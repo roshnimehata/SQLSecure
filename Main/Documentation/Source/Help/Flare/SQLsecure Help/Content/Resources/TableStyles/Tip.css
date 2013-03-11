@@ -1,0 +1,1037 @@
+/* MadCap Table Style: */
+
+/*<meta />*/
+
+mcTableStyle {
+	name: Tip; 
+	border-collapse: collapse; 
+	border-left-style: solid; 
+	border-left-width: 1px; 
+	border-left-color: #a9a9a9; 
+	border-right-style: solid; 
+	border-right-width: 1px; 
+	border-right-color: #a9a9a9; 
+	border-top-style: solid; 
+	border-top-width: 1px; 
+	border-top-color: #a9a9a9; 
+	border-bottom-style: solid; 
+	border-bottom-width: 1px; 
+	border-bottom-color: #a9a9a9; 
+	cell-padding-left: 3px; 
+	cell-padding-right: 3px; 
+	cell-padding-top: 3px; 
+	cell-padding-bottom: 3px; 
+	margin-right: 5pt;
+	margin-top: 2pt;
+	margin-left: 5pt;
+}
+
+mcTableColumnStyle {
+	span: 1; 
+	separator-style: solid; 
+	separator-width: 1px; 
+	separator-color: #a9a9a9; 
+	border-collapse: collapse; 
+	border-left-style: solid; 
+	border-left-width: 1px; 
+	border-left-color: #a9a9a9; 
+	border-right-style: solid; 
+	border-right-width: 1px; 
+	border-right-color: #a9a9a9; 
+	border-top-style: solid; 
+	border-top-width: 1px; 
+	border-top-color: #a9a9a9; 
+	border-bottom-style: solid; 
+	border-bottom-width: 1px; 
+	border-bottom-color: #a9a9a9; 
+	border-spacing-y: 0; 
+	background-color: #ff4905; 
+	font-weight: bold; 
+	font-style: normal; 
+	font-family: Arial; 
+}
+
+mcTableColumnStyle {
+	span: 1; 
+	separator-style: solid; 
+	separator-width: 1px; 
+	separator-color: #a9a9a9; 
+	border-collapse: collapse; 
+	border-left-style: solid; 
+	border-left-width: 1px; 
+	border-left-color: #a9a9a9; 
+	border-right-style: solid; 
+	border-right-width: 1px; 
+	border-right-color: #a9a9a9; 
+	border-top-style: solid; 
+	border-top-width: 1px; 
+	border-top-color: #a9a9a9; 
+	border-bottom-style: solid; 
+	border-bottom-width: 1px; 
+	border-bottom-color: #a9a9a9; 
+	border-spacing-y: 0; 
+	font-size: 10pt; 
+	font-family: Arial; 
+	color: #000000; 
+	font-weight: normal; 
+	font-style: normal; 
+}
+
+mcTableHeadStyle {
+	span: 1; 
+	separator-style: solid; 
+	separator-width: 2px; 
+	separator-color: #a9a9a9; 
+	font-family: Arial; 
+	color: #ffffff; 
+	font-size: 10pt; 
+	border-collapse: collapse; 
+	border-left-style: solid; 
+	border-left-width: 1px; 
+	border-left-color: #a9a9a9; 
+	border-right-style: solid; 
+	border-right-width: 1px; 
+	border-right-color: #a9a9a9; 
+	border-top-style: solid; 
+	border-top-width: 1px; 
+	border-top-color: #a9a9a9; 
+	border-bottom-style: solid; 
+	border-bottom-width: 1px; 
+	border-bottom-color: #a9a9a9; 
+	border-spacing-y: 0; 
+}
+
+mcTableBodyStyle {
+	span: 1; 
+	font-weight: bold; 
+	separator-style: solid; 
+	separator-width: 1px; 
+	separator-color: #a9a9a9; 
+	font-family: Arial; 
+	color: #ffffff; 
+	font-size: 10pt; 
+	border-collapse: collapse; 
+	border-left-style: solid; 
+	border-left-width: 1px; 
+	border-left-color: #a9a9a9; 
+	border-right-style: solid; 
+	border-right-width: 1px; 
+	border-right-color: #a9a9a9; 
+	border-top-style: solid; 
+	border-top-width: 1px; 
+	border-top-color: #a9a9a9; 
+	border-bottom-style: solid; 
+	border-bottom-width: 1px; 
+	border-bottom-color: #a9a9a9; 
+	border-spacing-y: 0; 
+}
+
+ 
+ 
+/* Cell Styles: */
+ 
+.TableStyle_Tip
+{
+	border-left-style: solid;
+	border-left-color: #a9a9a9;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-right-color: #a9a9a9;
+	border-right-width: 1px;
+	border-top-style: solid;
+	border-top-color: #a9a9a9;
+	border-top-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #a9a9a9;
+	border-bottom-width: 1px;
+	border-collapse: collapse;
+	border-spacing: 0px 0px;
+	mc-cell-padding: 3px 3px 3px 3px;
+	margin-right: 5pt;
+	margin-top: 2pt;
+	margin-left: 5pt;
+}
+
+.TableStyle_Tip_Head_0_0
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_0 p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Head_0_0_RowSep_ColSep
+{
+	font-size: 10pt;
+	color: #ffffff;
+	border-bottom-width: 2px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Head_0_0_RowSep_ColSep p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Head_0_0_RowSep
+{
+	font-size: 10pt;
+	color: #ffffff;
+	border-bottom-width: 2px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_0_RowSep p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Head_0_0_ColSep
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Head_0_0_ColSep p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Head_0_0_RowSep_ColEnd
+{
+	font-size: 10pt;
+	color: #ffffff;
+	border-bottom-width: 2px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_0_RowSep_ColEnd p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Head_0_0_RowEnd
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_0_RowEnd p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Head_0_0_RowEnd_ColSep
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Head_0_0_RowEnd_ColSep p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Head_0_0_RowEnd_ColEnd
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_0_RowEnd_ColEnd p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Head_0_0_ColEnd
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_0_ColEnd p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Head_0_1
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_1 p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Head_0_1_RowSep_ColSep
+{
+	border-bottom-width: 2px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Head_0_1_RowSep_ColSep p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Head_0_1_RowSep
+{
+	border-bottom-width: 2px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_1_RowSep p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Head_0_1_ColSep
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Head_0_1_ColSep p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Head_0_1_RowSep_ColEnd
+{
+	border-bottom-width: 2px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_1_RowSep_ColEnd p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Head_0_1_RowEnd
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_1_RowEnd p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Head_0_1_RowEnd_ColSep
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Head_0_1_RowEnd_ColSep p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Head_0_1_RowEnd_ColEnd
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_1_RowEnd_ColEnd p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Head_0_1_ColEnd
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Head_0_1_ColEnd p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Body_0_0
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_0 p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Body_0_0_RowSep_ColSep
+{
+	font-size: 10pt;
+	color: #ffffff;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Body_0_0_RowSep_ColSep p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Body_0_0_RowSep
+{
+	font-size: 10pt;
+	color: #ffffff;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_0_RowSep p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Body_0_0_ColSep
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Body_0_0_ColSep p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Body_0_0_RowSep_ColEnd
+{
+	font-size: 10pt;
+	color: #ffffff;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_0_RowSep_ColEnd p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Body_0_0_RowEnd
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_0_RowEnd p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Body_0_0_RowEnd_ColSep
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Body_0_0_RowEnd_ColSep p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Body_0_0_RowEnd_ColEnd
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_0_RowEnd_ColEnd p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Body_0_0_ColEnd
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+	background-color: #ff4905;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_0_ColEnd p
+{
+	font-size: 10pt;
+	color: #ffffff;
+	font-family: Arial;
+	font-weight: bold;
+	font-style: normal;
+}
+
+.TableStyle_Tip_Body_0_1
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_1 p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Body_0_1_RowSep_ColSep
+{
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Body_0_1_RowSep_ColSep p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Body_0_1_RowSep
+{
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_1_RowSep p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Body_0_1_ColSep
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Body_0_1_ColSep p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Body_0_1_RowSep_ColEnd
+{
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_1_RowSep_ColEnd p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Body_0_1_RowEnd
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_1_RowEnd p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Body_0_1_RowEnd_ColSep
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle_Tip_Body_0_1_RowEnd_ColSep p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Body_0_1_RowEnd_ColEnd
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_1_RowEnd_ColEnd p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+.TableStyle_Tip_Body_0_1_ColEnd
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle_Tip_Body_0_1_ColEnd p
+{
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	font-style: normal;
+	color: #000000;
+}
+
+

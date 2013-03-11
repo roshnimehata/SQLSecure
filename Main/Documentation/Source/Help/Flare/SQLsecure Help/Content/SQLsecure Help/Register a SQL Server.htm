@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" class="" MadCap:lastBlockDepth="6" MadCap:lastHeight="789" MadCap:lastWidth="890">
+    <head><title>Register a SQL Server</title>
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Add server to begin auditing</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Add server to begin auditing</h2>
+        <p class="Body">
+            <MadCap:keyword term="Add a new SQL Server;auditing:begin;auditing:add instance;server:audit new" />The Register a SQL Server wizard allows you to designate the SQL Server instances that you want SQLsecure to audit. The Register a SQL&#160;Server wizard allows you to do the following:</p>
+        <ul style="list-style-type: circle;">
+            <li class="Bullet"><a href="Select a SQL Server.htm">Select the SQL&#160;Server instance you want to audit with SQLsecure</a>
+            </li>
+            <li class="Bullet"><a href="Specify Connection Credentials.htm">Specify the credentials used to connect to your SQL Server instance and collect data</a>
+            </li>
+            <li class="Bullet"><a href="Select SQL Server Objects to Audit.htm">Select which objects you want SQLsecure to audit</a>
+            </li>
+            <li class="Bullet"><a href="Schedule Snapshots.htm">Schedule collection times</a>
+            </li>
+            <li class="BulletLast"><a href="Configure Email Notification.htm">Configure your email notifications</a>
+            </li>
+        </ul>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>When do I need to use the Register a SQL Server wizard?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">The Register a SQL Server wizard must be completed before SQL Server instances can be audited by SQLsecure. For every SQL Server instance you would like to audit, the Register a SQL Server wizard must be completed.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How does the Register a SQL Server wizard work?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">The Register a SQL Server Wizard will prompt you for the SQL Server location, credentials to use for auditing, filter criteria, and then schedule your audits. Once you have set up your SQL Server instance for auditing, SQLsecure will apply your settings and display this instance in the Security Summary and Explore Permissions tree panes.</p>
+                <p class="Body">These configuration settings are stored in the Repository.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do I&#160;register a SQL&#160;Server using the Register a SQL&#160;Server wizard?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">SQL Server instances must first be added to SQLsecure before the auditing process can begin.&#160;</p>
+                <p class="StepIntro">To add a SQL Server to SQLsecure:</p>
+                <ol>
+                    <li class="NumberedList">Select <span class="GUI_Item">File &gt; Register</span> a SQL Server from the toolbar.</li>
+                    <li class="NumberedList">Click <span class="GUI_Item">Next</span> on the Welcome to the Register SQL Server Wizard window.</li>
+                    <li class="NumberedList">Type the name of the SQL Server instance in the <span class="GUI_Item">Server</span> field or click <span class="GUI_Item">Browse</span> to locate the SQL Server instance you would like to register.</li>
+                    <li class="NumberedList">Select the authentication mode SQLsecure should use to connect to the selected SQL Server instance. 
+               
+                <p class="Body"><span class="If_Then_Statement">If you select to enter the credentials</span>, click <span class="GUI_Item">Next</span> and the Enter Credentials window will open. Enter the credentials you would like to use for auditing, re-enter your password, and then click <span class="GUI_Item">Next</span>.</p><p class="Body"><span class="If_Then_Statement">If the login configuration for the SQL&#160;Server you wish to audit is case-sensitive</span>, you must enter your login information in a case-sensitive format on the Credentials window.</p></li>
+                    <li class="NumberedList">Select to either enter snapshot filters manually or to copy existing filters from another server configuration.
+                
+                <p class="Body"><span class="If_Then_Statement">If you want to define the data collection filters manually</span>, enter them on the Specify data collection filter window and click <span class="GUI_Item">Next</span>.</p><p class="Body"><span class="If_Then_Statement">If you want to copy data collection filters from another server</span>, select the registered server from the list and click <span class="GUI_Item">Next</span>.</p></li>
+                    <li class="NumberedList">Verify that the servers you want to register are listed on the SQL Server Registration Complete window, and then click <span class="GUI_Item">Finish</span></li>
+                </ol>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

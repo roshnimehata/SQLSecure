@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html class="" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Assess Your Security Model|Define policies for custom assessments|Add new policy" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <!-- saved from url=(0014)about:internet -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Configure the policy risks</title>
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body class="NewPage">
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Select security checks</h1>
+        <p class="Body"><a name="kanchor64"></a>The Configure the Policy window allows you the define the security checks this policy should use to evaluate your audit data.</p>
+        <p class="Body">Security checks assess the vulnerability of specific Windows OS and SQL&#160;Server objects based on your criteria. After security checks are configured and your SQL&#160;Server instances are assigned to the policy, you can view the assessment results on the Security Summary view and on the Risk Assessment Report. </p>
+        <p class="Body">In addition, you can configure email notifications to be sent out when a particular risk level has been passed. For more information, see <a href="Configure Email Notification.htm">Configure Email Notifications</a>.</p>
+        <table class="TableStyle_Tip" style="mc-table-style: url('../Resources/TableStyles/Tip.css');" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                        <p>TIP</p>
+                    </td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                        <p>When security checks are setup for your policies, it is important that accurate criteria is entered. For example, a typo in the Windows Operating System Version metric criteria could cause erroneous findings.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2884229914_0" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What security check settings can I&#160;configure?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2884229914_0" style="display: none;">
+                <p class="DefinitionListTerm">Report Text</p>
+                <p class="DefinitionListBody">This text displays on your policy reports, such as the Risk Assessment report. By default, SQLsecure provides a report text question for each security check. You can edit this question so that it better fits your audit reporting needs.</p>
+                <p class="DefinitionListBody">For example, the Protocols security check includes the report text “Are unexpected Protocols enabled?”. If unexpected protocols are enabled, the report displays this question as well as the SQL Server instances on which the vulnerability was found.</p>
+                <p class="DefinitionListTerm">External Cross Reference</p>
+                <p class="DefinitionListBody">This field allows you to cross reference a security vulnerability included in your report to a number or name contained in an external security standard, such as a specific HIPAA&#160;regulation.</p>
+                <p class="DefinitionListTerm">Risk Level</p>
+                <p class="DefinitionListBody">This option allows you to set the severity of the risk posed by this finding. The risk level is important because it reflects how severe or risky a particular security finding is for your environment, allowing you to further customize security checks to meet your exact auditing needs. For example, finding an enabled Guest account on one instance may be a high risk, but on another instance it may be a low risk. The risk level also determines where the corresponding security finding appears on the policy or assessment Report Card and whether or not email notifications will be sent.</p>
+                <p class="DefinitionListTerm">Criteria</p>
+                <p class="DefinitionListBody">Some security checks allow you to configure the assessment criteria, such as specific user accounts, stored procedures, or the login audit level. Text entered in this field must use the exact spelling of the object being checked.</p>
+                <p class="DefinitionListBody"><span class="If_Then_Statement">If the criteria for this check is entered incorrectly</span>, it may fail to correctly display its finding in the Report Card. </p>
+                <table class="TableStyle_Tip" style="mc-table-style: url('../Resources/TableStyles/Tip.css');margin-left: 0;margin-right: auto;" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                                <p>TIP</p>
+                            </td>
+                            <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                                <p>Some security check criteria support using the percent wildcard character (%) to specify objects whose names apply a naming convention. For example, to specify all users whose logon starts with <code>sql</code>, enter the following syntax:&#160;<code>domain\sql%</code>.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2884229914_1" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />When I am creating a new policy "from scratch", why are security checks already enabled?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2884229914_1" style="display: none;">
+                <p class="Body">Even though you are creating a policy "from scratch", SQLsecure has enabled several common security checks you may need, to help you configure your policy quickly and easily. These security checks are also included in the default All Servers policy. You can add, edit, or disable any security check as needed. </p>
+                <table class="TableStyle_Tip" style="mc-table-style: url('../Resources/TableStyles/Tip.css');border-left-style: solid;border-left-width: 1px;border-left-color: #a9a9a9;border-right-style: solid;border-right-width: 1px;border-right-color: #a9a9a9;border-top-style: solid;border-top-width: 1px;border-top-color: #a9a9a9;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #a9a9a9;margin-left: 0;margin-right: auto;caption-side: top;" cellspacing="0">
+                    <col />
+                    <col />
+                    <tbody>
+                        <tr>
+                            <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                                <p>TIP</p>
+                            </td>
+                            <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                                <p>By default, the All Servers policy enforces the Idera Level 2 - Balanced template.  For more information, see how <a href="Policy Templates.htm">policy templates</a> <![CDATA[ ]]>can help you achieve your SQL&#160;Server security goals.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2884229914_2" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What is the Import Settings option?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2884229914_2" style="display: none;">
+                <p class="Body">This option allows you to import security check definitions from either a built-in policy template or an existing policy whose settings you previously exported. </p>
+            </div>
+        </div>
+        <div class="breadcrumb">
+            <p MadCap:conditions="Default.SEO" class="FooterWebLink"><a href="http://www.idera.com/Support/Service.aspx" target="_blank" class="FooterWebLink">Need more help? Search the Idera Customer Support Portal &gt; &gt;</a>
+            </p>
+        </div>
+        <div class="LearnMore">
+            <p MadCap:conditions="Default.SEO">SQLsecure tells you who has access to what on your SQL Server databases. <a href="http://www.idera.com/Products/SQL-Server/SQL-secure/" target="_blank" style="text-decoration: underline; color: #ffffff;">Learn&#160;more</a> &gt; &gt;</p>
+        </div>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO"><a class="IderaFooter" href="http://www.idera.com/Content/Products.aspx" target="_blank">Product</a> | <a href="http://www.idera.com/Action/Downloads.aspx" target="_blank" class="IderaFooter">Downloads</a> | <a href="http://www.idera.com/Action/Purchase.aspx" target="_blank" class="IderaFooter">Purchase</a> | <a href="http://www.idera.com/Support/" target="_blank" class="IderaFooter">Support</a> |&#160;<a href="http://www.idera.com/Content/Resources.aspx" target="_blank" class="IderaFooter">Resources</a> | <a href="http://www.idera.com/News/" target="_blank" class="IderaFooter">News</a> | <a href="http://www.idera.com/About-Us/" target="_blank" class="IderaFooter">About Us</a> | <a href="http://www.idera.com/Action/Show.aspx?&amp;ThisList=Quotes" target="_blank" class="IderaFooter">Customers</a> | <a href="http://www.idera.com/Partners/" target="_blank" class="IderaFooter">Partners</a></p>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO">Copyright ©2003-2012 Idera, Inc. | <a href="Legal Notice.htm" target="_blank" class="IderaFooter">Legal</a></p>
+        <script type="text/javascript">/* <![CDATA[ */
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16422007-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+/* ]]> */</script>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

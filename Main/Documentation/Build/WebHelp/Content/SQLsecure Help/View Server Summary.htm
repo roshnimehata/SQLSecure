@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html class="" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Explore Security Settings" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <!-- saved from url=(0014)about:internet -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Working with Audit History</title>
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body class="NewPage">
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">View single server summary</h1>
+        <p class="Body">The <a name="kanchor41"></a>Server Summary window allows you to view the following:</p>
+        <ul style="list-style-type: circle;">
+            <li class="Bullet" value="1">General SQL&#160;Server properties</li>
+            <li class="Bullet" value="2">Auditing status of the SQL&#160;Server instance</li>
+            <li class="BulletLast" value="3">Audit history</li>
+        </ul>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2910056864_0" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What kind of information is contained in SQL&#160;Server Properties?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2910056864_0" style="display: none;">
+                <p class="Body">SQL&#160;Server Properties displays the name of the instance, the version of SQL&#160;Server being used, and the Windows Operating System the SQL&#160;Server instance is operating on.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2910056864_1" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What kind of information is contained in Auditing Status?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2910056864_1" style="display: none;">
+                <p class="Body">Auditing Status displays the status of the last collection, the date and time of the next scheduled collection, and basic statistics for the latest snapshot.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2910056864_2" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What kind of information is contained in Audit History</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2910056864_2" style="display: none;">
+                <p class="Body">Audit History provides detailed information about your snapshot, including the time it was taken, the collection statistics, audit filter information, and a listing of any suspect Windows accounts or unavailable databases that were encountered while the Snapshot was being taken. For more information on suspect Windows accounts, see <a href="Suspect Windows Accounts.htm">Identify Suspect Windows Accounts</a>. For more information on unavailable databases, see <a href="Unavailable Databases.htm">Identify Unavailable Databases</a>.</p>
+                <p class="Body">The following table describes the information displayed in each of the columns:</p>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="text-align: left;">Item</th>
+                            <th class="HeadD-Column2-Header1" style="text-align: left;">Description</th>
+                        </tr>
+                    </thead>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Date/Time</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">The date and time when the snapshot was taken</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Status</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">The status of the snapshot (audit data collection)</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Comments</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">Description of any issues the collector encountered</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Baseline</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">Whether or not the snapshot is marked as a baseline</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Objects</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">The number of objects audited in the snapshot</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Permissions</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">The number of permissions collected in the snapshot</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Logins</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">The number of logins collected in the snapshot</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Group Members</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">The number of group members collected in the snapshot</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="breadcrumb">
+            <p MadCap:conditions="Default.SEO" class="FooterWebLink"><a href="http://www.idera.com/Support/Service.aspx" target="_blank" class="FooterWebLink">Need more help? Search the Idera Customer Support Portal &gt; &gt;</a>
+            </p>
+        </div>
+        <div class="LearnMore">
+            <p MadCap:conditions="Default.SEO">SQLsecure tells you who has access to what on your SQL Server databases. <a href="http://www.idera.com/Products/SQL-Server/SQL-secure/" target="_blank" style="text-decoration: underline; color: #ffffff;">Learn&#160;more</a> &gt; &gt;</p>
+        </div>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO"><a class="IderaFooter" href="http://www.idera.com/Content/Products.aspx" target="_blank">Product</a> | <a href="http://www.idera.com/Action/Downloads.aspx" target="_blank" class="IderaFooter">Downloads</a> | <a href="http://www.idera.com/Action/Purchase.aspx" target="_blank" class="IderaFooter">Purchase</a> | <a href="http://www.idera.com/Support/" target="_blank" class="IderaFooter">Support</a> |&#160;<a href="http://www.idera.com/Content/Resources.aspx" target="_blank" class="IderaFooter">Resources</a> | <a href="http://www.idera.com/News/" target="_blank" class="IderaFooter">News</a> | <a href="http://www.idera.com/About-Us/" target="_blank" class="IderaFooter">About Us</a> | <a href="http://www.idera.com/Action/Show.aspx?&amp;ThisList=Quotes" target="_blank" class="IderaFooter">Customers</a> | <a href="http://www.idera.com/Partners/" target="_blank" class="IderaFooter">Partners</a></p>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO">Copyright ©2003-2012 Idera, Inc. | <a href="Legal Notice.htm" target="_blank" class="IderaFooter">Legal</a></p>
+        <script type="text/javascript">/* <![CDATA[ */
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16422007-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+/* ]]> */</script>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

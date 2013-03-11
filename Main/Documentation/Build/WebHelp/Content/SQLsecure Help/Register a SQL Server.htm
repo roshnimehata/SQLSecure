@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html class="" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Get Started|Configure your deployment" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <!-- saved from url=(0014)about:internet -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Register a SQL Server</title>
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body class="NewPage">
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Add server to begin auditing</h1>
+        <p class="Body"><a name="kanchor13"></a>The Register a SQL Server wizard allows you to designate the SQL Server instances that you want SQLsecure to audit. The Register a SQL&#160;Server wizard allows you to do the following:</p>
+        <ul style="list-style-type: circle;">
+            <li class="Bullet" value="1"><a href="Select a SQL Server.htm">Select the SQL&#160;Server instance you want to audit with SQLsecure</a>
+            </li>
+            <li class="Bullet" value="2"><a href="Specify Connection Credentials.htm">Specify the credentials used to connect to your SQL Server instance and collect data</a>
+            </li>
+            <li class="Bullet" value="3"><a href="Select SQL Server Objects to Audit.htm">Select which objects you want SQLsecure to audit</a>
+            </li>
+            <li class="Bullet" value="4"><a href="Schedule Snapshots.htm">Schedule collection times</a>
+            </li>
+            <li class="BulletLast" value="5"><a href="Configure Email Notification.htm">Configure your email notifications</a>
+            </li>
+        </ul>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2102624157_0" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />When do I need to use the Register a SQL Server wizard?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2102624157_0" style="display: none;">
+                <p class="Body">The Register a SQL Server wizard must be completed before SQL Server instances can be audited by SQLsecure. For every SQL Server instance you would like to audit, the Register a SQL Server wizard must be completed.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2102624157_1" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How does the Register a SQL Server wizard work?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2102624157_1" style="display: none;">
+                <p class="Body">The Register a SQL Server Wizard will prompt you for the SQL Server location, credentials to use for auditing, filter criteria, and then schedule your audits. Once you have set up your SQL Server instance for auditing, SQLsecure will apply your settings and display this instance in the Security Summary and Explore Permissions tree panes.</p>
+                <p class="Body">These configuration settings are stored in the Repository.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2102624157_2" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How do I&#160;register a SQL&#160;Server using the Register a SQL&#160;Server wizard?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2102624157_2" style="display: none;">
+                <p class="Body">SQL Server instances must first be added to SQLsecure before the auditing process can begin.&#160;</p>
+                <p class="StepIntro">To add a SQL Server to SQLsecure:</p>
+                <ol>
+                    <li class="NumberedList" value="1">Select <span class="GUI_Item">File &gt; Register</span> a SQL Server from the toolbar.</li>
+                    <li class="NumberedList" value="2">Click <span class="GUI_Item">Next</span> on the Welcome to the Register SQL Server Wizard window.</li>
+                    <li class="NumberedList" value="3">Type the name of the SQL Server instance in the <span class="GUI_Item">Server</span> field or click <span class="GUI_Item">Browse</span> to locate the SQL Server instance you would like to register.</li>
+                    <li class="NumberedList" value="4">Select the authentication mode SQLsecure should use to connect to the selected SQL Server instance. 
+               
+                <p class="Body"><span class="If_Then_Statement">If you select to enter the credentials</span>, click <span class="GUI_Item">Next</span> and the Enter Credentials window will open. Enter the credentials you would like to use for auditing, re-enter your password, and then click <span class="GUI_Item">Next</span>.</p><p class="Body"><span class="If_Then_Statement">If the login configuration for the SQL&#160;Server you wish to audit is case-sensitive</span>, you must enter your login information in a case-sensitive format on the Credentials window.</p></li>
+                    <li class="NumberedList" value="5">Select to either enter snapshot filters manually or to copy existing filters from another server configuration.
+                
+                <p class="Body"><span class="If_Then_Statement">If you want to define the data collection filters manually</span>, enter them on the Specify data collection filter window and click <span class="GUI_Item">Next</span>.</p><p class="Body"><span class="If_Then_Statement">If you want to copy data collection filters from another server</span>, select the registered server from the list and click <span class="GUI_Item">Next</span>.</p></li>
+                    <li class="NumberedList" value="6">Verify that the servers you want to register are listed on the SQL Server Registration Complete window, and then click <span class="GUI_Item">Finish</span></li>
+                </ol>
+            </div>
+        </div>
+        <div class="breadcrumb">
+            <p MadCap:conditions="Default.SEO" class="FooterWebLink"><a href="http://www.idera.com/Support/Service.aspx" target="_blank" class="FooterWebLink">Need more help? Search the Idera Customer Support Portal &gt; &gt;</a>
+            </p>
+        </div>
+        <div class="LearnMore">
+            <p MadCap:conditions="Default.SEO">SQLsecure tells you who has access to what on your SQL Server databases. <a href="http://www.idera.com/Products/SQL-Server/SQL-secure/" target="_blank" style="text-decoration: underline; color: #ffffff;">Learn&#160;more</a> &gt; &gt;</p>
+        </div>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO"><a class="IderaFooter" href="http://www.idera.com/Content/Products.aspx" target="_blank">Product</a> | <a href="http://www.idera.com/Action/Downloads.aspx" target="_blank" class="IderaFooter">Downloads</a> | <a href="http://www.idera.com/Action/Purchase.aspx" target="_blank" class="IderaFooter">Purchase</a> | <a href="http://www.idera.com/Support/" target="_blank" class="IderaFooter">Support</a> |&#160;<a href="http://www.idera.com/Content/Resources.aspx" target="_blank" class="IderaFooter">Resources</a> | <a href="http://www.idera.com/News/" target="_blank" class="IderaFooter">News</a> | <a href="http://www.idera.com/About-Us/" target="_blank" class="IderaFooter">About Us</a> | <a href="http://www.idera.com/Action/Show.aspx?&amp;ThisList=Quotes" target="_blank" class="IderaFooter">Customers</a> | <a href="http://www.idera.com/Partners/" target="_blank" class="IderaFooter">Partners</a></p>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO">Copyright ©2003-2012 Idera, Inc. | <a href="Legal Notice.htm" target="_blank" class="IderaFooter">Legal</a></p>
+        <script type="text/javascript">/* <![CDATA[ */
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16422007-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+/* ]]> */</script>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

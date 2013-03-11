@@ -1,0 +1,563 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WizardFramework</name>
+    </assembly>
+    <members>
+        <member name="T:Divelements.WizardFramework.WizardPageEventHandler">
+            <summary>
+            Represents the method that will handle wizard page events.
+            </summary>
+        </member>
+        <member name="T:Divelements.WizardFramework.WizardFinishPageEventHandler">
+            <summary>
+            Represents the method that will handle wizard finish page events;
+            </summary>
+        </member>
+        <member name="T:Divelements.WizardFramework.WizardFinishPageEventArgs">
+            <summary>
+            Represents data passed to a procedure handling an event associated with a wizard finish page.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.WizardFinishPageEventArgs.AddNameValuePair(System.String,System.String)">
+            <summary>
+            Adds a pair of settings to the list displayed to the user.
+            </summary>
+            <param name="name">The setting name.</param>
+            <param name="value">The setting value.</param>
+            <remarks>
+            <para>By calling this method for every setting to add, you can present the options configured by the user in an intuitive manner at the end of the wizard.</para>
+            </remarks>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardFinishPageEventArgs.SettingsHeader">
+            <summary>
+            The text shown as an introduction to the settings configured by the wizard.
+            </summary>
+        </member>
+        <member name="T:Divelements.WizardFramework.FinishPage">
+            <summary>
+            A page designed to show a summary of activity undertaken in the wizard process.
+            </summary>
+        </member>
+        <member name="T:Divelements.WizardFramework.CoverWizardPage">
+            <summary>
+            A base class from which special pages such as IntroductionPage and FinishPage are derived.
+            </summary>
+            <remarks>
+            <para>You can derive from this page to create other special pages that show a margin and have specially-formatted headings.</para>
+            </remarks>
+        </member>
+        <member name="T:Divelements.WizardFramework.WizardPageBase">
+            <summary>
+            The base class from which all wizard pages derive.
+            </summary>
+            <remarks>
+            <para>You should not inherit from this class directly. Instead, inherit from either CoverWizardPage or WizardPage or their derivatives.</para>
+            </remarks>
+        </member>
+        <member name="M:Divelements.WizardFramework.WizardPageBase.#ctor">
+            <summary>
+            Initializes a new instance of the WizardPageBase class.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.WizardPageBase.OnBeforeDisplay(System.EventArgs)">
+            <summary>
+            Raises the BeforeDisplay event.
+            </summary>
+            <param name="e">Arguments for the event handling procedure.</param>
+        </member>
+        <member name="M:Divelements.WizardFramework.WizardPageBase.OnAfterDisplay(System.EventArgs)">
+            <summary>
+            Raises the AfterDisplay event.
+            </summary>
+            <param name="e">Arguments for the event handling procedure.</param>
+        </member>
+        <member name="M:Divelements.WizardFramework.WizardPageBase.OnBeforeMoveNext(System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Raises the BeforeMoveNext event.
+            </summary>
+            <param name="e">Arguments for the event handling procedure.</param>
+        </member>
+        <member name="M:Divelements.WizardFramework.WizardPageBase.OnBeforeMoveBack(System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Raises the BeforeMoveBack event.
+            </summary>
+            <param name="e">Arguments for the event handling procedure.</param>
+        </member>
+        <member name="M:Divelements.WizardFramework.WizardPageBase.OnTextChanged(System.EventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.WizardPageBase.OnFontChanged(System.EventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="E:Divelements.WizardFramework.WizardPageBase.BeforeMoveNext">
+            <summary>
+            Occurs when the user presses the Next button.
+            </summary>
+            <remarks>
+            <para>This event gives the developer the opportunity to validate the data entered on the page, and cancel the move if necessary.</para>
+            </remarks>
+        </member>
+        <member name="E:Divelements.WizardFramework.WizardPageBase.BeforeMoveBack">
+            <summary>
+            Occurs when the user presses the Back button.
+            </summary>
+            <remarks>
+            <para>This event gives the developer the opportunity to validate the data entered on the page, and cancel the move if necessary.</para>
+            </remarks>
+        </member>
+        <member name="E:Divelements.WizardFramework.WizardPageBase.AfterDisplay">
+            <summary>
+            Occurs after the page is displayed.
+            </summary>
+            <remarks>
+            <para>This event is only raised when moving foward, as it is assumed that when moving backward the page will need no configuration.</para>
+            </remarks>
+        </member>
+        <member name="E:Divelements.WizardFramework.WizardPageBase.BeforeDisplay">
+            <summary>
+            Occurs before the page is displayed.
+            </summary>
+            <remarks>
+            <para>This event is only raised when moving forward, as it is assumed that when moving backward the page will need no configuration.</para>
+            </remarks>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPageBase.Text">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPageBase.IsCurrent">
+            <summary>
+            Indicates whether the page is the selected page within the wizard.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPageBase.PreviousPage">
+            <summary>
+            The page to move to when the user presses the Back button.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPageBase.NextPage">
+            <summary>
+            The page to move to when the user presses the Next button.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPageBase.AllowCancel">
+            <summary>
+            Indicates whether the user will be allowed to cancel the wizard from this page.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPageBase.AllowMoveNext">
+            <summary>
+            Indicates whether the user will be allowed to move forwards from this page.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPageBase.AllowMovePrevious">
+            <summary>
+            Indicates whether the user will be allowed to move backwards from the page.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPageBase.Wizard">
+            <summary>
+            The wizard to which the page belongs.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPageBase.BackgroundImage">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.CoverWizardPage.#ctor">
+            <summary>
+            Initializes a new instance of the CoverWizardPage class.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.CoverWizardPage.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.CoverWizardPage.BackColor">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.CoverWizardPage.ForeColor">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.CoverWizardPage.ProceedText">
+            <summary>
+            The text that informs the user how to proceed to the next page.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.FinishPage.#ctor">
+            <summary>
+            Initializes a new instance of the FinishPage class.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.FinishPage.OnBeforeDisplay(System.EventArgs)">
+            <summary>
+            Overridden. Calls the OnCollectSettings method.
+            </summary>
+            <param name="e">Arguments for the event handling procedure.</param>
+        </member>
+        <member name="M:Divelements.WizardFramework.FinishPage.OnCollectSettings(Divelements.WizardFramework.WizardFinishPageEventArgs)">
+            <summary>
+            Raises the CollectSettings event.
+            </summary>
+            <param name="e">Arguments for the event handling procedure.</param>
+        </member>
+        <member name="M:Divelements.WizardFramework.FinishPage.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="E:Divelements.WizardFramework.FinishPage.CollectSettings">
+            <summary>
+            Occurs when the wizard needs to know all the settings configured by the user.
+            </summary>
+            <remarks>
+            <para>You should respond to this event by calling AddNameValuePair on the event arguments passed to the handling procedure as many times
+            as is necessary to reflect the options chosen by the user.</para>
+            </remarks>
+        </member>
+        <member name="P:Divelements.WizardFramework.FinishPage.SettingsHeader">
+            <summary>
+            The text used as an introduction to the name and value pair display of configured settings.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.FinishPage.FinishText">
+            <summary>
+            The text that informs the user that they have completed the wizard.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.FinishPage.ProceedText">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="F:Divelements.WizardFramework.frmChoosePage.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.frmChoosePage.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.frmChoosePage.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Divelements.WizardFramework.SystemIconType">
+            <summary>
+            A type of icon native to the system.
+            </summary>
+        </member>
+        <member name="F:Divelements.WizardFramework.SystemIconType.Application">
+            <summary>
+            The default icon for an application window.
+            </summary>
+        </member>
+        <member name="F:Divelements.WizardFramework.SystemIconType.Error">
+            <summary>
+            An icon indicating an error has occured.
+            </summary>
+        </member>
+        <member name="F:Divelements.WizardFramework.SystemIconType.Information">
+            <summary>
+            An icon indicating some information needs to be read.
+            </summary>
+        </member>
+        <member name="F:Divelements.WizardFramework.SystemIconType.Question">
+            <summary>
+            An icon indicating some information is required.
+            </summary>
+        </member>
+        <member name="F:Divelements.WizardFramework.SystemIconType.Warning">
+            <summary>
+            An icon indicating a warning.
+            </summary>
+        </member>
+        <member name="T:Divelements.WizardFramework.InformationBox">
+            <summary>
+            A presentation of text next to a system icon used to indicate information, a warning or an error.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.InformationBox.#ctor">
+            <summary>
+            Initializes a new instance of the InformationBox class.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.InformationBox.OnTextChanged(System.EventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+            <param name="e">Arguments for the event handling procedure.</param>
+        </member>
+        <member name="M:Divelements.WizardFramework.InformationBox.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.InformationBox.Text2">
+            <summary>
+            A second paragraph of text to display.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.InformationBox.Icon">
+            <summary>
+            Indicates the type of icon to show next to the information box.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.InformationBox.DefaultSize">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="T:Divelements.WizardFramework.IntroductionPage">
+            <summary>
+            A page designed to show an introduction to the wizard, and indicate its purpose.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.IntroductionPage.#ctor">
+            <summary>
+            Initializes a new instance of the IntroductionPage class.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.IntroductionPage.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.IntroductionPage.IntroductionText">
+            <summary>
+            The text that informs the user of the purpose of the wizard.
+            </summary>
+        </member>
+        <member name="T:Divelements.WizardFramework.Wizard">
+            <summary>
+            Provides a Wizard-97 style interface for an application with a number of discreet steps.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.#ctor">
+            <summary>
+            Initializes a new instance of the Wizard class.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.OnCancel(System.EventArgs)">
+            <summary>
+            Raises the Cancel event.
+            </summary>
+            <param name="e">Arguments for the event handling procedure.</param>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.OnFinish(System.EventArgs)">
+            <summary>
+            Raises the Finish event.
+            </summary>
+            <param name="e">Arguments for the event handling procedure.</param>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.Dispose(System.Boolean)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.OnParentChanged(System.EventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.OnControlRemoved(System.Windows.Forms.ControlEventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.OnControlAdded(System.Windows.Forms.ControlEventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.OnResize(System.EventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.GoNext">
+            <summary>
+            Causes the wizard to advance to the next page.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.GoBack">
+            <summary>
+            Causes the wizard to go back to the last page.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.SetPagePair(Divelements.WizardFramework.WizardPageBase,Divelements.WizardFramework.WizardPageBase)">
+            <summary>
+            Configures a relationship between two wizard pages where the first navigates to the second, and vice versa.
+            </summary>
+            <param name="firstPage">The first page, that will navigate to the second page upon pressing Next.</param>
+            <param name="secondPage">The second page, that will navigate to the first page upon pressing Back.</param>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.GetPagesWithNextPage(Divelements.WizardFramework.WizardPageBase)">
+            <summary>
+            Finds all pages that reference the specified page in their NextPage property.
+            </summary>
+            <param name="nextPage">The page for which a reference must be found.</param>
+            <returns>An array containing pages matching the criteria.</returns>
+        </member>
+        <member name="M:Divelements.WizardFramework.Wizard.GetPagesWithPreviousPage(Divelements.WizardFramework.WizardPageBase)">
+            <summary>
+            Finds all pages that reference the specified page in their PreviousPage property.
+            </summary>
+            <param name="previousPage">The page for which a reference must be found.</param>
+            <returns>An array containing pages matching the criteria.</returns>
+        </member>
+        <member name="E:Divelements.WizardFramework.Wizard.Cancel">
+            <summary>
+            Occurs when the wizard is cancelled by the user.
+            </summary>
+        </member>
+        <member name="E:Divelements.WizardFramework.Wizard.Finish">
+            <summary>
+            Occurs when the wizard is finished by the user.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.DefaultSize">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.HelpVisible">
+            <summary>
+            Indicates whether a Help button is displayed alongside the normal buttons.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.PreviousText">
+            <summary>
+            Indicates the text that is used on the Previous button.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.NextText">
+            <summary>
+            Indicates the text that is used on the Next button.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.CancelText">
+            <summary>
+            Indicates the text that is used on the Cancel button.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.FinishText">
+            <summary>
+            Indicates the text that is used on the Finish button.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.HelpText">
+            <summary>
+            Indicates the text that is used on the Help button.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.SelectedPage">
+            <summary>
+            The active wizard page.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.CoverPageBounds">
+            <summary>
+            The rectangle used to lay out cover pages within the wizard.
+            </summary>
+            <remarks>
+            <para>This property can be overridden to adjust the rectangle in which cover pages are laid out.</para>
+            </remarks>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.ContentPageBounds">
+            <summary>
+            The rectangle used to lay out pages within the wizard.
+            </summary>
+            <remarks>
+            <para>This property can be overridden to adjust the rectangle in which content pages are laid out.</para>
+            </remarks>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.MarginImage">
+            <summary>
+            The image displayed on the left of introduction and finish pages.
+            </summary>
+            <remarks>
+            <para>The image must have a width of 164 pixels.</para>
+            </remarks>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.BannerImage">
+            <summary>
+            The image displayed at the top right on content pages.
+            </summary>
+            <remarks>
+            <para>The image must be 49x49 pixels.</para>
+            </remarks>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.BackgroundImage">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.BackColor">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.Wizard.Text">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="T:Divelements.WizardFramework.WizardPage">
+            <summary>
+            A content page designed to hold other controls to be shown in the wizard.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.WizardPage.#ctor">
+            <summary>
+            Initializes a new instance of the WizardPage class.
+            </summary>
+        </member>
+        <member name="M:Divelements.WizardFramework.WizardPage.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            Overridden.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPage.TextColor">
+            <summary>
+            Indicates the color used to draw the title of the page.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPage.DescriptionColor">
+            <summary>
+            Indicates the color used to draw the description of the page.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPage.ProceedText">
+            <summary>
+            The text that informs the user how to proceed to the next page.
+            </summary>
+        </member>
+        <member name="P:Divelements.WizardFramework.WizardPage.Description">
+            <summary>
+            A piece of descriptive text about the page.
+            </summary>
+        </member>
+    </members>
+</doc>

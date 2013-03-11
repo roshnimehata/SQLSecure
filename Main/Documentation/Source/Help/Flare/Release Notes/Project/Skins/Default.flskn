@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CatapultSkin
+  Version="1"
+  Comment="This is the default skin"
+  Anchors="Width,Height"
+  Width="899px"
+  Height="412px"
+  Top="0"
+  Left="0"
+  Bottom="0"
+  Right="0"
+  Tabs="TOC,Index,Search,Favorites"
+  DefaultTab="TOC"
+  UseBrowserDefaultSize="false"
+  UseDefaultBrowserSetup="True"
+  Title="SQL compliance manager Help">
+  <Index
+    BinaryStorage="True" />
+  <HtmlHelpOptions
+    ShowMenuBar="false"
+    TopmostWindowStyle="False"
+    Buttons="Hide,Back,Forward,Refresh,Home,Print"
+    EnableButtonCaptions="True"
+    AdvancedSearch="false" />
+  <Toc
+    Border="Fixed3D" />
+  <Stylesheet />
+</CatapultSkin>

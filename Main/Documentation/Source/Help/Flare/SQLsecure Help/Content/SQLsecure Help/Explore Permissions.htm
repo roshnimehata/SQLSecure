@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" class="" MadCap:lastBlockDepth="5" MadCap:lastHeight="1256" MadCap:lastWidth="898">
+    <head><title>Explore Permissions</title>
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" MadCap:stylesheetType="table" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Explore Security Settings</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Explore Security Settings</h2>
+        <p class="Body">
+            <MadCap:keyword term="permissions:explore;permissions:analyze;permissions:enterprise level;permissions:server level;permissions:irregularities;Explore Permissions" />SQLsecure allows you to view the permission settings of individual users, roles, and objects, at a particular point in time, for each SQL Server instance that has been added to SQLsecure for auditing.</p>
+        <p class="Body">The Explore Permissions view allows you to review the following security information:</p>
+        <ul style="list-style-type: circle;">
+            <li class="Bullet">Enterprise level permissions </li>
+            <li class="Bullet">SQL&#160;Server level permissions </li>
+            <li class="BulletLast">Individual user permissions</li>
+        </ul>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do I analyze permissions?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">
+                    <MadCap:keyword term="analyze permissions" />It is important to understand that when analyzing a user’s permissions, SQLsecure shows multiple permissions when users have inherited object permissions from a parent role on the server.&#160;</p>
+                <p class="Body">For example; User A has been given explicit delete permissions at the server, database, schema, and table levels. Your company is now restricting the rights to a particular table and you need to revoke User A’s right to delete. To accomplish this task, revoke the user’s right to delete at the particular table level and also at the parent levels.</p>
+                <p class="Body">The following illustration depicts an example permissions scenario:</p>
+                <p class="Body">
+                    <img src="../Resources/Images/SQLsecure Help/03000002.png" style="width: 483px;height: 361px;" />
+                </p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What irregularities could I run into when searching user and object permissions?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">There may be times when it seems as though the permissions for a user or table have changed drastically, when no changes have actually occurred.</p>
+                <p class="Body">The following table lists some of the possible causes:</p>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle_Idera_Table_Stylesheet" cellspacing="0">
+                    <col />
+                    <col />
+                    <thead>
+                        <tr>
+                            <th style="font-family: arial;font-size: 10pt;text-align: left;" class="TableStyle_Idera_Table_Stylesheet_Head_0_0_RowSep_ColSep">
+                                <p class="TableHeadRow">Cause</p>
+                            </th>
+                            <th style="font-family: arial;font-size: 10pt;text-align: left;" class="TableStyle_Idera_Table_Stylesheet_Head_0_1_RowSep_ColEnd">
+                                <p class="TableHeadRow">Solution</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColSep">
+                            <p class="TableText">A user or table is deleted and then the same name is used again in the future.</p>
+                        </td>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_1_RowSep_ColEnd">
+                            <p class="TableText">Make sure that best practices are used when adding and deleting user and table names, or properly note the change to avoid confusion.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColSep">
+                            <p class="TableText">A user or table name is changed</p>
+                        </td>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_1_RowSep_ColEnd">
+                            <p class="TableText">Properly note the change to avoid confusion.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColSep">
+                            <p class="TableText">A user or table is deleted from the system</p>
+                        </td>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_1_RowSep_ColEnd">
+                            <p class="TableText">Properly note the change to avoid confusion.</p>
+                        </td>
+                    </tr>
+                </table>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>Which SQL Server permissions can I audit?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">SQLsecure allows you to audit all users and object permissions on SQL Server instances that have been registered with SQLsecure. For more information about SQL Server permissions, see Microsoft Books Online.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What are SQL Server permissions?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">SQL Server permissions are the rights given to a user or group of users who will interact with a database object. Every SQL Server operation or action requires that the user initiating the operation or action has the appropriate permissions.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What are the different types of SQL&#160;Server permissions?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Assigned permissions are permissions that are explicitly granted or denied to a user , group, or role for a particular server or database object. A user, group, or role can have more than one assigned permission. </p>
+                <p class="Body">Effective permissions are the net effect of assigned permissions, permissions inherited from the group or role membership, and covering permissions (SQL Server 2005 and later).</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

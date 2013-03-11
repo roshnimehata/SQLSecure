@@ -1,0 +1,494 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PolicyId>7</PolicyId>
+  <PolicyName>SNAC for SQL 2000</PolicyName>
+  <PolicyDescription>Based on the Guide to the Secure Configuration and Administration of Microsoft SQL Server 2000, Network Applications Team of the Systems and Network Attack Center (SNAC)</PolicyDescription>
+  <IsSystemPolicy>false</IsSystemPolicy>
+  <IsDynamic>true</IsDynamic>
+  <DynamicSelection>Left(version,2) ='8.'</DynamicSelection>
+  <InterviewName>General Guidelines</InterviewName>
+  <InterviewText>See http://www.nsa.gov/snac/db/mssql_2k.pdf</InterviewText>
+  <PolicyMetrics>
+    <PolicyMetric>
+      <MetricId>1</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Was the most recent snapshot collected within an acceptable timeframe?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'30'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>2</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 3</ReportKey>
+      <ReportText>Is SQL Server below the minimum acceptable version? Recommendation: Administrators should always check for hotfixes/patches and install them as directed.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'8.00.2039'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>3</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 16</ReportKey>
+      <ReportText>Is SQL Authentication enabled on the SQL Server? Recommendation: It is recommended that Windows 2000 Windows Authentication Mode be selected during the installation of SQL Server 2000. This tight coupling for login authentication has the advantage of eliminating excess overhead resulting from additional security and access layer controls while creating a trusted connection. It is understood that this is not always an option; therefore, security concerns pertaining to a Mixed Mode environment will be briefly discussed.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>4</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 55</ReportKey>
+      <ReportText>Is the login auditing configuration acceptable?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Failure','All'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>5</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is Cross Database Ownership Chaining enabled on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>6</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 29</ReportKey>
+      <ReportText>Is Guest user access available on the SQL Server? Recommendation: It is recommended that the guest user be deleted from all databases, except the master and tempdb databases.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'master','tempdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>7</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do suspect logins exist on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>8</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is C2 Audit Trace disabled on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>9</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is a Proxy Account enabled on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>10</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is Dedicated Administrator Connection enabled remotely on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>11</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Has anyone been granted permission to execute Integration Services stored procedures on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'sp_add_dtspackage','sp_enum_dtspackages','sp_add_job','sp_add_jobstep'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>13</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Is SQL Mail enabled? Recommend: Disable if not in use</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>14</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Is SQL Agent Mail enabled? Recommend: Disable if not in use</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>15</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 15</ReportKey>
+      <ReportText>Do the SQL Server sample databases exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Northwind','pubs','AdventureWorks','AdventureWorksDW'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>16</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does the SQL Server "sa" account exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>17</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 9</ReportKey>
+      <ReportText>Does SQL Server "sa" account have a blank password? Recommendation: Blank passwords do not meet standard password requirements.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>18</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are System Table Updates allowed?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>19</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does Everyone have read access to system tables?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>20</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are startup stored procedures enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>21</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any unapproved stored procedures set to run at startup?</ReportText>
+      <Severity>1</Severity>
+        <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>22</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any user stored procedures not encrypted?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>23</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do user-defined Extended Stored Procedures (XSPs) exist?</ReportText>
+      <Severity>1</Severity>
+        <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>24</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Do inappropriate permissions exist on dangerous Extended Stored Procedures (XPs)? Recommendation: Carefully review the need for each of these XPs and remove permissions on those that are not absolutely necessary for operations. Below is a list of stored procedures that should be deleted if not needed on a production server. It is not recommended that these stored procedures be deleted from a development server (except to test for functionality loss prior to deleting on a production server). The deletion of several of these stored procedures will result in the loss of some Enterprise Manager features. Prior to deleting stored procedures on a production server, test the affects on a development server for loss of functionality as a result. Execute sp_dropextendedproc to delete stored procedures. If deletion of these stored procedures is not an option in your environment, consider disabling them by denying execute permissions for database users and applications not requiring their use.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'sp_OACreate','sp_OADestroy','sp_OAGetErrorInfo','sp_OAGetProperty','sp_OAMethod','sp_OASetProperty','sp_OAStop','Xp_regaddmultistring','Xp_regdeletekey','Xp_regdeletevalue','Xp_regenumvalues','Xp_regremovemultistring','sp_bindsession','sp_cursor','sp_cursorclose','sp_cursorfetch','sp_cursoropen','sp_cursoroption','sp_getbindtoken','sp_GetMBCSCharLen','sp_IsMBCSLeadByte','sp_replcmds','sp_replcounters','sp_repldone','sp_replflush','sp_replstatus','sp_repltrans','sp_sdidebug','xp_availablemedia','xp_cmdshell','xp_deletemail','xp_dirtree','xp_dropwebtask','xp_dsninfo','xp_enumdsn','xp_enumerrorlogs','xp_enumgroups','xp_enumqueuedtasks','xp_eventlog','xp_findnextmsg','xp_fixeddrives','xp_getfiledetails','xp_getnetname','xp_grantlogin','xp_logevent','xp_loginconfig','xp_logininfo','xp_makewebtask','xp_msver','xp_perfend','xp_perfmonitor','xp_perfsample','xp_perfstart','xp_readerrorlog','xp_readmail','xp_revokelogin','xp_runwebtask','xp_schedulersignal','xp_sendmail','xp_servicecontrol','xp_snmp_getstate','xp_snmp_raisetrap','xp_sprintf','xp_sqlinventory','xp_sqlregister','xp_sqltrace','xp_sscanf','xp-startmail','xp_stopmail','xp_subdirs','xp_unc_to_drive'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>25</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is Remote Access enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>26</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 6</ReportKey>
+      <ReportText>Are unapproved protocols enabled?
+Recommendation: Remove all unnecessary protocol stacks. (Do not remove TCP/IP.)</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'TCP/IP'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>27</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 25</ReportKey>
+      <ReportText>Are common TCP ports used? Recommendation: The default port is 1433. If possible, administrators should change this to some other unused port.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'1433','1434'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>28</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 25</ReportKey>
+      <ReportText>Is SQL Server visible to client computers? Recommendation: Set to hidden.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>29</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Can anyone besides administrators execute SQL Agent CmdExec jobs on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>30</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is replication enabled on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>31</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 19</ReportKey>
+      <ReportText>Do unapproved registry key owners exist? Recommendation: After SQL Server 2000 is installed, remove read permission from the Everyone group on the HKEY_LOCAL_MACHINE\Software\Microsoft\MSSQLServer registry key. Grant appropriate permissions over the SQL Server registry keys listed in Table 4 to the account that will run SQL Server 2000.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>32</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 20</ReportKey>
+      <ReportText>Do users have unapproved access to registry keys? Recommendation: See table p 20 in guide.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>33</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any SQL Server files on drives not using NTFS?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>34</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 19</ReportKey>
+      <ReportText>Do unapproved executable file owners exist? Recommendation: Remove the Users group from the [Drive]:\Program Files\Microsoft SQL Server directory and grant full control to the SQL Server 2000 service account</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>35</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 19</ReportKey>
+      <ReportText>Do users have unapproved access to executable files?  Recommendation: See table 4 in guide.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>36</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unapproved database file owners exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>37</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 8</ReportKey>
+      <ReportText>Does Everyone have access to database files? Recommendation: Remove the “Everyone” group from the SQL Server installation drive or partition.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>38</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 19</ReportKey>
+      <ReportText>Do users have unapproved access to database files? Recommendation: See table 4 in guide.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>39</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 3</ReportKey>
+      <ReportText>Is OS version at an acceptable level? Recommendation: Administrators should always check for hotfixes/patches and install them as directed.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Microsoft(R) Windows(R) Server 2003, Enterprise Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003 Enterprise x64 Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003, Standard Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003 Standard x64 Edition, Service Pack 2'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>40</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 6</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Service account being used? Recommendation Create a Windows local user account or domain user account to run SQL Server 2000 services. Create a name that does not easily identify it with SQL Server.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>41</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Microsoft Reporting Services running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>42</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Analysis Services (OLAP) running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>43</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 6</ReportKey>
+      <ReportText>Is an unacceptable Analysis Services account being used? Recommendation Create a Windows local user account or domain user account to run SQL Server 2000 services. Create a name that does not easily identify it with SQL Server.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>44</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Notification Services running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>45</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 6</ReportKey>
+      <ReportText>Is an unacceptable Notification Services account being used? Recommendation Create a Windows local user account or domain user account to run SQL Server 2000 services. Create a name that does not easily identify it with SQL Server.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>46</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Integration Services running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>47</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 6</ReportKey>
+      <ReportText>Is an unacceptable Integration Services account being used? Recommendation Create a Windows local user account or domain user account to run SQL Server 2000 services. Create a name that does not easily identify it with SQL Server.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>''</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>48</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the SQL Server Agent running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>49</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 6</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Agent Service account being used? Recommendation: Create a Windows local user account or domain user account to run SQL Server 2000 services. Create a name that does not easily identify it with SQL Server.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>50</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is Full-Text Search running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>51</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 6</ReportKey>
+      <ReportText>Is an unacceptable Full-Text Search Service account being used? Recommendation Create a Windows local user account or domain user account to run SQL Server 2000 services. Create a name that does not easily identify it with SQL Server.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>52</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the SQL Server Browser running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>53</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 6</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Browser Service account being used? Recommendation Create a Windows local user account or domain user account to run SQL Server 2000 services. Create a name that does not easily identify it with SQL Server.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>54</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any servers in the policy missing audit data?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>55</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 55</ReportKey>
+      <ReportText>Is audit data incomplete?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>56</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is any audit data from a non-baseline snapshot?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>57</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 9</ReportKey>
+      <ReportText>Is the password policy enabled for all SQL Logins? Recommendation: User Standards for usernames and passwords</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>58</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 41</ReportKey>
+      <ReportText>Are any permissions granted to the public database role? Recommendation: The public role encompasses all users of a database; therefore, any changes to this role will affect all users of the database. Unless absolutely required for a particular environment, it is recommended that public NOT be used to assign permissions to users in a database.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>59</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 9</ReportKey>
+      <ReportText>Does any SQL Login have a blank password? Recommendation: Blank passwords do not meet standard password requirements.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>60</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SNAC p. 41</ReportKey>
+      <ReportText>Are any fixed roles assigned to the public role or guest user? Recommendation: The public role encompasses all users of a database; therefore, any changes to this role will affect all users of the database. Unless absolutely required for a particular environment, it is recommended that public NOT be used to assign permissions to users in a database.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>61</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the BUILTIN/Administrators group assigned to the sysadmin role?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+  </PolicyMetrics>
+</Policy>

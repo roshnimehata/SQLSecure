@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html class="" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Explore Security Settings" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <!-- saved from url=(0014)about:internet -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Viewing snapshots</title>
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body class="NewPage">
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">View snapshot summary</h1>
+        <p class="Body"><a name="kanchor42"></a>The Snapshot Summary tab lists statistics and other information about the selected snapshot. </p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/Tip.css');" class="TableStyle_Tip" cellspacing="0">
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">TIP</td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">Login counts may differ from what is displayed in SQL Server 2005 or later. This count displays the number of Server Principles collected. In SQL Server 2005 or later, Server Principles include Logins, Server Roles, and Certificates, while in SQL Server 2000, principles include only Logins.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1736233172_0" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What are snapshots?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1736233172_0" style="display: none;">
+                <p class="Body">Each snapshot is a listing of permission settings on a SQL Server instance at a particular point in time. You can filter and schedule your snapshots from the Audit SQL Server Properties window. Consider taking snapshots on a routine, scheduled basis. Because snapshots are taken over time, they can be viewed to see when changes are made to user or object permissions. For more information on configuring your snapshots, see <a href="Configure Audit Settings.htm">Audited SQL Server Properties window</a>.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1736233172_1" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What do I need to configure before collecting snapshots?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1736233172_1" style="display: none;">
+                <p class="Body">Before snapshots are taken, you must tell SQLsecure what permission data you would like to collect and when you want SQLsecure to collect it.</p>
+                <p class="Body">Snapshots are configured on the <a href="ASP Filters tab.htm">Audit Filters tab</a> in the SQL Server Properties window. The Audit Filters tab allows you to choose the permission data that is most important to you. After you choose the appropriate settings, you can schedule the snapshot collection times on the Schedule tab.</p>
+                <p class="Body">To collect data about SQL&#160;login password health, use the <a href="Configure Password Detection.htm">Configure Weak Password Detection window</a>.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1736233172_2" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How do snapshots help me?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1736233172_2" style="display: none;">
+                <p class="Body">Snapshot help you assess and manage your security settings. Snapshots represent the state of your SQL Server security at a given point in time. This provides a powerful tool you can use to diagnose security problems and quickly see where changes occur.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1736233172_3" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How do snapshots work?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1736233172_3" style="display: none;">
+                <p class="Body">SQLsecure uses snapshots to capture security permission settings on SQL Server instances at configured intervals. At the scheduled time, a SQLsecure job is executed and data is collected from the SQL Server instance to the Repository database. This data set represents a single snapshot and is accessed directly by the SQLsecure Console.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1736233172_4" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How do I manage my snapshot list?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1736233172_4" style="display: none;">
+                <p class="Body">Snapshots are managed through the grooming process. Grooming allows you to determine which snapshots should be deleted from the SQLsecure Repository. You can schedule grooming to occur on a routine basis, ensuring you keep only the snapshots you need. For more information, see <a href="Grooming Snapshots.htm">Grooming</a>. Keep in mind that snapshots associated with saved assessments cannot be groomed.</p>
+                <p class="Body">Be aware that snapshots that have been marked as baselines are not groomed.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1736233172_5" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />Why do I need to mark a snapshot as a baseline?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1736233172_5" style="display: none;">
+                <p class="Body">Baseline snapshots are snapshots that will not be deleted in the grooming process. </p>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="font-size: 10pt;text-align: left;">
+                                <p class="TableHeadRow">When snapshot should be marked as baseline</p>
+                            </th>
+                            <th class="HeadD-Column2-Header1" style="font-size: 10pt;text-align: left;">
+                                <p class="TableHeadRow">Importance</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">When you take your first snapshot</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">To have a starting point to use to identify changes to permissions over time</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">At the end of the month, quarter, or year</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">To track compliance to your database security policies</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">When you implement a new security model</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">To identify unwanted changes or issues with the new model</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">When you notice problems or irregularities in permission settings in a snapshot</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">To analyze the issue to correct problems and change permissions settings</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1736233172_6" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How do I use snapshots?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1736233172_6" style="display: none;">
+                <p class="Body">Use the following tasks to configure and manage your snapshots. </p>
+                <ul style="list-style-type: circle;">
+                    <li class="Bullet" value="1">Configure snapshots on the Audited SQL Server Properties window</li>
+                    <li class="Bullet" value="2">Schedule snapshot collection times on the Audited SQL Server Properties window</li>
+                    <li class="Bullet" value="3">Explore user permissions on the Explore Permissions view</li>
+                    <li class="Bullet" value="4">Mark a snapshot as a baseline from the Audit History tab on the Explore Permissions view</li>
+                    <li class="Bullet" value="5">Delete snapshots that you do not want to keep from the Audit History tab on the Explore Permissions view</li>
+                    <li class="Bullet" value="6">Collect audit data manually by selecting <b>Take Snapshot Now</b> from the <span class="GUI_Item">File </span>menu</li>
+                </ul>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1736233172_7" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How do I resolve group names and group memberships across multiple domains?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1736233172_7" style="display: none;">
+                <p class="Body">Using a single account to resolve group names and enumerate group memberships can be problematic when SQL Server grants permissions to accounts across multiple externally trusted domains.</p>
+                <p class="Body">In this situation, the server account specified on the Audited SQL Server Properties window should be an account that has been granted access to these external domains. This can be accomplished by either setting up two-way trusts between the account's domain and the external domains, or by creating pass-through accounts on all the external domains.</p>
+            </div>
+        </div>
+        <div class="breadcrumb">
+            <p MadCap:conditions="Default.SEO" class="FooterWebLink"><a href="http://www.idera.com/Support/Service.aspx" target="_blank" class="FooterWebLink">Need more help? Search the Idera Customer Support Portal &gt; &gt;</a>
+            </p>
+        </div>
+        <div class="LearnMore">
+            <p MadCap:conditions="Default.SEO">SQLsecure tells you who has access to what on your SQL Server databases. <a href="http://www.idera.com/Products/SQL-Server/SQL-secure/" target="_blank" style="text-decoration: underline; color: #ffffff;">Learn&#160;more</a> &gt; &gt;</p>
+        </div>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO"><a class="IderaFooter" href="http://www.idera.com/Content/Products.aspx" target="_blank">Product</a> | <a href="http://www.idera.com/Action/Downloads.aspx" target="_blank" class="IderaFooter">Downloads</a> | <a href="http://www.idera.com/Action/Purchase.aspx" target="_blank" class="IderaFooter">Purchase</a> | <a href="http://www.idera.com/Support/" target="_blank" class="IderaFooter">Support</a> |&#160;<a href="http://www.idera.com/Content/Resources.aspx" target="_blank" class="IderaFooter">Resources</a> | <a href="http://www.idera.com/News/" target="_blank" class="IderaFooter">News</a> | <a href="http://www.idera.com/About-Us/" target="_blank" class="IderaFooter">About Us</a> | <a href="http://www.idera.com/Action/Show.aspx?&amp;ThisList=Quotes" target="_blank" class="IderaFooter">Customers</a> | <a href="http://www.idera.com/Partners/" target="_blank" class="IderaFooter">Partners</a></p>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO">Copyright ©2003-2012 Idera, Inc. | <a href="Legal Notice.htm" target="_blank" class="IderaFooter">Legal</a></p>
+        <script type="text/javascript">/* <![CDATA[ */
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16422007-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+/* ]]> */</script>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" class="" MadCap:lastBlockDepth="8" MadCap:lastHeight="1468" MadCap:lastWidth="567">
+    <head><title>Customizing Reports</title>
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" MadCap:stylesheetType="table" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Use Reporting Services to generate reports</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Use Reporting Services to generate reports</h2>
+        <p class="Body">
+            <MadCap:keyword term="Reports;Custom Reports;Microsoft Reporting Services;auditing:report on;assessments:report on;requirements:MS Reporting Services" />SQLsecure includes the ability to take the existing built-in SQLsecure reports and seamlessly integrate them into Microsoft Reporting Services. For each built-in SQLsecure report, the Deploy Reports wizard installs a Report Definition Language (RDL)&#160;file. These RDL&#160;files define the report layout and parameters, using the data source (SQLsecure Repository) you specified during install. Reporting Services automatically acknowledges these files, allowing you to immediately generate and view reports on audit data using the Reports Manager Web interface.</p>
+        <p class="Body">You can view, customize, and develop new reports based on any of the built-in SQLsecure reports to fit your unique auditing needs. Reports can be viewed in an existing SQL&#160;Server environment that uses a dedicated Report Server. If you decide to use Microsoft Reporting Services, consider the following best practices:</p>
+        <ul style="list-style-type: circle;">
+            <li class="Bullet">Save your new and modified reports to a separate folder</li>
+            <li class="BulletLast">Use a different filename for modified reports</li>
+        </ul>
+        <p class="Body">For more information about the Reporting Services architecture, see the Reporting Services Books Online. For more information about developing custom reports using Microsoft Reporting Tools, see the Reporting Services Books Online.</p>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How does Microsoft Reporting Services work with SQLsecure?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">You can implement Reports on any computer running Reporting Services. The following installation scenario illustrates how you can implement Microsoft Reporting Services reports in an existing SQL&#160;Server environment that uses a dedicated Report Server.</p>
+                <p class="Body">
+                    <img src="../Resources/Images/SQLsecure Help/06000003.png" style="width: 446px;height: 384px;" />
+                </p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What permissions does Microsoft Reporting Services require?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Microsoft Reporting Services Reports leverage the existing role-based security model provided with Reporting Services. These reports support Windows authentication (mixed mode on SQL&#160;Server) and require the following permissions and rights to successfully generate reports on your audit data. Assessing the appropriate role on the SQLsecure folder in Report Manager, the individual report files inherit the permissions you set. By default, the Deploy Reports Wizard writes the report files to the <code>C:\Program Files\IderaSQLsecure\Reports</code> folder on the Report Server computer.</p>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <col class="Column-Column1" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="text-align: left;">
+                                <p class="TableHeadRow">Account</p>
+                            </th>
+                            <th class="HeadE-Column2-Header1" style="text-align: left;">
+                                <p class="TableHeadRow">Action</p>
+                            </th>
+                            <th class="HeadD-Column1-Header1" style="text-align: left;">
+                                <p class="TableHeadRow">Requirement</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="Body-Body1">
+                            <td style="font-size: 10pt;" class="BodyE-Column1-Body1">
+                                <p class="TableText">Logon account used for install</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Write RDL&#160;files to the Report server computer and configure reports</p>
+                            </td>
+                            <td class="BodyD-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Write access to the Report Server file system and Content Manager role</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Proxy user</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Connect to the Repository and read data per report parameters</p>
+                            </td>
+                            <td class="BodyD-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Read access to the Repository databases</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Administrator</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Configure reports and set security</p>
+                            </td>
+                            <td class="BodyD-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Content Manager role</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyB-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">End user (auditor or manager)</p>
+                            </td>
+                            <td class="BodyB-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Generate and view audit reports</p>
+                            </td>
+                            <td class="BodyA-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Browse role</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How are reports installed?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">The <a href="Deploy Reports Wizard Welcome.htm">Deploy Reports wizard</a> allows you to specify the proxy user account credentials and deploy the reports. Perform this deployment for each Repository that contains data you want to audit using Reports. Once installed, click the <span class="GUI_Item">View Deployed Reports</span> link at the bottom of the SQLsecure Reports window to find your reports.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How can I set up permissions for auditors to generate reports?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body"> 
+To grant auditors the ability to view and generate reports, create a SQL Server login and grant the <span class="GUI_Item">Can view</span> and <span class="GUI_Item">Report on audit data</span> permissions. Ensure that this account has the <span class="GUI_Item">Browse </span>role on the root folder.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

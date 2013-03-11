@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="672" MadCap:lastWidth="980">
+    <head>
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" MadCap:stylesheetType="table" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" MadCap:stylesheetType="table" />
+    </head>
+    <body>
+        <h1 class="Heading1">Schedule snapshots for routine data collection</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Schedule snapshots for routine data collection</h2>
+        <p class="Body">
+            <MadCap:keyword term="snapshots:schedule;snapshots:data collection;auditing:data collection" />The Schedule Snapshots window allows you to choose the best times to collect data from your SQL Server instance.&#160;</p>
+        <p class="Body">By default, snapshots are scheduled to run at midnight  every Sunday morning (using the local time of the computer hosting the SQLsecure Repository). </p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/Tip.css');" class="TableStyle_Tip" cellspacing="0">
+            <col style="width: 30px;" />
+            <col />
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                        <p>TIP</p>
+                    </td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">SQLsecure requires that a user be logged in as the SQLsecure Administrator to view snapshot schedules.</td>
+                </tr>
+            </tbody>
+        </table>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do I use the Schedule Snapshots window?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">The Schedule Snapshots window contains the data collection schedule that is currently being used for the SQL Server selected instance. To change the schedule, click <b>Change</b> and select the new time and frequency.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What times should I schedule my snapshot collections?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">When possible, schedule snapshots to run during non-peak or off-hour times. </p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What can I&#160;do on the Schedule Snapshots window?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="font-size: 10pt;text-align: left;">Item</th>
+                            <th class="HeadD-Column2-Header1" style="font-size: 10pt;text-align: left;">Description</th>
+                        </tr>
+                    </thead>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Change</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">Click this button to edit your audit snapshot collection schedule.</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Enable Scheduling</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">Select this option to specify the audit snapshot schedule.</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Keep snapshot for [number] days</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">Specify the number of days that you want to store snapshots in the SQLsecure Repository.</p>
+                        </td>
+                    </tr>
+                </table>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do I view snapshot properties?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">To view the properties of a specific snapshot, right-click the snapshot in the Snapshots window and then select <span class="GUI_Item">Properties</span> from the context menu.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How can I view a list of snapshots on my audited SQL Server?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">To view a list of snapshots and baselines for a specific SQL Server, select the <span class="GUI_Item">Audit History</span> tab on the Explore Permissions view. </p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>When is the first snapshot taken?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">The first snapshot is taken at the first scheduled snapshot collection time. You can manually take a snapshot at any time by right-clicking the SQL Server instance in the Explore Permissions view and then selecting <span class="GUIItem_1"><span class="GUI_Item">Take Snapshot</span> from the context menu</span>.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

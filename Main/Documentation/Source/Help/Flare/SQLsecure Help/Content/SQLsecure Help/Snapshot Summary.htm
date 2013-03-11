@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" class="" MadCap:lastBlockDepth="6" MadCap:lastHeight="861" MadCap:lastWidth="710">
+    <head>
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" MadCap:stylesheetType="table" /><title>Snapshot Summary</title>
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Use snapshots to collect audit data</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Use snapshots to collect audit data</h2>
+        <p class="Body">
+            <MadCap:keyword term="snapshots:about;snapshots:results" />SQLsecure uses audit snapshots to capture SQL&#160;Server user and object permission settings. These snapshots are listed in Explore Permissions tree. A snapshot is a set of audit data that SQLsecure has collected from a specific SQL&#160;Server instance. You can configure snapshot filters to select which SQL&#160;Server objects you want to audit.&#160;You can take snapshots <a href="Take Snapshot.htm#_Toc188773010">manually</a>, as you need fresh data, or <a href="Schedule Snapshots.htm">schedule snapshots</a> to be taken at regular intervals.</p>
+        <p class="Body">The Snapshot Summary tab provides detailed information about your snapshot, including the time it was taken, the collection statistics, audit filter information, and a listing of any Suspect Windows accounts or unavailable databases that were encountered while the Snapshot was being taken. For more information on unresolved Windows accounts, see <a href="Suspect Windows Accounts.htm">Identify Suspect Windows Accounts</a>. For more information on unavailable databases, see <a href="Unavailable Databases.htm">Identify Unavailable Databases</a>.</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/Tip.css');" class="TableStyle_Tip" cellspacing="0">
+            <col style="width: 30px;" />
+            <col />
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                        <p>TIP</p>
+                    </td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                        <p class="TableText">To collect and review data about the password health of your SQL&#160;logins, <a href="Configure Password Detection.htm">enable weak password detection</a>.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What data is located on the Snapshot Summary?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">The Snapshot Summary contains the following types of information:</p>
+                <p class="DefinitionListTerm">Snapshot Properties</p>
+                <p class="DefinitionListBody">Provides the basic status of the selected snapshot, the time it was collected, how long the collection took to complete, whether or not it has been selected as a baseline, and any comments associated with it.</p>
+                <p class="DefinitionListTerm">Audit Summary</p>
+                <p class="DefinitionListBody">Lists the statistics of the snapshot. These statistics include the number of objects, permissions, databases, logins, Windows accounts, and Windows well-known groups associated with the snapshot.</p>
+                <p class="DefinitionListTerm">Windows Accounts</p>
+                <p class="DefinitionListBody">Provides a partial list of the Windows users and groups that have access to the selected SQL&#160;Server instance.</p>
+                <p class="DefinitionListTerm">OS&#160;Windows Accounts</p>
+                <p class="DefinitionListBody">Provides a partial list of the Windows users and groups that have access to OS&#160;objects but do not interact with SQL&#160;Server objects.</p>
+                <p class="DefinitionListTerm">Filters</p>
+                <p class="DefinitionListBody">Provides the filter information associated with the selected snapshot. For more information, see <a href="Using the Add Filter wizard.htm#_Toc188772973">Filters</a>.</p>
+                <p class="DefinitionListTerm">Suspect Windows Accounts</p>
+                <p class="DefinitionListBody">Lists the Accounts that SQLsecure was unable to collect data on. This can occur when SQLsecure does not have the proper rights to collect information on these users, or if the account was deleted. For more information, see <a href="Suspect Windows Accounts.htm#_Toc188772966">Suspect Windows Accounts</a>.</p>
+                <p class="DefinitionListTerm">Suspect OS&#160;Windows Accounts</p>
+                <p class="DefinitionListBody">Lists the Accounts that SQLsecure was unable to collect data on. This can occur when SQLsecure does not have the proper rights to collect information on these users, or if the account was deleted. For more information, see <a href="Suspect Windows Accounts.htm#_Toc188772966">Suspect Windows Accounts</a>.</p>
+                <p class="DefinitionListTerm">Unavailable Databases</p>
+                <p class="DefinitionListBody">Lists the databases that SQLsecure was unable to collect SQL&#160;Server security data on. This can happen when a database is unavailable during SQLsecure data collection. For more information, see <a href="Unavailable Databases.htm#_Toc188772967">Unavailable Databases</a>.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

@@ -1,0 +1,1723 @@
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            
+//  IIIIIII SSSSSS                                                            
+//    II    SS                          InstallShield (R)                     
+//    II    SSSSSS      (c) 1996-2002, InstallShield Software Corporation     
+//    II        SS                     All rights reserved.             
+//  IIIIIII SSSSSS                  
+//                                                                            
+//                                                                            
+//  This template script provides the code necessary to build an entry-point 
+//  function to be called in an InstallScript custom action. 
+//                                                                            
+//                                                                            
+//    File Name:  Setup.rul                                                   
+//                                                                            
+//  Description:  InstallShield script                                        
+//
+////////////////////////////////////////////////////////////////////////////////
+    
+// Include Ifx.h for built-in InstallScript function prototypes, for Windows 
+// Installer API function prototypes and constants, and to declare code for 
+// the OnBegin and OnEnd events.
+#include "ifx.h"
+
+// The keyword export identifies MyFunction() as an entry-point function.
+// The argument it accepts must be a handle to the Installer database
+
+export prototype CheckDMO(HWND);
+export prototype CheckFeatureState(HWND); 
+export prototype CheckFileVersion(HWND); 
+export prototype CheckForBetaInstall(HWND);
+export prototype CheckRepositoryExist(HWND);
+export prototype CheckServiceSQLAcct(HWND); 
+export prototype CheckSQLdmInstalled(HWND);
+export prototype ConfirmINSTALLDirMedia(HWND);
+export prototype ConfirmINSTALLDirectory(HWND);
+export prototype MessageBoxProperties(HWND);
+export prototype RemoveJobsonUninstall(HWND);
+export prototype RemoveSlashINSTALLDirMedia(HWND);  
+export prototype RemoveUserFiles(HWND); 
+export prototype CheckGUICompatability(HWND);
+export prototype SetupCollectorLocation(HWND);
+export prototype SetPreserveJobs(HWND); 
+export prototype UpdateLocalInstance(HWND);
+export prototype UpgradeBackupServiceMessageBox(HWND);
+export prototype UpgradeRepositoryCheck(HWND);
+
+
+
+prototype _WriteToLogFile(HWND, STRING);
+prototype BOOL CheckDriveLetter(STRING);
+prototype BOOL DirCheckCharacters(STRING); 
+prototype BOOL DirCheckPath(STRING);
+prototype BOOL DirCheckSlash(STRING);
+prototype DeleteDirectory(STRING); //accepts a directory path
+prototype NUMBER DoesDatabaseExist();
+prototype LONG DoesSQLAccountExist(STRING, STRING, STRING); 
+prototype STRING EscapeDatabaseName(STRING);
+prototype LocalInstance(STRING, STRING);
+prototype BOOL IsValidDatabaseName(STRING);
+prototype NUMBER IsValidRepositoryVersion(); 
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// GLOBAL VARIABLES 
+///////////////////////////////////////////////////////////////////////////////
+
+ 	#define DELIMITER "|" 
+ 	// Stars
+	#define  LONG_STARS               "*****************************************************************"
+	#define  STARS                    "*** "                                       
+
+///////////////////////////////////////////////////////////////////////////////
+//  CheckFeatureState
+//  Checks the Feature state of the previously installed product during a upgrade  
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+function CheckFeatureState(hMSI) 
+	OBJECT installer, features;
+	STRING ProductCode, feature, state;
+	NUMBER i, nvStringBufferSize; 
+
+begin 
+_WriteToLogFile(hMSI, LONG_STARS);
+
+_WriteToLogFile(hMSI, "Intializing Properties");
+   
+	// Get the properties for the connection string
+    nvStringBufferSize = 256;
+                                                             
+    
+_WriteToLogFile(hMSI, "Getting Properties");    
+    
+    MsiGetProperty(ISMSI_HANDLE, "ISACTIONPROP1", ProductCode, nvStringBufferSize);
+
+_WriteToLogFile(hMSI, ProductCode);
+
+if ProductCode = "" then
+ 
+   MsiSetProperty(ISMSI_HANDLE, "IS_MAJOR_UPGRADE", "");
+   
+   _WriteToLogFile(hMSI, "No product codes found setting to not use upgrade screens");
+   
+   exit;
+      
+endif;
+
+_WriteToLogFile(hMSI, "Creating Windows Installer Object");
+
+	set installer = CreateObject("WindowsInstaller.Installer");
+
+_WriteToLogFile(hMSI, "Connecting to Feature Object.");
+
+	set features = installer.Features(ProductCode);
+
+_WriteToLogFile(hMSI, "Checking Feature state of Product: " + ProductCode);
+
+	for i = 0  to features.Count - 1
+			
+		feature = features.item(i);
+		
+		state = installer.FeatureState(ProductCode, feature);		
+
+       if state = "3" then
+
+			if feature = "Console" then 
+		
+_WriteToLogFile(hMSI, "The Console is installed locally");
+			  	 	    
+				MsiSetProperty(ISMSI_HANDLE, "FS_CONSOLE", "1"); 
+				
+			endif ; 
+			
+			if feature = "Repository" then 
+		
+_WriteToLogFile(hMSI, "The Repository is installed locally");
+			  	 	    
+				MsiSetProperty(ISMSI_HANDLE, "FS_REPOSITORY", "1"); 
+				
+			endif ;	
+			 
+			if feature = "Reports" then 
+		
+_WriteToLogFile(hMSI, "The Reports are installed locally");
+			  	 	    
+				MsiSetProperty(ISMSI_HANDLE, "FS_REPORTS", "1"); 
+				
+			endif ;			    
+	    
+	    endif;
+	endfor;
+
+_WriteToLogFile(hMSI, LONG_STARS);
+	
+end;  
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  CheckRepositoryExist
+//                                                                           
+//  Purpose:  This function is called to check if the repository exists 
+//            and if it is a valid schema.  This differs from DoesDatabaseExist
+//            in that it just logs the existance.
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+
+
+function CheckRepositoryExist(hMSI) 
+	OBJECT pADOConnObj, pADORecordSetObj;
+	STRING szConnString, szSQL;
+	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType;
+	STRING svEscapedDatabaseName, svRepositoryVersion;
+	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize, nvResponse;
+	NUMBER iReturn, iRes;
+	BOOL bUpgradeDAL, bUpgrade;
+begin                         
+    // At this point, we consider the specified database to be valid
+    // and we'll be installing the database schema
+    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "");
+   
+    // Get the properties for the connection string
+    nvStringBufferSize = 256;
+    nvBoolBufferSize = 1;                                                              
+    MsiGetProperty(ISMSI_HANDLE, "INSTANCE", svServerName, nvStringBufferSize);
+    MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_DATABASE", svDatabaseName, nvStringBufferSize);
+	MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_AUTHENTICATION", svAuthenticationType, nvBoolBufferSize);
+	if (svAuthenticationType = "1") then
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_USERNAME", svUserName, nvStringBufferSize);  
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_PASSWORD", svUserPassword, nvStringBufferSize);
+	endif;
+	
+	// Get the SQLsafe Repository version
+	MsiGetProperty(ISMSI_HANDLE, "SCHEMA_VERSION", svRepositoryVersion, nvStringBufferSize);
+                                                                
+	if (IsValidDatabaseName(svDatabaseName) = FALSE) then
+		MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "1");
+		MessageBox("The database name contains invalid characters.  Please provide a valid database name.", WARNING);
+	    exit
+	endif;
+		// Escape the database name and save it to a separate property
+	svEscapedDatabaseName = EscapeDatabaseName(svDatabaseName);
+	MsiSetProperty(ISMSI_HANDLE, "ESCAPED_SQL_DATABASENAME", svEscapedDatabaseName);
+               
+    iReturn = DoesDatabaseExist();
+    
+    
+    switch (iReturn)	
+				
+		case 1:
+           
+         //Repository Exists goto next validation
+   
+			
+			
+		case 0:
+		
+			// Repository does not exist
+
+			MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "");
+			MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "");
+			MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+	        
+	        exit;
+		
+		case -2:
+		 
+			 // Connection Error 
+			 MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "");
+			 MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "-2"); 
+			 MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "1");
+			 
+			 exit;
+		
+
+
+	endswitch;
+			    
+			    
+	try
+		// Create ADO Connection Object to connect to the SQL server	               
+		
+		set pADOConnObj = CreateObject("ADODB.Connection");
+		
+		// Set the ADO connection properties and open the connection
+
+		pADOConnObj.Provider = "sqloledb";
+		pADOConnObj.Properties("Data Source").Value = svServerName;
+		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		if (svAuthenticationType = "0") then
+			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+		else
+		    pADOConnObj.Properties("User ID").Value = svUserName;
+		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		endif; 
+		
+		pADOConnObj.Open();
+
+	                                       			    
+		// Create ADO Recordset object for the return 
+		
+		set pADORecordSetObj = CreateObject("ADODB.Recordset");
+	
+		// Set some ADO Recordset properties
+		  
+		pADORecordSetObj.CursorType = 3;
+		pADORecordSetObj.ActiveConnection = pADOConnObj;
+		
+// Determine if the schema version matches
+				 
+		pADORecordSetObj.Open("SELECT dalversion FROM dbo.currentversion");
+ 
+
+switch (pADORecordSetObj(0))
+      
+        	case "900":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    
+            case "902":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");     
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    
+			 case "2000":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", ""); 
+			    
+			 case "2001":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", ""); 
+
+			 case "2002":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", ""); 
+
+			 case "2003":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", ""); 
+
+			 case "2500":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", ""); 
+
+			 case "2600":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+			 case "2700":
+                
+                bUpgradeDAL = FALSE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+	    	default:
+	    			    		
+	    		bUpgradeDAL = FALSE;
+	    		bUpgrade = FALSE; 
+				MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
+				MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
+				MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "1");
+		        MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+				MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "-1");
+				MsiSetProperty(ISMSI_HANDLE, "UPGRADE_RELEASE", "1");
+                pADORecordSetObj.Close;
+                exit
+
+		endswitch;		     
+ 		
+ 		pADORecordSetObj.Close;
+ 		
+ 		pADORecordSetObj.Open("SELECT schemaversion FROM dbo.currentversion");
+				 
+
+switch (pADORecordSetObj(0))
+      
+        	case "900":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+	        
+	        case "2000":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+	        
+	        case "2500":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+	        case "2600":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+	        case "2700":
+ 
+                bUpgrade = FALSE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+				default:
+	    			    		
+	    		bUpgradeDAL = FALSE;
+	    		bUpgrade = FALSE; 
+				MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
+				MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
+				MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "1");
+		        MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+				MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "-1");
+				MsiSetProperty(ISMSI_HANDLE, "UPGRADE_RELEASE", "1");   
+				pADORecordSetObj.Close;
+                exit
+
+
+		endswitch;
+		
+		
+         if bUpgrade || bUpgradeDAL then
+         	   	
+		   	MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "2");
+		   	
+		   	iRes = MessageBox("Would you like to update the SQLsecure Repository database?", 52);
+			
+			if iRes = 6 then
+		        			        
+		        
+				MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");	
+	
+			else
+				
+				
+				MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "1");
+									
+			endif;
+		
+		elseif !bUpgrade & !bUpgradeDAL then
+		
+			MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "1");
+		 	iRes = AskYesNo("A valid version of the SQLsecure Repository already exists on the target SQL Server.  Would you like to use the existing database?", YES);
+				
+			if iRes = NO then
+		        			        
+		        
+				MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "1");	
+	
+			else
+				
+				
+				MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+									
+			endif;
+		
+		endif;			
+										
+		// Cleanup
+
+		pADORecordSetObj.Close();
+		pADOConnObj.Close();
+	catch
+	
+		MsiSetProperty(ISMSI_HANDLE, "UPGRADE_RELEASE", "1");
+		MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "1");
+		MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "");
+		MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "-3");
+		MessageBox("Unable to connect to the SQLsecure Repository.  Please ensure you have rights to the SQLsecure Repository database.", WARNING);
+		    
+	endcatch;
+				
+end;
+///////////////////////////////////////////////////////////////////////////////
+//
+//	Function: DoesDatabaseExist
+//
+//	Purpose: This function will determine whether a given database exists.
+//
+///////////////////////////////////////////////////////////////////////////////     
+function NUMBER DoesDatabaseExist() 
+	OBJECT pADOConnObj, pADORecordSetObj;
+	STRING szConnString, szSQL;
+	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType;
+	STRING svEscapedDatabaseName;
+	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize, iReturn;
+begin                         
+
+   
+    // Get the properties for the connection string
+    nvStringBufferSize = 256;
+    nvBoolBufferSize = 1;                                                              
+    MsiGetProperty(ISMSI_HANDLE, "INSTANCE", svServerName, nvStringBufferSize);
+    MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_DATABASE", svDatabaseName, nvStringBufferSize);
+	MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_AUTHENTICATION", svAuthenticationType, nvBoolBufferSize);
+	if (svAuthenticationType = "1") then
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_USERNAME", svUserName, nvStringBufferSize);  
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_PASSWORD", svUserPassword, nvStringBufferSize);
+	endif;
+	
+	                                                            
+	// Escape the database name and save it to a separate property
+	svEscapedDatabaseName = EscapeDatabaseName(svDatabaseName);
+	MsiSetProperty(ISMSI_HANDLE, "ESCAPED_SQL_DATABASENAME", svEscapedDatabaseName);
+               
+    try
+		// Create ADO Connection Object to connect to the SQL server	               
+		set pADOConnObj = CreateObject("ADODB.Connection");
+		
+		// Set the ADO connection properties and open the connection
+		pADOConnObj.Provider = "sqloledb";
+		pADOConnObj.Properties("Data Source").Value = svServerName;
+		pADOConnObj.Properties("Initial Catalog").Value = "master";
+		if (svAuthenticationType = "0") then
+			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+		else
+		    pADOConnObj.Properties("User ID").Value = svUserName;
+		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		endif;
+		pADOConnObj.Open();
+	                                       			    
+		// Create ADO Recordset object for the return
+		set pADORecordSetObj = CreateObject("ADODB.Recordset");
+	
+		// Set some ADO Recordset properties  
+		pADORecordSetObj.CursorType = 3;
+		pADORecordSetObj.ActiveConnection = pADOConnObj;
+		
+		// Create the SQL string to retrieve the database if it exists    
+		szSQL = "Select name from sysdatabases where name='" + svEscapedDatabaseName + "'";    
+		
+		// Use the recordset to see if the database exists 
+		pADORecordSetObj.Open(szSQL);
+		if (pADORecordSetObj.RecordCount = 1) then
+        
+        	iReturn = 1;
+        
+        else
+        
+        	iReturn = 0;
+        
+		endif;
+			
+		// Cleanup
+		pADORecordSetObj.Close();
+		pADOConnObj.Close();
+	catch
+	    iReturn = -2;
+		MessageBox(Err.Description, WARNING);
+	endcatch;
+  
+  return iReturn;
+  
+end;
+
+function BOOL IsValidDatabaseName(svDatabaseName) 
+begin
+        	
+	if (StrFind(svDatabaseName, "\"") >= 0) || 
+	   (StrFind(svDatabaseName, "*") >= 0) ||
+	   (StrFind(svDatabaseName, "?") >= 0) ||
+	   (StrFind(svDatabaseName, "|") >= 0) ||
+	   (StrFind(svDatabaseName, ":") >= 0) ||
+	   (StrFind(svDatabaseName, "\\") >= 0) ||
+	   (StrFind(svDatabaseName, "/") >= 0) then
+		return FALSE;
+	endif;
+
+	return TRUE;        
+end;
+
+function STRING EscapeDatabaseName(svDatabaseName)
+begin
+	StrReplace(svDatabaseName, "'", "''", 0);
+    return svDatabaseName;
+end;
+
+
+		
+		
+
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  MyFunction
+//                                                                           
+//  Purpose:  This function will be called by the script engine when 
+//            Windows(TM) Installer executes your custom action (see the "To 
+//            Do," above).
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+
+     
+                  
+function CheckDMO(hMSI)
+    STRING  szKey;  
+    STRING  szPropertyValue;
+    NUMBER  nRootKey;      
+    OBJECT	oSqlServer;
+
+begin
+
+// Set SQL-DMO object
+set oSqlServer = CoCreateObject("SQLDMO.Database");
+// Check if the object creation worked
+if ( !IsObject(oSqlServer) ) then    
+    //SQLDMO not installed
+    szPropertyValue = "TRUE";
+	MsiSetProperty(ISMSI_HANDLE, "INSTALLDMO", szPropertyValue);                      
+else
+	//SQLDMO installed
+	szPropertyValue = "FALSE";
+	MsiSetProperty(ISMSI_HANDLE, "INSTALLDMO", szPropertyValue);
+endif;
+end; 
+
+function CheckFileVersion(hMSI)
+    STRING  szKey;  
+    STRING  szPropertyValue;
+    NUMBER  nRootKey;      
+    OBJECT	oSqlServer;
+
+begin
+
+// Set SQL-DMO object
+//set oSqlServer = CoCreateObject("SQLDMO.Database");
+// Check if the object creation worked
+if ( !IsObject(oSqlServer) ) then    
+    //SQLDMO not installed
+    szPropertyValue = "TRUE";
+	MsiSetProperty(ISMSI_HANDLE, "SQLDMINSTALLED", "");                      
+else
+	//SQLDMO installed
+	szPropertyValue = "FALSE";
+	MsiSetProperty(ISMSI_HANDLE, "SQLDMINSTALLED", "1");
+endif;
+end; 
+
+
+function DeleteDirectory(directory)
+STRING fileName;
+
+begin
+  while ( FindFile(directory, "*.*", fileName)=0 ) //Finds all files in a directory
+    SetFileInfo(directory^fileName, FILE_ATTRIBUTE, FILE_ATTR_NORMAL, ""); //resets files attributes to NORMAL
+    DeleteFile(directory^fileName); //Delete File
+  endwhile;
+  DeleteDir(directory, ALLCONTENTS);
+end;    
+
+function RemoveUserFiles(hMSI)
+
+begin 
+ 
+ 	// Delete the install directory   
+	DeleteDirectory(INSTALLDIR);    
+	
+	// Delete all sqlsafe.prefs files
+	
+	
+
+end;      
+
+function MessageBoxProperties(hMSI)                        
+    STRING szMsg;
+    STRING  szPropertyValue;
+    NUMBER  nvBufferSize;  
+begin             
+                                              
+	nvBufferSize = 100;               
+	
+	MsiGetProperty(ISMSI_HANDLE, "INSTALL_SQLSAFE_REPOSITORY_USERNAME", szPropertyValue, nvBufferSize);
+    szMsg = szPropertyValue;
+
+    MessageBox (szMsg, WARNING);    
+    
+    MsiGetProperty(ISMSI_HANDLE, "INSTALL_SQLSAFE_REPOSITORY_PASSWORD", szPropertyValue, nvBufferSize);
+    szMsg = szPropertyValue;
+
+    MessageBox (szMsg, WARNING);  
+
+end;
+
+function UpgradeBackupServiceMessageBox(hMSI)                  
+    STRING szMsg;
+begin                                                     
+    MessageBox ("The local SQLsafe components have been upgraded. Please use the SQLsafe Management Console to upgrade any remote SQLsafe Backup Services installations.", WARNING);  
+end;  
+
+
+function CheckSQLdmInstalled(hMSI) 
+	NUMBER nvStringBufferSize, iRes;
+	STRING sSQLdmFile, sSQMdmPath, sMinVersion, sLocalVersion;
+
+begin                         
+    
+    
+    
+    
+    MsiSetProperty(ISMSI_HANDLE, "SQLdmInstalled", "");
+   
+    // Get the properties for the connection string
+    nvStringBufferSize = 256;
+    MsiGetProperty(ISMSI_HANDLE, "SQLdmMinVersion", sMinVersion, nvStringBufferSize);
+    MsiGetProperty(ISMSI_HANDLE, "SQLDM_OLD_LOCATION", sSQMdmPath, nvStringBufferSize);  
+	
+	sSQLdmFile = sSQMdmPath ^ "DiagnosticManager.exe";
+	
+	VerGetFileVersion(sSQLdmFile, sLocalVersion);
+	
+	 
+
+    iRes = 3;
+	
+	iRes = VerCompare(sLocalVersion, sMinVersion , VERSION);
+	
+	if iRes = 0 || iRes = 2 then 
+	// File is Equal to or Greater than min version.
+	MsiSetProperty(ISMSI_HANDLE, "SQLdmInstalled", "1");      
+
+	
+	else      
+	 // File is less than minimum version
+	 
+	 MsiSetProperty(ISMSI_HANDLE, "SQLdmInstalled", "");
+	 
+	endif;
+	
+end;    
+
+     
+
+
+function CheckServiceSQLAcct(hMSI) 
+	STRING svServerName, svDatabaseName, svUserName, svUserPassword;
+	NUMBER nvStringBufferSize, nvBoolBufferSize;
+	LONG iRes; 
+begin                         
+   
+    // At this point, we consider the specified database to be valid
+    // and we'll be installing the database schema
+    MsiSetProperty(ISMSI_HANDLE, "INVALID_SQLACCOUNT", "");
+   
+    // Get the properties for the connection string
+    nvStringBufferSize = 256;
+    nvBoolBufferSize = 1;                                                              
+    MsiGetProperty(ISMSI_HANDLE, "INSTANCE", svServerName, nvStringBufferSize);
+    MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_DATABASE", svDatabaseName, nvStringBufferSize);
+	MsiGetProperty(ISMSI_HANDLE, "SERVICE_SQL_USERNAME", svUserName, nvStringBufferSize);  
+	MsiGetProperty(ISMSI_HANDLE, "SERVICE_SQL_PASSWORD", svUserPassword, nvStringBufferSize);
+	
+	iRes = DoesSQLAccountExist(svServerName, svUserName, svUserPassword);	
+	
+	if iRes = 0 then 
+	
+	MsiSetProperty(ISMSI_HANDLE, "INVALID_SQLACCOUNT", "");
+	
+	else
+
+	MsiSetProperty(ISMSI_HANDLE, "INVALID_SQLACCOUNT", "1");
+	
+	MessageBox("The SQL Server Account specified could not be verified.  Please ensure the credentials are correct by clicking the change button.", WARNING);
+	
+	endif;
+	
+end; 
+
+function LONG DoesSQLAccountExist(svServerName, svUserName, svUserPassword) 
+	
+	OBJECT pADOConnObj;
+	
+begin                         
+   
+	                                                                         
+    try
+		// Create ADO Connection Object to connect to the SQL server	               
+		set pADOConnObj = CreateObject("ADODB.Connection");
+		
+		// Set the ADO connection properties and open the connection
+		pADOConnObj.Provider = "sqloledb";
+		pADOConnObj.Properties("Data Source").Value = svServerName;
+		pADOConnObj.Properties("Initial Catalog").Value = "master";
+		pADOConnObj.Properties("User ID").Value = svUserName;
+		pADOConnObj.Properties("Password").Value = svUserPassword;
+		
+		pADOConnObj.Open();                                      			    
+
+	catch
+	    return Err.Number;
+	    exit;
+	endcatch;
+
+	return 0;
+
+end; 
+
+///////////////////////////////////////////////////////////////////////////////
+//  CheckForBetaInstall
+//  Check if and BETA installation are setup locally  
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+
+function CheckForBetaInstall(hMSI) 
+	OBJECT installer;
+	STRING CheckProductCode;
+	NUMBER i; 
+
+begin 
+
+_WriteToLogFile(hMSI, LONG_STARS);
+
+_WriteToLogFile(hMSI, "Creating Windows Installer Object");
+
+set installer = CreateObject("WindowsInstaller.Installer");
+
+CheckProductCode = "{F79AC890-669D-4D90-85D3-A4071EE36532}";  
+
+_WriteToLogFile(hMSI, "Checking if Beta installer is installed locally");
+
+for  i = 0 to installer.Products.count - 1
+	
+	if installer.Products.item(i) = CheckProductCode then
+
+_WriteToLogFile(hMSI, CheckProductCode + " is installed locally");
+	  	 	    
+		MsiSetProperty(ISMSI_HANDLE, "BETA_INSTALL", "TRUE"); 
+		
+	endif ;                
+
+endfor;
+
+_WriteToLogFile(hMSI, LONG_STARS);
+	
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//  RemoveSlashINSTALLDirMedia
+//  Adds a trailing '\' to the INSTALLDIR path if it does not exist.  
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+function RemoveSlashINSTALLDirMedia(hMSI) 
+    
+	STRING sInstallDir;
+	NUMBER nvStringBufferSize; 
+
+begin 
+ 
+// Get the properties for the connection string
+nvStringBufferSize = 256;                                                           
+
+MsiGetProperty(ISMSI_HANDLE, "INSTALLDIR", sInstallDir, nvStringBufferSize);
+ 
+StrRemoveLastSlash ( sInstallDir );
+
+MsiSetProperty(ISMSI_HANDLE, "INSTALLDIR", sInstallDir);
+MsiSetTargetPath(ISMSI_HANDLE, "INSTALLDIR", sInstallDir);
+
+	
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//  ConfirmINSTALLDirMedia
+//  Initial check of InstallDir property  
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+function ConfirmINSTALLDirMedia(hMSI) 
+
+	STRING sInstallDir, sDir;
+	NUMBER nvStringBufferSize;
+	BOOL bRes; 
+
+begin 
+
+   
+	// Get the properties for the connection string
+    nvStringBufferSize = 256;
+    MsiSetProperty(ISMSI_HANDLE, "bINSTALLDrive", "TRUE");
+                                                                
+    
+    MsiGetProperty(ISMSI_HANDLE, "INSTALLDIR", sInstallDir, nvStringBufferSize);
+ 
+
+ 
+ bRes = CheckDriveLetter(sInstallDir);
+ 
+ if !bRes then 
+    
+ 	MsiSetProperty(ISMSI_HANDLE, "bINSTALLDrive", "FALSE");
+ 
+ endif;
+ 
+ StrSub ( sDir, sInstallDir, 0, 3 );
+ 
+ MsiSetProperty(ISMSI_HANDLE, "DRIVE_LETTER", sDir);
+ 
+				        
+ MsiSetProperty(ISMSI_HANDLE, "DRIVE_TYPE", "3");
+	
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//  ConfirmINSTALLDirectory
+//  Adds a trailing '\' to the INSTALLDIR path if it does not exist.  
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+function ConfirmINSTALLDirectory(hMSI) 
+    
+	STRING sInstallDir;
+	NUMBER nvStringBufferSize;
+	BOOL bRes ;
+
+begin 
+ 
+// Get the properties for the connection string
+nvStringBufferSize = 256; 
+
+ MsiSetProperty(ISMSI_HANDLE, "dirValid", "1");                                                          
+
+MsiGetProperty(ISMSI_HANDLE, "INSTALLDIR", sInstallDir, nvStringBufferSize);
+ 
+bRes = DirCheckPath ( sInstallDir );
+
+if !bRes then
+   
+      
+   MsiSetProperty(ISMSI_HANDLE, "dirValid", "");
+      
+endif;
+	
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//  DirCheckPath
+//  Runs through validations for specific path  
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+function BOOL DirCheckPath(sTraceDir) 
+    
+    STRING sDir;
+	BOOL bRes; 
+
+begin 
+ 
+ bRes = TRUE;
+ 
+ MsiSetProperty(ISMSI_HANDLE, "dirDoubleSlash", "");
+ MsiSetProperty(ISMSI_HANDLE, "dirIllegalChar", "");
+ 
+ if bRes then 
+ 
+ 	bRes = DirCheckSlash(sTraceDir);
+ 
+ endif;
+ 
+ if bRes then 
+ 
+ 	bRes = DirCheckCharacters(sTraceDir);
+ 
+ else
+ 
+ 	MsiSetProperty(ISMSI_HANDLE, "dirDoubleSlash", "1");
+ 
+ endif;
+ 
+  if (!bRes) then 
+ 
+ 	MsiSetProperty(ISMSI_HANDLE, "dirIllegalChar", "1");
+ 
+ endif;
+ 
+ return bRes; 
+	
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//  DirCheckSlash
+//  checks to make sure that there are no '\\' in the path.  
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+function BOOL DirCheckSlash(sInstallDir) 
+    
+    STRING sFindMe;
+	BOOL bRes; 
+    NUMBER nLocation; 
+    
+begin
+
+bRes = TRUE;
+nLocation = -1;
+
+    sFindMe = "\\\\";
+
+    // Find the substring specified by szFindMe.
+    nLocation = StrFind (sInstallDir, sFindMe);
+
+    // Display the location of the text if it was found.
+    if (nLocation < 0) then
+    // Not found
+    bRes = TRUE;
+    else
+    // Found
+    bRes = FALSE;
+    
+    endif;
+ 
+ 
+ return bRes; 
+	
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//  DirCheckCharacters
+//  Checks path for illegal characters  
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+function BOOL DirCheckCharacters(sInstallDir) 
+
+ STRING sDir;
+ NUMBER nLength;
+    
+begin 
+ 
+ nLength = StrLength ( sInstallDir );;
+ StrSub ( sDir, sInstallDir, 3, nLength - 3 );
+ 
+	if (StrFind(sDir, "\"") >= 0) || 
+	   (StrFind(sDir, "*") >= 0) ||
+	   (StrFind(sDir, "?") >= 0) ||
+	   (StrFind(sDir, "|") >= 0) ||
+	   (StrFind(sDir, "<") >= 0) ||  
+	   (StrFind(sDir, ">") >= 0) ||
+	   (StrFind(sDir, ":") >= 0) ||
+	   (StrFind(sDir, "/") >= 0) then		
+		
+		return FALSE;
+		
+	endif;
+	
+	return TRUE;
+	
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//  CheckDriveLetter
+//  Checks to make sure drive letter is formatted in 'c:\' format.  
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+function BOOL CheckDriveLetter(sInstallDir) 
+    
+    STRING sDir;
+	BOOL bRes; 
+
+begin 
+ 
+ bRes = TRUE;
+ 
+ StrSub ( sDir, sInstallDir, 1, 2 );
+ 
+ if sDir != ":\\" then	
+       
+ 	bRes = FALSE;      
+ 
+ endif;
+ 
+ return bRes; 
+	
+end;
+       
+////////////////////////////////////////////////////////////////////////////
+// Format and write a message to the log
+////////////////////////////////////////////////////////////////////////////
+function _WriteToLogFile(hInstall, szMessage)
+
+	NUMBER hRec;                                      
+	NUMBER lCount;  
+	STRING szOutput;
+	STRING szFullMessage;
+
+begin
+    
+    hInstall = ISMSI_HANDLE;
+    
+	//Validate the passed-in string
+	if (StrLength(szMessage) = 0) then
+		return;
+	endif;
+                
+	//Create a record with only one field
+	hRec = MsiCreateRecord(1);                  
+	
+	//Handle problem creating record
+	if (hRec = 0) then 
+		return;
+	endif;
+	
+	//Create the full message
+	szFullMessage = STARS + szMessage;
+
+	//Set that one field to the passed-in string
+	MsiRecordSetString(hRec, 1, szFullMessage);        
+	
+	//Set the formatting string to NULL
+	MsiRecordSetString(hRec, 0, "[1]");       
+	
+	//Get length of message to pass to MsiFormatRecord
+	lCount = StrLength(szFullMessage);
+	
+	//Format the record to get rid of the '1.'
+	MsiFormatRecord(hInstall, hRec, szOutput, lCount); 
+	
+	//Handle processing the message
+	MsiProcessMessage(hInstall,INSTALLMESSAGE_INFO, hRec);                 
+   
+end;       
+
+  
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  CheckGUICompatability
+//                                                                           
+//  Purpose:  Check the GUI to determin compatability. 
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+
+function CheckGUICompatability(hMSI) 
+	OBJECT pADOConnObj, pADORecordSetObj;
+	STRING szConnString, szSQL;
+	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType, svRepositoryVersion;
+	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize;
+	BOOL   bIsValidVersion;
+begin
+    
+         
+	// Get the properties for the connection string
+    nvStringBufferSize = 256;
+    nvBoolBufferSize = 1;                                                              
+    MsiGetProperty(ISMSI_HANDLE, "INSTANCE", svServerName, nvStringBufferSize);
+    MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_DATABASE", svDatabaseName, nvStringBufferSize);
+	MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_AUTHENTICATION", svAuthenticationType, nvBoolBufferSize);
+	if (svAuthenticationType = "1") then
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_USERNAME", svUserName, nvStringBufferSize);  
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_PASSWORD", svUserPassword, nvStringBufferSize);
+	endif;
+	
+	// Get the SQLsafe Repository version
+	MsiGetProperty(ISMSI_HANDLE, "SCHEMA_VERSION", svRepositoryVersion, nvStringBufferSize);
+    
+               
+    try
+		// Create ADO Connection Object to connect to the SQL server	               
+		set pADOConnObj = CreateObject("ADODB.Connection");
+		
+		// Set the ADO connection properties and open the connection
+		pADOConnObj.Provider = "sqloledb";
+		pADOConnObj.Properties("Data Source").Value = svServerName;
+		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		if (svAuthenticationType = "0") then
+			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+		else
+		    pADOConnObj.Properties("User ID").Value = svUserName;
+		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		endif;
+		
+		
+		pADOConnObj.Open();                                   			    
+		// Create ADO Recordset object for the return
+		set pADORecordSetObj = CreateObject("ADODB.Recordset");
+	
+		// Set some ADO Recordset properties  
+		pADORecordSetObj.CursorType = 3;
+		pADORecordSetObj.ActiveConnection = pADOConnObj;
+		
+		// Determine if the schema version matches 
+
+		
+		pADORecordSetObj.Open("EXEC dbo.isp_sqlsecure_isversioncompatible @dversion=" + svRepositoryVersion + ", @dtype='DAL'");
+				
+		if (pADORecordSetObj(0) = "Y") then
+			MsiSetProperty(ISMSI_HANDLE, "ValidGUI", "1");
+		else		
+			MsiSetProperty(ISMSI_HANDLE, "ValidGUI", "-1");
+		endif;
+		
+		// Cleanup
+		pADORecordSetObj.Close();
+		pADOConnObj.Close();
+	catch
+	    MsiSetProperty(ISMSI_HANDLE, "ValidGUI", "-2");
+	endcatch;
+
+       
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  SetupCollectorLocation
+//                                                                           
+//  Purpose:  Write the Collector location to the Repository. 
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+
+function SetupCollectorLocation(hMSI) 
+	OBJECT pADOConnObj, pADORecordSetObj;
+	STRING szConnString, szSQL;
+	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType, svInstallDir;
+	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize;
+
+begin
+	
+         
+	// Get the properties for the connection string
+    nvStringBufferSize = 256;
+    nvBoolBufferSize = 1;                                                              
+    MsiGetProperty(ISMSI_HANDLE, "INSTANCE", svServerName, nvStringBufferSize);
+    MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_DATABASE", svDatabaseName, nvStringBufferSize);
+	MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_AUTHENTICATION", svAuthenticationType, nvBoolBufferSize);
+	if (svAuthenticationType = "1") then
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_USERNAME", svUserName, nvStringBufferSize);  
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_PASSWORD", svUserPassword, nvStringBufferSize);
+	endif;
+	
+	// Get the SQLsafe Repository version
+	MsiGetProperty(ISMSI_HANDLE, "INSTALLDIR", svInstallDir, nvStringBufferSize);
+    
+               
+    try
+		// Create ADO Connection Object to connect to the SQL server	               
+		set pADOConnObj = CreateObject("ADODB.Connection");
+		
+		// Set the ADO connection properties and open the connection
+		pADOConnObj.Provider = "sqloledb";
+		pADOConnObj.Properties("Data Source").Value = svServerName;
+		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		if (svAuthenticationType = "0") then
+			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+		else
+		    pADOConnObj.Properties("User ID").Value = svUserName;
+		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		endif;
+		
+		
+		pADOConnObj.Open();                                   			    
+		// Create ADO Recordset object for the return
+		set pADORecordSetObj = CreateObject("ADODB.Recordset");
+	
+		// Set some ADO Recordset properties  
+		pADORecordSetObj.CursorType = 3;
+		pADORecordSetObj.ActiveConnection = pADOConnObj;
+		
+		// Determine if the schema version matches 
+
+		
+		pADORecordSetObj.Open("EXEC isp_sqlsecure_addcollectorinfo 'FILEPATH' , '" + svInstallDir + "Bin\\Idera.SQLsecure.Collector.exe'");
+
+		
+		// Cleanup
+		pADORecordSetObj.Close();
+		pADOConnObj.Close();
+	catch
+	    
+	    
+	    
+	endcatch;
+
+       
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//                                                                           
+// Function:  RemoveJobsonUninstall
+//                                                                           
+//  Purpose:  Check the GUI to determin compatability. 
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+
+function RemoveJobsonUninstall(hMSI) 
+	OBJECT pADOConnObj, pADORecordSetObj;
+	STRING szConnString, szSQL;
+	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType, svRepositoryVersion;
+	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize;
+	BOOL   bIsValidVersion;
+begin
+
+_WriteToLogFile(hMSI, LONG_STARS);
+
+_WriteToLogFile(hMSI, "Getting Connection Properties");    
+         
+	// Get the properties for the connection string
+    nvStringBufferSize = 256;
+    nvBoolBufferSize = 1;                                                              
+    MsiGetProperty(ISMSI_HANDLE, "INSTANCE", svServerName, nvStringBufferSize);
+    MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_DATABASE", svDatabaseName, nvStringBufferSize);
+	MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_AUTHENTICATION", svAuthenticationType, nvBoolBufferSize);
+	if (svAuthenticationType = "1") then
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_USERNAME", svUserName, nvStringBufferSize);  
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_PASSWORD", svUserPassword, nvStringBufferSize);
+	endif;
+	
+ 
+               
+    try
+
+_WriteToLogFile(hMSI, "Create ADO object");
+
+		// Create ADO Connection Object to connect to the SQL server	               
+		set pADOConnObj = CreateObject("ADODB.Connection");
+
+_WriteToLogFile(hMSI, "Create connection string");
+		
+		// Set the ADO connection properties and open the connection
+		pADOConnObj.Provider = "sqloledb";
+		pADOConnObj.Properties("Data Source").Value = svServerName;
+		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		if (svAuthenticationType = "0") then
+			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+		else
+		    pADOConnObj.Properties("User ID").Value = svUserName;
+		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		endif;
+
+_WriteToLogFile(hMSI, "Open Connection");		
+		
+		pADOConnObj.Open();                                   			    
+		// Create ADO Recordset object for the return
+		set pADORecordSetObj = CreateObject("ADODB.Recordset");
+	
+		// Set some ADO Recordset properties  
+		pADORecordSetObj.CursorType = 3;
+		pADORecordSetObj.ActiveConnection = pADOConnObj;
+		
+		// Determine if the schema version matches 
+
+_WriteToLogFile(hMSI, "Execure Stored Proceedure");
+		
+		pADORecordSetObj.Open("EXEC dbo.isp_sqlsecure_removealljobs");
+					
+		// Cleanup
+		pADORecordSetObj.Close();
+		pADOConnObj.Close();
+		
+_WriteToLogFile(hMSI, "Removal Success");
+
+	catch
+	    
+_WriteToLogFile(hMSI, "Removal Failed");	    
+	   
+	endcatch;
+
+_WriteToLogFile(hMSI, LONG_STARS);
+       
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//  UpdateLocalInstance
+//  Make sure the Repository is pointed at a local Instance   
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+function UpdateLocalInstance(hMSI)
+
+STRING szMsg;
+
+begin 
+
+szMsg = "The Repository must be set to a local instance.  Please update and continue.";
+
+LocalInstance("INSTANCE", szMsg);
+
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//  LocalInstance
+//  Function called to convert '.' and '(local)' to the Computer name   
+//  Also ensures the converted name does point to a local instance
+///////////////////////////////////////////////////////////////////////////////
+
+function LocalInstance(szInstance, szMsg)
+
+	STRING sServer, sComputerName, szPropertyValue, szServer, szComputerName;
+	STRING szChar, szProductName;
+	NUMBER nvStringBufferSize;
+
+begin
+// Initialize Numbers
+	nvStringBufferSize = 256;
+
+//Gets Properties to use.  The Instance is variablized to allow different checks
+
+	MsiGetProperty(ISMSI_HANDLE, szInstance, sServer, nvStringBufferSize);
+	MsiGetProperty(ISMSI_HANDLE, "ComputerName", sComputerName, nvStringBufferSize);
+	MsiGetProperty(ISMSI_HANDLE, "ProductName", szProductName, nvStringBufferSize);
+
+    
+// get first 2 characters of string to check for .\ 
+
+	StrSub (szChar, sServer, 0, 2);
+//uppercase all characters for string comparisons
+	StrToUpper (szServer, sServer);
+	StrToUpper (szComputerName, sComputerName);
+
+// check for .\ as intial characters
+	if szChar == ".\\" then
+       
+		StrReplace (szServer, ".", szComputerName, 0);
+		
+	    MsiSetProperty(ISMSI_HANDLE, szInstance, szServer);
+	    
+	endif;
+
+// check if instance entered as '.'
+if szServer == "." then
+        
+	StrReplace (szServer, ".", szComputerName, 0);    
+
+    MsiSetProperty(ISMSI_HANDLE, szInstance, szServer);
+    
+endif;    
+
+// check if Instance contains '(local)'
+if (szServer % "(LOCAL)") then
+        
+	StrReplace (szServer, "(LOCAL)", szComputerName, 0); 
+       
+    MsiSetProperty(ISMSI_HANDLE, szInstance, szServer);
+    
+endif;
+
+// check to ensure instance name contains the local computername
+// This is to ensure we are pointing at a local instance.
+if (szServer % szComputerName) then
+    // Everything is good update property and continue
+	
+	szPropertyValue = "TRUE";
+	MsiSetProperty(ISMSI_HANDLE, "bSQLLocal", szPropertyValue);
+    
+else
+    //Local Instance not found.  Warn User and set to not continue
+ 	
+ 	szPropertyValue = "FALSE";
+	MsiSetProperty(ISMSI_HANDLE, "bSQLLocal", szPropertyValue);
+		
+	SetDialogTitle (DLG_MSG_WARNING, szProductName);	
+	MessageBox (szMsg, WARNING);
+
+
+endif;
+
+end;      
+
+///////////////////////////////////////////////////////////////////////////////
+//  UpgradeRepositoryCheck
+//  Check to make sure the latest database schema is being used.  For Use
+//	During Upgrade.   
+//  
+///////////////////////////////////////////////////////////////////////////////
+
+function UpgradeRepositoryCheck(hMSI) 
+	OBJECT pADOConnObj, pADORecordSetObj;
+	STRING szConnString, szSQL;
+	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType, svRepositoryVersion;
+	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize, iRes;
+	BOOL   bIsValidVersion, bUpgrade, bUpgradeDAL;
+begin
+
+	bIsValidVersion = FALSE;     
+	// Get the properties for the connection string
+    nvStringBufferSize = 256;
+    nvBoolBufferSize = 1;                                                              
+    
+    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_CONFIRM", "1");
+    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+    
+    MsiGetProperty(ISMSI_HANDLE, "INSTANCE", svServerName, nvStringBufferSize);
+    MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_DATABASE", svDatabaseName, nvStringBufferSize);
+	MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_AUTHENTICATION", svAuthenticationType, nvBoolBufferSize);
+	if (svAuthenticationType = "1") then
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_USERNAME", svUserName, nvStringBufferSize);  
+		MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_PASSWORD", svUserPassword, nvStringBufferSize);
+	endif;
+	            
+    try
+		// Create ADO Connection Object to connect to the SQL server	               
+		
+		set pADOConnObj = CreateObject("ADODB.Connection");
+		
+		// Set the ADO connection properties and open the connection
+
+		pADOConnObj.Provider = "sqloledb";
+		pADOConnObj.Properties("Data Source").Value = svServerName;
+		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		if (svAuthenticationType = "0") then
+			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+		else
+		    pADOConnObj.Properties("User ID").Value = svUserName;
+		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		endif; 
+		
+		pADOConnObj.Open();
+
+	                                       			    
+		// Create ADO Recordset object for the return 
+		
+		set pADORecordSetObj = CreateObject("ADODB.Recordset");
+	
+		// Set some ADO Recordset properties
+		  
+		pADORecordSetObj.CursorType = 3;
+		pADORecordSetObj.ActiveConnection = pADOConnObj;
+		
+// Determine if the schema version matches
+				 
+		pADORecordSetObj.Open("SELECT dalversion FROM dbo.currentversion");
+ 
+
+switch (pADORecordSetObj(0))
+      
+        	case "900":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    
+            case "902":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");     
+			    
+			 case "2000":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");  
+			    
+			 case "2001":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");  
+
+			 case "2002":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+			 case "2003":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+			 case "2500":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+			 case "2600":
+                
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+			 case "2700":
+                
+                bUpgradeDAL = FALSE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+	    	default:
+	    			    		
+	    		bUpgradeDAL = FALSE;
+	    		bUpgrade = FALSE; 
+				MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
+				MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "-1");
+				MsiSetProperty(ISMSI_HANDLE, "UPGRADE_RELEASE", "1");
+				MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "1");
+
+
+		endswitch;		     
+ 		
+ 		pADORecordSetObj.Close;
+ 		
+ 		pADORecordSetObj.Open("SELECT schemaversion FROM dbo.currentversion");
+				 
+
+switch (pADORecordSetObj(0))
+      
+        	case "900":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+	        
+	        case "2000":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+ 	        
+	        case "2500":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+	        case "2600":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+	        case "2700":
+ 
+                bUpgrade = FALSE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+				default:
+	    			    		
+	    		bUpgradeDAL = FALSE;
+	    		bUpgrade = FALSE; 
+				MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
+				MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "-1");
+				MsiSetProperty(ISMSI_HANDLE, "UPGRADE_RELEASE", "1");
+				MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "1");
+
+
+		endswitch;
+		
+		
+         if bUpgrade || bUpgradeDAL then
+         
+			   	
+			   	MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "2");
+			   	
+			   	iRes = MessageBox("Would you like to update the SQLsecure Repository database?", 52);
+				
+				if iRes = 6 then
+			        			        
+			        
+					MsiSetProperty(ISMSI_HANDLE, "UPGRADE_CONFIRM", "1");	
+		
+				else
+					
+					
+					MsiSetProperty(ISMSI_HANDLE, "UPGRADE_CONFIRM", "");
+										
+				endif;
+		
+		else
+		
+			MsiSetProperty(ISMSI_HANDLE, "SCHEMA_VALIDATION", "1");
+		
+		endif;			
+										
+		// Cleanup
+
+		pADORecordSetObj.Close();
+		pADOConnObj.Close();
+	catch
+	
+		MsiSetProperty(ISMSI_HANDLE, "UPGRADE_RELEASE", "1");
+		    
+	endcatch;
+        
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//  SetPreserveJobs
+//  Sets the registry key PreserveTraces   
+//  This will instruct the upgrading application not to delete traces
+///////////////////////////////////////////////////////////////////////////////
+
+function SetPreserveJobs(hMSI)
+
+STRING szKey, svValue;
+
+begin
+_WriteToLogFile(hMSI, LONG_STARS);
+
+// Initialize values
+_WriteToLogFile(hMSI, "Initialize values");
+
+	szKey = "Software\\Idera\\SQLsecure\\Repository" ;  
+	
+	svValue = "1";
+
+_WriteToLogFile(hMSI, "Set Registry root to HKEY_LOCAL_MACHINE");  
+
+	RegDBSetDefaultRoot (HKEY_LOCAL_MACHINE);
+
+//set the registry key
+_WriteToLogFile(hMSI, "Set registry key PreserveJobs = " + svValue);
+
+	if (RegDBSetKeyValueEx (szKey, "PreserveJobs", REGDB_STRING, svValue , -1) < 0) then
+
+_WriteToLogFile(hMSI, "Error: Registry key could not be set");	
+
+	endif;
+
+_WriteToLogFile(hMSI, LONG_STARS);
+end;

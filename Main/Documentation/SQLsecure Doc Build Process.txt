@@ -1,0 +1,29 @@
+
+*******************************************
+Previous Releases of SQLsecure
+*******************************************
+
+<year>\<version>\Main\Documentation\Build
+
+SQLsecure Help.chm
+SQLsecure Quick Start Guide.pdf
+SQLsecure Release Notes.pdf
+SQLsecure User Guide.pdf
+
+The Help is converted from an MSWord file using WebWorks Publisher. The PDFs are created from MSWord files. All documentation source files are located under the Documentation\Source folder.
+
+
+*******************************************
+Current Release of SQLsecure
+*******************************************
+
+Main\Documentation\Build
+
+SQLsecure Help.chm
+SQLsecure Quick Start Guide.pdf
+SQLsecure Release Notes.pdf
+SQLsecure User Guide.pdf
+
+The Help is converted from an MSWord file using WebWorks Publisher. The PDFs are created from MSWord files. All documentation source files are located under the Documentation\Source folder.
+
+

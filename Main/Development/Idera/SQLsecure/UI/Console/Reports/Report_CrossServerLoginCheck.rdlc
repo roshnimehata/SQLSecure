@@ -1,0 +1,984 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="SQLsecure Data Source">
+      <DataSourceReference>SQLsecure Data Source</DataSourceReference>
+      <rd:DataSourceID>d5ad1358-36ef-49ac-b71f-5d4c829a0500</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <BottomMargin>0.5in</BottomMargin>
+  <RightMargin>0.5in</RightMargin>
+  <ReportParameters>
+    <ReportParameter Name="rundate">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=System.DateTime.Now.ToShortDateString()</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Use current data as of:</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="logintype">
+      <DataType>String</DataType>
+      <Prompt>Login Type:</Prompt>
+      <ValidValues>
+        <ParameterValues>
+          <ParameterValue>
+            <Value>W</Value>
+            <Label>Windows Account</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>S</Value>
+            <Label>SQL Login</Label>
+          </ParameterValue>
+        </ParameterValues>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="serverName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <Prompt>Server:</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="userName">
+      <DataType>String</DataType>
+      <Prompt>Login:</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Expand_All">
+      <DataType>Boolean</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>True</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Expand All:</Prompt>
+      <ValidValues>
+        <ParameterValues>
+          <ParameterValue>
+            <Value>True</Value>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>False</Value>
+          </ParameterValue>
+        </ParameterValues>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="ReportTitle">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportTitle</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="UserRange">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>UserRange</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <rd:GridSpacing>0.0625in</rd:GridSpacing>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <Body>
+    <ReportItems>
+      <Rectangle Name="rectangle1">
+        <ReportItems>
+          <Textbox Name="textbox8">
+            <Left>0.0625in</Left>
+            <ZIndex>1</ZIndex>
+            <Width>1.375in</Width>
+            <Style>
+              <FontWeight>700</FontWeight>
+              <Color>#404040</Color>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Value>About:</Value>
+          </Textbox>
+          <Textbox Name="textbox9">
+            <Left>1.4375in</Left>
+            <Width>5.8125in</Width>
+            <Style>
+              <Color>#404040</Color>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Value>="This report shows all SQL Servers where a selected user has access."</Value>
+          </Textbox>
+        </ReportItems>
+        <Top>0.75in</Top>
+        <ZIndex>4</ZIndex>
+        <Style>
+          <BorderStyle>
+            <Bottom>Dotted</Bottom>
+            <Top>Dotted</Top>
+          </BorderStyle>
+          <BorderColor>
+            <Default>LightGrey</Default>
+          </BorderColor>
+        </Style>
+        <Height>0.1875in</Height>
+      </Rectangle>
+      <Table Name="table2">
+        <Footer>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox17">
+                      <rd:DefaultName>textbox17</rd:DefaultName>
+                      <ZIndex>5</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Top>Solid</Top>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <BorderWidth>
+                          <Default>5pt</Default>
+                        </BorderWidth>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <BorderColor>
+                          <Default>#006699</Default>
+                        </BorderColor>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox18">
+                      <rd:DefaultName>textbox18</rd:DefaultName>
+                      <ZIndex>4</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Top>Solid</Top>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <BorderWidth>
+                          <Default>5pt</Default>
+                        </BorderWidth>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <BorderColor>
+                          <Default>#006699</Default>
+                        </BorderColor>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox16">
+                      <rd:DefaultName>textbox16</rd:DefaultName>
+                      <ZIndex>3</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Top>Solid</Top>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <BorderWidth>
+                          <Default>5pt</Default>
+                        </BorderWidth>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <BorderColor>
+                          <Default>#006699</Default>
+                        </BorderColor>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>0.1in</Height>
+            </TableRow>
+          </TableRows>
+        </Footer>
+        <DataSetName>ReportsDataset_isp_sqlsecure_report_getuserserveraccess</DataSetName>
+        <Top>1.8125in</Top>
+        <TableGroups>
+          <TableGroup>
+            <Header>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ColSpan>3</ColSpan>
+                      <ReportItems>
+                        <Textbox Name="ServerNameText">
+                          <ZIndex>8</ZIndex>
+                          <ToggleImage>
+                            <InitialState>=IIF(Parameters!Expand_All.Value = False, False, True)</InitialState>
+                          </ToggleImage>
+                          <Style>
+                            <BorderStyle>
+                              <Bottom>Solid</Bottom>
+                            </BorderStyle>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <FontWeight>700</FontWeight>
+                            <FontSize>9pt</FontSize>
+                            <BorderColor>
+                              <Default>#006699</Default>
+                            </BorderColor>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!connectionname.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.21in</Height>
+                </TableRow>
+              </TableRows>
+            </Header>
+            <Grouping Name="table2_Group1">
+              <GroupExpressions>
+                <GroupExpression>=Fields!connectionname.Value</GroupExpression>
+              </GroupExpressions>
+            </Grouping>
+          </TableGroup>
+          <TableGroup>
+            <Visibility>
+              <ToggleItem>ServerNameText</ToggleItem>
+              <Hidden>=IIF(Parameters!Expand_All.Value = False, True, False)</Hidden>
+            </Visibility>
+            <Header>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox19">
+                          <rd:DefaultName>textbox19</rd:DefaultName>
+                          <ZIndex>7</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <FontSize>9pt</FontSize>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ColSpan>2</ColSpan>
+                      <ReportItems>
+                        <Textbox Name="textbox20">
+                          <rd:DefaultName>textbox20</rd:DefaultName>
+                          <ZIndex>6</ZIndex>
+                          <ToggleImage>
+                            <InitialState>=IIF(Parameters!Expand_All.Value = False, False, True)</InitialState>
+                          </ToggleImage>
+                          <Style>
+                            <BorderStyle>
+                              <Bottom>Solid</Bottom>
+                            </BorderStyle>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <FontSize>9pt</FontSize>
+                            <BorderColor>
+                              <Default>#336699</Default>
+                            </BorderColor>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!logintype.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.21in</Height>
+                </TableRow>
+              </TableRows>
+            </Header>
+            <Grouping Name="grpType">
+              <GroupExpressions>
+                <GroupExpression>=Fields!logintype.Value</GroupExpression>
+              </GroupExpressions>
+            </Grouping>
+          </TableGroup>
+        </TableGroups>
+        <ZIndex>3</ZIndex>
+        <Visibility>
+          <Hidden>=IIF(Count(Fields!loginname.Value) &gt; 0, False, True)</Hidden>
+        </Visibility>
+        <Details>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox14">
+                      <rd:DefaultName>textbox14</rd:DefaultName>
+                      <ZIndex>2</ZIndex>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontSize>9pt</FontSize>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox15">
+                      <rd:DefaultName>textbox15</rd:DefaultName>
+                      <ZIndex>1</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Bottom>Solid</Bottom>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontSize>9pt</FontSize>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox13">
+                      <rd:DefaultName>textbox13</rd:DefaultName>
+                      <Style>
+                        <BorderStyle>
+                          <Bottom>Solid</Bottom>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontSize>9pt</FontSize>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BackgroundColor>= iif(RowNumber(Nothing) Mod 2, "White", "WhiteSmoke")</BackgroundColor>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!loginname.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>0.21in</Height>
+            </TableRow>
+          </TableRows>
+          <Visibility>
+            <ToggleItem>textbox20</ToggleItem>
+            <Hidden>=IIF(Parameters!Expand_All.Value = False, True, False)</Hidden>
+          </Visibility>
+        </Details>
+        <Header>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox2">
+                      <rd:DefaultName>textbox2</rd:DefaultName>
+                      <ZIndex>11</ZIndex>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <BackgroundColor>#006699</BackgroundColor>
+                        <Color>White</Color>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>Server</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox5">
+                      <rd:DefaultName>textbox5</rd:DefaultName>
+                      <ZIndex>10</ZIndex>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <BackgroundColor>#336699</BackgroundColor>
+                        <Color>White</Color>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>Login Type</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox10">
+                      <rd:DefaultName>textbox10</rd:DefaultName>
+                      <ZIndex>9</ZIndex>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <BackgroundColor>#006699</BackgroundColor>
+                        <Color>White</Color>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>Login</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>0.22in</Height>
+            </TableRow>
+          </TableRows>
+        </Header>
+        <TableColumns>
+          <TableColumn>
+            <Width>1in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>2in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>4.27in</Width>
+          </TableColumn>
+        </TableColumns>
+        <Height>0.95in</Height>
+      </Table>
+      <Rectangle Name="recommendation_rectangle">
+        <ReportItems>
+          <Textbox Name="textbox11">
+            <Left>0.0625in</Left>
+            <rd:DefaultName>textbox11</rd:DefaultName>
+            <ZIndex>1</ZIndex>
+            <Width>1.375in</Width>
+            <Style>
+              <FontWeight>700</FontWeight>
+              <Color>#404040</Color>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Height>0.25in</Height>
+            <Value>Recommendation:</Value>
+          </Textbox>
+          <Textbox Name="textbox3">
+            <Left>1.4375in</Left>
+            <rd:DefaultName>textbox3</rd:DefaultName>
+            <Width>5.8125in</Width>
+            <Style>
+              <Color>#404040</Color>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Value>="To ensure your SQL Server environment remains secure, consider granting the minimum rights and privileges to individual users. Use this report to locate all SQL Server instances where a SQL Login has been created for a Windows Account, or where an account is not directly a SQL Login but has access via group membership."</Value>
+          </Textbox>
+        </ReportItems>
+        <Top>1.0625in</Top>
+        <ZIndex>2</ZIndex>
+        <Style>
+          <BorderStyle>
+            <Bottom>Dotted</Bottom>
+            <Top>Dotted</Top>
+          </BorderStyle>
+          <BorderColor>
+            <Default>LightGrey</Default>
+          </BorderColor>
+        </Style>
+        <Height>0.625in</Height>
+      </Rectangle>
+      <Subreport Name="subreport1">
+        <MergeTransactions>true</MergeTransactions>
+        <Parameters>
+          <Parameter Name="rundate">
+            <Value>=Code.getRunDate(Parameters!rundate.Value, false)</Value>
+          </Parameter>
+          <Parameter Name="connectionname">
+            <Value>=Parameters!serverName.Value</Value>
+          </Parameter>
+        </Parameters>
+        <Top>2.875in</Top>
+        <ZIndex>1</ZIndex>
+        <ReportName>SubReport_ServersUsedSummary</ReportName>
+        <Height>1.375in</Height>
+      </Subreport>
+      <Rectangle Name="errorRectangle">
+        <Left>0.0625in</Left>
+        <ReportItems>
+          <Image Name="errGraphic">
+            <Sizing>AutoSize</Sizing>
+            <MIMEType>image/png</MIMEType>
+            <ZIndex>1</ZIndex>
+            <Width>0.58333in</Width>
+            <Source>Embedded</Source>
+            <Style>
+              <PaddingLeft>0.125in</PaddingLeft>
+              <PaddingBottom>0.125in</PaddingBottom>
+              <PaddingRight>0.125in</PaddingRight>
+              <PaddingTop>0.125in</PaddingTop>
+            </Style>
+            <Value>check</Value>
+          </Image>
+          <Textbox Name="errMsg">
+            <Left>0.625in</Left>
+            <Top>0.1875in</Top>
+            <Width>6.375in</Width>
+            <Style>
+              <FontWeight>700</FontWeight>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Height>0.1875in</Height>
+            <Value>="There are no logins that match your selected parameters."</Value>
+          </Textbox>
+        </ReportItems>
+        <Top>0.0625in</Top>
+        <Visibility>
+          <Hidden>=IIF(Count(Fields!loginname.Value, "ReportsDataset_isp_sqlsecure_report_getuserserveraccess") = 0, False, True)</Hidden>
+        </Visibility>
+        <Width>7.126in</Width>
+        <Style>
+          <BorderStyle>
+            <Default>Dashed</Default>
+          </BorderStyle>
+          <BorderWidth>
+            <Default>2pt</Default>
+          </BorderWidth>
+          <BorderColor>
+            <Default>Green</Default>
+          </BorderColor>
+        </Style>
+        <Height>0.584in</Height>
+      </Rectangle>
+    </ReportItems>
+    <Height>4.3125in</Height>
+  </Body>
+  <PageHeader>
+    <ReportItems>
+      <Image Name="image1">
+        <Sizing>Fit</Sizing>
+        <Top>0.9375in</Top>
+        <ZIndex>4</ZIndex>
+        <Source>Embedded</Source>
+        <Style />
+        <Height>0.062in</Height>
+        <Value>footer_narrow</Value>
+      </Image>
+      <Rectangle Name="parameters">
+        <ReportItems>
+          <Textbox Name="textbox4">
+            <Left>1.4375in</Left>
+            <ZIndex>5</ZIndex>
+            <Width>5.625in</Width>
+            <Style>
+              <Color>#404040</Color>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Height>0.1875in</Height>
+            <Value>=IIF(StrComp(Parameters!serverName.Value, "%") = 0, "All Servers", Parameters!serverName.Value)</Value>
+          </Textbox>
+          <Textbox Name="textbox7">
+            <Left>0.0625in</Left>
+            <ZIndex>4</ZIndex>
+            <Width>1.375in</Width>
+            <Style>
+              <FontWeight>700</FontWeight>
+              <Color>#404040</Color>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Height>0.1875in</Height>
+            <Value>Server:</Value>
+          </Textbox>
+          <Textbox Name="textbox6">
+            <Left>1.4375in</Left>
+            <Top>0.375in</Top>
+            <ZIndex>3</ZIndex>
+            <Width>5.625in</Width>
+            <Style>
+              <Color>#404040</Color>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Value>=Parameters!logintype.Label</Value>
+          </Textbox>
+          <Textbox Name="textbox1">
+            <Left>1.4375in</Left>
+            <Top>0.1875in</Top>
+            <ZIndex>2</ZIndex>
+            <Width>5.625in</Width>
+            <Style>
+              <Color>#404040</Color>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Height>0.1875in</Height>
+            <Value>=IIF(StrComp(Parameters!userName.Value, "*") = 0, "All Users", Parameters!userName.Value)</Value>
+          </Textbox>
+          <Textbox Name="textbox21">
+            <Left>0.0625in</Left>
+            <Top>0.375in</Top>
+            <ZIndex>1</ZIndex>
+            <Width>1.375in</Width>
+            <Style>
+              <FontWeight>700</FontWeight>
+              <Color>#404040</Color>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Value>Login Type:</Value>
+          </Textbox>
+          <Textbox Name="textbox22">
+            <Left>0.0625in</Left>
+            <Top>0.1875in</Top>
+            <Width>1.375in</Width>
+            <Style>
+              <FontWeight>700</FontWeight>
+              <Color>#404040</Color>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Height>0.1875in</Height>
+            <Value>User:</Value>
+          </Textbox>
+        </ReportItems>
+        <Top>1.125in</Top>
+        <ZIndex>3</ZIndex>
+        <Style>
+          <BorderStyle>
+            <Bottom>Dotted</Bottom>
+            <Top>Dotted</Top>
+          </BorderStyle>
+          <BorderColor>
+            <Default>LightGrey</Default>
+          </BorderColor>
+        </Style>
+        <Height>0.5625in</Height>
+      </Rectangle>
+      <Image Name="header">
+        <Sizing>Clip</Sizing>
+        <ZIndex>2</ZIndex>
+        <Source>Embedded</Source>
+        <Style />
+        <Height>0.58333in</Height>
+        <Value>header_narrow</Value>
+      </Image>
+      <Textbox Name="audit_date">
+        <Top>0.8125in</Top>
+        <ZIndex>1</ZIndex>
+        <Style>
+          <TextAlign>Center</TextAlign>
+          <FontStyle>Italic</FontStyle>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Height>0.125in</Height>
+        <Value>=Parameters!UserRange.Value</Value>
+      </Textbox>
+      <Textbox Name="report_title">
+        <Top>0.625in</Top>
+        <Style>
+          <TextAlign>Center</TextAlign>
+          <FontWeight>700</FontWeight>
+          <FontSize>16pt</FontSize>
+          <VerticalAlign>Bottom</VerticalAlign>
+          <Color>#cc6600</Color>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Height>0.1875in</Height>
+        <Value>=Parameters!ReportTitle.Value</Value>
+      </Textbox>
+    </ReportItems>
+    <Height>1.9375in</Height>
+    <PrintOnLastPage>true</PrintOnLastPage>
+    <PrintOnFirstPage>true</PrintOnFirstPage>
+  </PageHeader>
+  <rd:ReportID>f2f52cdc-2df7-476f-81a4-5efa0834c7c8</rd:ReportID>
+  <LeftMargin>0.5in</LeftMargin>
+  <EmbeddedImages>
+    <EmbeddedImage Name="footer_narrow">
+      <ImageData>iVBORw0KGgoAAAANSUhEUgAAAgsAAAAGCAIAAADCPEpuAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAA0SURBVHja7NWhDQBACMDAD/n9LQiGZQA86m6Emv6sfgCwhAQAOAQADgGAQwDgEACcGgEGAGoOAdryTXjRAAAAAElFTkSuQmCC</ImageData>
+      <MIMEType>image/png</MIMEType>
+    </EmbeddedImage>
+    <EmbeddedImage Name="idera_logo_small">
+      <ImageData>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</ImageData>
+      <MIMEType>image/png</MIMEType>
+    </EmbeddedImage>
+    <EmbeddedImage Name="header_narrow">
+      <ImageData>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</ImageData>
+      <MIMEType>image/png</MIMEType>
+    </EmbeddedImage>
+    <EmbeddedImage Name="check">
+      <ImageData>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</ImageData>
+      <MIMEType>image/png</MIMEType>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <DataSets>
+    <DataSet Name="ReportsDataset_isp_sqlsecure_report_getuserserveraccess">
+      <Query>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>dbo.isp_sqlsecure_report_getuserserveraccess</CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@rundate">
+            <Value>=Code.getRunDate(Parameters!rundate.Value, true)</Value>
+          </QueryParameter>
+          <QueryParameter Name="@logintype">
+            <Value>=Parameters!logintype.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@userName">
+            <Value>=Parameters!userName.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <DataSourceName>SQLsecure Data Source</DataSourceName>
+      </Query>
+      <Fields>
+        <Field Name="snapshotid">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>snapshotid</DataField>
+        </Field>
+        <Field Name="connectionname">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>connectionname</DataField>
+        </Field>
+        <Field Name="logintype">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>logintype</DataField>
+        </Field>
+        <Field Name="loginname">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>loginname</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <Author>Idera</Author>
+  <Code>Function isValidDate(d as string) as Boolean
+	Dim dt as DateTime
+
+	Try
+		dt = DateTime.Parse(d)
+		Return true
+	Catch
+		Return false
+	End Try
+End Function
+
+Function isDateOnly(d as string) as Boolean
+	d = d.TrimEnd().ToLower()
+	If Not isValidDate(d) Then
+		Return true
+	ElseIf d.IndexOf(":") &gt; -1 or d.IndexOf("am") &gt; -1 or d.IndexOf("pm") &gt; -1 Then
+		Return false
+	Else
+		Return true
+	End If
+End Function
+
+Function getRunDate(d as string, showErr as boolean) as DateTime
+	Dim dt as DateTime
+	Try
+		If Not isValidDate(d) Then
+			Throw New System.Exception("Invalid Date")
+		End If
+
+		dt = DateTime.Parse(d).ToUniversalTime()
+
+		If isDateOnly(d) Then
+			dt = DateAdd("d",1,DateAdd("s",-1,dt))
+		End If
+
+		Return dt
+	Catch
+		If showErr Then
+			MsgBox("Invalid Date entered for data selection. Using current date.")
+		End If
+
+		Return System.DateTime.Today.ToUniversalTime()
+	End Try
+End Function
+
+Function displayRunDate (d as string) as String
+	Dim rd as DateTime, dv as String
+
+	rd = getRunDate(d, false).ToLocalTime()
+	dv = rd.ToLongDateString()
+	If isValidDate(d)
+		If Not isDateOnly(d) Then
+			dv = dv + " at " + rd.ToLongTimeString()
+		End If
+
+		Return "Most current audit data as of " + dv
+	Else
+		Return "Selected Date Invalid. Using Current Date of " + dv
+	End If
+End Function
+
+Function loginTypeToString(t As String) As String
+	If t = "W" Then
+		Return "Windows Account"
+	Else
+		Return "SQL Login"
+	End If
+End Function
+
+Function setServerFilter(s As String)
+	If s.ToUpper() = "ALL SERVERS" Then
+		Return "%"
+	Else
+		Return s
+	End If
+End Function
+</Code>
+  <Width>18.46349cm</Width>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <Description>Show all SQL Servers where a selected user has access.</Description>
+  <Language>=User!Language</Language>
+  <PageFooter>
+    <ReportItems>
+      <Image Name="footer">
+        <Sizing>Fit</Sizing>
+        <Top>0.0625in</Top>
+        <ZIndex>5</ZIndex>
+        <Source>Embedded</Source>
+        <Style />
+        <Height>0.062in</Height>
+        <Value>footer_narrow</Value>
+      </Image>
+      <Textbox Name="copyright">
+        <Top>0.4375in</Top>
+        <ZIndex>4</ZIndex>
+        <Action>
+          <Hyperlink>http://www.idera.com/</Hyperlink>
+        </Action>
+        <Width>3in</Width>
+        <Style>
+          <PaddingLeft>2pt</PaddingLeft>
+          <FontSize>8pt</FontSize>
+          <Color>Blue</Color>
+          <TextDecoration>Underline</TextDecoration>
+          <PaddingTop>2pt</PaddingTop>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Height>0.1875in</Height>
+        <Value>Copyright © 2005-2012 Idera, Inc. </Value>
+      </Textbox>
+      <Image Name="idera_logo">
+        <Sizing>Clip</Sizing>
+        <Top>0.125in</Top>
+        <ZIndex>3</ZIndex>
+        <Width>1.25in</Width>
+        <Source>Embedded</Source>
+        <Style>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingTop>2pt</PaddingTop>
+        </Style>
+        <Height>0.3125in</Height>
+        <Value>idera_logo_small</Value>
+      </Image>
+      <Textbox Name="executiontime">
+        <Left>1.5625in</Left>
+        <Top>0.25in</Top>
+        <ZIndex>2</ZIndex>
+        <Width>5.6875in</Width>
+        <Style>
+          <TextAlign>Right</TextAlign>
+          <FontSize>9pt</FontSize>
+          <Color>DimGray</Color>
+          <PaddingTop>2pt</PaddingTop>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Height>0.125in</Height>
+        <Value>="Execution Time: " &amp;
+System.DateTime.Now.Subtract(Globals!ExecutionTime).Hours &amp; " hour" &amp; 
+IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Hours = 1, "", "s") &amp; ", " &amp;
+System.DateTime.Now.Subtract(Globals!ExecutionTime).Minutes &amp; " minute" &amp; 
+IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Minutes = 1, "", "s")  &amp; ", " &amp;
+System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds &amp; " second" &amp; 
+IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</Value>
+      </Textbox>
+      <Textbox Name="pagenumber">
+        <Left>3.25in</Left>
+        <Top>0.375in</Top>
+        <ZIndex>1</ZIndex>
+        <Width>4in</Width>
+        <Style>
+          <TextAlign>Right</TextAlign>
+          <FontSize>9pt</FontSize>
+          <Color>DimGray</Color>
+          <PaddingTop>2pt</PaddingTop>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Height>0.25in</Height>
+        <Value>="Page " &amp; Globals!PageNumber &amp; " of " &amp; Globals!TotalPages</Value>
+      </Textbox>
+      <Textbox Name="generatedby">
+        <Left>1.5625in</Left>
+        <Top>0.125in</Top>
+        <Width>5.6875in</Width>
+        <Style>
+          <TextAlign>Right</TextAlign>
+          <FontSize>9pt</FontSize>
+          <Color>DimGray</Color>
+          <PaddingTop>2pt</PaddingTop>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Height>0.125in</Height>
+        <Value>="Generated by " + User!UserID + " on " + DateTime.Now.ToString()</Value>
+      </Textbox>
+    </ReportItems>
+    <Height>0.6875in</Height>
+    <PrintOnLastPage>true</PrintOnLastPage>
+    <PrintOnFirstPage>true</PrintOnFirstPage>
+  </PageFooter>
+  <TopMargin>0.5in</TopMargin>
+</Report>

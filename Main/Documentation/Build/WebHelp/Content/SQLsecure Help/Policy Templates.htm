@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Assess Your Security Model|Define policies for custom assessments" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <!-- saved from url=(0014)about:internet -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Use policy templates to harden your security model</title>
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body class="NewPage">
+        <h1 class="Heading1">Use policy templates to harden your security model</h1>
+        <p class="Body"><a name="kanchor60"></a>You can use the built-in Idera and industry standard policy templates to further harden your SQL&#160;Server security model. By creating policies from these templates, you can enforce consistent security settings across your enterprise, and proactively assess when and where vulnerabilities exist. You can also customize new policies based on these templates to further address your specific security needs.</p>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2186938376_0" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />When should I use policy templates?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2186938376_0" style="display: none;">
+                <p class="Body">Consider using policy templates when you:</p>
+                <ul style="list-style-type: circle;">
+                    <li class="Bullet" value="1">Must enforce an industry standard such as CIS, SRR, HIPAA, or PCI</li>
+                    <li class="BulletLast" value="2">Need a more robust and comprehensive assessment of your security model than what Microsoft Best Practices can offer</li>
+                </ul>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2186938376_1" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What are the available templates?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2186938376_1" style="display: none;">
+                <p class="DefinitionListTerm">Idera Level 1 - Basic Protection</p>
+                <p class="DefinitionListBody">Establishes a realistic entry-level baseline for  SQL Server databases whose third-party applications  do not interface with  the World Wide Web. This template enforces MSBPA guidelines as well as additional security checks for logins, permissions, and other vulnerabilities.</p>
+                <p class="DefinitionListTerm">Idera Level 2 - Balanced Protection</p>
+                <p class="DefinitionListBody">Establishes a more secure baseline for production SQL Server databases  that are configured to support  external connectivity  while protecting  against the most popular intrusion tactics. This template combines the CIS and MSBPA guidelines as well as additional security checks for  permissions, configurations, and other vulnerabilities.</p>
+                <p class="DefinitionListTerm">Idera Level 3 - Strong Protection</p>
+                <p class="DefinitionListBody">Enables the maximum security checks for mission-critical  SQL Server databases that support Web-based, B2B, B2C, or external clients to prevent unauthorized disclosure and data tampering. This template combines Idera Level 1 and Level 2 guidelines with SRR regulations. Also included are additional  security checks for auditing, permissions, surface area configurations, and other  vulnerabilities.</p>
+                <p class="DefinitionListTerm">CIS for SQL&#160;Server 2000</p>
+                <p class="DefinitionListBody">Enforces security check settings derived from the Center for Internet Security - Security Configuration Benchmark for Microsoft SQL&#160;Server 2000, V 1.0, December, 2005.</p>
+                <p class="DefinitionListTerm">CIS&#160;for SQL&#160;Server 2005 or later</p>
+                <p class="DefinitionListBody">Enforces security check settings derived from  the Center for Internet Security - Security Configuration Benchmark for Microsoft SQL&#160;Server 2005, V 1.2.0, January 12, 2010. This version can also be applied to SQL&#160;Server 2008 and later.</p>
+                <p class="DefinitionListTerm">HIPAA Guidelines for SQL&#160;Server</p>
+                <p class="DefinitionListBody">Leverages the Health Insurance Portability and Accountability Act  (HIPAA) guideline as well as the Department of Defense Database Security Technical Implementation Guide (STIG) version 8 release 1.7. These guidelines target conditions that undermine the integrity of security, contribute to inefficient security operations and administration, or may lead to interruption of production operations for health information that resides on Microsoft SQL Server.</p>
+                <p class="DefinitionListTerm">MS&#160;Best Practices Analyzer</p>
+                <p class="DefinitionListBody">Enforces security check settings  derived from the Microsoft SQL&#160;Server 2005 Best Practices Analyzer Security Recommendations.</p>
+                <p class="DefinitionListTerm">PCI 2.0 Guidelines for SQL Server</p>
+                <p class="DefinitionListBody">Enforces security check settings  derived from the Payment Card Industry (PCI) v2.0 regulatory standard. This standard applies to mission critical databases hosted by internal or external services that store payment card information.</p>
+                <p class="DefinitionListTerm">SNAC for SQL&#160;2000</p>
+                <p class="DefinitionListBody">Enforces security check settings  derived from the Guide to the Secure Configuration and Administration of Microsoft SQL&#160;Server 2000, Network Applications Team of the Systems and Network Attack Center (SNAC).</p>
+                <p class="DefinitionListTerm">SRR&#160;Checklist for SQL&#160;Server 2000 </p>
+                <p class="DefinitionListBody">Enforces security check settings  derived from the DISA for a security readiness review (SRR)&#160;of a Microsoft SQL&#160;Server RDBMS installed in a Windows NT&#160;or Windows 2000 host operation system environment.</p>
+                <p class="DefinitionListTerm">SRR&#160;Checklist for SQL&#160;Server 2005 or later</p>
+                <p class="DefinitionListBody">Enforces security check settings derived from the Database Security Readiness Review (SRR) v8 r1.7. This SRR targets conditions the undermine the integrity of security, contribute to inefficient security operations and administration, and may lead to interruption of production operations. This version can also be applied to SQL&#160;Server 2008 and later.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2186938376_2" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How do I&#160;know which Idera template to pick?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2186938376_2" style="display: none;">
+                <p class="Body">Use the industry standard policy templates, such as the CIS for&#160;SQL&#160;Server 2005 template, when your environment needs to meet the exact security criteria defined by that regulatory organization. However, your environment may contain SQL&#160;Server instances that only need to follow your corporate security policies. In those cases, you can create new or enhance existing corporate policies based on the built-in Idera security level templates.</p>
+                <p class="Body">The Idera Level 1, Level 2, and Level 3 templates allow you to mature your SQL&#160;Server security model over time, graduating from a solid baseline to an intermediate level to a more advanced and hardened approach. Each level is based on regulatory models and industry best-practices as well as additional security checks that identify vulnerabilities other standards do not address.  The default All Servers policy enforces the Idera Level 2 - Balanced template.</p>
+                <p class="Body">Use the following table to determine which Idera security level template fits your current security needs and how your environment fits into the overall security maturation model.</p>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <col class="Column-Column1" style="width: 240px;" />
+                    <col class="Column-Column2" />
+                    <col class="Column-Column1" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1">
+                                <p>Idera Level</p>
+                            </th>
+                            <th class="HeadE-Column2-Header1">
+                                <p>Maturation Level</p>
+                            </th>
+                            <th class="HeadE-Column1-Header1">
+                                <p>Security Level</p>
+                            </th>
+                            <th class="HeadE-Column2-Header1">
+                                <p>Types of SQL&#160;Server Instances</p>
+                            </th>
+                            <th class="HeadE-Column1-Header1">
+                                <p>Types of Business</p>
+                            </th>
+                            <th class="HeadE-Column2-Header1">
+                                <p>Regulatory Model</p>
+                            </th>
+                            <th class="HeadD-Column1-Header1">
+                                <p>Unique Security Checks</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1">
+                                <p>1 - Basic Protection</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1">
+                                <p>Beginner</p>
+                            </td>
+                            <td class="BodyE-Column1-Body1">
+                                <p>Baseline</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1">
+                                <p>Test, development, and low-risk production instances</p>
+                            </td>
+                            <td class="BodyE-Column1-Body1">
+                                <p>Services internal groups by hosting data for third-party applications and does not require connections to external clients</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1">
+                                <p>MSBPA plus additional checks</p>
+                            </td>
+                            <td class="BodyD-Column1-Body1">
+                                <ul style="list-style-type: circle;">
+                                    <li class="Bullet" value="1">SA account has blank password</li>
+                                    <li class="Bullet" value="2">Any SQL Server login has  blank password</li>
+                                    <li class="Bullet" value="3">Public server role has been granted permissions</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1">
+                                <p>2 - Balanced Protection</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1">
+                                <p>Intermediate</p>
+                            </td>
+                            <td class="BodyE-Column1-Body1">
+                                <p>Medium</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1">
+                                <p>Average production instances</p>
+                            </td>
+                            <td class="BodyE-Column1-Body1">
+                                <p>Services internal and external groups that require  external connectivity to hosted data</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1">
+                                <p> CIS and MSBPA plus additional checks</p>
+                            </td>
+                            <td class="BodyD-Column1-Body1">
+                                <ul style="list-style-type: circle;">
+                                    <li class="Bullet" value="1">Sysadmins own trustworthy databases</li>
+                                    <li class="Bullet" value="2">Public server role has been granted permissions</li>
+                                    <li class="Bullet" value="3">File permissions on executables are not acceptable</li>
+                                    <li class="Bullet" value="4">SQL logins have weak passwords</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyB-Column1-Body1">
+                                <p>3 - Strong Protection</p>
+                            </td>
+                            <td class="BodyB-Column2-Body1">
+                                <p>Advanced</p>
+                            </td>
+                            <td class="BodyB-Column1-Body1">
+                                <p>High</p>
+                            </td>
+                            <td class="BodyB-Column2-Body1">
+                                <p>Mission-critical, sensitive, and high-risk production instances</p>
+                            </td>
+                            <td class="BodyB-Column1-Body1">
+                                <p>Services internal and external groups by hosting data for Web-based, B2B, B2C, or external clients</p>
+                            </td>
+                            <td class="BodyB-Column2-Body1">
+                                <p>CIS, MSBPA, and SRR, plus additional checks and auditing</p>
+                            </td>
+                            <td class="BodyA-Column1-Body1">
+                                <ul style="list-style-type: circle;">
+                                    <li class="Bullet" value="1">Required administrative accounts do not exist</li>
+                                    <li class="Bullet" value="2">xp_cmdshell proxy account exists</li>
+                                    <li class="Bullet" value="3">SA account is not using password policy</li>
+                                    <li class="Bullet" value="4">Public database role has unacceptable permissions</li>
+                                    <li class="Bullet" value="5">SSIS database role and stored procedure permissions</li>
+                                    <li class="Bullet" value="6">OS version is at acceptable level</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p class="Body">&#160;</p>
+        <div class="breadcrumb">
+            <p MadCap:conditions="Default.SEO" class="FooterWebLink"><a href="http://www.idera.com/Support/Service.aspx" target="_blank" class="FooterWebLink">Need more help? Search the Idera Customer Support Portal &gt; &gt;</a>
+            </p>
+        </div>
+        <div class="LearnMore">
+            <p MadCap:conditions="Default.SEO">SQLsecure tells you who has access to what on your SQL Server databases. <a href="http://www.idera.com/Products/SQL-Server/SQL-secure/" target="_blank" style="text-decoration: underline; color: #ffffff;">Learn&#160;more</a> &gt; &gt;</p>
+        </div>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO"><a class="IderaFooter" href="http://www.idera.com/Content/Products.aspx" target="_blank">Product</a> | <a href="http://www.idera.com/Action/Downloads.aspx" target="_blank" class="IderaFooter">Downloads</a> | <a href="http://www.idera.com/Action/Purchase.aspx" target="_blank" class="IderaFooter">Purchase</a> | <a href="http://www.idera.com/Support/" target="_blank" class="IderaFooter">Support</a> |&#160;<a href="http://www.idera.com/Content/Resources.aspx" target="_blank" class="IderaFooter">Resources</a> | <a href="http://www.idera.com/News/" target="_blank" class="IderaFooter">News</a> | <a href="http://www.idera.com/About-Us/" target="_blank" class="IderaFooter">About Us</a> | <a href="http://www.idera.com/Action/Show.aspx?&amp;ThisList=Quotes" target="_blank" class="IderaFooter">Customers</a> | <a href="http://www.idera.com/Partners/" target="_blank" class="IderaFooter">Partners</a></p>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO">Copyright ©2003-2012 Idera, Inc. | <a href="Legal Notice.htm" target="_blank" class="IderaFooter">Legal</a></p>
+        <script type="text/javascript">/* <![CDATA[ */
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16422007-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+/* ]]> */</script>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

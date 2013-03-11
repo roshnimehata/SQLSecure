@@ -1,0 +1,317 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Language" content="en-us">
+		<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">		
+		<title>Idera SQLsecure Quick Start</title>
+
+		<hta:application 
+			ID="oHTA"
+			applicationName="SQLsecure Autorun"
+			border="dialog"
+            borderStyle="normal"
+			caption="yes"
+			maximizeButton="no"
+			contextmenu="no"
+			innerborder="no"
+			scroll="no"			 
+			showintaskbar="yes"
+			sysmenu="yes"
+			selection="no"
+			singleInstance="yes"
+			icon="images/SQLsecure_product.ico"
+		/>
+
+		<script language="javascript">
+
+		//Platform
+		var platform          = "{platform}";
+		var copyright         = "{copyright}";
+		var appversion        = "{appversion}";
+		var helpversion       = "{helpversion}";
+		var helpurl           = "{helpurl}";
+        var webRoot           = "www";
+
+
+        // test values
+        /*
+        webRoot = "staging";
+		platform = "x86";
+		copyright = "Copyright 2002-2012 Idera";
+		appversion = "2.7.0.1111";
+		helpversion = "2-7";
+		helpurl = "http://" + webRoot + ".idera.com/Help/SQLsecure/{version}/Web/Default_CSH.htm#/{topic}|WebHelpSkinSilver";
+        */
+
+
+		var HELP_REQUIREMENTS        = "SQLsecure Help/Requirements.htm";
+		var HELP_INSTALL             = "SQLsecure Help/Install SQLsecure.htm";
+		var HELP_MAIN                = "SQLsecure Help/Start Help.htm"
+
+		var RN_BASE        = "http://" + webRoot + ".idera.com/Help/SQLsecure/{version}/RN/Default_CSH.htm#/What's New.htm|WebHelpSkinSilver"
+
+        var PRODUCT_SQLSECURE       = "SQLsecure";
+        var PRODUCT_LICENSE         = "License";
+        var INSTALL_SQLSECURE       = ".\\Intel\\SQLsecure.exe";
+        var INSTALL_SQLSECURE_X64   = "\".\\Intel\\SQLsecure x64.exe\"";
+        var INSTALL_SQLSECURE_IA64  = "\".\\Intel\\SQLsecure ia64.exe\"";
+        var VIEW_LICENSE            = '".\\Documentation\\Idera - Software License Agreement.rtf"';
+
+		// Set the fixed window size.
+		var startWindowWidth  = 646;
+		var startWindowHeight = 340;
+
+        // Set the default start window location.
+        var startWindowLeft = 200;
+        var startWindowTop  = 100;
+
+        // Check if the screen size info is available.
+        if (window.screen) 
+        {
+		    // Calculate the real default window location.
+		    startWindowLeft = (window.screen.availWidth  - startWindowWidth)  / 2;
+		    startWindowTop  = (window.screen.availHeight - startWindowHeight) / 2;
+		}
+
+		// Center the window on the screen.
+		window.moveTo(startWindowLeft, startWindowTop);
+		window.resizeTo(startWindowWidth, startWindowHeight);
+
+		//Check if running from CD or DVD
+		var commandLine = oHTA.commandLine;
+		var oShell      = new ActiveXObject("WScript.Shell");
+		oShell.CurrentDirectory = commandLine.substr(1, commandLine.lastIndexOf("\\"));		
+
+		function onClickHelp(topic)
+        {
+            return showHelp(helpurl.replace("{version}", helpversion).replace("{topic}", topic));
+		}
+
+		function onClickHelpMobile(topic) 
+        {
+		    return showHelp(helpurlmobile.replace("{version}", helpversionmobile).replace("{topic}", topic));
+		}
+
+		function onClickRN()
+        {
+            return showHelp(RN_BASE.replace("{version}", helpversion));
+        }
+
+        function onClickRNMobile() 
+        {
+            return showHelp(RN_BASE_MOBILE.replace("{version}", helpversionmobile));
+        }
+
+        function showHelp(link)
+        {
+            window.open(link, "_blank");
+            return false;
+        }
+
+		function onClickLinkApp(app)
+		{ 
+			switch (app)
+            {
+                case PRODUCT_SQLSECURE:
+                    if (platform == "x64")
+                        launchApp(INSTALL_SQLSECURE_X64);
+                    else if (platform == "ia64")
+                        launchApp(INSTALL_SQLSECURE_IA64);
+                    else
+                        launchApp(INSTALL_SQLSECURE);
+                    break;
+
+                case PRODUCT_LICENSE:
+                    launchApp(VIEW_LICENSE);
+                    break;
+            }
+		}
+
+        function launchApp(app)
+        {
+            try
+            {
+                var oShell = new ActiveXObject("WScript.Shell");
+                oShell.Run(app);
+            }
+            catch (err)
+            {
+                switch (err.number)
+                {
+                    case -2147023673:
+                        break;
+
+                    default:
+                        throw(err);
+                }
+            }
+        }
+	    </script>
+
+	    <style>
+	        a:link	  { text-decoration: none; color: black }
+		    a:visited { text-decoration: none; color: black }
+		    a:active  { text-decoration: none; color: black }
+		    a:hover	  { text-decoration: underline; color: #FE4210;}
+			
+		    body
+		    {
+			    background-image: url('images/background.png');
+			    background-position: center top; 
+			    background-repeat: no-repeat;
+			    padding-top: 80px;
+			    padding-left: 12px;				
+		    }
+			
+		    #mainTable	 	
+		    { 
+			    border: none; 				
+			    width: 100%;
+			    height: 100%;
+		    }
+			
+		    #pageTitle		
+		    { 
+			    font-family: Arial; 
+			    font-size: 13.5pt; 
+			    font-weight: bold;
+			    color: #000000; 
+			    vertical-align: text-middle; 
+			    height: 40px; 
+		    }
+			
+		    .linkHeader		
+		    { 
+			    padding-top: 3px; 
+			    font-family: Arial; 
+			    font-size: 15pt; 
+			    font-weight: bold;
+			    color: #FE4210; 
+			    vertical-align: text-top; 
+		    }
+			
+		    .subLinkHeader		
+		    { 
+			    padding-top: 3px; 
+			    font-family: Arial; 
+			    font-size: 11pt; 
+			    font-weight: bold;
+			    vertical-align: text-top; 
+		    }
+			
+		    .linkTitle
+		    {
+			    width: 33%;
+		    }
+			
+		    .linkBody
+		    { 
+			    padding-top: 5px; 
+			    vertical-align: text-top; 
+		    }
+				
+		    .linkText
+		    { 
+			    font-family: Arial; 
+			    font-size: 10pt; 
+			    color: black; 
+			    vertical-align: text-top; 
+			    height: 24px; 
+			    padding-right: 20px;
+			    padding-bottom: 5px; 
+		    }
+			
+		    .footer
+		    {
+			    font-family: Arial; 
+			    font-size: 8pt; 
+			    color: #5A5956; 
+			    vertical-align: text-bottom; 
+			    padding-right: 5px;
+			    padding-left: 5px;
+			    padding-bottom: 2px;
+		    }
+			
+		    .trademark
+		    {
+			    font-family: Arial;
+			    font-size: 8pt;
+			    font-weight: bold;
+			    vertical-align: top;
+		    }
+			
+		    .trademarkSmall
+		    {
+			    font-family: Arial;
+			    font-size: 7pt;
+			    font-weight: bold;
+			    vertical-align: top;
+		    }
+	    </style>
+
+	</head>
+	<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
+
+        <center>
+        <table border="0" bordercolor="red" cellpadding="0" cellspacing="0" id="mainTable">
+            <tr>
+				<td valign="top">
+				    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+					    <tr>
+						    <td id="pageTitle">
+							    Welcome to SQLsecure
+						    </td>
+					    </tr>
+					    <tr>
+						    <td align="left" style="padding: 0px;">
+
+							    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+								    <tr class="linkHeader">
+									    <td class="linkTitle">Prepare</td>
+									    <td class="linkTitle">Install</td>
+									    <td class="linkTitle">More Information</td>
+								    </tr>
+
+								    <tr class="linkBody"> 
+									    <td>										
+										    <table border="0">
+											    <tr><td class="linkText"><a href="#" title="Click here to view instructions for installing SQLsecure&reg; for the first time." onclick="onClickHelp(HELP_INSTALL);">Installation Instructions</a></td></tr>
+											    <tr><td class="linkText"><a href="#" title="Click here to view system requirements for installing SQLsecure&reg;." onclick="onClickHelp(HELP_REQUIREMENTS);">Requirements</a></td></tr>
+											    <tr><td class="linkText"><a href="#" title="Click here to view important information about this release of SQLsecure&reg;." onclick="onClickRN();">Release Notes</a></td></tr>
+										    </table>
+									    </td>
+									    <td>
+										    <table border="0">
+											    <tr><td class="linkText"><a href="#" title="Click here to install SQLsecure&reg; with the full installer." onclick="onClickLinkApp(PRODUCT_SQLSECURE);">All Components</a></td></tr>
+										    </table>
+									    </td>
+									    <td>
+										    <table border="0">
+											    <tr><td class="linkText"><a href="#" title="Click here to view general help for SQLsecure&reg; that provides comprehensive information about the product and its features." onclick="onClickHelp(HELP_MAIN);">Product Documentation</a></td></tr>
+											    <tr><td class="linkText"><a target="_blank" href="http://www.idera.com" title="Click here to visit the Idera home page.">Idera Home Page</a></td></tr>
+											    <tr><td class="linkText"><a target="_blank" href="http://www.idera.com/Support" title="Click here to visit the Idera Technical Support site.">Technical Support Site</a></td></tr>
+											    <tr><td class="linkText"><a href="#" title="Click here to view the Idera software license agreement." onclick="onClickLinkApp(PRODUCT_LICENSE);">License Agreement</a></td></tr>			
+										    </table>
+									    </td>
+								    </tr>
+							    </table>
+
+						    </td>					
+					    </tr>
+				    </table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table border="0" width="100%">
+						<tr>
+							<td align="left" class="footer">{copyright}</td>
+							<td align="right" class="footer">{appversion} ({platform})</td>
+						<tr>
+					</table>					
+				</td>
+			</tr>
+		</table>
+        </center>
+
+	</body>
+</html>

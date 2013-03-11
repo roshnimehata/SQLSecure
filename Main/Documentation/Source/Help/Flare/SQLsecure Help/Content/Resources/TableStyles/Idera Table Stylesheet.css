@@ -1,0 +1,1270 @@
+/* MadCap Table Style: */
+
+/*<meta Version="7" />*/
+
+mcTableStyle
+{
+	name: Idera Table Stylesheet;
+	margin-right: 5pt;
+	margin-top: 2pt;
+	margin-left: 5pt;
+	border-collapse: collapse;
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #a9a9a9;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-top-color: #a9a9a9;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-spacing-y: 0;
+	cell-padding-left: 3px;
+	cell-padding-right: 3px;
+	cell-padding-top: 3px;
+	cell-padding-bottom: 3px;
+	border-spacing-x: 0;
+	max-id: 4;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #a9a9a9;
+	border-collapse: collapse;
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #a9a9a9;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-top-color: #a9a9a9;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-spacing-y: 0;
+	name: Column1;
+	id: 0;
+}
+
+mcTableColumnStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #a9a9a9;
+	border-collapse: collapse;
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #a9a9a9;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-top-color: #a9a9a9;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-spacing-y: 0;
+	name: Column2;
+	id: 1;
+}
+
+mcTableHeadStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #a9a9a9;
+	background-color: #a9a9a9;
+	font-family: Arial;
+	color: #ffffff;
+	font-size: 10pt;
+	border-collapse: collapse;
+	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #a9a9a9;
+	border-right-style: solid;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-top-color: #a9a9a9;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-spacing-y: 0;
+	text-align: left;
+	name: Header1;
+	id: 3;
+}
+
+mcTableBodyStyle
+{
+	span: 1;
+	font-weight: normal;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #a9a9a9;
+	font-family: Arial;
+	color: #000000;
+	font-size: 10pt;
+	border-left-width: 1px;
+	border-left-color: #a9a9a9;
+	border-left-style: solid;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+	text-align: left;
+	name: Body1;
+	id: 2;
+}
+
+mcTableFootStyle
+{
+	span: 1;
+	separator-style: solid;
+	separator-width: 1px;
+	separator-color: #a9a9a9;
+	name: Footer1;
+	id: 4;
+}
+
+
+/* Cell Styles: */
+ 
+.TableStyle-Idera_Table_Stylesheet
+{
+	border-collapse: collapse;
+	border-left-style: solid;
+	border-left-color: #a9a9a9;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-right-color: #a9a9a9;
+	border-right-width: 1px;
+	border-top-style: solid;
+	border-top-color: #a9a9a9;
+	border-top-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #a9a9a9;
+	border-bottom-width: 1px;
+	margin-left: 5pt;
+	margin-right: 5pt;
+	margin-top: 2pt;
+	border-spacing: 0px 0px;
+}
+
+.TableStyle-Idera_Table_Stylesheet .Column-Column1
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .Column-Column2
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .Head-Header1
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadI-Column1-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadI-Column1-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadE-Column1-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadE-Column1-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadF-Column1-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadF-Column1-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadH-Column1-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadH-Column1-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadD-Column1-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadD-Column1-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadC-Column1-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadC-Column1-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadB-Column1-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadB-Column1-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadA-Column1-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadA-Column1-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadG-Column1-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadG-Column1-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadI-Column2-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadI-Column2-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadE-Column2-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadE-Column2-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadF-Column2-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadF-Column2-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadH-Column2-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadH-Column2-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadD-Column2-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadD-Column2-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadC-Column2-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadC-Column2-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadB-Column2-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadB-Column2-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadA-Column2-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadA-Column2-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadG-Column2-Header1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+	text-align: left;
+	background-color: #a9a9a9;
+}
+
+.TableStyle-Idera_Table_Stylesheet .HeadG-Column2-Header1 p
+{
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 10pt;
+}
+
+.TableStyle-Idera_Table_Stylesheet .Foot-Footer1
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootI-Column1-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootI-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootE-Column1-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+	border-top-width: 1px;
+	border-top-color: #a9a9a9;
+	border-top-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootE-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootF-Column1-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-top-width: 1px;
+	border-top-color: #a9a9a9;
+	border-top-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootF-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootH-Column1-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootH-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootD-Column1-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-top-width: 1px;
+	border-top-color: #a9a9a9;
+	border-top-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootD-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootC-Column1-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootC-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootB-Column1-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootB-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootA-Column1-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootA-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootG-Column1-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootG-Column1-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootI-Column2-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootI-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootE-Column2-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+	border-top-width: 1px;
+	border-top-color: #a9a9a9;
+	border-top-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootE-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootF-Column2-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-top-width: 1px;
+	border-top-color: #a9a9a9;
+	border-top-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootF-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootH-Column2-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootH-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootD-Column2-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-top-width: 1px;
+	border-top-color: #a9a9a9;
+	border-top-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootD-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootC-Column2-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootC-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootB-Column2-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootB-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootA-Column2-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootA-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootG-Column2-Footer1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.TableStyle-Idera_Table_Stylesheet .FootG-Column2-Footer1 p
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .Body-Body1
+{
+	
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyI-Column1-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyI-Column1-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyE-Column1-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyE-Column1-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyF-Column1-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyF-Column1-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyH-Column1-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyH-Column1-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyD-Column1-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyD-Column1-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyC-Column1-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyC-Column1-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyB-Column1-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyB-Column1-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyA-Column1-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyA-Column1-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyG-Column1-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyG-Column1-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyI-Column2-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyI-Column2-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyE-Column2-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyE-Column2-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyF-Column2-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyF-Column2-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyH-Column2-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyH-Column2-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyD-Column2-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+	border-bottom-width: 1px;
+	border-bottom-color: #a9a9a9;
+	border-bottom-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyD-Column2-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyC-Column2-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyC-Column2-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyB-Column2-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+	border-right-width: 1px;
+	border-right-color: #a9a9a9;
+	border-right-style: solid;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyB-Column2-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyA-Column2-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyA-Column2-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyG-Column2-Body1
+{
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+	text-align: left;
+}
+
+.TableStyle-Idera_Table_Stylesheet .BodyG-Column2-Body1 p
+{
+	color: #000000;
+	font-family: Arial;
+	font-size: 10pt;
+	font-weight: normal;
+}
+
+

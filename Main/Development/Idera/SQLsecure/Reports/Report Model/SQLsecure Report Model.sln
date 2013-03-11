@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{999D2CB9-9277-4465-A902-1604ED3686A3}") = "SQLsecure Report Model", "SQLsecure Report Model.smdlproj", "{3B9A6E22-A114-4FA4-A368-9C9F54DCC29C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Production|Default = Production|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B9A6E22-A114-4FA4-A368-9C9F54DCC29C}.Production|Default.ActiveCfg = Production
+		{3B9A6E22-A114-4FA4-A368-9C9F54DCC29C}.Production|Default.Build.0 = Production
+		{3B9A6E22-A114-4FA4-A368-9C9F54DCC29C}.Production|Default.Deploy.0 = Production
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

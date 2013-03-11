@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="6" MadCap:lastHeight="373" MadCap:lastWidth="890">
+    <head>
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Select audit data for assessment</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Select audit data for assessment</h2>
+        <p class="Body">
+            <MadCap:keyword term="refresh audit data;policies:refresh audit data" />Use the Select Audit Data window to change which audit data (snapshots) the selected policy is using to perform the assigned security checks. Choosing a different set of audit data may alter the policy findings. After you choose a new data set, SQLsecure updates the policy.</p>
+        <p class="Body">By default, SQLsecure always uses the most recent audit data available.</p>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>When should I select different audit data?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Consider refreshing the audit data when:</p>
+                <ul style="list-style-type: circle;">
+                    <li class="Bullet">Your environment has changed and you need to re-run the assessment against the most recent audit data</li>
+                    <li class="Bullet">You have responded to a high or medium risk by adjusting a security setting in your environment and thus need to validate your change</li>
+                    <li class="Bullet">You want to run the same policy against a point in time in the past, such as last week or last month</li>
+                </ul>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>Why would I&#160;use baseline snapshots only?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Baseline snapshots can be used as a guide about how your SQL&#160;Server security model should be configured. By running your policy against baseline snapshots only, you can test the thoroughness of this guide.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[isp_sqlsecure_getserverprincipalpermission]'))
+drop procedure [dbo].[isp_sqlsecure_getserverprincipalpermission]
+GO
+
+CREATE procedure [dbo].[isp_sqlsecure_getserverprincipalpermission] (@snapshotid int, @uid int)
+as
+   -- <Idera SQLsecure version and copyright>
+   --
+   -- Description :
+   --             Get all explict server permissions belonging to a server login or role
+   -- 	           
+
+	select 
+		objectname=case 
+					when classid=101 then (select name from serverprincipal where snapshotid = @snapshotid and principalid = a.majorid) 
+					when classid=105 then (select name from endpoint where snapshotid = @snapshotid and endpointid = a.majorid) 
+					else 'Server' end, 
+		objecttype=dbo.getclasstype(a.classid),
+		permission=a.permission, 
+		grantor=dbo.getserverprincipalname(a.snapshotid, a.grantor),
+		grantee=dbo.getserverprincipalname(a.snapshotid, a.grantee),
+		a.isgrant, 
+		a.isgrantwith, 
+		a.isdeny
+	from 
+		serverpermission a
+	where
+		a.snapshotid = @snapshotid and
+		a.grantee = @uid
+
+GO
+
+GRANT EXECUTE ON [dbo].[isp_sqlsecure_getserverprincipalpermission] TO [SQLSecureView]
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+

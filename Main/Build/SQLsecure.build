@@ -1,0 +1,699 @@
+<?xml version="1.0"?>
+<project name="SQLsecure" default="Build.Dev" basedir="..">
+
+	<!-- ***************************************************************************** -->
+	<!--                            Build Targets                                      -->
+	<!-- ***************************************************************************** -->
+
+	<!-- ******************* -->
+	<!-- Build.AllInstallers -->
+	<!-- ******************* -->
+	<target name="Build.AllInstallers">
+		<property name="SQLsecure.BuildType" value="All Installers" unless="${property::exists('SQLsecure.BuildType')}" />
+		<call target="Build.Installers" />
+		<call target="Build.CDImage" />
+		<call target="Build.WebInstaller" />
+	</target>
+
+	<!-- ************** -->
+	<!-- Build.Official -->
+	<!-- ************** -->
+	<target name="Build.Official">
+		<property name="SQLsecure.BuildType" value="Official" unless="${property::exists('SQLsecure.BuildType')}" />
+		<call target="Build.Dev" />
+		<call target="Perforce.Label" />
+		<call target="Archive" />
+	</target>
+
+	<!-- ********* -->
+	<!-- Build.Dev -->
+	<!-- ********* -->
+	<target name="Build.Dev">
+		<property name="SQLsecure.BuildType" value="Dev" unless="${property::exists('SQLsecure.BuildType')}" />
+		<call target="Perforce.Sync" />
+		<call target="Build.ApplyVersionInfo" />
+		<call target="Build.Compile" />
+		<call target="Build.Obfuscate" />
+		<call target="Build.AllInstallers" />
+	</target>
+
+	<!-- ***************** -->
+	<!-- Build.Incremental -->
+	<!-- ***************** -->
+	<target name="Build.Incremental">
+		<property name="SQLsecure.BuildType" value="Incremental" unless="${property::exists('SQLsecure.BuildType')}" />
+		<call target="Build.ApplyVersionInfo" />
+		<call target="Build.Compile" />
+		<call target="Build.Obfuscate" />
+		<call target="Build.AllInstallers" />
+		<call target="Perforce.Label" />
+		<call target="Archive" />
+	</target>
+
+	<!-- ******************** -->
+	<!-- Build.InstallDocOnly -->
+	<!-- ******************** -->
+	<target name="Build.InstallDocOnly">
+		<property name="SQLsecure.BuildType" value="InstallDocOnly" unless="${property::exists('SQLsecure.BuildType')}" />
+		<call target="Build.GetCurrentVersion" />
+		<call target="Build.AllInstallers" />
+		<call target="Perforce.Label" />
+		<call target="Archive" />
+	</target>
+
+	
+	<!-- ***************************************************************************** -->
+	<!--                            Setup Nant build properties                        -->
+	<!-- ***************************************************************************** -->
+	<!-- Use TStamp to set a proerty to the the current datetime defining the format -->
+	<tstamp property="Build.DateTime" pattern="MM-dd-yyyy.HHmm" verbose="true" />
+
+	<!-- Nant Properties -->
+	<property name="Framework.Version" value="v2.0.50727"/>
+	<property name="Framework.Install" value="c:/Windows/Microsoft.NET/Framework/${Framework.Version}"/>
+	<property name="nant.settings.currentframework" value="net-2.0"/>
+
+	<property name="Build.Config" value="Release" unless="${property::exists('Build.Config')}" />
+	<property name="BuildNumberPlaceholder" value="9.88.777.666" />
+	<property name="Build.Dev" value="Release" unless="${property::exists('Build.Dev')}" />
+	<property name="Build.Official" value="true" unless="${property::exists('Build.Official')}" />
+
+	<!-- Email Properties -->
+	<property name="Email.Server" value="mx.bbstek.com" />
+	<property name="Email.BuildMaster" value="michael.oneal@idera.com" />
+	<property name="Email.Developers" value="michael.oneal@idera.com, robert.wilkinson@idera.com, douglas.watson@idera.com" />
+	<property name="Email.QA" value="michael.oneal@idera.com" />
+	<property name="Email.From" value="${Email.BuildMaster}" />
+	<property name="Email.Success.To" value="${Email.BuildMaster}; ${Email.Developers}; ${Email.QA}"/>
+	<property name="Email.Failure.To" value="${Email.BuildMaster}; ${Email.Developers}"/>
+	<property name="MailLogger.mailhost" value="${Email.Server}" />
+	<property name="MailLogger.from" value="${Email.From}" />
+	<property name="MailLogger.success.to" value="${Email.Success.To}" />
+	<property name="MailLogger.failure.to" value="${Email.Failure.To}" />
+	<property name="MailLogger.success.subject" value="SQLsecure Build ${SQLsecure.BuildLabel} (${SQLsecure.BuildType}) Available" dynamic="true" />
+	<property name="MailLogger.failure.subject" value="SQLsecure Build ${SQLsecure.BuildLabel} (${SQLsecure.BuildType}) Failed on ${Build.DateTime}"  dynamic="true" />
+	<property name="MailLogger.success.notify" value="true" />
+	<property name="MailLogger.failure.notify" value="true" />
+
+	<!-- Project Directories -->
+	<property name="SQLsecure.Root" value="development/Idera/SQLsecure"/>
+	<property name="SQLsecure.Build" value="${SQLsecure.Root}/Build"/>
+	<property name="SQLsecure.Build.Bin" value="${SQLsecure.Root}/Build/Bin"/>
+	<property name="SQLsecure.Core" value="${SQLsecure.Root}/Core"/>
+	<property name="SQLsecure.Collector" value="${SQLsecure.Root}/DataLoader"/>
+	<property name="SQLsecure.UI.Console" value="${SQLsecure.Root}/UI/Console"/>
+	<property name="SQLsecure.Reports.Installer" value="${SQLsecure.Root}/Reports/ReportsInstaller"/>
+	<property name="SQLsecure.Reports.RDL" value="${SQLsecure.Root}/Reports/RDL"/>
+	<property name="SQLsecure.Repository" value="${SQLsecure.Root}/Repository"/>
+	<property name="SQLsecure.RepositoryDDL" value="${SQLsecure.Root}/Repository/DDL"/>
+	<property name="SQLsecure.ThirdPartySoftware" value="Development/ThirdPartySoftware"/>
+	<property name="SQLsecure.Documentation" value="Documentation/Build"/>
+	<property name="SQLsecure.Policies" value="${SQLsecure.Root}/Policies"/>
+	<property name="SQLsecure.Install" value="Install"/>
+	<property name="SQLsecure.Install.InstallShield" value="Install/InstallShield"/>
+	<property name="SQLsecure.Install.Autorun" value="Install/Autorun/"/>
+
+	<!-- Common Assembly Info -->
+	<property name="AssemblyInfo.Company" value="Idera, Inc." />
+	<property name="AssemblyInfo.Product" value="Idera SQLsecure" />
+	<property name="AssemblyInfo.Copyright" value="Copyright (C) 2005 - 2012 Idera, Inc." />
+	
+	<!-- InstallShield Information -->
+	<property name="InstallShield.Builder" value="C:\Program Files\Macrovision\IS 11.5 StandaloneBuild"/>
+	<property name="InstallShield.Full.Project" value="SQLsecure.ism"/>
+	<property name="InstallShield.Full.Project.x64" value="SQLsecure-x64.ism"/>
+	<property name="InstallShield.Full.Project.ia64" value="SQLsecure-ia64.ism"/>
+	<property name="installshield.mergemodules" value="${InstallShield.Builder}/Modules/i386"/>
+	<property name="SQLsecure.Install.MergeModules" value="${SQLsecure.Install}/MergeModules"/>
+	<property name="FullPath.Install.Full" value="${SQLsecure.Install.InstallShield}/SQLsecure/SQLsecure/Release 1/DiskImages/DISK1/SQLsecure.exe"/>
+	<property name="FullPath.Install.Full.x64" value="${SQLsecure.Install.InstallShield}/SQLsecure-x64/SQLsecure x64/Release 1/DiskImages/DISK1/SQLsecure x64.exe"/>
+	<property name="FullPath.Install.Full.ia64" value="${SQLsecure.Install.InstallShield}/SQLsecure-ia64/SQLsecure ia64/Release 1/DiskImages/DISK1/SQLsecure ia64.exe"/>
+	<property name="installshield.mergemodules.2" value="${InstallShield.Builder}/Objects"/>
+	<property name="installshield.mergemodules.searchpath" value="${installshield.mergemodules},${installshield.mergemodules.2}"/>
+
+	<!-- Redistributables -->
+	<property name="Redist" value="C:\Redist"/>
+	
+	<!-- Winzip dir -->
+	<property name="WinZip" value="C:\Program Files\WinZip"/>
+	
+	<!-- Absolute Packager dir -->
+	<property name="AbsolutePackager" value="C:\Program Files\Absolute Packager"/>
+	
+
+	<!-- Code-signing information -->
+	<property name="Signing.Dir" value="${SQLsecure.Install}/CodeSigning"/>
+	<property name="Signing.Application" value="${Signing.Dir}/signtool.exe"/>
+	<property name="Signing.Key" value="${Signing.Dir}/ideracs.pfx"/>
+	<property name="Signing.TimeStamp" value="http://timestamp.verisign.com/scripts/timstamp.dll"/>
+	<property name="Signing.Password" value="idera*88"/>
+	<property name="Signing.Url" value="http://www.idera.com/"/>
+	<property name="Signing.Name" value=""/>
+	<property name="Signing.Target" value=""/>
+
+	<!-- Additional Product Information -->
+	<property name="Product.Name" value="${AssemblyInfo.Company} ${AssemblyInfo.Product}" />
+	<property name="Product.Name.Simple" value="${AssemblyInfo.Company} SQLsecure" />
+	<property name="Product.Url" value="http://www.idera.com/" />
+
+	<!-- File Names -->
+	<property name="File.Core.Accounts" value="Idera.SQLsecure.Core.Accounts.dll"/>
+	<property name="File.Core.EventMessages" value="Idera.SQLsecure.Core.EventMessages.dll"/>
+	<property name="File.Core.Interop" value="Idera.SQLsecure.Core.Interop.dll"/>
+	<property name="File.Core.Logger" value="Idera.SQLsecure.Core.Logger.dll"/>
+	<property name="File.Console" value="Idera.SQLsecure.UI.Console.exe"/>
+	<property name="File.Collector" value="Idera.SQLsecure.Collector.exe"/>
+	<property name="File.InstallUtil" value="InstallUtil.exe"/>
+
+	<!-- Output Directories -->
+	<property name="SQLsecure.Compile.Output" value="${SQLsecure.Root}/bin/${Build.Config}"/>
+	<property name="SQLsecure.BuildCompile.Output" value="Build/BuildCompileOutput" />
+	<property name="SQLsecure.Build.Output" value="Build/BuildOutput" />
+
+	<!-- <property name="SQLsecure.Obfuscate.Output" value="${SQLsecure.Compile.Output}/obfuscated"/> -->
+
+	<property name="SQLsecure.Development.Builds" value="//redhousefs-02/Development/SQLsecure/Builds/"/>
+	<property name="SQLsecure.Development.Archives" value="//redhousefs-02/Development/SQLsecure/Archives/"/>
+
+	<!-- Perforce Information -->
+	<property name="Perforce.Branch" value="//sqlsecure/main"/>
+	<property name="Perforce.View" value="${Perforce.Branch}/..."/>
+	<property name="Perforce.DocView" value="${Perforce.Branch}/Documentation/..."/>
+
+	<property name="Utility.Sed" value="build/bin/sed.exe"/>
+
+	<!-- Version Information -->
+	<property name="Build.StartDate" value="03/01/2012"/>
+
+	<!-- ***************************************************************************** -->
+	<!--                            Build Steps                                        -->
+	<!-- ***************************************************************************** -->
+	
+	<!-- ************* -->
+	<!-- Build.Compile -->
+	<!-- ************* -->
+	<target name="Build.Compile">
+
+		<!-- Build the Collector solution -->
+	    	<exec program="msbuild" workingdir="${SQLsecure.Collector}">
+	      		<arg value="Idera.SQLsecure.Collector.sln"/>
+	      		<arg value="/p:Configuration=${Build.Config}"/>
+	    	</exec>
+
+	    	<!-- Build the Console solution -->
+	    	<exec program="msbuild" workingdir="${SQLsecure.UI.Console}">
+	      		<arg value="Idera.SQLsecure.UI.Console.sln"/>
+	      		<arg value="/p:Configuration=${Build.Config}"/>
+	    	</exec>
+
+	    	<!-- Build the Reports Installer solution -->
+	    	<exec program="msbuild" workingdir="${SQLsecure.Reports.Installer}">
+	      		<arg value="Idera.SQLsecure.Reports.Installer.sln"/>
+	      		<arg value="/p:Configuration=${Build.Config}"/>
+	    	</exec>
+
+        <!-- Sign the Reports Installer -->
+        <property name="Signing.Name" value="Idera SQLsecure Reports Installer"/>
+        <property name="Signing.Target" value="${SQLsecure.Compile.Output}/Idera.SQLsecure.Reports.Installer.exe"/>
+        <call target="SignCode"/>
+	    	
+	    	<!-- Create DDL repository load script -->
+	    	<exec program="${SQLsecure.RepositoryDDL}\CreateDDL.bat" workingdir="${SQLsecure.RepositoryDDL}"> </exec>
+	    	
+	    	<!-- Create DDL repository update script -->
+	    	<exec program="${SQLsecure.RepositoryDDL}\UpdateDDL.bat" workingdir="${SQLsecure.RepositoryDDL}"> </exec>
+
+	    	<!-- Create merged repository load scripts -->
+	    	<exec program="${SQLsecure.Repository}\CreateMerge.bat" workingdir="${SQLsecure.Repository}"> </exec>
+	</target>
+
+	<!-- *************** -->
+	<!-- Build.Obfuscate -->
+	<!-- *************** -->
+	<target name="Build.Obfuscate">
+	</target>
+
+	<!-- **************** -->
+  	<!-- Build.Installers -->
+	<!-- **************** -->
+	<target name="Build.Installers">
+		<!-- Copy Merge Modules for Installers -->
+		<copy todir="${installshield.mergemodules}">
+			    <fileset basedir="${SQLsecure.Install.MergeModules}">
+					<include name="*.*"/>
+			    </fileset>
+		</copy>            
+
+	    	<!-- Copy exe & dll files -->
+	    	<copy todir="${SQLsecure.BuildCompile.Output}/bin" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.Compile.Output}/*.exe"/>
+				<include name="${SQLsecure.Compile.Output}/*.dll"/>
+				<include name="${SQLsecure.Compile.Output}/Idera.SQLsecure.Reports.Installer.exe.config"/>
+				<include name="${SQLsecure.Compile.Output}/Idera.SQLsecure.Collector.exe.config"/>
+				<include name="${SQLsecure.Compile.Output}/Idera.SQLsecure.UI.Console.exe.config"/>
+				<include name="${SQLsecure.Compile.Output}/introSplash.png"/>
+				<include name="${SQLsecure.Documentation}/*.chm" />
+				<include name="${SQLsecure.Compile.Output}/*.ico"/>
+			</fileset>
+	    	</copy>
+	    	
+	    	<copy todir="${SQLsecure.BuildCompile.Output}/bin" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.ThirdPartySoftware}/Microsoft.ReportViewer.WinForms.dll"/>
+				<include name="${SQLsecure.ThirdPartySoftware}/Microsoft.ReportViewer.Common.dll"/>
+				<include name="${SQLsecure.ThirdPartySoftware}/TracerX.exe.config"/>
+			</fileset>
+	    	</copy>
+
+	    	<copy todir="${SQLsecure.BuildCompile.Output}/Reports" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.Reports.RDL}/*.xml"/>
+				<include name="${SQLsecure.Reports.RDL}/*.rdl"/>
+			</fileset>
+	    	</copy>
+
+	    	<!-- Copy repository script files -->
+	    	<copy todir="${SQLsecure.BuildCompile.Output}/Repository Scripts" flatten="true">
+	      		<fileset>
+				<include name="${SQLsecure.Repository}/merge_fn.sql"/>
+				<include name="${SQLsecure.Repository}/merge_vw.sql"/>
+				<include name="${SQLsecure.Repository}/merge_sp.sql"/>
+				<include name="${SQLsecure.Repository}/SQLsecure_version.sql"/>
+				<include name="${SQLsecure.RepositoryDDL}/SQLsecure_ddl.sql"/>
+				<include name="${SQLsecure.RepositoryDDL}/SQLsecure_ddl_update.sql"/>
+				<include name="${SQLsecure.Repository}/sql_postscript.sql"/>
+	      		</fileset>
+	    	</copy>
+
+	    	<!-- Copy doc files -->
+	    	<copy todir="${SQLsecure.BuildCompile.Output}/Documentation" flatten="true">
+	      		<fileset>
+              <include name="${SQLsecure.Documentation}/Idera - Trial Software License Agreement.rtf" />
+              <include name="${SQLsecure.Documentation}/Idera - Software License Agreement.rtf" />
+	      		</fileset>
+	    	</copy>
+
+
+	    	<!-- Copy policy files -->
+	    	<copy todir="${SQLsecure.BuildCompile.Output}/Policies" flatten="true">
+	      		<fileset>
+				<include name="${SQLsecure.Policies}/*.xml" />
+	      		</fileset>
+	    	</copy>
+
+		<!-- Add version number to the installer x86 -->	    	
+		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="false"/>
+		<move file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" tofile="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}.old"   overwrite="true" />
+		<exec program="${Utility.Sed}">
+			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}.old"/>
+			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}"/>
+			<arg value="${BuildNumberPlaceholder}"/>
+			<arg value="${SQLsecure.version}"/>
+		</exec>
+		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
+
+		<!-- Add version number to the installer x64 -->	    	
+		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.x64}" readonly="false"/>
+		<move file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.x64}" tofile="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.x64}.old"   overwrite="true" />
+		<exec program="${Utility.Sed}">
+			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.x64}.old"/>
+			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.x64}"/>
+			<arg value="${BuildNumberPlaceholder}"/>
+			<arg value="${SQLsecure.version}"/>
+		</exec>
+		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
+
+		<!-- Add version number to the installer x86 -->	    	
+		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}" readonly="false"/>
+		<move file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}" tofile="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}.old"   overwrite="true" />
+		<exec program="${Utility.Sed}">
+			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}.old"/>
+			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}"/>
+			<arg value="${BuildNumberPlaceholder}"/>
+			<arg value="${SQLsecure.version}"/>
+		</exec>
+		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
+
+		<!-- Full Install x86-->
+		<exec program="${InstallShield.Builder}\IsSABld.exe" workingdir="${SQLsecure.Install.InstallShield}">
+			<arg value="-c"/>
+			<arg value="COMP"/>
+			<arg value="-p"/>
+			<arg value="${InstallShield.Full.Project}"/>
+			<arg value="-e"/>
+			<arg value="Y"/>
+			<arg value="-o"/>
+			<arg value="${installshield.mergemodules.searchpath}"/>
+		</exec>
+		<property name="Signing.Name" value="Idera SQLsecure"/>
+		<property name="Signing.Target" value="${FullPath.Install.Full}"/>
+		<call target="SignCode"/>
+
+		<!-- Full Install x64-->
+		<exec program="${InstallShield.Builder}\IsSABld.exe" workingdir="${SQLsecure.Install.InstallShield}">
+			<arg value="-c"/>
+			<arg value="COMP"/>
+			<arg value="-p"/>
+			<arg value="${InstallShield.Full.Project.x64}"/>
+			<arg value="-e"/>
+			<arg value="Y"/>
+			<arg value="-o"/>
+			<arg value="${installshield.mergemodules.searchpath}"/>
+		</exec>
+		<property name="Signing.Name" value="Idera SQLsecure x64"/>
+		<property name="Signing.Target" value="${FullPath.Install.Full.x64}"/>
+		<call target="SignCode"/>
+		
+		<!-- Full Install ia64-->
+		<exec program="${InstallShield.Builder}\IsSABld.exe" workingdir="${SQLsecure.Install.InstallShield}">
+			<arg value="-c"/>
+			<arg value="COMP"/>
+			<arg value="-p"/>
+			<arg value="${InstallShield.Full.Project.ia64}"/>
+			<arg value="-e"/>
+			<arg value="Y"/>
+			<arg value="-o"/>
+			<arg value="${installshield.mergemodules.searchpath}"/>
+		</exec>
+		<property name="Signing.Name" value="Idera SQLsecure ia64"/>
+		<property name="Signing.Target" value="${FullPath.Install.Full.ia64}"/>
+		<call target="SignCode"/>
+	</target>
+	
+	<target name="SignCode">
+		<!-- Sign web installation kit -->
+		<exec program="${Signing.Application}">
+			<arg value="sign"/>
+			<arg value="-d"/>
+			<arg value="${Signing.Name}"/>
+			<arg value="-du"/>
+			<arg value="${Signing.Url}"/>
+			<arg value="-f"/>
+			<arg value="${Signing.Key}"/>
+			<arg value="-p"/>
+			<arg value="${Signing.Password}"/>
+			<arg value="-t"/>
+			<arg value="${Signing.TimeStamp}"/>
+			<arg value="${Signing.Target}"/>
+		</exec>
+	</target>
+
+	<!-- ************* -->
+	<!-- Build.CDImage -->
+	<!-- ************* -->
+	<target name="Build.CDImage">
+		<!-- copy installers -->
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full/Intel" flatten="true">
+			<fileset>
+				<include name="${FullPath.Install.Full}"/>
+			</fileset>
+	    </copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x64/Full/Intel" flatten="true">
+			<fileset>
+				<include name="${FullPath.Install.Full.x64}"/>
+			</fileset>
+	    </copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full/Intel" flatten="true">
+			<fileset>
+				<include name="${FullPath.Install.Full.ia64}"/>
+			</fileset>
+	    </copy>
+
+		<!-- copy Database Script -->
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full/Scripts" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.RepositoryDDL}/Schema_900_Fix.sql"/>
+			</fileset>
+	    </copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x64/Full/Scripts" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.RepositoryDDL}/Schema_900_Fix.sql"/>
+			</fileset>
+	    </copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full/Scripts" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.RepositoryDDL}/Schema_900_Fix.sql"/>
+			</fileset>
+	    </copy>
+
+		<!-- copy Documentation -->
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full/Documentation" flatten="true">
+      		<fileset>
+			<include name="${SQLsecure.Documentation}/*" />
+      		</fileset>
+    	</copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x64/Full/Documentation" flatten="true">
+      		<fileset>
+			<include name="${SQLsecure.Documentation}/*" />
+      		</fileset>
+    	</copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full/Documentation" flatten="true">
+      		<fileset>
+			<include name="${SQLsecure.Documentation}/*" />
+      		</fileset>
+    	</copy>
+
+		<!-- copy Redist -->
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full/redist/NET Framework 2.0" flatten="true">
+			<fileset>
+				<include name="${Redist}/NET Framework 2.0/*"/>
+			</fileset>
+	    	</copy>
+	    	<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full/redist/Windows Installer 3.1" flatten="true">
+			<fileset>
+				<include name="${Redist}/Windows Installer 3.1/*"/>
+			</fileset>
+		</copy>
+
+		<!-- Sign the Autorun setup.exe -->
+		<attrib file="${SQLsecure.Install.Autorun}/setup.exe" readonly="false" />
+		<property name="Signing.Name" value="Idera SQLsecure"/>
+		<property name="Signing.Target" value="${SQLsecure.Install.Autorun}/setup.exe"/>
+		<call target="SignCode"/>
+
+		<!-- get the SQLsecure help values from the webhelp.ini file-->
+		<foreach item="Line" in="${SQLsecure.ThirdPartySoftware}/webhelp.ini" delim="=" property="setting,setting.val" trim="Both">
+			<if test="${string::starts-with(setting, 'Version')}">
+				<property name="help.version" value="${setting.val}"/>
+			</if>
+			<if test="${string::starts-with(setting, 'Online')}">
+				<property name="help.url" value="${setting.val}"/>
+			</if>
+		</foreach>
+
+		<!-- Copy Autorun -->
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full" flatten="true"
+				file="${SQLsecure.Install.Autorun}/setup.hta" >
+			<filterchain>
+				<replacestring from="{platform}" to="x86" ignorecase="true" />
+				<replacestring from="{copyright}" to="${AssemblyInfo.Copyright}" ignorecase="true" />
+				<replacestring from="{appversion}" to="${SQLsecure.version}" ignorecase="true" />
+				<replacestring from="{helpversion}" to="${help.version}" ignorecase="true" />
+				<replacestring from="{helpurl}" to="${help.url}" ignorecase="true" />
+			</filterchain>
+		</copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full/Images" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.Install.Autorun}/Images/*"/>
+			</fileset>
+		</copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.Install.Autorun}/autorun.inf"/>
+				<include name="${SQLsecure.Install.Autorun}/setup.exe"/>
+			</fileset>
+		</copy>
+
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x64/Full" flatten="true"
+				file="${SQLsecure.Install.Autorun}/setup.hta" >
+			<filterchain>
+				<replacestring from="{platform}" to="x64" ignorecase="true" />
+				<replacestring from="{copyright}" to="${AssemblyInfo.Copyright}" ignorecase="true" />
+				<replacestring from="{appversion}" to="${SQLsecure.version}" ignorecase="true" />
+				<replacestring from="{helpversion}" to="${help.version}" ignorecase="true" />
+				<replacestring from="{helpurl}" to="${help.url}" ignorecase="true" />
+			</filterchain>
+		</copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x64/Full/Images" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.Install.Autorun}/Images/*"/>
+			</fileset>
+		</copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x64/Full" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.Install.Autorun}/autorun.inf"/>
+				<include name="${SQLsecure.Install.Autorun}/setup.exe"/>
+			</fileset>
+		</copy>
+
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full" flatten="true"
+				file="${SQLsecure.Install.Autorun}/setup.hta" >
+			<filterchain>
+				<replacestring from="{platform}" to="ia64" ignorecase="true" />
+				<replacestring from="{copyright}" to="${AssemblyInfo.Copyright}" ignorecase="true" />
+				<replacestring from="{appversion}" to="${SQLsecure.version}" ignorecase="true" />
+				<replacestring from="{helpversion}" to="${help.version}" ignorecase="true" />
+				<replacestring from="{helpurl}" to="${help.url}" ignorecase="true" />
+			</filterchain>
+		</copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full/Images" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.Install.Autorun}/Images/*"/>
+			</fileset>
+		</copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.Install.Autorun}/autorun.inf"/>
+				<include name="${SQLsecure.Install.Autorun}/setup.exe"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- ****************** -->
+	<!-- Build.WebInstaller -->
+	<!-- ****************** -->
+	<target name="Build.WebInstaller">
+		<!-- Zip the full solutions-->
+	    <exec program="${WinZip}\wzzip">
+	      		<arg value="-a"/>
+	      		<arg value="-p"/>
+	      		<arg value="-r"/>
+	      		<arg value="C:\Perforce\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure.zip"/>
+	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\x86\Full\*.*"/>
+	    	</exec>
+		<exec program="${WinZip}\wzzip">
+	      		<arg value="-a"/>
+	      		<arg value="-p"/>
+	      		<arg value="-r"/>
+	      		<arg value="C:\Perforce\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure-x64.zip"/>
+	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\x64\Full\*.*"/>
+	    	</exec>
+		<exec program="${WinZip}\wzzip">
+	      		<arg value="-a"/>
+	      		<arg value="-p"/>
+	      		<arg value="-r"/>
+	      		<arg value="C:\Perforce\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure-ia64.zip"/>
+	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\ia64\Full\*.*"/>
+	    	</exec>
+	    	
+		<!-- Build absolute packager -->
+	    <exec program="InstallationKit.bat" workingdir="C:\Perforce\SQLsecure\Main\Build">
+		</exec>
+		<exec program="InstallationKit-x64.bat" workingdir="C:\Perforce\SQLsecure\Main\Build">
+		</exec>
+		<exec program="InstallationKit-ia64.bat" workingdir="C:\Perforce\SQLsecure\Main\Build">
+	    	</exec>
+	    	
+        <!-- Zip the EXE (used for HTTP downloads where we dont want an EXE) -->
+		<exec program="${WinZip}\wzzip">
+			    <arg value="-a"/>
+			    <arg value="${SQLsecure.BuildCompile.Output}\IderaSQlsecureInstallationKit.zip"/>
+			    <arg value="${SQLsecure.BuildCompile.Output}\IderaSQlsecureInstallationKit.exe"/>
+		</exec>
+	    	
+    	<!-- Copy files to the Build output folder -->
+    	<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Web" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.BuildCompile.Output}\IderaSQlsecureInstallationKit.exe"/>
+			</fileset>
+	    	</copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x64/Web" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.BuildCompile.Output}\IderaSQlsecureInstallationKit-x64.exe"/>
+			</fileset>
+	    	</copy>
+		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Web" flatten="true">
+			<fileset>
+				<include name="${SQLsecure.BuildCompile.Output}\IderaSQlsecureInstallationKit-ia64.exe"/>
+			</fileset>
+	    	</copy>
+	</target>
+
+
+
+
+	<target name="Build.GetCurrentVersion">
+		<!-- Make build number file as R/W -->
+		<attrib file="build/build.number" readonly="false"/>
+		
+		<!-- Call utility to maintain the same build number -->
+		<loadtasks assembly="build/bin/BuildUtilities.dll" />
+		<versionex path="build/build.number" prefix="SQLsecure" buildtype="NoIncrement" revisiontype="NoIncrement" />
+		
+		<!-- Make build number file as R -->
+		<attrib file="build/build.number" readonly="true"/>
+		
+		<!-- Set the build label used for P4 labeling, output dir & zip file -->
+		<property name="SQLsecure.BuildLabel" value="${SQLsecure.version}_${SQLsecure.Incremental.Label}" />
+	</target>
+	
+	
+	
+
+	<target name="Perforce.Sync">
+	    <p4sync force="true"  view="${Perforce.View}" />
+	</target>
+	
+	<target name="Build.ApplyVersionInfo">
+		<call target="Build.Version" unless="${property::exists('SQLsecure.version')}"/>
+		<call target="Build.GenerateCommonAssemblyInfo"/>
+	</target>
+	
+	<target name="Build.Version">
+		<!-- Set the build.number file to read-write -->
+		<loadtasks assembly="build/bin/BuildUtilities.dll" />
+		<p4edit view="${Perforce.Branch}/build/build.number"/>
+
+		<!-- Generate the build/revision number -->
+		 <version path="build/build.number" startdate="${Build.StartDate}" prefix="SQLsecure" buildtype="MonthDay" revisiontype="Increment" />
+		<p4submit changelist="Update build number" view="${Perforce.Branch}/build/build.number"/>
+		
+		<!-- Set the build label used for P4 labeling, output dir & zip file -->
+		<property name="SQLsecure.BuildLabel" value="${SQLsecure.version}" />
+	</target>
+	
+	<target name="Build.GenerateCommonAssemblyInfo">
+		<property name="CommonAssemblyInfo" value="${SQLsecure.Root}/CommonAssemblyInfo.cs" />
+
+		<!-- Set the common assembly info file to read-write -->
+		<attrib file="${CommonAssemblyInfo}" readonly="false" />
+
+		<!-- Generate common assembly info -->
+		<asminfo output="${CommonAssemblyInfo}" language="CSharp">
+			<imports>
+				<import namespace="System.Reflection" />
+			</imports>
+			<attributes>
+				<attribute type="AssemblyCompanyAttribute" value="${AssemblyInfo.Company}" />
+				<attribute type="AssemblyProductAttribute" value="${AssemblyInfo.Product}" />
+				<attribute type="AssemblyCopyrightAttribute" value="${AssemblyInfo.Copyright}" />
+				<attribute type="AssemblyVersionAttribute" value="${SQLsecure.version}" />
+			</attributes>
+	    	</asminfo>
+
+    		<!-- Set the common assembly info file to read-only -->
+	    	<attrib file="${CommonAssemblyInfo}" readonly="true" />
+	</target>
+
+
+	<target name="Perforce.Label">
+		<p4label label="sqlsecure_${SQLsecure.BuildLabel}" view="${Perforce.View}"/>
+		<p4labelsync label="sqlsecure_${SQLsecure.BuildLabel}"  view="${Perforce.View}"/>
+		<exec program="LockLabel.bat" workingdir="C:\Perforce\SQLsecure\Main\Build">
+			<arg value="sqlsecure_${SQLsecure.BuildLabel}"/>
+	    	</exec>
+	</target>
+
+	<target name="Archive">
+		<!-- Zip the full solution -->
+	    	<exec program="${WinZip}\wzzip">
+	      		<arg value="-a"/>
+	      		<arg value="-p"/>
+	      		<arg value="-r"/>
+	      		<arg value="C:\Perforce\SQLsecure_${SQLsecure.BuildLabel}.zip"/>
+	      		<arg value="C:\Perforce\SQLsecure\*.*"/>
+	    	</exec>
+	</target>
+	
+</project>

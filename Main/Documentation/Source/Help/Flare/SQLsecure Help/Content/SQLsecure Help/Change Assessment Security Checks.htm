@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="5" MadCap:lastHeight="618" MadCap:lastWidth="903">
+    <head>
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" MadCap:stylesheetType="table" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Change assessment security checks</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Change assessment security checks</h2>
+        <p class="Body">Security checks assess the vulnerability of specific Windows OS and SQL&#160;Server objects based on your criteria. The security checks performed by the selected assessment were copied from the policy associated with this assessment. You can modify the criteria of these checks to better fit your auditing needs for this assessment. Changes made to the assessment security checks will not affect the associated policy.</p>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>Fields</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="BodyIndent">You can update the following fields:</p>
+                <p class="DefinitionListTerm">Criteria</p>
+                <p class="DefinitionListBody">Some security checks allow you to enter criteria the policy will check for, such as specific user accounts, stored procedures, or the login audit level. Text entered into these fields must be the exact spelling of the object or user being checked.</p>
+                <p class="DefinitionListBody"><span class="If_Then_Statement">If the criteria for any given security check is entered incorrectly</span>, the risk will appear in the Security Report Card. Select the risk and you can see the correct criteria names in the Details section. Open the Policy details window and enter the correct name on the Security Checks tab.
+                <table class="TableStyle_Tip" style="mc-table-style: url('../Resources/TableStyles/Tip.css');" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                                <p>TIP</p>
+                            </td>
+                            <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                                <p>Some security check criteria support using the percent wildcard character (%) to specify objects whose names apply a naming convention. For example, to specify all users whose logon starts with <code>sql</code>, enter the following syntax:&#160;<code>domain\sql%</code>.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table></p>
+                <p class="DefinitionListTerm">External Cross Reference&#160;</p>
+                <p class="DefinitionListBody">Allows you to cross reference a security vulnerability included in your report to a number or label contained in an external policy, industry standard, or government regulation.</p>
+                <p class="DefinitionListTerm">Report Text&#160;</p>
+                <p class="DefinitionListBody">The text entered in this field appears on your policy reports. </p>
+                <p class="DefinitionListBody">For example, the Protocols security check includes the report text “Are unexpected Protocols enabled?”. When unexpected protocols are enabled, the report displays the SQL Server instances where the risk is encountered.</p>
+                <p class="DefinitionListTerm">Risk Level&#160;</p>
+                <p class="DefinitionListBody">Allows you to set the severity of the risk posed by this finding. The risk level is important because it reflects how severe or risky a particular security finding is for your environment, allowing you to further customize security checks to meet your exact auditing needs. For example, finding an enabled Guest account on one instance may be a high risk, but on another instance it may be a low risk. The risk level also determines where the corresponding security finding appears on the policy or assessment Report Card and whether or not email notifications will be sent.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

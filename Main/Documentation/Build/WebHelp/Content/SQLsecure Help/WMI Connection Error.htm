@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Manage SQLsecure" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <!-- saved from url=(0014)about:internet -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Troubleshooting WMI&#160;connectivity issues</title>
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body class="NewPage">
+        <h1 class="Heading1">Troubleshooting WMI&#160;connectivity issues</h1>
+        <p class="Body">The user account used by SQLsecure to gather Operation System and Active Directory objects must have administrator permissions on the remote server to be able to use WMI.
+</p>
+        <p class="Body">The most frequently encountered problems with <a name="kanchor116"></a>WMI connectivity are:</p>
+        <ul style="list-style-type: circle;">
+            <li class="Bullet" value="1"><a name="kanchor117"></a>RPC traffic not getting through to the remote computer</li>
+            <li class="Bullet" value="2"><a name="kanchor118"></a>Invalid  DCOM or WMI permissions</li>
+            <li class="BulletLast" value="3"><a name="kanchor119"></a>Ports are not open or firewall is preventing access</li>
+        </ul>
+        <p class="Body">The following Web links may provide additional information about how to troubleshoot WMI connectivity issues:
+</p>
+        <ul style="list-style-type: circle;">
+            <li class="Bullet" value="1"><a href="http://msdn.microsoft.com/library/default.asp?url=/library/enus/wmisdk/wmi/securing_a_remote_wmi_connection.asp" target="_blank">Securing a remote WMI Connection</a> <![CDATA[ ]]></li>
+            <li class="BulletLast" value="2"><a href="http://www.microsoft.com/technet/scriptcenter/topics/help/wmi.mspx" target="_blank">Help with Scripts</a>
+            </li>
+        </ul>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1963825694_0" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />Resolve WMI&#160;Issues using WbemTest 
+</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1963825694_0" style="display: none;">
+                <p class="Body">You can use the WbemTest (Windows Management Instrumentation Tester) tool to connect to a server and issue WMI queries. Download this tool from Microsoft TechNet. This tool can help you test and troubleshoot WMI issues.
+</p>
+                <p class="StepIntro">To use WbemTest:
+</p>
+                <ol>
+                    <li class="NumberedList" value="1">	Run <span class="Code"><span class="GUI_Item">wbemtest.exe</span>.</span></li>
+                    <li class="NumberedList" value="2">Click <span class="GUI_Item">Connect</span>.
+</li>
+                    <li class="NumberedList" value="3">In the <span class="GUI_Item">NameSpace test</span> box, enter <span class="GUI_Item">\\server\root\cimv2</span> where server is the name of the server you want to connect to.
+</li>
+                    <li class="NumberedList" value="4">Click <span class="GUI_Item">Connect</span>.
+</li>
+                    <li class="NumberedList" value="5">Click<span class="GUI_Item"> Query</span>.
+</li>
+                    <li class="NumberedList" value="6">Enter <span class="GUI_Item">select*</span> from win32_process.
+</li>
+                    <li class="NumberedList" value="7">Click <span class="GUI_Item">Apply</span>.
+</li>
+                </ol>
+                <p class="Body"><span class="If_Then_Statement">If WbemTest was able to connect to the remote server and issue the query using WMI</span>, you
+should see a query result with output. In this case, WMI to the required server is working
+and no further action is needed.
+For more information on the Windows Management Instrumentation Tester, refer to Windows Management Instrumentation Tester overview.
+</p>
+                <p class="Body"><span class="If_Then_Statement">If you receive an error message</span>, use the following processes to help identify and resolve the issue.
+</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1963825694_1" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />Error: The RPC Server Is Unavailable
+</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1963825694_1" style="display: none;">
+                <p class="Body">This error usually indicates that the RPC traffic is not getting to the remote server, or there is no RPC listener on the remote server.
+</p>
+                <p class="StepIntro">To troubleshoot this RPC error:
+</p>
+                <ol>
+                    <li class="NumberedList" value="1">Ensure the Remote Procedure Call (RPC) service is running on the remote server.
+</li>
+                    <li class="NumberedList" value="2">Verify that there is a TCP listener on the remote server by running the netstat -nao command and verifying that there is the following entry: <span class="Code">TCP 0.0.0.0:135 0.0.0.0:0 LISTENING 1304</span></li>
+                    <li class="NumberedList" value="3">In the Tools subdirectory, run <span class="Code">rpcping /s &lt;servername&gt; /t ncacn_tp_tcp</span>  where <span class="Code">&lt;servername&gt;</span> is the name of the remote server. This command verifies that RPC can communicate with the remote server. The output should be similar to: </li>
+                </ol>
+                <p class="DefinitionListBody"><span class="Code">Completed 1 calls in 15 ms</span>
+                </p>
+                <p class="DefinitionListBody"><span class="Code">66 T/S or 15.000 ms/T</span>
+                </p>
+                <ol>
+                    <li class="NumberedList" value="4">Ensure that the traffic is not being blocked by local or internal network firewalls. Either disable the firewall or configure the Windows firewall to allow incoming RPC traffic.
+</li>
+                    <li class="NumberedList" value="5">Try to use the remote server IP address instead of the server name. If the IP address works, you may have a DNS issue.
+</li>
+                    <li class="NumberedList" value="6"><span class="If_Then_Statement">If the remote server resides in a different domain</span>, the two domains may not trust each other, or the user account being used does not have administrator permissions on the remote server/domain.
+</li>
+                    <li class="NumberedList" value="7"><span class="If_Then_Statement">If both computers are in the same domain</span>, and the user account has administrator permissions, try rejoining both computers to the domain.
+</li>
+                </ol>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1963825694_2" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />Error: Access Denied
+</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1963825694_2" style="display: none;">
+                <p class="Body">This error can indicate permission issues.
+</p>
+                <p class="StepIntro">To troubleshoot this access error:
+</p>
+                <ol>
+                    <li class="NumberedList" value="1">If the remote computer is running Windows XP, make sure Force Guest is disabled. This setting forces any connection to be impersonated as Guest.<ol style="list-style-type: lower-alpha;"><li class="NumberedList" value="1">Open the Local Security Policy console from Administrative Tools.
+</li><li class="NumberedList" value="2">Browse to<span class="GUI_Item"> Security Settings &gt; Local Policies &gt; Security Options</span>.
+</li><li class="NumberedList" value="3">Double-click <span class="GUIItem_1">Network Access: Sharing And Security Model For LocalAccounts</span>.
+</li><li class="NumberedList" value="4">Change the settings from <span class="Code">Guest Only</span> to Classic.
+</li></ol></li>
+                    <li class="NumberedList" value="2">Ensure that DCOM is enabled on the remote server:
+<ol style="list-style-type: lower-alpha;"><li class="NumberedList" value="1">Run <span class="Code">DcomCnfg </span>on the remote server.
+</li><li class="NumberedList" value="2">Click<span class="GUI_Item"> Component Services</span>.
+ </li><li class="NumberedList" value="3">Expand <span class="GUI_Item">Computers</span>.
+</li><li class="NumberedList" value="4">Right click <span class="GUI_Item">My Computer</span> and select <span class="GUI_Item">Properties</span>.
+</li><li class="NumberedList" value="5">Click the <span class="GUI_Item">Default Properties</span> tab.
+</li><li class="NumberedList" value="6">Ensure <span class="GUI_Item">Enable Distributed COM</span> on this computer is checked.
+</li></ol></li>
+                    <li class="NumberedList" value="3">Ensure the correct DCOM remote launch and activation permissions are configured:
+<ol style="list-style-type: lower-alpha;"><li class="NumberedList" value="1">Run <span class="Code">DcomCnfg</span> on the remote server.
+</li><li class="NumberedList" value="2">Click <span class="GUI_Item">Component Services</span>.
+</li><li class="NumberedList" value="3">Expand <span class="GUI_Item">Computers</span>.
+</li><li class="NumberedList" value="4">Right click<span class="GUI_Item"> My Computer</span> and select <span class="GUI_Item">Properties</span>.
+</li><li class="NumberedList" value="5">Ensure <span class="GUIItem_1"><span class="GUI_Item">Enable Distributed COM</span> on this computer</span> is checked.
+</li><li class="NumberedList" value="6">Click the <span class="GUI_Item">Com Security</span> tab.
+</li><li class="NumberedList" value="7">Under <span class="GUI_Item">Launch and Activation Permissions</span>, click<span class="GUI_Item"> Edit Limits</span>.
+</li><li class="NumberedList" value="8">In the <span class="GUIItem_1">Launch Permissions dialog</span> box, make sure your user account or group is listed in the Groups or user names list. If your user account or group is not listed, click <span class="GUI_Item">Add</span> and add it to the list. </li><li class="NumberedList" value="9">In the <span class="GUIItem_1">Launch Permission</span> dialog box, select your user account or group in the Group or user names list. In the <span class="GUIItem_1">Allow</span> column under Permissions for User, select <span class="GUI_Item">Remote Launch</span> and <span class="GUI_Item">Remote Activation</span>, and then click <span class="GUI_Item">OK</span>.
+</li></ol></li>
+                    <li class="NumberedList" value="4">Ensure the correct DCOM remote access permissions are configured:
+<ol style="list-style-type: lower-alpha;"><li class="NumberedList" value="1">Run <span class="Code">DcomCnfg</span> on the remote server.
+</li><li class="NumberedList" value="2">Click <span class="GUI_Item">Component Services</span>.
+</li><li class="NumberedList" value="3">Expand <span class="GUI_Item">Computers</span>.
+</li><li class="NumberedList" value="4">Right click <span class="GUI_Item">My Computer</span> and select <span class="GUI_Item">Properties</span>.
+</li><li class="NumberedList" value="5">Ensure <span class="GUIItem_1"><span class="GUI_Item">Enable Distributed COM</span> on this computer</span> is checked.
+</li><li class="NumberedList" value="6">Click the <span class="GUI_Item">Com Security</span> tab.
+ </li><li class="NumberedList" value="7">Under <span class="GUI_Item">Access Permissions</span>, click <span class="GUI_Item">Edit Limits</span>.
+</li><li class="NumberedList" value="8"> In the <span class="GUIItem_1">Access Permission</span> dialog box, select <span class="Code">ANONYMOUS LOGON</span> name in the <span class="GUIItem_1">Group or user names</span> list. 
+In the <span class="GUIItem_1">Allow</span> column under <span class="GUIItem_1">Permissions for User</span>, select <span class="GUI_Item">Remote Access</span>, and then click <span class="GUI_Item">OK</span>.
+</li></ol></li>
+                    <li class="NumberedList" value="5">Ensure the correct WMI namespace permissions are configured.
+<ol style="list-style-type: lower-alpha;"><li class="NumberedList" value="1">Run <span class="Code">wmimgmt.msc</span>.
+</li><li class="NumberedList" value="2">Right-click <span class="GUI_Item">WMI Control</span>, and then select <span class="GUI_Item">Connect to another computer</span>.
+ </li><li class="NumberedList" value="3">Enter the remote server name, and then click <span class="GUI_Item">OK</span>.
+ </li><li class="NumberedList" value="4">Right-click <span class="GUI_Item">WMI Control</span>, and then select <span class="GUI_Item">Properties</span>.
+</li><li class="NumberedList" value="5">In the Security tab, select the <span class="Code">namespace</span>, and then click <span class="GUI_Item">Security</span>.
+ </li><li class="NumberedList" value="6">Locate the appropriate account, and then check <span class="GUI_Item">Remote Enable</span> in the Permissions list.
+</li></ol></li>
+                </ol>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1963825694_3" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />Warning:&#160;The Network Path Was Not Found</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1963825694_3" style="display: none;">
+                <p class="Body">This warning typically indicates that SQLsecure cannot access the target computer due to closed ports or firewall access settings. Ensure the appropriate port is open on the target computer and check your firewall configuration. </p>
+                <p class="Body">SQLsecure uses the default ports opened by the Windows operating system for local and remote communications. To learn about Windows port assignments, see <a href="http://support.microsoft.com/kb/832017/" target="_blank">Article 832017</a> on the Microsoft Support site. To better understand how port assignments work when Windows Firewall has been configured, see <a href="http://msdn.microsoft.com/en-us/library/aa389286(VS.85).aspx" target="_blank">"Connecting Through Windows Firewall"</a> on the MSDN site.</p>
+            </div>
+        </div>
+        <div class="breadcrumb">
+            <p MadCap:conditions="Default.SEO" class="FooterWebLink"><a href="http://www.idera.com/Support/Service.aspx" target="_blank" class="FooterWebLink">Need more help? Search the Idera Customer Support Portal &gt; &gt;</a>
+            </p>
+        </div>
+        <div class="LearnMore">
+            <p MadCap:conditions="Default.SEO">SQLsecure tells you who has access to what on your SQL Server databases. <a href="http://www.idera.com/Products/SQL-Server/SQL-secure/" target="_blank" style="text-decoration: underline; color: #ffffff;">Learn&#160;more</a> &gt; &gt;</p>
+        </div>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO"><a class="IderaFooter" href="http://www.idera.com/Content/Products.aspx" target="_blank">Product</a> | <a href="http://www.idera.com/Action/Downloads.aspx" target="_blank" class="IderaFooter">Downloads</a> | <a href="http://www.idera.com/Action/Purchase.aspx" target="_blank" class="IderaFooter">Purchase</a> | <a href="http://www.idera.com/Support/" target="_blank" class="IderaFooter">Support</a> |&#160;<a href="http://www.idera.com/Content/Resources.aspx" target="_blank" class="IderaFooter">Resources</a> | <a href="http://www.idera.com/News/" target="_blank" class="IderaFooter">News</a> | <a href="http://www.idera.com/About-Us/" target="_blank" class="IderaFooter">About Us</a> | <a href="http://www.idera.com/Action/Show.aspx?&amp;ThisList=Quotes" target="_blank" class="IderaFooter">Customers</a> | <a href="http://www.idera.com/Partners/" target="_blank" class="IderaFooter">Partners</a></p>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO">Copyright ©2003-2012 Idera, Inc. | <a href="Legal Notice.htm" target="_blank" class="IderaFooter">Legal</a></p>
+        <script type="text/javascript">/* <![CDATA[ */
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16422007-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+/* ]]> */</script>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

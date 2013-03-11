@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="6" MadCap:lastHeight="305" MadCap:lastWidth="710">
+    <head>
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" MadCap:stylesheetType="table" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Use filters to specify which data is collected</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Use filters to specify which data is collected</h2>
+        <p class="Body">
+            <MadCap:keyword term="snapshots:filters;auditing:filter audit data;filters:about" />SQLsecure uses snapshot filters to control the data collected from your audited SQL&#160;Server instances. Each filter rule defines which data, such as permissions on user tables in a specific database, is collected and included in the snapshot.</p>
+        <p class="Body">By default, SQLsecure collects all available audit data. You can edit this default filter rule or delete it after you have defined your custom filter.</p>
+        <p class="Body">Custom filters are applied at the instance level and are unique to that instance. You can create a different filter for each instance. You can also create more than one filter, depending on your assessment needs. When multiple filters are defined, SQLsecure aggregates them, collecting all data identified by all the filters associated with this instance.</p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/Tip.css');" class="TableStyle_Tip" cellspacing="0">
+            <col style="width: 30px;" />
+            <col />
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                        <p>TIP</p>
+                    </td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                        <p class="TableText">To collect data about the password health of your SQL&#160;logins, <a href="Configure Password Detection.htm">enable weak password detection</a>.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

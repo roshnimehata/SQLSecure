@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html class="" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Manage SQLsecure" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <!-- saved from url=(0014)about:internet -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Using the Audited SQL Servers window</title>
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body class="NewPage">
+        <h1 class="Heading1">View the SQLsecure Repository status</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.ScreenOnly">View the SQLsecure Repository status</h2>
+        <p class="Body"><a name="kanchor121"></a>The Repository Status window allows you to view status of the SQL&#160;Server instances that are registered with SQLsecure, SQLsecure licenses, and the  SQL&#160;Server Agent used for collecting data.</p>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_598741004_0" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What information does System Status provide?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_598741004_0" style="display: none;">
+                <p class="Body">The <a name="kanchor122"></a>System Status section lists the SQL Server instance where the Repository resides and the version of SQL&#160;Server being utilized. In addition, the total number of SQLsecure licenses, the amount of space the Repository is using, and the time of the last Repository grooming is listed. For more information on grooming, see <a href="Grooming Snapshots.htm">Grooming Snapshots</a>.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_598741004_1" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What information does License Summary provide?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_598741004_1" style="display: none;">
+                <p class="Body">The <a name="kanchor123"></a>License Summary provides a graphical representation of the total number of SQL&#160;Server instances that can be monitored using your current SQLsecure licenses, the number of SQL&#160;Server instances currently being monitored by SQLsecure, and the number of additional SQL Server instances that can be monitored by SQLsecure. For more information, see <a href="Manage Your License.htm">Managing Your SQLsecure Licenses</a>.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_598741004_2" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What information does SQL&#160;Server Agent Status provide?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_598741004_2" style="display: none;">
+                <p class="Body">The <a name="kanchor124"></a>SQL Server Agent Status section displays the current status of the SQL&#160;Server Agent that SQLsecure uses to collect security information. <span class="If_Then_Statement">If the SQL&#160;Server Agent is stopped</span>, you must start the agent on the SQL&#160;Server instance hosting the Repository or snapshots cannot be taken. For more information, see Microsoft Books Online.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_598741004_3" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What information does Audited SQL&#160;Servers Status provide?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_598741004_3" style="display: none;">
+                <p class="Body">The <a name="kanchor125"></a>Audited SQL Servers section lists each audited SQL Server registered with SQLsecure. The list contains the status, last successful collection, and last collection attempted for each of the audited SQL Servers. Right-click a SQL&#160;Server instance in the list to Explore User or Object permissions, view the SQL&#160;Server instance summary, register a new SQL&#160;Server instance, remove the SQL&#160;Server instance from SQLsecure, configure the snapshot collection, manually take a snapshot, or view the properties of the SQL&#160;Server instance.</p>
+                <p class="Body">The following information is provided for each  SQL&#160;Server instance:</p>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="text-align: left;font-size: 10pt;">Property</th>
+                            <th class="HeadD-Column2-Header1" style="text-align: left;font-size: 10pt;">Column Description</th>
+                        </tr>
+                    </thead>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">SQL Server</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">Displays the name of the SQL Server instance that is being audited</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Status</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">Displays any warnings or errors that may have occurred with the last snapshot</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Last Successful Collection</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">Displays the date and time that the latest snapshot was taken and completed successfully</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Last Collection</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">Displays the date and time that the last snapshot was attempted (whether or not it was completed successfully)</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">Collector Job Status</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">Describes the current status of the SQL Server job running the audit data collection</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <p class="Body">&#160;</p>
+        <div class="breadcrumb">
+            <p MadCap:conditions="Default.SEO" class="FooterWebLink"><a href="http://www.idera.com/Support/Service.aspx" target="_blank" class="FooterWebLink">Need more help? Search the Idera Customer Support Portal &gt; &gt;</a>
+            </p>
+        </div>
+        <div class="LearnMore">
+            <p MadCap:conditions="Default.SEO">SQLsecure tells you who has access to what on your SQL Server databases. <a href="http://www.idera.com/Products/SQL-Server/SQL-secure/" target="_blank" style="text-decoration: underline; color: #ffffff;">Learn&#160;more</a> &gt; &gt;</p>
+        </div>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO"><a class="IderaFooter" href="http://www.idera.com/Content/Products.aspx" target="_blank">Product</a> | <a href="http://www.idera.com/Action/Downloads.aspx" target="_blank" class="IderaFooter">Downloads</a> | <a href="http://www.idera.com/Action/Purchase.aspx" target="_blank" class="IderaFooter">Purchase</a> | <a href="http://www.idera.com/Support/" target="_blank" class="IderaFooter">Support</a> |&#160;<a href="http://www.idera.com/Content/Resources.aspx" target="_blank" class="IderaFooter">Resources</a> | <a href="http://www.idera.com/News/" target="_blank" class="IderaFooter">News</a> | <a href="http://www.idera.com/About-Us/" target="_blank" class="IderaFooter">About Us</a> | <a href="http://www.idera.com/Action/Show.aspx?&amp;ThisList=Quotes" target="_blank" class="IderaFooter">Customers</a> | <a href="http://www.idera.com/Partners/" target="_blank" class="IderaFooter">Partners</a></p>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO">Copyright ©2003-2012 Idera, Inc. | <a href="Legal Notice.htm" target="_blank" class="IderaFooter">Legal</a></p>
+        <script type="text/javascript">/* <![CDATA[ */
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16422007-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+/* ]]> */</script>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

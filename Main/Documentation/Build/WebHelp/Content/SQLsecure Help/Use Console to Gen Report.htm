@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html class="" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Report on SQL Server Security" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <!-- saved from url=(0014)about:internet -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Using Quick Reports</title>
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body class="NewPage">
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Use the Console to generate reports</h1>
+        <p class="Body"><a name="kanchor94"></a><a name="kanchor95"></a><a name="kanchor96"></a><a name="kanchor97"></a><a name="kanchor98"></a>SQLsecure includes built-in reports which have been specially designed to generate commonly requested audit reports using the SQL Server permission data collected in your snapshots.</p>
+        <p class="Body">SQLsecure built-in reports allow you to quickly and easily meet the demands of on-the-spot audits, routine audits, and long-term event trending. Each report gives detailed information about events in your SQL Server environment.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/Tip.css');" class="TableStyle_Tip" cellspacing="0">
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                        <p>TIP</p>
+                    </td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                        <p>Using the Console to generate reports against large audit data sets can result in degraded performance. For example, when the selected snapshot is large (contains thousands of objects and permissions), the report performance may be impacted.
+<span class="If_Then_Statement">If you experience degraded performance</span>, try increasing the Console timeout value and, if the performance issues continue, run the report with <a href="Use RS to Gen Reports.htm">Microsoft Reporting Services</a> instead. </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1390770286_0" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What general reports are available?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1390770286_0" style="display: none;">
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="text-align: left;">Report Name</th>
+                            <th class="HeadD-Column2-Header1" style="text-align: left;">Report Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Cross Server Login Check</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all SQL&#160;Server instances where a selected user has access</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Audited SQL&#160;Servers</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all the SQL&#160;Server instances that are being audited by SQLsecure</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Data Collection Filters</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays the data collection filters for all SQL&#160;Server instances</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Risk Assessment</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all policy and risk assessment results. You can customize this text using the Policy Properties window. For more information, see <a href="Change IR Notes.htm">Internal Review Notes.</a></p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Activity History</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all SQLsecure activity history</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyB-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">SQLsecure Users</p>
+                            </td>
+                            <td class="BodyA-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all SQLsecure users</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1390770286_1" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" /><b><span>What entitlement reports are available?</span></b></a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1390770286_1" style="display: none;">
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="text-align: left;">Report Name</th>
+                            <th class="HeadD-Column2-Header1" style="text-align: left;">Report Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Server Logins and User Mappings</p>
+                            </td>
+                            <td style="font-size: 10pt;" class="BodyD-Column2-Body1">
+                                <p class="TableText">Displays all Server Logins and associated Database User Mappings for each SQL&#160;Server instance being audited</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Suspect Windows Accounts</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all the suspect Windows Accounts that have Server&#160;Logins. For more information, see <a href="Suspect Windows Accounts.htm">Suspect Windows</a> accounts.</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">User Permissions</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays permissions for a user across all SQL&#160;Server instances</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">All User Permissions</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all objects with permissions in the database for all SQL&#160;Server instances</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Server Roles</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all direct members of Server Roles on all SQL&#160;Server instances</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyB-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Database Roles</p>
+                            </td>
+                            <td class="BodyA-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all direct members of Database Roles on all SQL&#160;Server instances</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1390770286_2" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" /><b>What vulnerability reports are available?</b></a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1390770286_2" style="display: none;">
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="text-align: left;">Report Name</th>
+                            <th class="HeadD-Column2-Header1" style="text-align: left;">Report Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Mixed Mode Authentication</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all SQL&#160;Server instances where Windows Authentication is not the only login method</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Guest Enabled Databases</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all databases on a SQL&#160;Server instance where the Guest user has access</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">OS&#160;Vulnerability via XSPs</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all extended stored procedures that allow access to operating system features that could compromise system security</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Vulnerable Fixed Roles</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all SQL&#160;Server instances that contain fixed roles assigned to public or guest</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">System Administrator Vulnerability</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all SQL&#160;Server instances that include built-in Administrators as members of the sysadmin role</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Dangerous Windows Groups</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Displays all SQL&#160;Server instances that grant access to any OS&#160;controlled Windows Group</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td style="font-size: 10pt;" class="BodyE-Column1-Body1">
+                                <p class="TableText">Database Chaining Enabled</p>
+                            </td>
+                            <td style="font-size: 10pt;" class="BodyD-Column2-Body1">
+                                <p class="TableText">Display all SQL&#160;Server instances that have cross-database ownership chaining enabled</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td style="font-size: 10pt;" class="BodyE-Column1-Body1">
+                                <p class="TableText">Mail Vulnerability</p>
+                            </td>
+                            <td style="font-size: 10pt;" class="BodyD-Column2-Body1">
+                                <p class="TableText">Displays all SQL&#160;Server instances with SQL&#160;Mail stored procedures</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td style="font-size: 10pt;" class="BodyB-Column1-Body1">
+                                <p class="TableText">Login Vulnerability</p>
+                            </td>
+                            <td style="font-size: 10pt;" class="BodyA-Column2-Body1">
+                                <p class="TableText">Displays any SQL logins that have weak (easily guessed or hacked) passwords and lists their security properties, including the state of their password health.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1390770286_3" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What comparison reports are available?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1390770286_3" style="display: none;">
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="text-align: left;">Report Name</th>
+                            <th class="HeadD-Column2-Header1" style="text-align: left;">Report Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Assessment Comparison</p>
+                            </td>
+                            <td class="BodyD-Column2-Body1" style="font-size: 10pt;">Displays any differences identified in the security settings and findings of two assessments.</td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyB-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Snapshot Comparison</p>
+                            </td>
+                            <td class="BodyA-Column2-Body1" style="font-size: 10pt;">Displays any differences identified in the configuration settings and audit data of two snapshots.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_1390770286_4" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How do I generate a report?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_1390770286_4" style="display: none;">
+                <p class="StepIntro">To report on audit data:</p>
+                <ol>
+                    <li class="NumberedList" value="1">In the console tree pane, click <span class="GUI_Item">Reports</span>.</li>
+                    <li class="NumberedList" value="2">In the view pane, select the report you want to generate.</li>
+                    <li class="NumberedList" value="3">Specify the appropriate parameters for the selected report and then click <span class="GUI_Item">Apply</span>.</li>
+                </ol>
+            </div>
+        </div>
+        <p class="Body">&#160;</p>
+        <div class="breadcrumb">
+            <p MadCap:conditions="Default.SEO" class="FooterWebLink"><a href="http://www.idera.com/Support/Service.aspx" target="_blank" class="FooterWebLink">Need more help? Search the Idera Customer Support Portal &gt; &gt;</a>
+            </p>
+        </div>
+        <div class="LearnMore">
+            <p MadCap:conditions="Default.SEO">SQLsecure tells you who has access to what on your SQL Server databases. <a href="http://www.idera.com/Products/SQL-Server/SQL-secure/" target="_blank" style="text-decoration: underline; color: #ffffff;">Learn&#160;more</a> &gt; &gt;</p>
+        </div>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO"><a class="IderaFooter" href="http://www.idera.com/Content/Products.aspx" target="_blank">Product</a> | <a href="http://www.idera.com/Action/Downloads.aspx" target="_blank" class="IderaFooter">Downloads</a> | <a href="http://www.idera.com/Action/Purchase.aspx" target="_blank" class="IderaFooter">Purchase</a> | <a href="http://www.idera.com/Support/" target="_blank" class="IderaFooter">Support</a> |&#160;<a href="http://www.idera.com/Content/Resources.aspx" target="_blank" class="IderaFooter">Resources</a> | <a href="http://www.idera.com/News/" target="_blank" class="IderaFooter">News</a> | <a href="http://www.idera.com/About-Us/" target="_blank" class="IderaFooter">About Us</a> | <a href="http://www.idera.com/Action/Show.aspx?&amp;ThisList=Quotes" target="_blank" class="IderaFooter">Customers</a> | <a href="http://www.idera.com/Partners/" target="_blank" class="IderaFooter">Partners</a></p>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO">Copyright ©2003-2012 Idera, Inc. | <a href="Legal Notice.htm" target="_blank" class="IderaFooter">Legal</a></p>
+        <script type="text/javascript">/* <![CDATA[ */
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16422007-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+/* ]]> */</script>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

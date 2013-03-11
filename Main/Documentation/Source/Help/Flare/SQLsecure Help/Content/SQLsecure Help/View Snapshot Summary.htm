@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" class="" MadCap:lastBlockDepth="8" MadCap:lastHeight="1212" MadCap:lastWidth="967">
+    <head>
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" MadCap:stylesheetType="table" /><title>Viewing snapshots</title>
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" MadCap:stylesheetType="table" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">View snapshot summary</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">View snapshot summary</h2>
+        <p class="Body">
+            <MadCap:keyword term="audiiting:snapshots;snapshots:about;snapshots:baseline;snapshots:best practices;audit data collection" />The Snapshot Summary tab lists statistics and other information about the selected snapshot. </p>
+        <table style="width: 100%;mc-table-style: url('../Resources/TableStyles/Tip.css');" class="TableStyle_Tip" cellspacing="0">
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">TIP</td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">Login counts may differ from what is displayed in SQL Server 2005 or later. This count displays the number of Server Principles collected. In SQL Server 2005 or later, Server Principles include Logins, Server Roles, and Certificates, while in SQL Server 2000, principles include only Logins.</td>
+                </tr>
+            </tbody>
+        </table>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What are snapshots?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Each snapshot is a listing of permission settings on a SQL Server instance at a particular point in time. You can filter and schedule your snapshots from the Audit SQL Server Properties window. Consider taking snapshots on a routine, scheduled basis. Because snapshots are taken over time, they can be viewed to see when changes are made to user or object permissions. For more information on configuring your snapshots, see <a href="Configure Audit Settings.htm">Audited SQL Server Properties window</a>.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What do I need to configure before collecting snapshots?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Before snapshots are taken, you must tell SQLsecure what permission data you would like to collect and when you want SQLsecure to collect it.</p>
+                <p class="Body">Snapshots are configured on the <a href="ASP Filters tab.htm">Audit Filters tab</a> in the SQL Server Properties window. The Audit Filters tab allows you to choose the permission data that is most important to you. After you choose the appropriate settings, you can schedule the snapshot collection times on the Schedule tab.</p>
+                <p class="Body">To collect data about SQL&#160;login password health, use the <a href="Configure Password Detection.htm">Configure Weak Password Detection window</a>.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do snapshots help me?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Snapshot help you assess and manage your security settings. Snapshots represent the state of your SQL Server security at a given point in time. This provides a powerful tool you can use to diagnose security problems and quickly see where changes occur.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do snapshots work?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">SQLsecure uses snapshots to capture security permission settings on SQL Server instances at configured intervals. At the scheduled time, a SQLsecure job is executed and data is collected from the SQL Server instance to the Repository database. This data set represents a single snapshot and is accessed directly by the SQLsecure Console.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do I manage my snapshot list?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Snapshots are managed through the grooming process. Grooming allows you to determine which snapshots should be deleted from the SQLsecure Repository. You can schedule grooming to occur on a routine basis, ensuring you keep only the snapshots you need. For more information, see <a href="Grooming Snapshots.htm">Grooming</a>. Keep in mind that snapshots associated with saved assessments cannot be groomed.</p>
+                <p class="Body">Be aware that snapshots that have been marked as baselines are not groomed.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>Why do I need to mark a snapshot as a baseline?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Baseline snapshots are snapshots that will not be deleted in the grooming process. </p>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="font-size: 10pt;text-align: left;">
+                                <p class="TableHeadRow">When snapshot should be marked as baseline</p>
+                            </th>
+                            <th class="HeadD-Column2-Header1" style="font-size: 10pt;text-align: left;">
+                                <p class="TableHeadRow">Importance</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">When you take your first snapshot</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">To have a starting point to use to identify changes to permissions over time</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">At the end of the month, quarter, or year</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">To track compliance to your database security policies</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">When you implement a new security model</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">To identify unwanted changes or issues with the new model</p>
+                        </td>
+                    </tr>
+                    <tr class="Body-Body1">
+                        <td class="BodyE-Column1-Body1">
+                            <p class="TableText">When you notice problems or irregularities in permission settings in a snapshot</p>
+                        </td>
+                        <td class="BodyD-Column2-Body1">
+                            <p class="TableText">To analyze the issue to correct problems and change permissions settings</p>
+                        </td>
+                    </tr>
+                </table>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do I use snapshots?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Use the following tasks to configure and manage your snapshots. </p>
+                <ul style="list-style-type: circle;">
+                    <li class="Bullet">Configure snapshots on the Audited SQL Server Properties window</li>
+                    <li class="Bullet">Schedule snapshot collection times on the Audited SQL Server Properties window</li>
+                    <li class="Bullet">Explore user permissions on the Explore Permissions view</li>
+                    <li class="Bullet">Mark a snapshot as a baseline from the Audit History tab on the Explore Permissions view</li>
+                    <li class="Bullet">Delete snapshots that you do not want to keep from the Audit History tab on the Explore Permissions view</li>
+                    <li class="Bullet">Collect audit data manually by selecting <b>Take Snapshot Now</b> from the <span class="GUI_Item">File </span>menu</li>
+                </ul>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do I resolve group names and group memberships across multiple domains?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Using a single account to resolve group names and enumerate group memberships can be problematic when SQL Server grants permissions to accounts across multiple externally trusted domains.</p>
+                <p class="Body">In this situation, the server account specified on the Audited SQL Server Properties window should be an account that has been granted access to these external domains. This can be accomplished by either setting up two-way trusts between the account's domain and the external domains, or by creating pass-through accounts on all the external domains.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

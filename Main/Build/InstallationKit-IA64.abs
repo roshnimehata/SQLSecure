@@ -1,0 +1,71 @@
+[ARCHIVE]
+AdvancedMode=1
+ArchiveFileName=IderaSQLscureInstallationKit-IA64.exe
+Windows16Bits=0
+IconFile=InstallationKit.ico
+[SETTINGS]
+UsePath=0
+Overwrite=0
+Password=
+DefaultPassword=
+DeleteMode=0
+[PATHS]
+ExtractDirectory=<Program Files Folder>\Idera\SQLsecure Itanium Installation Kit
+ReadmePath=
+RunExePath=<Unzip Folder>\setup.exe
+RunParams=
+[FLAGS]
+PromptForDirectory=1
+PromptCreateDirectory=1
+ShowProgress=1
+ShowSuccessMsg=1
+ShowFailMsg=1
+ErrorCreatingDirMsg=1
+ShowIntroMsg=1
+ShowLisenceMsg=0
+[BUTTONS]
+OkBtn=&OK
+CancelBtn=&Cancel
+AbortBtn=&Abort
+SkipBtn=&Skip File
+AlwaysSkipBtn=&Always Skip
+YesBtn=&Yes
+NoBtn=&No
+OverwriteAllBtn=&All
+OverwriteNoneBtn=N&one
+ContinueBtn=&Continue
+ExitBtn=&Exit
+AgreeBtn=&Agree
+RefuseBtn=&Refuse
+[MESSAGES]
+SuccessMsg=The Idera SQLsecure Itanium Installation Kit was successfully extracted to the specified location.  Press OK to launch the Installation Kit.
+SuccessMsg2=
+FailMsg=Error #<Error Code> during unzipping operation. One or more files were not succesfully unzipped.
+FailMsg2=
+ErrorCreatingDirMsg=Unable to create the '<Folder>' folder
+ErrorCreatingDirMsg2=
+IntroMsg=This program extracts the Idera SQLsecure Itanium Installation Kit to the location you specify.
+IntroMsg2=
+LicenseMsg=
+LicenseMsg2=
+[PROMPTS]
+DirectoryPrompt=Select the folder where you want to unzip the files to:
+PasswordPrompt=A password is required for file:
+InsertLastDiskPrompt=Please insert the last disk of the set.
+InsertDiskPrompt=Please insert disk #<Disk Number>.
+AbortExtractPrompt=Are you sure you want to abort the unzipping operation?
+CreateDirectoryPrompt=Folder '<Folder>' does not exist. Do you want to create it?
+OverwritePrompt=File '<Filename>' already exists. Do you want to overwrite it?
+[STRINGS]
+TitleStr=Idera SQLsecure Installation Kit
+ExtractingFileStr=Unzipping file:
+ProgressStr=Overall progress:
+CurrentExtractDirStr=Current folder to unzip files to:
+DriveShareStr=<Share Name> on '<Computer>'
+EntireNetworkStr=Entire Network
+[REGISTRATION]
+ProgramGroup=
+ProgramGroupItems=
+RegisterExtensions=
+[FILE LIST]
+ZipFile=SQLsecure-ia64.zip

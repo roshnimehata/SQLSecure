@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html class="" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Assess Your Security Model|Analyze enterprise security" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <!-- saved from url=(0014)about:internet -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Viewing the Enterprise Users</title>
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body class="NewPage">
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">View user security across all serverss</h1>
+        <p class="Body"><a name="kanchor55"></a>The Users tab allows you to view all the user accounts associated with the SQL&#160;Server instances assigned to the selected policy.</p>
+        <table class="TableStyle_Tip" style="mc-table-style: url('../Resources/TableStyles/Tip.css');" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                        <p>TIP</p>
+                    </td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                        <p>You can right click on a particular user account row and select <b>Show Permissions</b> to explore user permissions and see more detailed security information about the selected account.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2772578209_0" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What information is displayed on the Users tab?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2772578209_0" style="display: none;">
+                <p class="Body">The following information is displayed on the Users tab:</p>
+                <p class="DefinitionListTerm">Login Name</p>
+                <p class="DefinitionListBody">The full login name of the associated account</p>
+                <p class="DefinitionListTerm">SQL&#160;Server</p>
+                <p class="DefinitionListBody">Name of the SQL&#160;Server instance the login is associated with</p>
+                <p class="DefinitionListTerm">Type</p>
+                <p class="DefinitionListBody">Login permission type (Windows Group or SQL&#160;Login)</p>
+                <p class="DefinitionListTerm">Server Access</p>
+                <p class="DefinitionListBody">Whether or not the user has access on the SQL&#160;Server instance</p>
+                <p class="DefinitionListTerm">Server Deny</p>
+                <p class="DefinitionListBody">Whether or not the user is denied access to the SQL&#160;Server instance</p>
+                <p class="DefinitionListTerm">Disabled</p>
+                <p class="DefinitionListBody">Whether or not the user account is disabled</p>
+                <p class="DefinitionListTerm">Expiration Checked</p>
+                <p class="DefinitionListBody">Whether or not the password expiration is checked</p>
+                <p class="DefinitionListTerm">Policy Checked</p>
+                <p class="DefinitionListBody">Whether or not the associated policy is checks for this user account</p>
+                <p class="DefinitionListTerm">Password Health</p>
+                <p class="DefinitionListBody">Whether or not the password associated with the account is considered weak. You can <a href="Configure Password Detection.htm">configure how SQLsecure detects weak passwords</a>. </p>
+                <p class="DefinitionListBody">Possible password health states include:</p>
+                <p class="DefinitionListBody">
+                    <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                        <col class="Column-Column1" style="width: 160px;" />
+                        <col class="Column-Column2" style="width: 228px;" />
+                        <thead>
+                            <tr class="Head-Header1">
+                                <th class="HeadE-Column1-Header1">Password health state</th>
+                                <th class="HeadD-Column2-Header1">What it means</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="Body-Body1">
+                                <td class="BodyE-Column1-Body1">
+                                    <p class="TableText">Blank</p>
+                                </td>
+                                <td class="BodyD-Column2-Body1">
+                                    <p class="TableText">The password for this login is either blank or null, which means no password is required for authentication or successful connection to databases hosted by your audited SQL&#160;Server instances.</p>
+                                </td>
+                            </tr>
+                            <tr class="Body-Body1">
+                                <td class="BodyE-Column1-Body1">
+                                    <p class="TableText">Matches login name</p>
+                                </td>
+                                <td class="BodyD-Column2-Body1">
+                                    <p class="TableText">The password for this login matches the name of the login.</p>
+                                </td>
+                            </tr>
+                            <tr class="Body-Body1">
+                                <td class="BodyE-Column1-Body1">
+                                    <p class="TableText">N/A</p>
+                                </td>
+                                <td class="BodyD-Column2-Body1">
+                                    <p class="TableText">The password for this login was not checked, most likely because the login is a Windows user account.</p>
+                                </td>
+                            </tr>
+                            <tr class="Body-Body1">
+                                <td class="BodyE-Column1-Body1">
+                                    <p class="TableText">OK</p>
+                                </td>
+                                <td class="BodyD-Column2-Body1">
+                                    <p class="TableText">This login most likely has a strong password because the password does not match any of the words and phrases in the Default Weak Passwords list or the additional and custom passwords you specified.</p>
+                                </td>
+                            </tr>
+                            <tr class="Body-Body1">
+                                <td class="BodyB-Column1-Body1">
+                                    <p class="TableText">Weak</p>
+                                </td>
+                                <td class="BodyA-Column2-Body1">
+                                    <p class="TableText">The password for this login matches one or more of the words and phrases in the Default Weak Passwords list or the additional and custom passwords you specified.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </p>
+                <p class="DefinitionListTerm">Default Language</p>
+                <p class="DefinitionListBody">The language that is set as the default for the user account</p>
+                <p class="DefinitionListTerm">Default Database</p>
+                <p class="DefinitionListBody">The database that this login connects to and queries when no other database is specified</p>
+            </div>
+        </div>
+        <div class="breadcrumb">
+            <p MadCap:conditions="Default.SEO" class="FooterWebLink"><a href="http://www.idera.com/Support/Service.aspx" target="_blank" class="FooterWebLink">Need more help? Search the Idera Customer Support Portal &gt; &gt;</a>
+            </p>
+        </div>
+        <div class="LearnMore">
+            <p MadCap:conditions="Default.SEO">SQLsecure tells you who has access to what on your SQL Server databases. <a href="http://www.idera.com/Products/SQL-Server/SQL-secure/" target="_blank" style="text-decoration: underline; color: #ffffff;">Learn&#160;more</a> &gt; &gt;</p>
+        </div>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO"><a class="IderaFooter" href="http://www.idera.com/Content/Products.aspx" target="_blank">Product</a> | <a href="http://www.idera.com/Action/Downloads.aspx" target="_blank" class="IderaFooter">Downloads</a> | <a href="http://www.idera.com/Action/Purchase.aspx" target="_blank" class="IderaFooter">Purchase</a> | <a href="http://www.idera.com/Support/" target="_blank" class="IderaFooter">Support</a> |&#160;<a href="http://www.idera.com/Content/Resources.aspx" target="_blank" class="IderaFooter">Resources</a> | <a href="http://www.idera.com/News/" target="_blank" class="IderaFooter">News</a> | <a href="http://www.idera.com/About-Us/" target="_blank" class="IderaFooter">About Us</a> | <a href="http://www.idera.com/Action/Show.aspx?&amp;ThisList=Quotes" target="_blank" class="IderaFooter">Customers</a> | <a href="http://www.idera.com/Partners/" target="_blank" class="IderaFooter">Partners</a></p>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO">Copyright ©2003-2012 Idera, Inc. | <a href="Legal Notice.htm" target="_blank" class="IderaFooter">Legal</a></p>
+        <script type="text/javascript">/* <![CDATA[ */
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16422007-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+/* ]]> */</script>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

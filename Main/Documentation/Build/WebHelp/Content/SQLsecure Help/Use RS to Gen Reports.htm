@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html class="" xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:tocPath="Report on SQL Server Security" MadCap:InPreviewMode="false" MadCap:PreloadImages="false" MadCap:RuntimeFileType="Topic" MadCap:TargetType="WebHelp" lang="en-us" xml:lang="en-us" MadCap:PathToHelpSystem="../../" MadCap:HelpSystemFileName="Default.xml" MadCap:SearchType="Stem">
+    <!-- saved from url=(0014)about:internet -->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Customizing Reports</title>
+        <link href="../SkinSupport/MadCap.css" rel="stylesheet" />
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" />
+        <script src="../SkinSupport/MadCapAll.js">
+        </script>
+    </head>
+    <body class="NewPage">
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Use Reporting Services to generate reports</h1>
+        <p class="Body"><a name="kanchor99"></a>SQLsecure includes the ability to take the existing built-in SQLsecure reports and seamlessly integrate them into Microsoft Reporting Services. For each built-in SQLsecure report, the Deploy Reports wizard installs a Report Definition Language (RDL)&#160;file. These RDL&#160;files define the report layout and parameters, using the data source (SQLsecure Repository) you specified during install. Reporting Services automatically acknowledges these files, allowing you to immediately generate and view reports on audit data using the Reports Manager Web interface.</p>
+        <p class="Body">You can view, customize, and develop new reports based on any of the built-in SQLsecure reports to fit your unique auditing needs. Reports can be viewed in an existing SQL&#160;Server environment that uses a dedicated Report Server. If you decide to use Microsoft Reporting Services, consider the following best practices:</p>
+        <ul style="list-style-type: circle;">
+            <li class="Bullet" value="1">Save your new and modified reports to a separate folder</li>
+            <li class="BulletLast" value="2">Use a different filename for modified reports</li>
+        </ul>
+        <p class="Body">For more information about the Reporting Services architecture, see the Reporting Services Books Online. For more information about developing custom reports using Microsoft Reporting Tools, see the Reporting Services Books Online.</p>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2132688306_0" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How does Microsoft Reporting Services work with SQLsecure?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2132688306_0" style="display: none;">
+                <p class="Body">You can implement Reports on any computer running Reporting Services. The following installation scenario illustrates how you can implement Microsoft Reporting Services reports in an existing SQL&#160;Server environment that uses a dedicated Report Server.</p>
+                <p class="Body">
+                    <img src="../Resources/Images/SQLsecure Help/06000003_446x384.png" style="width: 446;height: 384;" />
+                </p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2132688306_1" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />What permissions does Microsoft Reporting Services require?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2132688306_1" style="display: none;">
+                <p class="Body">Microsoft Reporting Services Reports leverage the existing role-based security model provided with Reporting Services. These reports support Windows authentication (mixed mode on SQL&#160;Server) and require the following permissions and rights to successfully generate reports on your audit data. Assessing the appropriate role on the SQLsecure folder in Report Manager, the individual report files inherit the permissions you set. By default, the Deploy Reports Wizard writes the report files to the <code>C:\Program Files\IderaSQLsecure\Reports</code> folder on the Report Server computer.</p>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle-Idera_Table_Stylesheet" cellspacing="0">
+                    <col class="Column-Column1" />
+                    <col class="Column-Column2" />
+                    <col class="Column-Column1" />
+                    <thead>
+                        <tr class="Head-Header1">
+                            <th class="HeadE-Column1-Header1" style="text-align: left;">
+                                <p class="TableHeadRow">Account</p>
+                            </th>
+                            <th class="HeadE-Column2-Header1" style="text-align: left;">
+                                <p class="TableHeadRow">Action</p>
+                            </th>
+                            <th class="HeadD-Column1-Header1" style="text-align: left;">
+                                <p class="TableHeadRow">Requirement</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="Body-Body1">
+                            <td style="font-size: 10pt;" class="BodyE-Column1-Body1">
+                                <p class="TableText">Logon account used for install</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Write RDL&#160;files to the Report server computer and configure reports</p>
+                            </td>
+                            <td class="BodyD-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Write access to the Report Server file system and Content Manager role</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Proxy user</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Connect to the Repository and read data per report parameters</p>
+                            </td>
+                            <td class="BodyD-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Read access to the Repository databases</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyE-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Administrator</p>
+                            </td>
+                            <td class="BodyE-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Configure reports and set security</p>
+                            </td>
+                            <td class="BodyD-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Content Manager role</p>
+                            </td>
+                        </tr>
+                        <tr class="Body-Body1">
+                            <td class="BodyB-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">End user (auditor or manager)</p>
+                            </td>
+                            <td class="BodyB-Column2-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Generate and view audit reports</p>
+                            </td>
+                            <td class="BodyA-Column1-Body1" style="font-size: 10pt;">
+                                <p class="TableText">Browse role</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2132688306_2" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How are reports installed?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2132688306_2" style="display: none;">
+                <p class="Body">The <a href="Deploy Reports Wizard Welcome.htm">Deploy Reports wizard</a> allows you to specify the proxy user account credentials and deploy the reports. Perform this deployment for each Repository that contains data you want to audit using Reports. Once installed, click the <span class="GUI_Item">View Deployed Reports</span> link at the bottom of the SQLsecure Reports window to find your reports.</p>
+            </div>
+        </div>
+        <div class="MCDropDown_0">
+            <div class="MCDropDownHead_0"><a class="MCDropDownHotSpot_0" href="javascript:void(0);" id="MCDropDownHotSpot_2132688306_3" onclick="FMCDropDown( this ); return false;"><img style="border: none;margin-right: 5px;" src="../SkinSupport/DropDownClosed.gif" MadCap:altsrc="../SkinSupport/DropDownOpen.gif" onload="if ( typeof( FMCPreloadImage ) == 'function' ) { FMCPreloadImage( '../SkinSupport/DropDownOpen.gif' ); }" class="MCDropDownIcon" />How can I set up permissions for auditors to generate reports?</a>
+            </div>
+            <div class="MCDropDownBody_0" id="MCDropDownBody_2132688306_3" style="display: none;">
+                <p class="Body"> 
+To grant auditors the ability to view and generate reports, create a SQL Server login and grant the <span class="GUI_Item">Can view</span> and <span class="GUI_Item">Report on audit data</span> permissions. Ensure that this account has the <span class="GUI_Item">Browse </span>role on the root folder.</p>
+            </div>
+        </div>
+        <div class="breadcrumb">
+            <p MadCap:conditions="Default.SEO" class="FooterWebLink"><a href="http://www.idera.com/Support/Service.aspx" target="_blank" class="FooterWebLink">Need more help? Search the Idera Customer Support Portal &gt; &gt;</a>
+            </p>
+        </div>
+        <div class="LearnMore">
+            <p MadCap:conditions="Default.SEO">SQLsecure tells you who has access to what on your SQL Server databases. <a href="http://www.idera.com/Products/SQL-Server/SQL-secure/" target="_blank" style="text-decoration: underline; color: #ffffff;">Learn&#160;more</a> &gt; &gt;</p>
+        </div>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO"><a class="IderaFooter" href="http://www.idera.com/Content/Products.aspx" target="_blank">Product</a> | <a href="http://www.idera.com/Action/Downloads.aspx" target="_blank" class="IderaFooter">Downloads</a> | <a href="http://www.idera.com/Action/Purchase.aspx" target="_blank" class="IderaFooter">Purchase</a> | <a href="http://www.idera.com/Support/" target="_blank" class="IderaFooter">Support</a> |&#160;<a href="http://www.idera.com/Content/Resources.aspx" target="_blank" class="IderaFooter">Resources</a> | <a href="http://www.idera.com/News/" target="_blank" class="IderaFooter">News</a> | <a href="http://www.idera.com/About-Us/" target="_blank" class="IderaFooter">About Us</a> | <a href="http://www.idera.com/Action/Show.aspx?&amp;ThisList=Quotes" target="_blank" class="IderaFooter">Customers</a> | <a href="http://www.idera.com/Partners/" target="_blank" class="IderaFooter">Partners</a></p>
+        <p class="IderaFooter" MadCap:conditions="Default.SEO">Copyright ©2003-2012 Idera, Inc. | <a href="Legal Notice.htm" target="_blank" class="IderaFooter">Legal</a></p>
+        <script type="text/javascript">/* <![CDATA[ */
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16422007-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+/* ]]> */</script>
+        <script type="text/javascript" src="../SkinSupport/MadCapBodyEnd.js">
+        </script>
+    </body>
+</html>

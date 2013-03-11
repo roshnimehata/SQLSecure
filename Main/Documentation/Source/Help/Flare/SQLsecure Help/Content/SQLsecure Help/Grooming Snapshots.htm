@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" class="" MadCap:lastBlockDepth="6" MadCap:lastHeight="642" MadCap:lastWidth="890">
+    <head><title>Grooming Snapshots</title>
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" MadCap:stylesheetType="table" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Set snapshot grooming schedule</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Set snapshot grooming schedule</h2>
+        <p class="Body">
+            <MadCap:keyword term="snapshots:groom;groom snapshots" />Grooming is the process of deleting audit snapshots from the SQLsecure Repository. Grooming allows you to keep only the permissions data you need for future reporting.  SQLsecure allows you to schedule snapshot grooming at the enterprise and at the individual SQL&#160;Server instance levels. Keep in mind that baseline snapshots and snapshots associated with saved assessments cannot be groomed.</p>
+        <table class="TableStyle_Tip" style="mc-table-style: url('../Resources/TableStyles/Tip.css');" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                        <p>TIP</p>
+                    </td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">To keep a snapshot, mark it as a baseline. For more information, see <a href="Designate a baseline snapshot.htm">Designate a baseline snapshot</a>.</td>
+                </tr>
+            </tbody>
+        </table>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do I&#160;set a grooming schedule at the enterprise level?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">You can configure the enterprise level grooming schedule on the Grooming schedule window. In addition to routine snapshot grooming, the grooming process deletes all the snapshots that are associated with any SQL Server instances you have removed from the SQLsecure Console. To open the Grooming Schedule window, select <code>Snapshots &gt; Grooming Schedule</code> from the toolbar.</p>
+                <p class="StepIntro">To schedule grooming at the enterprise level:</p>
+                <ol>
+                    <li class="NumberedList">Select <code>Snapshots &gt; Grooming Schedule</code> from the toolbar.</li>
+                    <li class="NumberedList">Click <span class="GUI_Item">Change</span>.</li>
+                    <li class="NumberedList">Edit the schedule.</li>
+                    <li class="NumberedList">Click <span class="GUI_Item">OK</span> to save.</li>
+                </ol>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>When do I need to schedule grooming?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Grooming should be scheduled for off-peak hours so that it does not interfere with your normal business operation.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>How do I set a grooming schedule at the SQL&#160;Server instance level?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Snapshot retention is the number of days SQLsecure will continue to store all your non-baseline audit snapshots in the SQLsecure Repository.</p>
+                <p class="StepIntro">To schedule grooming at the SQL&#160;Server instance level:</p>
+                <ol>
+                    <li class="NumberedList">Right-click the SQL&#160;Server instance in the Explore Permissions tree you want to configure and select <span class="GUI_Item">Properties</span>.</li>
+                    <li class="NumberedList">Select the Schedule tab.</li>
+                    <li class="NumberedList">Click <span class="GUI_Item">Change</span>. The Job Schedule window opens.</li>
+                    <li class="NumberedList">Select the frequency of your grooming job.</li>
+                    <li class="NumberedList">Click <span class="GUI_Item">OK</span> to save changes.</li>
+                </ol>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <p class="Body">&#160;</p>
+    </body>
+</html>
