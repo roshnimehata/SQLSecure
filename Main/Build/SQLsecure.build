@@ -30,7 +30,7 @@
 	<!-- ********* -->
 	<target name="Build.Dev">
 		<property name="SQLsecure.BuildType" value="Dev" unless="${property::exists('SQLsecure.BuildType')}" />
-		<call target="Perforce.Sync" />
+		<!--call target="Perforce.Sync" /-->
 		<call target="Build.ApplyVersionInfo" />
 		<call target="Build.Compile" />
 		<call target="Build.Obfuscate" />
@@ -46,7 +46,7 @@
 		<call target="Build.Compile" />
 		<call target="Build.Obfuscate" />
 		<call target="Build.AllInstallers" />
-		<call target="Perforce.Label" />
+		<!--call target="Perforce.Label" /-->
 		<call target="Archive" />
 	</target>
 
@@ -57,7 +57,7 @@
 		<property name="SQLsecure.BuildType" value="InstallDocOnly" unless="${property::exists('SQLsecure.BuildType')}" />
 		<call target="Build.GetCurrentVersion" />
 		<call target="Build.AllInstallers" />
-		<call target="Perforce.Label" />
+		<!--call target="Perforce.Label" /-->
 		<call target="Archive" />
 	</target>
 
@@ -559,30 +559,30 @@
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
-	      		<arg value="C:\Perforce\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure.zip"/>
+	      		<arg value="C:\Idera\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\x86\Full\*.*"/>
 	    	</exec>
 		<exec program="${WinZip}\wzzip">
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
-	      		<arg value="C:\Perforce\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure-x64.zip"/>
+	      		<arg value="C:\Idera\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure-x64.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\x64\Full\*.*"/>
 	    	</exec>
 		<exec program="${WinZip}\wzzip">
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
-	      		<arg value="C:\Perforce\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure-ia64.zip"/>
+	      		<arg value="C:\Idera\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure-ia64.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\ia64\Full\*.*"/>
 	    	</exec>
 	    	
 		<!-- Build absolute packager -->
-	    <exec program="InstallationKit.bat" workingdir="C:\Perforce\SQLsecure\Main\Build">
+	    <exec program="InstallationKit.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
 		</exec>
-		<exec program="InstallationKit-x64.bat" workingdir="C:\Perforce\SQLsecure\Main\Build">
+		<exec program="InstallationKit-x64.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
 		</exec>
-		<exec program="InstallationKit-ia64.bat" workingdir="C:\Perforce\SQLsecure\Main\Build">
+		<exec program="InstallationKit-ia64.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
 	    	</exec>
 	    	
         <!-- Zip the EXE (used for HTTP downloads where we dont want an EXE) -->
@@ -632,7 +632,7 @@
 	
 
 	<target name="Perforce.Sync">
-	    <p4sync force="true"  view="${Perforce.View}" />
+	    <!--p4sync force="true"  view="${Perforce.View}" /-->
 	</target>
 	
 	<target name="Build.ApplyVersionInfo">
@@ -643,11 +643,11 @@
 	<target name="Build.Version">
 		<!-- Set the build.number file to read-write -->
 		<loadtasks assembly="build/bin/BuildUtilities.dll" />
-		<p4edit view="${Perforce.Branch}/build/build.number"/>
+		<!--p4edit view="${Perforce.Branch}/build/build.number"/-->
 
 		<!-- Generate the build/revision number -->
 		 <version path="build/build.number" startdate="${Build.StartDate}" prefix="SQLsecure" buildtype="MonthDay" revisiontype="Increment" />
-		<p4submit changelist="Update build number" view="${Perforce.Branch}/build/build.number"/>
+		<!--p4submit changelist="Update build number" view="${Perforce.Branch}/build/build.number"/-->
 		
 		<!-- Set the build label used for P4 labeling, output dir & zip file -->
 		<property name="SQLsecure.BuildLabel" value="${SQLsecure.version}" />
@@ -678,9 +678,9 @@
 
 
 	<target name="Perforce.Label">
-		<p4label label="sqlsecure_${SQLsecure.BuildLabel}" view="${Perforce.View}"/>
-		<p4labelsync label="sqlsecure_${SQLsecure.BuildLabel}"  view="${Perforce.View}"/>
-		<exec program="LockLabel.bat" workingdir="C:\Perforce\SQLsecure\Main\Build">
+		<!--p4label label="sqlsecure_${SQLsecure.BuildLabel}" view="${Perforce.View}"/-->
+		<!--p4labelsync label="sqlsecure_${SQLsecure.BuildLabel}"  view="${Perforce.View}"/-->
+		<exec program="LockLabel.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
 			<arg value="sqlsecure_${SQLsecure.BuildLabel}"/>
 	    	</exec>
 	</target>
@@ -691,8 +691,8 @@
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
-	      		<arg value="C:\Perforce\SQLsecure_${SQLsecure.BuildLabel}.zip"/>
-	      		<arg value="C:\Perforce\SQLsecure\*.*"/>
+	      		<arg value="C:\Idera\SQLsecure_${SQLsecure.BuildLabel}.zip"/>
+	      		<arg value="C:\Idera\SQLsecure\*.*"/>
 	    	</exec>
 	</target>
 	
