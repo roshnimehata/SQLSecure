@@ -37,7 +37,7 @@
   <ItemGroup>
     <Reference Include="License4Net, Version=5.1.3749.18339, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\ThirdPartySoftware\BBSLicense\x64\License4Net.dll</HintPath>
+      <HintPath>..\..\..\..\ThirdPartySoftware\License4Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
