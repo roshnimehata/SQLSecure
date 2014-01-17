@@ -309,7 +309,7 @@ CREATE TABLE [registeredserver] (
     [sqlserverpassword] NVARCHAR(300),
     [sqlserverauthtype] NCHAR(1),
     [serverlogin] NVARCHAR(128),
-    [serverpassword] NVARCHAR(128),
+    [serverpassword] NVARCHAR(300),
     [os] NVARCHAR(512),
     [version] NVARCHAR(256),
     [edition] NVARCHAR(256),
