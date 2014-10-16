@@ -146,7 +146,7 @@
 	<property name="Signing.Application" value="${Signing.Dir}/signtool.exe"/>
 	<property name="Signing.Key" value="${Signing.Dir}/ideracs.pfx"/>
 	<property name="Signing.TimeStamp" value="http://timestamp.verisign.com/scripts/timstamp.dll"/>
-	<property name="Signing.Password" value="idera*88"/>
+	<property name="Signing.Password" value="idera"/>
 	<property name="Signing.Url" value="http://www.idera.com/"/>
 	<property name="Signing.Name" value=""/>
 	<property name="Signing.Target" value=""/>
