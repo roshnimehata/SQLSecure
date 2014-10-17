@@ -705,9 +705,9 @@
 	     ********************* -->
 	<target name="CopyBuildToDevShare">	
 		
-		<copy todir="${dir.Development.SQLsecure.Builds}/Build_${SQLsecure.BuildLabel}">
+		<copy todir="${dir.Development.SQLsecure.Builds}">
 			<fileset basedir="${SQLsecure.Build.Output}">
-				<include name="*.*"/>
+				<include name="**/*.*" />  
 			</fileset>
 		</copy>
 	</target>
