@@ -13,6 +13,7 @@
 		<call target="Build.Installers" />
 		<call target="Build.CDImage" />
 		<call target="Build.WebInstaller" />
+		<call target="CopyBuildToDevShare"/>
 	</target>
 
 	<!-- ************** -->
@@ -184,6 +185,9 @@
 
 	<!-- Version Information -->
 	<property name="Build.StartDate" value="03/01/2012"/>
+	
+	<!-- Build share -->
+	<property name="dir.Development.SQLsecure.Builds" value="\\redhouse.hq\Development\SQLsecure\Builds"/>
 
 	<!-- ***************************************************************************** -->
 	<!--                            Build Steps                                        -->
@@ -696,4 +700,15 @@
 	    	</exec>
 	</target>
 	
+	<!-- ********************************************************
+		Copy to Dev Shares
+	     ********************* -->
+	<target name="CopyBuildToDevShare">	
+		
+		<copy todir="${dir.Development.SQLsecure.Builds}/Build_${SQLsecure.BuildLabel}">
+			<fileset dir ="${SQLsecure.Build.Output}"/>
+		</copy>
+	</target>
+	
+
 </project>
