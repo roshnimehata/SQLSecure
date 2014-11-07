@@ -98,7 +98,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     target.Open();
 
                     // Use bulk copy object to write to repository.
-                    using (var bcp = new SqlBulkCopy(repository))
+                    using (SqlBulkCopy bcp = new SqlBulkCopy(repository))
                     {
                         // Set the destination table.
                         bcp.DestinationTableName = SqlJobDataTable.RepositoryTable;
@@ -108,7 +108,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         {
                             // Process each rule to collect the table objects.
 
-                            var query = string.Format(SqlJob.GetJobsQuery, server);
+                            string query = string.Format(SqlJob.GetJobsQuery, server);
 
                             Debug.Assert(!string.IsNullOrEmpty(query));
 
@@ -233,7 +233,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     target.Open();
 
                     // Use bulk copy object to write to repository.
-                    using (var bcp = new SqlBulkCopy(repository))
+                    using (SqlBulkCopy bcp = new SqlBulkCopy(repository))
                     {
                         // Set the destination table.
                         bcp.DestinationTableName = SQLJobProxy.RepositoryTable;
@@ -243,7 +243,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         using (DataTable dataTable = SQLJobProxy.Create())
                         {
 
-                            var query = SqlJob.GetProxiesQuery;
+                            string query = SqlJob.GetProxiesQuery;
 
                             Debug.Assert(!string.IsNullOrEmpty(query));
 
