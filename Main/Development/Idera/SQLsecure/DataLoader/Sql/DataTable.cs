@@ -594,9 +594,14 @@ namespace Idera.SQLsecure.Collector.Sql
                     colName = new DataColumn(ParamName, typeof(SqlString)),
                     colSchemaid = new DataColumn(ParamSchemaid, typeof(SqlInt32)),
                     colHashkey = new DataColumn(ParamHashkey, typeof(SqlString)),
-                    colRunAtStartup =  new DataColumn(ParamRunAtStartup,typeof(SqlString)),
+                    colRunAtStartup = new DataColumn(ParamRunAtStartup, typeof(SqlString)),
                     colIsEncypted = new DataColumn(ParamIsEncypted, typeof(SqlString)),
-                    colUserDefined = new DataColumn(ParamUserDefined, typeof(SqlString)))
+                    colUserDefined = new DataColumn(ParamUserDefined, typeof(SqlString)),
+                    colPermissionSet = new DataColumn(ParamPermissionSet, typeof(SqlInt32)),
+                    colCreateDate = new DataColumn(ParamCreateDate, typeof(SqlDateTime)),
+                    colModifyDate = new DataColumn(ParamModifyDate, typeof(SqlDateTime))
+
+                    )
             {
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
@@ -614,7 +619,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colHashkey,
                                                                 colRunAtStartup,
                                                                 colIsEncypted,
-                                                                colUserDefined
+                                                                colUserDefined,
+                                                                colPermissionSet,
+                                                                colCreateDate,
+                                                                colModifyDate
                                                             });
             }
 
@@ -634,6 +642,10 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamRunAtStartup = "runatstartup";
         internal const string ParamIsEncypted = "isencrypted";
         internal const string ParamUserDefined = "userdefined";
+        internal const string ParamPermissionSet = "permission_set";
+        internal const string ParamCreateDate = "createdate";
+        internal const string ParamModifyDate = "modifydate";
+
         internal const string RepositoryTable = "SQLsecure.dbo.databaseobject";
     }
 
@@ -1024,5 +1036,120 @@ namespace Idera.SQLsecure.Collector.Sql
 
         internal const string RepositoryTable = "SQLsecure.dbo.serverprotocol";
     }
+
+    internal static class SqlJobDataTable
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable = null;
+            using (DataColumn
+                    colJobId = new DataColumn(Paramjobid, typeof(SqlInt32)),
+                    colSnapshotid = new DataColumn(ParamSnapshotId, typeof(SqlInt32)),
+                    colName = new DataColumn(ParamName, typeof(SqlString)),
+                    colDescription = new DataColumn(ParamDescription, typeof(SqlString)),
+                    colStepName = new DataColumn(ParamStepName, typeof(SqlString)),
+                    colLastRunDate = new DataColumn(ParamLastRunDate, typeof(SqlDateTime)),
+                    colComand = new DataColumn(ParamCommand, typeof(SqlString)),
+                    colSubSystem = new DataColumn(ParamSubSystem, typeof(SqlString)),
+                    colOwnerSid = new DataColumn(ParamOwnerSid, typeof(SqlBinary)),
+                    colEnabled = new DataColumn(ParamEnabled, typeof(SqlInt16)))
+            {
+                // Create the data table object & define its columns.
+                // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("sqljob");
+                dataTable.Columns.AddRange(new DataColumn[] {  
+                                                                colJobId,
+                                                                colSnapshotid,
+                                                                colName,
+                                                                colDescription,
+                                                                colStepName,
+                                                                colLastRunDate,
+                                                                colComand,
+                                                                colSubSystem,
+                                                                colOwnerSid,
+                                                                colEnabled
+                                                            });
+            }
+
+            return dataTable;
+        }
+
+        internal const string Paramjobid = "jobid";
+        internal const string ParamName = "name";
+        internal const string ParamOwnerSid = "ownersid";
+        internal const string ParamDescription = "description";
+        internal const string ParamLastRunDate = "lastrundate";
+        internal const string ParamEnabled = "enabled";
+        internal const string ParamSubSystem = "subsystem";
+        internal const string ParamStepName = "stepname";
+        internal const string ParamCommand = "command";
+        internal const string ParamSnapshotId = "SnapshotId";
+
+
+        internal const string RepositoryTable = "SQLsecure.dbo.sqljob";
+    }
+
+    internal static class SQLJobProxy
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable = null;
+            using (DataColumn
+                    colProxyId = new DataColumn(ParamProxyId, typeof(SqlInt32)),
+                    colSnapshotid = new DataColumn(ParamSnapshotId, typeof(SqlInt32)),
+                    colName = new DataColumn(ParamName, typeof(SqlString)),
+                    colSubSystemId = new DataColumn(ParamSubSystemId, typeof(SqlInt32)),
+                    colUserId = new DataColumn(ParamUserSid, typeof(SqlBinary)),
+                    colSubSystem= new DataColumn(ParamSubSystem, typeof(SqlString)),
+                    colCredentialId = new DataColumn(ParamCredentialId, typeof(SqlInt32)),
+                    colCredentialName = new DataColumn(ParamCredentialName, typeof(SqlString)),
+                    colCredentialIdentity = new DataColumn(ParamCredentialIdentity, typeof(SqlString)),
+                    colEnabled = new DataColumn(ParamEnabled, typeof(SqlByte)))
+            {
+                // Create the data table object & define its columns.
+                // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("sqljobproxy");
+                dataTable.Columns.AddRange(new DataColumn[] {  
+                                                                colProxyId,
+                                                                colSnapshotid,
+                                                                colName,
+                                                                colEnabled,
+                                                                colUserId,
+                                                                colSubSystemId,
+                                                                colSubSystem,
+                                                                colCredentialId,
+                                                                colCredentialName,
+                                                                colCredentialIdentity
+                                                            });
+            }
+
+            return dataTable;
+        }
+
+        internal const string ParamProxyId = "proxyid";
+        internal const string ParamSnapshotId = "snapshotid";
+        internal const string ParamName = "proxyName";
+        internal const string ParamUserSid = "usersid";
+        internal const string ParamSubSystemId = "subsystemid";
+        internal const string ParamSubSystem = "subsystem";
+        internal const string ParamEnabled = "enabled";
+        internal const string ParamCredentialId = "credentialId";
+        internal const string ParamCredentialName = "credentialName";
+        internal const string ParamCredentialIdentity = "credentialIdentity";
+
+        internal const int ColProxyId =0;
+        internal const int ColName = 1;
+        internal const int ColCredentialId = 2;
+        internal const int ColEnabled = 3;
+        internal const int ColUserSid = 4;
+        internal const int ColSubSystemId = 5;
+        internal const int ColSubSystem = 6;
+        internal const int ColCredentialName = 7;
+        internal const int ColCredentialIdentity = 8;
+
+
+        internal const string RepositoryTable = "SQLsecure.dbo.sqljobproxy";
+    }
+
 
 }

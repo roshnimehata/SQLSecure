@@ -161,6 +161,9 @@ namespace Idera.SQLsecure.Collector.Sql
         private const int FieldRunAtStartup = 7;
         private const int FieldIsEncytped = 8;
         private const int FieldUserdefined = 9;
+        private const int FieldPermissionSet = 10;
+        private const int FieldCreateDate = 11;
+        private const int FieldModifyDate = 12;
 
         // ------------- Database Objects -------------
         #region Database Objects
@@ -306,7 +309,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                  ELSE 0 
                             END";
                     }
-                    else 
+                    else
                     {
                         strSQLVersionDependant = @"
                                  case 
@@ -340,8 +343,8 @@ namespace Idera.SQLsecure.Collector.Sql
                 // was picking up some message queue system tables.   This is only
                 // needed when looking for system tables.
                 // ---------------------------------------------------------------
-                if ( version != ServerVersion.SQL2000 && 
-                     rule.ScopeEnum == FilterScope.System && 
+                if (version != ServerVersion.SQL2000 &&
+                     rule.ScopeEnum == FilterScope.System &&
                      type == SqlObjectType.Table)
                 {
                     strTypes += @" AND parent_object_id = 0";
@@ -402,7 +405,10 @@ namespace Idera.SQLsecure.Collector.Sql
 	                                a.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                    userdefined = null "
+                                       userdefined = CASE a.is_user_defined WHEN 0 THEN 'N' WHEN 1 THEN 'Y' END,
+                                    permission_set=CAST(a.permission_set AS INT) 
+                                    , createdate=a.create_date,
+                                    modifydate=a.modify_date "
                                 + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.assemblies a ";
                     }
                     break;
@@ -424,7 +430,10 @@ namespace Idera.SQLsecure.Collector.Sql
 	                                a.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                    userdefined = null "
+                                    userdefined = null ,
+                                    permission_set=null 
+                                    , createdate=null,
+                                    modifydate=null "
                                 + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.certificates a ";
                     }
                     break;
@@ -446,7 +455,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                     a.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                    userdefined = null "
+                                    userdefined = null ,
+                                     permission_set=null 
+                                    , createdate=null,
+                                    modifydate=null "
                                 + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.fulltext_catalogs a";
                     }
                     break;
@@ -468,7 +480,10 @@ namespace Idera.SQLsecure.Collector.Sql
 	                                a.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                    userdefined = null "
+                                    userdefined = null,
+                                    permission_set=null ,
+                                    createdate=null,
+                                    modifydate=null "
                                 + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.asymmetric_keys a "
                                 + @"UNION ALL "
                                 +
@@ -482,7 +497,10 @@ namespace Idera.SQLsecure.Collector.Sql
 	                                c.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                    userdefined = null "
+                                    userdefined = null,
+                                    permission_set=null ,
+                                    createdate=c.create_date,
+                                    modifydate=c.modify_date  "
                                 + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.symmetric_keys c ";
 
                     }
@@ -505,7 +523,10 @@ namespace Idera.SQLsecure.Collector.Sql
 	                                a.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                    userdefined = null "
+                                    userdefined = null ,
+                                    permission_set=null,
+                                    createdate=null,
+                                    modifydate=null "
                                 + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.types a, "
                                 + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
                                 + "WHERE a.schema_id = b.schema_id";
@@ -529,7 +550,10 @@ namespace Idera.SQLsecure.Collector.Sql
 	                                a.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                    userdefined = null "
+                                    userdefined = null,
+                                    permission_set=null ,
+                                    createdate=null,
+                                    modifydate=null "
                                 + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.xml_schema_collections a, "
                                 + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
                                 + "WHERE a.schema_id = b.schema_id";
@@ -553,14 +577,14 @@ namespace Idera.SQLsecure.Collector.Sql
                             {
                                 LIKEClause = " AND name LIKE '" + ruleFilterMatchString + "'";
                             }
-                            else 
+                            else
                             {
                                 LIKEClause = " AND a.name LIKE '" + ruleFilterMatchString + "'";
                             }
                         }
                     }
                     string strScopeText = createScopeQueryText(version, type, rule);
-               
+
                     if (version == ServerVersion.SQL2000)
                     {
                         query = @" USE " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name)
@@ -574,7 +598,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                     name = a.name,
                                     runatstartup = CASE WHEN ObjectProperty(a.id, 'ExecIsStartup') = 1 THEN 'Y' ELSE 'N' END,
                                     isencypted = CASE WHEN isnull(b.encrypted,0) = 0 THEN 'N' ELSE 'Y' END,
-                                    userdefined = CASE WHEN (OBJECTPROPERTY(a.id, N'IsMSShipped')=1) THEN 'Y' WHEN (OBJECTPROPERTY(a.id, N'IsSystemTable')=1) THEN 'Y' ELSE 'N' END "
+                                    userdefined = CASE WHEN (OBJECTPROPERTY(a.id, N'IsMSShipped')=1) THEN 'Y' WHEN (OBJECTPROPERTY(a.id, N'IsSystemTable')=1) THEN 'Y' ELSE 'N' END ,"
+                                + "permission_set=null, "
+                                + "createdate=null, "
+                                + "modifydate=null "
                                 + "FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects a "
                                 + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.syscomments b ON (a.id = b.id and b.colid=1)"
                                 + "WHERE " + strScopeText + LIKEClause;
@@ -606,14 +633,17 @@ namespace Idera.SQLsecure.Collector.Sql
                                                            name = N'microsoft_database_tools_support') 
                                                         is not null then 'Y'
                                                     else 'N'
-                                                  end "
+                                                  end ,"
+                                + "permission_set=null, "
+                                + "createdate=null, "
+                                + "modifydate=null "
                                     + "FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
                                     + "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
                                     + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.syscomments c ON (a.object_id = c.id and c.colid=1)"
-                                    + "WHERE " + strScopeText + LIKEClause; 
-                    }             
+                                    + "WHERE " + strScopeText + LIKEClause;
+                    }
                     break;
-              
+
 
                 case SqlObjectType.ExtendedStoredProcedure:
                     if (string.Compare(database.Name, "master", true) == 0)
@@ -630,7 +660,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                     a.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                    userdefined = CASE WHEN c.category = 0 THEN 'Y' ELSE 'N' END "
+                                    userdefined = CASE WHEN c.category = 0 THEN 'Y' ELSE 'N' END ,"
+                               + "permission_set=null, "
+                                + "createdate=a.crdate, "
+                                + "modifydate=a.refdate "
                                     + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects a, "
                                     + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects c "
                                     + @"WHERE a.xtype = 'X' and a.id = c.id";
@@ -647,7 +680,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                     a.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                    userdefined = CASE WHEN c.category = 0 THEN 'Y' ELSE 'N' END "
+                                    userdefined = CASE WHEN c.category = 0 THEN 'Y' ELSE 'N' END ,"
+                                + "permission_set=null, "
+                                + "createdate=a.create_date, "
+                                + "modifydate=a.modify_date "
                                     + "FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
                                     + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b, "
                                     + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.sysobjects c "
@@ -655,65 +691,65 @@ namespace Idera.SQLsecure.Collector.Sql
                         }
                     }
                     break;
-//                case SqlObjectType.View:
-//                    if (version == ServerVersion.SQL2000)
-//                    {
-//                        query = @"SELECT 
-//                                    type = xtype, 
-//                                    owner = CAST (uid AS int),  
-//                                    schemaid = null,  
-//                                    classid = 1,  
-//                                    parentobjectid = 0,  
-//                                    objectid = id,  
-//                                    name "
-//                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects "
-//                                + @"WHERE type = 'V'";
-//                    }
-//                    else
-//                    {
-//                        query = @"SELECT 
-//                                    a.type, 
-//                                    owner = b.principal_id, 
-//                                    schemaid = a.schema_id, 
-//                                    classid = 1, 
-//                                    parentobjectid = a.parent_object_id, 
-//                                    objectid = a.object_id, 
-//                                    a.name "
-//                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
-//                                + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
-//                                + @"WHERE a.type = 'V'";
-//                    }
-//                    break;
+                //                case SqlObjectType.View:
+                //                    if (version == ServerVersion.SQL2000)
+                //                    {
+                //                        query = @"SELECT 
+                //                                    type = xtype, 
+                //                                    owner = CAST (uid AS int),  
+                //                                    schemaid = null,  
+                //                                    classid = 1,  
+                //                                    parentobjectid = 0,  
+                //                                    objectid = id,  
+                //                                    name "
+                //                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects "
+                //                                + @"WHERE type = 'V'";
+                //                    }
+                //                    else
+                //                    {
+                //                        query = @"SELECT 
+                //                                    a.type, 
+                //                                    owner = b.principal_id, 
+                //                                    schemaid = a.schema_id, 
+                //                                    classid = 1, 
+                //                                    parentobjectid = a.parent_object_id, 
+                //                                    objectid = a.object_id, 
+                //                                    a.name "
+                //                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
+                //                                + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
+                //                                + @"WHERE a.type = 'V'";
+                //                    }
+                //                    break;
 
-//                case SqlObjectType.Function:
-//                    if (version == ServerVersion.SQL2000)
-//                    {
-//                        query = @"SELECT 
-//                                    type = xtype, 
-//                                    owner = CAST (uid AS int),  
-//                                    schemaid = null,  
-//                                    classid = 1,  
-//                                    parentobjectid = 0,  
-//                                    objectid = id,  
-//                                    name "
-//                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects "
-//                                + @"WHERE type IN ('FN', 'IF', 'TF')";
-//                    }
-//                    else
-//                    {
-//                        query = @"SELECT 
-//                                    a.type, 
-//                                    owner = b.principal_id, 
-//                                    schemaid = a.schema_id, 
-//                                    classid = 1, 
-//                                    parentobjectid = a.parent_object_id, 
-//                                    objectid = a.object_id, 
-//                                    a.name "
-//                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
-//                                + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
-//                                + @"WHERE a.type IN ('AF', 'FN', 'FS', 'FT', 'IF', 'TF')";
-//                    }
-//                    break;
+                //                case SqlObjectType.Function:
+                //                    if (version == ServerVersion.SQL2000)
+                //                    {
+                //                        query = @"SELECT 
+                //                                    type = xtype, 
+                //                                    owner = CAST (uid AS int),  
+                //                                    schemaid = null,  
+                //                                    classid = 1,  
+                //                                    parentobjectid = 0,  
+                //                                    objectid = id,  
+                //                                    name "
+                //                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects "
+                //                                + @"WHERE type IN ('FN', 'IF', 'TF')";
+                //                    }
+                //                    else
+                //                    {
+                //                        query = @"SELECT 
+                //                                    a.type, 
+                //                                    owner = b.principal_id, 
+                //                                    schemaid = a.schema_id, 
+                //                                    classid = 1, 
+                //                                    parentobjectid = a.parent_object_id, 
+                //                                    objectid = a.object_id, 
+                //                                    a.name "
+                //                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
+                //                                + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
+                //                                + @"WHERE a.type IN ('AF', 'FN', 'FS', 'FT', 'IF', 'TF')";
+                //                    }
+                //                    break;
 
                 case SqlObjectType.Synonym:
                     if (version == ServerVersion.SQL2000)
@@ -732,7 +768,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                     a.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                    userdefined = null "
+                                    userdefined = null ,"
+                            + "permission_set=null, "
+                                + "createdate=a.create_date, "
+                                + "modifydate=a.modify_date "
                                 + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
                                 + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
                                 + @"WHERE a.type = 'SN' and a.schema_id = b.schema_id";
@@ -821,17 +860,24 @@ namespace Idera.SQLsecure.Collector.Sql
                                             SqlInt32 parentobjectid = rdr.GetSqlInt32(FieldParentobjectid);
                                             SqlInt32 objectid = rdr.GetSqlInt32(FieldObjectid);
                                             SqlString name = rdr.GetSqlString(FieldName);
-                                            SqlString runatstartup = rdr.IsDBNull(FieldRunAtStartup) 
+                                            SqlString runatstartup = rdr.IsDBNull(FieldRunAtStartup)
                                                                         ? null
                                                                         : rdr.GetSqlString(FieldRunAtStartup);
                                             SqlString isencypted = rdr.IsDBNull(FieldIsEncytped)
                                                                         ? null
-                                                                        : rdr.GetSqlString(FieldIsEncytped); 
-                                            SqlString userdefined = rdr.IsDBNull(FieldUserdefined) 
+                                                                        : rdr.GetSqlString(FieldIsEncytped);
+                                            SqlString userdefined = rdr.IsDBNull(FieldUserdefined)
                                                                         ? null
                                                                         : rdr.GetSqlString(FieldUserdefined);
 
-                                            // If the object was not processed, then add to the
+                                            SqlInt32 permissionSet = rdr.GetSqlInt32(FieldPermissionSet);
+
+                                            SqlDateTime createDate = rdr.IsDBNull(FieldCreateDate) ? SqlDateTime.Null
+                                                                   : rdr.GetDateTime(FieldCreateDate);
+                                            SqlDateTime modifyDate = rdr.IsDBNull(FieldModifyDate) ? SqlDateTime.Null
+                                                                   : rdr.GetDateTime(FieldModifyDate);
+
+                                            // If symmetric_keysthe object was not processed, then add to the
                                             // list of objects seen and process it.
                                             ObjId objId = new ObjId(classid.Value, parentobjectid.Value, objectid.Value);
                                             if (!objIdCollection.IsInCollection(objId))
@@ -854,7 +900,11 @@ namespace Idera.SQLsecure.Collector.Sql
                                                 dr[DatabaseObjectDataTable.ParamHashkey] = "";
                                                 dr[DatabaseObjectDataTable.ParamRunAtStartup] = runatstartup;
                                                 dr[DatabaseObjectDataTable.ParamIsEncypted] = isencypted;
-                                                dr[DatabaseObjectDataTable.ParamUserDefined] = userdefined;                                                    
+                                                dr[DatabaseObjectDataTable.ParamUserDefined] = userdefined;
+                                                dr[DatabaseObjectDataTable.ParamPermissionSet] = permissionSet;
+                                                dr[DatabaseObjectDataTable.ParamCreateDate] = createDate;
+                                                dr[DatabaseObjectDataTable.ParamModifyDate] = modifyDate;
+
                                                 dataTable.Rows.Add(dr);
 
                                                 // Write to repository if exceeds threshold.
@@ -900,13 +950,13 @@ namespace Idera.SQLsecure.Collector.Sql
                 {
                     string strMessage = "Processing " + objType.ToString() + "s";
                     logX.loggerX.Error("ERROR - " + strMessage, ex);
-                    Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnection, 
-                                                                            snapshotid, 
-                                                                            Collector.Constants.ActivityType_Error, 
-                                                                            Collector.Constants.ActivityEvent_Error, 
+                    Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnection,
+                                                                            snapshotid,
+                                                                            Collector.Constants.ActivityType_Error,
+                                                                            Collector.Constants.ActivityEvent_Error,
                                                                             strMessage + ex.Message);
                     AppLog.WriteAppEventError(SQLsecureEvent.ExErrExceptionRaised, SQLsecureCat.DlDataLoadCat,
-                        " SQL Server = " + new SqlConnectionStringBuilder(targetConnection).DataSource +                                                
+                        " SQL Server = " + new SqlConnectionStringBuilder(targetConnection).DataSource +
                         strMessage, ex.Message);
                     isOk = false;
                 }
@@ -920,8 +970,8 @@ namespace Idera.SQLsecure.Collector.Sql
             // Process column information for table, etc.
             if (isOk)
             {
-                if (objType == SqlObjectType.Table 
-                    || objType == SqlObjectType.View 
+                if (objType == SqlObjectType.Table
+                    || objType == SqlObjectType.View
                     || objType == SqlObjectType.Function)
                 {
                     if (!processColumns(version, targetConnection, repositoryConnection, snapshotid, database, objIdCollection, ref metricsData))
@@ -968,7 +1018,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
         // ------------- Columns -------------
         #region Columns
- 
+
         private static string createColumnQuery(
                 ServerVersion version,
                 Database database,
@@ -1174,5 +1224,5 @@ namespace Idera.SQLsecure.Collector.Sql
 
         #endregion
     }
-          
+
 }

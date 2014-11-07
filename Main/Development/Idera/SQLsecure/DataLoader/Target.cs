@@ -106,6 +106,8 @@ namespace Idera.SQLsecure.Collector
             "EXEC master.dbo.xp_sqlagent_proxy_account N'GET'";
         private const string QueryReplicationEnabled = @"EXEC sp_helpreplicationdboption";
 
+        private const string QueryDistributorEnabled = @"EXEC sp_get_distributor";
+
         private const string NonQueryCreateSnapshot =
                     @"SET DATEFORMAT mdy;
                         INSERT INTO SQLsecure.dbo.serversnapshot 
@@ -118,7 +120,7 @@ namespace Idera.SQLsecure.Collector
                                 databasemailxpsenabled, oleautomationproceduresenabled,
                                 webassistantproceduresenabled, xp_cmdshellenabled, serverisdomaincontroller,
                                 sapasswordempty, agentsysadminonly, replicationenabled, systemdrive, adhocdistributedqueriesenabled,
-                                isweakpassworddetectionenabled)
+                                isweakpassworddetectionenabled, isdistributor, ispublisher, hasremotepublisher)
                       select    connectionname = '{0}', 
                                 servername = '{1}', 
                                 instancename = '{2}', 
@@ -149,9 +151,12 @@ namespace Idera.SQLsecure.Collector
                                 replicationenabled = '{26}',
                                 systemdrive = '{27}',
                                 adhocdistributedqueriesenabled = '{28}',
-                                isweakpassworddetectionenabled = '{29}'
+                                isweakpassworddetectionenabled = '{29}',
+                                isdistributor = '{30}',
+                                ispublisher = '{31}', 
+                                hasremotepublisher = '{32}'
                       from SQLsecure.dbo.registeredserver where connectionname = '{0}'";
-                
+
         public const string NonQueryCreateSnapshotHistory =
                     @"INSERT INTO SQLsecure.dbo.snapshothistory
                             (snapshotid, starttime, numberoferror, status)
@@ -205,7 +210,7 @@ namespace Idera.SQLsecure.Collector
                 {
                     // Open the connection.
                     connection.Open();
-            
+
                     // Check the SQL Server version.
                     m_VersionEnum = Sql.SqlHelper.ParseVersion(connection.ServerVersion);
                     if (m_VersionEnum == Sql.ServerVersion.Unsupported)
@@ -305,7 +310,7 @@ namespace Idera.SQLsecure.Collector
                 {
                     string login = string.Empty;
                     string password = string.Empty;
-                    if(sqlAuthType.ToUpper() == "S")
+                    if (sqlAuthType.ToUpper() == "S")
                     {
                         login = sqlLogin;
                         password = sqlPassword;
@@ -397,7 +402,7 @@ namespace Idera.SQLsecure.Collector
 
         #region Data Load Functions
 
-        
+
 
         // 
         private Constants.CollectionStatus createSnapshot(out int snapshotid)
@@ -431,13 +436,16 @@ namespace Idera.SQLsecure.Collector
             char issaPasswordNull = Constants.Unknown;
             char isSysAdminOnlyCmdExec = Constants.Unknown;
             char isReplicationEnabled = Constants.Unknown;
+            char isDistributor = Constants.Unknown;
+            char isPublisher = Constants.Unknown;
+            char hasRemotePublisher = Constants.Unknown;
             char isWeakPasswordDetectionEnabled = Constants.Unknown;
             string systemDrive = Constants.Unknown.ToString();
 
             using (logX.loggerX.DebugCall())
             {
                 Program.ImpersonationContext wi = Program.SetTargetSQLServerImpersonationContext();
-                using(SqlConnection target = new SqlConnection(ConnectionString))
+                using (SqlConnection target = new SqlConnection(ConnectionString))
                 {
                     try
                     {
@@ -452,7 +460,7 @@ namespace Idera.SQLsecure.Collector
                             {
                                 if (rdr.Read())
                                 {
-                                    authenticationMode = ((int) rdr[0]) == 1
+                                    authenticationMode = ((int)rdr[0]) == 1
                                                              ?
                                                                  Constants.WindowsAuthentication
                                                              : Constants.MixedAuthentication;
@@ -478,7 +486,7 @@ namespace Idera.SQLsecure.Collector
                             {
                                 if (rdr.Read())
                                 {
-                                    version = (string) rdr[0];
+                                    version = (string)rdr[0];
                                 }
                                 else
                                 {
@@ -496,7 +504,7 @@ namespace Idera.SQLsecure.Collector
                             {
                                 if (rdr.Read())
                                 {
-                                    edition = (string) rdr[0];
+                                    edition = (string)rdr[0];
                                 }
                                 else
                                 {
@@ -514,7 +522,7 @@ namespace Idera.SQLsecure.Collector
                             {
                                 if (rdr.Read())
                                 {
-                                    servername = (string) rdr[0];
+                                    servername = (string)rdr[0];
                                 }
                                 else
                                 {
@@ -541,7 +549,7 @@ namespace Idera.SQLsecure.Collector
                                     enumStatus = Constants.CollectionStatus.StatusWarning;
                                 }
                             }
-                        }                       
+                        }
 
                         // Case sensitive
                         if (isOk)
@@ -551,7 +559,7 @@ namespace Idera.SQLsecure.Collector
                             {
                                 if (rdr.Read())
                                 {
-                                    casesensitivemode = (string) rdr[0];
+                                    casesensitivemode = (string)rdr[0];
                                     casesensitivemode = casesensitivemode.Contains("_CS_") ? "Y" : "N";
                                 }
                                 else
@@ -564,7 +572,7 @@ namespace Idera.SQLsecure.Collector
 
                         // enableproxyaccount
                         if (m_VersionEnum != Sql.ServerVersion.SQL2000)
-                        {                            
+                        {
                             if (isOk)
                             {
                                 using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
@@ -613,13 +621,13 @@ namespace Idera.SQLsecure.Collector
                                 }
                             }
                         }
-               
+
 
                         // Is SysAdmin only allowed to execute cmdExec SQL Server Agent Jobs
-                        if(isOk)
+                        if (isOk)
                         {
                             string query = string.Empty;
-                            if(m_VersionEnum == Sql.ServerVersion.SQL2000)
+                            if (m_VersionEnum == Sql.ServerVersion.SQL2000)
                             {
                                 query = QuerySysAdminOnlyForSQLAgentCmdExecJobs2k;
                             }
@@ -653,9 +661,10 @@ namespace Idera.SQLsecure.Collector
                             }
                         }
 
-                        // Replication Enabled
-                        if(isOk)
+
+                        if (isOk)
                         {
+                            // Replication Enabled
                             string query = QueryReplicationEnabled;
                             try
                             {
@@ -663,8 +672,8 @@ namespace Idera.SQLsecure.Collector
                                                                                     query, null))
                                 {
                                     isReplicationEnabled = Constants.No;
-                                    while(rdr.Read())
-                                    {                                    
+                                    while (rdr.Read())
+                                    {
                                         // name | id | transpublish | mergepublish | dbowner | dbreadonly
                                         if (Convert.ToInt32(rdr[2]) == 1 || Convert.ToInt32(rdr[3]) == 1)
                                         {
@@ -679,6 +688,29 @@ namespace Idera.SQLsecure.Collector
                                 logX.loggerX.Warn(string.Format("WARN - failed to read SysAdmin only allowed to execute cmdExec SQL Server Agent Jobs\n{0}", ex.Message));
                                 enumStatus = Constants.CollectionStatus.StatusWarning;
                             }
+
+                            //Is Server Distributor, isPublisher, HasRemotePublisher
+                            try
+                            {
+                                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text, QueryDistributorEnabled, null))
+                                {
+                                    if (rdr.Read())
+                                    {
+
+                                        // installed  | distribution server | distribution db installed  | is distribution publisher  | has remote distribution publisher
+                                        isDistributor = Convert.ToInt32(rdr[0]) == 1 ? Constants.Yes : Constants.No;
+                                        isPublisher = Convert.ToInt32(rdr[3]) == 1 ? Constants.Yes : Constants.No;
+                                        hasRemotePublisher = Convert.ToInt32(rdr[4]) == 1 ? Constants.Yes : Constants.No;
+
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                logX.loggerX.Warn(string.Format("WARN - failed to read if server is distributor/publisher or has remote publisher.\n{0}", ex.Message));
+                                enumStatus = Constants.CollectionStatus.StatusWarning;
+                            }
+
                         }
 
                         // Read Security configuration information
@@ -716,7 +748,7 @@ namespace Idera.SQLsecure.Collector
                                         }
                                     }
                                 }
-                            }                            
+                            }
                         }
                         else
                         {
@@ -727,8 +759,8 @@ namespace Idera.SQLsecure.Collector
                                 {
                                     while (rdr.Read())
                                     {
-                                        int id = (int) rdr[0];
-                                        char value = ((int) rdr[1] == 1) ? Constants.Yes : Constants.No;
+                                        int id = (int)rdr[0];
+                                        char value = ((int)rdr[1] == 1) ? Constants.Yes : Constants.No;
                                         switch (id)
                                         {
                                             case 102:
@@ -791,11 +823,11 @@ namespace Idera.SQLsecure.Collector
                 }
 
                 // Is Server Domain Controller
-                if(isOk)
+                if (isOk)
                 {
                     isDomainControler = m_Server.IsDomainController == true
                                                            ? Constants.Yes
-                                                           : Constants.No;                            
+                                                           : Constants.No;
                 }
 
                 // Connect to the repository, create snapshot entry and get
@@ -847,7 +879,7 @@ namespace Idera.SQLsecure.Collector
                                                     version,
                                                     edition,
                                                     Constants.StatusInProgress,
-                                                   // loginAuditMode,
+                                // loginAuditMode,
                                                     crossDbOwnership,
                                                     enableC2AuditTrace,
                                                     enableProxyAcct,
@@ -868,18 +900,21 @@ namespace Idera.SQLsecure.Collector
                                                     isReplicationEnabled,
                                                     systemDrive,
                                                     enabledAdHocDistributedQueries,
-                                                    isWeakPasswordDetectionEnabled);
+                                                    isWeakPasswordDetectionEnabled,
+                                                    isDistributor,
+                                                    isPublisher,
+                                                    hasRemotePublisher);
+
                             Sql.SqlHelper.ExecuteNonQuery(repository, CommandType.Text, query);
 
                             // Query to get the snapshotid.
                             using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(repository, null,
                                                                                    CommandType.Text, QuerySnapshotId,
-                                                                                   new SqlParameter[]
-                                                                                       {paramConnectionname}))
+                                                                                   new SqlParameter[] { paramConnectionname }))
                             {
                                 if (rdr.Read())
                                 {
-                                    snapshotid = (int) rdr[0];
+                                    snapshotid = (int)rdr[0];
                                 }
                             }
 
@@ -906,9 +941,48 @@ namespace Idera.SQLsecure.Collector
                     }
                     Program.RestoreImpersonationContext(ic);
                 }
+
+                //get info about sql server jobs
+                if (isOk)
+                {
+                    Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
+
+                    try
+                    {
+                  
+                        isOk = SqlJob.ProcessProxies(m_VersionEnum, ConnectionString,
+                            m_Repository.ConnectionString, snapshotid, servername);
+
+                    }
+                    catch (SqlException ex)
+                    {
+                        logX.loggerX.Error("ERROR - exception raised when getting info about sql server jobs proxies", ex);
+                        isOk = false;
+                        enumStatus = Constants.CollectionStatus.StatusError;
+                    }
+                    Program.RestoreImpersonationContext(ic);
+                }
+                if (isOk)
+                {
+                    Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
+
+                    try
+                    {
+                        isOk = SqlJob.Process(m_VersionEnum, ConnectionString,
+                            m_Repository.ConnectionString, snapshotid, servername);
+                    }
+                    catch (SqlException ex)
+                    {
+                        logX.loggerX.Error("ERROR - exception raised when getting info about sql server jobs", ex);
+                        isOk = false;
+                        enumStatus = Constants.CollectionStatus.StatusError;
+                    }
+                    Program.RestoreImpersonationContext(ic);
+                }
+
             }
 
-            if(!isOk)
+            if (!isOk)
             {
                 enumStatus = Constants.CollectionStatus.StatusError;
             }
@@ -1060,7 +1134,7 @@ namespace Idera.SQLsecure.Collector
                         if (isOk && isGuestEnabled)
                         {
                             db.IsGuestEnabled = isGuestEnabled;
-                            if ( !Sql.Database.UpdateRepositorySqlDatabaseGuestEnabled(m_Repository.ConnectionString,
+                            if (!Sql.Database.UpdateRepositorySqlDatabaseGuestEnabled(m_Repository.ConnectionString,
                                                                                       snapshotId, db))
                             {
                                 logX.loggerX.Error("ERROR - failed to update database ", db.Name,
@@ -1072,7 +1146,7 @@ namespace Idera.SQLsecure.Collector
                         // If this is SQL 2005, process all schemas.
                         if (isOk && m_VersionEnum != Sql.ServerVersion.SQL2000)
                         {
-                            if ( !Sql.Schema.Process(ConnectionString, m_Repository.ConnectionString, 
+                            if (!Sql.Schema.Process(ConnectionString, m_Repository.ConnectionString,
                                                      snapshotId, db, ref metricsData))
                             {
                                 logX.loggerX.Error("ERROR - error in processing schemas for db - ", db.Name);
@@ -1096,7 +1170,7 @@ namespace Idera.SQLsecure.Collector
                     }
 
                     // Force processing of Stored Procedures and Extended Stored Procedures
-                    if(isOk)
+                    if (isOk)
                     {
                         List<Filter.Rule> rules = new List<Filter.Rule>();
                         Filter.Rule rule = new Filter.Rule(0, (int)SqlObjectType.StoredProcedure, "A", "");
@@ -1125,8 +1199,8 @@ namespace Idera.SQLsecure.Collector
                     {
                         foreach (KeyValuePair<int, List<Sql.Filter.Rule>> kvp in dbObjRules)
                         {
-                            Sql.SqlObjectType oType = (Sql.SqlObjectType) kvp.Key;
-                            if(oType == SqlObjectType.StoredProcedure || oType == SqlObjectType.ExtendedStoredProcedure)
+                            Sql.SqlObjectType oType = (Sql.SqlObjectType)kvp.Key;//
+                            if (oType == SqlObjectType.StoredProcedure || oType == SqlObjectType.ExtendedStoredProcedure)
                             {
                                 // Processed above for all Databases.
                                 continue;
@@ -1364,7 +1438,7 @@ namespace Idera.SQLsecure.Collector
                     isOk = false;
                     snapshotStatus = Constants.StatusError;
                 }
-                else if( status == Constants.CollectionStatus.StatusWarning)
+                else if (status == Constants.CollectionStatus.StatusWarning)
                 {
                     strNewMessage = "Failed to load some configuration options for target SQL Server";
                     PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
@@ -1409,8 +1483,8 @@ namespace Idera.SQLsecure.Collector
                     if (registryPermissions == null)
                     {
                         registryPermissions =
-                            new RegistryPermissions(m_snapshotId,  m_Server.Name,
-                                                    Idera.SQLsecure.Core.Accounts.Path.GetInstanceFromSQLServerInstance(TargetInstance), 
+                            new RegistryPermissions(m_snapshotId, m_Server.Name,
+                                                    Idera.SQLsecure.Core.Accounts.Path.GetInstanceFromSQLServerInstance(TargetInstance),
                                                     m_VersionEnum);
                         int numWarnings = registryPermissions.LoadRegistrySettings();
                         if (numWarnings > 0)
@@ -1458,23 +1532,23 @@ namespace Idera.SQLsecure.Collector
                 }
 
                 // Load File Permissions
-                if(isOk)
+                if (isOk)
                 {
-                    if(filePermissions == null)
+                    if (filePermissions == null)
                     {
                         filePermissions = new FilePermissions(m_snapshotId, m_Server.Name, m_VersionEnum);
                     }
-                    if( filePermissions.LoadFilePermissionsForInstallationDirectory(registryPermissions.InstallPath) != 0)
+                    if (filePermissions.LoadFilePermissionsForInstallationDirectory(registryPermissions.InstallPath) != 0)
                     {
                         strNewMessage = "Failed to load file permissions for target SQL Server";
                         PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                        snapshotStatus = Constants.StatusWarning;                        
+                        snapshotStatus = Constants.StatusWarning;
                     }
-                    if( filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0 )
+                    if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
                     {
                         strNewMessage = "Failed to load file permissions for SQL Services on target SQL Server";
                         PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                        snapshotStatus = Constants.StatusWarning;                                                
+                        snapshotStatus = Constants.StatusWarning;
                     }
                 }
 
@@ -1520,7 +1594,7 @@ namespace Idera.SQLsecure.Collector
                     filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
                                                                         registryPermissions.NumOSObjectsWrittenToRepository);
                 }
-                if(isOk)
+                if (isOk)
                 {
                     List<Account> users = new List<Account>();
                     List<Account> groups = new List<Account>();
@@ -1534,8 +1608,8 @@ namespace Idera.SQLsecure.Collector
                         PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                         snapshotStatus = Constants.StatusWarning;
                     }
-                   // Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
-                    
+                    // Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
+
                 }
 
                 // Optimize the filters.
@@ -1682,14 +1756,14 @@ namespace Idera.SQLsecure.Collector
                 {
                     strActivityType = Constants.ActivityType_Error;
                 }
-                
+
                 // Write to System Application Event Log
                 AppLog.WriteAppEventInfo(SQLsecureEvent.DlInfoEndMsg, SQLsecureCat.DlEndCat,
                                          DateTime.Now.ToString() +
                                          " SQL Server = " + m_ConnectionStringBuilder.DataSource +
                                          " Snapshot ID = " + m_snapshotId.ToString() + "; " +
                                          strDoneStatus);
-                
+
                 // Write to SQLSecure Activity Log
                 Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString, m_snapshotId,
                                                                         strActivityType,
@@ -1723,7 +1797,7 @@ namespace Idera.SQLsecure.Collector
 
             return isOk;
         }
-    
+
 
 
         private void UpdateOldSnapshotStatus()
@@ -1794,7 +1868,7 @@ namespace Idera.SQLsecure.Collector
 
         private void PostActivityMessage(ref string strErrorMessage, string newMessage, string activityType)
         {
-            if(strErrorMessage.Length > 0)
+            if (strErrorMessage.Length > 0)
             {
                 strErrorMessage = strErrorMessage + " and " + newMessage;
             }
@@ -1810,7 +1884,7 @@ namespace Idera.SQLsecure.Collector
                                           " SQL Server = " + m_ConnectionStringBuilder.DataSource +
                                           " Snapshot ID = " + m_snapshotId.ToString() + "; " + newMessage);
             }
-            else if(activityType == Collector.Constants.ActivityType_Warning)
+            else if (activityType == Collector.Constants.ActivityType_Warning)
             {
                 logX.loggerX.Warn(string.Format("{0} - {1}", activityType, newMessage));
                 AppLog.WriteAppEventWarning(SQLsecureEvent.DlErrGeneralMsg, SQLsecureCat.DlDataLoadCat,
@@ -1826,7 +1900,7 @@ namespace Idera.SQLsecure.Collector
             WriteAppActivityToRepository(activityType,
                                          activityType,
                                          newMessage);
-            
+
         }
 
         #endregion
