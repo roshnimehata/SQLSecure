@@ -273,8 +273,8 @@ IF NOT EXISTS ( SELECT  *
                   N'Login',
                   N'DISTRIBUTOR_ADMIN Login',
                   N'Determine whether DISTRIBUTOR_ADMIN account should be deleted.',
-                  1,
-                  1,
+                  0,
+                  0,
                   N'',
                   N'When enabled, this check will identify a risk if the SQL Server  DISTRIBUTOR_ADMIN account hasn''t been deleted if server is not distributor or publisher.'
 				)
@@ -327,7 +327,7 @@ IF NOT EXISTS ( SELECT  *
                       N'Determine whether SQL SYSADMIN accounts that are in the local Administrator role for the physical server.',
                       1,
                       1,
-                      N'',
+                      N'''%\Administrator''',
                       N'When enabled, this check will identify a risk if SQL SYSADMIN account is in the local Administrator role for the physical server.'
 			        )
 
@@ -350,7 +350,7 @@ IF NOT EXISTS ( SELECT  *
                   N'',
                   N'Is SQL SYSADMIN account in the local Administrator role?',
                   2,
-                  N'',
+                  N'''%\Administrator''',
                   0
 				)
     end   
@@ -375,8 +375,8 @@ IF NOT EXISTS ( SELECT  *
 				  N'Access',
 				  N'Database roles and members',
 				  N'Shows information about database roles and their members',
-				  1,
-				  1,
+				  0,
+				  0,
 				  N'',
 				  N'When enabled, this check will list database, database role, corresponding members, login type, windows group, permissions.'
 				)
@@ -426,8 +426,8 @@ IF NOT EXISTS ( SELECT  *
                   N'Access',
                   N'Server roles and members',
                   N'Shows information about server roles and their members',
-                  1,
-                  1,
+                  0,
+                  0,
                   N'',
                   N'When enabled, this check will list SQL instance, role, corresponding members, login type, windows group, disabled.'
 				)

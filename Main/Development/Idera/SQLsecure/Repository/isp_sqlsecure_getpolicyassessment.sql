@@ -5251,13 +5251,14 @@ AS
                                                 on WGM.snapshotid = WG.snapshotid
                                                    and WGM.groupsid = WG.sid
                                                    and WG.Name like '%\Administrators'
-												   and SPU.name not like '%\Administrator'
                                         where
-                                            SPU.name not in (
-                                            select
-                                                Name
-                                            from
-                                                @SuppressedAccounts )
+                                            ( select
+                                                count(*)
+                                              from
+                                                @SuppressedAccounts as sa
+                                              where
+                                                SPU.name like sa.Name
+                                            ) = 0
 
                               declare SysadminUsersCursor cursor
                               for
