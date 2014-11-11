@@ -1,6 +1,6 @@
-set QUOTED_IDENTIFIER on 
+SET QUOTED_IDENTIFIER ON 
 GO
-set ANSI_NULLS on 
+SET ANSI_NULLS ON 
 GO
 
 if exists ( select
