@@ -58,16 +58,6 @@ ELSE
 		ALTER TABLE dbo.assessment
 		ALTER COLUMN assessmentnotes VARCHAR(max) not null
 
-		EXEC sp_refreshview N'[dbo].[vwregistrykey]'
-		EXEC sp_refreshview N'[dbo].[vwregistrykeypermission]'
-		EXEC sp_refreshview N'[dbo].[vwpolicymetric]'
-		EXEC sp_refreshview N'[dbo].[vwfilesystemobject]'
-		EXEC sp_refreshview N'[dbo].[vwfilesystemobjectpermission]'
-		EXEC sp_refreshview N'[dbo].[vwosobjectpermission]'
-		EXEC sp_refreshview N'[dbo].[vwpolicyassessment]'
-		EXEC sp_refreshview N'[dbo].[vwpolicychangelog]'
-		EXEC sp_refreshview N'[dbo].[vwpolicy]'    
-
          IF NOT EXISTS ( SELECT *
                          FROM   dbo.sysobjects
                          WHERE  id = OBJECT_ID(N'[dbo].[sqljob]')
