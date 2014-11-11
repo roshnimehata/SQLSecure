@@ -120,4 +120,24 @@ ELSE
 
 GO	
 
+GO
+
+/* ---------------------------------------------------------------------- */
+/*	Updates to new fields must be done after finalizing the changes		  */
+/* ---------------------------------------------------------------------- */
+declare @ver int
+SELECT @ver=schemaversion FROM currentversion
+if (isnull(@ver,900) < 2800)
+BEGIN
+	BEGIN TRANSACTION
+
+	--insert into the newly created configuration table
+	INSERT INTO dbo.configuration (lastupdated, isweakpassworddetectionenabled) VALUES (GETUTCDATE(), N'Y') 
+	
+	COMMIT
+END
+
+GO	
+
+
 
