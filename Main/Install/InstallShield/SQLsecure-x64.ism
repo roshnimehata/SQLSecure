@@ -5397,7 +5397,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>RETURN</td><td>0</td><td/></row>
 		<row><td>RebootYesNo</td><td>Yes</td><td/></row>
 		<row><td>ReinstallModeText</td><td>omus</td><td/></row>
-		<row><td>SCHEMA_VERSION</td><td>2700</td><td/></row>
+		<row><td>SCHEMA_VERSION</td><td>2800</td><td/></row>
 		<row><td>SERVICEPASSWORD</td><td/><td/></row>
 		<row><td>SERVICEUSERNAME</td><td/><td/></row>
 		<row><td>SERVICE_SQLAUTHENTICATION</td><td/><td/></row>
