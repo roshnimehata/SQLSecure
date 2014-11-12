@@ -4804,7 +4804,7 @@ AS
 
 				
 							  select
-								@metricthreshold = N'Server is vulnerable if there are user defined assemblies with host policy other than SAFE '
+								@metricthreshold = N'Server is vulnerable if there are contained databases and authntification mode set to Mixed '
 						end 
 
 
