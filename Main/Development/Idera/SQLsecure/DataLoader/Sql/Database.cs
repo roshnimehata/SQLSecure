@@ -147,8 +147,11 @@ namespace Idera.SQLsecure.Collector.Sql
                         connection.Open();
 
                         // Create the query based on server version.
-                        string query = sqlServerVersion == ServerVersion.SQL2000 ? QueryDb2K : QueryDb2K5;
-
+                        string query = QueryDb2K;
+                        if (sqlServerVersion >= ServerVersion.SQL2012)
+                            query = QueryDb2K12;
+                        if (sqlServerVersion < ServerVersion.SQL2012 && sqlServerVersion > ServerVersion.SQL2000)
+                            query = QueryDb2K5;
                         // Get a list of databases from the target instance.
                         using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
                             CommandType.Text, query, null))
@@ -360,6 +363,10 @@ namespace Idera.SQLsecure.Collector.Sql
                               FROM master.dbo.sysdatabases AS db LEFT OUTER JOIN master.dbo.syslogins AS l 
 	                                    ON (db.sid = l.sid)";
         private const string QueryDb2K5 =
+                            @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=0
+                              FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
+	                                    ON (db.owner_sid = l.sid)";
+        private const string QueryDb2K12 =
                             @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( db.containment as bit)
                               FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
