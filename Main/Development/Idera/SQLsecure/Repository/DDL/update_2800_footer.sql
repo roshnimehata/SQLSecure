@@ -531,25 +531,6 @@ IF NOT EXISTS ( SELECT  *
 				-- this check makes it restartable
 				and a.assessmentid not in (select distinct assessmentid from policymetric where metricid between @startmetricid and @metricid)
 
-go 
--- Adde new filter type for sequence objets
-insert into dbo.objecttype
-        (
-          objecttype,
-          objecttypename,
-          hashkey
-        )
-values
-        (
-          N'SO', -- objecttype - nvarchar(5)
-          N'Sequence Object', -- objecttypename - nvarchar(500)
-          N'' )
 
-insert into dbo.filterruleclass
-		        ( objectclass, objectvalue )
-values
-		        ( 48, -- objectclass - int
-		          N'Sequence Objects'  -- objectvalue - nvarchar(128)
-		          )
 			  end
 go
