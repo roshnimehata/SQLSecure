@@ -16,7 +16,7 @@ CREATE procedure [dbo].[isp_sqlsecure_addpolicy]
 	@isdynamic bit, 
 	@dynamicselection nvarchar(4000), 
 	@interviewname nvarchar(256) = null,
-	@interviewtext varchar(max) = null,
+	@interviewtext nvarchar(max) = null,
 	@policyid int output
 )
 as

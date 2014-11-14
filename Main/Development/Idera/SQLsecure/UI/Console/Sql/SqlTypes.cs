@@ -103,6 +103,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         View = 44,
         Function = 45,
         Synonym = 46,
+        SequenceObject = 48,
         Unknown = 0xFF
     }
 
@@ -276,7 +277,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             RegistryKey,
             Services,
             Service,
-            Unknown
+            Unknown,
+            SequenceObjects
         }
 
         // TypeEnum/Object type string name map element.
@@ -375,7 +377,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             "Registry Key",
             "Services",
             "Service",
-            "Unknown"
+            "Unknown",
+             "Sequence Objects"
         };
 
         private static TypeStringElement[] m_TypeStringMap = new TypeStringElement[] {
@@ -411,7 +414,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             new TypeStringElement("TF",TypeEnum.FunctionTableValued),
             new TypeStringElement("U",TypeEnum.Table),
             new TypeStringElement("V",TypeEnum.View),
-            new TypeStringElement("X",TypeEnum.ExtendedStoredProcedure)
+            new TypeStringElement("X",TypeEnum.ExtendedStoredProcedure),
+            new TypeStringElement("SO",TypeEnum.SequenceObjects)
         };
 
         private static Controls.ObjectImages m_ObjectImages = new Controls.ObjectImages();
@@ -579,6 +583,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private const string NodeUserDefinedDataTypes = "User-defined Data Types";
         private const string NodeXMLSchemaCollections = "XML Schema Collections";
         private const string NodeFullTextCatalogs = "Full Text Catalogs";
+        private const string NodeSequenceObjects = "Sequence Objects";
 
         #endregion
 
@@ -669,7 +674,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                          || objType == ObjectType.TypeEnum.Assemblies
                          || objType == ObjectType.TypeEnum.UserDefinedDataTypes
                          || objType == ObjectType.TypeEnum.XMLSchemaCollections
-                         || objType == ObjectType.TypeEnum.FullTextCatalogs);
+                         || objType == ObjectType.TypeEnum.FullTextCatalogs
+                          || objType == ObjectType.TypeEnum.SequenceObjects);
             Debug.Assert(database != null);
 
             m_SnapshotId = snapshotId;
@@ -754,7 +760,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                          || objType == ObjectType.TypeEnum.Assembly
                          || objType == ObjectType.TypeEnum.UserDefinedDataType
                          || objType == ObjectType.TypeEnum.XMLSchemaCollection
-                         || objType == ObjectType.TypeEnum.FullTextCatalog);
+                         || objType == ObjectType.TypeEnum.FullTextCatalog
+                         || objType == ObjectType.TypeEnum.SequenceObjects);
             Debug.Assert(database != null);
             Debug.Assert(!string.IsNullOrEmpty(objectName));
 
@@ -925,6 +932,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     case ObjectType.TypeEnum.FullTextCatalogs:
                         name = NodeFullTextCatalogs;
                         break;
+                    case ObjectType.TypeEnum.SequenceObjects:
+                        name = NodeSequenceObjects;
+                        break;
                     default:
                         Debug.Assert(false);
                         break;
@@ -1067,6 +1077,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     break;
                 case ObjectType.TypeEnum.FullTextCatalogs:
                     path = snapshot + @"\" + server + @"\Databases\" + DatabaseName + @"\Full Text Catalogs";
+                    break;
+                case ObjectType.TypeEnum.SequenceObjects:
+                    path = snapshot + @"\" + server + @"\Databases\" + DatabaseName + @"\Full Sequence Objects";
                     break;
                 default:
                     Debug.Assert(false);

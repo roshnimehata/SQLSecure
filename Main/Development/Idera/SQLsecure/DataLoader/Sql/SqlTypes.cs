@@ -82,6 +82,9 @@ namespace Idera.SQLsecure.Collector.Sql
                 case SqlObjectType.Column:
                     strType = "Column";
                     break;
+                case SqlObjectType.SequenceObject:
+                    strType = "SequenceObject";
+                    break;
                 default:
                     strType = "UnKnown";
                     System.Diagnostics.Debug.Assert(false, "Unknown Database Type");
@@ -121,7 +124,8 @@ namespace Idera.SQLsecure.Collector.Sql
         View = 44,
         Function = 45,
         Synonym = 46,
-        Column = 47
+        Column = 47,
+        SequenceObject=48
     }
 
     public enum FilterScope

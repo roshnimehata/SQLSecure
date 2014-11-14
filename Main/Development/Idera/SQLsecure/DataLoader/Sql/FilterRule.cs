@@ -799,6 +799,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     case SqlObjectType.View:
                     case SqlObjectType.Function:
                     case SqlObjectType.Synonym:
+                    case  SqlObjectType.SequenceObject:
                         if (m_SrvrLvlRules.Count == 0)
                         {
                             if (rule.ObjectTypeEnum == SqlObjectType.Database)

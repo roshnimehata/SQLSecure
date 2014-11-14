@@ -1320,6 +1320,12 @@ namespace Idera.SQLsecure.UI.Console.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap sequence_48 {
+            get {
+                object obj = ResourceManager.GetObject("sequence_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
         internal static System.Drawing.Bitmap server_16 {
             get {
                 object obj = ResourceManager.GetObject("server_16", resourceCulture);

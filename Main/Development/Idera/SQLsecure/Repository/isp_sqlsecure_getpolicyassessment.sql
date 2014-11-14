@@ -5927,8 +5927,125 @@ AS
                                  end
 					
                               select
-                                @metricthreshold = N'Server is vulnerable database is owned by one of the next account  '
+                                @metricthreshold = N'Server is vulnerable if  databases are owned by one of the next accounts:  '
                                 + @severityvalues
+                        end 
+
+						if ( @metricid = 103 ) 
+		       begin 
+						
+                              truncate table #tempdetails 						 
+
+                                       if ( @isadmin = 1 ) 
+                                          begin
+										  											
+                                                insert  into #tempdetails
+                                                        select
+                                                            @policyid,
+                                                            @assessmentid,
+                                                            @metricid,
+                                                            @snapshotid,
+                                                            N'Public role has access to  '
+                                                            + dd.name
+                                                            + ' object ',
+                                                            dd.dbid,
+                                                            dd.type,
+                                                            dd.objectid,
+                                                            dd.name
+                                                        from
+                                                            dbo.databaseobject dd
+                                                            join dbo.sqldatabase sdb
+                                                              on dd.snapshotid = sdb.snapshotid
+                                                              and dd.dbid = sdb.dbid
+                                                            join dbo.databaseschema ds
+                                                              on dd.snapshotid = ds.snapshotid
+                                                              and dd.dbid = ds.dbid
+                                                              and dd.schemaid = ds.schemaid
+                                                            join dbo.databaseobjectpermission dp
+                                                              on dd.snapshotid = dp.snapshotid
+                                                              and dd.dbid = dp.dbid
+                                                              and dd.classid = dp.classid
+                                                              and dd.parentobjectid = dp.parentobjectid
+                                                              and dd.objectid = dp.objectid
+                                                        where
+                                                            dp.grantee = 0
+                                                            and ds.schemaname <> 'sys'
+                                                            and sdb.databasename not in (
+                                                            'master', 'msdb',
+                                                            'tempdb' )
+                                                            and dp.isdeny = 'N'
+                                                            and dd.snapshotid = @snapshotid
+                                                        group by
+                                                            dd.name,
+															  dd.dbid,
+                                                            dd.type,
+                                                           dd.objectid,
+                                                            sdb.databasename                            
+															
+													
+
+
+                                                if not exists ( select
+                                                              *
+                                                              from
+                                                              #tempdetails ) 
+                                                   select
+                                                    @sevcode = @sevcodeok,
+                                                    @metricval = N'None found.' 
+                                                else 
+                                                   begin 
+                                                         set @metricval = 'Public roles have access to next objects :'
+
+                                                         select
+                                                            @metricval = @metricval
+                                                            + objectname
+                                                            + ', '
+                                                         from
+                                                            #tempdetails
+                                                         group by
+                                                            objectname
+
+                                                         set @metricval = substring(@metricval,
+                                                              0,
+                                                              len(@metricval)) 
+
+													
+  
+                                                         insert
+                                                              into policyassessmentdetail
+                                                              select
+                                                              policyid,
+                                                              assessmentid,
+                                                              metricid,
+                                                              snapshotid,
+                                                              detailfinding,
+                                                              databaseid,
+                                                              objecttype,
+                                                              objectid,
+                                                              objectname
+                                                              from
+                                                              #tempdetails
+                                                              group by
+                                                              policyid,
+                                                              assessmentid,
+                                                              metricid,
+                                                              snapshotid,
+                                                              detailfinding,
+                                                              databaseid,
+                                                              objecttype,
+                                                              objectid,
+                                                              objectname 
+                                                         select
+                                                            @sevcode = @severity
+
+
+                                                   end 
+                                          end 
+                             
+					
+                              select
+                                @metricthreshold = N'Server is vulnerable if public roles has access to user defined objects'
+                                
                         end 
 
 						--**************************** code added to handle user defined security checks, but never used (first added in version 2.5)

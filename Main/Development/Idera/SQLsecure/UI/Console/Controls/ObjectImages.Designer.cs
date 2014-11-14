@@ -135,6 +135,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.AppImageList16.Images.SetKeyName(90, "MediumRiskExplained_16.png");
             this.AppImageList16.Images.SetKeyName(91, "LowRiskExplained_16.png");
             this.AppImageList16.Images.SetKeyName(92, "check_16.png");
+            this.AppImageList16.Images.SetKeyName(93, "sequence_48.png");
             // 
             // AppImageList32
             // 
@@ -282,6 +283,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.ImageListSQLTypes16.Images.SetKeyName(62, "gears.png");
             this.ImageListSQLTypes16.Images.SetKeyName(63, "gears.png");
             this.ImageListSQLTypes16.Images.SetKeyName(64, "unknown.png");
+            this.ImageListSQLTypes16.Images.SetKeyName(65, "sequence_48.png");
             // 
             // ObjectImages
             // 

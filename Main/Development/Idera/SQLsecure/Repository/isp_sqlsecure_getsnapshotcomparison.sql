@@ -508,7 +508,7 @@ as
 								N'auditflags', N'accesstype', N'isinherited', N'principalid', N'majorid', N'minorid',
 								N'dbid', N'classid', N'parentobjectid', N'objectid', N'schemaid', N'permission', N'grantee', N'grantor', 
 								N'type', N'name', N'isrevoke', N'isaudited')
-		AND DATA_TYPE <>  N'varchar(max)'
+		AND DATA_TYPE <>  N'nvarchar(max)'
 
 		--AND TABLE_NAME LIKE 'sql%'	--	restriction for testing on certain tables
 

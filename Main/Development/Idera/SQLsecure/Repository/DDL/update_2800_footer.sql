@@ -508,7 +508,60 @@ IF NOT EXISTS ( SELECT  *
 			          0  -- assessmentid - int
 			        )
 	end   
-	
+        select
+            @metricid = 103
+        if not exists ( select
+                            *
+                        from
+                            metric
+                        where
+                            metricid = @metricid ) 
+           begin
+                 insert into dbo.metric
+                        (
+                          metricid,
+                          metrictype,
+                          metricname,
+                          metricdescription,
+                          isuserentered,
+                          ismultiselect,
+                          validvalues,
+                          valuedescription
+                        )
+                 values
+                        (
+                          @metricid, -- metricid - int
+                          N'Access', -- metrictype - nvarchar(32)
+                          N'Public role permissions', -- metricname - nvarchar(256)
+                          N'Determine whether the public roles have permissions to user defined objects', -- metricdescription - nvarchar(1024)
+                          0, -- isuserentered - bit
+                          0, -- ismultiselect - bit
+                          N'', -- validvalues - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if permissions have been granted to the public roles '  -- valuedescription - nvarchar(1024)									        
+                        )
+                 insert into dbo.policymetric
+                        (
+                          policyid,
+                          metricid,
+                          isenabled,
+                          reportkey,
+                          reporttext,
+                          severity,
+                          severityvalues,
+                          assessmentid
+                        )
+                 values
+                        (
+                          0, -- policyid - int
+                          @metricid, -- metricid - int
+                          1, -- isenabled - bit
+                          N'', -- reportkey - nvarchar(32)
+                          N'Is there objects with permissions granted to public role?', -- reporttext - nvarchar(4000)
+                          1, -- severity - int
+                          N'', -- severityvalues - nvarchar(4000)
+                          0  -- assessmentid - int
+                        )
+           end
 	-- note: the following uses the @metricid to determine the ending value for the metrics to apply to all of the policies
 
 	if (@ver is null	-- this is a new install, so fix the All Servers policy to use the default values for the new security checks
@@ -532,5 +585,23 @@ IF NOT EXISTS ( SELECT  *
 				and a.assessmentid not in (select distinct assessmentid from policymetric where metricid between @startmetricid and @metricid)
 
 
+insert  into dbo.objecttype
+        (
+          objecttype,
+          objecttypename,
+          hashkey
+        )
+values
+        (
+          N'SO', -- objecttype - nvarchar(5)
+          N'Sequence Object', -- objecttypename - nvarchar(500)
+          N'' 
+        )
+insert  into dbo.filterruleclass
+        ( objectclass, objectvalue )
+values
+        ( 48, -- objectclass - int
+          N'Sequence Objects'  -- objectvalue - nvarchar(128)
+          )
 			  end
 go

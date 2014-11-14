@@ -286,6 +286,15 @@ namespace Idera.SQLsecure.UI.Console.Sql
                                     FROM SQLsecure.dbo.vwdatabaseobject
                                     WHERE snapshotid = @snapshotid AND dbid = @dbid AND type = 'iFTXT'";
 
+        private const string QueryGetSnapshotSequenceObjects
+                                = @"SELECT 
+                                        classid, 
+                                        parentobjectid, 
+                                        objectid,
+                                        type,
+                                        name
+                                    FROM SQLsecure.dbo.vwdatabaseobject
+                                    WHERE snapshotid = @snapshotid AND dbid = @dbid AND type = 'SO'";
         private const string ParamQueryGetSnapshotDatabaseObjectsSnapshotid = "snapshotid";
         private const string ParamQueryGetSnapshotDatabaseObjectsDbid = "dbid";
         private enum SnapshotDatabaseObjectColumns
@@ -495,6 +504,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
             return getSnapshotDbObject(connectionString, snapshotid, dbid, QueryGetSnapshotFullTextCatalogs);
         }
 
+        public static List<DatabaseObject> GetSnapshotSequenceObjects(
+               string connectionString,
+               int snapshotid,
+               int dbid
+           )
+        {
+            return getSnapshotDbObject(connectionString, snapshotid, dbid, QueryGetSnapshotSequenceObjects);
+        }
         #endregion
     }
 }

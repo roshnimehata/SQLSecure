@@ -360,6 +360,12 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 tag = new Sql.ObjectTag(m_SnapshotId, type, database);
                 m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
             }
+            if (m_Version >= Sql.ServerVersion.SQL2012)
+            {
+                type = Sql.ObjectType.TypeEnum.SequenceObjects;
+                tag = new Sql.ObjectTag(m_SnapshotId, type, database);
+                m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
+            }
         }
 
         private void fillDatabaseSecurityNode(Sql.Database database)
@@ -781,6 +787,33 @@ namespace Idera.SQLsecure.UI.Console.Controls
             }
         }
 
+        private void fillDatabaseSequenceObjectsNode(Sql.Database database)
+        {
+            try
+            {
+                // Get a list of objs for the snapshot.
+                List<Sql.DatabaseObject> objs = Sql.DatabaseObject.GetSnapshotSequenceObjects(Program.gController.Repository.ConnectionString, m_SnapshotId, database.DbId);
+
+                // Fill the grid.
+                Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.SequenceObjects;
+                foreach (Sql.DatabaseObject obj in objs)
+                {
+                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, database, obj.ClassId, obj.ParentObjectId, obj.ObjectId, obj.Name);
+                    string name = string.Empty;
+                    string owner = string.Empty;
+                    string schema = string.Empty;
+                    string schemaowner = string.Empty;
+                    getDBObjectNames(tag, ref name, ref owner, ref schema, ref schemaowner);
+                    m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.ObjectName,
+                                         tag.TypeName, tag, owner, schema, schemaowner,
+                                         null, null, null, null, null, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utility.MsgBox.ShowError(Utility.ErrorMsgs.ObjectExplorerCaption, Utility.ErrorMsgs.GetSnapshotFullTextCatalogsFailed, ex);
+            }
+        }
         private void updateGridView(
                 Sql.ObjectType.TypeEnum objType,
                 Sql.Database database
@@ -909,6 +942,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 case Sql.ObjectType.TypeEnum.FullTextCatalogs:
                     m_ColumnsToShow = columnsToShow.DBObjects;
                     fillDatabaseFullTextCatalogsNode(database);
+                    break;
+                case Sql.ObjectType.TypeEnum.SequenceObjects:
+                    m_ColumnsToShow = columnsToShow.DBObjects;
+                    fillDatabaseSequenceObjectsNode(database);
                     break;
                 default:
                     m_ColumnsToShow = columnsToShow.Default;
@@ -1264,6 +1301,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
                             tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
 
                             tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.FullTextCatalogs, db);
+                            tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
+                            tn.Tag = tag;
+                            tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                            tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.SequenceObjects, db);
                             tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
                             tn.Tag = tag;
                             tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
