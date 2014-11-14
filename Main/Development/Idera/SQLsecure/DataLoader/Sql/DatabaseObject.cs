@@ -197,6 +197,10 @@ namespace Idera.SQLsecure.Collector.Sql
                     return true;
                 }
             }
+            if (version == ServerVersion.SQL2012 && type== SqlObjectType.SequenceObject)
+            {
+                    return true;
+            }
 
             return false;
         }
@@ -378,7 +382,8 @@ namespace Idera.SQLsecure.Collector.Sql
                          || type == SqlObjectType.FullTextCatalog
                          || type == SqlObjectType.Key
                          || type == SqlObjectType.UserDefinedDataType
-                         || type == SqlObjectType.XMLSchemaCollection);
+                         || type == SqlObjectType.XMLSchemaCollection
+                         ||type==SqlObjectType.SequenceObject);
             Debug.Assert(rule != null);
 
             string query = null;
@@ -775,6 +780,32 @@ namespace Idera.SQLsecure.Collector.Sql
                                 + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
                                 + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
                                 + @"WHERE a.type = 'SN' and a.schema_id = b.schema_id";
+                    }
+                    break;
+                case SqlObjectType.SequenceObject :
+                    if (version != ServerVersion.SQL2012)//need to add sql server 2014
+                    {
+                        Debug.Assert(false);
+                    }
+                    else
+                    {
+                        query =string.Format(@"SELECT 
+                                 ob.type,
+                                 owner = isnull( ob.principal_id,sc.principal_id),	
+                                 schemaid = sc.schema_id,
+                                 classid = 1,
+                                 parentobjectid = ob.parent_object_id,
+                                 objectid = ob.object_id,
+                                 ob.name,
+                                 runatstartup = null,
+                                 isencypted = null,
+                                 userdefined = null,
+                                 permission_set = null,
+                                 createdate = ob.create_date,
+                                 modifydate = ob.modify_date "    
+                                + @" FROM  {0}.sys.objects ob "
+                                + " join  {1}.sys.schemas sc on  ob.schema_id = sc.schema_id "
+                                + @" WHERE ob.type = 'SO' ", Sql.SqlHelper.CreateSafeDatabaseName(database.Name), Sql.SqlHelper.CreateSafeDatabaseName(database.Name));
                     }
                     break;
 
