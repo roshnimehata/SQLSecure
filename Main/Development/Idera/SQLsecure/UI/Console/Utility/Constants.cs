@@ -466,6 +466,10 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string Policy_Install_Folder = "Policies";
 
         #endregion
+        #region Password Validation Constants
+        public const int MINIMUM_PASSWORD_LENGTH = 8;
+        public const string PASSWORD_LENGTH_MESSAGE_FORMAT = @"SQLSecure application requires password length not less {0} characters to save it properly into database!";
+        #endregion
     }
 
     #region Policies

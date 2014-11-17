@@ -30,7 +30,7 @@ IF NOT EXISTS ( SELECT  *
          VALUES (
                  @metricid
                 ,N'Access'
-                ,N'Symetric key'
+                ,N'Symmetric key'
                 ,N'Determine whether master, msdb, model or tempdb have user-created symmetric keys'
                 ,0
                 ,0
@@ -297,7 +297,7 @@ IF NOT EXISTS ( SELECT  *
                   1,
                   N'',
                   N'Does the DISTRIBUTOR_ADMIN account exist?',
-                  2,
+                  3,
                   N'',
                   0
 				)
@@ -349,7 +349,7 @@ IF NOT EXISTS ( SELECT  *
                   1,
                   N'',
                   N'Is SQL SYSADMIN account in the local Administrator role?',
-                  2,
+                  3,
                   N'''%\Administrator''',
                   0
 				)
@@ -604,4 +604,10 @@ values
           N'Sequence Objects'  -- objectvalue - nvarchar(128)
           )
 			  end
+ if exists (select 1 from dbo.metric where metricid=71)
+	begin 
+		update dbo.metric
+		set valuedescription='When enabled, this check will identify a risk if any unauthorized accounts are members of the sysadmin server role. Specify the authorized accounts. Can use ''%'' as wildcard.'
+		where metricid=71
+	end
 go

@@ -3102,7 +3102,7 @@ AS
 								select @sql = N'declare sysadmincursor cursor for
 													select distinct name 
 														from #sysadminstbl 
-														where lower(name) in (' + lower(@severityvalues) + N')'
+														where lower(name) not in (' + lower(@severityvalues) + N')'
  								if (charindex('%', @severityvalues) > 0)
 								begin
 									select @strval = lower(@severityvalues),
@@ -3111,7 +3111,7 @@ AS
 									begin
 										select @intval2 = charindex('%', @strval)
 										if (@intval2 < @intval)		-- this item contains a wildcard
-											select @sql = @sql + ' or lower(name) like ' + substring(@strval,1,@intval)
+											select @sql = @sql + ' or lower(name) not like ' + substring(@strval,1,@intval)
 											select @strval = substring(@strval,@intval+2, len(@strval)-(@intval+1))
 											select @intval = charindex(''',''',@strval)
 									end
@@ -3119,7 +3119,7 @@ AS
 									begin
 										select @intval2 = charindex('%', @strval)
 										if (@intval2 > 0)		-- this item contains a wildcard
-											select @sql = @sql + ' or lower(name) like ' + @strval
+											select @sql = @sql + ' or lower(name) not like ' + @strval
 									end
 								end
 								select @sql = @sql + N' order by name'
@@ -3176,9 +3176,9 @@ AS
  							end
 							else
 								select @sevcode=@sevcodeok,
-											@metricval = N'No list of approved logins was provided.'
+											@metricval = N'No list of unapproved logins was provided.'
 
-							select @metricthreshold = N'Server is vulnerable if the sysadmin server role members include: ' + @severityvalues
+							select @metricthreshold = N'Server is vulnerable if the sysadmin server role members include other logins than: ' + @severityvalues
 						end
 						-- sa Account disabled  (this is a subset of metric 16)
 						else if (@metricid = 72)
@@ -5148,7 +5148,9 @@ AS
     				    --  DISTRIBUTOR_ADMIN account
 						else if (@metricid = 98)
                         begin
-
+                              set @metricval = N'None found.'                       
+                              set @metricthreshold = N'Server is vulnerable if DISTRIBUTOR_ADMIN account exists when server is not distributor or DISTRIBUTOR_ADMIN account doesn''t follow password control standards when distributor server has a remote publisher.'
+                              set @sevcode = @sevcodeok
                               if exists ( select
                                             SPU.name
                                           from
@@ -5180,10 +5182,10 @@ AS
                                        where
                                         SS.snapshotid = @SnapshotId  
 	
-                                       set @sevcode = @severity
 								
                                        if ( @IsDistributer = 'N' ) 
                                           begin
+                                                set @sevcode = @severity                                        
                                                 set @metricval = N'The DISTRIBUTOR_ADMIN account should be deleted as it is only needed at the distributor.'
                                           end
                                        else 
@@ -5192,14 +5194,10 @@ AS
                                                and @HasRemotePublisher = 'Y'
                                              ) 
                                              begin
+                                                   set @sevcode = @severity                                           
                                                    set @metricval = N'The password of DISTRIBUTOR_ADMIN login must be set according to password control standards using the "sp_changedistributor_password" stored procedure.'
                                              end
-                                          else 
-                                             begin
-                                                   set @sevcode = @sevcodeok                                    
-                                             end                              
 
-                                       set @metricthreshold = N'Server is vulnerable if DISTRIBUTOR_ADMIN account exists when server is not distributor or DISTRIBUTOR_ADMIN account doesn''t follow password control standards when distributor server has a remote publisher.'
                                  end
                         end                        
   

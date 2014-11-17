@@ -1346,6 +1346,7 @@
     <Compile Include="Utility\MsgBox.cs" />
     <Compile Include="Utility\NodeTag.cs" />
     <Compile Include="SQL\SqlHelper.cs" />
+    <Compile Include="Utility\PasswordValidator.cs" />
     <Compile Include="Utility\ReportXmlHelper.cs" />
     <Compile Include="Utility\ReportInfo.cs" />
     <Compile Include="Utility\Security.cs" />

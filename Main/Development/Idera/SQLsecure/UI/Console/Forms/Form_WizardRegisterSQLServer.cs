@@ -714,6 +714,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 }
             }
 
+            bool isPasswordLengthValid = radioButton_SQLServerAuth.Checked
+            ? PasswordValidator.ValidatePasswordLength(textbox_SqlLoginPassword.Text)
+            : PasswordValidator.ValidatePasswordLength(textBox_SQLWindowsPassword.Text);
+            if (!isPasswordLengthValid)
+            {
+                isOk = false;
+                allowRegisterAnyway = false;
+                msgBldr.AppendFormat(Utility.Constants.PASSWORD_LENGTH_MESSAGE_FORMAT, Utility.Constants.MINIMUM_PASSWORD_LENGTH);
+            }
             if (allowRegisterAnyway)
             {
                 // Operation System and AD User 

@@ -603,7 +603,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     name = a.name,
                                     runatstartup = CASE WHEN ObjectProperty(a.id, 'ExecIsStartup') = 1 THEN 'Y' ELSE 'N' END,
                                     isencypted = CASE WHEN isnull(b.encrypted,0) = 0 THEN 'N' ELSE 'Y' END,
-                                    userdefined = CASE WHEN (OBJECTPROPERTY(a.id, N'IsMSShipped')=1) THEN 'Y' WHEN (OBJECTPROPERTY(a.id, N'IsSystemTable')=1) THEN 'Y' ELSE 'N' END ,"
+                                    userdefined = CASE WHEN (OBJECTPROPERTY(a.id, N'IsMSShipped')=1) THEN 'N' WHEN (OBJECTPROPERTY(a.id, N'IsSystemTable')=1) THEN 'N' ELSE 'Y' END ,"
                                 + "permission_set=null, "
                                 + "createdate=null, "
                                 + "modifydate=null "
@@ -625,7 +625,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     runatstartup = CASE WHEN ObjectProperty(a.object_id, 'ExecIsStartup') = 1 THEN 'Y' ELSE 'N' END,
                                     isencypted = CASE WHEN isnull(c.encrypted,0) = 0 THEN 'N' ELSE 'Y' END,
                                     userdefined = case 
-                                                    when is_ms_shipped = 1 then 'Y'
+                                                    when is_ms_shipped = 1 then 'N'
                                                     when (
                                                         select 
                                                           major_id 
@@ -636,8 +636,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                                             minor_id = 0 and 
                                                             class = 1 and 
                                                            name = N'microsoft_database_tools_support') 
-                                                        is not null then 'Y'
-                                                    else 'N'
+                                                        is not null then 'N'
+                                                    else 'Y'
                                                   end ,"
                                 + "permission_set=null, "
                                 + "createdate=null, "

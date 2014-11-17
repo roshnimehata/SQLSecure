@@ -46,10 +46,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private const string DESCR_SCHEDULE = @"Specify when you want SQLsecure to take snapshots.";
         private const string DESCR_EMAIL = @"Configure email notification for snapshot status and findings.";
         private const string DESCR_INTERVIEW = @"Select which policies should audit this SQL Server.";
-        private const string PASSWORD_LENGTH_MESSAGE_FORMAT = @"SQLSecure application requires password length not less {0} characters to save it properly into database!";
 
         private const string NoFilters = @"Collect only server level data.";
-        private const int MINIMUM_PASSWORD_LENGTH = 8;
 
         #endregion
 
@@ -884,15 +882,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         #endregion
 
-        private bool ValidatePasswordLength(string password)
-        {
-            if (!string.IsNullOrEmpty(password) &&
-                password.Length < MINIMUM_PASSWORD_LENGTH)
-            {
-                return false;
-            }
-            return true;
-        }
         private void _btn_OK_Click(object sender, EventArgs e)
         {
             bool isOk = true;
@@ -1006,13 +995,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     }
 
                     bool isPasswordLengthValid = radioButton_SQLServerAuth.Checked
-                        ? ValidatePasswordLength(textbox_SqlLoginPassword.Text)
-                        : ValidatePasswordLength(textBox_SQLWindowsPassword.Text);
+                        ? PasswordValidator.ValidatePasswordLength(textbox_SqlLoginPassword.Text)
+                        : PasswordValidator.ValidatePasswordLength(textBox_SQLWindowsPassword.Text);
                     if (!isPasswordLengthValid)
                     {
                         isOk = false;
                         allowRegisterAnyway = false;
-                        msgBldr.AppendFormat(PASSWORD_LENGTH_MESSAGE_FORMAT, MINIMUM_PASSWORD_LENGTH);
+                        msgBldr.AppendFormat(Utility.Constants.PASSWORD_LENGTH_MESSAGE_FORMAT, Utility.Constants.MINIMUM_PASSWORD_LENGTH);
                     }
                     if (allowRegisterAnyway)
                     {
