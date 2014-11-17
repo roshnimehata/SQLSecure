@@ -4914,7 +4914,7 @@ AS
 														u.userid not in ( select
 																			userId
 																		  from
-																			UserRoles )
+																			UserRoles us where us.dbid=u.dbid)
 													group by
 														u.isOwner,
 														u.dbid,

@@ -78,7 +78,7 @@ IF NOT EXISTS ( SELECT  *
          VALUES (
                  @metricid
                 ,N'Access'
-                ,N'Assambly host policy'
+                ,N'Assembly host policy'
                 ,N'Determine whether there are user defined assembies with host policy other than SAFE'
                 ,0
                 ,0
