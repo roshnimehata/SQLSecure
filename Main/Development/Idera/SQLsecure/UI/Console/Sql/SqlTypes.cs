@@ -41,7 +41,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
     {
         public class SQL2000
         {
-            public static string[] Builds = new string[] {     @"194",       @"384", @"534", @"760", @"2039" };
+            public static string[] Builds = new string[] { @"194", @"384", @"534", @"760", @"2039" };
             public static string[] BuildNames = new string[] { string.Empty, @"SP1", @"SP2", @"SP3", @"SP4" };
             //public const string RTM = @"194";       // included for reference
             //public const string SP1 = @"384";
@@ -52,8 +52,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
         }
         public class SQL2005
         {
-            public static string[] Builds = new string[] {     @"1399",      @"2047", @"3042",  @"3043",  @"4035",  @"5000" };
-            public static string[] BuildNames = new string[] { string.Empty, @"SP1",  @"SP2",   @"SP2",   @"SP3",   @"SP4" };
+            public static string[] Builds = new string[] { @"1399", @"2047", @"3042", @"3043", @"4035", @"5000" };
+            public static string[] BuildNames = new string[] { string.Empty, @"SP1", @"SP2", @"SP2", @"SP3", @"SP4" };
             //public const string RTM = @"1399";      // included for reference
             //public const string SP1 = @"2047";
             //public const string SP2_CTP = @"3027", @"3033";
@@ -62,15 +62,15 @@ namespace Idera.SQLsecure.UI.Console.Sql
         }
         public class SQL2008
         {
-            public static string[] Builds = new string[] {     @"1600",      @"2531",  @"4000",  @"5500" };
-            public static string[] BuildNames = new string[] { string.Empty, @"SP1",   @"SP2",   @"SP3" };
+            public static string[] Builds = new string[] { @"1600", @"2531", @"4000", @"5500" };
+            public static string[] BuildNames = new string[] { string.Empty, @"SP1", @"SP2", @"SP3" };
             //public const string Beta_CTP = @"1019", @"1049", @"1300";     // removed, but kept for reference
             //public const string RTM = @"1600";      // included for reference
         }
         public class SQL2008R2
         {
-            public static string[] Builds = new string[] {     @"1600",       @"2500" };
-            public static string[] BuildNames = new string[] { string.Empty,  @"SP1" };
+            public static string[] Builds = new string[] { @"1600", @"2500" };
+            public static string[] BuildNames = new string[] { string.Empty, @"SP1" };
             //public const string RTM = @"1600";      // included for reference
         }
         public class SQL2012

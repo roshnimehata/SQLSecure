@@ -502,7 +502,10 @@ namespace Idera.SQLsecure.Collector.Sql
                     colAltuid = new DataColumn(ParamAltuid, typeof(SqlInt32)),
                     colHasaccess = new DataColumn(ParamHasaccess, typeof(SqlString)),
                     colDefaultschemaname = new DataColumn(ParamDefaultschemaname, typeof(SqlString)),
-                    colHashkey = new DataColumn(ParamHashkey, typeof(SqlString)))
+                    colHashkey = new DataColumn(ParamHashkey, typeof(SqlString)),
+                    colIsContained = new DataColumn(ParamIsContained, typeof(SqlBoolean)),
+                    colAuthenticationType = new DataColumn(ParamAuthenticationType, typeof(SqlString))
+                    )
             {
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
@@ -519,7 +522,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colAltuid,
                                                                 colHasaccess,
                                                                 colDefaultschemaname,
-                                                                colHashkey 
+                                                                colHashkey,
+                                                                colIsContained,
+                                                                colAuthenticationType
                                                             });
             }
 
@@ -538,6 +543,8 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamHasaccess = "hasaccess";
         internal const string ParamDefaultschemaname = "defaultschemaname";
         internal const string ParamHashkey = "hashkey";
+        internal const string ParamIsContained = "iscontaineduser";
+        internal const string ParamAuthenticationType = "AuthenticationType";
 
         internal const string RepositoryTable = "SQLsecure.dbo.databaseprincipal";
     }

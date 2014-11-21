@@ -36,6 +36,8 @@ namespace Idera.SQLsecure.Collector.Sql
         private const int FieldPrincipalHasaccess = 6;
         private const int FieldPrincipalOwner = 7;
         private const int FieldPrincipalDefaultschemaname = 8;
+        private const int FieldIsContainedUser = 9;
+        private const int FieldAuthenticationType = 10;
 
         private static string createPrincipalQuery(
                 ServerVersion version,
@@ -65,11 +67,15 @@ namespace Idera.SQLsecure.Collector.Sql
                             altuid = CAST(altuid AS int), 
                             hasaccess = CASE WHEN hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
                             owner = CAST (NULL AS int),
-                            defaultschemaname = CAST (NULL AS NVARCHAR)"
+                            defaultschemaname = CAST (NULL AS NVARCHAR),"
+                             + "isContainedUser =cast (0 as bit) "
+                             + "authenticationtype= 'NOT SUPPORTED' "
                       + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".dbo.sysusers";
             }
-            else
+            else if (version < ServerVersion.SQL2012)
             {
+
+
                 query = @"SELECT
                             dp.name, 
                             uid = dp.principal_id, 
@@ -79,7 +85,9 @@ namespace Idera.SQLsecure.Collector.Sql
                             altuid = CAST(su.altuid AS int),
                             hasaccess = CASE WHEN su.hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
                             owner = dp.owning_principal_id, 
-                            defaultschemaname = dp.default_schema_name "
+                            defaultschemaname = dp.default_schema_name, 
+                            isContainedUser = cast(0 as bit) ,"
+                    + "authenticationtype= 'NOT SUPPORTED' "
                       + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals AS dp JOIN "
                             + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers AS su ON (dp.principal_id = su.uid) "
                       + @"UNION ALL SELECT
@@ -97,10 +105,59 @@ namespace Idera.SQLsecure.Collector.Sql
                             altuid = CAST(altuid AS int), 
                             hasaccess = CASE WHEN hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
                             owner = CAST (NULL AS int),
-                            defaultschemaname = CAST (NULL AS NVARCHAR) "
+                            defaultschemaname = CAST (NULL AS NVARCHAR), "
+                      + "isContainedUser = cast(0 as bit),"
+                      + "authenticationtype= 'NOT SUPPORTED' "
                       + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers "
                       + @"WHERE isaliased = 1";
             }
+            else if (version == ServerVersion.SQL2012)
+            {
+                query = @"SELECT
+                            dp.name, 
+                            uid = dp.principal_id, 
+                            dp.type, 
+                            usersid = dp.sid, 
+                            isalias = 'N', 
+                            altuid = CAST(su.altuid AS int),
+                            hasaccess = CASE WHEN su.hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
+                            owner = dp.owning_principal_id, 
+                            defaultschemaname = dp.default_schema_name, 
+                            isContainedUser = cast(( case authentication_type
+                               when 2 then 1
+                               when 3 then  isnull((select top 1 0 from " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals cdp
+							    where cdp.principal_id=dp.principal_id and cdp.sid  in (SELECT sid FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.server_principals) 
+								and    type in ( 'U', 'S', 'G' )
+    and name not in ( 'dbo', 'guest', 'INFORMATION_SCHEMA', 'sys' )
+								), 1)
+								else 0
+                             end ) as bit), " +
+                       " authenticationtype = authentication_type_desc "
+                      + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals AS dp JOIN "
+                            + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers AS su ON (dp.principal_id = su.uid) "
+                      + @"UNION ALL SELECT
+                            name, 
+                            uid = CAST(uid AS int), 
+                            type = CASE 
+	                                    WHEN islogin = 1 AND isntname = 0 AND issqluser = 1 THEN 'S'
+	                                    WHEN islogin = 1 AND isntname = 1 AND isntgroup = 1 THEN 'G'
+                                        WHEN islogin = 1 AND isntname = 1 AND isntuser = 1 THEN 'U'
+                                        WHEN isapprole = 1 THEN 'A'
+                                        ELSE 'R'
+                                   END, 
+                            usersid = sid, 
+                            isalias = CASE WHEN isaliased = 1 THEN 'Y' ELSE 'N' END, 
+                            altuid = CAST(altuid AS int), 
+                            hasaccess = CASE WHEN hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
+                            owner = CAST (NULL AS int),
+                            defaultschemaname = CAST (NULL AS NVARCHAR), "
+                      + "isContainedUser = cast(0 as bit) ,"
+                      + "authenticationtype= 'NOT SUPPORTED' "
+                      + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers "
+                      + @"WHERE isaliased = 1";
+            }
+
+
 
             return query;
         }
@@ -141,7 +198,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnection,
                 int snapshotid,
                 Database database,
-                Dictionary<string, KeyValuePair<int,string>> nameDictionary
+                Dictionary<string, KeyValuePair<int, string>> nameDictionary
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
@@ -161,7 +218,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     repository.Open();
                     Program.SetTargetSQLServerImpersonationContext();
                     target.Open();
-                    
+
 
                     // Use bulk copy object to write to repository.
                     using (SqlBulkCopy bcp = new SqlBulkCopy(repository))
@@ -187,7 +244,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     // Retrieve and setup the table row.
                                     if (version == ServerVersion.SQL2000)
                                     {
-                                        KeyValuePair<int,string> role, member;
+                                        KeyValuePair<int, string> role, member;
                                         if (nameDictionary.TryGetValue((string)rdr[0], out role)
                                             && nameDictionary.TryGetValue((string)rdr[1], out member))
                                         {
@@ -339,7 +396,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
             // Process database users.
             List<int> uidList = new List<int>();
-            Dictionary<string, KeyValuePair<int,string>> nameDictionary = new Dictionary<string, KeyValuePair<int,string>>();
+            Dictionary<string, KeyValuePair<int, string>> nameDictionary = new Dictionary<string, KeyValuePair<int, string>>();
             using (SqlConnection target = new SqlConnection(targetConnection),
                     repository = new SqlConnection(repositoryConnection))
             {
@@ -379,6 +436,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                     SqlString hasaccess = rdr.GetSqlString(FieldPrincipalHasaccess);
                                     SqlInt32 owner = rdr.GetSqlInt32(FieldPrincipalOwner);
                                     SqlString defaultSchemaName = rdr.GetSqlString(FieldPrincipalDefaultschemaname);
+                                    SqlBoolean isContained = database.IsContained && rdr.GetBoolean(FieldIsContainedUser);
+                                    SqlString authenticationType = rdr.GetString(FieldAuthenticationType);
 
                                     // Add to uid collection for later permission processing.
                                     Debug.Assert(!uid.IsNull);
@@ -387,10 +446,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                     // Add to name dictionary for SQL 2000 role member processing & public role processing.
                                     Debug.Assert(!name.IsNull);
                                     Debug.Assert(!type.IsNull);
-                                    nameDictionary.Add(name.Value, new KeyValuePair<int,string>(uid.Value,type.Value));
+                                    nameDictionary.Add(name.Value, new KeyValuePair<int, string>(uid.Value, type.Value));
 
                                     // If guest account set guest enabled flag.
-                                    if( uid.Value == Constants.GuestUser && string.Compare(hasaccess.Value, "Y", true) == 0 )
+                                    if (uid.Value == Constants.GuestUser && string.Compare(hasaccess.Value, "Y", true) == 0)
                                     {
                                         isGuestEnabled = true;
                                     }
@@ -409,6 +468,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                     dr[DatabasePrincipalDataTable.ParamHasaccess] = hasaccess;
                                     dr[DatabasePrincipalDataTable.ParamDefaultschemaname] = defaultSchemaName;
                                     dr[DatabasePrincipalDataTable.ParamHashkey] = "";
+                                    dr[DatabasePrincipalDataTable.ParamIsContained] = isContained;
+                                    dr[DatabasePrincipalDataTable.ParamAuthenticationType] = authenticationType;
+
                                     dataTable.Rows.Add(dr);
 
                                     numProcessedUsers++;
@@ -453,16 +515,16 @@ namespace Idera.SQLsecure.Collector.Sql
                 {
                     string strMessage = "Processing database principals";
                     logX.loggerX.Error("ERROR - " + strMessage, ex);
-                    Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnection, 
-                                                                            snapshotid, 
-                                                                            Collector.Constants.ActivityType_Error, 
-                                                                            Collector.Constants.ActivityEvent_Error, 
+                    Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnection,
+                                                                            snapshotid,
+                                                                            Collector.Constants.ActivityType_Error,
+                                                                            Collector.Constants.ActivityEvent_Error,
                                                                             strMessage + ex.Message);
                     AppLog.WriteAppEventError(SQLsecureEvent.ExErrExceptionRaised, SQLsecureCat.DlDataLoadCat,
-                        " SQL Server = " + new SqlConnectionStringBuilder(targetConnection).DataSource +                                                
+                        " SQL Server = " + new SqlConnectionStringBuilder(targetConnection).DataSource +
                         strMessage, ex.Message);
 
-   
+
                     isOk = false;
                 }
                 finally

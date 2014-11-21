@@ -28,13 +28,14 @@ namespace Idera.SQLsecure.UI.Console.Utility
         #region Links
 
         public const string IderaHomePage = @"http://www.idera.com";
-        public const string SQLsecureHomePage = @"http://www.idera.com/Products/SQLsecure";
+        public const string SQLsecureHomePage = @"https://www.idera.com/productssolutions/sqlserver/sqlsecure";
         public const string SupportHomePage = @"http://www.idera.com/support";
         public const string KnowledgeBaseHomePage = @"http://www.idera.com/support/Service.aspx";
         public const string IderaProducts = @"http://www.idera.com/Products/Default.aspx";
         public const string CheckUpdates = @"http://www.idera.com/webscripts/VersionCheck.aspx?productid={0}&v={1}";
         public const string productID = "sqlsecure";
         public const string productVersion = "28000";
+        public const string ABOUT_IDERA = "http://wiki.idera.com/x/0whK";
 
         #endregion
 

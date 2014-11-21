@@ -1954,9 +1954,7 @@ namespace Idera.SQLsecure.UI.Console
         {
             Cursor = Cursors.WaitCursor;
 
-            Form_About dlg = new Form_About();
-            dlg.ShowDialog();
-            setTitle();
+            Process.Start(Utility.Help.ABOUT_IDERA);
 
             Cursor = Cursors.Default;
         }

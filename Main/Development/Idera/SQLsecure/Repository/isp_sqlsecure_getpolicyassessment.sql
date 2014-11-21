@@ -4596,7 +4596,7 @@ AS
 													@assessmentid,
 													@metricid,
 													@snapshotid,
-													N'Symetric key ''' + db.NAME
+													N'Symmetric key ''' + db.NAME
 													+ N''' was found in system database ',
 													db.dbid,
 													db.type,
@@ -4646,13 +4646,13 @@ AS
 
 												select
 													@sevcode = @severity,
-													@metricval = N'Next symetric keys found in  system databases : '
+													@metricval = N'Next symmetric keys found in system databases : '
 													+ @metricval 
 										  end 
 								 end 
 
 							  select
-								@metricthreshold = N'Server is vulnerable if system database have symetric key ' 
+								@metricthreshold = N'Server is vulnerable if system database have symmetric key ' 
 						end 
 
 						else 

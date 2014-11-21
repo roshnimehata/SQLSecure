@@ -50,6 +50,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string colServerAccess = "Server Access";
         private const string colServerDeny = "Server Deny";
         private const string colState = "State";
+        private const string colIsContainedUser = "Is User Contained";
 
         enum columnsToShow
         {
@@ -409,7 +410,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.ObjectName, tag.TypeName, tag,
                         null, null, null,
                         user.Login, user.HasAccess, user.IsAlias,
-                        null, null, null);
+                        null, null, null,null,user.IsContainedUser);
                 }
             }
             catch (Exception ex)
@@ -1503,6 +1504,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             m_DataTable.Columns.Add(colServerAccess, typeof(bool));
             m_DataTable.Columns.Add(colServerDeny, typeof(bool));
             m_DataTable.Columns.Add(colState, typeof(string));
+            m_DataTable.Columns.Add(colIsContainedUser, typeof(bool));
         }
 
         #endregion
@@ -1969,6 +1971,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 columns[colHasAccess].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
                 columns[colHasIsAliased].Hidden = false;
                 columns[colHasIsAliased].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
+                columns[colIsContainedUser].Hidden = false;
+                columns[colIsContainedUser].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
             }
             else
             {
@@ -1978,6 +1982,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 columns[colHasAccess].ExcludeFromColumnChooser = ExcludeFromColumnChooser.True;
                 columns[colHasIsAliased].Hidden = true;
                 columns[colHasIsAliased].ExcludeFromColumnChooser = ExcludeFromColumnChooser.True;
+                columns[colIsContainedUser].Hidden = true;
+                columns[colIsContainedUser].ExcludeFromColumnChooser = ExcludeFromColumnChooser.True;
             }
 
             // Member Of, Server Access, and Server Deny columns

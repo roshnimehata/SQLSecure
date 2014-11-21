@@ -111,6 +111,11 @@ BEGIN
 
                   ALTER TABLE [dbo].[sqljobproxy] CHECK CONSTRAINT [FK_sqljobproxie_serversnapshot]
             END 			       
+
+			--Support for contained users
+			alter table dbo.databaseprincipal
+			add IsContainedUser bit,
+			AuthenticationType nvarchar(60)
 	COMMIT
 END
 
