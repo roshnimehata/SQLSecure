@@ -35,7 +35,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private bool m_HasAccess = false;
         private string m_DefaultSchemaName = string.Empty;
         private bool m_isContainedUser = false;
-
+		private string m_authenticationType="";
         #endregion
 
         #region Queries
@@ -291,7 +291,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
             get { return m_isContainedUser; }
             set { m_isContainedUser = value; }
         }
-        public string AuthenticationType { get; set; }
+        public string AuthenticationType
+		{ 
+			 get { return m_authenticationType; }
+             set { m_authenticationType = value; }
+		}
         #endregion
 
         #region Methods
