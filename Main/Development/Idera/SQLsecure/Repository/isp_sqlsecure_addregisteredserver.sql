@@ -10,7 +10,7 @@ GO
 CREATE procedure [dbo].[isp_sqlsecure_addregisteredserver] (@connectionname nvarchar(500), @connectionport int, @servername nvarchar(128), @instancename nvarchar(128),
 															@loginname nvarchar(128), @loginpassword nvarchar(300), @authmode nvarchar(256),
 															@serverlogin nvarchar(256), @serverpassword nvarchar(256),
-															@version nvarchar(256), @retentionperiod int=50)
+															@version nvarchar(256), @retentionperiod int=50, @auditfoldersstring nvarchar(max))
 as
    -- <Idera SQLsecure version and copyright>
    --
