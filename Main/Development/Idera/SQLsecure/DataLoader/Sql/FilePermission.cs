@@ -293,6 +293,45 @@ namespace Idera.SQLsecure.Collector.Sql
             return numWarnings;
         }
 
+        public int LoadFilePermissionsForAuditDirectory(string directory)
+        {
+            int numWarnings = 0;
+            using (logX.loggerX.DebugCall())
+            {
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Program.ImpersonationContext wi = Program.SetTargetImpersonationContext();
+                    try
+                    {
+                        // Convert to UNC file Name
+                        string dirName = ConvertLocalPathToUNCPath(directory);
+
+                        // Get Disk Type (NTFS or FAT)
+                        string diskType = GetDiskTypeFromLocalPath(directory);
+
+                        numWarnings = ProcessDirectory(dirName, enumOSObjectType.IDir, diskType);
+                    }
+                    catch (Exception ex)
+                    {
+                        numWarnings++;
+                        logX.loggerX.Error(
+                            string.Format("Failed to load permissions for Audit Directory '{0}': {1}",
+                                          directory, ex.Message));
+                    }
+                    finally
+                    {
+                        Program.RestoreImpersonationContext(wi);
+                    }
+                }
+                else
+                {
+                    logX.loggerX.Error(
+                        "Failed to load permissions for Audit Directory '{0}': invalid directory name");
+                }
+            }
+            return numWarnings;
+        }
+
         public int  GetDatabaseFilePermissions(List<Database> databases)
         {
             int numWarnings = 0;
@@ -1085,6 +1124,14 @@ namespace Idera.SQLsecure.Collector.Sql
                 if (path[1] == ':')
                 {
                     drive = path[0].ToString() + ":";
+                }
+                else
+                {
+                    string localPath = ConvertUNCPathToLocalPath(path);
+                    if (localPath[1] == ':')
+                    {
+                        drive = localPath[0].ToString() + ":";
+                    }
                 }
 
                 StringBuilder scopeStr = null;

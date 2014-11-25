@@ -39,6 +39,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             Infragistics.Win.Appearance appearance3 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab1 = new Infragistics.Win.UltraWinTabControl.UltraTab();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab2 = new Infragistics.Win.UltraWinTabControl.UltraTab();
+            Infragistics.Win.UltraWinTabControl.UltraTab ultraTab7 = new Infragistics.Win.UltraWinTabControl.UltraTab();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab3 = new Infragistics.Win.UltraWinTabControl.UltraTab();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab4 = new Infragistics.Win.UltraWinTabControl.UltraTab();
             Infragistics.Win.UltraWinTabControl.UltraTab ultraTab6 = new Infragistics.Win.UltraWinTabControl.UltraTab();
@@ -91,6 +92,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._pnl_CredentialsIntro = new System.Windows.Forms.Panel();
             this._lbl_CredentialsIntroSep = new System.Windows.Forms.Label();
             this._lbl_CredentialsIntroText = new System.Windows.Forms.Label();
+            this.tpcAuditFolders = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
+            this.label15 = new System.Windows.Forms.Label();
             this.ultraTabPageControl_Filters = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this._spltcntnr = new System.Windows.Forms.SplitContainer();
             this.ultraListView_Filters = new Infragistics.Win.UltraWinListView.UltraListView();
@@ -158,6 +161,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraTabSharedControlsPage1 = new Infragistics.Win.UltraWinTabControl.UltraTabSharedControlsPage();
             this.ultraButton_OK = new Infragistics.Win.Misc.UltraButton();
             this.ultraButton_Cancel = new Infragistics.Win.Misc.UltraButton();
+            this.addEditFoldersControl = new Idera.SQLsecure.UI.Console.Controls.AddEditFolders();
             this._bfd_ButtonPanel.SuspendLayout();
             this._bf_MainPanel.SuspendLayout();
             this.ultraTabPageControl_General.SuspendLayout();
@@ -168,6 +172,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._grpbx_SQLServerCredentials.SuspendLayout();
             this._grpbx_WindowsGMCredentials.SuspendLayout();
             this._pnl_CredentialsIntro.SuspendLayout();
+            this.tpcAuditFolders.SuspendLayout();
             this.ultraTabPageControl_Filters.SuspendLayout();
             this._spltcntnr.Panel1.SuspendLayout();
             this._spltcntnr.Panel2.SuspendLayout();
@@ -782,6 +787,24 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._lbl_CredentialsIntroText.Text = "This window allows you to change the credentials that are used to collect data fo" +
                 "r auditing. \r\n";
             // 
+            // tpcAuditFolders
+            // 
+            this.tpcAuditFolders.Controls.Add(this.addEditFoldersControl);
+            this.tpcAuditFolders.Controls.Add(this.label15);
+            this.tpcAuditFolders.Location = new System.Drawing.Point(2, 24);
+            this.tpcAuditFolders.Name = "tpcAuditFolders";
+            this.tpcAuditFolders.Size = new System.Drawing.Size(504, 461);
+            // 
+            // label15
+            // 
+            this.label15.ForeColor = System.Drawing.Color.Navy;
+            this.label15.Location = new System.Drawing.Point(3, 3);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(498, 34);
+            this.label15.TabIndex = 0;
+            this.label15.Text = "This window allows you to view and modify audit folders.  You can add, edit or re" +
+                "move folders.";
+            // 
             // ultraTabPageControl_Filters
             // 
             this.ultraTabPageControl_Filters.Controls.Add(this._spltcntnr);
@@ -1346,7 +1369,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             this.ultraTabPageControl_Policies.Controls.Add(this.panel3);
             this.ultraTabPageControl_Policies.Controls.Add(this.panel1);
-            this.ultraTabPageControl_Policies.Location = new System.Drawing.Point(2, 24);
+            this.ultraTabPageControl_Policies.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabPageControl_Policies.Name = "ultraTabPageControl_Policies";
             this.ultraTabPageControl_Policies.Size = new System.Drawing.Size(504, 461);
             // 
@@ -1486,13 +1509,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._cntxtmi_FilterDelete,
             this._cntxtmi_FilterProperties});
             this._cntxtmn_FilterList.Name = "_cntxtmn_FilterList";
-            this._cntxtmn_FilterList.Size = new System.Drawing.Size(144, 70);
+            this._cntxtmn_FilterList.Size = new System.Drawing.Size(133, 70);
             // 
             // _cntxtmi_FilterNew
             // 
             this._cntxtmi_FilterNew.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.Filter2HS;
             this._cntxtmi_FilterNew.Name = "_cntxtmi_FilterNew";
-            this._cntxtmi_FilterNew.Size = new System.Drawing.Size(143, 22);
+            this._cntxtmi_FilterNew.Size = new System.Drawing.Size(132, 22);
             this._cntxtmi_FilterNew.Text = "New Filter";
             this._cntxtmi_FilterNew.Click += new System.EventHandler(this._cntxtmi_FilterNew_Click);
             // 
@@ -1500,7 +1523,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             this._cntxtmi_FilterDelete.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.delete2;
             this._cntxtmi_FilterDelete.Name = "_cntxtmi_FilterDelete";
-            this._cntxtmi_FilterDelete.Size = new System.Drawing.Size(143, 22);
+            this._cntxtmi_FilterDelete.Size = new System.Drawing.Size(132, 22);
             this._cntxtmi_FilterDelete.Text = "Delete Filter";
             this._cntxtmi_FilterDelete.Click += new System.EventHandler(this._cntxtmi_FilterDelete_Click);
             // 
@@ -1508,7 +1531,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             this._cntxtmi_FilterProperties.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.propertiesORoptions;
             this._cntxtmi_FilterProperties.Name = "_cntxtmi_FilterProperties";
-            this._cntxtmi_FilterProperties.Size = new System.Drawing.Size(143, 22);
+            this._cntxtmi_FilterProperties.Size = new System.Drawing.Size(132, 22);
             this._cntxtmi_FilterProperties.Text = "Properties";
             this._cntxtmi_FilterProperties.Click += new System.EventHandler(this._cntxtmi_FilterProperties_Click);
             // 
@@ -1542,6 +1565,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraTabControl_ServerProperties.Controls.Add(this.ultraTabPageControl_Schedule);
             this.ultraTabControl_ServerProperties.Controls.Add(this.ultraTabPageControl_Policies);
             this.ultraTabControl_ServerProperties.Controls.Add(this.ultraTabPageControl_Email);
+            this.ultraTabControl_ServerProperties.Controls.Add(this.tpcAuditFolders);
             this.ultraTabControl_ServerProperties.Location = new System.Drawing.Point(3, 7);
             this.ultraTabControl_ServerProperties.Name = "ultraTabControl_ServerProperties";
             this.ultraTabControl_ServerProperties.SharedControlsPage = this.ultraTabSharedControlsPage1;
@@ -1553,6 +1577,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             ultraTab2.Key = "Credentials";
             ultraTab2.TabPage = this.ultraTabPageControl_Credentials;
             ultraTab2.Text = "Credentials";
+            ultraTab7.TabPage = this.tpcAuditFolders;
+            ultraTab7.Text = "Audit Folders";
             ultraTab3.Key = "Filters";
             ultraTab3.TabPage = this.ultraTabPageControl_Filters;
             ultraTab3.Text = "Filters";
@@ -1568,6 +1594,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraTabControl_ServerProperties.Tabs.AddRange(new Infragistics.Win.UltraWinTabControl.UltraTab[] {
             ultraTab1,
             ultraTab2,
+            ultraTab7,
             ultraTab3,
             ultraTab4,
             ultraTab6,
@@ -1601,6 +1628,16 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraButton_Cancel.TabIndex = 5;
             this.ultraButton_Cancel.Text = "&Cancel";
             // 
+            // addEditFoldersControl
+            // 
+            this.addEditFoldersControl.ForeColor = System.Drawing.Color.Navy;
+            this.addEditFoldersControl.Location = new System.Drawing.Point(3, 37);
+            this.addEditFoldersControl.Name = "addEditFoldersControl";
+            this.addEditFoldersControl.Size = new System.Drawing.Size(498, 388);
+            this.addEditFoldersControl.TabIndex = 1;
+            this.addEditFoldersControl.Text = "This window allows you to view and modify audit folders.  You can add, edit or re" +
+                "move folders.";
+            // 
             // Form_SqlServerProperties
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1631,6 +1668,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._grpbx_WindowsGMCredentials.ResumeLayout(false);
             this._grpbx_WindowsGMCredentials.PerformLayout();
             this._pnl_CredentialsIntro.ResumeLayout(false);
+            this.tpcAuditFolders.ResumeLayout(false);
             this.ultraTabPageControl_Filters.ResumeLayout(false);
             this._spltcntnr.Panel1.ResumeLayout(false);
             this._spltcntnr.Panel2.ResumeLayout(false);
@@ -1787,5 +1825,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
+        private Infragistics.Win.UltraWinTabControl.UltraTabPageControl tpcAuditFolders;
+        private System.Windows.Forms.Label label15;
+        private Idera.SQLsecure.UI.Console.Controls.AddEditFolders addEditFoldersControl;
     }
 }

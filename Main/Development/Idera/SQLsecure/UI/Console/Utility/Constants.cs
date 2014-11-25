@@ -77,6 +77,15 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
     internal static class Constants
     {
+        #region General
+
+        public const int NOT_FOUND = -1;
+        public const int NOT_SELECTED = -1;
+        public const string AUDIT_FOLDER_DELIMITER = "|";
+        public const string FILE_SCHEME = "file";
+
+        #endregion
+
         #region General Product info
 
         public static String COMPANY_STR = @"Idera";
@@ -466,9 +475,12 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string Policy_Install_Folder = "Policies";
 
         #endregion
+
         #region Password Validation Constants
+
         public const int MINIMUM_PASSWORD_LENGTH = 8;
         public const string PASSWORD_LENGTH_MESSAGE_FORMAT = @"SQLSecure application requires password length not less {0} characters to save it properly into database!";
+
         #endregion
     }
 

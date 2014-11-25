@@ -46,8 +46,8 @@ as
 	end
 
 	declare @id int
-	insert into registeredserver (connectionname, connectionport, servername, instancename, sqlserverlogin, sqlserverpassword, sqlserverauthtype, serverlogin, serverpassword, version, snapshotretentionperiod) 
-							values (@connectionname, @connectionport, @servername, @instancename, @loginname, @loginpassword, @authmode, @serverlogin, @serverpassword, @version, @retentionperiod)
+	insert into registeredserver (connectionname, connectionport, servername, instancename, sqlserverlogin, sqlserverpassword, sqlserverauthtype, serverlogin, serverpassword, version, snapshotretentionperiod, auditfoldersstring) 
+							values (@connectionname, @connectionport, @servername, @instancename, @loginname, @loginpassword, @authmode, @serverlogin, @serverpassword, @version, @retentionperiod, @auditfoldersstring)
 
 	select @err = @@error
 

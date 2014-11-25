@@ -188,6 +188,12 @@
     <Compile Include="ActiveDirectory\PInvoke.cs" />
     <Compile Include="ActiveDirectory\StructsFlags.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="Controls\AddEditFolders.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AddEditFolders.Designer.cs">
+      <DependentUpon>AddEditFolders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AuditedServers.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -426,6 +432,12 @@
     <Compile Include="Data\SQLsecureActivity.cs" />
     <Compile Include="Data\Server.cs" />
     <Compile Include="Data\SqlServerSettings.cs" />
+    <Compile Include="Forms\Form_FolderPath.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_FolderPath.Designer.cs">
+      <DependentUpon>Form_FolderPath.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Form_OSObjectPermissions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1762,6 +1774,10 @@
     <Content Include="Resources\Report_SQLsecureUsers_16.png" />
     <Content Include="Resources\Report_SQLsecureUsers_32.png" />
     <Content Include="Resources\Report_SQLsecureUsers_48.png" />
+    <EmbeddedResource Include="Controls\AddEditFolders.resx">
+      <DependentUpon>AddEditFolders.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ControlPolicyAddServers.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ControlPolicyAddServers.cs</DependentUpon>
@@ -1785,6 +1801,10 @@
     <EmbeddedResource Include="Controls\ServerPrincipalPermissionsGrid.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ServerPrincipalPermissionsGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_FolderPath.resx">
+      <DependentUpon>Form_FolderPath.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_OSObjectPermissions.resx">
       <DependentUpon>Form_OSObjectPermissions.cs</DependentUpon>

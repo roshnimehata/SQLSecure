@@ -116,6 +116,11 @@ BEGIN
 			alter table dbo.databaseprincipal
 			add IsContainedUser bit,
 			AuthenticationType nvarchar(60)
+ 
+			--Support audit folders
+			alter table dbo.registeredserver
+			add auditfoldersstring nvarchar(max) null
+	          
 	COMMIT
 END
 

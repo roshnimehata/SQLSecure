@@ -1081,6 +1081,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 case ObjectType.TypeEnum.SequenceObjects:
                     path = snapshot + @"\" + server + @"\Databases\" + DatabaseName + @"\Full Sequence Objects";
                     break;
+
                 default:
                     Debug.Assert(false);
                     break;

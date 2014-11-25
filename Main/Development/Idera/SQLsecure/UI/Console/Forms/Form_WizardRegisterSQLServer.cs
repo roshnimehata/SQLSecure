@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.Diagnostics;
+using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
-using System.Security.Principal;
-using System.Diagnostics;
-
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
-using Idera.SQLsecure.UI.Console.Sql;
 using Idera.SQLsecure.UI.Console.Controls;
+using Idera.SQLsecure.UI.Console.Sql;
 using Idera.SQLsecure.UI.Console.Utility;
 using Infragistics.Win.UltraWinListView;
 using Policy=Idera.SQLsecure.UI.Console.Sql.Policy;
@@ -225,12 +222,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         sqlPassword = form.textBox_SQLWindowsPassword.Text;
                     }
                     
+                    string[] auditFolders = form.addEditFoldersControl.GetFolders();
                     Sql.RegisteredServer.AddServer(Program.gController.Repository.ConnectionString,
                                         form.m_Connection, form.m_ConnectionPort, form.m_Machine, form.m_Instance, 
                                         form.radioButton_WindowsAuth.Checked ? "W" : "S",
                                         sqlLogin, sqlPassword, 
                                         form.textbox_WindowsUser.Text, form.textbox_WindowsPassword.Text, 
-                                        form.m_Version, (int)form.numericUpDown_KeepSnapshotDays.Value);
+                                        form.m_Version, (int)form.numericUpDown_KeepSnapshotDays.Value, auditFolders);
 
                     // Notify controller that a new server was added.
                     Program.gController.SignalRefreshServersEvent(true, form._txtbx_Server.Text.ToUpper());
@@ -376,6 +374,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 helpTopic = Utility.Help.AddServerGeneralHelpTopic;
             else if (_page_Credentials.Visible)
                 helpTopic = Utility.Help.AddServerCredentialsHelpTopic;
+            else if (_page_FilePermissionFolders.Visible)
+                helpTopic = Utility.Help.ServerAuditFoldersHelpTopic;
             else if (_page_JobSchedule.Visible)
                 helpTopic = Utility.Help.AddServerScheduleHelpTopic;
             else if (_page_DefineFilters.Visible)
@@ -717,12 +717,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             bool isPasswordLengthValid = radioButton_SQLServerAuth.Checked
             ? PasswordValidator.ValidatePasswordLength(textbox_SqlLoginPassword.Text)
             : PasswordValidator.ValidatePasswordLength(textBox_SQLWindowsPassword.Text);
+
             if (!isPasswordLengthValid)
             {
                 isOk = false;
                 allowRegisterAnyway = false;
                 msgBldr.AppendFormat(Utility.Constants.PASSWORD_LENGTH_MESSAGE_FORMAT, Utility.Constants.MINIMUM_PASSWORD_LENGTH);
             }
+
             if (allowRegisterAnyway)
             {
                 // Operation System and AD User 
@@ -937,8 +939,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 m_Instance = instance;
                 m_Connection = connection;
                 m_Version = version;
-                _page_Credentials.NextPage = _page_DefineFilters;
-                _page_DefineFilters.PreviousPage = _page_Credentials;
+                addEditFoldersControl.TargetServerName = m_Machine;
             }
             else
             {
@@ -1170,8 +1171,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             _page_ConfigureSMTPEmail.AllowMoveNext = entered;
         }
        
-        #endregion
-
         private void wizardPage1_BeforeDisplay(object sender, EventArgs e)
         {
 
@@ -1282,7 +1281,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             _page_NotificationOptions.AllowMoveNext = !string.IsNullOrEmpty(textBox_Recipient.Text);
         }
 
-      
+        #endregion
         
     }
 }
