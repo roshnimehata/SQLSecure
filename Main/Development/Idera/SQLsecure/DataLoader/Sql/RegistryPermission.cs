@@ -155,6 +155,7 @@ namespace Idera.SQLsecure.Collector.Sql
         private string m_targetInstanceName;
         private string m_InstallPath;
         private string m_ErrorLogPath;
+        private int m_NumErrorLogs;
         private string m_AgentErrorLogPath;
         private Sql.ServerVersion m_SQLVersionEnum;
         private string m_regInstancePath;
@@ -179,6 +180,7 @@ namespace Idera.SQLsecure.Collector.Sql
             m_regInstancePath = GetRegistryInstancePath();
             m_InstallPath = GetInstallPath();
             m_ErrorLogPath = GetErrorLogPath();
+            m_NumErrorLogs = GetNumErrorLogs();
             m_AgentErrorLogPath = GetAgentErrorLogPath();
             Program.RestoreImpersonationContext(wi);
         }
@@ -216,6 +218,10 @@ namespace Idera.SQLsecure.Collector.Sql
         public string ErrorLogPath
         {
             get { return m_ErrorLogPath; }
+        }
+        public int NumErrorLogs
+        {
+            get { return m_NumErrorLogs; }
         }
 
         public string AgentErrorLogPath
@@ -936,7 +942,8 @@ namespace Idera.SQLsecure.Collector.Sql
 set 
 hideinstance = '{0}',
 loginauditmode = '{1}',
-agentmailprofile = '{2}'
+agentmailprofile = '{2}',
+numerrorlogs = {4}
 from 
     SQLsecure.dbo.serversnapshot
 where
@@ -945,7 +952,8 @@ where
                                                      m_isHidden ? Collector.Constants.Yes : Collector.Constants.No,
                                                      m_loginAuditMode,
                                                      m_emialProfile,
-                                                     m_snapshotId);
+                                                     m_snapshotId,
+                                                     m_NumErrorLogs);
                         Sql.SqlHelper.ExecuteNonQuery(repository, CommandType.Text, query, null);
 
                     }
@@ -1273,6 +1281,34 @@ where
             return logPath;
         }
 
+        private int GetNumErrorLogs()
+        {
+            int numErrorLogs = 0;
+            RegistryKey valueKey = null;
+            RegistryKey remoteBaseKey = null;
+            using (logX.loggerX.DebugCall())
+            {
+                try
+                {
+                    remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    valueKey = remoteBaseKey.OpenSubKey(m_regInstancePath + @"\MSSQLServer");
+                    if (valueKey != null) numErrorLogs = (int)valueKey.GetValue("NumErrorLogs", 0);
+                }
+                catch (Exception ex)
+                {
+                    logX.loggerX.Error(string.Format("Failed to read Num Error Logs for {0}\\{1}: {2}",
+                                                     m_targetServerName, m_targetInstanceName, ex.Message));
+                }
+                finally
+                {
+                    if (remoteBaseKey != null)
+                        remoteBaseKey.Close();
+                    if (valueKey != null)
+                        valueKey.Close();
+                }
+            }
+            return numErrorLogs;
+        }
         private string GetAgentErrorLogPath()
         {
             string logPath = string.Empty;

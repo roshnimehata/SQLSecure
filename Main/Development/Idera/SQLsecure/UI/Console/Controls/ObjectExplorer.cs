@@ -8,7 +8,9 @@ using System.Drawing;
 using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
-
+using Idera.SQLsecure.UI.Console.Forms;
+using Idera.SQLsecure.UI.Console.Sql;
+using Idera.SQLsecure.UI.Console.SQL;
 using Infragistics.Win;
 using Infragistics.Win.UltraWinGrid;
 
@@ -274,6 +276,12 @@ namespace Idera.SQLsecure.UI.Console.Controls
             Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.Endpoints;
             Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type);
             m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
+            if (m_Version == ServerVersion.SQL2012)
+            {
+                type = Sql.ObjectType.TypeEnum.AvailabilityGroups;
+                tag = new Sql.ObjectTag(m_SnapshotId, type);
+                m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
+            }
         }
 
         private void fillEndpointsNode()
@@ -796,7 +804,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 List<Sql.DatabaseObject> objs = Sql.DatabaseObject.GetSnapshotSequenceObjects(Program.gController.Repository.ConnectionString, m_SnapshotId, database.DbId);
 
                 // Fill the grid.
-                Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.SequenceObjects;
+                Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.SequenceObject;
                 foreach (Sql.DatabaseObject obj in objs)
                 {
                     Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, database, obj.ClassId, obj.ParentObjectId, obj.ObjectId, obj.Name);
@@ -815,9 +823,86 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 Utility.MsgBox.ShowError(Utility.ErrorMsgs.ObjectExplorerCaption, Utility.ErrorMsgs.GetSnapshotFullTextCatalogsFailed, ex);
             }
         }
+        private void fillAvailabilityGroupReplicaNode(object obj)
+        {
+            try
+            {
+                AvailabilityGroupReplica gr = obj as AvailabilityGroupReplica;
+
+                if (gr != null)
+                {
+                    //// Fill the grid.
+                    Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.AvailabilityGroupReplica;
+
+
+                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, gr.ServerreplicaId,
+                            gr.ReplicaServerName, gr);
+
+
+                    m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.ObjectName,
+                        tag.TypeName, tag, null, null, null,
+                        null, null, null, null, null, null);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utility.MsgBox.ShowError(Utility.ErrorMsgs.ObjectExplorerCaption, Utility.ErrorMsgs.GetSnapshotFullTextCatalogsFailed, ex);
+            }
+        }
+
+        private void fillAvailabilityGroupNode(object obj)
+        {
+            try
+            {
+                AvailabilityGroup gr = obj as AvailabilityGroup;
+
+                if (gr != null)
+                {
+                    //// Fill the grid.
+                    Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.AvailabilityGroupReplica;
+
+                    foreach (AvailabilityGroupReplica mAvailabilityGroup in gr.Replicas)
+                    {
+                        Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, mAvailabilityGroup.ServerreplicaId,
+                            mAvailabilityGroup.ReplicaServerName);
+
+                        m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.ObjectName,
+                            tag.TypeName, tag, null, null, null,
+                            null, null, null, null, null, null);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utility.MsgBox.ShowError(Utility.ErrorMsgs.ObjectExplorerCaption, Utility.ErrorMsgs.GetSnapshotFullTextCatalogsFailed, ex);
+            }
+        }
+        private void fillAvailabilityGroupsNode()
+        {
+            try
+            {
+                //// Fill the grid.
+                Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.AvailabilityGroup;
+                foreach (AvailabilityGroup mAvailabilityGroup in m_availabilityGroups)
+                {
+                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, mAvailabilityGroup.ServerGroupId, mAvailabilityGroup.Name, mAvailabilityGroup);
+                    m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.ObjectName, tag.TypeName, tag);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Utility.MsgBox.ShowError(Utility.ErrorMsgs.ObjectExplorerCaption, Utility.ErrorMsgs.GetSnapshotFullTextCatalogsFailed, ex);
+            }
+        }
+
         private void updateGridView(
                 Sql.ObjectType.TypeEnum objType,
-                Sql.Database database
+                Sql.Database database,
+                object tagObj = null
             )
         {
             // Clear the data table.
@@ -948,6 +1033,18 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     m_ColumnsToShow = columnsToShow.DBObjects;
                     fillDatabaseSequenceObjectsNode(database);
                     break;
+                case Sql.ObjectType.TypeEnum.AvailabilityGroups:
+                    m_ColumnsToShow = columnsToShow.Default;
+                    fillAvailabilityGroupsNode();
+                    break;
+                case Sql.ObjectType.TypeEnum.AvailabilityGroup:
+                    m_ColumnsToShow = columnsToShow.Default;
+                    fillAvailabilityGroupNode(tagObj);
+                    break;
+                case Sql.ObjectType.TypeEnum.AvailabilityGroupReplica:
+                    m_ColumnsToShow = columnsToShow.Default;
+                    fillAvailabilityGroupReplicaNode(tagObj);
+                    break;
                 default:
                     m_ColumnsToShow = columnsToShow.Default;
                     break;
@@ -1025,6 +1122,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private columnsToShow m_ColumnsToShow = columnsToShow.Default;
 
         private bool m_gridCellClicked = false;
+        private List<AvailabilityGroup> m_availabilityGroups;
 
         #endregion
 
@@ -1066,8 +1164,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
         private bool isSnapshotValid
         {
-            get { return m_ServerInstance != null && m_SnapshotId != 0
-                            && m_Snapshot != null && m_Snapshot.HasValidPermissions; }
+            get
+            {
+                return m_ServerInstance != null && m_SnapshotId != 0
+                          && m_Snapshot != null && m_Snapshot.HasValidPermissions;
+            }
         }
 
         private void loadSnapshotData()
@@ -1077,6 +1178,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // Get the list of databases.
             m_Databases = Sql.Database.GetSnapshotDatabases(m_SnapshotId);
             m_Databases.Sort();
+
+            //Get list of availability groups 
+            m_availabilityGroups = AvailabilityGroup.GetAvailabilityGroups(m_SnapshotId);
 
             // Get audit filters.
             m_AuditFilters = Sql.DataCollectionFilter.GetSnapshotFilters(m_ServerInstance.ConnectionName, m_SnapshotId);
@@ -1179,14 +1283,40 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 if (m_Version > Sql.ServerVersion.SQL2000 && m_Version != Sql.ServerVersion.Unsupported)
                 {
                     tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.ServerObjects);
-                    tn = tnServer.Nodes.Add(tag.NodeName, tag.NodeName);
+                    TreeNode svObjects = tnServer.Nodes.Add(tag.NodeName, tag.NodeName);
+                    svObjects.Tag = tag;
+                    svObjects.ImageIndex = svObjects.SelectedImageIndex = tag.ImageIndex;
+
+                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Endpoints);
+                    tn = svObjects.Nodes.Add(tag.NodeName, tag.NodeName);
                     tn.Tag = tag;
                     tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
 
-                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Endpoints);
-                    tn = tn.Nodes.Add(tag.NodeName, tag.NodeName);
+                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.AvailabilityGroups);
+                    tn = svObjects.Nodes.Add(tag.NodeName, tag.NodeName);
                     tn.Tag = tag;
                     tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+
+                    if (m_availabilityGroups.Count != 0)
+                    {
+                        foreach (AvailabilityGroup mAvailabilityGroup in m_availabilityGroups)
+                        {
+                            ObjectTag grTag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.AvailabilityGroup, mAvailabilityGroup.ServerGroupId, mAvailabilityGroup.Name, mAvailabilityGroup);
+                            TreeNode tbGr = tn.Nodes.Add(mAvailabilityGroup.Name, mAvailabilityGroup.Name);
+                            tbGr.Tag = grTag;
+                            tbGr.ImageIndex = tbGr.SelectedImageIndex = grTag.ImageIndex;
+                            foreach (AvailabilityGroupReplica groupReplicas in mAvailabilityGroup.Replicas)
+                            {
+                                ObjectTag repTag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.AvailabilityGroupReplica, mAvailabilityGroup.ServerGroupId, mAvailabilityGroup.Name, groupReplicas);
+                                TreeNode tbRep = tbGr.Nodes.Add(groupReplicas.ReplicaServerName, groupReplicas.ReplicaServerName);
+                                tbRep.Tag = repTag;
+                                tbRep.ImageIndex = tbRep.SelectedImageIndex = repTag.ImageIndex;
+                            }
+
+                        }
+                    }
+
+
                 }
 
                 // Add databases node.
@@ -1429,7 +1559,14 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 case Sql.ObjectType.TypeEnum.UserDefinedDataType:
                 case Sql.ObjectType.TypeEnum.XMLSchemaCollection:
                 case Sql.ObjectType.TypeEnum.FullTextCatalog:
+                case Sql.ObjectType.TypeEnum.SequenceObject:
                     Forms.Form_SnapshotDbObjProperties.Process(m_Version, tag);
+                    break;
+                case Sql.ObjectType.TypeEnum.AvailabilityGroup:
+                    Form_SnapshotAvailabilityGroupProperties.Process(m_Version, tag);
+                    break;
+                case Sql.ObjectType.TypeEnum.AvailabilityGroupReplica:
+                    Form_SnapshotAvailabilityGroupReplicaProperties.Process(m_Version, tag);
                     break;
                 default:
                     Debug.Assert(false);
@@ -1825,7 +1962,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 {
                     m_ObjectTypeString = Sql.ObjectType.TypeName(tag.ObjType);
                     // Update the grid view.
-                    updateGridView(tag.ObjType, tag.Database);
+                    updateGridView(tag.ObjType, tag.Database, tag.Tag);
 
                     // Clear any colors set for the grid selection.
                     _ultraGrid.DisplayLayout.Override.ActiveRowAppearance.BackColor = Color.White;

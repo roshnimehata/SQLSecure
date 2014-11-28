@@ -278,7 +278,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
             Services,
             Service,
             Unknown,
-            SequenceObjects
+            SequenceObjects,
+            AvailabilityGroups,
+            AvailabilityGroup,
+            AvailabilityGroupReplica,
+            SequenceObject
         }
 
         // TypeEnum/Object type string name map element.
@@ -378,7 +382,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
             "Services",
             "Service",
             "Unknown",
-             "Sequence Objects"
+            "Sequence Objects",
+            "Always On Availability Groups",
+            "Always On Availability Group",
+            "Availability Group Replica",
+            "Sequence Object"
         };
 
         private static TypeStringElement[] m_TypeStringMap = new TypeStringElement[] {
@@ -584,6 +592,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private const string NodeXMLSchemaCollections = "XML Schema Collections";
         private const string NodeFullTextCatalogs = "Full Text Catalogs";
         private const string NodeSequenceObjects = "Sequence Objects";
+        private const string NodeAvailabilityGroups = "Always On Availability Groups";
 
         #endregion
 
@@ -598,8 +607,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private int m_ObjectId = -1;
 
         private string m_ObjectName = string.Empty;
+        private object _tag;
 
         #endregion
+        public object Tag
+        {
+            get { return _tag; }
+            set { _tag = value; }
+        }
 
         #region Ctors
 
@@ -619,6 +634,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                          || objType == ObjectType.TypeEnum.ServerRoles
                          || objType == ObjectType.TypeEnum.ServerObjects
                          || objType == ObjectType.TypeEnum.Endpoints
+                         || objType == ObjectType.TypeEnum.AvailabilityGroups
                          || objType == ObjectType.TypeEnum.Databases);
             Debug.Assert(objType == ObjectType.TypeEnum.Snapshot ? true : snapshotId != 0);
 
@@ -631,7 +647,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 int snapshotId,
                 Sql.ObjectType.TypeEnum objType,
                 int objectId,
-                string objectName
+                string objectName,
+                object tag = null
             )
         {
             Debug.Assert(snapshotId != 0);
@@ -642,6 +659,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                          || objType == ObjectType.TypeEnum.WindowsGroupLogin
                          || objType == ObjectType.TypeEnum.WindowsUserLogin
                          || objType == ObjectType.TypeEnum.ServerRole
+                           || objType == ObjectType.TypeEnum.ServerRole
+                           || objType == ObjectType.TypeEnum.AvailabilityGroup
+                           || objType == ObjectType.TypeEnum.AvailabilityGroupReplica
                          || objType == ObjectType.TypeEnum.Endpoint);
             Debug.Assert(!string.IsNullOrEmpty(objectName));
 
@@ -650,6 +670,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_ObjectId = objectId;
             m_ObjectName = objectName;
             m_ClassId = m_ObjType == ObjectType.TypeEnum.Endpoint ? 105 : 101;
+            Tag = tag;
         }
 
         public ObjectTag( // database and database level tree view containers
@@ -761,7 +782,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                          || objType == ObjectType.TypeEnum.UserDefinedDataType
                          || objType == ObjectType.TypeEnum.XMLSchemaCollection
                          || objType == ObjectType.TypeEnum.FullTextCatalog
-                         || objType == ObjectType.TypeEnum.SequenceObjects);
+                         || objType == ObjectType.TypeEnum.SequenceObjects
+                         || objType == ObjectType.TypeEnum.SequenceObject);
             Debug.Assert(database != null);
             Debug.Assert(!string.IsNullOrEmpty(objectName));
 
@@ -797,7 +819,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
         }
         public int ClassId
         {
-            get { return m_ClassId; }
+            get
+            {
+                return m_ObjType == ObjectType.TypeEnum.AvailabilityGroup ? 108 : m_ClassId;
+            }
         }
         public int ParentObjectId
         {
@@ -935,6 +960,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     case ObjectType.TypeEnum.SequenceObjects:
                         name = NodeSequenceObjects;
                         break;
+                    case ObjectType.TypeEnum.AvailabilityGroups:
+                        name = NodeAvailabilityGroups;
+                        break;
                     default:
                         Debug.Assert(false);
                         break;
@@ -976,6 +1004,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                        || m_ObjType == ObjectType.TypeEnum.Assembly
                        || m_ObjType == ObjectType.TypeEnum.UserDefinedDataType
                        || m_ObjType == ObjectType.TypeEnum.XMLSchemaCollection
+                       || m_ObjType == ObjectType.TypeEnum.AvailabilityGroupReplica
+                       || m_ObjType == ObjectType.TypeEnum.AvailabilityGroup
+                       || m_ObjType == ObjectType.TypeEnum.SequenceObject
                        || m_ObjType == ObjectType.TypeEnum.FullTextCatalog);
             }
         }

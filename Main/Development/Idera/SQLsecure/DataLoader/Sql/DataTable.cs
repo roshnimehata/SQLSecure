@@ -1159,4 +1159,141 @@ namespace Idera.SQLsecure.Collector.Sql
     }
 
 
+    internal static class AvailabilityGroupTable
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable = null;
+            using (DataColumn
+                   colGroupId = new DataColumn(ParamGroupId, typeof(SqlGuid)),
+                   colName = new DataColumn(ParamName, typeof(SqlString)),
+                   colResourceId = new DataColumn(ParamResourceId, typeof(SqlString)),
+                   colResourceGroupId = new DataColumn(ParamResourceGroupId, typeof(SqlString)),
+                   colFailureConditionLevel = new DataColumn(ParamFailureConditionLevel, typeof(SqlInt32)),
+                   colHealthCheckTimeout = new DataColumn(ParamHealthCheckTimeout, typeof(SqlInt32)),
+                   colAutomatedBackuppReference = new DataColumn(ParamAutomatedBackuppReference, typeof(SqlByte)),
+                   colAutomatedBackuppReferenceDesc = new DataColumn(ParamAutomatedBackuppReferenceDesc, typeof(SqlString)),
+                      colSnapshotid = new DataColumn(ParamSnapshotid, typeof(SqlInt32)))
+            {
+                // Create the data table object & define itsParamumns.
+                // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("availabilitygroups");
+                dataTable.Columns.AddRange(new DataColumn[] {  
+                                                               colGroupId,
+                                                               colName,
+                                                               colResourceId,
+                                                               colResourceGroupId,
+                                                               colFailureConditionLevel,
+                                                               colHealthCheckTimeout,
+                                                               colAutomatedBackuppReference,
+                                                               colAutomatedBackuppReferenceDesc,
+                                                               colSnapshotid
+                                                            });
+            }
+
+            return dataTable;
+        }
+
+
+        internal const string ParamGroupId = "[groupid]";
+        internal const string ParamSnapshotid = "[snapshotid]";
+        internal const string ParamName = "[name]";
+        internal const string ParamResourceId = "[resourceid]";
+        internal const string ParamResourceGroupId = "[resourcegroupid]";
+        internal const string ParamFailureConditionLevel = "[failureconditionlevel]";
+        internal const string ParamHealthCheckTimeout = "[healthchecktimeout]";
+        internal const string ParamAutomatedBackuppReference = "[automatedbackuppreference]";
+        internal const string ParamAutomatedBackuppReferenceDesc = "[automatedbackuppreferencedesc]";
+
+
+
+
+
+
+        internal const string RepositoryTable = "SQLsecure.dbo.availabilitygroups";
+    }
+
+    internal static class AvailabilityReplicas
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable = null;
+            using (DataColumn
+                            colReplicaid = new DataColumn(ParamReplicaId, typeof(SqlGuid)),
+                            colGroupid = new DataColumn(ParamGroupid, typeof(SqlGuid)),
+                            colSnapshotid = new DataColumn(ParamSnapshotid, typeof(SqlInt32)),
+                            colReplicaServerName = new DataColumn(ParamReplicaServerName, typeof(SqlString)),
+                            colOwnersid = new DataColumn(ParamOwnersid, typeof(SqlBinary)),
+                            colEndpointUrl = new DataColumn(ParamEndpointUrl, typeof(SqlString)),
+                            colAvailabilityMode = new DataColumn(ParamAvailabilityMode, typeof(SqlByte)),
+                            colAvailabilityModeDesc = new DataColumn(ParamAvailabilityModeDesc, typeof(SqlString)),
+                            colFailovermode = new DataColumn(ParamFailoverMode, typeof(SqlByte)),
+                            colFailoverModeDesc = new DataColumn(ParamFailoverModeDesc, typeof(SqlString)),
+                            colCreateDate = new DataColumn(ParamCreateDate, typeof(SqlDateTime)),
+                            colModifyDate = new DataColumn(ParamModifyDate, typeof(SqlDateTime)),
+                            colReplicaMetadataId = new DataColumn(ParamReplicaMetadataId, typeof(SqlInt32))
+                            )
+            {
+                // Create the data table object & define itsParamumns.
+                // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("availabilityreplicas");
+                dataTable.Columns.AddRange(new DataColumn[] {  
+                                                                colReplicaid ,
+                                                                colSnapshotid ,
+                                                                colGroupid ,
+                                                                colReplicaServerName ,
+                                                                colOwnersid ,
+                                                                colEndpointUrl ,
+                                                                colAvailabilityMode ,
+                                                                colAvailabilityModeDesc ,
+                                                                colFailovermode ,
+                                                                colFailoverModeDesc ,
+                                                                colCreateDate ,
+                                                                colModifyDate ,
+                                                                colReplicaMetadataId
+                                                             });
+            }
+
+            return dataTable;
+        }
+
+
+
+
+        internal const string ParamReplicaId = "replicaid";
+        internal const string ParamServerReplicaId = "serverreplicaid";
+        internal const string ParamSnapshotid = "snapshotid";
+        internal const string ParamGroupid = "groupid";
+        internal const string ParamReplicaServerName = "replicaservername";
+        internal const string ParamOwnersid = "ownersid";
+        internal const string ParamEndpointUrl = "endpointurl";
+        internal const string ParamAvailabilityMode = "availabilitymode";
+        internal const string ParamAvailabilityModeDesc = "availabilitymodedesc";
+        internal const string ParamFailoverMode = "failovermode";
+        internal const string ParamFailoverModeDesc = "failovermodedesc";
+        internal const string ParamCreateDate = "createdate";
+        internal const string ParamModifyDate = "modifydate";
+        internal const string ParamReplicaMetadataId = "replicametadataid";
+
+       
+
+        internal const int ColReplicaid = 0;
+        internal const int ColGroupId = 1;
+        internal const int ColReplicaServerName = 2;
+        internal const int ColOwnersid = 3;
+        internal const int ColEndpointUrl = 4;
+        internal const int ColAvailabilityMode = 5;
+        internal const int ColAvailabilityModeDesc = 6;
+        internal const int ColFailoverMode = 7;
+        internal const int ColFailoverModeDesc = 8;
+        internal const int ColCreateDate = 9;
+        internal const int ColModifyDate = 10;
+        internal const int ColReplicaMetadataId = 11;
+
+
+
+        internal const string RepositoryTable = "SQLsecure.dbo.availabilityreplicas";
+    }
+
+
 }

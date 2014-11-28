@@ -188,6 +188,12 @@
     <Compile Include="ActiveDirectory\PInvoke.cs" />
     <Compile Include="ActiveDirectory\StructsFlags.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="Controls\AddEditFolders.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AddEditFolders.Designer.cs">
+      <DependentUpon>AddEditFolders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AuditedServers.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -426,6 +432,12 @@
     <Compile Include="Data\SQLsecureActivity.cs" />
     <Compile Include="Data\Server.cs" />
     <Compile Include="Data\SqlServerSettings.cs" />
+    <Compile Include="Forms\Form_FolderPath.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_FolderPath.Designer.cs">
+      <DependentUpon>Form_FolderPath.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Form_OSObjectPermissions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -479,6 +491,18 @@
     </Compile>
     <Compile Include="Forms\Form_SelectFolder.Designer.cs">
       <DependentUpon>Form_SelectFolder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Form_SnapshotAvailabilityGroupReplicaProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_SnapshotAvailabilityGroupReplicaProperties.Designer.cs">
+      <DependentUpon>Form_SnapshotAvailabilityGroupReplicaProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Form_SnapshotAvailabilityGroupProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_SnapshotAvailabilityGroupProperties.Designer.cs">
+      <DependentUpon>Form_SnapshotAvailabilityGroupProperties.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Form_WeakPasswordDetection.cs">
       <SubType>Form</SubType>
@@ -835,6 +859,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\AddEditFolders.resx">
+      <DependentUpon>AddEditFolders.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\AuditedServers.resx">
       <DependentUpon>AuditedServers.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -955,6 +982,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>ViewSection.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_FolderPath.resx">
+      <DependentUpon>Form_FolderPath.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_PolicyProperties.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Form_PolicyProperties.cs</DependentUpon>
@@ -966,6 +996,14 @@
     <EmbeddedResource Include="Forms\Form_ImportPolicy.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Form_ImportPolicy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_SnapshotAvailabilityGroupReplicaProperties.resx">
+      <DependentUpon>Form_SnapshotAvailabilityGroupReplicaProperties.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_SnapshotAvailabilityGroupProperties.resx">
+      <DependentUpon>Form_SnapshotAvailabilityGroupProperties.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_SnapshotFileProperties.resx">
       <SubType>Designer</SubType>
@@ -1310,6 +1348,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ReportsDataset.xsd</DependentUpon>
     </Compile>
+    <Compile Include="SQL\AvailabilityGroup.cs" />
+    <Compile Include="SQL\AvailabilityGroupReplica.cs" />
     <Compile Include="SQL\Database.cs" />
     <Compile Include="SQL\DatabaseObject.cs" />
     <Compile Include="SQL\DatabasePrincipal.cs" />
@@ -1697,6 +1737,7 @@
     <None Include="Resources\Assessment_Publish_48.png" />
     <None Include="Resources\Assessment_EditSettings_48.png" />
     <Content Include="Resources\AuditSQLServer_48.png" />
+    <None Include="Resources\avail-48.png" />
     <Content Include="Resources\Certificates_48.png" />
     <Content Include="Resources\Columns_48.png" />
     <None Include="Resources\copy.png" />
@@ -1729,6 +1770,7 @@
     <Content Include="Resources\MediumRisk_16.png" />
     <Content Include="Resources\MediumRisk_32.png" />
     <Content Include="Resources\Properties_48.png" />
+    <None Include="Resources\replica-48.png" />
     <Content Include="Resources\Report_ActivityHistory_16.png" />
     <Content Include="Resources\Report_ActivityHistory_32.png" />
     <Content Include="Resources\Report_ActivityHistory_48.png" />

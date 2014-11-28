@@ -562,6 +562,316 @@ IF NOT EXISTS ( SELECT  *
                           0  -- assessmentid - int
                         )
            end
+         select
+            @metricid = 104
+        if not exists ( select
+                            *
+                        from
+                            metric
+                        where
+                            metricid = @metricid ) 
+           begin
+                 insert into dbo.metric
+                        (
+                          metricid,
+                          metrictype,
+                          metricname,
+                          metricdescription,
+                          isuserentered,
+                          ismultiselect,
+                          validvalues,
+                          valuedescription
+									        
+                        )
+                 values
+                        (
+                          @metricid, -- metricid - int
+                          N'Configuration', -- metrictype - nvarchar(32)
+                          N'CLR Enabled', -- metricname - nvarchar(256)
+                          N'Determine whether the CLR is Enabled on the server', -- metricdescription - nvarchar(1024)
+                          0, -- isuserentered - bit
+                          0, -- ismultiselect - bit
+                          N'', -- validvalues - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if CLR is enabled on the server'  -- valuedescription - nvarchar(1024)									        
+                        )
+                 insert into dbo.policymetric
+                        (
+                          policyid,
+                          metricid,
+                          isenabled,
+                          reportkey,
+                          reporttext,
+                          severity,
+                          severityvalues,
+                          assessmentid
+											        
+                        )
+                 values
+                        (
+                          0, -- policyid - int
+                          @metricid, -- metricid - int
+                          1, -- isenabled - bit
+                          N'', -- reportkey - nvarchar(32)
+                          N'Is there CLR Enabled on the server?', -- reporttext - nvarchar(4000)
+                          1, -- severity - int
+                          N'', -- severityvalues - nvarchar(4000)
+                          0  -- assessmentid - int
+											        
+                        )
+           end      
+
+        select
+            @metricid = 105
+        if not exists ( select
+                            *
+                        from
+                            metric
+                        where
+                            metricid = @metricid ) 
+           begin
+                 insert into dbo.metric
+                        (
+                          metricid,
+                          metrictype,
+                          metricname,
+                          metricdescription,
+                          isuserentered,
+                          ismultiselect,
+                          validvalues,
+                          valuedescription
+									        
+                        )
+                 values
+                        (
+                          @metricid, -- metricid - int
+                          N'Configuration', -- metrictype - nvarchar(32)
+                          N'Default Trace Enabled', -- metricname - nvarchar(256)
+                          N'Determine whether the Default Trace Enabled on the server', -- metricdescription - nvarchar(1024)
+                          0, -- isuserentered - bit
+                          0, -- ismultiselect - bit
+                          N'', -- validvalues - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if Default Trace is disabled on the server'  -- valuedescription - nvarchar(1024)									        
+                        )
+                 insert into dbo.policymetric
+                        (
+                          policyid,
+                          metricid,
+                          isenabled,
+                          reportkey,
+                          reporttext,
+                          severity,
+                          severityvalues,
+                          assessmentid
+											        
+                        )
+                 values
+                        (
+                          0, -- policyid - int
+                          @metricid, -- metricid - int
+                          1, -- isenabled - bit
+                          N'', -- reportkey - nvarchar(32)
+                          N'Is there Default Trace disabled on the server?', -- reporttext - nvarchar(4000)
+                          1, -- severity - int
+                          N'', -- severityvalues - nvarchar(4000)
+                          0  -- assessmentid - int
+											        
+                        )
+           end 
+
+        select
+            @metricid = 106
+        if not exists ( select
+                            *
+                        from
+                            metric
+                        where
+                            metricid = @metricid ) 
+           begin
+                 insert into dbo.metric
+                        (
+                          metricid,
+                          metrictype,
+                          metricname,
+                          metricdescription,
+                          isuserentered,
+                          ismultiselect,
+                          validvalues,
+                          valuedescription
+									        
+                        )
+                 values
+                        (
+                          @metricid, -- metricid - int
+                          N'Configuration', -- metrictype - nvarchar(32)
+                          N'Maximum number of error log files', -- metricname - nvarchar(256)
+                          N'Determine whether the Maximum number of error log files is more than 11', -- metricdescription - nvarchar(1024)
+                          0, -- isuserentered - bit
+                          0, -- ismultiselect - bit
+                          N'', -- validvalues - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if Maximum number of error log files is less than 12'  -- valuedescription - nvarchar(1024)									        
+                        )
+                 insert into dbo.policymetric
+                        (
+                          policyid,
+                          metricid,
+                          isenabled,
+                          reportkey,
+                          reporttext,
+                          severity,
+                          severityvalues,
+                          assessmentid
+											        
+                        )
+                 values
+                        (
+                          0, -- policyid - int
+                          @metricid, -- metricid - int
+                          1, -- isenabled - bit
+                          N'', -- reportkey - nvarchar(32)
+                          N'Is maximum number of error log files is grater than or equal to 12?', -- reporttext - nvarchar(4000)
+                          1, -- severity - int
+                          N'', -- severityvalues - nvarchar(4000)
+                          0  -- assessmentid - int
+											        
+                        )
+           end 
+
+		select @metricid = 107
+        if not exists ( select
+                            *
+                        from
+                            metric
+                        where
+                            metricid = @metricid ) 
+           begin
+                 insert into dbo.metric
+                        (
+                          metricid,
+                          metrictype,
+                          metricname,
+                          metricdescription,
+                          isuserentered,
+                          ismultiselect,
+                          validvalues,
+                          valuedescription
+									        
+                        )
+                 values
+                        (
+                          @metricid, -- metricid - int
+                          N'Login', -- metrictype - nvarchar(32)
+                          N'Orphaned users', -- metricname - nvarchar(256)
+                          N'Determine whether any orphaned users exist in databases.', -- metricdescription - nvarchar(1024)
+                          1, -- isuserentered - bit
+                          1, -- ismultiselect - bit
+                          N'''MS_DataCollectorInternalUser''', -- validvalues - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if there any orphaned user exists.'  -- valuedescription - nvarchar(1024)									        
+                        )
+                 insert into dbo.policymetric
+                        (
+                          policyid,
+                          metricid,
+                          isenabled,
+                          reportkey,
+                          reporttext,
+                          severity,
+                          severityvalues,
+                          assessmentid
+											        
+                        )
+                 values
+                        (
+                          0, -- policyid - int
+                          @metricid, -- metricid - int
+                          1, -- isenabled - bit
+                          N'', -- reportkey - nvarchar(32)
+                          N'Is there any orphaned users?', -- reporttext - nvarchar(4000)
+                          1, -- severity - int
+                          N'''MS_DataCollectorInternalUser''', -- severityvalues - nvarchar(4000)
+                          0  -- assessmentid - int
+											        
+                        )
+           end 
+		   
+		select @metricid = 108
+        if not exists ( select
+                            *
+                        from
+                            metric
+                        where
+                            metricid = @metricid ) 
+           begin
+                 insert into dbo.metric
+                        (
+                          metricid,
+                          metrictype,
+                          metricname,
+                          metricdescription,
+                          isuserentered,
+                          ismultiselect,
+                          validvalues,
+                          valuedescription
+									        
+                        )
+                 values
+                        (
+                          @metricid, -- metricid - int
+                          N'Configuration', -- metrictype - nvarchar(32)
+                          N'Ole automation procedures', -- metricname - nvarchar(256)
+                          N'Determine whether the Ole automation procedures are enabled.', -- metricdescription - nvarchar(1024)
+                          1, -- isuserentered - bit
+                          1, -- ismultiselect - bit
+                          N'', -- validvalues - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if Ole automation procedures are enabled on the SQL Server.'  -- valuedescription - nvarchar(1024)									        
+                        )
+                 insert into dbo.policymetric
+                        (
+                          policyid,
+                          metricid,
+                          isenabled,
+                          reportkey,
+                          reporttext,
+                          severity,
+                          severityvalues,
+                          assessmentid
+											        
+                        )
+                 values
+                        (
+                          0, -- policyid - int
+                          @metricid, -- metricid - int
+                          1, -- isenabled - bit
+                          N'', -- reportkey - nvarchar(32)
+                          N'Is there Ole automation procedures enabled on the server?', -- reporttext - nvarchar(4000)
+                          1, -- severity - int
+                          N'', -- severityvalues - nvarchar(4000)
+                          0  -- assessmentid - int
+                        )
+           end 
+	select @metricid = 24
+		if exists (select * from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid )
+		begin
+			update policymetric 
+				set isenabled=1,severity=2,severityvalues='''xp_cmdshell'',''xp_available_media'',''xp_dirtree'',''xp_dsninfo'',''xp_enumdsn'',''xp_enumerrorlogs'',''xp_enumgroups'',''xp_eventlog'',''xp_fixeddrives'',''xp_getfiledetails'',''xp_getnetname'',''xp_logevent'',''xp_loginconfig'',''xp_msver'',''xp_readerrorlog'',''xp_servicecontrol'',''xp_sprintf'',''xp_sscanf'',''xp_subdirs'',''xp_deletemail'',''xp_findnextmsg'',''xp_get_mapi_default_profile'',''xp_get_mapi_profiles'',''xp_readmail'',''xp_sendmail'',''xp_startmail'',''xp_stopmail'',''xp_cleanupwebtask'',''xp_convertwebtask'',''xp_dropwebtask'',''xp_enumcodepages'',''xp_makewebtask'',''xp_readwebtask'',''xp_runwebtask'',''sp_OACreate'',''xp_regaddmultistring'',''xp_regdeletekey'',''xp_regdeletevalue'',''xp_regenumvalues'',''xp_regremovemultistring'',''xp_regwrite'',''xp_regread'''
+				where policyid = 0 and assessmentid=0 and metricid = @metricid
+			if (@ver is null)	-- this is a new install, so fix the All Servers policy
+				update policymetric 
+					set isenabled=1,severity=2,severityvalues= (select severityvalues from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid)
+					where policyid = 1 and assessmentid = 1 and metricid = @metricid
+		end
+
+	select @metricid = 4
+		if exists (select * from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid )
+		begin
+			update policymetric 
+				set severityvalues='''All'''
+				where policyid = 0 and assessmentid=0 and metricid = @metricid
+			if (@ver is null)	-- this is a new install, so fix the All Servers policy
+				update policymetric 
+					set isenabled=1,severity=1,severityvalues= '''All''', reportkey='', reporttext ='Is the login auditing configuration acceptable?'
+					where policyid = 1 and assessmentid = 1 and metricid = @metricid
+	end 
+  		          
 	-- note: the following uses the @metricid to determine the ending value for the metrics to apply to all of the policies
 
 	if (@ver is null	-- this is a new install, so fix the All Servers policy to use the default values for the new security checks
@@ -585,6 +895,7 @@ IF NOT EXISTS ( SELECT  *
 				and a.assessmentid not in (select distinct assessmentid from policymetric where metricid between @startmetricid and @metricid)
 
 
+-- Adde new filter type for sequence objets
 insert  into dbo.objecttype
         (
           objecttype,
@@ -597,17 +908,27 @@ values
           N'Sequence Object', -- objecttypename - nvarchar(500)
           N'' 
         )
+
 insert  into dbo.filterruleclass
         ( objectclass, objectvalue )
 values
         ( 48, -- objectclass - int
           N'Sequence Objects'  -- objectvalue - nvarchar(128)
           )
-			  end
+ end
+
  if exists (select 1 from dbo.metric where metricid=71)
 	begin 
 		update dbo.metric
 		set valuedescription='When enabled, this check will identify a risk if any unauthorized accounts are members of the sysadmin server role. Specify the authorized accounts. Can use ''%'' as wildcard.'
 		where metricid=71
 	end
+
+insert into dbo.classtype
+        ( classid, classname, hashkey )
+values
+        ( 108, -- classid - int
+          N'Availability Group', -- classname - nvarchar(500)
+          null, -- hashkey - nvarchar(256)
+          )
 go

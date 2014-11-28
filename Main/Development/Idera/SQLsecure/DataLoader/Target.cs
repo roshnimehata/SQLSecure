@@ -51,6 +51,7 @@ namespace Idera.SQLsecure.Collector
         private FilePermissions filePermissions = null;
         private RegistryPermissions registryPermissions = null;
         private SQLServices sqlServices = null;
+        private string[] m_auditFolders = null;
 
         #endregion
 
@@ -99,7 +100,7 @@ namespace Idera.SQLsecure.Collector
                       WHERE config in (102, 117, 400, 544, 1547)";
         private const string QueryConfigurations2K5 =
             @"SELECT configuration_id, value_in_use FROM sys.configurations
-                      WHERE configuration_id in (102, 117, 400, 544, 1547, 1576, 16385, 16386, 16388, 16389, 16390, 16391)";
+                      WHERE configuration_id in (102, 117, 400, 544, 1547, 1576, 16385, 16386, 16388, 16389, 16390, 16391, 1562, 1568)";
         private const string QuerySysAdminOnlyForSQLAgentCmdExecJobs2k5 =
             "EXEC msdb.dbo.sp_enum_proxy_for_subsystem @subsystem_id = 3";
         private const string QuerySysAdminOnlyForSQLAgentCmdExecJobs2k =
@@ -120,7 +121,7 @@ namespace Idera.SQLsecure.Collector
                                 databasemailxpsenabled, oleautomationproceduresenabled,
                                 webassistantproceduresenabled, xp_cmdshellenabled, serverisdomaincontroller,
                                 sapasswordempty, agentsysadminonly, replicationenabled, systemdrive, adhocdistributedqueriesenabled,
-                                isweakpassworddetectionenabled, isdistributor, ispublisher, hasremotepublisher)
+                                isweakpassworddetectionenabled, isdistributor, ispublisher, hasremotepublisher, isclrenabled, isdefaulttraceenabled)
                       select    connectionname = '{0}', 
                                 servername = '{1}', 
                                 instancename = '{2}', 
@@ -154,7 +155,9 @@ namespace Idera.SQLsecure.Collector
                                 isweakpassworddetectionenabled = '{29}',
                                 isdistributor = '{30}',
                                 ispublisher = '{31}', 
-                                hasremotepublisher = '{32}'
+                                hasremotepublisher = '{32}',
+                                isclrenabled = '{33}',
+                                isdefaulttraceenabled = '{34}'
                       from SQLsecure.dbo.registeredserver where connectionname = '{0}'";
 
         public const string NonQueryCreateSnapshotHistory =
@@ -342,6 +345,7 @@ namespace Idera.SQLsecure.Collector
                 m_IsValid = false;
             }
 
+            m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
             // Retrieve the filter rules.
             if (m_IsValid)
             {
@@ -426,6 +430,7 @@ namespace Idera.SQLsecure.Collector
             char enabledDAC = Constants.Unknown;
             char enabledAllowUpdates = Constants.Unknown;
             char enabledScanForStartupSP = Constants.Unknown;
+            char isDefaultTraceEnabled = Constants.Unknown;
             char enabledSQLmailXPs = Constants.Unknown;
             char enabledDatabaseMailXPs = Constants.Unknown;
             char enabledOLEAutomationXPs = Constants.Unknown;
@@ -440,6 +445,7 @@ namespace Idera.SQLsecure.Collector
             char isPublisher = Constants.Unknown;
             char hasRemotePublisher = Constants.Unknown;
             char isWeakPasswordDetectionEnabled = Constants.Unknown;
+            char isClrEnabled = Constants.Unknown;
             string systemDrive = Constants.Unknown.ToString();
 
             using (logX.loggerX.DebugCall())
@@ -742,6 +748,9 @@ namespace Idera.SQLsecure.Collector
                                             case 1547:
                                                 enabledScanForStartupSP = value;
                                                 break;
+                                            case 1568:
+                                                isDefaultTraceEnabled = value;
+                                                break;
                                             default:
                                                 logX.loggerX.Warn("WARN - Read unknown configuration id: ", id);
                                                 break;
@@ -775,6 +784,9 @@ namespace Idera.SQLsecure.Collector
                                             case 544:
                                                 enableC2AuditTrace = value;
                                                 break;
+                                            case 1568:
+                                                isDefaultTraceEnabled = value;
+                                                break;
                                             case 1547:
                                                 enabledScanForStartupSP = value;
                                                 break;
@@ -798,6 +810,9 @@ namespace Idera.SQLsecure.Collector
                                                 break;
                                             case 16391:
                                                 enabledAdHocDistributedQueries = value;
+                                                break;
+                                            case 1562:
+                                                isClrEnabled = value;
                                                 break;
                                             default:
                                                 logX.loggerX.Warn("WARN - Read unknown configuration id: ", id);
@@ -903,7 +918,9 @@ namespace Idera.SQLsecure.Collector
                                                     isWeakPasswordDetectionEnabled,
                                                     isDistributor,
                                                     isPublisher,
-                                                    hasRemotePublisher);
+                                                    hasRemotePublisher,
+                                                    isClrEnabled,
+                                                    isDefaultTraceEnabled);
 
                             Sql.SqlHelper.ExecuteNonQuery(repository, CommandType.Text, query);
 
@@ -974,6 +991,23 @@ namespace Idera.SQLsecure.Collector
                     catch (SqlException ex)
                     {
                         logX.loggerX.Error("ERROR - exception raised when getting info about sql server jobs", ex);
+                        isOk = false;
+                        enumStatus = Constants.CollectionStatus.StatusError;
+                    }
+                    Program.RestoreImpersonationContext(ic);
+                }
+                if (isOk)
+                {
+                    Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
+
+                    try
+                    {
+                        isOk = AvailabilityGroup.ProcessGroups(m_VersionEnum, ConnectionString,
+                            m_Repository.ConnectionString, snapshotid, servername);
+                    }
+                    catch (SqlException ex)
+                    {
+                        logX.loggerX.Error("ERROR - exception raised when getting info about sql server availability groups", ex);
                         isOk = false;
                         enumStatus = Constants.CollectionStatus.StatusError;
                     }
@@ -1543,6 +1577,16 @@ namespace Idera.SQLsecure.Collector
                         strNewMessage = "Failed to load file permissions for target SQL Server";
                         PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                         snapshotStatus = Constants.StatusWarning;
+                    }
+                    //for audit folders
+                    foreach (string auditFolder in m_auditFolders)
+                    {
+                        if (filePermissions.LoadFilePermissionsForAuditDirectory(auditFolder) != 0)
+                        {
+                            strNewMessage = string.Format("Failed to load file permissions for '{0}' audit folder", auditFolder);
+                            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                            snapshotStatus = Constants.StatusWarning;
+                        }   
                     }
                     if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
                     {

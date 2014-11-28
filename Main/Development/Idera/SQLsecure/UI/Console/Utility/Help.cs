@@ -10,6 +10,7 @@
  *******************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 using System.IO;
@@ -48,37 +49,16 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static void showHelp(Control control, HelpNavigator navIn, string paramIn)
         {
-            string topic = string.Empty;
-            if (!string.IsNullOrEmpty(paramIn))
+            if (control != null)
             {
-                topic = string.Format(LINK_FMT, paramIn);
+                control.Cursor = Cursors.WaitCursor;
             }
 
-            IntPtr hWnd;
-            if (!Idera.WebHelp.WebHelpLauncher.TryShowWebHelp(topic, out hWnd))
-            {
-                showHelpChm(control, navIn, paramIn);
-            }
-        }
+            Process.Start(string.Format(LINK_FMT, paramIn));
 
-        private static void showHelpChm(
-                System.Windows.Forms.Control controlIn,
-                HelpNavigator navIn,
-                String paramIn
-            )
-        {
-            // Get full path of the chm file, assumes its in the same directory
-            // as the Console binary.
-            String helpFile = string.Format(FILE_FMT, Path.GetDirectoryName(Application.ExecutablePath), SQLSECURE_CHM_FILE_STR);
-
-            // Display the help file.
-            try
+            if (control != null)
             {
-                System.Windows.Forms.Help.ShowHelp(controlIn, helpFile, navIn, string.Format(LINK_FMT, paramIn));
-            }
-            catch (Exception ex)
-            {
-                MsgBox.ShowError("SQLsecure Help", ErrorMsgs.CantLoadHelpFile, ex);
+                control.Cursor = Cursors.Default;
             }
         }
 
@@ -236,6 +216,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         // Register Server Property Pages
         public const string ServerGeneralHelpTopic = @"/x/VglK";//ASP General tab
         public const string ServerCredentialsHelpTopic = @"/x/VAlK";//ASP Credentials tab
+        public const string ServerAuditFoldersHelpTopic = @"/x/2QRJAg";//Audit Folders tab
         public const string ServerFiltersHelpTopic = @"/x/UwlK";//ASP Filters tab
         public const string ServerScheduleHelpTopic = @"/x/VwlK";//ASP Schedule tab
         public const string ServerEmailHelpTopic = @"/x/VQlK";//ASP Email tab

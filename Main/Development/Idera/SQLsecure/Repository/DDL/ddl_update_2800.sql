@@ -116,6 +116,93 @@ BEGIN
 			alter table dbo.databaseprincipal
 			add IsContainedUser bit,
 			AuthenticationType nvarchar(60)
+			--Support audit folders
+			alter table dbo.registeredserver
+			add auditfoldersstring nvarchar(max) null
+ 
+			alter table dbo.serversnapshot
+			add isclrenabled nchar(1) null
+ 
+ 			alter table dbo.serversnapshot
+			add isdefaulttraceenabled nchar(1) null 
+			
+			alter table dbo.serversnapshot
+			add numerrorlogs smallint null           
+
+			  IF NOT EXISTS ( SELECT *
+                         FROM   dbo.sysobjects
+                         WHERE  id = OBJECT_ID(N'[dbo].[availabilitygroups]')
+                                AND xtype = N'U' ) 
+								begin
+										SET ANSI_NULLS ON
+										SET QUOTED_IDENTIFIER ON
+
+										CREATE TABLE [dbo].[availabilitygroups](
+											[groupid] [uniqueidentifier] NOT NULL,
+											[name] [nvarchar](60) NOT NULL,
+											[resourceid] [nvarchar](40) NULL,
+											[resourcegroupid] [nvarchar](40) NULL,
+											[failureconditionlevel] [int] NULL,
+											[healthchecktimeout] [int] NULL,
+											[automatedbackuppreference] [tinyint] NULL,
+											[automatedbackuppreferencedesc] [nvarchar](60) NULL,
+											[snapshotid] [int] NOT NULL,
+											[servergroupId] [int] IDENTITY(1,1) NOT NULL,
+										 CONSTRAINT [PK_availabilitygroups] PRIMARY KEY CLUSTERED 
+										(
+											[servergroupId] ASC,
+											[snapshotid] ASC,
+											[groupid] ASC
+										)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+										) ON [PRIMARY]
+
+
+								 end
+								   IF NOT EXISTS ( SELECT *
+                         FROM   dbo.sysobjects
+                         WHERE  id = OBJECT_ID(N'[dbo].[availabilityreplicas]')
+                                AND xtype = N'U' ) 
+								begin
+									SET QUOTED_IDENTIFIER ON
+
+									SET ANSI_PADDING ON
+
+									CREATE TABLE [dbo].[availabilityreplicas](
+										[replicaid] [uniqueidentifier] NOT NULL,
+										[snapshotid] [int] NOT NULL,
+										[groupid] [uniqueidentifier] NOT NULL,
+										[replicaservername] [nvarchar](256) NULL,
+										[ownersid] [binary](85) NULL,
+										[endpointurl] [nvarchar](256) NULL,
+										[availabilitymode] [tinyint] NULL,
+										[availabilitymodedesc] [nvarchar](60) NULL,
+										[failovermode] [tinyint] NULL,
+										[failovermodedesc] [nvarchar](60) NULL,
+										[createdate] [datetime] NULL,
+										[modifydate] [datetime] NULL,
+										[replicametadataid] [int] NULL,
+										[serverreplicaid] [int] IDENTITY(1,1) NOT NULL,
+									 CONSTRAINT [PK_availabilityreplicas] PRIMARY KEY CLUSTERED 
+									(
+										[serverreplicaid] ASC,
+										[snapshotid] ASC,
+										[groupid] ASC
+									)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+									) ON [PRIMARY]
+
+
+									SET ANSI_PADDING OFF
+
+									ALTER TABLE [dbo].[availabilityreplicas]  WITH NOCHECK ADD  CONSTRAINT [FK_availabilityreplicas_availabilityreplicas] FOREIGN KEY([serverreplicaid], [snapshotid], [groupid])
+									REFERENCES [dbo].[availabilityreplicas] ([serverreplicaid], [snapshotid], [groupid])
+
+									ALTER TABLE [dbo].[availabilityreplicas] CHECK CONSTRAINT [FK_availabilityreplicas_availabilityreplicas]
+
+
+
+
+								end
+			           
 	COMMIT
 END
 

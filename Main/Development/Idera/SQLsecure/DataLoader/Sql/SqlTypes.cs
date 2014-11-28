@@ -125,7 +125,8 @@ namespace Idera.SQLsecure.Collector.Sql
         Function = 45,
         Synonym = 46,
         Column = 47,
-        SequenceObject=48
+        SequenceObject=48,
+        AvailabilityGroup=49
     }
 
     public enum FilterScope

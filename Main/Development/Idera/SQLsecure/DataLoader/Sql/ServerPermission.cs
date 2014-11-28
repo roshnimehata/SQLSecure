@@ -41,7 +41,10 @@ namespace Idera.SQLsecure.Collector.Sql
                 List<int> oidbatch
             )
         {
-            Debug.Assert(otype == SqlObjectType.Server || otype == SqlObjectType.Login || otype == SqlObjectType.Endpoint);
+            Debug.Assert(otype == SqlObjectType.Server
+                || otype == SqlObjectType.Login 
+                || otype == SqlObjectType.Endpoint
+                || otype == SqlObjectType.AvailabilityGroup);
             Debug.Assert(oidbatch != null && oidbatch.Count > 0);
 
             StringBuilder query = new StringBuilder();
@@ -74,6 +77,9 @@ namespace Idera.SQLsecure.Collector.Sql
                 case SqlObjectType.Endpoint:
                     query.Append("105 ");
                     break;
+                    case SqlObjectType.AvailabilityGroup:
+                        query.Append("108 ");
+                        break;
                 default:
                     Debug.Assert(false);
                     break;

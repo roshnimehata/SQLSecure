@@ -284,6 +284,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.ImageListSQLTypes16.Images.SetKeyName(63, "gears.png");
             this.ImageListSQLTypes16.Images.SetKeyName(64, "unknown.png");
             this.ImageListSQLTypes16.Images.SetKeyName(65, "sequence_48.png");
+            this.ImageListSQLTypes16.Images.SetKeyName(66, "avail_16.png");
+            this.ImageListSQLTypes16.Images.SetKeyName(67, "avail_16.png");
+            this.ImageListSQLTypes16.Images.SetKeyName(68, "replica-16.png");
+            this.ImageListSQLTypes16.Images.SetKeyName(69, "sequence_48.png");
             // 
             // ObjectImages
             // 

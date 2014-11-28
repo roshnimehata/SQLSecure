@@ -638,11 +638,11 @@ namespace Idera.SQLsecure.Collector.Sql
                                                            name = N'microsoft_database_tools_support') 
                                                         is not null then 'N'
                                                     else 'Y'
-                                                  end ,"
-                                + "permission_set=null, "
-                                + "createdate=null, "
-                                + "modifydate=null "
-                                    + "FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
+                                                  end ,
+                                permission_set=null, 
+                                createdate=null, 
+                                modifydate=null 
+                                    FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
                                     + "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
                                     + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.syscomments c ON (a.object_id = c.id and c.colid=1)"
                                     + "WHERE " + strScopeText + LIKEClause;
@@ -783,7 +783,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     }
                     break;
                 case SqlObjectType.SequenceObject :
-                    if (version != ServerVersion.SQL2012)//need to add sql server 2014
+                    if (version < ServerVersion.SQL2012)
                     {
                         Debug.Assert(false);
                     }
@@ -791,8 +791,8 @@ namespace Idera.SQLsecure.Collector.Sql
                     {
                         query =string.Format(@"SELECT 
                                  ob.type,
-                                 owner = isnull( ob.principal_id,sc.principal_id),	
-                                 schemaid = sc.schema_id,
+                                 owner = ob.principal_id,
+                                 schemaid = ob.schema_id,
                                  classid = 1,
                                  parentobjectid = ob.parent_object_id,
                                  objectid = ob.object_id,
@@ -803,9 +803,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                  permission_set = null,
                                  createdate = ob.create_date,
                                  modifydate = ob.modify_date "    
-                                + @" FROM  {0}.sys.objects ob "
-                                + " join  {1}.sys.schemas sc on  ob.schema_id = sc.schema_id "
-                                + @" WHERE ob.type = 'SO' ", Sql.SqlHelper.CreateSafeDatabaseName(database.Name), Sql.SqlHelper.CreateSafeDatabaseName(database.Name));
+                                + @" FROM  {0}.sys.sequences ob "
+                                + @" WHERE ob.type = 'SO' ", Sql.SqlHelper.CreateSafeDatabaseName(database.Name));
                     }
                     break;
 

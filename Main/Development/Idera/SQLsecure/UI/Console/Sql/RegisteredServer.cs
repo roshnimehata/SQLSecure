@@ -71,6 +71,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private SqlString m_EnableC2AuditTrace;
         private SqlString m_CrossDbOwnershipChaining;
         private SqlString m_CaseSensitiveMode;
+        private SqlString m_auditfoldersstring;
         private SqlGuid     m_jobid;
         private SqlDateTime m_LastCollectionTime;
         private SqlInt32    m_LastCollectionSnapshotId;
@@ -138,6 +139,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         public string VersionFriendly { get { return Sql.SqlHelper.ParseVersionFriendly(m_Version.Value); } }
         public string VersionFriendlyLong { get { return Sql.SqlHelper.ParseVersionFriendly(m_Version.Value, true); } }
+        public string AuditFoldersString { get { return m_auditfoldersstring.IsNull ? string.Empty : m_auditfoldersstring.Value.ToLower(); } }
 
         public string NextCollectionTime
         {
@@ -219,7 +221,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         snapshotretentionperiod,
                         serverisdomaincontroller,
                         replicationenabled,
-                        sapasswordempty
+                        sapasswordempty,
+                        auditfoldersstring
                       FROM SQLsecure.dbo.vwregisteredserver";
 
         private static string QueryGetRegisteredServer = QueryGetAllRegisteredServerBase + @" WHERE connectionname = @instance";
@@ -256,7 +259,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             SnapshotRetentionPeriod,
             ServerIsDomainController,
             ReplicationEnabled,
-            SaPasswordEmpty
+            SaPasswordEmpty,
+            AuditFoldersString
         }
 
         // Is server registered.
@@ -280,6 +284,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private const string ParamRegisterServerServerpassword = "@serverpassword";
         private const string ParamRegisterServerVersion = "@version";
         private const string ParamRegisterServerRetentionPeriod = "@retentionperiod";
+        private const string ParamAuditFoldersString = "@auditfoldersstring";
 
         // Remove server.
         private const string NonQueryRemoveServer = @"SQLsecure.dbo.isp_sqlsecure_removeregisteredserver";
@@ -287,6 +292,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         // Change credentials.
         private const string NonQueryChangeServerCredentials = @"SQLsecure.dbo.isp_sqlsecure_updateregisteredservercredentials";
+        private const string NonQueryChangeAuditFolders = @"SQLsecure.dbo.isp_sqlsecure_updateregisteredserverauditfolders";
         private const string ParamChangeServerCredentialsConnectionname = @"@connectionname";
         private const string ParamChangeServerCredentialsLoginname = @"@loginname";
         private const string ParamChangeServerCredentialsLoginpassword = @"@loginpassword";
@@ -348,6 +354,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_ServerIsDomainController = SqlHelper.GetString(rdr, (int)RegisteredServerColumn.ServerIsDomainController);
             m_ReplicationEnabled = SqlHelper.GetString(rdr, (int)RegisteredServerColumn.ReplicationEnabled);
             m_SaPasswordEmpty = SqlHelper.GetString(rdr, (int)RegisteredServerColumn.SaPasswordEmpty);
+            m_auditfoldersstring = rdr.GetSqlString((int)RegisteredServerColumn.AuditFoldersString);
         }
 
         #endregion
@@ -734,7 +741,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 string windowsUser,
                 string windowsPassword,
                 string version,
-                int retentionPeriod                
+                int retentionPeriod,
+                string[] auditFolders 
             )
         {
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
@@ -744,6 +752,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             // Encrypt passwords before saving them to the repository
             string cipherSqlPassword = Encryptor.Encrypt(sqlPassword);
             string cipherWindowsPassword = Encryptor.Encrypt(windowsPassword);
+            string auditFoldersString = FormAuditFoldersString(auditFolders);
 
             // Open connection to repository and add server.
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -762,12 +771,13 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 SqlParameter paramServerlogin = new SqlParameter(ParamRegisterServerServerlogin, windowsUser);
                 SqlParameter paramServerpassword = new SqlParameter(ParamRegisterServerServerpassword, cipherWindowsPassword);
                 SqlParameter paramVersion = new SqlParameter(ParamRegisterServerVersion, version);
-                SqlParameter paramRetentionPeriod = new SqlParameter(ParamRegisterServerRetentionPeriod, retentionPeriod); 
+                SqlParameter paramRetentionPeriod = new SqlParameter(ParamRegisterServerRetentionPeriod, retentionPeriod);
+                SqlParameter paramAuditFoldersString = new SqlParameter(ParamAuditFoldersString, auditFoldersString);
 
                 Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
                                 NonQueryRegisterServer, new SqlParameter[] { paramConnectionname, paramConnectionport, paramServername, 
                                                         paramInstancename, paramAuthmode, paramLoginname, paramLoginpassword, 
-                                                            paramServerlogin, paramServerpassword, paramVersion, paramRetentionPeriod});
+                                                            paramServerlogin, paramServerpassword, paramVersion, paramRetentionPeriod, paramAuditFoldersString});
             }
         }
 
@@ -887,6 +897,32 @@ namespace Idera.SQLsecure.UI.Console.Sql
                                 NonQueryChangeServerCredentials, new SqlParameter[] { paramConnectionname, paramLogingname, paramLoginpassword,
                                                                                         paramAuthmode, paramServerlogin, paramServerpassword });
             }
+        }
+
+        static public void UpdateFolders(string connectionString, string connectionName, string[] folders )
+        {
+            Debug.Assert(!string.IsNullOrEmpty(connectionString));
+
+            try
+            {
+                string auditFoldersString = FormAuditFoldersString(folders);
+                // Open connection to repository and add server.
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    // Open the connection.
+                    connection.Open();
+
+                    // Setup audit folder server params.
+                    SqlParameter paramConnectionname = new SqlParameter(ParamChangeServerCredentialsConnectionname, connectionName);
+                    SqlParameter paramAuditFoldersString = new SqlParameter(ParamAuditFoldersString, auditFoldersString);
+                    SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
+                                                  NonQueryChangeAuditFolders, new SqlParameter[] { paramConnectionname, paramAuditFoldersString });
+                }
+            }
+            catch (Exception ex)
+            {
+                logX.loggerX.Error(string.Format("Failed to update audit folders. Error message: {0}", ex.Message));
+            }   
         }
 
         static public void AddRegisteredServerToPolicy(int registeredServerId, int policyId)
@@ -1038,6 +1074,18 @@ namespace Idera.SQLsecure.UI.Console.Sql
             else { Debug.Assert(false, "Unknown answer"); }
 
             return ret;
+        }
+
+        private static string FormAuditFoldersString(string[] folders)
+        {
+            string auditFoldersString = null;
+
+            if (folders != null && folders.Length > 0)
+            {
+                auditFoldersString = string.Join(Utility.Constants.AUDIT_FOLDER_DELIMITER, folders);
+            }
+
+            return auditFoldersString;
         }
 
         #endregion

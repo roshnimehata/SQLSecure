@@ -12,7 +12,7 @@ namespace Idera.SQLsecure.Collector.Sql
 {
     public class SqlJob
     {
-        private static LogX logX = new LogX("Idera.SQLsecure.Collector.Sql.DatabaseObject");
+        private static LogX logX = new LogX("Idera.SQLsecure.Collector.Sql.SqlJob");
 
         public static string GetJobsQuery = "SELECT  sj.name ," +
                                             " sj.owner_sid ," +

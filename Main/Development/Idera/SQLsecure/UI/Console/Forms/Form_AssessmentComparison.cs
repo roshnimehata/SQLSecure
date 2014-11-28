@@ -1388,10 +1388,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
                         // Create a new Comparison Summary by processing the detail and creating a summary
                         m_ComparisonSummaryTable = createDataSourceComparisonGridTable();
+
+                        metricDifferenceDict.Clear();
+
                         if (m_ComparisonTable.DefaultView.Count > 0)
                         {
                             DataRow newRow = m_ComparisonSummaryTable.NewRow();
-                            metricDifferenceDict.Clear();
+                            
                             foreach (DataRowView drv in m_ComparisonTable.DefaultView)
                             {
                                 if (nMetricId != (int) drv[colMetricId])
@@ -2712,6 +2715,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
                 // Save the user configuration of the grid to restore it after setting the datasource again
                 Utility.GridSettings gridSettings = GridSettings.GetSettings(_grid_ReportCard);
+
+                DataView dataView = _grid_ReportCard.DataSource as DataView;
+                if (dataView != null)
+                {
+                    dataView.Dispose();
+                }
+
                 bool initializing = _grid_ReportCard.DataSource == null;
 
                 _grid_ReportCard.SetDataBinding(ReportCardTable.DefaultView, null);

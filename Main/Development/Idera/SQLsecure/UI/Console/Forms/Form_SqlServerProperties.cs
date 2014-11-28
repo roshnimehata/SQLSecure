@@ -1,20 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
+using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
-using System.Security.Principal;
-
 using Idera.SQLsecure.Core.Accounts;
-using Idera.SQLsecure.UI.Console.Utility;
-using Idera.SQLsecure.UI.Console.Sql;
-using Idera.SQLsecure.UI.Console.Controls;
 using Idera.SQLsecure.Core.Logger;
+using Idera.SQLsecure.UI.Console.Controls;
+using Idera.SQLsecure.UI.Console.Sql;
+using Idera.SQLsecure.UI.Console.Utility;
 using Infragistics.Win.UltraWinListView;
-using Constants = Idera.SQLsecure.UI.Console.Utility.Constants;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 
 namespace Idera.SQLsecure.UI.Console.Forms
@@ -27,6 +22,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             General,
             Credentials,
+            AuditFolders,
             Filters,
             Schedule,
             Email,
@@ -207,6 +203,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
             }
         }
 
+        private void InitializeAuditFoldersPage()
+        {
+            string[] folders = m_RegisteredServer.AuditFoldersString.Split(new string[] { Utility.Constants.AUDIT_FOLDER_DELIMITER},
+                StringSplitOptions.RemoveEmptyEntries);
+            addEditFoldersControl.SetFolders(folders);
+        }
         private void initSchedulePage()
         {
             // Disable the controls, if editing is not allowed.
@@ -542,6 +544,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             Debug.Assert(filters != null);
 
             InitializeComponent();
+            addEditFoldersControl.FoldersUpdated += addEditFoldersControl_FoldersUpdated;
 
             // Set images.
             _cntxtmi_FilterNew.Image = _tsbtn_FilterNew.Image = AppIcons.AppImage16(AppIcons.Enum.NewAuditFilter);
@@ -552,6 +555,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             m_RequestedOperation = op;
             m_IsEdit = isEdit;
             m_RegisteredServer = registeredServer;
+            addEditFoldersControl.TargetServerName = m_RegisteredServer.ServerName;
             m_Filters = filters;
 
             ultraTabControl_ServerProperties.DrawFilter = new HideFocusRectangleDrawFilter();
@@ -637,6 +641,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // Initialize the tab pages.
             initGeneralPage();
             initCredentialsPage();
+            InitializeAuditFoldersPage();
             initSchedulePage();
             initFilterPage();
             initNotificationPage();
@@ -1224,6 +1229,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         }
                     }
 
+                    try
+                    {
+                        string[] updatedFolders = addEditFoldersControl.GetFolders();
+                        RegisteredServer.UpdateFolders(Program.gController.Repository.ConnectionString, m_RegisteredServer.ConnectionName, updatedFolders);
+                    }
+                    catch (Exception ex)
+                    {
+                        MsgBox.ShowError(ErrorMsgs.UpdateAuditFoldersFailedCaption, ErrorMsgs.UpdateAuditFoldersFailedMsg, ex);
+                    }
                     // Update filters.
                     Sql.DataCollectionFilter.UpdateFilters(Program.gController.Repository.ConnectionString,
                                                                 m_RegisteredServer.ConnectionName, m_Filters);
@@ -1431,20 +1445,35 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private void _btn_Help_Click(object sender, EventArgs e)
         {
-            string helpTopic = Utility.Help.ServerGeneralHelpTopic;
-            if (ultraTabControl_ServerProperties.SelectedTab.Index == (int)FormTabs.General)
-                helpTopic = Utility.Help.ServerGeneralHelpTopic;
-            else if (ultraTabControl_ServerProperties.SelectedTab.Index == (int)FormTabs.Credentials)
-                helpTopic = Utility.Help.ServerCredentialsHelpTopic;
-            else if (ultraTabControl_ServerProperties.SelectedTab.Index == (int)FormTabs.Filters)
-                helpTopic = Utility.Help.ServerFiltersHelpTopic;
-            else if (ultraTabControl_ServerProperties.SelectedTab.Index == (int)FormTabs.Schedule)
-                helpTopic = Utility.Help.ServerScheduleHelpTopic;
-            else if (ultraTabControl_ServerProperties.SelectedTab.Index == (int)FormTabs.Email)
-                helpTopic = Utility.Help.ServerEmailHelpTopic;
-            else if (ultraTabControl_ServerProperties.SelectedTab.Index == (int)FormTabs.Policies)
-                helpTopic = Utility.Help.ServerPoliciesHelpTopic;
+            string helpTopic;
 
+            switch (ultraTabControl_ServerProperties.SelectedTab.Index)
+            {
+                case (int)FormTabs.General:
+                    helpTopic = Utility.Help.ServerGeneralHelpTopic;
+                    break;
+                case (int)FormTabs.Credentials:
+                    helpTopic = Utility.Help.ServerCredentialsHelpTopic;
+                    break;
+                case (int)FormTabs.AuditFolders:
+                    helpTopic = Utility.Help.ServerAuditFoldersHelpTopic;
+                    break;
+                case (int)FormTabs.Filters:
+                    helpTopic = Utility.Help.ServerFiltersHelpTopic;
+                    break;
+                case (int)FormTabs.Schedule:
+                     helpTopic = Utility.Help.ServerScheduleHelpTopic;
+                    break;
+                case (int)FormTabs.Email:
+                    helpTopic = Utility.Help.ServerEmailHelpTopic;
+                    break;
+                case (int)FormTabs.Policies:
+                    helpTopic = Utility.Help.ServerPoliciesHelpTopic;
+                    break;
+                default:
+                    helpTopic = Utility.Help.ServerGeneralHelpTopic;
+                    break;
+            }
             Program.gController.ShowTopic(helpTopic);
         }
 
@@ -1452,8 +1481,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             _btn_Help_Click(sender, hlpevent);
         }
-
-        #endregion
 
         private void button_EmailProvider_Click(object sender, EventArgs e)
         {
@@ -1521,5 +1548,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
             m_IsDirty = true;
         }
 
+        private void addEditFoldersControl_FoldersUpdated(object sender, EventArgs e)
+        {
+            m_IsDirty = true;
+        }
+
+        #endregion
     }
 }
