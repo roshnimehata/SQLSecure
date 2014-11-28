@@ -221,7 +221,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         sqlLogin = form.textBox_SQLWindowsUser.Text;
                         sqlPassword = form.textBox_SQLWindowsPassword.Text;
                     }
-
+                    
                     string[] auditFolders = form.addEditFoldersControl.GetFolders();
                     Sql.RegisteredServer.AddServer(Program.gController.Repository.ConnectionString,
                                         form.m_Connection, form.m_ConnectionPort, form.m_Machine, form.m_Instance, 
@@ -1170,7 +1170,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             _page_ConfigureSMTPEmail.AllowMoveNext = entered;
         }
-
+       
         private void wizardPage1_BeforeDisplay(object sender, EventArgs e)
         {
 

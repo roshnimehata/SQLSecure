@@ -331,6 +331,7 @@ namespace Idera.SQLsecure.Collector.Sql
             }
             return numWarnings;
         }
+
         public int  GetDatabaseFilePermissions(List<Database> databases)
         {
             int numWarnings = 0;

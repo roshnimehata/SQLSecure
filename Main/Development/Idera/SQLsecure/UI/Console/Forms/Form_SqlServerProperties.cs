@@ -42,7 +42,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private const string DESCR_SCHEDULE = @"Specify when you want SQLsecure to take snapshots.";
         private const string DESCR_EMAIL = @"Configure email notification for snapshot status and findings.";
         private const string DESCR_INTERVIEW = @"Select which policies should audit this SQL Server.";
-
         private const string NoFilters = @"Collect only server level data.";
 
         #endregion
@@ -209,6 +208,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 StringSplitOptions.RemoveEmptyEntries);
             addEditFoldersControl.SetFolders(folders);
         }
+
         private void initSchedulePage()
         {
             // Disable the controls, if editing is not allowed.
@@ -1002,12 +1002,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     bool isPasswordLengthValid = radioButton_SQLServerAuth.Checked
                         ? PasswordValidator.ValidatePasswordLength(textbox_SqlLoginPassword.Text)
                         : PasswordValidator.ValidatePasswordLength(textBox_SQLWindowsPassword.Text);
+
                     if (!isPasswordLengthValid)
                     {
                         isOk = false;
                         allowRegisterAnyway = false;
                         msgBldr.AppendFormat(Utility.Constants.PASSWORD_LENGTH_MESSAGE_FORMAT, Utility.Constants.MINIMUM_PASSWORD_LENGTH);
                     }
+
                     if (allowRegisterAnyway)
                     {
                         // Operating System and AD User 
@@ -1229,6 +1231,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         }
                     }
 
+                    //Update Audit Folders
                     try
                     {
                         string[] updatedFolders = addEditFoldersControl.GetFolders();
@@ -1238,6 +1241,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     {
                         MsgBox.ShowError(ErrorMsgs.UpdateAuditFoldersFailedCaption, ErrorMsgs.UpdateAuditFoldersFailedMsg, ex);
                     }
+
                     // Update filters.
                     Sql.DataCollectionFilter.UpdateFilters(Program.gController.Repository.ConnectionString,
                                                                 m_RegisteredServer.ConnectionName, m_Filters);
@@ -1450,25 +1454,25 @@ namespace Idera.SQLsecure.UI.Console.Forms
             switch (ultraTabControl_ServerProperties.SelectedTab.Index)
             {
                 case (int)FormTabs.General:
-                    helpTopic = Utility.Help.ServerGeneralHelpTopic;
+                helpTopic = Utility.Help.ServerGeneralHelpTopic;
                     break;
                 case (int)FormTabs.Credentials:
-                    helpTopic = Utility.Help.ServerCredentialsHelpTopic;
+                helpTopic = Utility.Help.ServerCredentialsHelpTopic;
                     break;
                 case (int)FormTabs.AuditFolders:
                     helpTopic = Utility.Help.ServerAuditFoldersHelpTopic;
                     break;
                 case (int)FormTabs.Filters:
-                    helpTopic = Utility.Help.ServerFiltersHelpTopic;
+                helpTopic = Utility.Help.ServerFiltersHelpTopic;
                     break;
                 case (int)FormTabs.Schedule:
-                     helpTopic = Utility.Help.ServerScheduleHelpTopic;
+                helpTopic = Utility.Help.ServerScheduleHelpTopic;
                     break;
                 case (int)FormTabs.Email:
-                    helpTopic = Utility.Help.ServerEmailHelpTopic;
+                helpTopic = Utility.Help.ServerEmailHelpTopic;
                     break;
                 case (int)FormTabs.Policies:
-                    helpTopic = Utility.Help.ServerPoliciesHelpTopic;
+                helpTopic = Utility.Help.ServerPoliciesHelpTopic;
                     break;
                 default:
                     helpTopic = Utility.Help.ServerGeneralHelpTopic;

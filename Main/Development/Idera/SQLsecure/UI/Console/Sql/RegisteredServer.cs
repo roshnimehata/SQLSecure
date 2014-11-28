@@ -771,7 +771,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 SqlParameter paramServerlogin = new SqlParameter(ParamRegisterServerServerlogin, windowsUser);
                 SqlParameter paramServerpassword = new SqlParameter(ParamRegisterServerServerpassword, cipherWindowsPassword);
                 SqlParameter paramVersion = new SqlParameter(ParamRegisterServerVersion, version);
-                SqlParameter paramRetentionPeriod = new SqlParameter(ParamRegisterServerRetentionPeriod, retentionPeriod);
+                SqlParameter paramRetentionPeriod = new SqlParameter(ParamRegisterServerRetentionPeriod, retentionPeriod); 
                 SqlParameter paramAuditFoldersString = new SqlParameter(ParamAuditFoldersString, auditFoldersString);
 
                 Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,

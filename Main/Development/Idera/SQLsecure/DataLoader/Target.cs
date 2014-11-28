@@ -345,7 +345,9 @@ namespace Idera.SQLsecure.Collector
                 m_IsValid = false;
             }
 
+            //Retrieve audit folders 
             m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
+
             // Retrieve the filter rules.
             if (m_IsValid)
             {
@@ -1577,16 +1579,6 @@ namespace Idera.SQLsecure.Collector
                         strNewMessage = "Failed to load file permissions for target SQL Server";
                         PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                         snapshotStatus = Constants.StatusWarning;
-                    }
-                    //for audit folders
-                    foreach (string auditFolder in m_auditFolders)
-                    {
-                        if (filePermissions.LoadFilePermissionsForAuditDirectory(auditFolder) != 0)
-                        {
-                            strNewMessage = string.Format("Failed to load file permissions for '{0}' audit folder", auditFolder);
-                            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                            snapshotStatus = Constants.StatusWarning;
-                        }   
                     }
                     if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
                     {

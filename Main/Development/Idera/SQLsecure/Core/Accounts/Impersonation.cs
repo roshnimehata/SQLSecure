@@ -81,8 +81,8 @@ namespace Idera.SQLsecure.Core.Accounts
                 returnValue = NativeMethods.LogonUser(username,
                                                            domain,
                                                            password,
-                                                           NativeMethods.LOGON32_LOGON_INTERACTIVE,
-                                                           NativeMethods.LOGON32_PROVIDER_DEFAULT,
+                                                           NativeMethods.LOGON32_LOGON_NEW_CREDENTIALS,
+                                                           NativeMethods.LOGON32_PROVIDER_WINNT50,
                                                            ref tokenHandle);
 
                 if (!returnValue)
@@ -204,10 +204,15 @@ namespace Idera.SQLsecure.Core.Accounts
                                                        IntPtr* arguments);
 
         internal const int LOGON32_PROVIDER_DEFAULT = 0;
+        internal const int LOGON32_PROVIDER_WINNT35 = 1;
+        internal const int LOGON32_PROVIDER_WINNT40 = 2;
+        internal const int LOGON32_PROVIDER_WINNT50 = 3;
+
         //This parameter causes LogonUser to create a primary token.
         internal const int LOGON32_LOGON_INTERACTIVE = 2;
         internal const int LOGON32_LOGON_NETWORK = 3;
         internal const int LOGON32_LOGON_NETWORK_CLEARTEXT = 8;
+        internal const int LOGON32_LOGON_NEW_CREDENTIALS = 9;
         internal const int SECURITY_IMPERSONATION = 2;
 
         /// <summary>
