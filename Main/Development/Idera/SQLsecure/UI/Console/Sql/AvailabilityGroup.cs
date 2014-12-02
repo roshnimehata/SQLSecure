@@ -356,24 +356,24 @@ namespace Idera.SQLsecure.UI.Console.SQL
 
                 foreach (DataRow dataRow in replicRows)
                 {
-                    AvailabilityGroupReplica rep = new AvailabilityGroupReplica()
-                    {
-                        AvailabilityMode =
-                            byte.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.AvailabilityMode].ToString()),
-                        CreateDate = DateTime.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.CreateDate].ToString()),
-                        AvailabilityModeDesc = dataRow[(int)AvailabilityGroupReplicaColumns.AvailabilityModeDesc].ToString(),
-                        EndpointUrl = dataRow[(int)AvailabilityGroupReplicaColumns.EndpointUrl].ToString(),
-                        FailoverMode = byte.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.FailoverMode].ToString()),
-                        FailoverModeDesc = dataRow[(int)AvailabilityGroupReplicaColumns.FailoverModeDesc].ToString(),
-                        GroupId = new Guid(dataRow[(int)AvailabilityGroupReplicaColumns.GroupId].ToString()),
-                        ModifyDate = DateTime.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.ModifyDate].ToString()),
-                        Ownersid = dataRow[(int)AvailabilityGroupReplicaColumns.Ownersid].ToString(),
-                        ReplicaServerName = dataRow[(int)AvailabilityGroupReplicaColumns.ReplicaServerName].ToString(),
-                        Replicaid = new Guid(dataRow[(int)AvailabilityGroupReplicaColumns.Replicaid].ToString()),
-                        ServerreplicaId = int.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.ServerreplicaId].ToString()),
-                        SnapshotId = int.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.SnapshotId].ToString()),
-                        OwnerName = dataRow[(int)AvailabilityGroupReplicaColumns.OwnerName].ToString()
-                    };
+                    AvailabilityGroupReplica rep = new AvailabilityGroupReplica();
+                    
+                        rep.AvailabilityMode =
+                            byte.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.AvailabilityMode].ToString());
+                        rep.CreateDate = DateTime.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.CreateDate].ToString());
+                        rep.AvailabilityModeDesc = dataRow[(int)AvailabilityGroupReplicaColumns.AvailabilityModeDesc].ToString();
+                        rep.EndpointUrl = dataRow[(int)AvailabilityGroupReplicaColumns.EndpointUrl].ToString();
+                        rep.FailoverMode = byte.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.FailoverMode].ToString());
+                        rep.FailoverModeDesc = dataRow[(int)AvailabilityGroupReplicaColumns.FailoverModeDesc].ToString();
+                        rep.GroupId = new Guid(dataRow[(int)AvailabilityGroupReplicaColumns.GroupId].ToString());
+                        rep.ModifyDate = DateTime.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.ModifyDate].ToString());
+                        rep.Ownersid = dataRow[(int)AvailabilityGroupReplicaColumns.Ownersid].ToString();
+                        rep.ReplicaServerName = dataRow[(int)AvailabilityGroupReplicaColumns.ReplicaServerName].ToString();
+                        rep.Replicaid = new Guid(dataRow[(int)AvailabilityGroupReplicaColumns.Replicaid].ToString());
+                        rep.ServerreplicaId = int.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.ServerreplicaId].ToString());
+                        rep.SnapshotId = int.Parse(dataRow[(int)AvailabilityGroupReplicaColumns.SnapshotId].ToString());
+                        rep.OwnerName = dataRow[(int)AvailabilityGroupReplicaColumns.OwnerName].ToString();
+                    
                     db.Replicas.Add(rep);
                 }
             }
