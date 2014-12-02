@@ -274,7 +274,7 @@ namespace Idera.SQLsecure.UI.Console.SQL
                         sqlAdapter.Fill(set);
                         foreach (DataRow row in set.Tables[0].Rows)
                         {
-                            var db = GetGroupFromDAtaRow(row, set);
+                            AvailabilityGroup db = GetGroupFromDAtaRow(row, set);
 
                             groupList.Add(db);
                         }
@@ -351,7 +351,7 @@ namespace Idera.SQLsecure.UI.Console.SQL
                 int.Parse(row[(int)AvailabilityGroupColumns.ServergroupId].ToString()));
             if (set.Tables.Count > 1)
             {
-                var replicRows = set.Tables[1].Select(string.Format("groupid = '{0}'",
+                DataRow[] replicRows = set.Tables[1].Select(string.Format("groupid = '{0}'",
                     row[(int)AvailabilityGroupColumns.GroupId].ToString()));
 
                 foreach (DataRow dataRow in replicRows)
