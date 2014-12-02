@@ -123,6 +123,6 @@ namespace Idera.SQLsecure.Collector
    
         #endregion
 
-        #endregion
+        
     }
 }
