@@ -986,4 +986,6 @@ values
           N'Availability Group', -- classname - nvarchar(500)
           null -- hashkey - nvarchar(256)
           )
-go
+go 
+
+
