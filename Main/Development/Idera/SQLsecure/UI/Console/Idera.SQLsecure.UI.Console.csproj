@@ -188,7 +188,10 @@
     <Compile Include="ActiveDirectory\PInvoke.cs" />
     <Compile Include="ActiveDirectory\StructsFlags.cs" />
     <Compile Include="Controller.cs" />  
-  
+    <Compile Include="Controls\AddEditFolders.cs" />
+    <Compile Include="Controls\AddEditFolders.Designer.cs">
+      <DependentUpon>AddEditFolders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AuditedServers.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -866,7 +869,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  
+    <EmbeddedResource Include="Controls\AddEditFolders.resx">
+      <DependentUpon>AddEditFolders.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\AuditedServers.resx">
       <DependentUpon>AuditedServers.cs</DependentUpon>
       <SubType>Designer</SubType>

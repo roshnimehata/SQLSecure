@@ -159,7 +159,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 // Fill the grid.
                 foreach (Sql.FileSystemObject fsobject in fsobjects)
                 {
-                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, fsobject.OsObjectId, fsobject.Name);
+                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, fsobject.OsObjectId, fsobject.Name,null);
                     m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(tag.ObjType), tag.ObjectName, fsobject.TypeDescription, tag,
                                         fsobject.Owner);
                 }
@@ -181,7 +181,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 // Fill the grid.
                 foreach (Sql.RegistryKey key in keys)
                 {
-                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, key.OsObjectId, key.Name);
+                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, key.OsObjectId, key.Name, null);
                     m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(tag.ObjType), tag.ObjectName, tag.TypeName, tag,
                                         key.Owner);
                 }
@@ -203,7 +203,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 // Fill the grid.
                 foreach (Sql.Service service in services)
                 {
-                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, 0, service.Name);
+                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, 0, service.Name, null);
                     m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(tag.ObjType), service.DisplayName, tag.TypeName, tag,
                                         null, null, null, service.LoginName, null, null, null, null, null,
                                         service.State);
@@ -236,7 +236,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 // Fill the grid.
                 foreach (Sql.Login login in logins)
                 {
-                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, login.Type, login.Id, login.Name);
+                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, login.Type, login.Id, login.Name, null);
                     m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(tag.ObjType), tag.ObjectName, tag.TypeName, tag,
                                         null, null, null, null, null, null,
                                         getMembersOf(tag), login.ServerAccess, login.ServerDeny);
@@ -259,7 +259,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.ServerRole;
                 foreach (Sql.ServerRole role in roles)
                 {
-                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, role.Id, role.Name);
+                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, role.Id, role.Name, null);
                     m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.ObjectName, tag.TypeName, tag);
                 }
             }
@@ -296,7 +296,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.Endpoint;
                 foreach (Sql.Endpoint endpoint in endpoints)
                 {
-                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, endpoint.Id, endpoint.Name);
+                    Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, endpoint.Id, endpoint.Name, null);
                     m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.ObjectName, tag.TypeName, tag);
                 }
             }
@@ -866,7 +866,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     foreach (AvailabilityGroupReplica mAvailabilityGroup in gr.Replicas)
                     {
                         Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, mAvailabilityGroup.ServerreplicaId,
-                            mAvailabilityGroup.ReplicaServerName);
+                            mAvailabilityGroup.ReplicaServerName, null);
 
                         m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.ObjectName,
                             tag.TypeName, tag, null, null, null,
@@ -903,7 +903,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private void updateGridView(
                 Sql.ObjectType.TypeEnum objType,
                 Sql.Database database,
-                object tagObj = null
+                object tagObj
             )
         {
             // Clear the data table.

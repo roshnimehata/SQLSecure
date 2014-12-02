@@ -655,7 +655,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 Sql.ObjectType.TypeEnum objType,
                 int objectId,
                 string objectName,
-                object tag = null
+                object tag 
             )
         {
             Debug.Assert(snapshotId != 0);

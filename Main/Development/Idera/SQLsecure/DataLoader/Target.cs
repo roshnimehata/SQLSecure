@@ -100,7 +100,7 @@ namespace Idera.SQLsecure.Collector
                       WHERE config in (102, 117, 400, 544, 1547)";
         private const string QueryConfigurations2K5 =
             @"SELECT configuration_id, value_in_use FROM sys.configurations
-                      WHERE configuration_id in (102, 117, 400, 544, 1547, 1576, 16385, 16386, 16388, 16389, 16390, 16391, 1562, 1568)";
+                      WHERE configuration_id in (102, 117, 400, 544, 1547, 1576, 16385, 16386, 16388, 16389, 16390, 16391, 1562, 1568, 1577)";
         private const string QuerySysAdminOnlyForSQLAgentCmdExecJobs2k5 =
             "EXEC msdb.dbo.sp_enum_proxy_for_subsystem @subsystem_id = 3";
         private const string QuerySysAdminOnlyForSQLAgentCmdExecJobs2k =
@@ -121,7 +121,7 @@ namespace Idera.SQLsecure.Collector
                                 databasemailxpsenabled, oleautomationproceduresenabled,
                                 webassistantproceduresenabled, xp_cmdshellenabled, serverisdomaincontroller,
                                 sapasswordempty, agentsysadminonly, replicationenabled, systemdrive, adhocdistributedqueriesenabled,
-                                isweakpassworddetectionenabled, isdistributor, ispublisher, hasremotepublisher, isclrenabled, isdefaulttraceenabled)
+                                isweakpassworddetectionenabled, isdistributor, ispublisher, hasremotepublisher, isclrenabled, isdefaulttraceenabled, iscommoncriteriacomplianceenabled)
                       select    connectionname = '{0}', 
                                 servername = '{1}', 
                                 instancename = '{2}', 
@@ -157,7 +157,8 @@ namespace Idera.SQLsecure.Collector
                                 ispublisher = '{31}', 
                                 hasremotepublisher = '{32}',
                                 isclrenabled = '{33}',
-                                isdefaulttraceenabled = '{34}'
+                                isdefaulttraceenabled = '{34}',
+                                iscommoncriteriacomplianceenabled = '{35}'
                       from SQLsecure.dbo.registeredserver where connectionname = '{0}'";
 
         public const string NonQueryCreateSnapshotHistory =
@@ -433,6 +434,7 @@ namespace Idera.SQLsecure.Collector
             char enabledAllowUpdates = Constants.Unknown;
             char enabledScanForStartupSP = Constants.Unknown;
             char isDefaultTraceEnabled = Constants.Unknown;
+            char isCommonCriteriaComplianceEnabled = Constants.Unknown;
             char enabledSQLmailXPs = Constants.Unknown;
             char enabledDatabaseMailXPs = Constants.Unknown;
             char enabledOLEAutomationXPs = Constants.Unknown;
@@ -753,6 +755,9 @@ namespace Idera.SQLsecure.Collector
                                             case 1568:
                                                 isDefaultTraceEnabled = value;
                                                 break;
+                                            case 1577:
+                                                isCommonCriteriaComplianceEnabled = value;
+                                                break;
                                             default:
                                                 logX.loggerX.Warn("WARN - Read unknown configuration id: ", id);
                                                 break;
@@ -815,6 +820,9 @@ namespace Idera.SQLsecure.Collector
                                                 break;
                                             case 1562:
                                                 isClrEnabled = value;
+                                                break;
+                                            case 1577:
+                                                isCommonCriteriaComplianceEnabled = value;
                                                 break;
                                             default:
                                                 logX.loggerX.Warn("WARN - Read unknown configuration id: ", id);
@@ -922,7 +930,8 @@ namespace Idera.SQLsecure.Collector
                                                     isPublisher,
                                                     hasRemotePublisher,
                                                     isClrEnabled,
-                                                    isDefaultTraceEnabled);
+                                                    isDefaultTraceEnabled,
+                                                    isCommonCriteriaComplianceEnabled);
 
                             Sql.SqlHelper.ExecuteNonQuery(repository, CommandType.Text, query);
 
