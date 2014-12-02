@@ -205,6 +205,10 @@ namespace Idera.SQLsecure.Collector.Sql
             get { return m_SQLVersionEnum == Sql.ServerVersion.SQL2012; }
         }
 
+        private bool Is2014
+        {
+            get { return m_SQLVersionEnum == Sql.ServerVersion.SQL2014; }
+        }
         public int NumOSObjectsWrittenToRepository
         {
             get { return m_OSObjectCount; }
@@ -681,6 +685,10 @@ namespace Idera.SQLsecure.Collector.Sql
                             {
                                 regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server Native Client 11.0";
                             }
+                            else if (Is2014)
+                            {
+                                regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server Native Client 11.0";
+                            }
                             if (!string.IsNullOrEmpty(regSubKey))
                             {
                                 logX.loggerX.Debug(string.Format(@"Processing HKLM\{0} Registry Keys", regSubKey));
@@ -706,6 +714,10 @@ namespace Idera.SQLsecure.Collector.Sql
                             else if (Is2012)
                             {
                                 regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server 2012 Redist";
+                            }
+                            else if (Is2014)
+                            {
+                                regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server 2014 Redist";
                             }
                             if (!string.IsNullOrEmpty(regSubKey))
                             {

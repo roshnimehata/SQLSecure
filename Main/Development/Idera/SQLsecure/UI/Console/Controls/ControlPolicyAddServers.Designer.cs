@@ -31,20 +31,22 @@ namespace Idera.SQLsecure.UI.Console.Controls
             Infragistics.Win.Appearance appearance1 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance2 = new Infragistics.Win.Appearance();
             this.groupBoxMainServerSelection = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.radioButton2012 = new System.Windows.Forms.RadioButton();
             this.ultraListViewServers = new Infragistics.Win.UltraWinListView.UltraListView();
             this.radioButton2008 = new System.Windows.Forms.RadioButton();
             this.radioButton2005 = new System.Windows.Forms.RadioButton();
             this.radioButton2000 = new System.Windows.Forms.RadioButton();
             this.radioButtonAll = new System.Windows.Forms.RadioButton();
             this.radioButtonManual = new System.Windows.Forms.RadioButton();
-            this.radioButton2012 = new System.Windows.Forms.RadioButton();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.radioButton2014 = new System.Windows.Forms.RadioButton();
             this.groupBoxMainServerSelection.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ultraListViewServers)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxMainServerSelection
             // 
+            this.groupBoxMainServerSelection.Controls.Add(this.radioButton2014);
             this.groupBoxMainServerSelection.Controls.Add(this.panel1);
             this.groupBoxMainServerSelection.Controls.Add(this.radioButton2012);
             this.groupBoxMainServerSelection.Controls.Add(this.ultraListViewServers);
@@ -61,16 +63,36 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.groupBoxMainServerSelection.TabStop = false;
             this.groupBoxMainServerSelection.Text = "Select SQL Servers to include in this Policy";
             // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.panel1.Location = new System.Drawing.Point(20, 110);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(427, 2);
+            this.panel1.TabIndex = 8;
+            // 
+            // radioButton2012
+            // 
+            this.radioButton2012.AutoSize = true;
+            this.radioButton2012.ForeColor = System.Drawing.Color.Navy;
+            this.radioButton2012.Location = new System.Drawing.Point(223, 58);
+            this.radioButton2012.Name = "radioButton2012";
+            this.radioButton2012.Size = new System.Drawing.Size(170, 17);
+            this.radioButton2012.TabIndex = 5;
+            this.radioButton2012.TabStop = true;
+            this.radioButton2012.Text = "All SQL Server 2012 Instances";
+            this.radioButton2012.UseVisualStyleBackColor = true;
+            // 
             // ultraListViewServers
             // 
-            this.ultraListViewServers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            appearance1.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.server_16;
+            this.ultraListViewServers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ultraListViewServers.Appearance = appearance1;
             this.ultraListViewServers.BorderStyle = Infragistics.Win.UIElementBorderStyle.None;
             this.ultraListViewServers.GroupHeadersVisible = Infragistics.Win.DefaultableBoolean.False;
-            appearance2.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.server_16;
             this.ultraListViewServers.ItemSettings.Appearance = appearance2;
             this.ultraListViewServers.ItemSettings.SelectionType = Infragistics.Win.UltraWinListView.SelectionType.None;
             this.ultraListViewServers.Location = new System.Drawing.Point(32, 148);
@@ -147,27 +169,17 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.radioButtonManual.UseVisualStyleBackColor = true;
             this.radioButtonManual.CheckedChanged += new System.EventHandler(this.radioButtonManual_CheckedChanged);
             // 
-            // radioButton2012
+            // radioButton2014
             // 
-            this.radioButton2012.AutoSize = true;
-            this.radioButton2012.ForeColor = System.Drawing.Color.Navy;
-            this.radioButton2012.Location = new System.Drawing.Point(223, 58);
-            this.radioButton2012.Name = "radioButton2012";
-            this.radioButton2012.Size = new System.Drawing.Size(170, 17);
-            this.radioButton2012.TabIndex = 5;
-            this.radioButton2012.TabStop = true;
-            this.radioButton2012.Text = "All SQL Server 2012 Instances";
-            this.radioButton2012.UseVisualStyleBackColor = true;
-            // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this.panel1.Location = new System.Drawing.Point(20, 110);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(427, 2);
-            this.panel1.TabIndex = 8;
+            this.radioButton2014.AutoSize = true;
+            this.radioButton2014.ForeColor = System.Drawing.Color.Navy;
+            this.radioButton2014.Location = new System.Drawing.Point(223, 81);
+            this.radioButton2014.Name = "radioButton2014";
+            this.radioButton2014.Size = new System.Drawing.Size(170, 17);
+            this.radioButton2014.TabIndex = 9;
+            this.radioButton2014.TabStop = true;
+            this.radioButton2014.Text = "All SQL Server 2014 Instances";
+            this.radioButton2014.UseVisualStyleBackColor = true;
             // 
             // ControlPolicyAddServers
             // 
@@ -196,5 +208,6 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private System.Windows.Forms.RadioButton radioButtonAll;
         private System.Windows.Forms.RadioButton radioButton2012;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton radioButton2014;
     }
 }

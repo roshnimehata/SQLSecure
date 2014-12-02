@@ -68,6 +68,8 @@ namespace Idera.SQLsecure.Core.Accounts
             WindowsIdentity currentIdentity = null;
             IntPtr tokenHandle = IntPtr.Zero;
             IntPtr dupeTokenHandle = IntPtr.Zero;
+            SecurityImpersonationLevel impersonationLevel = SecurityImpersonationLevel.SecurityImpersonation;
+
             bool returnValue;
 
             if (!string.IsNullOrEmpty(fullUsername))
@@ -81,26 +83,44 @@ namespace Idera.SQLsecure.Core.Accounts
                 returnValue = NativeMethods.LogonUser(username,
                                                            domain,
                                                            password,
-                                                           NativeMethods.LOGON32_LOGON_NEW_CREDENTIALS,
-                                                           NativeMethods.LOGON32_PROVIDER_WINNT50,
+                                                           NativeMethods.LOGON32_LOGON_INTERACTIVE,
+                                                           NativeMethods.LOGON32_PROVIDER_DEFAULT,
                                                            ref tokenHandle);
 
                 if (!returnValue)
                 {
-                    int returnCode = Marshal.GetLastWin32Error();
-                    if (returnCode == 0x00000522)
+                    tokenHandle = IntPtr.Zero;
+
+                    // try to use cross domain connection (pass-through authentication
+                    returnValue = NativeMethods.LogonUser( username,
+                                                           domain,
+                                                           password,
+                                                           NativeMethods.LOGON32_LOGON_NEW_CREDENTIALS,
+                                                           NativeMethods.LOGON32_PROVIDER_WINNT50,
+                                                           ref tokenHandle);
+
+                    impersonationLevel = SecurityImpersonationLevel.SecurityDelegation;
+
+                    if (!returnValue)
                     {
-                        // "A required privilege was not held by the user"
-                        throw new Exception(                           
+
+                        int returnCode = Marshal.GetLastWin32Error();
+                        if (returnCode == 0x00000522)
+                        {
+                            // "A required privilege was not held by the user"
+                            throw new Exception(
                                 String.Format("Could not Impersonate User {0}", fullUsername) +
                                 String.Format("\r\n     Details: {0}", NativeMethods.GetErrorMessage(returnCode)) +
-                                String.Format("\r\nThe Windows account '{0}' must have the 'Act as part of Operating System' privilage enabled", WindowsIdentity.GetCurrent().Name));
-                    }
-                    else
-                    {
-                        throw new Exception(
-                            String.Format("Could not logon user, error message: {0}",
-                                          NativeMethods.GetErrorMessage(returnCode)));
+                                String.Format(
+                                    "\r\nThe Windows account '{0}' must have the 'Act as part of Operating System' privilage enabled",
+                                    WindowsIdentity.GetCurrent().Name));
+                        }
+                        else
+                        {
+                            throw new Exception(
+                                String.Format("Could not logon user, error message: {0}",
+                                    NativeMethods.GetErrorMessage(returnCode)));
+                        }
                     }
                 }
             }
@@ -116,8 +136,7 @@ namespace Idera.SQLsecure.Core.Accounts
             if(tokenHandle != IntPtr.Zero)
             {
                 // Duplicate the token, so that we can get a primary token for impersonation
-                returnValue =
-                    NativeMethods.DuplicateToken(tokenHandle, NativeMethods.SECURITY_IMPERSONATION, ref dupeTokenHandle);
+                returnValue = NativeMethods.DuplicateToken(tokenHandle, (int)impersonationLevel, ref dupeTokenHandle);
 
                 if (!returnValue)
                 {
@@ -239,5 +258,13 @@ namespace Idera.SQLsecure.Core.Accounts
         }
 
         #endregion
+    }
+
+    public enum SecurityImpersonationLevel
+    {
+        SecurityAnonymous,
+        SecurityIdentification,
+        SecurityImpersonation,
+        SecurityDelegation
     }
 }

@@ -111,7 +111,7 @@ namespace Idera.SQLsecure.Collector.Sql
                       + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers "
                       + @"WHERE isaliased = 1";
             }
-            else if (version == ServerVersion.SQL2012)
+            else if (version >= ServerVersion.SQL2012)
             {
                 query = @"SELECT
                             dp.name, 

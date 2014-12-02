@@ -100,6 +100,7 @@ namespace Idera.SQLsecure.Collector.Sql
         SQL2008,
         SQL2008R2,
         SQL2012,
+        SQL2014,
         Unsupported
     }
 
@@ -153,6 +154,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string Sql2008VerPrefix = @"10";
         internal const string Sql2008R2VerPrefix = @"10.50";
         internal const string Sql2012VerPrefix = @"11";
+        internal const string Sql2014VerPrefix = @"12";
 
         #endregion
 

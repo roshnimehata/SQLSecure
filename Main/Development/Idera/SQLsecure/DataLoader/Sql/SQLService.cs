@@ -163,6 +163,7 @@ namespace Idera.SQLsecure.Collector.Sql
                             continue;
                         break;
                     case ServerVersion.SQL2012:
+                    case ServerVersion.SQL2014:
                         if (type == SQLService.ServiceType.MSSearch ||
                             type == SQLService.ServiceType.msftesql ||
                             type == SQLService.ServiceType.MSSQLServerADHelper ||

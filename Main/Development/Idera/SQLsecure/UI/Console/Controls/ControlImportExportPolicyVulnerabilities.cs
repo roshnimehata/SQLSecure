@@ -4,18 +4,16 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-
 using Idera.SQLsecure.Core.Logger;
-using Idera.SQLsecure.UI.Console.Forms;
-using Idera.SQLsecure.UI.Console.Sql;
 using Idera.SQLsecure.UI.Console.Utility;
+using Idera.SQLsecure.UI.Console.Sql;
 using Infragistics.Win;
 using Infragistics.Win.UltraWinGrid;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 
 namespace Idera.SQLsecure.UI.Console.Controls
 {
-    public partial class controlConfigurePolicyVulnerabilities : UserControl
+    public partial class ControlImportExportPolicyVulnerabilities : UserControl
     {
         #region fields
 
@@ -24,7 +22,6 @@ namespace Idera.SQLsecure.UI.Console.Controls
         List<PolicyMetric> m_metrics = null;
         private bool m_InternalUpdate = false;
         private bool m_importing = false;
-
         private bool m_allowEdit = true;
 
         #endregion
@@ -35,6 +32,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string valueListEnabled = @"Enabled";
 
         // Columns for handling the grid and policymetric results
+        private const string colIsSelected = @"IsSelected";
         private const string colIsEnabled = @"IsEnabled";
         private const string colIsMultiSelect = @"IsMultiSelect";
         private const string colIsUserEntered = @"IsUserEntered";
@@ -56,7 +54,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
         #region ctors
 
-        public controlConfigurePolicyVulnerabilities()
+        public ControlImportExportPolicyVulnerabilities()
         {
             InitializeComponent();
 
@@ -149,83 +147,15 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
         #region properties
 
-        public int NumSecurityChecks
-        {           
-            get
-            {
-                int count = 0;
-                foreach (PolicyMetric pm in m_metrics)
-                {
-                    if(pm.IsEnabled)
-                    {
-                        count++;
-                    }
-                }
-                return count;                
-            }
-        }
-
-        public int NumHighSecurityChecks
+        public string IsSelectColumnDisplayText
         {
-            get
-            {
-                int count = 0;
-                foreach (PolicyMetric pm in m_metrics)
-                {
-                    if (pm.IsEnabled && pm.Severity == 3)
-                    {
-                        count++;
-                    }
-                }
-                return count;
-            }
-        }
-
-        public int NumMediumSecurityChecks
-        {
-            get
-            {
-                int count = 0;
-                foreach (PolicyMetric pm in m_metrics)
-                {
-                    if (pm.IsEnabled && pm.Severity == 2)
-                    {
-                        count++;
-                    }
-                }
-                return count;
-            }
-        }
-
-        public int NumLowSecurityChecks
-        {
-            get
-            {
-                int count = 0;
-                foreach (PolicyMetric pm in m_metrics)
-                {
-                    if (pm.IsEnabled && pm.Severity == 1)
-                    {
-                        count++;
-                    }
-                }
-                return count;
-            }
+            get { return ultraGridPolicyMetrics.DisplayLayout.Bands[0].Columns[colIsSelected].Header.Caption; }
+            set { ultraGridPolicyMetrics.DisplayLayout.Bands[0].Columns[colIsSelected].Header.Caption = value; }
         }
 
         #endregion
 
         #region methods
-
-        public void InitializeControl(Policy policy)
-        {
-            m_policy = policy;
-            m_importing = m_policy.PolicyId == 0;
-            button_Remove.Enabled = false;
-            checkBox_GroupByCategories.Checked = true;
-
-            loadPolicyMetrics();            
-        }
 
         public void InitializeControl(Policy policy, int metricId, bool allowEdit)
         {
@@ -254,11 +184,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             m_allowEdit = allowEdit;
             if(!allowEdit)
             {
-                button_Import.Enabled =
-                    button_Clear.Enabled =
-                    button_ResetToDefaults.Enabled =
-                    button_Edit.Enabled =
-                    button_Remove.Enabled = false;
+                button_Clear.Enabled =
+                button_ResetToDefaults.Enabled =
+                button_Edit.Enabled =
+                button_Remove.Enabled = false;
                 textBox_ReportKey.Enabled =
                     textBox_ReportText.Enabled =
                     textBox_UserEnterSingle.Enabled = false;
@@ -283,93 +212,6 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     radioButton8.Enabled = false;
                 listView_MultiSelect.Enabled = false;
             }
-        }
-
-        public bool OKToSave()
-        {
-            bool ok = true;
-            Infragistics.Win.UltraWinGrid.UltraGridRow row = ultraGridPolicyMetrics.ActiveRow;
-            if (row != null && row.IsDataRow)
-            {
-                Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[colIsEnabled];
-                if (cell != null && cell.Value is bool && (bool)cell.Value == true)
-                {
-                    if (groupBox_CriteriaUserEnterMultiple.Visible)
-                    {
-                        if (listView_MultiSelect.Items.Count < 1)
-                        {
-                            ok = false;
-                        }
-                    }
-                    else if (groupBox_CriteriaUserEnterSingle.Visible)
-                    {
-                        if (string.IsNullOrEmpty(textBox_UserEnterSingle.Text))
-                        {
-                            ok = false;
-                        }
-                    }
-                    else if(groupBox_CriteriaMultiple.Visible)
-                    {
-                        bool atLeastOneChecked = false;
-                        if(checkBox1.Checked)
-                        {
-                            atLeastOneChecked = true;                            
-                        }
-                        else if(checkBox2.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox3.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox4.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox5.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox6.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox7.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox8.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        if(!atLeastOneChecked)
-                        {
-                            ok = false;
-                        }
-                    }
-                }
-            }
-            if(!ok)
-            {
-                MsgBox.ShowError("Security Checks",
-                                 "This security check requires at least one criteria be specified.\n\nEither specify a criteria or disable this security check.");                
-            }
-            return ok;
-        }
-
-        public void SaveMetricChanges(Policy policy)
-        {
-            if (OKToSave())
-            {
-                RetrieveValuesFromUI();
-                policy.SetPolicyMetrics(m_metrics);
-            }
-        }
-
-        public bool LeavingControl()
-        {
-            return RetrieveValuesFromUI();
         }
 
         #endregion
@@ -488,16 +330,15 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridPolicyMetrics.DisplayLayout.Bands[0].SortedColumns.Add("MetricName", false);
         }
 
-
         private bool RetrieveValuesFromUI()
         {
             bool bAllowContinue = true;
             if (Visible && !m_InternalUpdate)
             {
-                if(!OKToSave())
-                {
-                    return false;
-                }
+                //if(!OKToSave())
+                //{
+                //    return false;
+                //}
                 Infragistics.Win.UltraWinGrid.UltraGridRow row = ultraGridPolicyMetrics.ActiveRow;
                 if (row != null)
                 {
@@ -1008,21 +849,19 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
         private void ultraGridPolicyMetrics_MouseClick(object sender, MouseEventArgs e)
         {
-            if (m_allowEdit && e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
-                Infragistics.Win.UIElement selectedElement = ultraGridPolicyMetrics.DisplayLayout.UIElement.ElementFromPoint(new Point(e.X, e.Y));
+                UIElement selectedElement = ultraGridPolicyMetrics.DisplayLayout.UIElement.ElementFromPoint(new Point(e.X, e.Y));
 
-                if( selectedElement is Infragistics.Win.CheckIndicatorUIElement )
+                if( selectedElement is CheckIndicatorUIElement )
                 {
-                    Infragistics.Win.UltraWinGrid.UltraGridRow row = selectedElement.SelectableItem as Infragistics.Win.UltraWinGrid.UltraGridRow;
-                    if (row != null && row.Cells != null)
+
+                    UltraGridCell cell = selectedElement.GetContext(typeof(UltraGridCell)) as UltraGridCell;
+                    if (cell != null && 
+                        (cell.Column.Key == colIsSelected))
                     {
-                        Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[colIsEnabled];
-                        if (cell != null && cell.Value is bool)
-                        {
-                            cell.Value = !(bool) cell.Value;
-                            UpdateEnabledCount();
-                        }
+                        cell.Value = !((bool)cell.Value);
+                        UpdateEnabledCount();
                     }
                 }
             }
@@ -1081,20 +920,6 @@ namespace Idera.SQLsecure.UI.Console.Controls
                             UpdateEnabledCount();
                         }
                     }
-                }
-            }
-        }
-
-        private void ultraGridPolicyMetrics_DoubleClickRow(object sender, DoubleClickRowEventArgs e)
-        {
-            Infragistics.Win.UltraWinGrid.UltraGridRow row = e.Row;
-            if (m_allowEdit && row != null && row.Cells != null)
-            {
-                Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[colIsEnabled];
-                if (cell != null && cell.Value is bool)
-                {
-                    cell.Value = !(bool)cell.Value;
-                    UpdateEnabledCount();
                 }
             }
         }
@@ -1204,27 +1029,6 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
         #region buttons for all security checks
 
-        private void button_Import_Click(object sender, EventArgs e)
-        {
-            Cursor = Cursors.WaitCursor;
-
-            string fileName = Forms.Form_ImportPolicy.Process();
-            if (!string.IsNullOrEmpty(fileName) )
-            {
-                Policy policy = new Policy();
-                policy.ImportPolicyFromXMLFile(fileName, false);
-                policy.IsSystemPolicy = false;
-                if (Form_ImportExportPolicySecuriyChecks.ProcessImport(policy, Program.gController.isAdmin))
-                {
-                m_importing = true;
-                loadPolicyMetrics();
-                    m_policy.UpdatePolicyMetricsFromSelectedSecurityChecks(policy);
-                }
-            }
-
-            Cursor = Cursors.Default;
-        }
-
         private void button_ResetToDefaults_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -1289,107 +1093,5 @@ namespace Idera.SQLsecure.UI.Console.Controls
         #endregion
 
         #endregion
-    }
-
-    class MetricValue
-    {
-        private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Controls.controlConfigurePolicyVulnerabilities.MetricValue");
-
-        public MetricValue(string possibleValues, string currentValues)
-        {
-            logX.loggerX.Verbose(string.Format("Security check possible values: {0}", possibleValues));
-            logX.loggerX.Verbose(string.Format("Security check current values: {0}", currentValues));
-            string delim = "' ";
-            string sep = "','";
-            string[] values = possibleValues.Split(',');
-            foreach (string s in values)
-            {
-                string[] t = s.Split(':');
-                if (t.GetLength(0) == 2)
-                {
-                    m_PossibleValues.Add(t[1].Trim(delim.ToCharArray()), t[0].Trim(delim.ToCharArray()));
-                }
-            }
-            
-            if (!string.IsNullOrEmpty(currentValues))
-            {
-                // Process each set of single quoted items.
-                StringBuilder sb = new StringBuilder();
-                for(int x = 0; x<currentValues.Length; x++)
-                {
-                    if (currentValues[x] == '\'')
-                    {
-                        // Are there any more characters?
-                        if (currentValues.Length > x + 1)
-                        {
-                            if (sb.Length == 0)
-                            {
-                                // First ' of new string
-                                x++;
-                                if (currentValues.Length > x + 1)
-                                {
-                                    if (currentValues[x] == '\'' && currentValues[x+1] == '\'')
-                                    {
-                                        // found Escaped quote add it to string
-                                        sb.Append(currentValues[x]);
-                                        x++;
-                                    }
-                                }
-                                sb.Append(currentValues[x]);
-                            }
-                            else
-                            {
-                                if(currentValues[x+1] == '\'')
-                                {
-                                  // found Escaped quote add it to string
-                                  sb.Append(currentValues[x]);
-                                  x++;
-                                  sb.Append(currentValues[x]);
-                                }
-                                else
-                                {
-                                    if (sb.Length > 0)
-                                    {
-                                        // found end of quoted string add it to values array
-                                        m_CurrentValues.Add(sb.ToString());
-                                        sb.Remove(0, sb.Length);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else if(sb.Length > 0)
-                    {
-                        // found character between quotes
-                        sb.Append(currentValues[x]);
-                    }
-                    else if(currentValues[x] != ',')
-                    {
-                        logX.loggerX.Error(string.Format("Invalid criteria string: {0}", currentValues));
-                        m_CurrentValues.Clear();
-                        sb.Remove(0, sb.Length);
-                        break;
-                    }
-                }
-                if(sb.Length > 0)
-                {
-                    m_CurrentValues.Add(sb.ToString());
-                }               
-            }
-        }
-
-        public Dictionary<string, string> PossibleValues
-        {
-            get { return m_PossibleValues; }
-        }
-
-        public List<string> CurrentValues
-        {
-            get { return m_CurrentValues; }
-        }
-
-        private Dictionary<string, string> m_PossibleValues = new Dictionary<string, string>();
-        private List<string> m_CurrentValues = new List<string>();
-
     }
 }

@@ -6302,6 +6302,49 @@ AS
 								 end 
 						end 
 
+						else if ( @metricid = 109 ) 
+						begin
+
+							  if exists ( select
+												1
+											  from
+												serversnapshot
+											  where
+												snapshotid = @snapshotid
+												and iscommoncriteriacomplianceenabled = N'Y' ) 
+								 select
+									@sevcode = @sevcodeok,
+									@metricval = N'Common criteria compliance is enabled.' 
+							  else 
+								 begin 
+									   set @metricval = 'Common criteria compliance is disabled.'													
+									   insert   into policyassessmentdetail
+												(
+												  policyid,
+												  assessmentid,
+												  metricid,
+												  snapshotid,
+												  detailfinding,
+												  databaseid,
+												  objecttype,
+												  objectid,
+												  objectname 
+												)
+									   values
+												(
+												  @policyid,
+												  @assessmentid,
+												  @metricid,
+												  @snapshotid,
+												  @metricval,
+												  null, -- database ID,
+												  N'DB', -- object type
+												  null,
+												  @strval 
+												)
+									   set @sevcode = @severity
+								 end 
+						end  
 						--**************************** code added to handle user defined security checks, but never used (first added in version 2.5)
 						-- User implemented
 						else if (@metricid >= 1000)

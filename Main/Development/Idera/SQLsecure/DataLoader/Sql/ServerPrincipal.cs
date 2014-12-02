@@ -609,7 +609,7 @@ namespace Idera.SQLsecure.Collector.Sql
             if (ServerPrincipal.defaultPasswordList.Count <= 0)
                 ServerPrincipal.defaultPasswordList = LoadPasswordList();
 
-            if (version == ServerVersion.SQL2012)
+            if (version >= ServerVersion.SQL2012)
                 return CheckPassword(passwordSettings, passwordSalt, mixedCasePasswordHash, loginName, Encryptor.HashVersion.SHA512);
             return CheckPassword(passwordSettings, passwordSalt, mixedCasePasswordHash, loginName, Encryptor.HashVersion.SHA1);
         }

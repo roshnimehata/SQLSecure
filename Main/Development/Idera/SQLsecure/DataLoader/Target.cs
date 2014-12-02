@@ -998,7 +998,7 @@ namespace Idera.SQLsecure.Collector
                     }
                     Program.RestoreImpersonationContext(ic);
                 }
-                if (isOk)
+                if (isOk && m_VersionEnum != ServerVersion.Unsupported && m_VersionEnum>=ServerVersion.SQL2012)
                 {
                     Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
 
@@ -1579,6 +1579,15 @@ namespace Idera.SQLsecure.Collector
                         strNewMessage = "Failed to load file permissions for target SQL Server";
                         PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                         snapshotStatus = Constants.StatusWarning;
+                    }
+                    foreach (string auditFolder in m_auditFolders)
+                    {
+                        if (filePermissions.LoadFilePermissionsForAuditDirectory(auditFolder) != 0)
+                        {
+                            strNewMessage = string.Format("Failed to load file permissions for '{0}' audit folder", auditFolder);
+                            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                            snapshotStatus = Constants.StatusWarning;
+                        }   
                     }
                     if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
                     {

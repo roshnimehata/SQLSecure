@@ -128,6 +128,8 @@ BEGIN
 			
 			alter table dbo.serversnapshot
 			add numerrorlogs smallint null           
+			alter table dbo.serversnapshot
+			add iscommoncriteriacomplianceenabled nchar(1) null       
 
 			  IF NOT EXISTS ( SELECT *
                          FROM   dbo.sysobjects

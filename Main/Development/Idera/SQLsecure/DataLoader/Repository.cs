@@ -357,6 +357,56 @@ namespace Idera.SQLsecure.Collector
             }
         }
 
+        public string[] GetAuditFolders(string targetInstance)
+        {
+            using (logX.loggerX.DebugCall())
+            {
+                Debug.Assert(IsValid);
+                Program.ImpersonationContext wi = Program.SetLocalImpersonationContext();
+
+                using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
+                {
+                    // Open connection to the repository SQL Server.
+                    try
+                    {
+                        // Open the connection.
+                        connection.Open();
+
+                        // Retrieve audit folders string.
+                        logX.loggerX.Info("Retrieve audit folders...");
+                        SqlParameter param = new SqlParameter(QueryGetTargetServerInfoParam, targetInstance);
+
+                        using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                                                        QueryGetAuditFoldersString, new SqlParameter[] { param }))
+                        {
+                            // Read only 1 row.
+                            if (rdr.Read())
+                            {
+                                string auditFoldersString = rdr[0] == DBNull.Value ? null : (string)rdr[0];
+                                if (!string.IsNullOrEmpty(auditFoldersString))
+                                {
+                                    string[] folders = auditFoldersString.Split(new string[] { Constants.AUDIT_FOLDER_DELIMITER }, StringSplitOptions.RemoveEmptyEntries);
+                                    return folders;
+                                }
+                            }
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        logX.loggerX.Error("ERROR - exception raised when retrieving audit folders", ex);
+                        AppLog.WriteAppEventError(SQLsecureEvent.ExErrExceptionRaised, SQLsecureCat.DlValidationCat,
+                                                   "Retrieve audit folders", ex.Message);
+                    }
+                    finally
+                    {
+                        Program.RestoreImpersonationContext(wi);
+                    }
+                }
+
+                return new string[0];
+            }
+        }
+
         public bool GetCollectionFilters(
                 string targetInstance,
                 out List<Sql.Filter> filterList

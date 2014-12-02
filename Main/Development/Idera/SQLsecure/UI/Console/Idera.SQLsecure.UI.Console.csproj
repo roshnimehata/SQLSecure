@@ -254,6 +254,12 @@
     <Compile Include="Controls\ControlPolicyAddServers.Designer.cs">
       <DependentUpon>ControlPolicyAddServers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ControlImportExportPolicyVulnerabilities.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ControlImportExportPolicyVulnerabilities.Designer.cs">
+      <DependentUpon>ControlImportExportPolicyVulnerabilities.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\controlSMTPEmailConfig.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -503,6 +509,12 @@
     </Compile>
     <Compile Include="Forms\Form_SnapshotAvailabilityGroupProperties.Designer.cs">
       <DependentUpon>Form_SnapshotAvailabilityGroupProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Form_ImportExportPolicySecuriyChecks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_ImportExportPolicySecuriyChecks.Designer.cs">
+      <DependentUpon>Form_ImportExportPolicySecuriyChecks.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Form_WeakPasswordDetection.cs">
       <SubType>Form</SubType>
@@ -902,6 +914,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>ControlGettingStarted.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ControlImportExportPolicyVulnerabilities.resx">
+      <DependentUpon>ControlImportExportPolicyVulnerabilities.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\OsObjectPermissionsGrid.resx">
       <SubType>Designer</SubType>
       <DependentUpon>OsObjectPermissionsGrid.cs</DependentUpon>
@@ -1004,6 +1019,9 @@
     <EmbeddedResource Include="Forms\Form_SnapshotAvailabilityGroupProperties.resx">
       <DependentUpon>Form_SnapshotAvailabilityGroupProperties.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_ImportExportPolicySecuriyChecks.resx">
+      <DependentUpon>Form_ImportExportPolicySecuriyChecks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_SnapshotFileProperties.resx">
       <SubType>Designer</SubType>

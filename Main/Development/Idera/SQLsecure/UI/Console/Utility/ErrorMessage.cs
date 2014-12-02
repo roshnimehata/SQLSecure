@@ -65,7 +65,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string RegisterSqlServerCantFindServer = "SQL Server < {0} > was not found, make sure the SQL Server name is valid and the SQL Server is running.";
         public const string ServerRegistrationCheckFailedMsg = @"Error was encountered when checking if the server was already registered.";
         public const string ServerAlreadyRegisteredMsg = @"The SQL Server instance is already registered for auditing.";
-        public const string ServerVersionNotSupportedMsg = @"The SQL Server version is not supported for auditing.   SQLsecure only supports auditing SQL Server 2000 through SQL Server 2012.";
+        public const string ServerVersionNotSupportedMsg = @"The SQL Server version is not supported for auditing.   SQLsecure only supports auditing SQL Server 2000 through SQL Server 2014.";
         public const string RetrieveServerPropertiesFailedMsg = @"Error was encountered when retrieving SQL Server properties for registration.";
         public const string SqlLoginNotSpecifiedMsg = @"SQL login credentials have not been entered.";
         public const string SqlLoginFailureNoCredentialsMsg = @"Login to SQL Server failed, please specify SQL login credentials.";

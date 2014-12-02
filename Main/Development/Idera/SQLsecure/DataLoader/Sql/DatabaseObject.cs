@@ -197,7 +197,9 @@ namespace Idera.SQLsecure.Collector.Sql
                     return true;
                 }
             }
-            if (version == ServerVersion.SQL2012 && type== SqlObjectType.SequenceObject)
+            if ((version == ServerVersion.SQL2014
+                ||version == ServerVersion.SQL2012)
+                && type== SqlObjectType.SequenceObject)
             {
                     return true;
             }

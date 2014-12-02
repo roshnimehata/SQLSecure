@@ -848,6 +848,61 @@ IF NOT EXISTS ( SELECT  *
                           0  -- assessmentid - int
                         )
            end 
+		select @metricid = 109
+        if not exists ( select
+                            *
+                        from
+                            metric
+                        where
+                            metricid = @metricid ) 
+           begin         
+                 insert into dbo.metric
+                        (
+                          metricid,
+                          metrictype,
+                          metricname,
+                          metricdescription,
+                          isuserentered,
+                          ismultiselect,
+                          validvalues,
+                          valuedescription
+									        
+                        )
+                 values
+                        (
+                          @metricid, -- metricid - int
+                          N'Configuration', -- metrictype - nvarchar(32)
+                          N'Common criteria compliance', -- metricname - nvarchar(256)
+                          N'Determine whether the Common criteria compliance is enabled.', -- metricdescription - nvarchar(1024)
+                          1, -- isuserentered - bit
+                          1, -- ismultiselect - bit
+                          N'', -- validvalues - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if Common criteria compliance is disabled on the SQL Server.'  -- valuedescription - nvarchar(1024)									        
+                        )
+                 insert into dbo.policymetric
+                        (
+                          policyid,
+                          metricid,
+                          isenabled,
+                          reportkey,
+                          reporttext,
+                          severity,
+                          severityvalues,
+                          assessmentid
+											        
+                        )
+                 values
+                        (
+                          0, -- policyid - int
+                          @metricid, -- metricid - int
+                          1, -- isenabled - bit
+                          N'', -- reportkey - nvarchar(32)
+                          N'Is there Common criteria compliance disabled on the server?', -- reporttext - nvarchar(4000)
+                          1, -- severity - int
+                          N'', -- severityvalues - nvarchar(4000)
+                          0  -- assessmentid - int
+                        )
+           end 
 	select @metricid = 24
 		if exists (select * from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid )
 		begin

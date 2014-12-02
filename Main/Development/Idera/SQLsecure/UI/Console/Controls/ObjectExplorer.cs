@@ -276,7 +276,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.Endpoints;
             Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type);
             m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
-            if (m_Version == ServerVersion.SQL2012)
+            if (m_Version == ServerVersion.SQL2012
+                || m_Version == ServerVersion.SQL2014)
             {
                 type = Sql.ObjectType.TypeEnum.AvailabilityGroups;
                 tag = new Sql.ObjectTag(m_SnapshotId, type);
@@ -369,7 +370,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 tag = new Sql.ObjectTag(m_SnapshotId, type, database);
                 m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
             }
-            if (m_Version >= Sql.ServerVersion.SQL2012)
+            if (m_Version >= Sql.ServerVersion.SQL2012 && m_Version <= Sql.ServerVersion.SQL2014)
             {
                 type = Sql.ObjectType.TypeEnum.SequenceObjects;
                 tag = new Sql.ObjectTag(m_SnapshotId, type, database);
@@ -1595,7 +1596,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
         #region Ctors
 
-        public ObjectExplorer() : base()
+        public ObjectExplorer()
+            : base()
         {
             InitializeComponent();
 

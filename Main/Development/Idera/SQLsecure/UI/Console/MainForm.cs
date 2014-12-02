@@ -4553,9 +4553,15 @@ namespace Idera.SQLsecure.UI.Console
             string fileName = Form_ImportPolicy.Process();
             if (!string.IsNullOrEmpty(fileName))
             {
-                if (Form_PolicyProperties.Process(fileName, Program.gController.isAdmin, Forms.Form_PolicyProperties.RequestedOperation.ConfigureMetrics))
+                Policy policy = new Policy();
+                policy.ImportPolicyFromXMLFile(fileName, false);
+                policy.IsSystemPolicy = false;
+                if (Form_ImportExportPolicySecuriyChecks.ProcessImport(policy, Program.gController.isAdmin))
+                {
+                    if (Form_PolicyProperties.Process(policy, Program.gController.isAdmin, Form_PolicyProperties.RequestedOperation.ConfigureMetrics))
                 {
                     Program.gController.SignalRefreshPoliciesEvent(0);
+                    }   
                 }
             }
 
@@ -4574,12 +4580,8 @@ namespace Idera.SQLsecure.UI.Console
                 {
                     Debug.Assert(node.Tag.GetType() == typeof(Sql.Policy));
 
-                    Sql.Policy policy = (Sql.Policy)node.Tag;
-
-                    if (saveFileDialog_ExportPolicy.ShowDialog() == DialogResult.OK)
-                    {
-                        policy.SaveToXMLFile(saveFileDialog_ExportPolicy.FileName);
-                    }
+                    Policy policy = (Policy)node.Tag;
+                    Form_ImportExportPolicySecuriyChecks.ProcessExport(policy, Program.gController.isAdmin);
                 }
             }
             Cursor = Cursors.Default;

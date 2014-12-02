@@ -231,6 +231,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
             {
                 versionEnum = ServerVersion.SQL2012;
             }
+            else if (String.Compare(version, i, Constants.Sql2014VerPrefix, 0,
+                         Constants.Sql2014VerPrefix.Length) == 0)
+            {
+                versionEnum = ServerVersion.SQL2014;
+            }
             else
             {
                 versionEnum = ServerVersion.Unsupported;
@@ -320,6 +325,16 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 }
             }
 
+            else if (ver == ServerVersion.SQL2014)
+            {
+                for (int i = 0; i < ServicePack.SQL2014.Builds.Length; ++i)
+                {
+                    if (build == ServicePack.SQL2014.Builds[i])
+                    {
+                        SP = ServicePack.SQL2014.BuildNames[i];
+                    }
+                }
+            }
             return SP;
         }
 
@@ -352,6 +367,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
             else if (fversion == ServerVersion.SQL2012)
             {
                 ver = VersionName.SQL2012;
+            }
+            else if (fversion == ServerVersion.SQL2014)
+            {
+                ver = VersionName.SQL2014;
             }
             else
             {
