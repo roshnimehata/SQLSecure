@@ -970,7 +970,7 @@ values
         ( 48, -- objectclass - int
           N'Sequence Objects'  -- objectvalue - nvarchar(128)
           )
- end
+
 
  if exists (select 1 from dbo.metric where metricid=71)
 	begin 
@@ -986,6 +986,7 @@ values
           N'Availability Group', -- classname - nvarchar(500)
           null -- hashkey - nvarchar(256)
           )
-go 
-
+end
+		  go 
+ 
 
