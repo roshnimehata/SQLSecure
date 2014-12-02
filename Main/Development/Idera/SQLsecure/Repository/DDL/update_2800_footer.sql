@@ -984,6 +984,6 @@ insert into dbo.classtype
 values
         ( 108, -- classid - int
           N'Availability Group', -- classname - nvarchar(500)
-          null, -- hashkey - nvarchar(256)
+          null -- hashkey - nvarchar(256)
           )
 go
