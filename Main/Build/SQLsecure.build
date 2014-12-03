@@ -9,8 +9,9 @@
 	<!-- Build.AllInstallers -->
 	<!-- ******************* -->
 	<target name="Build.AllInstallers">
-		<property name="SQLsecure.BuildType" value="All Installers" unless="${property::exists('SQLsecure.BuildType')}" />
+		<property name="SQLsecure.BuildType" value="All Installers" unless="${property::exists('SQLsecure.BuildType')}" />		
 		<call target="Build.Installers" />
+		<call target="CopyScript"/>
 		<call target="Build.CDImage" />
 		<call target="Build.WebInstaller" />
 		<call target="CopyBuildToDevShare"/>
@@ -707,6 +708,15 @@
 		
 		<copy todir="${dir.Development.SQLsecure.Builds}">
 			<fileset basedir="${SQLsecure.Build.Output}">
+				<include name="**/*.*" />  
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="CopyScript">	
+		
+		<copy todir="${dir.Development.SQLsecure.Builds}">
+			<fileset basedir="${SQLsecure.RepositoryDDL}">
 				<include name="**/*.*" />  
 			</fileset>
 		</copy>
