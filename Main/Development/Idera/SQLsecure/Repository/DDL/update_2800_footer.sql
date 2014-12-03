@@ -4,3 +4,6 @@ if (isnull(@ver, 900) <= 2799)	-- Check to prevent this from running in future u
 BEGIN
 	print '11'
 end
+
+GO
+
