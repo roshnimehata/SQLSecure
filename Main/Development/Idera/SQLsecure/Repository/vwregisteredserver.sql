@@ -36,8 +36,7 @@ snapshotretentionperiod,
 registeredserverid,
 serverisdomaincontroller,
 replicationenabled,
-sapasswordempty,
-auditfoldersstring
+sapasswordempty
 ) 
 AS SELECT 
 lastcollectionsnapshotid,
@@ -67,8 +66,7 @@ snapshotretentionperiod,
 registeredserverid,
 serverisdomaincontroller,
 replicationenabled,
-sapasswordempty,
-auditfoldersstring
+sapasswordempty
 FROM 
 [registeredserver]
 

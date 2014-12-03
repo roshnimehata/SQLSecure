@@ -438,12 +438,10 @@ as
 															and a.dbid = new.dbid 
 															and a.classid = new.classid 
 															and a.parentobjectid = new.parentobjectid
-																and a.objectid = new.objectid
 															and b.snapshotid = old.snapshotid 
 															and b.dbid = old.dbid 
 															and b.classid = old.classid 
 															and b.parentobjectid = old.parentobjectid
-																and b.objectid = old.objectid
 															and a.name = b.name) '
 						else N''
 						end

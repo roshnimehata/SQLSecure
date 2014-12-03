@@ -43,8 +43,6 @@ SELECT	a.connectionname,
 							THEN 'SQL Server 2008 v'
 						WHEN SUBSTRING(a.version,1,3) = '11.'
 							THEN 'SQL Server 2012 v'
-						WHEN SUBSTRING(a.version,1,3) = '12.'
-							THEN 'SQL Server 2014 v'
 						ELSE ''
 					END + a.version,
 		a.edition,
