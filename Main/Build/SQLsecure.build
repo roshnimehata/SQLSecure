@@ -715,10 +715,16 @@
 	
 	<target name="CopyScript">	
 		
-		<copy todir="${dir.Development.SQLsecure.Builds}">
-			<fileset basedir="${SQLsecure.RepositoryDDL}">
-				<include name="**/*.*" />  
-			</fileset>
+		<copy todir="${dir.Development.SQLsecure.Builds}/DebugScripts">
+			<fileset>
+				<include name="${SQLsecure.Repository}/merge_fn.sql"/>
+				<include name="${SQLsecure.Repository}/merge_vw.sql"/>
+				<include name="${SQLsecure.Repository}/merge_sp.sql"/>
+				<include name="${SQLsecure.Repository}/SQLsecure_version.sql"/>
+				<include name="${SQLsecure.RepositoryDDL}/SQLsecure_ddl.sql"/>
+				<include name="${SQLsecure.RepositoryDDL}/SQLsecure_ddl_update.sql"/>
+				<include name="${SQLsecure.Repository}/sql_postscript.sql"/>
+	      		</fileset>
 		</copy>
 	</target>
 	
