@@ -1,2 +1,2 @@
-copy /b header.sql + ddl.sql + footer.sql + Schema_900_Fix.sql + ddl_update_2000.sql + update_2000_footer.sql + ddl_update_2500.sql + update_2500_footer.sql + ddl_update_2600.sql + update_2600_footer.sql + update_2700_footer.sql ddl_update_2700.sql + ddl_update_2800.sql sqlsecure_ddl.sql
+copy /b header.sql + ddl.sql + footer.sql + Schema_900_Fix.sql + ddl_update_2000.sql + update_2000_footer.sql + ddl_update_2500.sql + update_2500_footer.sql + ddl_update_2600.sql + update_2600_footer.sql + update_2700_footer.sql + ddl_update_2700.sql + ddl_update_2800.sql sqlsecure_ddl.sql
 +
