@@ -10,7 +10,7 @@ GO
 CREATE procedure [dbo].[isp_sqlsecure_addregisteredserver] (@connectionname nvarchar(500), @connectionport int, @servername nvarchar(128), @instancename nvarchar(128),
 															@loginname nvarchar(128), @loginpassword nvarchar(300), @authmode nvarchar(256),
 															@serverlogin nvarchar(256), @serverpassword nvarchar(256),
-															@version nvarchar(256), @retentionperiod int=50, @auditfoldersstring nvarchar(max))
+															@version nvarchar(256), @retentionperiod int=50)
 as
    -- <Idera SQLsecure version and copyright>
    --
@@ -46,8 +46,8 @@ as
 	end
 
 	declare @id int
-	insert into registeredserver (connectionname, connectionport, servername, instancename, sqlserverlogin, sqlserverpassword, sqlserverauthtype, serverlogin, serverpassword, version, snapshotretentionperiod, auditfoldersstring) 
-							values (@connectionname, @connectionport, @servername, @instancename, @loginname, @loginpassword, @authmode, @serverlogin, @serverpassword, @version, @retentionperiod, @auditfoldersstring)
+	insert into registeredserver (connectionname, connectionport, servername, instancename, sqlserverlogin, sqlserverpassword, sqlserverauthtype, serverlogin, serverpassword, version, snapshotretentionperiod) 
+							values (@connectionname, @connectionport, @servername, @instancename, @loginname, @loginpassword, @authmode, @serverlogin, @serverpassword, @version, @retentionperiod)
 
 	select @err = @@error
 

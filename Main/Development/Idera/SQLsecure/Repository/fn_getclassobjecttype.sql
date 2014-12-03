@@ -28,8 +28,6 @@ begin
 		select @name = 'iENDP'
 	else if (@classid = 25)
 		select @name = 'iCERT'
-	else if (@classid = 108)
-		select @name = 'iAVG'		
 	
 	return @name
 
