@@ -69,7 +69,7 @@ as
 	end
 
 	-- check if database name is not found
-	if (@classid not in (100, 101, 105))
+	if (@classid not in (100, 101, 105,108))
 	begin
 		if (@databaseid < 0)
 		begin
@@ -94,7 +94,7 @@ as
 
 	-- TODO: FIND ALL THE LOGINS ASSOCIATED WITH ALL THE DATABASE USERS
 
-	if (@classid IN (100, 105))
+	if (@classid IN (100, 105,108))
 	begin
 
 		declare cursor1 cursor for
@@ -464,6 +464,82 @@ as
 			return
 		end
 
+			if (@classid = 108)
+		begin
+			insert into #tmppermission 
+			(snapshotid, 
+			permissionlevel, 
+			logintype, 
+			loginname, 
+			connectionname, 
+			databasename, 
+			principalid, 
+			principalname, 
+			principaltype, 
+			grantor,
+			grantorname,
+			grantee, 
+			granteename,
+			classid, 
+			permissiontype, 
+			permission, 
+			isgrant, 
+			isgrantwith, 
+			isrevoke, 
+			isdeny, 
+			objectname, 
+			objectid,
+			objecttype,
+			objecttypename,
+			inherited,
+			sourcename,
+			sourcetype,
+			sourcepermission) 
+			select distinct 
+			ag.snapshotid, 
+			'AV',
+			@logintype, 
+			@loginname, 
+			@connectionname, 
+			NULL, 	
+			ag.servergroupId, 
+			ag.name, 
+			'A', 
+			d.grantor, 
+			dbo.getserverprincipalname(d.snapshotid, d.grantor),
+			d.grantee, 
+			dbo.getserverprincipalname(d.snapshotid, d.grantee),
+			d.classid, 
+			'EX', 
+			d.permission, 
+			d.isgrant, 
+			d.isgrantwith, 
+			d.isrevoke, 
+			d.isdeny, 
+			ag.name, 
+			ag.servergroupId,
+			dbo.getclassobjecttype(d.classid),
+			dbo.getclasstype(d.classid),
+			'N',
+			ag.name, 
+			'Login',
+			d.permission
+			from 
+			dbo.availabilitygroups ag 
+			join dbo.availabilityreplicas ar on ag.groupid = ar.groupid and ag.snapshotid = ar.snapshotid
+			join serverpermission d on  d.majorid=ar.replicametadataid and ar.snapshotid = d.snapshotid
+			where 
+			ag.snapshotid = @snapshotid and			
+			d.classid = 108 and ag.servergroupId=@objectid and 
+			(d.grantee in (select distinct /* ssz add distinct */  principalid from #tmplogins) or 
+			 (d.grantee in (select distinct /* ssz add distinct */  principalid from serverrolemember where memberprincipalid in (select distinct /* ssz add distinct */  principalid from #tmplogins))))
+		end
+		if (@classid = 108 and UPPER(@permissiontype) = 'X')
+		begin
+			exec ('isp_sqlsecure_processpermission')
+			exec ('select distinct * from #tmppermission where classid = 108 and objectid=' + @objectid)
+			return
+		end
 		if (@classid = 105)
 		begin
 

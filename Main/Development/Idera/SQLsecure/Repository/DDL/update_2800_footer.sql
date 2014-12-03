@@ -79,11 +79,11 @@ IF NOT EXISTS ( SELECT  *
                  @metricid
                 ,N'Access'
                 ,N'Assembly host policy'
-                ,N'Determine whether there are user defined assemblies with host policy other than SAFE'
+                ,N'Determine whether there are user defined assembies with host policy other than SAFE'
                 ,0
                 ,0
                 ,N''
-                ,N'When enabled, this check will identify a risk if there are user defined assemblies with host policy other than SAFE'
+                ,N'When enabled, this check will identify a risk if there are user defined assembies with host policy other than SAFE'
                 )
          INSERT [dbo].[policymetric]
                 (
@@ -101,7 +101,7 @@ IF NOT EXISTS ( SELECT  *
                 ,@metricid
                 ,1
                 ,N''
-                ,N'Is there are user defined assembiles with host policy other than SAFE?'
+                ,N'Is there are user defined assambiles with host policy other than SAFE?'
                 ,3
                 ,N''
                 ,0
@@ -127,11 +127,11 @@ IF NOT EXISTS ( SELECT  *
                  @metricid
                 ,N'Access'
                 ,N'Contained database authentification type'
-                ,N'Determine whether Authentification type set to Mixed mode with contained databases exists on instance'
+                ,N'Determine whether Authentification type set to Moxed mode with contained databases exists on instance'
                 ,0
                 ,0
                 ,N''
-                ,N'When enabled, this check will identify a risk if Authentification type set to Mixed mode with contained databases exists on instance'
+                ,N'When enabled, this check will identify a risk if Authentification type set to Moxed mode with contained databases exists on instance'
                 )
          INSERT [dbo].[policymetric]
                 (
@@ -174,7 +174,7 @@ IF NOT EXISTS ( SELECT  *
          VALUES (
                  @metricid
                 ,N'Access'
-                ,N'Startup Stored Procedures permissions'
+                ,N'Startup stored procedures permissions'
                 ,N'Determine whether startup stored procedures can be run or are owned by accounts without sysadmin permissions '
                 ,0
                 ,0
