@@ -883,6 +883,28 @@ IF NOT EXISTS ( SELECT  *
                           0  -- assessmentid - int
                         )
            end 
+		   
+	if (@ver is null	-- this is a new install, so fix the All Servers policy to use the default values for the new security checks
+		and not exists (select * from policymetric where policyid = 1 and assessmentid=1 and metricid between @startmetricid and @metricid))
+			insert into policymetric (policyid, assessmentid, metricid, isenabled, reportkey, reporttext, severity, severityvalues)
+				select 1, 1, m.metricid, m.isenabled, m.reportkey, m.reporttext, m.severity, m.severityvalues
+					from policymetric m
+					where m.policyid = 0
+						and m.assessmentid = 0
+						and m.metricid between @startmetricid and @metricid
+
+	-- now add the new security checks to all existing policies, but disable it by default so it won't interfere with the current assessment values
+	insert into policymetric (policyid, assessmentid, metricid, isenabled, reportkey, reporttext, severity, severityvalues)
+		select a.policyid, a.assessmentid, m.metricid, 0, m.reportkey, m.reporttext, m.severity, m.severityvalues
+			from policymetric m, assessment a
+			where m.policyid = 0
+				and m.assessmentid = 0
+				and m.metricid between @startmetricid and @metricid
+				and a.policyid > 0
+				-- this check makes it restartable
+				and a.assessmentid not in (select distinct assessmentid from policymetric where metricid between @startmetricid and @metricid)
+		   
+		   
 	select @metricid = 24
 		if exists (select * from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid )
 		begin
@@ -907,25 +929,6 @@ IF NOT EXISTS ( SELECT  *
 	end 
 	-- note: the following uses the @metricid to determine the ending value for the metrics to apply to all of the policies
 
-	if (@ver is null	-- this is a new install, so fix the All Servers policy to use the default values for the new security checks
-		and not exists (select * from policymetric where policyid = 1 and assessmentid=1 and metricid between @startmetricid and @metricid))
-			insert into policymetric (policyid, assessmentid, metricid, isenabled, reportkey, reporttext, severity, severityvalues)
-				select 1, 1, m.metricid, m.isenabled, m.reportkey, m.reporttext, m.severity, m.severityvalues
-					from policymetric m
-					where m.policyid = 0
-						and m.assessmentid = 0
-						and m.metricid between @startmetricid and @metricid
-
-	-- now add the new security checks to all existing policies, but disable it by default so it won't interfere with the current assessment values
-	insert into policymetric (policyid, assessmentid, metricid, isenabled, reportkey, reporttext, severity, severityvalues)
-		select a.policyid, a.assessmentid, m.metricid, 0, m.reportkey, m.reporttext, m.severity, m.severityvalues
-			from policymetric m, assessment a
-			where m.policyid = 0
-				and m.assessmentid = 0
-				and m.metricid between @startmetricid and @metricid
-				and a.policyid > 0
-				-- this check makes it restartable
-				and a.assessmentid not in (select distinct assessmentid from policymetric where metricid between @startmetricid and @metricid)
 
 
 insert  into dbo.objecttype
