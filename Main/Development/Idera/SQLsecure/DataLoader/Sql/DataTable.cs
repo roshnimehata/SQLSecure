@@ -545,7 +545,6 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamHashkey = "hashkey";
         internal const string ParamIsContained = "iscontaineduser";
         internal const string ParamAuthenticationType = "AuthenticationType";
-
         internal const string RepositoryTable = "SQLsecure.dbo.databaseprincipal";
     }
 

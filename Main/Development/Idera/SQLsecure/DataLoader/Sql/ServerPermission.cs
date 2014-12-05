@@ -48,6 +48,7 @@ namespace Idera.SQLsecure.Collector.Sql
             Debug.Assert(oidbatch != null && oidbatch.Count > 0);
 
             StringBuilder query = new StringBuilder();
+         
             query.Append(@"SELECT 
                                 classid = CAST (class AS int), 
                                 major_id, 

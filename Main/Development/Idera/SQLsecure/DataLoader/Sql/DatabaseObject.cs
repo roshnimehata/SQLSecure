@@ -204,6 +204,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     return true;
             }
 
+
             return false;
         }
 

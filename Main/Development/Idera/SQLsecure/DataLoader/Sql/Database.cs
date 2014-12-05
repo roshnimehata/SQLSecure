@@ -366,6 +366,7 @@ namespace Idera.SQLsecure.Collector.Sql
                             @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( 0 as bit)
                               FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
+
         private const string QueryDb2K12 =
                             @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( db.containment as bit)
                               FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l

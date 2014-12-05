@@ -708,7 +708,7 @@ namespace Idera.SQLsecure.Collector
                                     {
 
                                         // installed  | distribution server | distribution db installed  | is distribution publisher  | has remote distribution publisher
-                                        isDistributor = Convert.ToInt32(rdr[0]) == 1 ? Constants.Yes : Constants.No;
+                                        isDistributor = Convert.ToInt32(rdr[2]) == 1 ? Constants.Yes : Constants.No;
                                         isPublisher = Convert.ToInt32(rdr[3]) == 1 ? Constants.Yes : Constants.No;
                                         hasRemotePublisher = Convert.ToInt32(rdr[4]) == 1 ? Constants.Yes : Constants.No;
 
@@ -1589,6 +1589,8 @@ namespace Idera.SQLsecure.Collector
                         PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                         snapshotStatus = Constants.StatusWarning;
                     }
+
+                    //for audit folders
                     foreach (string auditFolder in m_auditFolders)
                     {
                         if (filePermissions.LoadFilePermissionsForAuditDirectory(auditFolder) != 0)
@@ -1598,6 +1600,7 @@ namespace Idera.SQLsecure.Collector
                             snapshotStatus = Constants.StatusWarning;
                         }   
                     }
+
                     if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
                     {
                         strNewMessage = "Failed to load file permissions for SQL Services on target SQL Server";
