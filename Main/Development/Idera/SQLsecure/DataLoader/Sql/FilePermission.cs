@@ -305,9 +305,18 @@ namespace Idera.SQLsecure.Collector.Sql
                     {
                         // Convert to UNC file Name
                         string dirName = ConvertLocalPathToUNCPath(directory);
+                        string localDirName = ConvertUNCPathToLocalPath(directory);
 
                         // Get Disk Type (NTFS or FAT)
-                        string diskType = GetDiskTypeFromLocalPath(directory);
+                        string diskType = GetDiskTypeFromLocalPath(localDirName);
+
+                        //check if target server is local server
+                        if (m_targetServerName == Environment.MachineName &&
+                            !dirName.ToLower().Equals(localDirName.ToLower()) &&
+                            CanReadFilesFromDirectory(localDirName))
+                        {
+                            dirName = localDirName;
+                        }
 
                         numWarnings = ProcessDirectory(dirName, enumOSObjectType.IDir, diskType);
                     }
@@ -1098,7 +1107,7 @@ namespace Idera.SQLsecure.Collector.Sql
         {
             string localPath = path;
 
-            if (path.Contains(m_targetServerName))
+            if (path.ToLower().Contains(m_targetServerName.ToLower()))
             {
                 if (path.Contains(@"$\"))
                 {
@@ -1198,6 +1207,19 @@ namespace Idera.SQLsecure.Collector.Sql
                 logX.loggerX.Error(string.Format("Error getting File System type for path {0}, {1}", path, ex.Message));
             }
             return diskType;
+        }
+
+        private bool CanReadFilesFromDirectory(string path)
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #endregion

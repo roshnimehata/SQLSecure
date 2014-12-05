@@ -66,37 +66,53 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
                 // Get the version.
                 version = connection.ServerVersion;
+                string type = null;
+                string confQuery = @"select isnull(SERVERPROPERTY('IsClustered'),0) AS IsClusterd, 
+                                          isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
+                                          isnull(SERVERPROPERTY('MachineName'),'')  as MachineName,
+                                          isnull(SERVERPROPERTY('ServerName'),'') as ServerName,
+                                          isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName
 
-                // Get the machine name.
+                                   SELECT top 1 cluster_name FROM  sys.dm_hadr_cluster
+";
+
+
+                //Get server type 
                 using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
-                                                @"select ServerProperty('MachineName')", null))
+                    confQuery, null))
                 {
                     if (rdr.HasRows && rdr.Read())
                     {
-                        machineName = rdr.GetString(0); // this should not be null, so if it is let there be an exception.
+                        if (int.Parse(rdr["IsClusterd"].ToString()) == 1)
+                        {
+                            type = "C";
                     }
-                }
 
-                // Get the instance.
-                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
-                                                @"select instancename = CAST(ServerProperty('InstanceName') AS nvarchar)", null))
-                {
-                    if (rdr.HasRows && rdr.Read())
+                        instanceName = rdr["InstanceName"].ToString();
+                        if (int.Parse(rdr["HadrManagerStatus"].ToString()) == 1)
+                        {
+                            type = "A";
+                }
+                        if (type == "A")
+                        {
+
+                            if (rdr.NextResult()&&rdr.HasRows)
                     {
-                        SqlString insname = rdr.GetSqlString(0);
-                        instanceName = insname.IsNull ? string.Empty : insname.Value;
+                                rdr.Read();
+                                fullName = machineName = rdr.GetString(0);
                     }
                 }
-
+                        else
+                        {
+                            // Get the machine name.
+                            machineName = rdr["MachineName"].ToString();
+                                    // this should not be null, so if it is let there be an exception.
                 // Get the full name.
-                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
-                                                @"select ServerProperty('ServerName')", null))
-                {
-                    if (rdr.HasRows && rdr.Read())
-                    {
-                        fullName = rdr.GetString(0); // this should not be null, so if it is let there be an exception.
+                            fullName = rdr["ServerName"].ToString();
+                        }
                     }
                 }
+
                 SqlConnection.ClearPool(connection);
             }
            
