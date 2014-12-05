@@ -276,6 +276,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.Endpoints;
             Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type);
             m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
+
             if (m_Version == ServerVersion.SQL2012
                 || m_Version == ServerVersion.SQL2014)
             {
@@ -824,6 +825,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 Utility.MsgBox.ShowError(Utility.ErrorMsgs.ObjectExplorerCaption, Utility.ErrorMsgs.GetSnapshotFullTextCatalogsFailed, ex);
             }
         }
+
         private void fillAvailabilityGroupReplicaNode(object obj)
         {
             try
@@ -1436,6 +1438,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                             tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
                             tn.Tag = tag;
                             tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+
                             tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.SequenceObjects, db);
                             tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
                             tn.Tag = tag;

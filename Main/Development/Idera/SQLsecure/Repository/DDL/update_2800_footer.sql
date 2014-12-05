@@ -398,7 +398,7 @@ IF NOT EXISTS ( SELECT  *
                   @metricid,
                   1,
                   N'',
-                  N'Have you check infromation about database roles and their memebers?',
+                  N'Have you check information about database roles and their memebers?',
                   2,
                   N'',
                   0
@@ -450,7 +450,7 @@ IF NOT EXISTS ( SELECT  *
                   @metricid,
                   1,
                   N'',
-                  N'Have you check infromation about server roles and their members?',
+                  N'Have you check information about server roles and their members?',
                   2,
                   N'',
                   0
@@ -883,6 +883,63 @@ IF NOT EXISTS ( SELECT  *
                           0  -- assessmentid - int
                         )
            end 
+		   select @metricid = 110
+        if not exists ( select
+                            *
+                        from
+                            metric
+                        where
+                            metricid = @metricid ) 
+           begin         
+		   insert into dbo.metric
+                        (
+                          metricid,
+                          metrictype,
+                          metricname,
+                          metricdescription,
+                          isuserentered,
+                          ismultiselect,
+                          validvalues,
+                          valuedescription
+									        
+                        )
+                 values
+                        (
+                          @metricid, -- metricid - int
+                          N'Permissions', -- metrictype - nvarchar(32)
+                          N'Integration Services Users Permissions Not Acceptable', -- metricname - nvarchar(256)
+                          N'Determine whether unapproved users have been granted permissions on an Integration Services stored procedure.', -- metricdescription - nvarchar(1024)
+                          1, -- isuserentered - bit
+                          1, -- ismultiselect - bit
+                          N'', -- validvalues - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if an unapproved user has been granted permissions on an Integration Services stored procedure. Specify the stored procedures.'  -- valuedescription - nvarchar(1024)									        
+                        )
+
+                 insert into dbo.policymetric
+                        (
+                          policyid,
+                          metricid,
+                          isenabled,
+                          reportkey,
+                          reporttext,
+                          severity,
+                          severityvalues,
+                          assessmentid
+											        
+                        )
+                 values
+                        (
+                          0, -- policyid - int
+                          @metricid, -- metricid - int
+                          1, -- isenabled - bit
+                          N'', -- reportkey - nvarchar(32)
+                          N'Do unapproved users have permissions on SSIS stored procedures?', -- reporttext - nvarchar(4000)
+                          1, -- severity - int
+                          N'''sp_add_dtspackage'',''sp_drop_dtspackage'',''sp_dts_addfolder'',''sp_dts_addlogentry'',''sp_dts_checkexists'',''sp_dts_deletefolder'',''sp_dts_deletepackage'',''sp_dts_getfolder'',''sp_dts_getpackage'',''sp_dts_getpackageroles'',''sp_dts_listfolders'',''sp_dts_listpackages'',''sp_dts_putpackage'',''sp_dts_renamefolder'',''sp_dts_setpackageroles'',''sp_dump_dtslog_all'',''sp_dump_dtspackagelog'',''sp_dump_dtssteplog'',''sp_dump_dtstasklog'',''sp_enum_dtspackagelog'',''sp_enum_dtspackages'',''sp_enum_dtssteplog'',''sp_enum_dtstasklog'',''sp_get_dtspackage'',''sp_get_dtsversion'',''sp_log_dtspackage_begin'',''sp_log_dtspackage_end'',''sp_log_dtsstep_begin'',''sp_log_dtsstep_end'',''sp_log_dtstask'',''sp_make_dtspackagename'',''sp_reassign_dtspackageowner'',''sp_ssis_addfolder'',''sp_ssis_addlogentry'',''sp_ssis_checkexists'',''sp_ssis_deletefolder'',''sp_ssis_deletepackage'',''sp_ssis_getfolder'',''sp_ssis_getpackage''', -- severityvalues - nvarchar(4000)
+                          0  -- assessmentid - int
+                        )
+		   end
+		   
 		   
 	if (@ver is null	-- this is a new install, so fix the All Servers policy to use the default values for the new security checks
 		and not exists (select * from policymetric where policyid = 1 and assessmentid=1 and metricid between @startmetricid and @metricid))
@@ -927,10 +984,30 @@ IF NOT EXISTS ( SELECT  *
 					set isenabled=1,severity=1,severityvalues= '''All''', reportkey='', reporttext ='Is the login auditing configuration acceptable?'
 					where policyid = 1 and assessmentid = 1 and metricid = @metricid
 	end 
+
+	select @metricid = 91
+		if exists (select * from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid )
+		begin
+		 update metric  
+			SET [metrictype] = 'Permissions'
+			  ,[metricname] = 'Integration Services Roles Permissions Not Acceptable'
+			  ,[metricdescription] = 'Determine whether unapproved roles have been granted permissions on an Integration Services stored procedure.'
+			  ,[valuedescription] = 'When enabled, this check will identify a risk if an unapproved role has been granted permissions on an Integration Services stored procedure. Specify the stored procedures.'
+			where metricid = @metricid     
+
+			update policymetric 
+				set reporttext = 'Do unapproved roles have permissions on SSIS stored procedures?'
+				where policyid = 0 and assessmentid=0 and metricid = @metricid
+			if (@ver is null)	-- this is a new install, so fix the All Servers policy
+				update policymetric 
+					set isenabled=1, severity=1, severityvalues= N'''sp_add_dtspackage'',''sp_drop_dtspackage'',''sp_dts_addfolder'',''sp_dts_addlogentry'',''sp_dts_checkexists'',''sp_dts_deletefolder'',''sp_dts_deletepackage'',''sp_dts_getfolder'',''sp_dts_getpackage'',''sp_dts_getpackageroles'',''sp_dts_listfolders'',''sp_dts_listpackages'',''sp_dts_putpackage'',''sp_dts_renamefolder'',''sp_dts_setpackageroles'',''sp_dump_dtslog_all'',''sp_dump_dtspackagelog'',''sp_dump_dtssteplog'',''sp_dump_dtstasklog'',''sp_enum_dtspackagelog'',''sp_enum_dtspackages'',''sp_enum_dtssteplog'',''sp_enum_dtstasklog'',''sp_get_dtspackage'',''sp_get_dtsversion'',''sp_log_dtspackage_begin'',''sp_log_dtspackage_end'',''sp_log_dtsstep_begin'',''sp_log_dtsstep_end'',''sp_log_dtstask'',''sp_make_dtspackagename'',''sp_reassign_dtspackageowner'',''sp_ssis_addfolder'',''sp_ssis_addlogentry'',''sp_ssis_checkexists'',''sp_ssis_deletefolder'',''sp_ssis_deletepackage'',''sp_ssis_getfolder'',''sp_ssis_getpackage'''
+					where policyid = 1 and assessmentid = 1 and metricid = @metricid
+		end
+				  
 	-- note: the following uses the @metricid to determine the ending value for the metrics to apply to all of the policies
 
 
-
+-- Adde new filter type for sequence objets
 insert  into dbo.objecttype
         (
           objecttype,

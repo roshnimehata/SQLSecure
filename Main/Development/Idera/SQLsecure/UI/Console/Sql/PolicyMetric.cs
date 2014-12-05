@@ -339,6 +339,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 m_isSelected = value;
             }
         }
+
         #endregion
 
         #region Methods

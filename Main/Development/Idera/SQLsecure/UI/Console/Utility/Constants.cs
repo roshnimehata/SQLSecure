@@ -482,7 +482,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string PASSWORD_LENGTH_MESSAGE_FORMAT = @"SQLSecure application requires password length not less {0} characters to save it properly into database!";
 
         #endregion
+
         #region Import/Export Policies Constants
+
         public const string TITLE_POLICY = "Policy";
         public const string TITLE_ASSESSMENT = "Assessment";
         public const string EXPORTING = "Exporting";
@@ -491,6 +493,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string IMPORT_COLUMN_TEXT = "Import";
         public const string IMPORTING_EXPORTING_DESCRIPTION_FORMAT = "Check security checks in {0} column for {1} operation.";
         public const string IMPORTING_EXPORTING_FORM_TITLE_FORMAT = "{0} {1} Security Checks - {2}";
+
         #endregion
     }
 

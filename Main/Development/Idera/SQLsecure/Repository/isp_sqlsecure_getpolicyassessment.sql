@@ -4447,7 +4447,7 @@ AS
 							select @metricthreshold = N'Server is vulnerable if dangerous security principals have been added to SSIS database roles.'
 						end
 						
-						-- Integration Services Permissions Not Acceptable
+						-- Integration Services Roles Permissions Not Acceptable
 						else if (@metricid = 91)
 						begin
 							select @sql = N'declare databasecursor cursor for
@@ -4460,6 +4460,7 @@ AS
 												(vdop.snapshotid = ' + convert(nvarchar, @snapshotid) + N') 
 												and ((vdop.isgrant = N''Y'') or (vdop.isgrantwith = N''Y''))
 												and (vdop.objectname in (' + @severityvalues + N'))
+												and dp.type IN (''R'', ''A'')
 												and (dp.name not in (''db_dtsadmin'', ''db_dtsltduser'', ''db_dtsoperator'', ''db_ssisadmin'', ''db_ssisltduser'', ''db_ssisoperator''))
 											)'
 							exec (@sql)			
@@ -4514,7 +4515,6 @@ AS
 
 							select @metricthreshold = N'Server is vulnerable if users other than the default SSIS database roles have been granted permissions on an Integration Services stored procedure.'
 						end
-
 						--Weak Passwords
 						else if (@metricid = 92)
 						begin
@@ -4587,6 +4587,7 @@ AS
 						if ( @metricid = 93 ) 
 						begin 
 							  truncate table #tempdetails 
+
 							  if ( @isadmin = 1 ) 
 								 begin 
 									   insert   into #tempdetails
@@ -4611,6 +4612,7 @@ AS
 													and db.snapshotid = @snapshotid
 													and sd.databasename in ( 'msdb', 'master', 'model',
 																			 'tempdb' ) 
+
 									   if not exists ( select
 														*
 													   from
@@ -4624,6 +4626,7 @@ AS
 													@metricval = @metricval + objectname + ', '
 												from
 													#tempdetails 
+
 												set @metricval = substring(@metricval, 0,
 																		   len(@metricval)) 
 
@@ -5179,7 +5182,6 @@ AS
                                        where
                                         SS.snapshotid = @SnapshotId  
 	
-								
                                        if ( @IsDistributer = 'N' ) 
                                           begin
                                                 set @sevcode = @severity                                        
@@ -5194,7 +5196,6 @@ AS
                                                    set @sevcode = @severity                                           
                                                    set @metricval = N'The password of DISTRIBUTOR_ADMIN login must be set according to password control standards using the "sp_changedistributor_password" stored procedure.'
                                              end
-
                                  end
                         end                        
   
@@ -6315,6 +6316,7 @@ AS
 							  else 
 								 begin 
 									   set @metricval = 'Common criteria compliance is disabled.'													
+  
 									   insert   into policyassessmentdetail
 												(
 												  policyid,
@@ -6340,8 +6342,79 @@ AS
 												  @strval 
 												)
 									   set @sevcode = @severity
+
+
 								 end 
 						end  
+
+				-- Integration Services Users Permissions Not Acceptable
+						else if (@metricid = 110)
+						begin
+							select @sql = N'declare databasecursor cursor for
+											select vdop.objectname, dp.name
+											from [dbo].[vwdatabaseobjectpermission] vdop
+											inner join databaseprincipal dp 
+												on ((vdop.snapshotid = dp.snapshotid) and (vdop.dbid = dp.dbid) and (vdop.grantee = dp.uid))
+											where 
+											(
+												(vdop.snapshotid = ' + convert(nvarchar, @snapshotid) + N') 
+												and ((vdop.isgrant = N''Y'') or (vdop.isgrantwith = N''Y''))
+												and (vdop.objectname in (' + @severityvalues + N'))
+												and dp.type IN (''S'', ''U'', ''G'')
+											)'
+							exec (@sql)			
+ 							open databasecursor
+							fetch next from databasecursor into @strval2, @strval3
+
+							select @intval2 = 0
+							while @@fetch_status = 0
+							begin
+								select @strval = @strval3 + ' on ' + @strval2
+								if (@intval2 = 1 or len(@metricval) + len(@strval) > 1010)
+								begin
+									if @intval2 = 0
+										select @metricval = @metricval + N', more...',
+												@intval2 = 1
+								end
+								else
+									select @metricval = @metricval + case when len(@metricval) > 0 then N', ' else N'' end + N'''' + @strval + N''''
+
+								if (@isadmin = 1)
+									insert into policyassessmentdetail ( policyid,
+																		 assessmentid,
+																		 metricid,
+																		 snapshotid,
+																		 detailfinding,
+																		 databaseid,
+																		 objecttype,
+																		 objectid,
+																		 objectname )
+																values ( @policyid,
+																		 @assessmentid,
+																		 @metricid,
+																		 @snapshotid,
+																		 N'Permissions on stored procedures found: ''' + @strval + N'''',
+																		 null, -- database ID,
+																		 N'DB', -- object type
+																		 null,
+																		 @strval )
+
+								fetch next from databasecursor into @strval2, @strval3
+								 end 
+
+							close databasecursor
+							deallocate databasecursor	
+
+							if (len(@metricval) = 0)
+								select @sevcode=@sevcodeok,
+										@metricval = 'No unacceptable permissions found.'
+							else
+								select @sevcode=@severity,
+										@metricval = N'Permissions on stored procedures found: ' + @metricval
+
+							select @metricthreshold = N'Server is vulnerable if users other than the default SSIS database roles have been granted permissions on an Integration Services stored procedure.'
+						end  
+
 						--**************************** code added to handle user defined security checks, but never used (first added in version 2.5)
 						-- User implemented
 						else if (@metricid >= 1000)

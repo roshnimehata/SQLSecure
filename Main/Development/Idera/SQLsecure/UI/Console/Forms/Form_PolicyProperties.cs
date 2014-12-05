@@ -210,6 +210,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             Text = string.Format(IMPORTTITLEFMT, m_policy.PolicyName);
             InitializeDialogCommon(allowEdit);
         }
+
         public void InitializeDialog(int policyID, int assessmentId, bool allowEdit)
         {
             if (policyID == 0)
@@ -268,8 +269,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             Form_PolicyProperties frm = new Form_PolicyProperties(op);
             frm.InitializeDialog(fileName, allowEdit);
+
+            // return true if updated, otherwise false
             return DialogResult.Cancel != frm.ShowDialog();
         }
+
         public static bool Process(Policy importingPolicy, bool allowEdit, RequestedOperation op)
         {
             Form_PolicyProperties frm = new Form_PolicyProperties(op);

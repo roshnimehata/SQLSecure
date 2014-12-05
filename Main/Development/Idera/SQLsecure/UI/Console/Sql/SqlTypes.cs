@@ -617,6 +617,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private object _tag;
 
         #endregion
+
         public object Tag
         {
             get { return _tag; }

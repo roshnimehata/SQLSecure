@@ -163,6 +163,5 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         #endregion
 
-     
     }
 }

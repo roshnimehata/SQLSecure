@@ -4579,7 +4579,6 @@ namespace Idera.SQLsecure.UI.Console
                 if (node.Level == 0)
                 {
                     Debug.Assert(node.Tag.GetType() == typeof(Sql.Policy));
-
                     Policy policy = (Policy)node.Tag;
                     Form_ImportExportPolicySecuriyChecks.ProcessExport(policy, Program.gController.isAdmin);
                 }

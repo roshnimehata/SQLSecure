@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.UI.Console.Forms;
 using Idera.SQLsecure.UI.Console.Sql;

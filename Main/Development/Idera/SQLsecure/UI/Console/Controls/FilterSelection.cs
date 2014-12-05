@@ -289,8 +289,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 // Full Text Catalogs
                 filterObj = new FilterObject(RuleObjectType.FullTextCatalog, RuleScope.All, matchAll);
                 m_FilterObjects.Add(RuleObjectType.FullTextCatalog, filterObj);
+
+                //Keys
                 filterObj = new FilterObject(RuleObjectType.Key, RuleScope.All, matchAll);
                 m_FilterObjects.Add(RuleObjectType.Key, filterObj);
+
                 // Sequence Objects
                 filterObj = new FilterObject(RuleObjectType.SequenceObject, RuleScope.All, matchAll);
                 m_FilterObjects.Add(RuleObjectType.SequenceObject, filterObj);

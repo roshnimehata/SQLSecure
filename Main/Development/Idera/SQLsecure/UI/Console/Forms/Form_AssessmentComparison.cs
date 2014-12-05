@@ -2732,11 +2732,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     GridSettings.ApplySettingsToGrid(gridSettings, _grid_ReportCard);
                 }
 
-                //_grid_ReportCard.DisplayLayout.Bands[0].SortedColumns.Clear();
-                //_grid_ReportCard.DisplayLayout.Bands[0].SortedColumns.Add(colDifferencesFound, true, false);
-                //_grid_ReportCard.DisplayLayout.Bands[0].SortedColumns.Add(colMetricId, true, false);
-
-
                 _label_ReportCard.Text = string.Format(ReportCardHeader,
                                               nTotalDiffs == 0
                                                   ? "No"
@@ -2745,7 +2740,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                                   ? DifferenceSingular
                                                   : DifferencePlural);
  
-
                 int selectedMetric = 1;
                 if (_grid_ReportCard.Rows.Count > 0 && _grid_ReportCard.Selected.Rows.Count > 0)
                 {
