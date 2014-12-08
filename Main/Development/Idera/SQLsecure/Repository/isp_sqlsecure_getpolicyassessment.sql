@@ -4779,7 +4779,7 @@ AS
 											@metricval = N'None found.' 
 									   else 
 										  begin 
-												set @metricval = 'Sql server authntification mode set to Mixed but contained databases exist on instance'
+												set @metricval = 'Sql server authentication mode set to Mixed but contained databases exist on instance'
 
 												insert  into policyassessmentdetail
 														select
@@ -4804,7 +4804,7 @@ AS
 
 				
 							  select
-								@metricthreshold = N'Server is vulnerable if there are contained databases and authntification mode set to Mixed '
+								@metricthreshold = N'Server is vulnerable if there are contained databases and authentication mode set to Mixed '
 						end 
 
 

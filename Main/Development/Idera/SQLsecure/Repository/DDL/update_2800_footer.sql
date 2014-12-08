@@ -126,12 +126,12 @@ IF NOT EXISTS ( SELECT  *
          VALUES (
                  @metricid
                 ,N'Access'
-                ,N'Contained database authentification type'
-                ,N'Determine whether Authentification type set to Mixed mode with contained databases exists on instance'
+                ,N'Contained database authentication type'
+                ,N'Determine whether authentication type set to Mixed mode with contained databases exists on instance'
                 ,0
                 ,0
                 ,N''
-                ,N'When enabled, this check will identify a risk if Authentification type set to Mixed mode with contained databases exists on instance'
+                ,N'When enabled, this check will identify a risk if authentication type set to Mixed mode with contained databases exists on instance'
                 )
          INSERT [dbo].[policymetric]
                 (
@@ -149,7 +149,7 @@ IF NOT EXISTS ( SELECT  *
                 ,@metricid
                 ,1
                 ,N''
-                ,N'Is Authentification mode set to Windows Only on servers with contained databases?'
+                ,N'Is authentication mode set to Windows Only on servers with contained databases?'
                 ,3
                 ,N''
                 ,0
@@ -477,7 +477,7 @@ IF NOT EXISTS ( SELECT  *
 			        (
 			          @metricid, -- metricid - int
 			          N'Access', -- metrictype - nvarchar(32)
-			          N' Unacceptable Database Owneship', -- metricname - nvarchar(256)
+			          N' Unacceptable Database Ownership', -- metricname - nvarchar(256)
 			          N'Determine whether if a database is found with an unacceptable owner', -- metricdescription - nvarchar(1024)
 			          1, -- isuserentered - bit
 			          1, -- ismultiselect - bit
@@ -500,7 +500,7 @@ IF NOT EXISTS ( SELECT  *
 			        (
 			          0, -- policyid - int
 			          @metricid, -- metricid - int
-			          1, -- isenabled - bit
+			          0, -- isenabled - bit
 			          N'', -- reportkey - nvarchar(32)
 			          N'Are there  databases with an unacceptable owner?', -- reporttext - nvarchar(4000)
 			          1, -- severity - int
