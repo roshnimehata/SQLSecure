@@ -967,22 +967,22 @@ IF NOT EXISTS ( SELECT  *
 		begin
 			update policymetric 
 				set isenabled=1,severity=2,severityvalues='''xp_cmdshell'',''xp_available_media'',''xp_dirtree'',''xp_dsninfo'',''xp_enumdsn'',''xp_enumerrorlogs'',''xp_enumgroups'',''xp_eventlog'',''xp_fixeddrives'',''xp_getfiledetails'',''xp_getnetname'',''xp_logevent'',''xp_loginconfig'',''xp_msver'',''xp_readerrorlog'',''xp_servicecontrol'',''xp_sprintf'',''xp_sscanf'',''xp_subdirs'',''xp_deletemail'',''xp_findnextmsg'',''xp_get_mapi_default_profile'',''xp_get_mapi_profiles'',''xp_readmail'',''xp_sendmail'',''xp_startmail'',''xp_stopmail'',''xp_cleanupwebtask'',''xp_convertwebtask'',''xp_dropwebtask'',''xp_enumcodepages'',''xp_makewebtask'',''xp_readwebtask'',''xp_runwebtask'',''sp_OACreate'',''xp_regaddmultistring'',''xp_regdeletekey'',''xp_regdeletevalue'',''xp_regenumvalues'',''xp_regremovemultistring'',''xp_regwrite'',''xp_regread'''
-				where policyid = 0 and assessmentid=0 and metricid = @metricid
+				where metricid = @metricid
 			if (@ver is null)	-- this is a new install, so fix the All Servers policy
 				update policymetric 
 					set isenabled=1,severity=2,severityvalues= (select severityvalues from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid)
-					where policyid = 1 and assessmentid = 1 and metricid = @metricid
+					where metricid = @metricid
 		end
 	select @metricid = 4
 		if exists (select * from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid )
 		begin
 			update policymetric 
 				set severityvalues='''All'''
-				where policyid = 0 and assessmentid=0 and metricid = @metricid
+				where metricid = @metricid
 			if (@ver is null)	-- this is a new install, so fix the All Servers policy
 				update policymetric 
 					set isenabled=1,severity=1,severityvalues= '''All''', reportkey='', reporttext ='Is the login auditing configuration acceptable?'
-					where policyid = 1 and assessmentid = 1 and metricid = @metricid
+					where metricid = @metricid
 	end 
 
 	select @metricid = 91
@@ -997,11 +997,11 @@ IF NOT EXISTS ( SELECT  *
 
 			update policymetric 
 				set reporttext = 'Do unapproved roles have permissions on SSIS stored procedures?'
-				where policyid = 0 and assessmentid=0 and metricid = @metricid
+				where metricid = @metricid
 			if (@ver is null)	-- this is a new install, so fix the All Servers policy
 				update policymetric 
 					set isenabled=1, severity=1, severityvalues= N'''sp_add_dtspackage'',''sp_drop_dtspackage'',''sp_dts_addfolder'',''sp_dts_addlogentry'',''sp_dts_checkexists'',''sp_dts_deletefolder'',''sp_dts_deletepackage'',''sp_dts_getfolder'',''sp_dts_getpackage'',''sp_dts_getpackageroles'',''sp_dts_listfolders'',''sp_dts_listpackages'',''sp_dts_putpackage'',''sp_dts_renamefolder'',''sp_dts_setpackageroles'',''sp_dump_dtslog_all'',''sp_dump_dtspackagelog'',''sp_dump_dtssteplog'',''sp_dump_dtstasklog'',''sp_enum_dtspackagelog'',''sp_enum_dtspackages'',''sp_enum_dtssteplog'',''sp_enum_dtstasklog'',''sp_get_dtspackage'',''sp_get_dtsversion'',''sp_log_dtspackage_begin'',''sp_log_dtspackage_end'',''sp_log_dtsstep_begin'',''sp_log_dtsstep_end'',''sp_log_dtstask'',''sp_make_dtspackagename'',''sp_reassign_dtspackageowner'',''sp_ssis_addfolder'',''sp_ssis_addlogentry'',''sp_ssis_checkexists'',''sp_ssis_deletefolder'',''sp_ssis_deletepackage'',''sp_ssis_getfolder'',''sp_ssis_getpackage'''
-					where policyid = 1 and assessmentid = 1 and metricid = @metricid
+					where metricid = @metricid
 		end
 				  
 	-- note: the following uses the @metricid to determine the ending value for the metrics to apply to all of the policies
