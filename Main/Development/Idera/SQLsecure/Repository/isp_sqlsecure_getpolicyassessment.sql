@@ -874,12 +874,12 @@ AS
 								if (@version > N'9.' or @version < N'6.')
 								begin
 									-- check to make sure the sa account is either disabled or renamed
-									select @severityvalues = N'Y'
+									select @severityvalues = N'N'
 									select @metricval=[name], @strval=[disabled] from serverprincipal where snapshotid = @snapshotid and sid = 0x01
-									if (lower(@metricval) <> N'sa' or @strval = @severityvalues)
-										select @sevcode=@sevcodeok
-									else
+									if (lower(@metricval) = N'sa' and @strval = @severityvalues)
 										select @sevcode=@severity
+									else
+										select @sevcode=@sevcodeok
 
 									select @metricval = N'The sa account is named ''' + @metricval + N'''' + case when @strval = @severityvalues then N'.' else N' and is enabled.' end
 								end
@@ -3187,12 +3187,15 @@ AS
 							if (@version > N'9.' or @version < N'6.')
 							begin
 								-- check to make sure the sa account is either disabled or renamed
-								select @severityvalues = N'Y'
+								select @severityvalues = N'N'
 								select @metricval=[name], @strval=[disabled] from serverprincipal where snapshotid = @snapshotid and sid = 0x01
-								if (@strval = @severityvalues)
-									select @sevcode=@sevcodeok
-								else
+
+								if (lower(@metricval) = N'sa' and @strval = @severityvalues)
 									select @sevcode=@severity
+								else if (lower(@metricval) <> N'sa' and @strval = @severityvalues)
+									select @sevcode= 2
+								else
+									select @sevcode=@sevcodeok
 
 								select @metricval = N'The sa account is enabled.'
 							end
