@@ -5,6 +5,50 @@ BEGIN
 	-- update default security checks
 	declare @metricid int, @strval nvarchar(512)
 
+	set @metricid = 16
+	if exists (select * from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid )
+	begin
+        update
+            policymetric
+        set 
+            severity = 3
+        where
+            policyid = 0
+            and assessmentid = 0
+            and metricid = @metricid
+        if ( @ver is null )	-- this is a new install, so fix the All Servers policy
+           update
+            policymetric
+           set
+            severity = 3
+           where
+            policyid = 1
+            and assessmentid = 1
+            and metricid = @metricid
+	end
+ 
+ 	set @metricid = 72
+	if exists (select * from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid )
+	begin
+        update
+            policymetric
+        set 
+            severity = 3
+        where
+            policyid = 0
+            and assessmentid = 0
+            and metricid = @metricid
+        if ( @ver is null )	-- this is a new install, so fix the All Servers policy
+           update
+            policymetric
+           set
+            severity = 3
+           where
+            policyid = 1
+            and assessmentid = 1
+            and metricid = @metricid
+	end   
+
 	---- ADD NEW SECURITY CHECKS ***************************************************************
 
 
@@ -960,7 +1004,6 @@ IF NOT EXISTS ( SELECT  *
 				and a.policyid > 0
 				-- this check makes it restartable
 				and a.assessmentid not in (select distinct assessmentid from policymetric where metricid between @startmetricid and @metricid)
-		   
 		   
 	select @metricid = 24
 		if exists (select * from policymetric where policyid = 0 and assessmentid=0 and metricid = @metricid )
