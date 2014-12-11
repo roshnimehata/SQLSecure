@@ -318,7 +318,7 @@
 		<row><td>SQLSERVER_AUTHENTICATION</td><td>1</td></row>
 		<row><td>SQLSERVER_AUTHENTICATION1</td><td>1</td></row>
 		<row><td>SQLSERVER_AUTHENTICATION2</td><td>1</td></row>
-		<row><td>SQLSERVER_IS_CLUSTER</td><td>0</td></row>
+		<row><td>SQLSERVER_IS_CLUSTER</td><td>1</td></row>
 		<row><td>chkExportUtility</td><td>1</td></row>
 		<row><td>chkSQLdmDSS</td><td>1</td></row>
 	</table>
