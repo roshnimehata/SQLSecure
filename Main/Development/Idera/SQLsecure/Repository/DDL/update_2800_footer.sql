@@ -846,8 +846,8 @@ IF NOT EXISTS ( SELECT  *
                           N'Configuration', -- metrictype - nvarchar(32)
                           N'Ole automation procedures', -- metricname - nvarchar(256)
                           N'Determine whether the Ole automation procedures are enabled.', -- metricdescription - nvarchar(1024)
-                          1, -- isuserentered - bit
-                          1, -- ismultiselect - bit
+                          0, -- isuserentered - bit
+                          0, -- ismultiselect - bit
                           N'', -- validvalues - nvarchar(1024)
                           N'When enabled, this check will identify a risk if Ole automation procedures are enabled on the SQL Server.'  -- valuedescription - nvarchar(1024)									        
                         )
@@ -899,8 +899,8 @@ IF NOT EXISTS ( SELECT  *
                           N'Configuration', -- metrictype - nvarchar(32)
                           N'Common criteria compliance', -- metricname - nvarchar(256)
                           N'Determine whether the Common criteria compliance is enabled.', -- metricdescription - nvarchar(1024)
-                          1, -- isuserentered - bit
-                          1, -- ismultiselect - bit
+                          0, -- isuserentered - bit
+                          0, -- ismultiselect - bit
                           N'', -- validvalues - nvarchar(1024)
                           N'When enabled, this check will identify a risk if Common criteria compliance is disabled on the SQL Server.'  -- valuedescription - nvarchar(1024)									        
                         )
