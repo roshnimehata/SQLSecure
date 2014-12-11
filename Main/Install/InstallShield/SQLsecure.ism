@@ -1964,6 +1964,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>setAllUsersProfile2K</td><td>51</td><td>ALLUSERSPROFILE</td><td>[%ALLUSERSPROFILE]</td><td/></row>
 		<row><td>setINSTANCE_Local</td><td>51</td><td>INSTANCE</td><td>(local)</td><td/></row>
 		<row><td>setSQLSERVER_AUTHENTICATION</td><td>51</td><td>SQLSERVER_AUTHENTICATION</td><td>0</td><td/></row>
+		<row><td>setSQLSERVER_IS_CLUSTER</td><td>51</td><td>SQLSERVER_IS_CLUSTER</td><td>0</td><td/></row>
 		<row><td>setUPGRADE</td><td>51</td><td>IS_UPGRADE</td><td>1</td><td/></row>
 		<row><td>setUPGRADE_RELEASE</td><td>51</td><td>UPGRADE_RELEASE</td><td>1</td><td/></row>
 		<row><td>setUserProfileNT</td><td>51</td><td>USERPROFILE</td><td>[%USERPROFILE]</td><td/></row>
@@ -4937,7 +4938,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ISSQLServerCosting</td><td/><td>1500</td><td/><td/></row>
 		<row><td>ISSQLServerFinalize</td><td/><td>6605</td><td/><td/></row>
 		<row><td>ISSQLServerInstall</td><td/><td>5901</td><td/><td/></row>
-		<row><td>ISSQLServerRollback</td><td/><td>1503</td><td/><td/></row>
+		<row><td>ISSQLServerRollback</td><td/><td>1506</td><td/><td/></row>
 		<row><td>ISSQLServerUninstall</td><td/><td>2399</td><td/><td/></row>
 		<row><td>ISSelfRegisterCosting</td><td/><td>2201</td><td/><td/></row>
 		<row><td>ISSelfRegisterFiles</td><td/><td>5601</td><td/><td/></row>
@@ -4947,7 +4948,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ISUnSelfRegisterFiles</td><td/><td>2202</td><td/><td/></row>
 		<row><td>InstallFiles</td><td/><td>4000</td><td>InstallFiles</td><td/></row>
 		<row><td>InstallFinalize</td><td/><td>6600</td><td>InstallFinalize</td><td/></row>
-		<row><td>InstallInitialize</td><td/><td>1501</td><td>InstallInitialize</td><td/></row>
+		<row><td>InstallInitialize</td><td/><td>1502</td><td>InstallInitialize</td><td/></row>
 		<row><td>InstallODBC</td><td/><td>5400</td><td>InstallODBC</td><td/></row>
 		<row><td>InstallServices</td><td>VersionNT</td><td>5800</td><td>InstallServices</td><td/></row>
 		<row><td>InstallValidate</td><td/><td>1400</td><td>InstallValidate</td><td/></row>
@@ -4958,7 +4959,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>MsiPublishAssemblies</td><td/><td>6250</td><td>MsiPublishAssemblies</td><td/></row>
 		<row><td>MsiUnpublishAssemblies</td><td/><td>1750</td><td>MsiUnpublishAssemblies</td><td/></row>
 		<row><td>OnMoved</td><td/><td>6599</td><td>Required for installations using InstallScript Objects.</td><td/></row>
-		<row><td>OnMoving</td><td/><td>1502</td><td>Required for installations using InstallScript.</td><td/></row>
+		<row><td>OnMoving</td><td/><td>1504</td><td>Required for installations using InstallScript.</td><td/></row>
 		<row><td>PatchFiles</td><td/><td>4090</td><td>PatchFiles</td><td/></row>
 		<row><td>ProcessComponents</td><td/><td>1600</td><td>ProcessComponents</td><td/></row>
 		<row><td>PublishComponents</td><td/><td>6200</td><td>PublishComponents</td><td/></row>
@@ -5006,7 +5007,8 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>WriteEnvironmentStrings</td><td/><td>5200</td><td>WriteEnvironmentStrings</td><td/></row>
 		<row><td>WriteIniValues</td><td/><td>5100</td><td>WriteIniValues</td><td/></row>
 		<row><td>WriteRegistryValues</td><td/><td>5000</td><td>WriteRegistryValues</td><td/></row>
-		<row><td>setSQLSERVER_AUTHENTICATION</td><td>SQLSERVER_AUTHENTICATION = ""</td><td>925</td><td/><td/></row>
+		<row><td>setSQLSERVER_AUTHENTICATION</td><td>SQLSERVER_AUTHENTICATION = ""</td><td>901</td><td/><td/></row>
+		<row><td>setSQLSERVER_IS_CLUSTER</td><td>SQLSERVER_IS_CLUSTER=""</td><td>903</td><td/><td/></row>
 		<row><td>setUPGRADE</td><td>IS_MAJOR_UPGRADE or IS_MINOR_UPGRADE</td><td>405</td><td/><td/></row>
 		<row><td>set_ReinstallMode</td><td>Installed and not IS_UPGRADE</td><td>415</td><td/><td/></row>
 	</table>
