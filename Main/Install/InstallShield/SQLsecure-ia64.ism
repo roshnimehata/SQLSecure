@@ -318,7 +318,7 @@
 		<row><td>SQLSERVER_AUTHENTICATION</td><td>1</td></row>
 		<row><td>SQLSERVER_AUTHENTICATION1</td><td>1</td></row>
 		<row><td>SQLSERVER_AUTHENTICATION2</td><td>1</td></row>
-		<row><td>SQLSERVER_IS_CLUSTER</td><td>1</td></row>
+		<row><td>SQLSERVER_IS_CLUSTER</td><td/></row>
 		<row><td>chkExportUtility</td><td>1</td></row>
 		<row><td>chkSQLdmDSS</td><td>1</td></row>
 	</table>
@@ -838,7 +838,7 @@
 		<row><td>SQLLogin</td><td>SQLaccount</td><td>PushButton</td><td>482</td><td>235</td><td>55</td><td>17</td><td>3</td><td/><td>##NEW_STRING137##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>Text1</td><td>Text</td><td>289</td><td>202</td><td>250</td><td>24</td><td>65539</td><td/><td>##NEW_STRING135##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>cboServers</td><td>ComboBox</td><td>290</td><td>139</td><td>180</td><td>16</td><td>65539</td><td>INSTANCE</td><td>##NEW_STRING11##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SQLLogin</td><td>chkSQLAuthen</td><td>CheckBox</td><td>290</td><td>232</td><td>164</td><td>20</td><td>3</td><td>SQLSERVER_AUTHENTICATION</td><td>##NEW_STRING136##</td><td>NextLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>SQLLogin</td><td>chkSQLAuthen</td><td>CheckBox</td><td>289</td><td>232</td><td>164</td><td>20</td><td>3</td><td>SQLSERVER_AUTHENTICATION</td><td>##NEW_STRING136##</td><td>NextLarge</td><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>cnkIsCluster</td><td>CheckBox</td><td>292</td><td>163</td><td>164</td><td>20</td><td>3</td><td>SQLSERVER_IS_CLUSTER</td><td>##NEW_STRING158##</td><td>chkSQLAuthen</td><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>lbUpgradeIntro</td><td>Text</td><td>287</td><td>58</td><td>237</td><td>49</td><td>65538</td><td/><td>##NEW_STRING150##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>lblAuthentication</td><td>Text</td><td>287</td><td>190</td><td>138</td><td>14</td><td>3</td><td/><td>##NEW_STRING133##</td><td/><td/><td/><td/><td/><td/></row>
