@@ -5018,7 +5018,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>WriteIniValues</td><td/><td>5100</td><td>WriteIniValues</td><td/></row>
 		<row><td>WriteRegistryValues</td><td/><td>5000</td><td>WriteRegistryValues</td><td/></row>
 		<row><td>setSQLSERVER_AUTHENTICATION</td><td>SQLSERVER_AUTHENTICATION = ""</td><td>925</td><td/><td/></row>
-		<row><td>setSQLSERVER_IS_CLUSTER</td><td>SQLSERVER_IS_CLUSTER=""</td><td>937</td><td/><td/></row>
+		<row><td>setSQLSERVER_IS_CLUSTER</td><td/><td>912</td><td/><td/></row>
 		<row><td>setUPGRADE</td><td>IS_MAJOR_UPGRADE or IS_MINOR_UPGRADE</td><td>405</td><td/><td/></row>
 		<row><td>set_ReinstallMode</td><td>Installed and not IS_UPGRADE</td><td>415</td><td/><td/></row>
 	</table>
