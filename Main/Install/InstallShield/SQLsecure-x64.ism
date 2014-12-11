@@ -5418,7 +5418,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>SQLSERVER_AUTHENTICATION2</td><td>0</td><td/></row>
 		<row><td>SQLSERVER_DATABASE</td><td>SQLsecure</td><td/></row>
 		<row><td>SQLSERVER_INSTANCE</td><td/><td/></row>
-		<row><td>SQLSERVER_IS_CLUSTER</td><td>0</td><td/></row>
+		<row><td>SQLSERVER_IS_CLUSTER</td><td/><td/></row>
 		<row><td>SQLSERVER_LIST_ALL</td><td>0</td><td/></row>
 		<row><td>SQLSERVER_PASSWORD</td><td/><td/></row>
 		<row><td>SQLSERVER_USERNAME</td><td>sa</td><td/></row>

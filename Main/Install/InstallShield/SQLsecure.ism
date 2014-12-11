@@ -1379,6 +1379,7 @@
 		<row><td>SQLLogin</td><td>NextLarge</td><td>DoAction</td><td>UpdateLocalInstance</td><td>not NOVALIDATION and INSTANCE &lt;&gt; ""</td><td>4</td></row>
 		<row><td>SQLLogin</td><td>NextLarge</td><td>DoAction</td><td>UpgradeRepositoryCheck</td><td>IS_SQLSERVER_STATUS = 0 and IS_UPGRADE and not NOVALIDATION</td><td>14</td></row>
 		<row><td>SQLLogin</td><td>NextLarge</td><td>DoAction</td><td>setSQLSERVER_AUTHENTICATION</td><td>SQLSERVER_AUTHENTICATION = "" and bSQLLocal &lt;&gt;"FALSE"</td><td>8</td></row>
+		<row><td>SQLLogin</td><td>NextLarge</td><td>DoAction</td><td>setSQLSERVER_IS_CLUSTER</td><td>setSQLSERVER_IS_CLUSTER = "" and bSQLLocal &lt;&gt;"FALSE"</td><td>8</td></row>
 		<row><td>SQLLogin</td><td>NextLarge</td><td>NewDialog</td><td>ReadyToInstall</td><td>IS_SQLSERVER_STATUS=0 and bSQLLocal&lt;&gt;"FALSE" and INSTANCE and bSQLVersion&lt;&gt;"FALSE" and SQLBlank and not INVALID_DATABASE and BSQLVER &lt;&gt; "FALSE" and not bSQLRights and not IS_UPGRADE</td><td>15</td></row>
 		<row><td>SQLLogin</td><td>NextLarge</td><td>NewDialog</td><td>ReadyToUpgrade</td><td>IS_SQLSERVER_STATUS=0 and IS_UPGRADE and SQLBlank and INSTANCE and BSQLVER &lt;&gt; "FALSE" and (((SCHEMA_VALIDATION = 2 and UPGRADE_CONFIRM) or SCHEMA_VALIDATION = 1) or NOVALIDATION)</td><td>16</td></row>
 		<row><td>SQLLogin</td><td>NextLarge</td><td>SpawnDialog</td><td>DatabaseInvalidVersion</td><td>IS_SQLSERVER_STATUS=0 and SCHEMA_VALIDATION = -1</td><td>21</td></row>
@@ -5406,7 +5407,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>SQLSERVER_AUTHENTICATION2</td><td>0</td><td/></row>
 		<row><td>SQLSERVER_DATABASE</td><td>SQLsecure</td><td/></row>
 		<row><td>SQLSERVER_INSTANCE</td><td/><td/></row>
-		<row><td>SQLSERVER_IS_CLUSTER</td><td>0</td><td/></row>
+		<row><td>SQLSERVER_IS_CLUSTER</td><td/><td/></row>
 		<row><td>SQLSERVER_LIST_ALL</td><td>0</td><td/></row>
 		<row><td>SQLSERVER_PASSWORD</td><td/><td/></row>
 		<row><td>SQLSERVER_USERNAME</td><td>sa</td><td/></row>
