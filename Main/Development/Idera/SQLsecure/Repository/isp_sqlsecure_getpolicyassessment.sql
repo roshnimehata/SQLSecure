@@ -6152,7 +6152,7 @@ AS
 									@metricval = N'Maximum number of error log files is ' + CONVERT(varchar,@numerrorlogs) + '.' 
 							  else 
 								 begin 
-									   set @metricval = N'Maximum number of error log files is less than recomended (12+). Current value is ' + CONVERT(varchar, @numerrorlogs) + '.'											
+									   set @metricval = N'Maximum number of error log files is less than recommended (12+). Current value is ' + CONVERT(varchar, @numerrorlogs) + '.'											
   
 									   insert   into policyassessmentdetail
 												(
