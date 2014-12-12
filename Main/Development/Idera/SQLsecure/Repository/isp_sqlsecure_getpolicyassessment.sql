@@ -6240,7 +6240,7 @@ AS
 									@orphanedUsersNames = STUFF((SELECT N'; ' + orphanedUsersNamesForDb + N' in ' + dbname FROM OrphanedUsersForDb FOR XML PATH(N'')), 1, 2, N'')  
 									from OrphanedUsersForDb  
 
-								  if ( @orphanedUsersCount = 0 ) 
+								  if ( @orphanedUsersCount is null or @orphanedUsersCount = 0 ) 
 									 select
 										@sevcode = @sevcodeok,
 										@metricval = N'There is no Orphaned users.' 
