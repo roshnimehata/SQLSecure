@@ -865,10 +865,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     //// Fill the grid.
                     Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.AvailabilityGroupReplica;
 
-                    foreach (AvailabilityGroupReplica mAvailabilityGroup in gr.Replicas)
+                    foreach (AvailabilityGroupReplica replica in gr.Replicas)
                     {
-                        Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, mAvailabilityGroup.ServerreplicaId,
-                            mAvailabilityGroup.ReplicaServerName, null);
+                        Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type, replica.ServerreplicaId,
+                            replica.ReplicaServerName, replica);
 
                         m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.ObjectName,
                             tag.TypeName, tag, null, null, null,
