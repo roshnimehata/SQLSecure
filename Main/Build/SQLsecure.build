@@ -173,7 +173,7 @@
 
 	<!-- <property name="SQLsecure.Obfuscate.Output" value="${SQLsecure.Compile.Output}/obfuscated"/> -->
 
-	<property name="SQLsecure.Development.Builds" value="//redhousefs-02/Development/SQLsecure/Builds/"/>
+	<property name="SQLsecure.Development.Builds" value="//redhousefs-02/Development/SQLsecure/Builds/Version 2.8"/>
 	<property name="SQLsecure.Development.Archives" value="//redhousefs-02/Development/SQLsecure/Archives/"/>
 
 	<!-- Perforce Information -->
