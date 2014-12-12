@@ -1965,7 +1965,6 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>setAllUsersProfile2K</td><td>51</td><td>ALLUSERSPROFILE</td><td>[%ALLUSERSPROFILE]</td><td/></row>
 		<row><td>setINSTANCE_Local</td><td>51</td><td>INSTANCE</td><td>(local)</td><td/></row>
 		<row><td>setSQLSERVER_AUTHENTICATION</td><td>51</td><td>SQLSERVER_AUTHENTICATION</td><td>0</td><td/></row>
-		<row><td>setSQLSERVER_IS_CLUSTER</td><td>51</td><td>SQLSERVER_IS_CLUSTER</td><td>0</td><td/></row>
 		<row><td>setUPGRADE</td><td>51</td><td>IS_UPGRADE</td><td>1</td><td/></row>
 		<row><td>setUPGRADE_RELEASE</td><td>51</td><td>UPGRADE_RELEASE</td><td>1</td><td/></row>
 		<row><td>setUserProfileNT</td><td>51</td><td>USERPROFILE</td><td>[%USERPROFILE]</td><td/></row>
@@ -5009,7 +5008,6 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>WriteIniValues</td><td/><td>5100</td><td>WriteIniValues</td><td/></row>
 		<row><td>WriteRegistryValues</td><td/><td>5000</td><td>WriteRegistryValues</td><td/></row>
 		<row><td>setSQLSERVER_AUTHENTICATION</td><td>SQLSERVER_AUTHENTICATION = ""</td><td>902</td><td/><td/></row>
-		<row><td>setSQLSERVER_IS_CLUSTER</td><td/><td>901</td><td/><td/></row>
 		<row><td>setUPGRADE</td><td>IS_MAJOR_UPGRADE or IS_MINOR_UPGRADE</td><td>405</td><td/><td/></row>
 		<row><td>set_ReinstallMode</td><td>Installed and not IS_UPGRADE</td><td>415</td><td/><td/></row>
 	</table>
@@ -5407,7 +5405,6 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>SQLSERVER_AUTHENTICATION2</td><td>0</td><td/></row>
 		<row><td>SQLSERVER_DATABASE</td><td>SQLsecure</td><td/></row>
 		<row><td>SQLSERVER_INSTANCE</td><td/><td/></row>
-		<row><td>SQLSERVER_IS_CLUSTER</td><td/><td/></row>
 		<row><td>SQLSERVER_LIST_ALL</td><td>0</td><td/></row>
 		<row><td>SQLSERVER_PASSWORD</td><td/><td/></row>
 		<row><td>SQLSERVER_USERNAME</td><td>sa</td><td/></row>
