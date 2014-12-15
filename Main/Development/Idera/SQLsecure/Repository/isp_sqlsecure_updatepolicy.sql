@@ -22,7 +22,7 @@ CREATE procedure [dbo].[isp_sqlsecure_updatepolicy]
 	@assessmentdate datetime, 
 	@usebaseline bit, 
 	@interviewname nvarchar(256) = null, 
-	@interviewtext ntext = null
+	@interviewtext nvarchar(max) = null
 )
 as
    -- <Idera SQLsecure version and copyright>

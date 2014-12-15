@@ -235,6 +235,12 @@ namespace Idera.SQLsecure.UI.Console.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap avail_48 {
+            get {
+                object obj = ResourceManager.GetObject("avail_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
         internal static System.Drawing.Bitmap box_view_16 {
             get {
                 object obj = ResourceManager.GetObject("box_view_16", resourceCulture);
@@ -802,6 +808,12 @@ namespace Idera.SQLsecure.UI.Console.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap replica_48 {
+            get {
+                object obj = ResourceManager.GetObject("replica_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
         internal static System.Drawing.Bitmap report_32 {
             get {
                 object obj = ResourceManager.GetObject("report_32", resourceCulture);
@@ -1320,6 +1332,12 @@ namespace Idera.SQLsecure.UI.Console.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap sequence_48 {
+            get {
+                object obj = ResourceManager.GetObject("sequence_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
         internal static System.Drawing.Bitmap server_16 {
             get {
                 object obj = ResourceManager.GetObject("server_16", resourceCulture);

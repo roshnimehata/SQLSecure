@@ -34,7 +34,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private string m_AltName = string.Empty;
         private bool m_HasAccess = false;
         private string m_DefaultSchemaName = string.Empty;
-
+        private bool m_isContainedUser = false;
+		private string m_authenticationType="";
         #endregion
 
         #region Queries
@@ -51,7 +52,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
 	                                    isalias, 
 	                                    altname, 
 	                                    hasaccess, 
-	                                    defaultschemaname 
+	                                    defaultschemaname ,
+                                        iscontaineduser,
+                                        AuthenticationType
                                     FROM SQLsecure.dbo.vwdatabaseprincipal
                                     WHERE snapshotid = @snapshotid AND dbid = @dbid AND type IN ('S', 'U', 'G')";
         private const string QueryGetSnapshotUser
@@ -66,7 +69,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
 	                                    isalias, 
 	                                    altname, 
 	                                    hasaccess, 
-	                                    defaultschemaname 
+	                                    defaultschemaname,
+                                        iscontaineduser,
+                                        AuthenticationType
                                     FROM SQLsecure.dbo.vwdatabaseprincipal
                                     WHERE snapshotid = @snapshotid AND dbid = @dbid AND uid = @uid AND type IN ('S', 'U', 'G')";
         private const string QueryGetSnapshotUserRoles
@@ -133,7 +138,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
             IsAlias,
             AltName,
             HasAccess,
-            DefaultSchemaName
+            DefaultSchemaName,
+            IsContainedUser,
+            AuthenticationType
         };
         private enum UserRoleColumns
         {
@@ -183,7 +190,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 SqlString isalias,
                 SqlString altname,
                 SqlString hasaccess,
-                SqlString defaultschemaname
+                SqlString defaultschemaname,
+                SqlBoolean isContainedeUser,
+                SqlString authType
             )
         {
             m_Id = id.IsNull ? -1 : id.Value;
@@ -195,6 +204,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_AltName = altname.IsNull ? string.Empty : altname.Value;
             m_HasAccess = Sql.ObjectType.ToBoolean(hasaccess);
             m_DefaultSchemaName = defaultschemaname.IsNull ? string.Empty : defaultschemaname.Value;
+            m_isContainedUser = isContainedeUser.Value;
+            AuthenticationType = authType.Value;
         }
 
         private DatabasePrincipal(
@@ -275,6 +286,16 @@ namespace Idera.SQLsecure.UI.Console.Sql
             get { return m_DefaultSchemaName; }
         }
 
+        public bool IsContainedUser
+        {
+            get { return m_isContainedUser; }
+            set { m_isContainedUser = value; }
+        }
+        public string AuthenticationType
+		{ 
+			 get { return m_authenticationType; }
+             set { m_authenticationType = value; }
+		}
         #endregion
 
         #region Methods
@@ -313,9 +334,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         SqlString altname = rdr.GetSqlString((int)UserColumns.AltName);
                         SqlString hasaccess = rdr.GetSqlString((int)UserColumns.HasAccess);
                         SqlString defaultschemaname = rdr.GetSqlString((int)UserColumns.DefaultSchemaName);
+                        SqlBoolean isContainedUser = rdr.GetSqlBoolean((int)UserColumns.IsContainedUser);
+                        SqlString AuthenticationType = rdr.GetSqlString((int)UserColumns.AuthenticationType);
 
                         // Create the user and add to list.
-                        DatabasePrincipal user = new DatabasePrincipal(id, name, type, owner, login, isalias, altname, hasaccess, defaultschemaname);
+                        DatabasePrincipal user = new DatabasePrincipal(id, name, type, owner, login, isalias, altname, hasaccess, defaultschemaname, isContainedUser,AuthenticationType);
                         users.Add(user);
                     }
                 }
@@ -360,9 +383,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         SqlString altname = rdr.GetSqlString((int)UserColumns.AltName);
                         SqlString hasaccess = rdr.GetSqlString((int)UserColumns.HasAccess);
                         SqlString defaultschemaname = rdr.GetSqlString((int)UserColumns.DefaultSchemaName);
-
+                        SqlBoolean isContainedUser = rdr.GetSqlBoolean((int)UserColumns.IsContainedUser);
+                        SqlString AuthenticationType = rdr.GetSqlString((int)UserColumns.AuthenticationType);
                         // Create the user.
-                        user = new DatabasePrincipal(id, name, type, owner, login, isalias, altname, hasaccess, defaultschemaname);
+                        user = new DatabasePrincipal(id, name, type, owner, login, isalias, altname, hasaccess, defaultschemaname, isContainedUser, AuthenticationType);
                     }
                 }
             }

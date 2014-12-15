@@ -502,7 +502,10 @@ namespace Idera.SQLsecure.Collector.Sql
                     colAltuid = new DataColumn(ParamAltuid, typeof(SqlInt32)),
                     colHasaccess = new DataColumn(ParamHasaccess, typeof(SqlString)),
                     colDefaultschemaname = new DataColumn(ParamDefaultschemaname, typeof(SqlString)),
-                    colHashkey = new DataColumn(ParamHashkey, typeof(SqlString)))
+                    colHashkey = new DataColumn(ParamHashkey, typeof(SqlString)),
+                    colIsContained = new DataColumn(ParamIsContained, typeof(SqlBoolean)),
+                    colAuthenticationType = new DataColumn(ParamAuthenticationType, typeof(SqlString))
+                    )
             {
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
@@ -519,7 +522,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colAltuid,
                                                                 colHasaccess,
                                                                 colDefaultschemaname,
-                                                                colHashkey 
+                                                                colHashkey,
+                                                                colIsContained,
+                                                                colAuthenticationType
                                                             });
             }
 
@@ -538,7 +543,8 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamHasaccess = "hasaccess";
         internal const string ParamDefaultschemaname = "defaultschemaname";
         internal const string ParamHashkey = "hashkey";
-
+        internal const string ParamIsContained = "iscontaineduser";
+        internal const string ParamAuthenticationType = "AuthenticationType";
         internal const string RepositoryTable = "SQLsecure.dbo.databaseprincipal";
     }
 
@@ -594,9 +600,14 @@ namespace Idera.SQLsecure.Collector.Sql
                     colName = new DataColumn(ParamName, typeof(SqlString)),
                     colSchemaid = new DataColumn(ParamSchemaid, typeof(SqlInt32)),
                     colHashkey = new DataColumn(ParamHashkey, typeof(SqlString)),
-                    colRunAtStartup =  new DataColumn(ParamRunAtStartup,typeof(SqlString)),
+                    colRunAtStartup = new DataColumn(ParamRunAtStartup, typeof(SqlString)),
                     colIsEncypted = new DataColumn(ParamIsEncypted, typeof(SqlString)),
-                    colUserDefined = new DataColumn(ParamUserDefined, typeof(SqlString)))
+                    colUserDefined = new DataColumn(ParamUserDefined, typeof(SqlString)),
+                    colPermissionSet = new DataColumn(ParamPermissionSet, typeof(SqlInt32)),
+                    colCreateDate = new DataColumn(ParamCreateDate, typeof(SqlDateTime)),
+                    colModifyDate = new DataColumn(ParamModifyDate, typeof(SqlDateTime))
+
+                    )
             {
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
@@ -614,7 +625,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colHashkey,
                                                                 colRunAtStartup,
                                                                 colIsEncypted,
-                                                                colUserDefined
+                                                                colUserDefined,
+                                                                colPermissionSet,
+                                                                colCreateDate,
+                                                                colModifyDate
                                                             });
             }
 
@@ -634,6 +648,10 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamRunAtStartup = "runatstartup";
         internal const string ParamIsEncypted = "isencrypted";
         internal const string ParamUserDefined = "userdefined";
+        internal const string ParamPermissionSet = "permission_set";
+        internal const string ParamCreateDate = "createdate";
+        internal const string ParamModifyDate = "modifydate";
+
         internal const string RepositoryTable = "SQLsecure.dbo.databaseobject";
     }
 
@@ -1024,5 +1042,257 @@ namespace Idera.SQLsecure.Collector.Sql
 
         internal const string RepositoryTable = "SQLsecure.dbo.serverprotocol";
     }
+
+    internal static class SqlJobDataTable
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable = null;
+            using (DataColumn
+                    colJobId = new DataColumn(Paramjobid, typeof(SqlInt32)),
+                    colSnapshotid = new DataColumn(ParamSnapshotId, typeof(SqlInt32)),
+                    colName = new DataColumn(ParamName, typeof(SqlString)),
+                    colDescription = new DataColumn(ParamDescription, typeof(SqlString)),
+                    colStepName = new DataColumn(ParamStepName, typeof(SqlString)),
+                    colLastRunDate = new DataColumn(ParamLastRunDate, typeof(SqlDateTime)),
+                    colComand = new DataColumn(ParamCommand, typeof(SqlString)),
+                    colSubSystem = new DataColumn(ParamSubSystem, typeof(SqlString)),
+                    colOwnerSid = new DataColumn(ParamOwnerSid, typeof(SqlBinary)),
+                    colEnabled = new DataColumn(ParamEnabled, typeof(SqlInt16)))
+            {
+                // Create the data table object & define its columns.
+                // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("sqljob");
+                dataTable.Columns.AddRange(new DataColumn[] {  
+                                                                colJobId,
+                                                                colSnapshotid,
+                                                                colName,
+                                                                colDescription,
+                                                                colStepName,
+                                                                colLastRunDate,
+                                                                colComand,
+                                                                colSubSystem,
+                                                                colOwnerSid,
+                                                                colEnabled
+                                                            });
+            }
+
+            return dataTable;
+        }
+
+        internal const string Paramjobid = "jobid";
+        internal const string ParamName = "name";
+        internal const string ParamOwnerSid = "ownersid";
+        internal const string ParamDescription = "description";
+        internal const string ParamLastRunDate = "lastrundate";
+        internal const string ParamEnabled = "enabled";
+        internal const string ParamSubSystem = "subsystem";
+        internal const string ParamStepName = "stepname";
+        internal const string ParamCommand = "command";
+        internal const string ParamSnapshotId = "SnapshotId";
+
+
+        internal const string RepositoryTable = "SQLsecure.dbo.sqljob";
+    }
+
+    internal static class SQLJobProxy
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable = null;
+            using (DataColumn
+                    colProxyId = new DataColumn(ParamProxyId, typeof(SqlInt32)),
+                    colSnapshotid = new DataColumn(ParamSnapshotId, typeof(SqlInt32)),
+                    colName = new DataColumn(ParamName, typeof(SqlString)),
+                    colSubSystemId = new DataColumn(ParamSubSystemId, typeof(SqlInt32)),
+                    colUserId = new DataColumn(ParamUserSid, typeof(SqlBinary)),
+                    colSubSystem= new DataColumn(ParamSubSystem, typeof(SqlString)),
+                    colCredentialId = new DataColumn(ParamCredentialId, typeof(SqlInt32)),
+                    colCredentialName = new DataColumn(ParamCredentialName, typeof(SqlString)),
+                    colCredentialIdentity = new DataColumn(ParamCredentialIdentity, typeof(SqlString)),
+                    colEnabled = new DataColumn(ParamEnabled, typeof(SqlByte)))
+            {
+                // Create the data table object & define its columns.
+                // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("sqljobproxy");
+                dataTable.Columns.AddRange(new DataColumn[] {  
+                                                                colProxyId,
+                                                                colSnapshotid,
+                                                                colName,
+                                                                colEnabled,
+                                                                colUserId,
+                                                                colSubSystemId,
+                                                                colSubSystem,
+                                                                colCredentialId,
+                                                                colCredentialName,
+                                                                colCredentialIdentity
+                                                            });
+            }
+
+            return dataTable;
+        }
+
+        internal const string ParamProxyId = "proxyid";
+        internal const string ParamSnapshotId = "snapshotid";
+        internal const string ParamName = "proxyName";
+        internal const string ParamUserSid = "usersid";
+        internal const string ParamSubSystemId = "subsystemid";
+        internal const string ParamSubSystem = "subsystem";
+        internal const string ParamEnabled = "enabled";
+        internal const string ParamCredentialId = "credentialId";
+        internal const string ParamCredentialName = "credentialName";
+        internal const string ParamCredentialIdentity = "credentialIdentity";
+
+        internal const int ColProxyId =0;
+        internal const int ColName = 1;
+        internal const int ColCredentialId = 2;
+        internal const int ColEnabled = 3;
+        internal const int ColUserSid = 4;
+        internal const int ColSubSystemId = 5;
+        internal const int ColSubSystem = 6;
+        internal const int ColCredentialName = 7;
+        internal const int ColCredentialIdentity = 8;
+
+
+        internal const string RepositoryTable = "SQLsecure.dbo.sqljobproxy";
+    }
+
+
+    internal static class AvailabilityGroupTable
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable = null;
+            using (DataColumn
+                   colGroupId = new DataColumn(ParamGroupId, typeof(SqlGuid)),
+                   colName = new DataColumn(ParamName, typeof(SqlString)),
+                   colResourceId = new DataColumn(ParamResourceId, typeof(SqlString)),
+                   colResourceGroupId = new DataColumn(ParamResourceGroupId, typeof(SqlString)),
+                   colFailureConditionLevel = new DataColumn(ParamFailureConditionLevel, typeof(SqlInt32)),
+                   colHealthCheckTimeout = new DataColumn(ParamHealthCheckTimeout, typeof(SqlInt32)),
+                   colAutomatedBackuppReference = new DataColumn(ParamAutomatedBackuppReference, typeof(SqlByte)),
+                   colAutomatedBackuppReferenceDesc = new DataColumn(ParamAutomatedBackuppReferenceDesc, typeof(SqlString)),
+                      colSnapshotid = new DataColumn(ParamSnapshotid, typeof(SqlInt32)))
+            {
+                // Create the data table object & define itsParamumns.
+                // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("availabilitygroups");
+                dataTable.Columns.AddRange(new DataColumn[] {  
+                                                               colGroupId,
+                                                               colName,
+                                                               colResourceId,
+                                                               colResourceGroupId,
+                                                               colFailureConditionLevel,
+                                                               colHealthCheckTimeout,
+                                                               colAutomatedBackuppReference,
+                                                               colAutomatedBackuppReferenceDesc,
+                                                               colSnapshotid
+                                                            });
+            }
+
+            return dataTable;
+        }
+
+
+        internal const string ParamGroupId = "[groupid]";
+        internal const string ParamSnapshotid = "[snapshotid]";
+        internal const string ParamName = "[name]";
+        internal const string ParamResourceId = "[resourceid]";
+        internal const string ParamResourceGroupId = "[resourcegroupid]";
+        internal const string ParamFailureConditionLevel = "[failureconditionlevel]";
+        internal const string ParamHealthCheckTimeout = "[healthchecktimeout]";
+        internal const string ParamAutomatedBackuppReference = "[automatedbackuppreference]";
+        internal const string ParamAutomatedBackuppReferenceDesc = "[automatedbackuppreferencedesc]";
+
+
+
+
+
+
+        internal const string RepositoryTable = "SQLsecure.dbo.availabilitygroups";
+    }
+
+    internal static class AvailabilityReplicas
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable = null;
+            using (DataColumn
+                            colReplicaid = new DataColumn(ParamReplicaId, typeof(SqlGuid)),
+                            colGroupid = new DataColumn(ParamGroupid, typeof(SqlGuid)),
+                            colSnapshotid = new DataColumn(ParamSnapshotid, typeof(SqlInt32)),
+                            colReplicaServerName = new DataColumn(ParamReplicaServerName, typeof(SqlString)),
+                            colOwnersid = new DataColumn(ParamOwnersid, typeof(SqlBinary)),
+                            colEndpointUrl = new DataColumn(ParamEndpointUrl, typeof(SqlString)),
+                            colAvailabilityMode = new DataColumn(ParamAvailabilityMode, typeof(SqlByte)),
+                            colAvailabilityModeDesc = new DataColumn(ParamAvailabilityModeDesc, typeof(SqlString)),
+                            colFailovermode = new DataColumn(ParamFailoverMode, typeof(SqlByte)),
+                            colFailoverModeDesc = new DataColumn(ParamFailoverModeDesc, typeof(SqlString)),
+                            colCreateDate = new DataColumn(ParamCreateDate, typeof(SqlDateTime)),
+                            colModifyDate = new DataColumn(ParamModifyDate, typeof(SqlDateTime)),
+                            colReplicaMetadataId = new DataColumn(ParamReplicaMetadataId, typeof(SqlInt32))
+                            )
+            {
+                // Create the data table object & define itsParamumns.
+                // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("availabilityreplicas");
+                dataTable.Columns.AddRange(new DataColumn[] {  
+                                                                colReplicaid ,
+                                                                colSnapshotid ,
+                                                                colGroupid ,
+                                                                colReplicaServerName ,
+                                                                colOwnersid ,
+                                                                colEndpointUrl ,
+                                                                colAvailabilityMode ,
+                                                                colAvailabilityModeDesc ,
+                                                                colFailovermode ,
+                                                                colFailoverModeDesc ,
+                                                                colCreateDate ,
+                                                                colModifyDate ,
+                                                                colReplicaMetadataId
+                                                             });
+            }
+
+            return dataTable;
+        }
+
+
+
+
+        internal const string ParamReplicaId = "replicaid";
+        internal const string ParamServerReplicaId = "serverreplicaid";
+        internal const string ParamSnapshotid = "snapshotid";
+        internal const string ParamGroupid = "groupid";
+        internal const string ParamReplicaServerName = "replicaservername";
+        internal const string ParamOwnersid = "ownersid";
+        internal const string ParamEndpointUrl = "endpointurl";
+        internal const string ParamAvailabilityMode = "availabilitymode";
+        internal const string ParamAvailabilityModeDesc = "availabilitymodedesc";
+        internal const string ParamFailoverMode = "failovermode";
+        internal const string ParamFailoverModeDesc = "failovermodedesc";
+        internal const string ParamCreateDate = "createdate";
+        internal const string ParamModifyDate = "modifydate";
+        internal const string ParamReplicaMetadataId = "replicametadataid";
+
+       
+
+        internal const int ColReplicaid = 0;
+        internal const int ColGroupId = 1;
+        internal const int ColReplicaServerName = 2;
+        internal const int ColOwnersid = 3;
+        internal const int ColEndpointUrl = 4;
+        internal const int ColAvailabilityMode = 5;
+        internal const int ColAvailabilityModeDesc = 6;
+        internal const int ColFailoverMode = 7;
+        internal const int ColFailoverModeDesc = 8;
+        internal const int ColCreateDate = 9;
+        internal const int ColModifyDate = 10;
+        internal const int ColReplicaMetadataId = 11;
+
+
+
+        internal const string RepositoryTable = "SQLsecure.dbo.availabilityreplicas";
+    }
+
 
 }

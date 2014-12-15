@@ -77,23 +77,32 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
     internal static class Constants
     {
+        #region General
+
+        public const int NOT_FOUND = -1;
+        public const int NOT_SELECTED = -1;
+        public const string AUDIT_FOLDER_DELIMITER = "|";
+        public const string FILE_SCHEME = "file";
+
+        #endregion
+
         #region General Product info
 
         public static String COMPANY_STR = @"Idera";
         public static String PRODUCT_STR = @"SQLsecure";
-        public static String PRODUCT_VER_STR = @"2.7";
+        public static String PRODUCT_VER_STR = @"2.8";
         // Previous version strings (newest first) to find previous option files
-        public static String[] PRODUCT_VER_STR_PREV = { @"2.6", @"2.5", @"2.0", @"1.2", @"1.1" };
+        public static String[] PRODUCT_VER_STR_PREV = { @"2.7",@"2.6", @"2.5", @"2.0", @"1.2", @"1.1" };
         public static String COMPONENT_STR = @"Console";
 
         public static String APP_TITLE_STR = COMPANY_STR + @" " + PRODUCT_STR + @" - {0}";
 
         public static String OPTIONS_FILE_EXTENSION_STR = @".options.xml";
 
-        public const int DalVersion = 2700;
-        public const int SchemaVersion = 2700;
+        public const int DalVersion = 2800;
+        public const int SchemaVersion = 2800;
 
-        public const string COPYRIGHT_MSG = @"© Copyright 2005-2012 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
+        public const string COPYRIGHT_MSG = @"© Copyright 2005-2014 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
 
         public const string BETA_VERSION = ""; //" (BETA VERSION)"; 
 
@@ -168,7 +177,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         internal const string SetDefault = "-DefaultRepository"; // Save Installation Repository
         internal const string Verbose = "-Verbose";
 
-        internal const string CopyrightMsg = "\nCopyright © 2005-2012, Idera, Inc.";
+        internal const string CopyrightMsg = "\nCopyright © 2005-2014, Idera, Inc.";
         internal static string UsageMsg = "\n" + PRODUCT_STR + @"  audits SQL Server security data and associated\n"
                                                       + "Windows accounts.\n\n"
                                                       + "Usage: Idera." + PRODUCT_STR + @".Console\n"
@@ -464,6 +473,26 @@ namespace Idera.SQLsecure.UI.Console.Utility
         #region Policies
 
         public const string Policy_Install_Folder = "Policies";
+
+        #endregion
+
+        #region Password Validation Constants
+
+        public const int MINIMUM_PASSWORD_LENGTH = 8;
+        public const string PASSWORD_LENGTH_MESSAGE_FORMAT = @"SQLSecure application requires password length not less {0} characters to save it properly into database!";
+
+        #endregion
+
+        #region Import/Export Policies Constants
+
+        public const string TITLE_POLICY = "Policy";
+        public const string TITLE_ASSESSMENT = "Assessment";
+        public const string EXPORTING = "Exporting";
+        public const string IMPORTING = "Importing";
+        public const string EXPORT_COLUMN_TEXT = "Export";
+        public const string IMPORT_COLUMN_TEXT = "Import";
+        public const string IMPORTING_EXPORTING_DESCRIPTION_FORMAT = "Check security checks in {0} column for {1} operation.";
+        public const string IMPORTING_EXPORTING_FORM_TITLE_FORMAT = "{0} {1} Security Checks - {2}";
 
         #endregion
     }

@@ -2,19 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
-
 using Idera.SQLsecure.Core.Logger;
-using Idera.SQLsecure.UI.Console.Utility;
+using Idera.SQLsecure.UI.Console.Forms;
 using Idera.SQLsecure.UI.Console.Sql;
-using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
-
+using Idera.SQLsecure.UI.Console.Utility;
 using Infragistics.Win;
 using Infragistics.Win.UltraWinGrid;
-
+using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 
 namespace Idera.SQLsecure.UI.Console.Controls
 {
@@ -1214,9 +1210,15 @@ namespace Idera.SQLsecure.UI.Console.Controls
             string fileName = Forms.Form_ImportPolicy.Process();
             if (!string.IsNullOrEmpty(fileName) )
             {
-                m_policy.UpdatePolicyFromXMLFile(fileName);
+                Policy policy = new Policy();
+                policy.ImportPolicyFromXMLFile(fileName, false);
+                policy.IsSystemPolicy = false;
+                if (Form_ImportExportPolicySecuriyChecks.ProcessImport(policy, Program.gController.isAdmin))
+                {
                 m_importing = true;
                 loadPolicyMetrics();
+                    m_policy.UpdatePolicyMetricsFromSelectedSecurityChecks(policy);
+                }
             }
 
             Cursor = Cursors.Default;

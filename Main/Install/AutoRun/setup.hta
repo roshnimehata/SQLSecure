@@ -43,9 +43,10 @@
         */
 
 
-		var HELP_REQUIREMENTS        = "SQLsecure Help/Requirements.htm";
-		var HELP_INSTALL             = "SQLsecure Help/Install SQLsecure.htm";
-		var HELP_MAIN                = "SQLsecure Help/Start Help.htm"
+        var HELP_REQUIREMENTS        = "http://wiki.idera.com/x/8QhK";
+		var HELP_INSTALL             = "http://wiki.idera.com/x/8whK";
+		var HELP_MAIN                = "http://wiki.idera.com/x/zwhK";
+		var RELEASE_NOTES            = "http://wiki.idera.com/x/2whK";
 
 		var RN_BASE        = "http://" + webRoot + ".idera.com/Help/SQLsecure/{version}/RN/Default_CSH.htm#/What's New.htm|WebHelpSkinSilver"
 
@@ -274,9 +275,9 @@
 								    <tr class="linkBody"> 
 									    <td>										
 										    <table border="0">
-											    <tr><td class="linkText"><a href="#" title="Click here to view instructions for installing SQLsecure&reg; for the first time." onclick="onClickHelp(HELP_INSTALL);">Installation Instructions</a></td></tr>
-											    <tr><td class="linkText"><a href="#" title="Click here to view system requirements for installing SQLsecure&reg;." onclick="onClickHelp(HELP_REQUIREMENTS);">Requirements</a></td></tr>
-											    <tr><td class="linkText"><a href="#" title="Click here to view important information about this release of SQLsecure&reg;." onclick="onClickRN();">Release Notes</a></td></tr>
+											    <tr><td class="linkText"><a href="#" title="Click here to view instructions for installing SQLsecure&reg; for the first time." onclick="showHelp(HELP_INSTALL);">Installation Instructions</a></td></tr>
+											    <tr><td class="linkText"><a href="#" title="Click here to view system requirements for installing SQLsecure&reg;." onclick="showHelp(HELP_REQUIREMENTS);">Requirements</a></td></tr>
+											    <tr><td class="linkText"><a href="#" title="Click here to view important information about this release of SQLsecure&reg;." onclick="showHelp(RELEASE_NOTES);">Release Notes</a></td></tr>
 										    </table>
 									    </td>
 									    <td>
@@ -286,9 +287,9 @@
 									    </td>
 									    <td>
 										    <table border="0">
-											    <tr><td class="linkText"><a href="#" title="Click here to view general help for SQLsecure&reg; that provides comprehensive information about the product and its features." onclick="onClickHelp(HELP_MAIN);">Product Documentation</a></td></tr>
+											    <tr><td class="linkText"><a href="#" title="Click here to view general help for SQLsecure&reg; that provides comprehensive information about the product and its features." onclick="showHelp(HELP_MAIN);">Product Documentation</a></td></tr>
 											    <tr><td class="linkText"><a target="_blank" href="http://www.idera.com" title="Click here to visit the Idera home page.">Idera Home Page</a></td></tr>
-											    <tr><td class="linkText"><a target="_blank" href="http://www.idera.com/Support" title="Click here to visit the Idera Technical Support site.">Technical Support Site</a></td></tr>
+											    <tr><td class="linkText"><a target="_blank" href="https://www.idera.com/support/faq" title="Click here to visit the Idera Technical Support site.">Technical Support Site</a></td></tr>
 											    <tr><td class="linkText"><a href="#" title="Click here to view the Idera software license agreement." onclick="onClickLinkApp(PRODUCT_LICENSE);">License Agreement</a></td></tr>			
 										    </table>
 									    </td>

@@ -116,6 +116,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 case Sql.ObjectType.TypeEnum.FullTextCatalog:
                     Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.FulltextCatalog_48;
                     break;                
+                case Sql.ObjectType.TypeEnum.SequenceObjects:
+                    Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.sequence_48;
+                    break;   
             }
 
             // Fill explicit permissions.

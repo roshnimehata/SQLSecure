@@ -48,6 +48,18 @@ AS
 							currentvalue nvarchar(1500),
 							thresholdvalue nvarchar(1500)
 							)
+		 create table #tempdetails
+              (
+                policyid int,
+                assessmentid int,
+                metricid int,
+                snapshotid int,
+                detailfinding varchar(2048),
+                databaseid int null,
+                objecttype varchar(5),
+                objectid int null,
+                objectname varchar(400)
+              ) 
 	declare @err int,
 			@sevcodeok int,
 			@valid bit,
@@ -862,12 +874,12 @@ AS
 								if (@version > N'9.' or @version < N'6.')
 								begin
 									-- check to make sure the sa account is either disabled or renamed
-									select @severityvalues = N'Y'
+									select @severityvalues = N'N'
 									select @metricval=[name], @strval=[disabled] from serverprincipal where snapshotid = @snapshotid and sid = 0x01
-									if (lower(@metricval) <> N'sa' or @strval = @severityvalues)
-										select @sevcode=@sevcodeok
-									else
+									if (lower(@metricval) = N'sa' and @strval = @severityvalues)
 										select @sevcode=@severity
+									else
+										select @sevcode=@sevcodeok
 
 									select @metricval = N'The sa account is named ''' + @metricval + N'''' + case when @strval = @severityvalues then N'.' else N' and is enabled.' end
 								end
@@ -3090,7 +3102,7 @@ AS
 								select @sql = N'declare sysadmincursor cursor for
 													select distinct name 
 														from #sysadminstbl 
-														where lower(name) in (' + lower(@severityvalues) + N')'
+														where lower(name) not in (' + lower(@severityvalues) + N')'
  								if (charindex('%', @severityvalues) > 0)
 								begin
 									select @strval = lower(@severityvalues),
@@ -3099,7 +3111,7 @@ AS
 									begin
 										select @intval2 = charindex('%', @strval)
 										if (@intval2 < @intval)		-- this item contains a wildcard
-											select @sql = @sql + ' or lower(name) like ' + substring(@strval,1,@intval)
+											select @sql = @sql + ' or lower(name) not like ' + substring(@strval,1,@intval)
 											select @strval = substring(@strval,@intval+2, len(@strval)-(@intval+1))
 											select @intval = charindex(''',''',@strval)
 									end
@@ -3107,7 +3119,7 @@ AS
 									begin
 										select @intval2 = charindex('%', @strval)
 										if (@intval2 > 0)		-- this item contains a wildcard
-											select @sql = @sql + ' or lower(name) like ' + @strval
+											select @sql = @sql + ' or lower(name) not like ' + @strval
 									end
 								end
 								select @sql = @sql + N' order by name'
@@ -3164,9 +3176,9 @@ AS
  							end
 							else
 								select @sevcode=@sevcodeok,
-											@metricval = N'No list of approved logins was provided.'
+											@metricval = N'No list of unapproved logins was provided.'
 
-							select @metricthreshold = N'Server is vulnerable if the sysadmin server role members include: ' + @severityvalues
+							select @metricthreshold = N'Server is vulnerable if the sysadmin server role members include other logins than: ' + @severityvalues
 						end
 						-- sa Account disabled  (this is a subset of metric 16)
 						else if (@metricid = 72)
@@ -3175,12 +3187,15 @@ AS
 							if (@version > N'9.' or @version < N'6.')
 							begin
 								-- check to make sure the sa account is either disabled or renamed
-								select @severityvalues = N'Y'
+								select @severityvalues = N'N'
 								select @metricval=[name], @strval=[disabled] from serverprincipal where snapshotid = @snapshotid and sid = 0x01
-								if (@strval = @severityvalues)
-									select @sevcode=@sevcodeok
-								else
+
+								if (lower(@metricval) = N'sa' and @strval = @severityvalues)
 									select @sevcode=@severity
+								else if (lower(@metricval) <> N'sa' and @strval = @severityvalues)
+									select @sevcode= 2
+								else
+									select @sevcode=@sevcodeok
 
 								select @metricval = N'The sa account is enabled.'
 							end
@@ -4435,7 +4450,7 @@ AS
 							select @metricthreshold = N'Server is vulnerable if dangerous security principals have been added to SSIS database roles.'
 						end
 						
-						-- Integration Services Permissions Not Acceptable
+						-- Integration Services Roles Permissions Not Acceptable
 						else if (@metricid = 91)
 						begin
 							select @sql = N'declare databasecursor cursor for
@@ -4448,6 +4463,7 @@ AS
 												(vdop.snapshotid = ' + convert(nvarchar, @snapshotid) + N') 
 												and ((vdop.isgrant = N''Y'') or (vdop.isgrantwith = N''Y''))
 												and (vdop.objectname in (' + @severityvalues + N'))
+												and dp.type IN (''R'', ''A'')
 												and (dp.name not in (''db_dtsadmin'', ''db_dtsltduser'', ''db_dtsoperator'', ''db_ssisadmin'', ''db_ssisltduser'', ''db_ssisoperator''))
 											)'
 							exec (@sql)			
@@ -4502,7 +4518,6 @@ AS
 
 							select @metricthreshold = N'Server is vulnerable if users other than the default SSIS database roles have been granted permissions on an Integration Services stored procedure.'
 						end
-
 						--Weak Passwords
 						else if (@metricid = 92)
 						begin
@@ -4572,7 +4587,1837 @@ AS
 
 							select @metricthreshold = N'Server is vulnerable if SQL Logins are found that have a weak password.'
 						end
+						if ( @metricid = 93 ) 
+						begin 
+							  truncate table #tempdetails 
+
+							  if ( @isadmin = 1 ) 
+								 begin 
+									   insert   into #tempdetails
+												select
+													@policyid,
+													@assessmentid,
+													@metricid,
+													@snapshotid,
+													N'Symmetric key ''' + db.NAME
+													+ N''' was found in system database ',
+													db.dbid,
+													db.type,
+													db.objectid,
+													db.NAME
+												from
+													dbo.databaseobject db
+													join dbo.sqldatabase sd
+														on db.snapshotid = sd.snapshotid
+														   and db.dbid = sd.dbid
+												where
+													db.type = 'isk'
+													and db.snapshotid = @snapshotid
+													and sd.databasename in ( 'msdb', 'master', 'model',
+																			 'tempdb' ) 
+
+									   if not exists ( select
+														*
+													   from
+														#tempdetails ) 
+										  select
+											@sevcode = @sevcodeok,
+											@metricval = N'None found.' 
+									   else 
+										  begin 
+												select
+													@metricval = @metricval + objectname + ', '
+												from
+													#tempdetails 
+
+												set @metricval = substring(@metricval, 0,
+																		   len(@metricval)) 
+
+												insert  into policyassessmentdetail
+														select
+															policyid,
+															assessmentid,
+															metricid,
+															snapshotid,
+															detailfinding,
+															databaseid,
+															objecttype,
+															objectid,
+															objectname
+														from
+															#tempdetails 
+
+												select
+													@sevcode = @severity,
+													@metricval = N'Next symmetric keys found in system databases : '
+													+ @metricval 
+										  end 
+								 end 
+
+							  select
+								@metricthreshold = N'Server is vulnerable if system database have symmetric key ' 
+						end 
+
+						else 
+						if ( @metricid = 94 ) 
+						begin 
+
+							  truncate table #tempdetails 
+
+							  if ( @isadmin = 1 ) 
+								 begin 
+									   insert   into #tempdetails
+												select
+													@policyid,
+													@assessmentid,
+													@metricid,
+													@snapshotid,
+													N'User defined assembly with unsafe access  '''
+													+ db.NAME + N''' was found in '+sd.databasename,
+													db.dbid,
+													db.type,
+													db.objectid,
+													db.NAME
+												from
+													dbo.databaseobject db
+													join dbo.sqldatabase sd
+														on db.snapshotid = sd.snapshotid
+														   and db.dbid = sd.dbid
+												where
+													db.type = 'iasm'
+													and db.snapshotid = @snapshotid
+													and db.userdefined = 'y'
+													and permission_set <> 1 
+
+									   if not exists ( select
+														*
+													   from
+														#tempdetails ) 
+										  select
+											@sevcode = @sevcodeok,
+											@metricval = N'None found.' 
+									   else 
+										  begin 
+												select
+													@metricval = @metricval + objectname + ', '
+												from
+													#tempdetails 
+
+												set @metricval = substring(@metricval, 0,
+																		   len(@metricval)) 
+
+												insert  into policyassessmentdetail
+														select
+															policyid,
+															assessmentid,
+															metricid,
+															snapshotid,
+															detailfinding,
+															databaseid,
+															objecttype,
+															objectid,
+															objectname
+														from
+															#tempdetails 
+
+												select
+													@sevcode = @severity,
+													@metricval = N'Next user defined assemblies with host policy other then safe was found : '
+													+ @metricval 
+										  end 
+								 end 
+
+					
+							  select
+								@metricthreshold = N'Server is vulnerable if there are user defined assemblies with host policy other than SAFE '
+						end 
+
+						else 
+						if ( @metricid = 95 ) 
+						begin 
+
+							  truncate table #tempdetails 
+
+							  if ( @isadmin = 1 ) 
+								 begin
+
+									   declare @currServerAuthMode nvarchar(1)
+
+									   select
+										@currServerAuthMode = authenticationmode
+									   from
+										dbo.registeredserver
+									   where
+										registeredserverid = @registeredserverid 
+
+									   insert   into #tempdetails
+												select
+													@policyid,
+													@assessmentid,
+													@metricid,
+													@snapshotid,
+													N'Next contained databases was found  '''
+													+ db.NAME,
+													db.dbid,
+													db.type,
+													db.objectid,
+													db.NAME
+												from
+													dbo.databaseobject db
+													join dbo.sqldatabase sd
+														on db.snapshotid = sd.snapshotid
+														   and db.dbid = sd.dbid
+												where
+													@currServerAuthMode = 'M'
+													and db.type = 'DB'
+													and db.snapshotid = @snapshotid
+													and isnull(sd.IsContained, 0) = 1 
+      
+									   if not exists ( select
+														*
+													   from
+														#tempdetails ) 
+										  select
+											@sevcode = @sevcodeok,
+											@metricval = N'None found.' 
+									   else 
+										  begin 
+												set @metricval = 'Sql server authentication mode set to Mixed but contained databases exist on instance'
+
+												insert  into policyassessmentdetail
+														select
+															policyid,
+															assessmentid,
+															metricid,
+															snapshotid,
+															detailfinding,
+															databaseid,
+															objecttype,
+															objectid,
+															objectname
+														from
+															#tempdetails 
+					
+												select
+													@sevcode = @severity
+
+
+										  end 
+								 end 
+
+				
+							  select
+								@metricthreshold = N'Server is vulnerable if there are contained databases and authentication mode set to Mixed '
+						end 
+
+
+						else 
+						if ( @metricid = 96 ) 
+						begin 
+
+							  truncate table #tempdetails 
+
+							  if ( @isadmin = 1 ) 
+								 begin
+
+							   ;
+									   with users ( objectid, NAME, isOwner, snapshotid, userid, dbid, type )
+											  as ( select
+													db.objectid,
+													db.NAME,
+													0 as IsOwner,
+													db.snapshotid,
+													dp.grantee,
+													db.dbid,
+													db.type
+												   from
+													dbo.databaseobject db
+													join dbo.databaseobjectpermission dp
+														on db.snapshotid = dp.snapshotid
+														   and db.dbid = dp.dbid
+														   and db.classid = dp.classid
+														   and db.parentobjectid = dp.parentobjectid
+														   and db.objectid = dp.objectid
+														   and dp.permission = 'EXECUTE'
+												   where
+													db.type in ( 'P', 'X' )
+													and runatstartup is not null
+													and runatstartup = 'y'
+													and db.snapshotid = @snapshotid
+												   union
+												   select
+													db.objectid,
+													db.NAME,
+													1 as IsOwner,
+													db.snapshotid,
+													db.owner,
+													db.dbid,
+													db.type
+												   from
+													dbo.databaseobject db
+												   where
+													db.type in ( 'P', 'X' )
+													and runatstartup is not null
+													and runatstartup = 'y'
+													and db.snapshotid = @snapshotid
+												 ),
+											UserRoles ( userId, dbid, userDBName, userDBRole, userLogin, userServerRole, snapshotid )
+											  as ( select
+													m.uid,
+													m.dbid,
+													m.name,
+													r.name,
+													sm.NAME,
+													sr.NAME,
+													m.snapshotid
+												   from
+													databaseprincipal m
+													join databaserolemember as rm
+														on m.snapshotid = rm.snapshotid
+														   and m.dbid = rm.dbid
+														   and m.uid = rm.rolememberuid
+													join databaseprincipal as r
+														on rm.snapshotid = r.snapshotid
+														   and rm.dbid = r.dbid
+														   and rm.groupuid = r.uid
+													join dbo.serverprincipal sm
+														on m.snapshotid = sm.snapshotid
+														   and m.usersid = sm.sid
+													join dbo.serverrolemember srm
+														on sm.snapshotid = srm.snapshotid
+														   and sm.principalid = srm.memberprincipalid
+													join dbo.serverprincipal sr
+														on rm.snapshotid = sr.snapshotid
+														   and srm.principalid = sr.principalid
+												   where
+													sr.sid = 0x03
+													and m.snapshotid = @snapshotid
+												 )
+											insert  into #tempdetails
+													select
+														@policyid,
+														@assessmentid,
+														@metricid,
+														@snapshotid,
+														case u.isOwner
+														  when 1
+														  then N'Startup stored procedure ' + u.NAME
+															   + 'are owned by user without sysadmin permissions '
+														  when 0
+														  then N'Startup stored procedure ' + u.NAME
+															   + 'can be executed by user without sysadmin permissions '
+														end,
+														u.dbid,
+														u.type,
+														u.objectid,
+														u.NAME
+													from
+														users u
+													where
+														u.userid not in ( select
+																			userId
+																		  from
+																			UserRoles us where us.dbid=u.dbid)
+													group by
+														u.isOwner,
+														u.dbid,
+														u.type,
+														u.objectid,
+														u.NAME   
+
+	
+
+									   if not exists ( select
+														*
+													   from
+														#tempdetails ) 
+										  select
+											@sevcode = @sevcodeok,
+											@metricval = N'None found.' 
+									   else 
+										  begin 
+												set @metricval = 'Next stored procedure can be run or are owned by accounts without sysadmin permissions '
+
+												select
+													@metricval = @metricval + objectname + ', '
+												from
+													#tempdetails
+
+												set @metricval = substring(@metricval, 0,
+																		   len(@metricval)) 
+
+												insert  into policyassessmentdetail
+														select
+															policyid,
+															assessmentid,
+															metricid,
+															snapshotid,
+															detailfinding,
+															databaseid,
+															objecttype,
+															objectid,
+															objectname
+														from
+															#tempdetails 
+												select
+													@sevcode = @severity
+
+
+										  end 
+								 end 
+
+							  select
+								@metricthreshold = N'Server is vulnerable if startup stored procedures can be run or are owned by accounts without sysadmin permissions '
+						end 
+
+
+						else 
+						if ( @metricid = 97 ) 
+						begin 
 						
+							  truncate table #tempdetails 
+							  if object_id('tempdb..#sevrVals') is not null 
+								 begin
+									   drop table #sevrVals
+								 end
+
+							  select
+								Value
+							  into
+								#sevrVals
+							  from
+								dbo.splitbydelimiter(@severityvalues, ',')
+
+							  if exists ( select
+											1
+										  from
+											dbo.sqljob
+										  where
+											SubSystem in ( select
+															value
+														   from
+															#sevrVals )
+											and SnapshotId = @snapshotid ) 
+								 begin
+									   if ( @isadmin = 1 ) 
+										  begin
+												declare @lName as varchar(200)
+
+												select
+													@lName = ( select
+																loginname
+															   from
+																dbo.serverservice
+															   where
+																snapshotid = @snapshotid
+																and servicename = 'SQLSERVERAGENT'
+															 )
+
+												insert  into #tempdetails
+														select
+															@policyid,
+															@assessmentid,
+															@metricid,
+															@snapshotid,
+															N'SQL Server Agent account ' + swa.name
+															+ ' is a member of ' + smm.name ' group',
+															null,
+															'Acc',
+															null,
+															swa.NAME
+														from
+															dbo.serveroswindowsaccount swa
+															join dbo.serveroswindowsgroupmember ss
+																on swa.snapshotid = ss.snapshotid
+																   and swa.sid = ss.groupmember
+															join dbo.serveroswindowsaccount smm
+																on ss.snapshotid = smm.snapshotid
+																   and ss.groupsid = smm.sid
+														where
+															substring(swa.name,
+																	  charindex('\', swa.name) + 1,
+																	  len(swa.name)) = substring(@lName,
+																					  charindex('\',
+																					  @lName) + 1,
+																					  len(@lName))
+															and swa.snapshotid = @snapshotid
+															and smm.name like '%\Administrators'
+
+
+												insert  into #tempdetails
+														select
+															@policyid,
+															@assessmentid,
+															@metricid,
+															@snapshotid,
+															N'SQL Server Job proxy  ' + swa.name
+															+ ' is a member of ' + smm.name ' group',
+															null,
+															'Acc',
+															null,
+															swa.NAME
+														from
+															dbo.sqljobproxy p
+															join dbo.serveroswindowsaccount swa
+																on p.snapshotid = swa.snapshotid
+																   and swa.sid = p.usersid
+															join dbo.serveroswindowsgroupmember ss
+																on swa.snapshotid = ss.snapshotid
+																   and swa.sid = ss.groupmember
+															join dbo.serveroswindowsaccount smm
+																on ss.snapshotid = smm.snapshotid
+																   and ss.groupsid = smm.sid
+														where
+															p.SubSystem in ( select
+																				value
+																			 from
+																				#sevrVals )
+															and p.snapshotid = @snapshotid
+															and smm.name like '%\Administrators'
+														group by
+															swa.name,
+															smm.name
+
+
+												if not exists ( select
+																	*
+																from
+																	#tempdetails ) 
+												   select
+													@sevcode = @sevcodeok,
+													@metricval = N'None found.' 
+												else 
+												   begin 
+														 set @metricval = 'Next accounts are in Administrators role  '
+
+														 select
+															@metricval = @metricval + objectname
+															+ ', '
+														 from
+															#tempdetails
+														 group by
+															objectname
+
+														 set @metricval = substring(@metricval, 0,
+																					len(@metricval)) 
+
+														 set @metricval = @metricval
+															 + ' and can run sql job steps in '
+															 + @severityvalues + ' subsystems'
+  
+														 insert into policyassessmentdetail
+																select
+																	policyid,
+																	assessmentid,
+																	metricid,
+																	snapshotid,
+																	detailfinding,
+																	databaseid,
+																	objecttype,
+																	objectid,
+																	objectname
+																from
+																	#tempdetails
+																group by
+																	policyid,
+																	assessmentid,
+																	metricid,
+																	snapshotid,
+																	detailfinding,
+																	databaseid,
+																	objecttype,
+																	objectid,
+																	objectname 
+														 select
+															@sevcode = @severity
+
+
+												   end 
+										  end 
+								 end
+
+							  else 
+								 begin
+									   select
+										@sevcode = @sevcodeok,
+										@metricval = N'None found.'
+								 end
+							  select
+								@metricthreshold = N'Server is vulnerable if sql job steps in  '
+								+ @severityvalues
+								+ ' subsystems are run by Administrators role members'
+						end 
+
+    				    --  DISTRIBUTOR_ADMIN account
+						else if (@metricid = 98)
+                        begin
+                              set @metricval = N'None found.'                       
+                              set @metricthreshold = N'Server is vulnerable if DISTRIBUTOR_ADMIN account exists when server is not distributor or DISTRIBUTOR_ADMIN account doesn''t follow password control standards when distributor server has a remote publisher.'
+                              set @sevcode = @sevcodeok
+                              if exists ( select
+                                            SPU.name
+                                          from
+                                            dbo.serverrolemember as SRM
+                                            inner join dbo.serverprincipal as SPU
+                                                on SRM.snapshotid = SPU.snapshotid
+                                                   and SRM.memberprincipalid = SPU.principalid
+                                                   and SPU.type <> 'R'
+                                            inner join dbo.serverprincipal as SPR
+                                                on SRM.snapshotid = SPR.snapshotid
+                                                   and SRM.principalid = SPR.principalid
+                                                   and SPR.type = 'R'
+                                                   and spr.name = 'sysadmin'
+                                          where
+                                            SRM.snapshotid = @SnapshotId
+                                            and SPU.name = 'distributor_admin' ) 
+                                 begin
+
+                                       declare @IsDistributer nchar(1)
+                                       declare @IsPublisher nchar(1)
+                                       declare @HasRemotePublisher nchar(1)
+
+                                       select
+                                        @IsDistributer = SS.isdistributor,
+                                        @IsPublisher = SS.ispublisher,
+                                        @HasRemotePublisher = SS.hasremotepublisher
+                                       from
+                                        dbo.serversnapshot as SS
+                                       where
+                                        SS.snapshotid = @SnapshotId  
+	
+                                       if ( @IsDistributer = 'N' ) 
+                                          begin
+                                                set @sevcode = @severity                                        
+                                                set @metricval = N'The DISTRIBUTOR_ADMIN account should be deleted as it is only needed at the distributor.'
+                                          end
+                                       else 
+                                          if (
+                                               @IsPublisher = 'N'
+                                               and @HasRemotePublisher = 'Y'
+                                             ) 
+                                             begin
+                                                   set @sevcode = @severity                                           
+                                                   set @metricval = N'The password of DISTRIBUTOR_ADMIN login must be set according to password control standards using the "sp_changedistributor_password" stored procedure.'
+                                             end
+                                 end
+                        end                        
+  
+  						-- sysadmin accounts with local administrator role
+						else if (@metricid = 99)
+                        begin
+
+                              declare @SysadminUsers table
+                                      (
+                                        username nvarchar(128) not null
+                                      );
+
+                              declare @SuppressedAccounts table ( Name
+                                                              nvarchar(200) )
+
+                              insert    into @SuppressedAccounts
+                                        select
+                                            Value
+                                        from
+                                            dbo.SplitByDelimiter(@severityvalues,
+                                                              ',')
+
+                              insert    into @SysadminUsers
+                                        select
+                                            SPU.name as username
+                                        from
+                                            dbo.serverrolemember as SRM
+                                            inner join dbo.serverprincipal as SPU
+                                                on SRM.snapshotid = SPU.snapshotid
+                                                   and SRM.snapshotid = @SnapshotId
+                                                   and SRM.memberprincipalid = SPU.principalid
+                                                   and SPU.type <> 'R'
+                                            inner join dbo.serverprincipal as SPR
+                                                on SRM.snapshotid = SPR.snapshotid
+                                                   and SRM.principalid = SPR.principalid
+                                                   and SPR.type = 'R'
+                                                   and SPR.name = 'sysadmin'
+                                            inner join dbo.serveroswindowsgroupmember
+                                            as WGM
+                                                on SPU.snapshotid = WGM.snapshotid
+                                                   and SPU.sid = WGM.groupmember
+                                            inner join dbo.serveroswindowsaccount
+                                            as WG
+                                                on WGM.snapshotid = WG.snapshotid
+                                                   and WGM.groupsid = WG.sid
+                                                   and WG.Name like '%\Administrators'
+                                        where
+                                            ( select
+                                                count(*)
+                                              from
+                                                @SuppressedAccounts as sa
+                                              where
+                                                SPU.name like sa.Name
+                                            ) = 0
+
+                              declare SysadminUsersCursor cursor
+                              for
+                                      select
+                                        username
+                                      from
+                                        @SysadminUsers
+                              open SysadminUsersCursor
+                              select
+                                @intval2 = 0
+                              fetch next from SysadminUsersCursor into @strval
+                              while @@fetch_status = 0 
+                                    begin
+                                          if (
+                                               @intval2 = 1
+                                               or len(@metricval)
+                                               + len(@strval) > 1010
+                                             ) 
+                                             begin
+                                                   if @intval2 = 0 
+                                                      select
+                                                        @metricval = @metricval
+                                                        + N', more...',
+                                                        @intval2 = 1
+                                             end
+                                          else 
+                                             select
+                                                @metricval = @metricval
+                                                + case when len(@metricval) > 0
+                                                       then N', '
+                                                       else N''
+                                                  end + N'''' + @strval
+                                                + N''''
+
+                                          if ( @isadmin = 1 ) 
+                                             insert into policyassessmentdetail
+                                                    (
+                                                      policyid,
+                                                      assessmentid,
+                                                      metricid,
+                                                      snapshotid,
+                                                      detailfinding,
+                                                      databaseid,
+                                                      objecttype,
+                                                      objectid,
+                                                      objectname 
+                                                    
+                                                    )
+                                             values
+                                                    (
+                                                      @policyid,
+                                                      @assessmentid,
+                                                      @metricid,
+                                                      @snapshotid,
+                                                      N'SQL SYSADMIN accounts that are in the local Administrator role: '''
+                                                      + @strval + N'''',
+                                                      null, -- database ID,
+                                                      N'DB', -- object type
+                                                      null, -- object id
+                                                      @strval 
+                                                    
+                                                    )
+															         
+                                          fetch next from SysadminUsersCursor into @strval
+                                    end
+
+                              if ( len(@metricval) = 0 ) 
+                                 select
+                                    @sevcode = @sevcodeok,
+                                    @metricval = N'None found.'
+                              else 
+                                 select
+                                    @sevcode = @severity,
+                                    @metricval = N'SQL SYSADMIN accounts that are in the local Administrator role: '
+                                    + @metricval
+
+                              select
+                                @metricthreshold = N'Server is vulnerable if SQL SYSADMIN accounts that are in the local Administrator role for the physical server other than: '
+                                + @severityvalues
+
+                              close SysadminUsersCursor
+                              deallocate SysadminUsersCursor
+                        end                      
+ 
+ 						--information about database roles
+						else if (@metricid = 100)
+                        begin
+                              select
+                                @severityvalues = N'Y'
+                              declare @RolePermissions table
+                                      (
+                                        rolename nvarchar(256) null,
+                                        rolepermission nvarchar(max) null
+                                      );
+
+                              with  RolePermisions
+                                      as ( select
+                                            rolename,
+                                            ( select
+                                                T1.rolepermission + ', ' as [text()]
+                                              from
+                                                dbo.fixedrolepermission as T1
+                                              where
+                                                T1.rolename = T2.rolename
+                                              order by
+                                                T1.rolename
+                                            for
+                                              xml path('')
+                                            ) as rolepermissions
+                                           from
+                                            ( select
+                                                rolename
+                                              from
+                                                dbo.fixedrolepermission
+                                              group by
+                                                rolename
+                                            ) as T2
+                                         )
+                                   insert   into @RolePermissions
+                                            select
+                                                rolename,
+                                                left(rolepermissions,
+                                                     len(rolepermissions) - 1) as rolepermissions
+                                            from
+                                                RolePermisions;
+
+
+                              declare @DatabaseRoleUsers table
+                                      (
+                                        snapshotid int not null,
+                                        dbid int not null,
+                                        roleid varbinary(85) null,
+                                        username nvarchar(128) not null,
+                                        usertype nvarchar(20) not null,
+                                        groupname nvarchar(200) null,
+                                        rolepermissions nvarchar(max)
+                                      );
+
+                              insert    into @DatabaseRoleUsers
+                                        select
+                                            DRM.snapshotid,
+                                            DRM.dbid,
+                                            DPR.uid as roleid,
+                                            DPU.name as username,
+                                            case when DPU.type = 'U'
+                                                 then 'Windows User'
+                                                 when DPU.type = 'G'
+                                                 then 'Windows Group'
+                                                 when DPU.type = 'S'
+                                                 then 'SQL login'
+                                            end as usertype,
+                                            WG.name as groupname,
+                                            RP.rolepermission
+                                        from
+                                            dbo.databaserolemember as DRM
+                                            inner join dbo.databaseprincipal
+                                            as DPU
+                                                on DRM.snapshotid = DPU.snapshotid
+                                                   and DRM.dbid = DPU.dbid
+                                                   and DRM.rolememberuid = DPU.uid
+                                                   and DPU.type <> 'R'
+                                            inner join dbo.databaseprincipal
+                                            as DPR
+                                                on DRM.snapshotid = DPR.snapshotid
+                                                   and DRM.dbid = DPR.dbid
+                                                   and DRM.groupuid = DPR.uid
+                                                   and DPR.type = 'R'
+                                            left join dbo.serveroswindowsgroupmember
+                                            as WGM
+                                                on DPU.snapshotid = WGM.snapshotid
+                                                   and DPU.usersid = WGM.groupmember
+                                            left join dbo.serveroswindowsaccount
+                                            as WG
+                                                on WGM.snapshotid = WG.snapshotid
+                                                   and WGM.groupsid = WG.sid
+                                            left join @RolePermissions as RP
+                                                on DPR.name = RP.rolename
+                                        order by
+                                            DRM.snapshotid,
+                                            DRM.dbid
+
+                              declare @DatabaseRolesInfo table
+                                      (
+                                        databasename nvarchar(128),
+                                        rolename nvarchar(128),
+                                        username nvarchar(128),
+                                        usertype nvarchar(20),
+                                        groupname nvarchar(200),
+                                        rolepermissions nvarchar(max)
+                                      );
+
+                              insert    into @DatabaseRolesInfo
+                                        select
+                                            DB.databasename,
+                                            DPR.name,
+                                            DRU.username,
+                                            DRU.usertype,
+                                            DRU.groupname,
+                                            rolepermissions
+                                        from
+                                            dbo.databaseprincipal as DPR
+                                            inner join dbo.sqldatabase as DB
+                                                on DPR.snapshotid = DB.snapshotid
+                                                   and DPR.dbid = DB.dbid
+                                                   and DPR.TYPE = 'R'
+                                            left join @DatabaseRoleUsers as DRU
+                                                on DPR.snapshotid = DRU.snapshotid
+                                                   and DPR.dbid = DRU.dbid
+                                                   and DPR.uid = DRU.roleid
+                                        where
+                                            DPR.snapshotid = @SnapshotId
+                                        order by
+                                            DB.databasename,
+                                            DPR.name
+
+                              declare @databasename nvarchar(128)
+                              declare @rolename nvarchar(128)
+                              declare @username nvarchar(128)
+                              declare @usertype nvarchar(20)
+                              declare @groupname nvarchar(200)
+                              declare @permissions nvarchar(max)
+                              declare @Delimiter nvarchar(10) = ', '
+
+                              declare DatabaseRolesInfoCursor cursor
+                              for
+                                      select
+                                        DRI.databasename,
+                                        DRI.rolename,
+                                        DRI.username,
+                                        DRI.usertype,
+                                        DRI.groupname,
+                                        DRI.rolepermissions
+                                      from
+                                        @DatabaseRolesInfo as DRI
+
+                              open DatabaseRolesInfoCursor
+                              fetch next from DatabaseRolesInfoCursor into @databasename,
+                                    @rolename, @username, @usertype,
+                                    @groupname, @permissions
+
+                              select
+                                @intval2 = 0
+                              while @@fetch_status = 0 
+                                    begin
+                            
+                                          set @strval = 'Database: '
+                                              + @databasename + '; Role: '
+                                              + @rolename
+
+                                          if len(isnull(@username, '')) <> 0 
+                                             begin
+                                                   set @strval = @strval
+                                                       + '; User: '
+                                                       + @username	                              
+                                             end                              
+
+                                          if len(isnull(@usertype, '')) <> 0 
+                                             begin
+                                                   set @strval = @strval
+                                                       + '; Type: '
+                                                       + @usertype	                              
+                                             end  
+
+                                          if len(isnull(@groupname, '')) <> 0 
+                                             begin
+                                                   set @strval = @strval
+                                                       + '; Windows Group: '
+                                                       + @groupname	                              
+                                             end  
+
+                                          if len(isnull(@permissions, '')) <> 0 
+                                             begin
+                                                   set @strval = @strval
+                                                       + '; Permissions: '
+                                                       + @permissions	                              
+                                             end    
+									                          
+                                          if (
+                                               @intval2 = 1
+                                               or len(@metricval)
+                                               + len(@strval) > 1010
+                                             ) 
+                                             begin
+                                                   if @intval2 = 0 
+                                                      select
+                                                        @metricval = @metricval
+                                                        + N', more...',
+                                                        @intval2 = 1
+                                             end
+                                          else 
+                                             select
+                                                @metricval = @metricval
+                                                + case when len(@metricval) > 0
+                                                       then N', '
+                                                       else N''
+                                                  end + N'''' + @strval
+                                                + N''''
+
+                                          if ( @isadmin = 1 ) 
+                                             insert into policyassessmentdetail
+                                                    (
+                                                      policyid,
+                                                      assessmentid,
+                                                      metricid,
+                                                      snapshotid,
+                                                      detailfinding,
+                                                      databaseid,
+                                                      objecttype,
+                                                      objectid,
+                                                      objectname 
+                                                    )
+                                             values
+                                                    (
+                                                      @policyid,
+                                                      @assessmentid,
+                                                      @metricid,
+                                                      @snapshotid,
+                                                      N'Database Role Info found: '''
+                                                      + @strval + N'''',
+                                                      null, -- database ID,
+                                                      N'DB', -- object type
+                                                      null,
+                                                      N'Database Role Metric details' 
+                                                    )
+																	 
+                                          fetch next from
+                                                DatabaseRolesInfoCursor into @databasename,
+                                                @rolename, @username,
+                                                @usertype, @groupname,
+                                                @permissions
+                                    end
+
+                              close DatabaseRolesInfoCursor
+                              deallocate DatabaseRolesInfoCursor	
+                              select
+                                @sevcode = @severity,
+                                @metricval = N'The following database roles were found: '
+                                + @metricval
+                              select
+                                @metricthreshold = N'Server is vulnerable if database role info hasn''t been checked.'
+                        end                  
+--						--information about server roles
+						else if (@metricid = 101)
+                        begin
+                              select
+                                @severityvalues = N'Y'
+                              declare @ServerRoleUsers table
+                                      (
+                                        snapshotid int not null,
+                                        roleprincipalid varbinary(85) null,
+                                        username nvarchar(128) not null,
+                                        usertype nvarchar(20) not null,
+                                        groupname nvarchar(200) null,
+                                        disabled nvarchar(3)
+                                      );
+
+                              insert    into @ServerRoleUsers
+                                        select 
+						--*
+                                            SRM.snapshotid,
+                                            SPR.principalid,
+                                            SPU.name as username,
+                                            case when SPU.type = 'U'
+                                                 then 'Windows User'
+                                                 when SPU.type = 'G'
+                                                 then 'Windows Group'
+                                                 when SPU.type = 'S'
+                                                 then 'SQL login'
+                                            end as usertype,
+                                            WG.name as groupname,
+                                            case when SPU.disabled = 'Y'
+                                                 then 'Yes'
+                                                 else 'No'
+                                            end as disabled
+                                        from
+                                            dbo.serverrolemember as SRM
+                                            inner join dbo.serverprincipal as SPU
+                                                on SRM.snapshotid = SPU.snapshotid
+                                                   and SRM.memberprincipalid = SPU.principalid
+                                                   and SPU.type <> 'R'
+                                            inner join dbo.serverprincipal as SPR
+                                                on SRM.snapshotid = SPR.snapshotid
+                                                   and SRM.principalid = SPR.principalid
+                                                   and SPR.type = 'R'
+                                            left join dbo.serveroswindowsgroupmember
+                                            as WGM
+                                                on SPU.snapshotid = WGM.snapshotid
+                                                   and SPU.sid = WGM.groupmember
+                                            left join dbo.serveroswindowsaccount
+                                            as WG
+                                                on WGM.snapshotid = WG.snapshotid
+                                                   and WGM.groupsid = WG.sid
+                                        where
+                                            SRM.snapshotid = @SnapshotId
+                                        order by
+                                            SRM.snapshotid
+
+                              declare @ServerRolesInfo table
+                                      (
+                                        instancename nvarchar(400),
+                                        rolename nvarchar(128),
+                                        username nvarchar(128),
+                                        usertype nvarchar(20),
+                                        groupname nvarchar(200),
+                                        disabled nvarchar(3)
+                                      );
+
+                              insert    into @ServerRolesInfo
+                                        select
+                                            case when len(isnull(ST.instancename,
+                                                              '')) <> 0
+                                                 then ST.instancename
+                                                 when len(isnull(ST.servername,
+                                                              '')) <> 0
+                                                 then ST.servername
+                                                 else ST.connectionname
+                                            end as instancename,
+                                            SP.name as rolename,
+                                            SRU.username,
+                                            SRU.usertype,
+                                            SRU.groupname,
+                                            SRU.disabled
+                                        from
+                                            dbo.serverprincipal as SP
+                                            inner join dbo.serversnapshot as ST
+                                                on SP.snapshotid = ST.snapshotid
+                                                   and SP.type = 'R'
+                                            left join @ServerRoleUsers as SRU
+                                                on SP.snapshotid = SRU.snapshotid
+                                                   and SP.principalid = SRU.roleprincipalid
+                                        where
+                                            SP.snapshotid = @SnapshotId
+                                        order by
+                                            instancename,
+                                            rolename
+
+                              declare @InstanceName nvarchar(400)
+                              declare @ServerRoleName nvarchar(128)
+                              declare @ServerUserName nvarchar(128)
+                              declare @ServerUserType nvarchar(20)
+                              declare @WindowsGroupName nvarchar(200)
+                              declare @ServerUserDisabled nvarchar(3)
+
+                              declare ServerRolesInfoCursor cursor
+                              for
+                                      select
+                                        SRI.instancename,
+                                        SRI.rolename,
+                                        SRI.username,
+                                        SRI.usertype,
+                                        SRI.groupname,
+                                        SRI.disabled
+                                      from
+                                        @ServerRolesInfo as SRI
+
+                              open ServerRolesInfoCursor
+                              fetch next from ServerRolesInfoCursor into @InstanceName,
+                                    @ServerRoleName, @ServerUserName,
+                                    @ServerUserType, @WindowsGroupName,
+                                    @ServerUserDisabled
+
+                              select
+                                @intval2 = 0
+                              while @@fetch_status = 0 
+                                    begin
+                            
+                                          set @strval = 'SQL Instance: '
+                                              + @InstanceName
+                                              + '; Server Role: '
+                                              + @ServerRoleName
+
+                                          if len(isnull(@ServerUserName, '')) <> 0 
+                                             begin
+                                                   set @strval = @strval
+                                                       + '; User: '
+                                                       + @ServerUserName	                              
+                                             end                              
+
+                                          if len(isnull(@ServerUserType, '')) <> 0 
+                                             begin
+                                                   set @strval = @strval
+                                                       + '; Type: '
+                                                       + @ServerUserType	                              
+                                             end  
+
+                                          if len(isnull(@WindowsGroupName, '')) <> 0 
+                                             begin
+                                                   set @strval = @strval
+                                                       + '; Windows Group: '
+                                                       + @WindowsGroupName	                              
+                                             end  
+
+                                          if len(isnull(@ServerUserDisabled,
+                                                        '')) <> 0 
+                                             begin
+                                                   set @strval = @strval
+                                                       + '; Disabled: '
+                                                       + @ServerUserDisabled	                              
+                                             end            
+								                
+                                          if (
+                                               @intval2 = 1
+                                               or len(@metricval)
+                                               + len(@strval) > 1010
+                                             ) 
+                                             begin
+                                                   if @intval2 = 0 
+                                                      select
+                                                        @metricval = @metricval
+                                                        + N', more...',
+                                                        @intval2 = 1
+                                             end
+                                          else 
+                                             select
+                                                @metricval = @metricval
+                                                + case when len(@metricval) > 0
+                                                       then N', '
+                                                       else N''
+                                                  end + N'''' + @strval
+                                                + N''''
+
+                                          if ( @isadmin = 1 ) 
+                                             insert into policyassessmentdetail
+                                                    (
+                                                      policyid,
+                                                      assessmentid,
+                                                      metricid,
+                                                      snapshotid,
+                                                      detailfinding,
+                                                      databaseid,
+                                                      objecttype,
+                                                      objectid,
+                                                      objectname 
+                                                    )
+                                             values
+                                                    (
+                                                      @policyid,
+                                                      @assessmentid,
+                                                      @metricid,
+                                                      @snapshotid,
+                                                      N'Server Role Info found: '''
+                                                      + @strval + N'''',
+                                                      null, -- database ID,
+                                                      N'DB', -- object type
+                                                      null,
+                                                      N'Server Role Metric details' 
+                                                    )
+																	 
+                                          fetch next from
+                                                ServerRolesInfoCursor into @InstanceName,
+                                                @ServerRoleName,
+                                                @ServerUserName,
+                                                @ServerUserType,
+                                                @WindowsGroupName,
+                                                @ServerUserDisabled
+                                    end
+
+                              close ServerRolesInfoCursor
+                              deallocate ServerRolesInfoCursor	
+                              select
+                                @sevcode = @severity,
+                                @metricval = N'The following server roles were found: '
+                                + @metricval
+                              select
+                                @metricthreshold = N'Server is vulnerable if server roles haven''t been checked.'
+                        end                         
+			else
+			if ( @metricid = 102 ) 
+		       begin 
+						
+                              truncate table #tempdetails 						 
+
+                              if exists ( select
+                                            1
+                                          from
+                                            dbo.splitbydelimiter(@severityvalues,
+                                                              ',') ) 
+                                 begin
+                                       if ( @isadmin = 1 ) 
+                                          begin
+										  											
+                                                insert  into #tempdetails
+                                                        select
+                                                            @policyid,
+                                                            @assessmentid,
+                                                            @metricid,
+                                                            @snapshotid,
+                                                            N'Database   '
+                                                            + sdb.databasename
+                                                            + 'has next unacceptable  '
+                                                            + sdb.owner,
+                                                            sdb.dbid,
+                                                            'DB',
+                                                            sdb.dbid,
+                                                            sdb.databasename
+                                                        from
+                                                            dbo.sqldatabase sdb
+                                                            join dbo.splitbydelimiter(@severityvalues,
+                                                              ',') sp
+                                                              on sdb.owner like '%'
+                                                              + sp.Value
+                                                        where
+                                                            sdb.snapshotid = @snapshotid
+															
+													
+
+
+                                                if not exists ( select
+                                                              *
+                                                              from
+                                                              #tempdetails ) 
+                                                   select
+                                                    @sevcode = @sevcodeok,
+                                                    @metricval = N'None found.' 
+                                                else 
+                                                   begin 
+                                                         set @metricval = 'Next databases are owned by unacceptable accounts :'
+
+                                                         select
+                                                            @metricval = @metricval
+                                                            + objectname
+                                                            + ', '
+                                                         from
+                                                            #tempdetails
+                                                         group by
+                                                            objectname
+
+                                                         set @metricval = substring(@metricval,
+                                                              0,
+                                                              len(@metricval)) 
+
+													
+  
+                                                         insert
+                                                              into policyassessmentdetail
+                                                              select
+                                                              policyid,
+                                                              assessmentid,
+                                                              metricid,
+                                                              snapshotid,
+                                                              detailfinding,
+                                                              databaseid,
+                                                              objecttype,
+                                                              objectid,
+                                                              objectname
+                                                              from
+                                                              #tempdetails
+                                                              group by
+                                                              policyid,
+                                                              assessmentid,
+                                                              metricid,
+                                                              snapshotid,
+                                                              detailfinding,
+                                                              databaseid,
+                                                              objecttype,
+                                                              objectid,
+                                                              objectname 
+                                                         select
+                                                            @sevcode = @severity
+
+
+                                                   end 
+                                          end 
+                                 end
+
+                              else 
+                                 begin
+                                       select
+                                        @sevcode = @sevcodeok,
+                                        @metricval = N'Blacklist of database ownership was not provided'
+                                 end
+					
+                              select
+                                @metricthreshold = N'Server is vulnerable if  databases are owned by one of the next accounts:  '
+                                + @severityvalues
+                        end 
+
+						else if ( @metricid = 103 ) 
+		       begin 
+						
+                              truncate table #tempdetails 						 
+
+                                       if ( @isadmin = 1 ) 
+                                          begin
+										  											
+                                                insert  into #tempdetails
+                                                        select
+                                                            @policyid,
+                                                            @assessmentid,
+                                                            @metricid,
+                                                            @snapshotid,
+                                                            N'Public role has access to  '
+                                                            + dd.name
+                                                            + ' object ',
+                                                            dd.dbid,
+                                                            dd.type,
+                                                            dd.objectid,
+                                                            dd.name
+                                                        from
+                                                            dbo.databaseobject dd
+                                                            join dbo.sqldatabase sdb
+                                                              on dd.snapshotid = sdb.snapshotid
+                                                              and dd.dbid = sdb.dbid
+                                                            join dbo.databaseschema ds
+                                                              on dd.snapshotid = ds.snapshotid
+                                                              and dd.dbid = ds.dbid
+                                                              and dd.schemaid = ds.schemaid
+                                                            join dbo.databaseobjectpermission dp
+                                                              on dd.snapshotid = dp.snapshotid
+                                                              and dd.dbid = dp.dbid
+                                                              and dd.classid = dp.classid
+                                                              and dd.parentobjectid = dp.parentobjectid
+                                                              and dd.objectid = dp.objectid
+                                                        where
+                                                            dp.grantee = 0
+                                                            and ds.schemaname <> 'sys'
+                                                            and sdb.databasename not in (
+                                                            'master', 'msdb',
+                                                            'tempdb' )
+                                                            and dp.isdeny = 'N'
+                                                            and dd.snapshotid = @snapshotid
+                                                        group by
+                                                            dd.name,
+															  dd.dbid,
+                                                            dd.type,
+                                                           dd.objectid,
+                                                            sdb.databasename                            
+															
+													
+
+
+                                                if not exists ( select
+                                                              *
+                                                              from
+                                                              #tempdetails ) 
+                                                   select
+                                                    @sevcode = @sevcodeok,
+                                                    @metricval = N'None found.' 
+                                                else 
+                                                   begin 
+                                                         set @metricval = 'Public roles have access to next objects :'
+
+                                                         select
+                                                            @metricval = @metricval
+                                                            + objectname
+                                                            + ', '
+                                                         from
+                                                            #tempdetails
+                                                         group by
+                                                            objectname
+
+                                                         set @metricval = substring(@metricval,
+                                                              0,
+                                                              len(@metricval)) 
+
+													
+  
+                                                         insert
+                                                              into policyassessmentdetail
+                                                              select
+                                                              policyid,
+                                                              assessmentid,
+                                                              metricid,
+                                                              snapshotid,
+                                                              detailfinding,
+                                                              databaseid,
+                                                              objecttype,
+                                                              objectid,
+                                                              objectname
+                                                              from
+                                                              #tempdetails
+                                                              group by
+                                                              policyid,
+                                                              assessmentid,
+                                                              metricid,
+                                                              snapshotid,
+                                                              detailfinding,
+                                                              databaseid,
+                                                              objecttype,
+                                                              objectid,
+                                                              objectname 
+                                                         select
+                                                            @sevcode = @severity
+
+
+                                                   end 
+                                          end 
+                             
+					
+                              select
+                                @metricthreshold = N'Server is vulnerable if public roles has access to user defined objects'
+                                
+                        end 
+
+						else if ( @metricid = 104 ) 
+						begin
+
+							  if not exists ( select
+												*
+											  from
+												serversnapshot
+											  where
+												snapshotid = @snapshotid
+												and isclrenabled = N'Y' ) 
+								 select
+									@sevcode = @sevcodeok,
+									@metricval = N'CLR is turned off.' 
+							  else 
+								 begin 
+									   set @metricval = 'CLR is turned on.'													
+  
+									   insert   into policyassessmentdetail
+												(
+												  policyid,
+												  assessmentid,
+												  metricid,
+												  snapshotid,
+												  detailfinding,
+												  databaseid,
+												  objecttype,
+												  objectid,
+												  objectname 
+												)
+									   values
+												(
+												  @policyid,
+												  @assessmentid,
+												  @metricid,
+												  @snapshotid,
+												  @metricval,
+												  null, -- database ID,
+												  N'iSRV', -- object type
+												  null,
+												  @strval 
+												)
+									   set @sevcode = @severity
+
+
+								 end 
+						end                       
+ 
+ 
+						else if ( @metricid = 105 ) 
+						begin
+
+							  if exists ( select
+												*
+											  from
+												serversnapshot
+											  where
+												snapshotid = @snapshotid
+												and isdefaulttraceenabled = N'Y' ) 
+								 select
+									@sevcode = @sevcodeok,
+									@metricval = N'Default Trace is enabled.' 
+							  else 
+								 begin 
+									   set @metricval = N'Default Trace is disabled.'													
+  
+									   insert   into policyassessmentdetail
+												(
+												  policyid,
+												  assessmentid,
+												  metricid,
+												  snapshotid,
+												  detailfinding,
+												  databaseid,
+												  objecttype,
+												  objectid,
+												  objectname 
+												)
+									   values
+												(
+												  @policyid,
+												  @assessmentid,
+												  @metricid,
+												  @snapshotid,
+												  @metricval,
+												  null, -- database ID,
+												  N'iSRV', -- object type
+												  null,
+												  @strval 
+												)
+									   set @sevcode = @severity
+
+
+								 end 
+						end   
+
+						else if ( @metricid = 106 ) 
+						begin
+								declare @numerrorlogs smallint
+                                select	@numerrorlogs = isnull(numerrorlogs, 0) from serversnapshot where snapshotid = @snapshotid
+							  if ( @numerrorlogs > 11 ) 
+								 select
+									@sevcode = @sevcodeok,
+									@metricval = N'Maximum number of error log files is ' + CONVERT(varchar,@numerrorlogs) + '.' 
+							  else 
+								 begin 
+									   set @metricval = N'Maximum number of error log files is less than recommended (12+). Current value is ' + CONVERT(varchar, @numerrorlogs) + '.'											
+  
+									   insert   into policyassessmentdetail
+												(
+												  policyid,
+												  assessmentid,
+												  metricid,
+												  snapshotid,
+												  detailfinding,
+												  databaseid,
+												  objecttype,
+												  objectid,
+												  objectname 
+												)
+									   values
+												(
+												  @policyid,
+												  @assessmentid,
+												  @metricid,
+												  @snapshotid,
+												  @metricval,
+												  null, -- database ID,
+												  N'iSRV', -- object type
+												  null,
+												  @strval 
+												)
+									   set @sevcode = @severity
+
+
+								 end 
+						end 
+
+						else if ( @metricid = 107 ) 
+						begin
+							truncate table #tempdetails 						                     
+
+							if object_id('tempdb..#sevrVal') is not null 
+							begin
+								drop table #sevrVal
+							end
+							
+							select Value
+							into #sevrVal
+							from dbo.splitbydelimiter(@severityvalues, ',')
+
+							declare @orphanedUsersCount as int
+							declare @orphanedUsersNames as varchar(max)                       
+
+							;WITH OrphanedUsers (dbid, name, uid, type)
+							as
+							(
+								SELECT dbid, name, uid, type
+								FROM dbo.databaseprincipal
+								where usersid not in(SELECT sid FROM dbo.serverprincipal where sid is not null and snapshotid = @snapshotid)
+								and type = N'S' 
+								and usersid <> 0x00 
+								and usersid is not null 
+								and IsContainedUser = 0
+								and snapshotid = @snapshotid
+								and not exists (select * from #sevrVal where Value = name)
+							)
+							insert  into #tempdetails
+							select
+								@policyid,
+								@assessmentid,
+								@metricid,
+								@snapshotid,
+								N'Orphaned user found - ' + name,
+								dbid,
+								type,
+								uid,
+								name
+							from OrphanedUsers
+
+							;with OrphanedUsersForDb(orphanedUsersCountForDb, orphanedUsersNamesForDb, dbname, dbid)
+							as(
+								select count(*) as orphanedUsersCount, 
+										STUFF((SELECT N', ' + objectname  FROM #tempdetails c2 where c.databaseid = c2.databaseid FOR XML PATH(N'')), 1, 2, N'') as orphanedUsersNamesForDb,
+										sdb.databasename,
+										c.databaseid
+								FROM #tempdetails c
+								join dbo.sqldatabase sdb on c.databaseid = sdb.dbid and c.snapshotid = sdb.snapshotid
+								group by c.databaseid, sdb.databasename
+							)
+							select @orphanedUsersCount =  sum(orphanedUsersCountForDb),
+									@orphanedUsersNames = STUFF((SELECT N'; ' + orphanedUsersNamesForDb + N' in ' + dbname FROM OrphanedUsersForDb FOR XML PATH(N'')), 1, 2, N'')  
+									from OrphanedUsersForDb  
+
+								  if ( @orphanedUsersCount is null or @orphanedUsersCount = 0 ) 
+									 select
+										@sevcode = @sevcodeok,
+										@metricval = N'There is no Orphaned users.' 
+								  else 
+									 begin 
+										set @metricval = cast(@orphanedUsersCount as nvarchar) + N' orphaned users found: ' + @orphanedUsersNames + '.'	
+										insert  into policyassessmentdetail
+										select
+											policyid,
+											assessmentid,
+											metricid,
+											snapshotid,
+											detailfinding,
+											databaseid,
+											objecttype,
+											objectid,
+											objectname
+										from
+												#tempdetails 
+												
+										set @sevcode = @severity
+									 end 
+						end 
+
+						else if ( @metricid = 108 ) 
+						begin
+							  if not exists(select * from serversnapshot where snapshotid = @snapshotid and oleautomationproceduresenabled = N'Y')
+								 select
+									@sevcode = @sevcodeok,
+									@metricval = N'Ole automation procedures are disabled.' 
+							  else 
+								 begin 
+									   set @metricval = N'Ole automation procedures are enabled.'											
+  
+									   insert   into policyassessmentdetail
+												(
+												  policyid,
+												  assessmentid,
+												  metricid,
+												  snapshotid,
+												  detailfinding,
+												  databaseid,
+												  objecttype,
+												  objectid,
+												  objectname 
+												)
+									   values
+												(
+												  @policyid,
+												  @assessmentid,
+												  @metricid,
+												  @snapshotid,
+												  @metricval,
+												  null, -- database ID,
+												  N'DB', -- object type
+												  null,
+												  @strval 
+												)
+									   set @sevcode = @severity
+								 end 
+						end 
+
+						else if ( @metricid = 109 ) 
+						begin
+
+							  if exists ( select
+												1
+											  from
+												serversnapshot
+											  where
+												snapshotid = @snapshotid
+												and iscommoncriteriacomplianceenabled = N'Y' ) 
+								 select
+									@sevcode = @sevcodeok,
+									@metricval = N'Common criteria compliance is enabled.' 
+							  else 
+								 begin 
+									   set @metricval = 'Common criteria compliance is disabled.'													
+  
+									   insert   into policyassessmentdetail
+												(
+												  policyid,
+												  assessmentid,
+												  metricid,
+												  snapshotid,
+												  detailfinding,
+												  databaseid,
+												  objecttype,
+												  objectid,
+												  objectname 
+												)
+									   values
+												(
+												  @policyid,
+												  @assessmentid,
+												  @metricid,
+												  @snapshotid,
+												  @metricval,
+												  null, -- database ID,
+												  N'DB', -- object type
+												  null,
+												  @strval 
+												)
+									   set @sevcode = @severity
+
+
+								 end 
+						end  
+
+				-- Integration Services Users Permissions Not Acceptable
+						else if (@metricid = 110)
+						begin
+							select @sql = N'declare databasecursor cursor for
+											select vdop.objectname, dp.name
+											from [dbo].[vwdatabaseobjectpermission] vdop
+											inner join databaseprincipal dp 
+												on ((vdop.snapshotid = dp.snapshotid) and (vdop.dbid = dp.dbid) and (vdop.grantee = dp.uid))
+											where 
+											(
+												(vdop.snapshotid = ' + convert(nvarchar, @snapshotid) + N') 
+												and ((vdop.isgrant = N''Y'') or (vdop.isgrantwith = N''Y''))
+												and (vdop.objectname in (' + @severityvalues + N'))
+												and dp.type IN (''S'', ''U'', ''G'')
+											)'
+							exec (@sql)			
+ 							open databasecursor
+							fetch next from databasecursor into @strval2, @strval3
+
+							select @intval2 = 0
+							while @@fetch_status = 0
+							begin
+								select @strval = @strval3 + ' on ' + @strval2
+								if (@intval2 = 1 or len(@metricval) + len(@strval) > 1010)
+								begin
+									if @intval2 = 0
+										select @metricval = @metricval + N', more...',
+												@intval2 = 1
+								end
+								else
+									select @metricval = @metricval + case when len(@metricval) > 0 then N', ' else N'' end + N'''' + @strval + N''''
+
+								if (@isadmin = 1)
+									insert into policyassessmentdetail ( policyid,
+																		 assessmentid,
+																		 metricid,
+																		 snapshotid,
+																		 detailfinding,
+																		 databaseid,
+																		 objecttype,
+																		 objectid,
+																		 objectname )
+																values ( @policyid,
+																		 @assessmentid,
+																		 @metricid,
+																		 @snapshotid,
+																		 N'Permissions on stored procedures found: ''' + @strval + N'''',
+																		 null, -- database ID,
+																		 N'DB', -- object type
+																		 null,
+																		 @strval )
+
+								fetch next from databasecursor into @strval2, @strval3
+								 end 
+
+							close databasecursor
+							deallocate databasecursor	
+
+							if (len(@metricval) = 0)
+								select @sevcode=@sevcodeok,
+										@metricval = 'No unacceptable permissions found.'
+							else
+								select @sevcode=@severity,
+										@metricval = N'Permissions on stored procedures found: ' + @metricval
+
+							select @metricthreshold = N'Server is vulnerable if users other than the default SSIS database roles have been granted permissions on an Integration Services stored procedure.'
+						end  
+
 						--**************************** code added to handle user defined security checks, but never used (first added in version 2.5)
 						-- User implemented
 						else if (@metricid >= 1000)
@@ -4608,7 +6453,7 @@ AS
 					end try
 					begin catch
 						select @sevcode=@severity
-						select @metricval = N'Error ' + cast(ERROR_NUMBER() as nvarchar) + N' encountered on line ' + Error_Line() + N' while processing security check: ' + Error_Message()
+						select @metricval = N'Error ' + cast(ERROR_NUMBER() as nvarchar) + N' encountered on line ' + cast(Error_Line() as nvarchar) + N' while processing security check: ' + Error_Message()
 						select @metricthreshold = N'The security check could not be verified.'
 					end catch
 

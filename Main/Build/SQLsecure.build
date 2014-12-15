@@ -9,8 +9,8 @@
 	<!-- Build.AllInstallers -->
 	<!-- ******************* -->
 	<target name="Build.AllInstallers">
-		<property name="SQLsecure.BuildType" value="All Installers" unless="${property::exists('SQLsecure.BuildType')}" />
-		<call target="Build.Installers" />
+		<property name="SQLsecure.BuildType" value="All Installers" unless="${property::exists('SQLsecure.BuildType')}" />		
+		<call target="Build.Installers" />		
 		<call target="Build.CDImage" />
 		<call target="Build.WebInstaller" />
 		<call target="CopyBuildToDevShare"/>
@@ -117,7 +117,7 @@
 	<!-- Common Assembly Info -->
 	<property name="AssemblyInfo.Company" value="Idera, Inc." />
 	<property name="AssemblyInfo.Product" value="Idera SQLsecure" />
-	<property name="AssemblyInfo.Copyright" value="Copyright (C) 2005 - 2012 Idera, Inc." />
+	<property name="AssemblyInfo.Copyright" value="Copyright (C) 2005 - 2014 Idera, Inc." />
 	
 	<!-- InstallShield Information -->
 	<property name="InstallShield.Builder" value="C:\Program Files\Macrovision\IS 11.5 StandaloneBuild"/>
@@ -173,7 +173,7 @@
 
 	<!-- <property name="SQLsecure.Obfuscate.Output" value="${SQLsecure.Compile.Output}/obfuscated"/> -->
 
-	<property name="SQLsecure.Development.Builds" value="//redhousefs-02/Development/SQLsecure/Builds/"/>
+	<property name="SQLsecure.Development.Builds" value="//redhousefs-02/Development/SQLsecure/Builds/Version 2.8"/>
 	<property name="SQLsecure.Development.Archives" value="//redhousefs-02/Development/SQLsecure/Archives/"/>
 
 	<!-- Perforce Information -->
@@ -712,5 +712,6 @@
 		</copy>
 	</target>
 	
-
+	
+	
 </project>

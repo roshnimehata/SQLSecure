@@ -1388,10 +1388,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
                         // Create a new Comparison Summary by processing the detail and creating a summary
                         m_ComparisonSummaryTable = createDataSourceComparisonGridTable();
+
+                        metricDifferenceDict.Clear();
+
                         if (m_ComparisonTable.DefaultView.Count > 0)
                         {
                             DataRow newRow = m_ComparisonSummaryTable.NewRow();
-                            metricDifferenceDict.Clear();
+                            
                             foreach (DataRowView drv in m_ComparisonTable.DefaultView)
                             {
                                 if (nMetricId != (int) drv[colMetricId])
@@ -2712,6 +2715,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
                 // Save the user configuration of the grid to restore it after setting the datasource again
                 Utility.GridSettings gridSettings = GridSettings.GetSettings(_grid_ReportCard);
+
+                DataView dataView = _grid_ReportCard.DataSource as DataView;
+                if (dataView != null)
+                {
+                    dataView.Dispose();
+                }
+
                 bool initializing = _grid_ReportCard.DataSource == null;
 
                 _grid_ReportCard.SetDataBinding(ReportCardTable.DefaultView, null);
@@ -2722,11 +2732,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     GridSettings.ApplySettingsToGrid(gridSettings, _grid_ReportCard);
                 }
 
-                //_grid_ReportCard.DisplayLayout.Bands[0].SortedColumns.Clear();
-                //_grid_ReportCard.DisplayLayout.Bands[0].SortedColumns.Add(colDifferencesFound, true, false);
-                //_grid_ReportCard.DisplayLayout.Bands[0].SortedColumns.Add(colMetricId, true, false);
-
-
                 _label_ReportCard.Text = string.Format(ReportCardHeader,
                                               nTotalDiffs == 0
                                                   ? "No"
@@ -2735,7 +2740,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                                   ? DifferenceSingular
                                                   : DifferencePlural);
  
-
                 int selectedMetric = 1;
                 if (_grid_ReportCard.Rows.Count > 0 && _grid_ReportCard.Selected.Rows.Count > 0)
                 {

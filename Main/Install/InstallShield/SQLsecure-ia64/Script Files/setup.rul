@@ -334,6 +334,13 @@ switch (pADORecordSetObj(0))
 				
 			 case "2700":
                 
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+                                                                              
+			 case "2800":
+                
                 bUpgradeDAL = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
@@ -390,6 +397,14 @@ switch (pADORecordSetObj(0))
 			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
 				
 	        case "2700":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    
+			    
+	        case "2800":
  
                 bUpgrade = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
@@ -1502,18 +1517,21 @@ end;
 function LocalInstance(szInstance, szMsg)
 
 	STRING sServer, sComputerName, szPropertyValue, szServer, szComputerName;
-	STRING szChar, szProductName;
-	NUMBER nvStringBufferSize;
+	STRING szChar, szProductName,bIsCluster;
+	NUMBER nvStringBufferSize,  nvBoolBufferSize;       
 
 begin
 // Initialize Numbers
 	nvStringBufferSize = 256;
+    nvBoolBufferSize = 1;       
 
 //Gets Properties to use.  The Instance is variablized to allow different checks
 
 	MsiGetProperty(ISMSI_HANDLE, szInstance, sServer, nvStringBufferSize);
 	MsiGetProperty(ISMSI_HANDLE, "ComputerName", sComputerName, nvStringBufferSize);
 	MsiGetProperty(ISMSI_HANDLE, "ProductName", szProductName, nvStringBufferSize);
+	MsiGetProperty(ISMSI_HANDLE, "SQLSERVER_IS_CLUSTER", bIsCluster, nvBoolBufferSize);        
+	
 
     
 // get first 2 characters of string to check for .\ 
@@ -1542,7 +1560,7 @@ if szServer == "." then
 endif;    
 
 // check if Instance contains '(local)'
-if (szServer % "(LOCAL)") then
+if ( (szServer % "(LOCAL)")) then
         
 	StrReplace (szServer, "(LOCAL)", szComputerName, 0); 
        
@@ -1552,7 +1570,7 @@ endif;
 
 // check to ensure instance name contains the local computername
 // This is to ensure we are pointing at a local instance.
-if (szServer % szComputerName) then
+if (bIsCluster="1" || (szServer % szComputerName)) then
     // Everything is good update property and continue
 	
 	szPropertyValue = "TRUE";
@@ -1697,6 +1715,13 @@ switch (pADORecordSetObj(0))
 
 			 case "2700":
                 
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");    
+			 
+			 case "2800":
+                
                 bUpgradeDAL = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
@@ -1750,6 +1775,13 @@ switch (pADORecordSetObj(0))
 			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
 
 	        case "2700":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");    
+			    
+	        case "2800":
  
                 bUpgrade = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");

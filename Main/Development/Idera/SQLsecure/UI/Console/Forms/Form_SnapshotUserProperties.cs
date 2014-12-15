@@ -79,6 +79,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 _lbl_Login.Text = user.Login;
                 _lbl_HasAccess.Text = user.HasAccessStr;
                 _lbl_IsAliased.Text = user.IsAliasStr;
+                _lb_ContainedType.Text = user.AuthenticationType;
                 if (user.IsAlias) { _lbl_AliasedTo.Text = user.AltName; }
 
                 if (version == Sql.ServerVersion.SQL2000)
@@ -162,6 +163,5 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         #endregion
 
-     
     }
 }

@@ -201,6 +201,16 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         }
 
+        public void InitializeDialog(Policy importingPolicy, bool allowEdit)
+        {
+            m_isCreateNew = true;
+            m_policy = new Policy();
+            m_policy.UpdatePolicyFromImporting(importingPolicy);
+            m_policy.IsSystemPolicy = false;
+            Text = string.Format(IMPORTTITLEFMT, m_policy.PolicyName);
+            InitializeDialogCommon(allowEdit);
+        }
+
         public void InitializeDialog(int policyID, int assessmentId, bool allowEdit)
         {
             if (policyID == 0)
@@ -259,6 +269,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             Form_PolicyProperties frm = new Form_PolicyProperties(op);
             frm.InitializeDialog(fileName, allowEdit);
+
+            // return true if updated, otherwise false
+            return DialogResult.Cancel != frm.ShowDialog();
+        }
+
+        public static bool Process(Policy importingPolicy, bool allowEdit, RequestedOperation op)
+        {
+            Form_PolicyProperties frm = new Form_PolicyProperties(op);
+            frm.InitializeDialog(importingPolicy, allowEdit);
 
             // return true if updated, otherwise false
             return DialogResult.Cancel != frm.ShowDialog();

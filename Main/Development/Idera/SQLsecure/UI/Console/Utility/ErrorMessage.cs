@@ -65,7 +65,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string RegisterSqlServerCantFindServer = "SQL Server < {0} > was not found, make sure the SQL Server name is valid and the SQL Server is running.";
         public const string ServerRegistrationCheckFailedMsg = @"Error was encountered when checking if the server was already registered.";
         public const string ServerAlreadyRegisteredMsg = @"The SQL Server instance is already registered for auditing.";
-        public const string ServerVersionNotSupportedMsg = @"The SQL Server version is not supported for auditing.   SQLsecure only supports auditing SQL Server 2000 through SQL Server 2012.";
+        public const string ServerVersionNotSupportedMsg = @"The SQL Server version is not supported for auditing.   SQLsecure only supports auditing SQL Server 2000 through SQL Server 2014.";
         public const string RetrieveServerPropertiesFailedMsg = @"Error was encountered when retrieving SQL Server properties for registration.";
         public const string SqlLoginNotSpecifiedMsg = @"SQL login credentials have not been entered.";
         public const string SqlLoginFailureNoCredentialsMsg = @"Login to SQL Server failed, please specify SQL login credentials.";
@@ -129,6 +129,22 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string SaveChangesBeforeCancelMsg = "Do you wish to save the changes made to the registered SQL Server configuration?";
         public const string ConfirmFilterRuleDeleteMsg = "Do you wish to delete selected filters?";
         public const string UpdateRetentionPeriodFailedMsg = "Error was encountered when updating registered server retention period";
+
+
+        //Add Edit Audit Folders
+        public const string AddEditFolderPathCaption = "{0} Audit Folder Path";
+        public const string AadNewCaption = "Add New";
+        public const string EditCaption = "Edit";
+        public const string FolderExistsCaption = "Folder Exists";
+        public const string FolderExistsMsg = "The '{0}' folder is already in the list!";
+        public const string DeleteAuditFolderCaption = "Deleting Audit Folder";
+        public const string ConfirmAuditFolderPathDeleteMsg = "Do you wish to delete '{0}' folder?";
+        public const string FolderPathNotValidCaption = "Folder Path Is Not Valid";
+        public const string FolderPathNotValidMsg = "Please specify valid a mapped drive folder or a folder in UNC format.";
+        public const string FolderPathMissingCaption = "Folder Path Missing";
+        public const string FolderPathMissingMsg = "Folder Path Missing";
+        public const string UpdateAuditFoldersFailedCaption = "Failed Updating Audit Folder";
+        public const string UpdateAuditFoldersFailedMsg = "Error was encountered when updating registered server audit folders";
 
         // Filter properties.
         public const string FilterPropertiesCaption = "Filter Properties";

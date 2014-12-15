@@ -26,6 +26,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         SQL2008,
         SQL2008R2,
         SQL2012,
+        SQL2014,
         Unsupported
     }
     public struct VersionName
@@ -35,13 +36,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public const string SQL2008 = @"SQL Server 2008";
         public const string SQL2008R2 = @"SQL Server 2008 R2";
         public const string SQL2012 = @"SQL Server 2012";
+        public const string SQL2014 = @"SQL Server 2014";
         public const string Unsupported = @"Unknown version";
     }
     public class ServicePack
     {
         public class SQL2000
         {
-            public static string[] Builds = new string[] {     @"194",       @"384", @"534", @"760", @"2039" };
+            public static string[] Builds = new string[] { @"194", @"384", @"534", @"760", @"2039" };
             public static string[] BuildNames = new string[] { string.Empty, @"SP1", @"SP2", @"SP3", @"SP4" };
             //public const string RTM = @"194";       // included for reference
             //public const string SP1 = @"384";
@@ -52,8 +54,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
         }
         public class SQL2005
         {
-            public static string[] Builds = new string[] {     @"1399",      @"2047", @"3042",  @"3043",  @"4035",  @"5000" };
-            public static string[] BuildNames = new string[] { string.Empty, @"SP1",  @"SP2",   @"SP2",   @"SP3",   @"SP4" };
+            public static string[] Builds = new string[] { @"1399", @"2047", @"3042", @"3043", @"4035", @"5000" };
+            public static string[] BuildNames = new string[] { string.Empty, @"SP1", @"SP2", @"SP2", @"SP3", @"SP4" };
             //public const string RTM = @"1399";      // included for reference
             //public const string SP1 = @"2047";
             //public const string SP2_CTP = @"3027", @"3033";
@@ -62,15 +64,15 @@ namespace Idera.SQLsecure.UI.Console.Sql
         }
         public class SQL2008
         {
-            public static string[] Builds = new string[] {     @"1600",      @"2531",  @"4000",  @"5500" };
-            public static string[] BuildNames = new string[] { string.Empty, @"SP1",   @"SP2",   @"SP3" };
+            public static string[] Builds = new string[] { @"1600", @"2531", @"4000", @"5500" };
+            public static string[] BuildNames = new string[] { string.Empty, @"SP1", @"SP2", @"SP3" };
             //public const string Beta_CTP = @"1019", @"1049", @"1300";     // removed, but kept for reference
             //public const string RTM = @"1600";      // included for reference
         }
         public class SQL2008R2
         {
-            public static string[] Builds = new string[] {     @"1600",       @"2500" };
-            public static string[] BuildNames = new string[] { string.Empty,  @"SP1" };
+            public static string[] Builds = new string[] { @"1600", @"2500" };
+            public static string[] BuildNames = new string[] { string.Empty, @"SP1" };
             //public const string RTM = @"1600";      // included for reference
         }
         public class SQL2012
@@ -79,6 +81,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
             public static string[] BuildNames = new string[] { string.Empty };
             //public const string Beta_CTP = @"1103", @"1440", @"1750";     // removed, but kept for reference
             //public const string RTM = @"2100";      // included for reference
+        }
+        public class SQL2014
+        {
+            public static string[] Builds = new string[] { @"2000" };
+            public static string[] BuildNames = new string[] { string.Empty };
         }
     }
 
@@ -103,6 +110,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         View = 44,
         Function = 45,
         Synonym = 46,
+        SequenceObject = 48,
         Unknown = 0xFF
     }
 
@@ -276,7 +284,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
             RegistryKey,
             Services,
             Service,
-            Unknown
+            Unknown,
+            SequenceObjects,
+            AvailabilityGroups,
+            AvailabilityGroup,
+            AvailabilityGroupReplica,
+            SequenceObject
         }
 
         // TypeEnum/Object type string name map element.
@@ -375,7 +388,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
             "Registry Key",
             "Services",
             "Service",
-            "Unknown"
+            "Unknown",
+            "Sequence Objects",
+            "Always On Availability Groups",
+            "Always On Availability Group",
+            "Availability Group Replica",
+            "Sequence Object"
         };
 
         private static TypeStringElement[] m_TypeStringMap = new TypeStringElement[] {
@@ -411,7 +429,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             new TypeStringElement("TF",TypeEnum.FunctionTableValued),
             new TypeStringElement("U",TypeEnum.Table),
             new TypeStringElement("V",TypeEnum.View),
-            new TypeStringElement("X",TypeEnum.ExtendedStoredProcedure)
+            new TypeStringElement("X",TypeEnum.ExtendedStoredProcedure),
+            new TypeStringElement("SO",TypeEnum.SequenceObjects)
         };
 
         private static Controls.ObjectImages m_ObjectImages = new Controls.ObjectImages();
@@ -579,6 +598,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private const string NodeUserDefinedDataTypes = "User-defined Data Types";
         private const string NodeXMLSchemaCollections = "XML Schema Collections";
         private const string NodeFullTextCatalogs = "Full Text Catalogs";
+        private const string NodeSequenceObjects = "Sequence Objects";
+        private const string NodeAvailabilityGroups = "Always On Availability Groups";
 
         #endregion
 
@@ -593,8 +614,15 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private int m_ObjectId = -1;
 
         private string m_ObjectName = string.Empty;
+        private object _tag;
 
         #endregion
+
+        public object Tag
+        {
+            get { return _tag; }
+            set { _tag = value; }
+        }
 
         #region Ctors
 
@@ -614,6 +642,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                          || objType == ObjectType.TypeEnum.ServerRoles
                          || objType == ObjectType.TypeEnum.ServerObjects
                          || objType == ObjectType.TypeEnum.Endpoints
+                         || objType == ObjectType.TypeEnum.AvailabilityGroups
                          || objType == ObjectType.TypeEnum.Databases);
             Debug.Assert(objType == ObjectType.TypeEnum.Snapshot ? true : snapshotId != 0);
 
@@ -626,7 +655,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 int snapshotId,
                 Sql.ObjectType.TypeEnum objType,
                 int objectId,
-                string objectName
+                string objectName,
+                object tag 
             )
         {
             Debug.Assert(snapshotId != 0);
@@ -637,6 +667,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                          || objType == ObjectType.TypeEnum.WindowsGroupLogin
                          || objType == ObjectType.TypeEnum.WindowsUserLogin
                          || objType == ObjectType.TypeEnum.ServerRole
+                           || objType == ObjectType.TypeEnum.ServerRole
+                           || objType == ObjectType.TypeEnum.AvailabilityGroup
+                           || objType == ObjectType.TypeEnum.AvailabilityGroupReplica
                          || objType == ObjectType.TypeEnum.Endpoint);
             Debug.Assert(!string.IsNullOrEmpty(objectName));
 
@@ -645,6 +678,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_ObjectId = objectId;
             m_ObjectName = objectName;
             m_ClassId = m_ObjType == ObjectType.TypeEnum.Endpoint ? 105 : 101;
+            Tag = tag;
         }
 
         public ObjectTag( // database and database level tree view containers
@@ -669,7 +703,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                          || objType == ObjectType.TypeEnum.Assemblies
                          || objType == ObjectType.TypeEnum.UserDefinedDataTypes
                          || objType == ObjectType.TypeEnum.XMLSchemaCollections
-                         || objType == ObjectType.TypeEnum.FullTextCatalogs);
+                         || objType == ObjectType.TypeEnum.FullTextCatalogs
+                          || objType == ObjectType.TypeEnum.SequenceObjects);
             Debug.Assert(database != null);
 
             m_SnapshotId = snapshotId;
@@ -754,7 +789,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                          || objType == ObjectType.TypeEnum.Assembly
                          || objType == ObjectType.TypeEnum.UserDefinedDataType
                          || objType == ObjectType.TypeEnum.XMLSchemaCollection
-                         || objType == ObjectType.TypeEnum.FullTextCatalog);
+                         || objType == ObjectType.TypeEnum.FullTextCatalog
+                         || objType == ObjectType.TypeEnum.SequenceObjects
+                         || objType == ObjectType.TypeEnum.SequenceObject);
             Debug.Assert(database != null);
             Debug.Assert(!string.IsNullOrEmpty(objectName));
 
@@ -790,7 +827,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
         }
         public int ClassId
         {
-            get { return m_ClassId; }
+            get
+            {
+                return m_ObjType == ObjectType.TypeEnum.AvailabilityGroup ? 108 : m_ClassId;
+            }
         }
         public int ParentObjectId
         {
@@ -925,6 +965,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     case ObjectType.TypeEnum.FullTextCatalogs:
                         name = NodeFullTextCatalogs;
                         break;
+                    case ObjectType.TypeEnum.SequenceObjects:
+                        name = NodeSequenceObjects;
+                        break;
+                    case ObjectType.TypeEnum.AvailabilityGroups:
+                        name = NodeAvailabilityGroups;
+                        break;
                     default:
                         Debug.Assert(false);
                         break;
@@ -966,6 +1012,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                        || m_ObjType == ObjectType.TypeEnum.Assembly
                        || m_ObjType == ObjectType.TypeEnum.UserDefinedDataType
                        || m_ObjType == ObjectType.TypeEnum.XMLSchemaCollection
+                       || m_ObjType == ObjectType.TypeEnum.AvailabilityGroupReplica
+                       || m_ObjType == ObjectType.TypeEnum.AvailabilityGroup
+                       || m_ObjType == ObjectType.TypeEnum.SequenceObject
                        || m_ObjType == ObjectType.TypeEnum.FullTextCatalog);
             }
         }
@@ -1068,6 +1117,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 case ObjectType.TypeEnum.FullTextCatalogs:
                     path = snapshot + @"\" + server + @"\Databases\" + DatabaseName + @"\Full Text Catalogs";
                     break;
+                case ObjectType.TypeEnum.SequenceObjects:
+                    path = snapshot + @"\" + server + @"\Databases\" + DatabaseName + @"\Full Sequence Objects";
+                    break;
+
                 default:
                     Debug.Assert(false);
                     break;
@@ -1089,6 +1142,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         internal const string Sql2008VerPrefix = @"10";
         internal const string Sql2008R2VerPrefix = @"10.50.";
         internal const string Sql2012VerPrefix = @"11";
+        internal const string Sql2014VerPrefix = @"12";
 
         #endregion
 

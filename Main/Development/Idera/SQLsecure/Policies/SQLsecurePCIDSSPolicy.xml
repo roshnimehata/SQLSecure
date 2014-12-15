@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <PolicyName>PCI-DSS Guidelines for SQL Server</PolicyName>
-  <PolicyDescription>This Payment Card Industry (PCI)  v2.0 guideline leverages the SQL Server Database Security Readiness Review (SRR) and  targets conditions that undermine the integrity of security, contribute to inefficient security operations and administration, or may lead to interruption of production operations.</PolicyDescription>
+  <PolicyDescription>This Payment Card Industry (PCI)  v3.0 guideline leverages the SQL Server Database Security Readiness Review (SRR) and  targets conditions that undermine the integrity of security, contribute to inefficient security operations and administration, or may lead to interruption of production operations.</PolicyDescription>
   <IsDynamic>true</IsDynamic>
   <DynamicSelection />
   <UseBaseline>false</UseBaseline>
-  <InterviewName>Payment Card Industry v2.0  Data Security Standard for SQL Server</InterviewName>
-  <InterviewText>This Payment Card Industry (PCI)  v2.0 guideline leverages the SQL Server Database Security Readiness Review (SRR) and  targets conditions that undermine the integrity of security, contribute to inefficient security operations and administration, or may lead to interruption of production operations.
+  <InterviewName>Payment Card Industry v3.0  Data Security Standard for SQL Server</InterviewName>
+  <InterviewText>This Payment Card Industry (PCI)  v3.0 guideline leverages the SQL Server Database Security Readiness Review (SRR) and  targets conditions that undermine the integrity of security, contribute to inefficient security operations and administration, or may lead to interruption of production operations.
 
 Specifically this guideline addresses  the following sections in the PCI - Data Security Standard-
 
@@ -88,7 +88,7 @@ SQLsecure - provides 3 Idera defined templates that exceed the guidelines from C
       <ReportKey />
       <ReportText>Is SQL Server below the minimum acceptable version?</ReportText>
       <Severity>2</Severity>
-      <SeverityValues>'11.0.2100','10.50.2500','10.0.5500','9.00.5000','8.00.2039'</SeverityValues>
+      <SeverityValues>'12.0.2000.8','11.0.2100','10.50.2500','10.0.5500','9.00.5000','8.00.2039'</SeverityValues>
     </PolicyMetric>
     <PolicyMetric>
       <MetricId>3</MetricId>

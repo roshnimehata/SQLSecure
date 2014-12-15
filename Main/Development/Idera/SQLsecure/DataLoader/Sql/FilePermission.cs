@@ -293,6 +293,54 @@ namespace Idera.SQLsecure.Collector.Sql
             return numWarnings;
         }
 
+        public int LoadFilePermissionsForAuditDirectory(string directory)
+        {
+            int numWarnings = 0;
+            using (logX.loggerX.DebugCall())
+            {
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Program.ImpersonationContext wi = Program.SetTargetImpersonationContext();
+                    try
+                    {
+                        // Convert to UNC file Name
+                        string dirName = ConvertLocalPathToUNCPath(directory);
+                        string localDirName = ConvertUNCPathToLocalPath(directory);
+
+                        // Get Disk Type (NTFS or FAT)
+                        string diskType = GetDiskTypeFromLocalPath(localDirName);
+
+                        //check if target server is local server
+                        if (m_targetServerName == Environment.MachineName &&
+                            !dirName.ToLower().Equals(localDirName.ToLower()) &&
+                            CanReadFilesFromDirectory(localDirName))
+                        {
+                            dirName = localDirName;
+                        }
+
+                        numWarnings = ProcessDirectory(dirName, enumOSObjectType.IDir, diskType);
+                    }
+                    catch (Exception ex)
+                    {
+                        numWarnings++;
+                        logX.loggerX.Error(
+                            string.Format("Failed to load permissions for Audit Directory '{0}': {1}",
+                                          directory, ex.Message));
+                    }
+                    finally
+                    {
+                        Program.RestoreImpersonationContext(wi);
+                    }
+                }
+                else
+                {
+                    logX.loggerX.Error(
+                        "Failed to load permissions for Audit Directory '{0}': invalid directory name");
+                }
+            }
+            return numWarnings;
+        }
+
         public int  GetDatabaseFilePermissions(List<Database> databases)
         {
             int numWarnings = 0;
@@ -1059,7 +1107,7 @@ namespace Idera.SQLsecure.Collector.Sql
         {
             string localPath = path;
 
-            if (path.Contains(m_targetServerName))
+            if (path.ToLower().Contains(m_targetServerName.ToLower()))
             {
                 if (path.Contains(@"$\"))
                 {
@@ -1085,6 +1133,14 @@ namespace Idera.SQLsecure.Collector.Sql
                 if (path[1] == ':')
                 {
                     drive = path[0].ToString() + ":";
+                }
+                else
+                {
+                    string localPath = ConvertUNCPathToLocalPath(path);
+                    if (localPath[1] == ':')
+                    {
+                        drive = localPath[0].ToString() + ":";
+                    }
                 }
 
                 StringBuilder scopeStr = null;
@@ -1151,6 +1207,19 @@ namespace Idera.SQLsecure.Collector.Sql
                 logX.loggerX.Error(string.Format("Error getting File System type for path {0}, {1}", path, ex.Message));
             }
             return diskType;
+        }
+
+        private bool CanReadFilesFromDirectory(string path)
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #endregion

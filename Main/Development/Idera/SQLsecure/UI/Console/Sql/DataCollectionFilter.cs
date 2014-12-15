@@ -646,6 +646,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     case RuleObjectType.Synonym:
                         otherObjs.Add("Synonyms");
                         break;
+                    case RuleObjectType.SequenceObject:
+                        otherObjs.Add("Sequence Objects");
+                        break;
                     default:
                         Debug.Assert(false);
                         break;
@@ -946,6 +949,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 case RuleObjectType.View:
                 case RuleObjectType.Function:
                 case RuleObjectType.Synonym:
+                case RuleObjectType.SequenceObject:
                     m_RuleType = RuleType.Database;
                     break;
                 default:

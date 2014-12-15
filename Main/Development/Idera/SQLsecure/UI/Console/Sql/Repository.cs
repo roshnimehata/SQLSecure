@@ -752,7 +752,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             foreach (Sql.RegisteredServer svr in m_RegisteredServers)
             {
-                if (svr.ConnectionName == serverName)
+                if (svr.ConnectionName.Equals(serverName, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return svr;
                 }

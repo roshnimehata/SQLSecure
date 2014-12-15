@@ -61,6 +61,12 @@ as
 	begin
 		BEGIN TRAN
 		
+			
+			delete from dbo.sqljob where SnapshotId = @snapshotid
+			delete from dbo.sqljobproxy where SnapshotId = @snapshotid
+			delete from dbo.availabilitygroups where SnapshotId = @snapshotid
+			delete from dbo.availabilityreplicas where SnapshotId = @snapshotid
+			
 			delete from databaseprincipalpermission where snapshotid = @snapshotid
 			delete from databaseobjectpermission where snapshotid = @snapshotid
 			delete from databaseschemapermission where snapshotid = @snapshotid
@@ -85,6 +91,7 @@ as
 			delete from serveroswindowsgroupmember where snapshotid = @snapshotid
 			delete from serveroswindowsaccount where snapshotid = @snapshotid
 			delete from serversnapshot where snapshotid = @snapshotid
+		
 
 			if @err <> 0
 			begin

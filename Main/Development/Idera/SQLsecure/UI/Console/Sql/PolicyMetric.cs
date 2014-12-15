@@ -44,6 +44,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private SqlString m_ReportText;
         private SqlInt32 m_Severity;
         private SqlString m_SeverityValues;
+        private bool m_isSelected = true;
 
         [XmlIgnoreAttribute]
         private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Sql.PolicyMetric");
@@ -324,6 +325,18 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     m_dirty = true;
                     m_SeverityValues = value;
                 }
+            }
+        }
+
+        public bool IsSelected
+        {
+            get
+            {
+                return m_isSelected;
+            }
+            set
+            {
+                m_isSelected = value;
             }
         }
 

@@ -317,6 +317,8 @@
 		<row><td>SERVICE_SQLAUTHENTICATION</td><td>1</td></row>
 		<row><td>SQLSERVER_AUTHENTICATION</td><td>1</td></row>
 		<row><td>SQLSERVER_AUTHENTICATION1</td><td>1</td></row>
+		<row><td>SQLSERVER_AUTHENTICATION2</td><td>1</td></row>
+		<row><td>SQLSERVER_IS_CLUSTER</td><td>1</td></row>
 		<row><td>chkExportUtility</td><td>1</td></row>
 		<row><td>chkSQLdmDSS</td><td>1</td></row>
 	</table>
@@ -825,8 +827,8 @@
 		<row><td>SQLLogin</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
 		<row><td>SQLLogin</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>SQLLogin</td><td>BtnSQLBrowse</td><td>PushButton</td><td>475</td><td>139</td><td>63</td><td>17</td><td>3</td><td/><td>##IDS_SQLLOGIN_BROWSE##</td><td>chkSQLAuthen</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SQLLogin</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>cboServers</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SQLLogin</td><td>BtnSQLBrowse</td><td>PushButton</td><td>475</td><td>139</td><td>63</td><td>17</td><td>3</td><td/><td>##IDS_SQLLOGIN_BROWSE##</td><td>cnkIsCluster</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SQLLogin</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>chkSQLAuthen</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>DlgDescLarge</td><td>Text</td><td>21</td><td>23</td><td>445</td><td>18</td><td>65538</td><td/><td>##NEW_STRING134##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>DlgDescLarge_upg</td><td>Text</td><td>21</td><td>23</td><td>445</td><td>18</td><td>65538</td><td/><td>##NEW_STRING149##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##IDS_SQLLOGIN_TITLE##</td><td/><td/><td>0</td><td/><td/><td/></row>
@@ -836,7 +838,8 @@
 		<row><td>SQLLogin</td><td>SQLaccount</td><td>PushButton</td><td>482</td><td>235</td><td>55</td><td>17</td><td>3</td><td/><td>##NEW_STRING137##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>Text1</td><td>Text</td><td>289</td><td>202</td><td>250</td><td>24</td><td>65539</td><td/><td>##NEW_STRING135##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>cboServers</td><td>ComboBox</td><td>290</td><td>139</td><td>180</td><td>16</td><td>65539</td><td>INSTANCE</td><td>##NEW_STRING11##</td><td>BtnSQLBrowse</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SQLLogin</td><td>chkSQLAuthen</td><td>CheckBox</td><td>290</td><td>232</td><td>164</td><td>20</td><td>3</td><td>SQLSERVER_AUTHENTICATION</td><td>##NEW_STRING136##</td><td>NextLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>SQLLogin</td><td>chkSQLAuthen</td><td>CheckBox</td><td>290</td><td>232</td><td>164</td><td>20</td><td>3</td><td>SQLSERVER_AUTHENTICATION</td><td>##NEW_STRING136##</td><td>cboServers</td><td/><td/><td/><td/><td/></row>
+		<row><td>SQLLogin</td><td>cnkIsCluster</td><td>CheckBox</td><td>293</td><td>162</td><td>164</td><td>20</td><td>3</td><td>SQLSERVER_IS_CLUSTER</td><td>##NEW_STRING158##</td><td>NextLarge</td><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>lbUpgradeIntro</td><td>Text</td><td>287</td><td>58</td><td>237</td><td>49</td><td>65538</td><td/><td>##NEW_STRING150##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>lblAuthentication</td><td>Text</td><td>287</td><td>190</td><td>138</td><td>14</td><td>3</td><td/><td>##NEW_STRING133##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>lblServer</td><td>Text</td><td>287</td><td>121</td><td>251</td><td>14</td><td>3</td><td/><td>##IDS_SQLLOGIN_SERVER##</td><td/><td/><td>0</td><td/><td/><td/></row>
@@ -1180,7 +1183,7 @@
 		<row><td>AdminChangeFolder</td><td>OK</td><td>SetTargetPath</td><td>TARGETDIR</td><td>1</td><td>1</td></row>
 		<row><td>AdminChangeFolder</td><td>Up</td><td>DirectoryListUp</td><td>0</td><td>1</td><td>0</td></row>
 		<row><td>AdminNetworkLocation</td><td>Back</td><td>NewDialog</td><td>AdminWelcome</td><td>1</td><td>1</td></row>
-		<row><td>AdminNetworkLocation</td><td>Browse</td><td>SpawnDialog</td><td>AdminChangeFolder</td><td>1</td><td>0</td></row>
+		<row><td>AdminNetworkLocation</td><td>Browse</td><td>SpawnDialog</td><td>AdminChangeFolder</td><td>1</td><td>1</td></row>
 		<row><td>AdminNetworkLocation</td><td>Cancel</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
 		<row><td>AdminNetworkLocation</td><td>InstallNow</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1</td><td>3</td></row>
 		<row><td>AdminNetworkLocation</td><td>InstallNow</td><td>NewDialog</td><td>OutOfSpace</td><td>OutOfNoRbDiskSpace = 1</td><td>2</td></row>
@@ -1376,6 +1379,7 @@
 		<row><td>SQLLogin</td><td>NextLarge</td><td>DoAction</td><td>UpdateLocalInstance</td><td>not NOVALIDATION and INSTANCE &lt;&gt; ""</td><td>4</td></row>
 		<row><td>SQLLogin</td><td>NextLarge</td><td>DoAction</td><td>UpgradeRepositoryCheck</td><td>IS_SQLSERVER_STATUS = 0 and IS_UPGRADE and not NOVALIDATION</td><td>14</td></row>
 		<row><td>SQLLogin</td><td>NextLarge</td><td>DoAction</td><td>setSQLSERVER_AUTHENTICATION</td><td>SQLSERVER_AUTHENTICATION = "" and bSQLLocal &lt;&gt;"FALSE"</td><td>8</td></row>
+		<row><td>SQLLogin</td><td>NextLarge</td><td>DoAction</td><td>setSQLSERVER_IS_CLUSTER</td><td>setSQLSERVER_IS_CLUSTER = "" and bSQLLocal &lt;&gt;"FALSE"</td><td>8</td></row>
 		<row><td>SQLLogin</td><td>NextLarge</td><td>NewDialog</td><td>ReadyToInstall</td><td>IS_SQLSERVER_STATUS=0 and bSQLLocal&lt;&gt;"FALSE" and INSTANCE and bSQLVersion&lt;&gt;"FALSE" and SQLBlank and not INVALID_DATABASE and BSQLVER &lt;&gt; "FALSE" and not bSQLRights and not IS_UPGRADE</td><td>15</td></row>
 		<row><td>SQLLogin</td><td>NextLarge</td><td>NewDialog</td><td>ReadyToUpgrade</td><td>IS_SQLSERVER_STATUS=0 and IS_UPGRADE and SQLBlank and INSTANCE and BSQLVER &lt;&gt; "FALSE" and (((SCHEMA_VALIDATION = 2 and UPGRADE_CONFIRM) or SCHEMA_VALIDATION = 1) or NOVALIDATION)</td><td>16</td></row>
 		<row><td>SQLLogin</td><td>NextLarge</td><td>SpawnDialog</td><td>DatabaseInvalidVersion</td><td>IS_SQLSERVER_STATUS=0 and SCHEMA_VALIDATION = -1</td><td>21</td></row>
@@ -1760,6 +1764,10 @@ if err.number = 0 then
 	      	Session.Property("BSQLVER") = "TRUE"
 	      	
 	   Case "11"
+	      
+	      	Session.Property("BSQLVER") = "TRUE"    
+	      	    	
+	   Case "12"
 	      
 	      	Session.Property("BSQLVER") = "TRUE"
 	      	
@@ -4658,6 +4666,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>NEW_STRING155</td><td>1033</td><td>Click Upgrade to start the upgrade process.</td><td>0</td><td/><td>-786644810</td></row>
 		<row><td>NEW_STRING156</td><td>1033</td><td>{\Tahoma7Red}Note: Install locally on a SQL Server computer hosting the Repository.</td><td>0</td><td/><td>572301929</td></row>
 		<row><td>NEW_STRING157</td><td>1033</td><td>Installs the Console and Reports, and creates the Repository database on a local SQL Server instance.</td><td>0</td><td/><td>572275401</td></row>
+		<row><td>NEW_STRING158</td><td>1033</td><td>&amp;Cluster Installation </td><td>0</td><td/><td>1176670025</td></row>
 		<row><td>NEW_STRING16</td><td>1033</td><td>&amp;Next &gt;</td><td>0</td><td/><td>-199646929</td></row>
 		<row><td>NEW_STRING17</td><td>1033</td><td>Cancel</td><td>0</td><td/><td>-199642833</td></row>
 		<row><td>NEW_STRING173</td><td>1033</td><td>&amp;OK</td><td>0</td><td/><td>-2070198543</td></row>
@@ -4929,7 +4938,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ISSQLServerCosting</td><td/><td>1500</td><td/><td/></row>
 		<row><td>ISSQLServerFinalize</td><td/><td>6605</td><td/><td/></row>
 		<row><td>ISSQLServerInstall</td><td/><td>5901</td><td/><td/></row>
-		<row><td>ISSQLServerRollback</td><td/><td>1503</td><td/><td/></row>
+		<row><td>ISSQLServerRollback</td><td/><td>1506</td><td/><td/></row>
 		<row><td>ISSQLServerUninstall</td><td/><td>2399</td><td/><td/></row>
 		<row><td>ISSelfRegisterCosting</td><td/><td>2201</td><td/><td/></row>
 		<row><td>ISSelfRegisterFiles</td><td/><td>5601</td><td/><td/></row>
@@ -4939,7 +4948,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ISUnSelfRegisterFiles</td><td/><td>2202</td><td/><td/></row>
 		<row><td>InstallFiles</td><td/><td>4000</td><td>InstallFiles</td><td/></row>
 		<row><td>InstallFinalize</td><td/><td>6600</td><td>InstallFinalize</td><td/></row>
-		<row><td>InstallInitialize</td><td/><td>1501</td><td>InstallInitialize</td><td/></row>
+		<row><td>InstallInitialize</td><td/><td>1502</td><td>InstallInitialize</td><td/></row>
 		<row><td>InstallODBC</td><td/><td>5400</td><td>InstallODBC</td><td/></row>
 		<row><td>InstallServices</td><td>VersionNT</td><td>5800</td><td>InstallServices</td><td/></row>
 		<row><td>InstallValidate</td><td/><td>1400</td><td>InstallValidate</td><td/></row>
@@ -4950,7 +4959,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>MsiPublishAssemblies</td><td/><td>6250</td><td>MsiPublishAssemblies</td><td/></row>
 		<row><td>MsiUnpublishAssemblies</td><td/><td>1750</td><td>MsiUnpublishAssemblies</td><td/></row>
 		<row><td>OnMoved</td><td/><td>6599</td><td>Required for installations using InstallScript Objects.</td><td/></row>
-		<row><td>OnMoving</td><td/><td>1502</td><td>Required for installations using InstallScript.</td><td/></row>
+		<row><td>OnMoving</td><td/><td>1504</td><td>Required for installations using InstallScript.</td><td/></row>
 		<row><td>PatchFiles</td><td/><td>4090</td><td>PatchFiles</td><td/></row>
 		<row><td>ProcessComponents</td><td/><td>1600</td><td>ProcessComponents</td><td/></row>
 		<row><td>PublishComponents</td><td/><td>6200</td><td>PublishComponents</td><td/></row>
@@ -4998,7 +5007,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>WriteEnvironmentStrings</td><td/><td>5200</td><td>WriteEnvironmentStrings</td><td/></row>
 		<row><td>WriteIniValues</td><td/><td>5100</td><td>WriteIniValues</td><td/></row>
 		<row><td>WriteRegistryValues</td><td/><td>5000</td><td>WriteRegistryValues</td><td/></row>
-		<row><td>setSQLSERVER_AUTHENTICATION</td><td>SQLSERVER_AUTHENTICATION = ""</td><td>925</td><td/><td/></row>
+		<row><td>setSQLSERVER_AUTHENTICATION</td><td>SQLSERVER_AUTHENTICATION = ""</td><td>902</td><td/><td/></row>
 		<row><td>setUPGRADE</td><td>IS_MAJOR_UPGRADE or IS_MINOR_UPGRADE</td><td>405</td><td/><td/></row>
 		<row><td>set_ReinstallMode</td><td>Installed and not IS_UPGRADE</td><td>415</td><td/><td/></row>
 	</table>
@@ -5393,6 +5402,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>SERVICE_SQL_USERNAME</td><td>sa</td><td/></row>
 		<row><td>SQLSERVER_AUTHENTICATION</td><td/><td/></row>
 		<row><td>SQLSERVER_AUTHENTICATION1</td><td>0</td><td/></row>
+		<row><td>SQLSERVER_AUTHENTICATION2</td><td>0</td><td/></row>
 		<row><td>SQLSERVER_DATABASE</td><td>SQLsecure</td><td/></row>
 		<row><td>SQLSERVER_INSTANCE</td><td/><td/></row>
 		<row><td>SQLSERVER_LIST_ALL</td><td>0</td><td/></row>

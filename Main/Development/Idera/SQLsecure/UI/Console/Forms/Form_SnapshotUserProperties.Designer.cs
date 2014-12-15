@@ -63,9 +63,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._lbl_IA = new System.Windows.Forms.Label();
             this._lbl_AT = new System.Windows.Forms.Label();
             this._lbl_AliasedTo = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this._lbl_T = new System.Windows.Forms.Label();
             this._lbl_Name = new System.Windows.Forms.Label();
             this._lbl_N = new System.Windows.Forms.Label();
+            this._lb_ContainedType = new System.Windows.Forms.Label();
             this._lbl_Type = new System.Windows.Forms.Label();
             this.ultraTabPageControl_Permissions = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this._dbPrincipalPermissionsGrid = new Idera.SQLsecure.UI.Console.Controls.DbPrincipalPermissionsGrid();
@@ -116,9 +118,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._pnl_Properties.Controls.Add(this._lbl_L);
             this._pnl_Properties.Controls.Add(this._lbl_Login);
             this._pnl_Properties.Controls.Add(this._grpbx_Misc);
+            this._pnl_Properties.Controls.Add(this.label1);
             this._pnl_Properties.Controls.Add(this._lbl_T);
             this._pnl_Properties.Controls.Add(this._lbl_Name);
             this._pnl_Properties.Controls.Add(this._lbl_N);
+            this._pnl_Properties.Controls.Add(this._lb_ContainedType);
             this._pnl_Properties.Controls.Add(this._lbl_Type);
             this._pnl_Properties.Dock = System.Windows.Forms.DockStyle.Fill;
             this._pnl_Properties.Location = new System.Drawing.Point(3, 3);
@@ -255,7 +259,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._lbl_Login.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this._lbl_Login.Location = new System.Drawing.Point(47, 25);
             this._lbl_Login.Name = "_lbl_Login";
-            this._lbl_Login.Size = new System.Drawing.Size(547, 15);
+            this._lbl_Login.Size = new System.Drawing.Size(265, 15);
             this._lbl_Login.TabIndex = 10;
             // 
             // _grpbx_Misc
@@ -360,6 +364,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._lbl_AliasedTo.Size = new System.Drawing.Size(456, 15);
             this._lbl_AliasedTo.TabIndex = 16;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(318, 27);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(105, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Authentication Type:";
+            // 
             // _lbl_T
             // 
             this._lbl_T.AutoSize = true;
@@ -389,17 +402,30 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._lbl_N.TabIndex = 5;
             this._lbl_N.Text = "Name:";
             // 
+            // _lb_ContainedType
+            // 
+            this._lb_ContainedType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._lb_ContainedType.AutoEllipsis = true;
+            this._lb_ContainedType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
+            this._lb_ContainedType.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this._lb_ContainedType.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            this._lb_ContainedType.Location = new System.Drawing.Point(429, 24);
+            this._lb_ContainedType.Name = "_lb_ContainedType";
+            this._lb_ContainedType.Size = new System.Drawing.Size(165, 16);
+            this._lb_ContainedType.TabIndex = 4;
+            // 
             // _lbl_Type
             // 
-            this._lbl_Type.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_Type.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_Type.AutoEllipsis = true;
             this._lbl_Type.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_Type.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this._lbl_Type.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            this._lbl_Type.Location = new System.Drawing.Point(358, 2);
+            this._lbl_Type.Location = new System.Drawing.Point(429, 2);
             this._lbl_Type.Name = "_lbl_Type";
-            this._lbl_Type.Size = new System.Drawing.Size(236, 15);
+            this._lbl_Type.Size = new System.Drawing.Size(165, 15);
             this._lbl_Type.TabIndex = 4;
             // 
             // ultraTabPageControl_Permissions
@@ -515,5 +541,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private Infragistics.Win.UltraWinTabControl.UltraTabSharedControlsPage ultraTabSharedControlsPage1;
         private Infragistics.Win.UltraWinTabControl.UltraTabPageControl ultraTabPageControl_General;
         private Infragistics.Win.UltraWinTabControl.UltraTabPageControl ultraTabPageControl_Permissions;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label _lb_ContainedType;
     }
 }

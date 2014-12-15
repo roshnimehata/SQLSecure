@@ -1748,12 +1748,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
                 if (i >= 0)
                 {
+                    p.IsSelected = newPolicy.PolicyMetrics[i].IsSelected;
                     p.IsEnabled = newPolicy.PolicyMetrics[i].IsEnabled;
                     p.ReportKey = newPolicy.PolicyMetrics[i].ReportKey;
                     p.ReportText = newPolicy.PolicyMetrics[i].ReportText.Replace("\n", "\r\n");
-
                     p.Severity = newPolicy.PolicyMetrics[i].Severity;
-                    p.SeverityValues = newPolicy.PolicyMetrics[i].SeverityValues;
+                    p.SeverityValues = newPolicy.PolicyMetrics[i].SeverityValues;   
                 }
                 else
                 {
@@ -1777,14 +1777,88 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        public void UpdatePolicyMetricsFromSelectedSecurityChecks(Policy newPolicy)
+        {
+            foreach (PolicyMetric p in m_PolicyMetrics)
+            {
+                int i = newPolicy.PolicyMetrics.BinarySearch(p, metricComparer);
+
+                if (i >= 0)
+                {
+                    if (newPolicy.PolicyMetrics[i].IsSelected)
+                    {
+                        p.IsEnabled = newPolicy.PolicyMetrics[i].IsEnabled;
+                        p.ReportKey = newPolicy.PolicyMetrics[i].ReportKey;
+                        p.ReportText = newPolicy.PolicyMetrics[i].ReportText.Replace("\n", "\r\n");
+                        p.Severity = newPolicy.PolicyMetrics[i].Severity;
+                        p.SeverityValues = newPolicy.PolicyMetrics[i].SeverityValues;
+                    }
+                }
+                else
+                {
+                    p.IsEnabled = false;
+                }
+                if (p.IsEnabled)
+                {
+                    switch (p.Severity)
+                    {
+                        case 1:
+                            m_MetricCountLow = m_MetricCountLow.Value + 1;
+                            break;
+                        case 2:
+                            m_MetricCountMedium = m_MetricCountMedium.Value + 1;
+                            break;
+                        case 3:
+                            m_MetricCountHigh = m_MetricCountHigh.Value + 1;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private Policy ReadPolicyFromXMLFile(string filename)
+        {
+            Policy policy = null;
+            XmlSerializer reader = new XmlSerializer(typeof(Policy));
+
+            using (StreamReader file = new StreamReader(filename))
+            {
+                policy = (Policy)reader.Deserialize(file);    
+            }
+            
+            return policy;
+        }
+
+        public void LoadPolicyFromXMLFile(string filename)
+        {
+            try
+            {
+                Policy policy = ReadPolicyFromXMLFile(filename);
+
+                if (policy.IsPolicy)
+                {
+                    m_PolicyName = policy.m_PolicyName;
+                    m_PolicyDescription = policy.PolicyDescription.Replace("\n", "\r\n");
+                    m_IsSystemPolicy = policy.IsSystemPolicy;
+                    m_IsDynamic = policy.IsDynamic;
+                    m_InterviewIsTemplate = policy.InterviewIsTemplate;
+                    m_InterviewName = policy.InterviewName;
+                    m_InterviewText = policy.InterviewText;
+                    m_PolicyMetrics = policy.PolicyMetrics;
+                }
+
+            }
+            catch(Exception ex)
+            {
+                logX.loggerX.Error("Failed to Import Policy:  ", ex.Message);
+            }
+        }
+
         public void UpdatePolicyFromXMLFile(string filename)
         {
             try
             {
-                XmlSerializer reader = new XmlSerializer(typeof (Policy));
-                StreamReader file = new StreamReader(filename);
-                Policy policy = (Policy) reader.Deserialize(file);
-                file.Close();
+                Policy policy = ReadPolicyFromXMLFile(filename);
 
                 if (IsPolicy)
                 {
@@ -1799,6 +1873,29 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 UpdatePolicyMetricsFromImport(policy);
             }
             catch(Exception ex)
+            {
+                logX.loggerX.Error("Failed to Import Policy:  ", ex.Message);
+            }
+        }
+
+        public void UpdatePolicyFromImporting(Policy policy)
+        {
+            try
+            {
+                if (IsPolicy)
+                {
+                    m_PolicyName = policy.m_PolicyName;
+                    m_PolicyDescription = policy.PolicyDescription.Replace("\n", "\r\n");
+                    m_IsSystemPolicy = policy.IsSystemPolicy;
+                    m_IsDynamic = policy.IsDynamic;
+                    m_InterviewIsTemplate = policy.InterviewIsTemplate;
+                    m_InterviewName = policy.InterviewName;
+                    m_InterviewText = policy.InterviewText;
+                }
+                m_PolicyMetrics = GetPolicyMetrics(Program.gController.Repository.ConnectionString);
+                UpdatePolicyMetricsFromSelectedSecurityChecks(policy);
+            }
+            catch (Exception ex)
             {
                 logX.loggerX.Error("Failed to Import Policy:  ", ex.Message);
             }

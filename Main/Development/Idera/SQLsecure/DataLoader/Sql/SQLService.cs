@@ -34,7 +34,8 @@ namespace Idera.SQLsecure.Collector.Sql
             MsDtsServer100,           // SQL Server Integration Services 10.0 (SQL2008)
             MSSQLServerADHelper100,   // SQL Active Directory Helper Service 10.0 (SQL2008)
             MSSQLFDLauncher,          // SQL Full-text Filter Daemon Launcher (SQL2008)
-            MsDtsServer110            // SQL Server Integration Services 11.0 (SQL2012)
+            MsDtsServer110,           // SQL Server Integration Services 12.0 (SQL2014)
+            MsDtsServer120            // SQL Server Integration Services 12.0 (SQL2014)
         }
 
         private string m_Name;
@@ -102,7 +103,8 @@ namespace Idera.SQLsecure.Collector.Sql
                     "MsDtsServer100",           // SQL Server Integration Services 10.0 (SQL2008)
                     "MSSQLServerADHelper100",   // SQL Active Directory Helper Service 10.0 (SQL2008)
                     "MSSQLFDLauncher",          // SQL Full-text Filter Daemon Launcher (SQL2008)
-                    "MsDtsServer110"            // SQL Server Integration Services 11.0 (SQL2012)
+                    "MsDtsServer110",           // SQL Server Integration Services 11.0 (SQL2012)
+                    "MsDtsServer120"            // SQL Server Integration Services 12.0 (SQL2014)
                 };
             string[] serviceArrayInstance = new string[]
                 {
@@ -163,6 +165,7 @@ namespace Idera.SQLsecure.Collector.Sql
                             continue;
                         break;
                     case ServerVersion.SQL2012:
+                    case ServerVersion.SQL2014:
                         if (type == SQLService.ServiceType.MSSearch ||
                             type == SQLService.ServiceType.msftesql ||
                             type == SQLService.ServiceType.MSSQLServerADHelper ||

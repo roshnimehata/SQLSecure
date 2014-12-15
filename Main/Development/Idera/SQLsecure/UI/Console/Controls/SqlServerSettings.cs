@@ -557,6 +557,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
                             case Sql.ServerVersion.SQL2012:
                                 displayValue = Sql.VersionName.SQL2012;
                                 break;
+                            case Sql.ServerVersion.SQL2014:
+                                displayValue = Sql.VersionName.SQL2014;
+                                break;
                             default:
                                 displayValue = Sql.VersionName.Unsupported;
                                 break;
