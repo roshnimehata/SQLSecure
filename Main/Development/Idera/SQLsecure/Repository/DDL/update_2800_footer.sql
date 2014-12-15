@@ -521,7 +521,7 @@ IF NOT EXISTS ( SELECT  *
 			        (
 			          @metricid, -- metricid - int
 			          N'Access', -- metrictype - nvarchar(32)
-			          N' Unacceptable Database Ownership', -- metricname - nvarchar(256)
+			          N'Unacceptable Database Ownership', -- metricname - nvarchar(256)
 			          N'Determine whether if a database is found with an unacceptable owner', -- metricdescription - nvarchar(1024)
 			          1, -- isuserentered - bit
 			          1, -- ismultiselect - bit
