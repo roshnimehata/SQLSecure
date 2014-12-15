@@ -97,7 +97,7 @@ SQLsecure allows you to define consistent baselines for accessing SQL Server dat
       <ReportKey />
       <ReportText>Is SQL Server below the minimum acceptable version?</ReportText>
       <Severity>1</Severity>
-      <SeverityValues>'11.0.2100','10.50.2500','10.0.5500','9.00.5000','8.00.2039'</SeverityValues>
+      <SeverityValues>'12.0.2000.8','11.0.2100','10.50.2500','10.0.5500','9.00.5000','8.00.2039'</SeverityValues>
     </PolicyMetric>
     <PolicyMetric>
       <MetricId>3</MetricId>

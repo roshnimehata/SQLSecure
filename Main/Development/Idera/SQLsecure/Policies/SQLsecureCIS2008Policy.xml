@@ -285,7 +285,7 @@ Disabled by default.
       <ReportKey>CIS 2.2</ReportKey>
       <ReportText>Is the SQL Server version below the minimum acceptable level? Recommendation: Ensure the Current SQL Server service pack and hotfixes are installed.</ReportText>
       <Severity>1</Severity>
-      <SeverityValues>'11.0.2100','10.50.2500','10.0.5500','9.00.5000'</SeverityValues>
+      <SeverityValues>'12.0.2000.8','11.0.2100','10.50.2500','10.0.5500','9.00.5000'</SeverityValues>
     </PolicyMetric>
     <PolicyMetric>
       <MetricId>3</MetricId>
