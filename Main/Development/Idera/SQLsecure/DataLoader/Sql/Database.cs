@@ -147,7 +147,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         connection.Open();
 
                         // Create the query based on server version.
-                        string query = QueryDb2K;
+                        string query = QueryDb2K;    
                         if (sqlServerVersion >= ServerVersion.SQL2012)
                             query = QueryDb2K12;
                         if (sqlServerVersion < ServerVersion.SQL2012 && sqlServerVersion > ServerVersion.SQL2000)
@@ -164,7 +164,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                 SqlBinary ownersid = rdr.GetSqlBinary(FieldOwnersid);
                                 SqlString ownername = rdr.GetSqlString(FieldOwnername);
                                 SqlBoolean trustworthy = rdr.GetBoolean(FieldTrustworthy);
-                                SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);
+                                SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);   
 
                                 // Create the sid object.
                                 Debug.Assert(!ownersid.IsNull);
@@ -357,9 +357,9 @@ namespace Idera.SQLsecure.Collector.Sql
 
         private const string QueryGetDBFileNames = @"use {0} exec sp_helpfile";
 
-
+        
         private const string QueryDb2K =
-                            @"SELECT name = db.name, dbid = CAST(db.dbid AS int), ownersid = db.sid, ownername = l.loginname, trustworthy = cast(0 as bit)
+                            @"SELECT name = db.name, dbid = CAST(db.dbid AS int), ownersid = db.sid, ownername = l.loginname, trustworthy = cast(0 as bit), isContained=cast( 0 as bit)
                               FROM master.dbo.sysdatabases AS db LEFT OUTER JOIN master.dbo.syslogins AS l 
 	                                    ON (db.sid = l.sid)";
         private const string QueryDb2K5 =

@@ -27,6 +27,17 @@ namespace Idera.SQLsecure.Collector.Sql
                                             " JOIN msdb.dbo.sysjobsteps st ON sj.job_id = st.job_id" +
                                             " WHERE sv.name='{0}'";
 
+        public static string GetJobsQuerySQL2000 = "SELECT  sj.name ," +
+                                            " sj.owner_sid ," +
+                                            " sj.enabled ," +
+                                            " sj.description ," +
+                                            " st.last_run_date ," +
+                                            " st.command ," +
+                                            " st.step_name, " +
+                                            " st.subsystem" +
+                                            " FROM    msdb.dbo.sysjobs sj" +
+                                            " JOIN msdb.dbo.sysjobsteps st ON sj.job_id = st.job_id";
+
         public static string GetProxiesQuery = "SELECT  sp.proxy_id proxyId ," +
                                              "sp.name proxyName," +
                                              "sp.credential_id credentialId," +
@@ -41,6 +52,16 @@ namespace Idera.SQLsecure.Collector.Sql
                                              " JOIN msdb.dbo.syssubsystems sb ON ss.subsystem_id = sb.subsystem_id " +
                                              " JOIN sys.credentials sc ON sc.credential_id=sp.credential_id";
 
+        public static string GetProxiesQuerySQL2000 = "SELECT  NULL proxyId ," +
+                                             "NULL proxyName," +
+                                             "NULL credentialId," +
+                                             "NULL enabled," +
+                                             "NULL usersid," +
+                                             "NULL subsystemid," +
+                                             "NULL subsystem, " +
+                                             "NULL credentialName ," +
+                                             "NULL credentialIdentity " +
+                                             " WHERE 1 = 2 ";
 
         public static string InsertJobsQuery = "INSERT INTO sqlsecure.dbo.sqljob" +
                                                "  ([Name]" +
@@ -109,6 +130,10 @@ namespace Idera.SQLsecure.Collector.Sql
                             // Process each rule to collect the table objects.
 
                             string query = string.Format(SqlJob.GetJobsQuery, server);
+                            if (version == ServerVersion.SQL2000)  
+                            {
+                                query = SqlJob.GetJobsQuerySQL2000;
+                            }
 
                             Debug.Assert(!string.IsNullOrEmpty(query));
 
@@ -214,7 +239,7 @@ namespace Idera.SQLsecure.Collector.Sql
             int snapshotid,
             string server)
         {
-            Debug.Assert(version != ServerVersion.Unsupported);
+            Debug.Assert(version != ServerVersion.Unsupported);  
             Debug.Assert(!string.IsNullOrEmpty(targetConnection));
             Debug.Assert(!string.IsNullOrEmpty(repositoryConnection));
 
@@ -245,6 +270,10 @@ namespace Idera.SQLsecure.Collector.Sql
 
                             string query = SqlJob.GetProxiesQuery;
 
+                            if (version == ServerVersion.SQL2000)  
+                            {
+                                query = SqlJob.GetProxiesQuerySQL2000;
+                            }
                             Debug.Assert(!string.IsNullOrEmpty(query));
 
                             // Query to get the table objects.
@@ -305,7 +334,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 }
                 catch (SqlException ex)
                 {
-                    string strMessage = "Processing sql job proxies  failed";
+                    string strMessage = "Processing sql job proxies  failed";  
                     logX.loggerX.Error("ERROR - " + strMessage, ex);
                     Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnection,
                         snapshotid,
