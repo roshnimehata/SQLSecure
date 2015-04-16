@@ -80,10 +80,10 @@
 	<property name="Build.Official" value="true" unless="${property::exists('Build.Official')}" />
 
 	<!-- Email Properties -->
-	<property name="Email.Server" value="mx.bbstek.com" />
-	<property name="Email.BuildMaster" value="michael.oneal@idera.com" />
-	<property name="Email.Developers" value="michael.oneal@idera.com, robert.wilkinson@idera.com, douglas.watson@idera.com" />
-	<property name="Email.QA" value="michael.oneal@idera.com" />
+	<property name="Email.Server" value="smtp.google.com" />
+	<property name="Email.BuildMaster" value="scott.patterson@idera.com" />
+	<property name="Email.Developers" value="scott.patterson@idera.comm" />
+	<property name="Email.QA" value="scott.patterson@idera.com" />
 	<property name="Email.From" value="${Email.BuildMaster}" />
 	<property name="Email.Success.To" value="${Email.BuildMaster}; ${Email.Developers}; ${Email.QA}"/>
 	<property name="Email.Failure.To" value="${Email.BuildMaster}; ${Email.Developers}"/>
