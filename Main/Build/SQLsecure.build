@@ -173,8 +173,8 @@
 
 	<!-- <property name="SQLsecure.Obfuscate.Output" value="${SQLsecure.Compile.Output}/obfuscated"/> -->
 
-	<property name="SQLsecure.Development.Builds" value="//redhousefs-02/Development/SQLsecure/Builds/Version 2.8"/>
-	<property name="SQLsecure.Development.Archives" value="//redhousefs-02/Development/SQLsecure/Archives/"/>
+	<property name="SQLsecure.Development.Builds" value="//qnap.redhouse.hq/Development/SQLsecure/Builds/Version 2.8"/>
+	<property name="SQLsecure.Development.Archives" value="//qnap.redhouse.hq/Development/SQLsecure/Archives/"/>
 
 	<!-- Perforce Information -->
 	<property name="Perforce.Branch" value="//sqlsecure/main"/>
@@ -187,7 +187,7 @@
 	<property name="Build.StartDate" value="03/01/2012"/>
 	
 	<!-- Build share -->
-	<property name="dir.Development.SQLsecure.Builds" value="\\redhouse.hq\Development\SQLsecure\Builds"/>
+	<property name="dir.Development.SQLsecure.Builds" value="\\qnap.redhouse.hq\Development\SQLsecure\Builds"/>
 
 	<!-- ***************************************************************************** -->
 	<!--                            Build Steps                                        -->
