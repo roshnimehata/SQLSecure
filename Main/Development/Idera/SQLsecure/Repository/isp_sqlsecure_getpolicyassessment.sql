@@ -5474,7 +5474,9 @@ AS
                               declare @usertype nvarchar(20)
                               declare @groupname nvarchar(200)
                               declare @permissions nvarchar(max)
-                              declare @Delimiter nvarchar(10) = ', '
+                              declare @Delimiter nvarchar(10) 
+       
+                              select @Delimiter  = ', '
 
                               declare DatabaseRolesInfoCursor cursor
                               for
