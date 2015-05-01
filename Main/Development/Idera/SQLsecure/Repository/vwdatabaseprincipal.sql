@@ -21,7 +21,7 @@ SELECT DISTINCT
 	dbuser3.name AS altname, 
 	dbuser1.hasaccess, 
 	dbuser1.defaultschemaname,
-	dbuser1.iscontaineduser,
+	dbuser1.IsContainedUser,
 	dbuser1.AuthenticationType
 FROM databaseprincipal AS dbuser1
 	LEFT OUTER JOIN databaseprincipal AS dbuser2 ON (dbuser1.snapshotid = dbuser2.snapshotid AND dbuser1.dbid = dbuser2.dbid AND dbuser1.owner = dbuser2.uid)

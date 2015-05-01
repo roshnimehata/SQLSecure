@@ -403,7 +403,9 @@ namespace Idera.SQLsecure.Collector.Sql
                     }
                     else
                     {
-                        query = @"SELECT
+                        if (version == ServerVersion.SQL2005)
+                        {
+                            query = @"SELECT
 	                                type = 'iASM', 
 	                                owner = a.principal_id,
 	                                schemaid = NULL,  
@@ -413,11 +415,30 @@ namespace Idera.SQLsecure.Collector.Sql
 	                                a.name,
                                     runatstartup = null,
                                     isencypted = null,
-                                       userdefined = CASE a.is_user_defined WHEN 0 THEN 'N' WHEN 1 THEN 'Y' END,
+                                    userdefined = 'N' ,
                                     permission_set=CAST(a.permission_set AS INT) 
                                     , createdate=a.create_date,
                                     modifydate=a.modify_date "
-                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.assemblies a ";
+                                    + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.assemblies a ";
+                        }
+                        else
+                        {
+                            query = @"SELECT
+	                                type = 'iASM', 
+	                                owner = a.principal_id,
+	                                schemaid = NULL,  
+	                                classid = 5,  
+	                                parentobjectid = 0,  
+	                                objectid = a.assembly_id,
+	                                a.name,
+                                    runatstartup = null,
+                                    isencypted = null,
+                                    userdefined = CASE a.is_user_defined WHEN 0 THEN 'N' WHEN 1 THEN 'Y' END,
+                                    permission_set=CAST(a.permission_set AS INT) 
+                                    , createdate=a.create_date,
+                                    modifydate=a.modify_date "
+                                    + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.assemblies a ";
+                        }
                     }
                     break;
 
