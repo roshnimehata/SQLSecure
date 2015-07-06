@@ -5218,7 +5218,7 @@ AS
                                         select
                                             Value
                                         from
-                                            dbo.SplitByDelimiter(@severityvalues,
+                                            dbo.splitbydelimiter(@severityvalues,
                                                               ',')
 
                               insert    into @SysadminUsers

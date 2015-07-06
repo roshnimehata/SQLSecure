@@ -25,7 +25,7 @@ namespace Idera.SQLsecure.UI.Console.SQL
                     av.snapshotid,                          
                     av.servergroupId                       
                 from                                        
-                   SQLSecure.dbo.availabilitygroups av      
+                   SQLsecure.dbo.availabilitygroups av      
                 where                                       
                     av.snapshotid = @snapshotid             
                 order by                                    
@@ -44,7 +44,7 @@ namespace Idera.SQLsecure.UI.Console.SQL
                     av.snapshotid,                          
                     av.servergroupId                       
                 from                                        
-                   SQLSecure.dbo.availabilitygroups av      
+                   SQLsecure.dbo.availabilitygroups av      
                 where                                       
                     av.snapshotid = @snapshotid  
                    and av.groupid =@servergroupId      
@@ -68,8 +68,8 @@ namespace Idera.SQLsecure.UI.Console.SQL
                                                      isnull(ar.createdate,'') createdate,   
                                                           isnull(ar.modifydate,'')   modifydate,
                                                          dp.name                                 
-                                                     from  SQLSecure.dbo.availabilityreplicas ar  
-                                                         left outer join SQLSecure.dbo.databaseprincipal dp
+                                                     from  SQLsecure.dbo.availabilityreplicas ar  
+                                                         left outer join SQLsecure.dbo.databaseprincipal dp
                                                              on ar.snapshotid = dp.snapshotid    
                                                                 and dp.usersid = ar.ownersid     
                                                      where                                       
@@ -105,8 +105,8 @@ namespace Idera.SQLsecure.UI.Console.SQL
                                                          isnull(ar.createdate,'') createdate,   
                                                           isnull(ar.modifydate,'')   modifydate,
                                                          dp.name                                 
-                                                     from  SQLSecure.dbo.availabilityreplicas ar  
-                                                         left outer join SQLSecure.dbo.databaseprincipal dp
+                                                     from  SQLsecure.dbo.availabilityreplicas ar  
+                                                         left outer join SQLsecure.dbo.databaseprincipal dp
                                                              on ar.snapshotid = dp.snapshotid    
                                                                 and dp.usersid = ar.ownersid     
                                                      where                                       
