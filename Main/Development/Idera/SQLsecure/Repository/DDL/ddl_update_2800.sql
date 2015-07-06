@@ -38,7 +38,7 @@ BEGIN
          ADD hasremotepublisher NCHAR(1) NULL
 
          ALTER TABLE dbo.databaseobject
-         ADD PERMISSION_SET  INT NULL,
+         ADD permission_set  INT NULL,
 		 CreateDate DATETIME NULL,
 		 ModifyDate DATETIME NULL
 

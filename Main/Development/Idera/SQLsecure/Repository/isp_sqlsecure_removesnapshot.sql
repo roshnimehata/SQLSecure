@@ -63,9 +63,9 @@ as
 		
 			
 			delete from dbo.sqljob where SnapshotId = @snapshotid
-			delete from dbo.sqljobproxy where SnapshotId = @snapshotid
-			delete from dbo.availabilitygroups where SnapshotId = @snapshotid
-			delete from dbo.availabilityreplicas where SnapshotId = @snapshotid
+			delete from dbo.sqljobproxy where snapshotid = @snapshotid
+			delete from dbo.availabilitygroups where snapshotid = @snapshotid
+			delete from dbo.availabilityreplicas where snapshotid = @snapshotid
 			
 			delete from databaseprincipalpermission where snapshotid = @snapshotid
 			delete from databaseobjectpermission where snapshotid = @snapshotid

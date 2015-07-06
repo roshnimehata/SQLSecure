@@ -4599,12 +4599,12 @@ AS
 													@assessmentid,
 													@metricid,
 													@snapshotid,
-													N'Symmetric key ''' + db.NAME
+													N'Symmetric key ''' + db.name
 													+ N''' was found in system database ',
 													db.dbid,
 													db.type,
 													db.objectid,
-													db.NAME
+													db.name
 												from
 													dbo.databaseobject db
 													join dbo.sqldatabase sd
@@ -4673,11 +4673,11 @@ AS
 													@metricid,
 													@snapshotid,
 													N'User defined assembly with unsafe access  '''
-													+ db.NAME + N''' was found in '+sd.databasename,
+													+ db.name + N''' was found in '+sd.databasename,
 													db.dbid,
 													db.type,
 													db.objectid,
-													db.NAME
+													db.name
 												from
 													dbo.databaseobject db
 													join dbo.sqldatabase sd
@@ -4757,11 +4757,11 @@ AS
 													@metricid,
 													@snapshotid,
 													N'Next contained databases was found  '''
-													+ db.NAME,
+													+ db.name,
 													db.dbid,
 													db.type,
 													db.objectid,
-													db.NAME
+													db.name
 												from
 													dbo.databaseobject db
 													join dbo.sqldatabase sd
@@ -4821,10 +4821,10 @@ AS
 								 begin
 
 							   ;
-									   with users ( objectid, NAME, isOwner, snapshotid, userid, dbid, type )
+									   with users ( objectid, name, isOwner, snapshotid, userid, dbid, type )
 											  as ( select
 													db.objectid,
-													db.NAME,
+													db.name,
 													0 as IsOwner,
 													db.snapshotid,
 													dp.grantee,
@@ -4847,7 +4847,7 @@ AS
 												   union
 												   select
 													db.objectid,
-													db.NAME,
+													db.name,
 													1 as IsOwner,
 													db.snapshotid,
 													db.owner,
@@ -4861,14 +4861,14 @@ AS
 													and runatstartup = 'y'
 													and db.snapshotid = @snapshotid
 												 ),
-											UserRoles ( userId, dbid, userDBName, userDBRole, userLogin, userServerRole, snapshotid )
+											UserRoles ( userId, dbid, userDBname, userDBRole, userLogin, userServerRole, snapshotid )
 											  as ( select
 													m.uid,
 													m.dbid,
 													m.name,
 													r.name,
-													sm.NAME,
-													sr.NAME,
+													sm.name,
+													sr.name,
 													m.snapshotid
 												   from
 													databaseprincipal m
@@ -4901,16 +4901,16 @@ AS
 														@snapshotid,
 														case u.isOwner
 														  when 1
-														  then N'Startup stored procedure ' + u.NAME
+														  then N'Startup stored procedure ' + u.name
 															   + 'are owned by user without sysadmin permissions '
 														  when 0
-														  then N'Startup stored procedure ' + u.NAME
+														  then N'Startup stored procedure ' + u.name
 															   + 'can be executed by user without sysadmin permissions '
 														end,
 														u.dbid,
 														u.type,
 														u.objectid,
-														u.NAME
+														u.name
 													from
 														users u
 													where
@@ -4923,7 +4923,7 @@ AS
 														u.dbid,
 														u.type,
 														u.objectid,
-														u.NAME   
+														u.name   
 
 	
 
@@ -5001,10 +5001,10 @@ AS
 								 begin
 									   if ( @isadmin = 1 ) 
 										  begin
-												declare @lName as varchar(200)
+												declare @lname as varchar(200)
 
 												select
-													@lName = ( select
+													@lname = ( select
 																loginname
 															   from
 																dbo.serverservice
@@ -5024,7 +5024,7 @@ AS
 															null,
 															'Acc',
 															null,
-															swa.NAME
+															swa.name
 														from
 															dbo.serveroswindowsaccount swa
 															join dbo.serveroswindowsgroupmember ss
@@ -5036,10 +5036,10 @@ AS
 														where
 															substring(swa.name,
 																	  charindex('\', swa.name) + 1,
-																	  len(swa.name)) = substring(@lName,
+																	  len(swa.name)) = substring(@lname,
 																					  charindex('\',
-																					  @lName) + 1,
-																					  len(@lName))
+																					  @lname) + 1,
+																					  len(@lname))
 															and swa.snapshotid = @snapshotid
 															and smm.name like '%\Administrators'
 
@@ -5055,7 +5055,7 @@ AS
 															null,
 															'Acc',
 															null,
-															swa.NAME
+															swa.name
 														from
 															dbo.sqljobproxy p
 															join dbo.serveroswindowsaccount swa
@@ -5068,7 +5068,7 @@ AS
 																on ss.snapshotid = smm.snapshotid
 																   and ss.groupsid = smm.sid
 														where
-															p.SubSystem in ( select
+															p.subsystem in ( select
 																				value
 																			 from
 																				#sevrVals )
@@ -5166,9 +5166,9 @@ AS
                                                 on SRM.snapshotid = SPR.snapshotid
                                                    and SRM.principalid = SPR.principalid
                                                    and SPR.type = 'R'
-                                                   and spr.name = 'sysadmin'
+                                                   and SPR.name = 'sysadmin'
                                           where
-                                            SRM.snapshotid = @SnapshotId
+                                            SRM.snapshotid = @snapshotid
                                             and SPU.name = 'distributor_admin' ) 
                                  begin
 
@@ -5183,7 +5183,7 @@ AS
                                        from
                                         dbo.serversnapshot as SS
                                        where
-                                        SS.snapshotid = @SnapshotId  
+                                        SS.snapshotid = @snapshotid
 	
                                        if ( @IsDistributer = 'N' ) 
                                           begin
@@ -5211,7 +5211,7 @@ AS
                                         username nvarchar(128) not null
                                       );
 
-                              declare @SuppressedAccounts table ( Name
+                              declare @SuppressedAccounts table ( name
                                                               nvarchar(200) )
 
                               insert    into @SuppressedAccounts
@@ -5228,7 +5228,7 @@ AS
                                             dbo.serverrolemember as SRM
                                             inner join dbo.serverprincipal as SPU
                                                 on SRM.snapshotid = SPU.snapshotid
-                                                   and SRM.snapshotid = @SnapshotId
+                                                   and SRM.snapshotid = @snapshotid
                                                    and SRM.memberprincipalid = SPU.principalid
                                                    and SPU.type <> 'R'
                                             inner join dbo.serverprincipal as SPR
@@ -5244,14 +5244,14 @@ AS
                                             as WG
                                                 on WGM.snapshotid = WG.snapshotid
                                                    and WGM.groupsid = WG.sid
-                                                   and WG.Name like '%\Administrators'
+                                                   and WG.name like '%\Administrators'
                                         where
                                             ( select
                                                 count(*)
                                               from
                                                 @SuppressedAccounts as sa
                                               where
-                                                SPU.name like sa.Name
+                                                SPU.name like sa.name
                                             ) = 0
 
                               declare SysadminUsersCursor cursor
@@ -5457,13 +5457,13 @@ AS
                                             inner join dbo.sqldatabase as DB
                                                 on DPR.snapshotid = DB.snapshotid
                                                    and DPR.dbid = DB.dbid
-                                                   and DPR.TYPE = 'R'
+                                                   and DPR.type = 'R'
                                             left join @DatabaseRoleUsers as DRU
                                                 on DPR.snapshotid = DRU.snapshotid
                                                    and DPR.dbid = DRU.dbid
                                                    and DPR.uid = DRU.roleid
                                         where
-                                            DPR.snapshotid = @SnapshotId
+                                            DPR.snapshotid = @snapshotid
                                         order by
                                             DB.databasename,
                                             DPR.name
@@ -5648,7 +5648,7 @@ AS
                                                 on WGM.snapshotid = WG.snapshotid
                                                    and WGM.groupsid = WG.sid
                                         where
-                                            SRM.snapshotid = @SnapshotId
+                                            SRM.snapshotid = @snapshotid
                                         order by
                                             SRM.snapshotid
 
@@ -5686,16 +5686,16 @@ AS
                                                 on SP.snapshotid = SRU.snapshotid
                                                    and SP.principalid = SRU.roleprincipalid
                                         where
-                                            SP.snapshotid = @SnapshotId
+                                            SP.snapshotid = @snapshotid
                                         order by
                                             instancename,
                                             rolename
 
-                              declare @InstanceName nvarchar(400)
-                              declare @ServerRoleName nvarchar(128)
-                              declare @ServerUserName nvarchar(128)
+                              declare @Instancename nvarchar(400)
+                              declare @ServerRolename nvarchar(128)
+                              declare @ServerUsername nvarchar(128)
                               declare @ServerUserType nvarchar(20)
-                              declare @WindowsGroupName nvarchar(200)
+                              declare @WindowsGroupname nvarchar(200)
                               declare @ServerUserDisabled nvarchar(3)
 
                               declare ServerRolesInfoCursor cursor
@@ -5711,9 +5711,9 @@ AS
                                         @ServerRolesInfo as SRI
 
                               open ServerRolesInfoCursor
-                              fetch next from ServerRolesInfoCursor into @InstanceName,
-                                    @ServerRoleName, @ServerUserName,
-                                    @ServerUserType, @WindowsGroupName,
+                              fetch next from ServerRolesInfoCursor into @Instancename,
+                                    @ServerRolename, @ServerUsername,
+                                    @ServerUserType, @WindowsGroupname,
                                     @ServerUserDisabled
 
                               select
@@ -5722,15 +5722,15 @@ AS
                                     begin
                             
                                           set @strval = 'SQL Instance: '
-                                              + @InstanceName
+                                              + @Instancename
                                               + '; Server Role: '
-                                              + @ServerRoleName
+                                              + @ServerRolename
 
-                                          if len(isnull(@ServerUserName, '')) <> 0 
+                                          if len(isnull(@ServerUsername, '')) <> 0 
                                              begin
                                                    set @strval = @strval
                                                        + '; User: '
-                                                       + @ServerUserName	                              
+                                                       + @ServerUsername	                              
                                              end                              
 
                                           if len(isnull(@ServerUserType, '')) <> 0 
@@ -5740,11 +5740,11 @@ AS
                                                        + @ServerUserType	                              
                                              end  
 
-                                          if len(isnull(@WindowsGroupName, '')) <> 0 
+                                          if len(isnull(@WindowsGroupname, '')) <> 0 
                                              begin
                                                    set @strval = @strval
                                                        + '; Windows Group: '
-                                                       + @WindowsGroupName	                              
+                                                       + @WindowsGroupname	                              
                                              end  
 
                                           if len(isnull(@ServerUserDisabled,
@@ -5804,11 +5804,11 @@ AS
                                                     )
 																	 
                                           fetch next from
-                                                ServerRolesInfoCursor into @InstanceName,
-                                                @ServerRoleName,
-                                                @ServerUserName,
+                                                ServerRolesInfoCursor into @Instancename,
+                                                @ServerRolename,
+                                                @ServerUsername,
                                                 @ServerUserType,
-                                                @WindowsGroupName,
+                                                @WindowsGroupname,
                                                 @ServerUserDisabled
                                     end
 
@@ -6200,7 +6200,7 @@ AS
 							from dbo.splitbydelimiter(@severityvalues, ',')
 
 							declare @orphanedUsersCount as int
-							declare @orphanedUsersNames as varchar(max)                       
+							declare @orphanedUsersnames as varchar(max)                       
 
 							;WITH OrphanedUsers (dbid, name, uid, type)
 							as
@@ -6228,10 +6228,10 @@ AS
 								name
 							from OrphanedUsers
 
-							;with OrphanedUsersForDb(orphanedUsersCountForDb, orphanedUsersNamesForDb, dbname, dbid)
+							;with OrphanedUsersForDb(orphanedUsersCountForDb, orphanedUsersnamesForDb, dbname, dbid)
 							as(
 								select count(*) as orphanedUsersCount, 
-										STUFF((SELECT N', ' + objectname  FROM #tempdetails c2 where c.databaseid = c2.databaseid FOR XML PATH(N'')), 1, 2, N'') as orphanedUsersNamesForDb,
+										STUFF((SELECT N', ' + objectname  FROM #tempdetails c2 where c.databaseid = c2.databaseid FOR XML PATH(N'')), 1, 2, N'') as orphanedUsersnamesForDb,
 										sdb.databasename,
 										c.databaseid
 								FROM #tempdetails c
@@ -6239,7 +6239,7 @@ AS
 								group by c.databaseid, sdb.databasename
 							)
 							select @orphanedUsersCount =  sum(orphanedUsersCountForDb),
-									@orphanedUsersNames = STUFF((SELECT N'; ' + orphanedUsersNamesForDb + N' in ' + dbname FROM OrphanedUsersForDb FOR XML PATH(N'')), 1, 2, N'')  
+									@orphanedUsersnames = STUFF((SELECT N'; ' + orphanedUsersnamesForDb + N' in ' + dbname FROM OrphanedUsersForDb FOR XML PATH(N'')), 1, 2, N'')  
 									from OrphanedUsersForDb  
 
 								  if ( @orphanedUsersCount is null or @orphanedUsersCount = 0 ) 
@@ -6248,7 +6248,7 @@ AS
 										@metricval = N'There is no Orphaned users.' 
 								  else 
 									 begin 
-										set @metricval = cast(@orphanedUsersCount as nvarchar) + N' orphaned users found: ' + @orphanedUsersNames + '.'	
+										set @metricval = cast(@orphanedUsersCount as nvarchar) + N' orphaned users found: ' + @orphanedUsersnames + '.'	
 										insert  into policyassessmentdetail
 										select
 											policyid,

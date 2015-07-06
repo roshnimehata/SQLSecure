@@ -1123,8 +1123,8 @@ namespace Idera.SQLsecure.Collector.Sql
 
 
         #region SQL Queries
-        private const string NonQueryDatabaseInsert = 
-                    @"INSERT INTO SQLsecure.dbo.sqldatabase (dbid, snapshotid, databasename, owner, guestenabled, trustworthy, available, status, hashkey, isaudited,iscontained)
+        private const string NonQueryDatabaseInsert =
+                    @"INSERT INTO SQLsecure.dbo.sqldatabase (dbid, snapshotid, databasename, owner, guestenabled, trustworthy, available, status, hashkey, isaudited,IsContained)
                       VALUES (@dbid, @snapshotid, @databasename, @owner, @guestenabled, @trustworthy, @available, @status, @hashkey, @isaudited,@iscontained)";
         private const string NonQueryObjectInsert =
                     @"INSERT INTO SQLsecure.dbo.databaseobject (snapshotid, dbid, classid, parentobjectid, objectid, schemaid, type, owner, name, hashkey)
