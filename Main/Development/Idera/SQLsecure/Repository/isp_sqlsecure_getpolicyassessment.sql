@@ -4994,7 +4994,7 @@ AS
 											dbo.sqljob
 										  where
 											SubSystem in ( select
-															value
+															Value
 														   from
 															#sevrVals )
 											and SnapshotId = @snapshotid ) 
