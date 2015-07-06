@@ -53,7 +53,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 	                                    altname, 
 	                                    hasaccess, 
 	                                    defaultschemaname ,
-                                        iscontaineduser,
+                                        IsContainedUser,
                                         AuthenticationType
                                     FROM SQLsecure.dbo.vwdatabaseprincipal
                                     WHERE snapshotid = @snapshotid AND dbid = @dbid AND type IN ('S', 'U', 'G')";
@@ -70,7 +70,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 	                                    altname, 
 	                                    hasaccess, 
 	                                    defaultschemaname,
-                                        iscontaineduser,
+                                        IsContainedUser,
                                         AuthenticationType
                                     FROM SQLsecure.dbo.vwdatabaseprincipal
                                     WHERE snapshotid = @snapshotid AND dbid = @dbid AND uid = @uid AND type IN ('S', 'U', 'G')";
