@@ -26,7 +26,7 @@ namespace Idera.SQLsecure.Core.Accounts
     /// </summary>
     public class Account
     {
-
+        private const int OS_USER_DISABLED_FLAG = 0x0002;
 
         #region Fields & Enums
         private static LogX logX = new LogX("Idera.SQLsecure.Core.Accounts.Account");
