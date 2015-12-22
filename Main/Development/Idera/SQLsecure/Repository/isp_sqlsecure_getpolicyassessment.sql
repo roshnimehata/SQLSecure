@@ -78,6 +78,10 @@ AS
 		print '@policyid='+convert(nvarchar,@policyid)+', @assessmentid='+convert(nvarchar,isnull(@assessmentid,-1))+', @registeredserverid='+convert(nvarchar,isnull(@registeredserverid,-1))
 		print '@alertsonly='+convert(nvarchar,isnull(@alertsonly,-1))+', @usebaseline='+convert(nvarchar,isnull(@usebaseline,-1))+', @rundate='+convert(nvarchar,isnull(@rundate,-1))
 	end
+	else
+	begin
+		SET NOCOUNT ON
+	end
 
 	exec @isadmin = [isp_sqlsecure_isadmin]
 
@@ -3111,7 +3115,7 @@ AS
 									begin
 										select @intval2 = charindex('%', @strval)
 										if (@intval2 < @intval)		-- this item contains a wildcard
-											select @sql = @sql + ' or lower(name) not like ' + substring(@strval,1,@intval)
+											select @sql = @sql + ' and lower(name) not like ' + substring(@strval,1,@intval)
 											select @strval = substring(@strval,@intval+2, len(@strval)-(@intval+1))
 											select @intval = charindex(''',''',@strval)
 									end
@@ -3119,7 +3123,7 @@ AS
 									begin
 										select @intval2 = charindex('%', @strval)
 										if (@intval2 > 0)		-- this item contains a wildcard
-											select @sql = @sql + ' or lower(name) not like ' + @strval
+											select @sql = @sql + ' and lower(name) not like ' + @strval
 									end
 								end
 								select @sql = @sql + N' order by name'

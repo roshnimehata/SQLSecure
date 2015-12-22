@@ -20,6 +20,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         //private const string DynamicSqlVersion2008R2Code = "Left(version,4) = '10.5'";
         private const string DynamicSqlVersion2012Code = "Left(version,3) = '11.'";
         private const string DynamicSqlVersion2014Code = "Left(version,3) = '12.'";
+        private const string DynamicSqlVersion2016Code = "Left(version,3) = '14.'";
 
 
         private const string TITLE_POLICY = "Policy";
@@ -60,6 +61,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             //radioButton2008R2.Tag = DynamicSqlVersion2008R2Code;
             radioButton2012.Tag = DynamicSqlVersion2012Code;
             radioButton2014.Tag = DynamicSqlVersion2014Code;
+            radioButton2016.Tag = DynamicSqlVersion2016Code;
 
             groupBoxMainServerSelection.Text = string.Format(GROUPBOXHEADING_FMT, TITLE_NAME);
 
@@ -85,6 +87,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         break;
                     case DynamicSqlVersion2014Code:
                         radioButton2014.Checked = true;
+                        break;
+                    case DynamicSqlVersion2016Code:
+                        radioButton2016.Checked = true;
                         break;
                     default:
                         radioButtonAll.Checked = true;
@@ -114,6 +119,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 //radioButton2008R2.Enabled = false;
                 radioButton2012.Enabled = false;
                 radioButton2014.Enabled = false;
+                radioButton2016.Enabled = false;
                 radioButtonManual.Enabled = false;
                 ultraListViewServers.Enabled = false;
             }
@@ -127,29 +133,18 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     }
                 }
 
-                if (m_policy == null ||
+                bool isEnabled = (m_policy == null ||
                     (m_policy.IsSystemPolicy &&
-                    m_policy.IsDynamic))
-                {
-                    radioButtonAll.Enabled = false;
-                    radioButton2000.Enabled = false;
-                    radioButton2005.Enabled = false;
-                    radioButton2008.Enabled = false;
-                    radioButton2014.Enabled = false;
-                    //radioButton2008R2.Enabled = false;
-                    radioButton2012.Enabled = false;
-                    radioButtonManual.Enabled = false;
-                }
-                else
-                {
+                                m_policy.IsDynamic)) ? false : m_policy.IsPolicy;
+
                     radioButtonAll.Enabled =
                         radioButton2000.Enabled =
                         radioButton2005.Enabled =
                         radioButton2008.Enabled =
-                        radioButton2014.Enabled =
                         //radioButton2008R2.Enabled =
-                        radioButton2012.Enabled = m_policy.IsPolicy;
-                }
+                        radioButton2012.Enabled =
+                        radioButton2014.Enabled =
+                        radioButton2016.Enabled = isEnabled;
             }
         }
 
@@ -190,6 +185,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             else if (radioButton2014.Checked)
             {
                 servers.Add(radioButton2014.Text);
+            }
+            else if (radioButton2016.Checked)
+            {
+                servers.Add(radioButton2016.Text);
             }
             return servers;
         }
@@ -264,6 +263,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             else if (radioButton2014.Checked)
             {
                 dynamicSelection = (string)radioButton2014.Tag;
+            }
+            else if (radioButton2016.Checked)
+            {
+                dynamicSelection = (string)radioButton2016.Tag;
             }
         }
 

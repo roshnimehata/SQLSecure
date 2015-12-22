@@ -12,7 +12,8 @@ CREATE procedure [dbo].[isp_sqlsecure_report_allobjectswithpermissions]
 	@rundate datetime = null,	--defaults to all
 	@policyid int = 1,			--defaults to all
 	@usebaseline bit = 0,		--defaults to false
-	@serverName nvarchar(400)
+	@serverName nvarchar(400),
+	@databaseName nvarchar(4000) 	--we don't use nvarchar(max) here for sQL Server 2000 support
 )
 AS
    -- <Idera SQLsecure version and copyright>
@@ -52,6 +53,7 @@ WHERE	e.registeredserverid IN (SELECT registeredserverid FROM #tmpservers)
 		AND a.objecttype = c.objecttype
 		AND d.snapshotid = a.snapshotid
 		AND d.dbid = a.dbid
+		AND (@databaseName = '%' OR d.databasename in (select LTRIM(Value) from dbo.splitbydelimiter(@databaseName, ',')))
 
 DROP TABLE #tmpservers
 

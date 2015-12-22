@@ -231,6 +231,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         protected const string SqlParamUsebaseline = @"@usebaseline";
         protected const string SqlParamServerName = @"@servername";
         protected const string SqlParamServerName2 = @"@serverName";    // This is because of inconsistencies in SP parameter names and should be fixed asap
+        protected const string SqlParamDatabaseName = @"@databaseName";
         protected const string SqlParamServer = @"@connectionname";
         protected const string SqlParamRunDate = @"@rundate";
         protected const string SqlParamLoginType = @"@logintype";

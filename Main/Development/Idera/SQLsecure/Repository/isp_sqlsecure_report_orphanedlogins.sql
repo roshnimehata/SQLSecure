@@ -25,7 +25,7 @@ CREATE TABLE #tmpservers (registeredserverid int)
 INSERT #tmpservers
     EXEC [dbo].[isp_sqlsecure_getpolicymemberlist]
          @policyid = @policyid  
-
+((
 SELECT	d.connectionname, a.name,
 		[type] = CASE WHEN a.type = 'G' THEN 'Group' ELSE 'User' END,
 		-- if there are any resolved accounts in the domain
@@ -42,6 +42,26 @@ WHERE	a.snapshotid IN (SELECT snapshotid FROM dbo.getsnapshotlist(@rundate, @use
 		AND a.type IN ('G', 'U')	-- Principal type is Windows Group or User
 		AND b.state = 'S'			-- State is suspect
 		AND c.windowsgroupname IS NULL	-- Account is not OS controlled well-known
+)
+union
+(
+SELECT	d.connectionname, b.name, 
+		[type] = CASE WHEN b.type != 'User' and b.type != 'Unknown' THEN 'Group' ELSE b.type END,
+		-- if there are any resolved accounts in the domain
+		--		then this account is likely an orphan
+		--		otherwise the entire domain is suspect
+		[state] = CASE WHEN EXISTS (SELECT snapshotid FROM windowsaccount WHERE substring([name], 0, charindex('\', [name])) = substring(b.name, 0, charindex('\',b.name)) AND [state] = 'G') THEN 'Orphan' ELSE 'Suspect' END
+FROM	serveroswindowsaccount b 
+		
+		LEFT JOIN ancillarywindowsgroup c ON b.snapshotid = c.snapshotid AND b.name = c.windowsgroupname
+		INNER JOIN serversnapshot d ON b.snapshotid = d.snapshotid
+WHERE	b.snapshotid IN (SELECT snapshotid FROM dbo.getsnapshotlist(@rundate, @usebaseline))
+		AND d.registeredserverid IN (SELECT registeredserverid FROM #tmpservers)
+		AND UPPER(d.connectionname) LIKE UPPER(@serverName)
+		AND b.type IN ('WellknownGroup', 'User', 'Unknown', 'LocalGroup')	-- Principal type is Windows Group or User
+		AND b.state = 'S'			-- State is suspect
+		AND c.windowsgroupname IS NULL	-- Account is not OS controlled well-known
+))
 
 ORDER BY d.connectionname, a.name
 

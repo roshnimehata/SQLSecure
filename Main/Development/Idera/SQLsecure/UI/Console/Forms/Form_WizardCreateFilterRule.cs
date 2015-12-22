@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Idera.SQLsecure.UI.Console.Data;
 
 namespace Idera.SQLsecure.UI.Console.Forms
 {
@@ -156,7 +157,10 @@ Description : ";
             // Setup wizard start page.
             _wizard.SelectedPage = _page_Introduction;
 
-            filterSelection1.Initialize(null, Sql.SqlHelper.ParseVersion(m_RegisteredServer.Version));
+            Idera.SQLsecure.UI.Console.Sql.ServerVersion parsedVersion = Sql.SqlHelper.ParseVersion(m_RegisteredServer.Version);
+            ServerInfo serverInfo = new ServerInfo(parsedVersion, m_RegisteredServer.SQLServerAuthType == "W", 
+                m_RegisteredServer.SqlLogin, m_RegisteredServer.SqlPassword, m_RegisteredServer.FullConnectionName);
+            filterSelection1.Initialize(null, serverInfo);
 
             // Others page.
         }

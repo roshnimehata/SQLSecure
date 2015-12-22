@@ -287,9 +287,9 @@ default.</ReportText>
       <MetricId>6</MetricId>
       <IsEnabled>true</IsEnabled>
       <ReportKey>CIS 1.9.1</ReportKey>
-      <ReportText>Is Guest user access available on the SQL Server? Remove the guest user from all databases except master and tempdb.</ReportText>
+      <ReportText>Is Guest user access available on the SQL Server? Remove the guest user from all databases except msdb, master and tempdb.</ReportText>
       <Severity>1</Severity>
-      <SeverityValues>'master','tempdb'</SeverityValues>
+      <SeverityValues>'msdb','master','tempdb'</SeverityValues>
     </PolicyMetric>
     <PolicyMetric>
       <MetricId>7</MetricId>

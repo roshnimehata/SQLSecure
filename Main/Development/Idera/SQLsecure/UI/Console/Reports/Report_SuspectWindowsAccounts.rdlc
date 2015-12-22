@@ -80,7 +80,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="This report shows all the unresolved Windows Accounts that have Server Logins."</Value>
+            <Value>="This report shows all the unresolved Windows Accounts that have Server Logins or Server Files Security Permissions."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
@@ -116,7 +116,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="The Windows Accounts listed in this report may be orphaned logins.  Review the list and consider removing any SQL Logins that are no longer in Active Directory. If the accounts exist in Active Directory and you wish to remove them from future reports, configure data collection with the proper credentials that can verify the accounts in Active Directory. "</Value>
+            <Value>="The Windows Accounts listed in this report may be orphaned logins.  Review the list and consider removing any SQL Logins or Server Files Security Permissions that are no longer in Active Directory. If the accounts exist in Active Directory and you wish to remove them from future reports, configure data collection with the proper credentials that can verify the accounts in Active Directory. "</Value>
           </Textbox>
         </ReportItems>
         <Top>1.0625in</Top>
@@ -816,7 +816,7 @@ Function setServerFilter(s As String)
 End Function</Code>
   <Width>10in</Width>
   <InteractiveHeight>11in</InteractiveHeight>
-  <Description>Show all the unresolved Windows Accounts that have Server Logins.</Description>
+  <Description>Show all the unresolved Windows Accounts that have Server Logins or Server Files Security Permissions.</Description>
   <Language>=User!Language</Language>
   <PageFooter>
     <ReportItems>

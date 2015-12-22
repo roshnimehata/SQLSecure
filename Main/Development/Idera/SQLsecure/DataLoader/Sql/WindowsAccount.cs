@@ -96,6 +96,7 @@ namespace Idera.SQLsecure.Collector.Sql
             {
                 dr[WindowsAccountDataTable.ParamName] = account.SamPath;
             }
+            dr[WindowsAccountDataTable.ParamEnabled] = account.Enabled;
             dtAccount.Rows.Add(dr);
         }
 

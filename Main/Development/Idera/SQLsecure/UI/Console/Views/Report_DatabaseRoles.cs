@@ -62,6 +62,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             //start off with the default value
             _comboBox_Server.Items.Add(Utility.Constants.ReportSelect_AllServers);
             _comboBox_Server.Text = Utility.Constants.ReportSelect_AllServers;
+
+            _comboBox_Level.SelectedIndex = 0;
         }
 
         #endregion
@@ -71,6 +73,9 @@ namespace Idera.SQLsecure.UI.Console.Views
         // Main Report        
         private const string QueryDataSource = @"SQLsecure.dbo.isp_sqlsecure_report_databaseroles";
         private const string DataSourceName = @"ReportsDataset_isp_sqlsecure_report_databaseroles";
+        private const string QueryDataSourceUser = @"SQLsecure.dbo.isp_sqlsecure_report_databaseroles_user";
+        private const string ReportEmbeddedResource = @"Idera.SQLsecure.UI.Console.Reports.Report_DatabaseRoles.rdlc";
+        private const string ReportEmbeddedResourceUser = @"Idera.SQLsecure.UI.Console.Reports.Report_DatabaseRolesUser.rdlc";
         
         #endregion
 
@@ -110,7 +115,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                     connection.Open();
 
                     // Setup stored procedure
-                    SqlCommand cmd = new SqlCommand(QueryDataSource, connection);
+                    SqlCommand cmd = new SqlCommand(_comboBox_Level.SelectedIndex == 0 ? QueryDataSource : QueryDataSourceUser, connection);
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     // Build parameters
@@ -133,6 +138,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                     rds.Name = DataSourceName;
                     rds.Value = ds.Tables[0];
                     _reportViewer.LocalReport.DataSources.Clear();
+                    _reportViewer.LocalReport.ReportEmbeddedResource = _comboBox_Level.SelectedIndex == 0 ? ReportEmbeddedResource : ReportEmbeddedResourceUser;
                     _reportViewer.LocalReport.DataSources.Add(rds);
                 }
             }

@@ -9,6 +9,7 @@ using System.Diagnostics;
 
 using Idera.SQLsecure.UI.Console.Sql;
 using Infragistics.Win.UltraWinListView;
+using Idera.SQLsecure.UI.Console.Data;
 
 namespace Idera.SQLsecure.UI.Console.Controls
 {    
@@ -20,7 +21,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private bool m_isDirty = false;
         private bool m_isInitialized = false;
         private bool m_isListViewUpdating = false;
-        private Sql.ServerVersion m_Version;
+        private ServerInfo m_ServerInfo = null;
 
         private DataCollectionFilter m_Filter;
         private Dictionary<RuleObjectType, FilterObject> m_FilterObjects;
@@ -47,10 +48,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
         #endregion
 
         #region Public Methods
-        public void Initialize(DataCollectionFilter filter, Sql.ServerVersion version)
+        public void Initialize(DataCollectionFilter filter, ServerInfo serverInfo)
         {
 
-            m_Version = version;
+            m_ServerInfo = serverInfo;
 
             CreateFilterObjects();
 
@@ -127,10 +128,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         {
                             if (m_FilterObjects.TryGetValue(filterObject.ObjectType, out filterObject))
                             {
+                                FilterObject dbFilter = (FilterObject)ultraListViewFilters.Items[0].Tag;
                                 bool isDirty;
                                 filterObject.MatchStringList =
-                                    Forms.Form_NameMatching.Process(filterObject.ObjectTypeDisplay,
-                                                                    filterObject.MatchStringList, out isDirty);
+                                    Forms.Form_NameMatching.Process(filterObject, dbFilter, m_ServerInfo, out isDirty);
                                 if (isDirty)
                                 {
                                     m_isDirty = true;
@@ -260,7 +261,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             filterObj = new FilterObject(RuleObjectType.Function, RuleScope.All, matchAll);
             m_FilterObjects.Add(RuleObjectType.Function, filterObj);
 
-            if (m_Version > ServerVersion.SQL2000 && m_Version != ServerVersion.Unsupported)
+            if (m_ServerInfo.version > ServerVersion.SQL2000 && m_ServerInfo.version != ServerVersion.Unsupported)
             {
                 // Database Principles
                 filterObj = new FilterObject(RuleObjectType.User, RuleScope.All, matchAll);

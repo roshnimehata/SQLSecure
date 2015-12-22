@@ -957,7 +957,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
             m_Filter = null;
             m_Filter = new Sql.DataCollectionFilter(m_Connection, "Default rule", "Rule created when the server was registered");
 
-            filterSelection1.Initialize(m_Filter, Sql.SqlHelper.ParseVersion(m_Version));
+            ServerVersion parsedVersion = Sql.SqlHelper.ParseVersion(m_Version);
+            Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedVersion, radioButton_WindowsAuth.Checked, 
+                textBox_SQLWindowsUser.Text, textBox_SQLWindowsPassword.Text, m_Connection);
+            filterSelection1.Initialize(m_Filter, serverInfo);
         }
 
         private void _page_DefineFilters_BeforeMoveNext(object sender, CancelEventArgs e)

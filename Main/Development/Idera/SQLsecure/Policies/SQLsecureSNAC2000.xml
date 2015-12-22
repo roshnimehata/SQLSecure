@@ -53,9 +53,9 @@
       <MetricId>6</MetricId>
       <IsEnabled>true</IsEnabled>
       <ReportKey>SNAC p. 29</ReportKey>
-      <ReportText>Is Guest user access available on the SQL Server? Recommendation: It is recommended that the guest user be deleted from all databases, except the master and tempdb databases.</ReportText>
+      <ReportText>Is Guest user access available on the SQL Server? Recommendation: It is recommended that the guest user be deleted from all databases, except the msdb, master and tempdb databases.</ReportText>
       <Severity>1</Severity>
-      <SeverityValues>'master','tempdb'</SeverityValues>
+      <SeverityValues>'msdb','master','tempdb'</SeverityValues>
     </PolicyMetric>
     <PolicyMetric>
       <MetricId>7</MetricId>

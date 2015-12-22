@@ -53,9 +53,9 @@
       <MetricId>6</MetricId>
       <IsEnabled>true</IsEnabled>
       <ReportKey>DM1709 \ V0002451</ReportKey>
-      <ReportText>Is Guest user access available on the SQL Server? Description:  Found guest user IDs. The guest user ID in a database allows access by all login IDs. If the user ID guest exists in the database, all logins not mapped or aliased to a user ID are allowed access to the database as guest. The guest account cannot be removed from the master or tempdb database. The guest user ID will not exist in other databases.</ReportText>
+      <ReportText>Is Guest user access available on the SQL Server? Description:  Found guest user IDs. The guest user ID in a database allows access by all login IDs. If the user ID guest exists in the database, all logins not mapped or aliased to a user ID are allowed access to the database as guest. The guest account cannot be removed from the msdb, master or tempdb database. The guest user ID will not exist in other databases.</ReportText>
       <Severity>2</Severity>
-      <SeverityValues>'master','tempdb'</SeverityValues>
+      <SeverityValues>'msdb','master','tempdb'</SeverityValues>
 	</PolicyMetric>
     <PolicyMetric>
       <MetricId>7</MetricId>

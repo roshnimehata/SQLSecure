@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
@@ -53,11 +53,11 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.21in</Height>
+              <Height>0.25in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox11">
+                    <Textbox Name="Textbox48">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -73,8 +73,7 @@
                           <Style />
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>textbox11</rd:DefaultName>
-                      <ZIndex>5</ZIndex>
+                      <rd:DefaultName>Textbox48</rd:DefaultName>
                       <Style>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -82,12 +81,13 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
                     <Subreport Name="subreport1">
-                      <ReportName>SubReport_Logins</ReportName>
+                      <ReportName>SubReport_LoginsUser</ReportName>
                       <Parameters>
                         <Parameter Name="rundate">
                           <Value>=Code.getRunDate(Parameters!rundate.Value, false)</Value>
@@ -101,23 +101,76 @@
                         <Parameter Name="server">
                           <Value>=Fields!connectionname.Value</Value>
                         </Parameter>
-                        <Parameter Name="policyid">
-                          <Value>=Parameters!policyid.Value</Value>
-                        </Parameter>
-                        <Parameter Name="usebaseline">
-                          <Value>=Parameters!usebaseline.Value</Value>
-                        </Parameter>
-                        <Parameter Name="level">
-                          <Value>=Parameters!level.Value</Value>
-                        </Parameter>
                       </Parameters>
                       <MergeTransactions>true</MergeTransactions>
                       <KeepTogether>true</KeepTogether>
                       <ZIndex>4</ZIndex>
                       <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </Subreport>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
+            <TablixRow>
+              <Height>0.25in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox42">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style>
+                                <FontSize>9pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox42</rd:DefaultName>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                    <rd:Selected>true</rd:Selected>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Subreport Name="subreport2">
+                      <ReportName>SubReport_UsersPermissions</ReportName>
+                      <Parameters>
+                        <Parameter Name="rundate">
+                          <Value>=Code.getRunDate(Parameters!rundate.Value, false)</Value>
+                        </Parameter>
+                        <Parameter Name="user">
+                          <Value>=Parameters!user.Value</Value>
+                        </Parameter>
+                        <Parameter Name="usertype">
+                          <Value>=Parameters!usertype.Value</Value>
+                        </Parameter>
+                        <Parameter Name="permissiontype">
+                          <Value>=Parameters!permissiontype.Value</Value>
+                        </Parameter>
+                        <Parameter Name="server">
+                          <Value>=Fields!connectionname.Value</Value>
+                        </Parameter>
+                        <Parameter Name="Expand_All">
+                          <Value>=Parameters!Expand_All.Value</Value>
+                        </Parameter>
+                      </Parameters>
+                      <KeepTogether>true</KeepTogether>
+                      <Style>
                         <FontSize>9pt</FontSize>
                       </Style>
                     </Subreport>
@@ -155,37 +208,33 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Subreport Name="subreport2">
-                      <ReportName>SubReport_UsersPermissions</ReportName>
-                      <Parameters>
-                        <Parameter Name="rundate">
-                          <Value>=Code.getRunDate(Parameters!rundate.Value, false)</Value>
-                        </Parameter>
-                        <Parameter Name="user">
-                          <Value>=Parameters!user.Value</Value>
-                        </Parameter>
-                        <Parameter Name="usertype">
-                          <Value>=Parameters!usertype.Value</Value>
-                        </Parameter>
-                        <Parameter Name="permissiontype">
-                          <Value>=Parameters!permissiontype.Value</Value>
-                        </Parameter>
-                        <Parameter Name="server">
-                          <Value>=Fields!connectionname.Value</Value>
-                        </Parameter>
-                        <Parameter Name="Expand_All">
-                          <Value>=Parameters!Expand_All.Value</Value>
-                        </Parameter>
-                      </Parameters>
+                    <Textbox Name="Textbox53">
+                      <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox53</rd:DefaultName>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
-                    </Subreport>
+                    </Textbox>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -281,39 +330,59 @@
               </Group>
               <TablixMembers>
                 <TablixMember>
-                  <KeepWithGroup>After</KeepWithGroup>
                   <KeepTogether>true</KeepTogether>
                 </TablixMember>
                 <TablixMember>
-                  <Group Name="table1_Details_Group">
-                    <DataElementName>Detail</DataElementName>
+                  <Group Name="loginname">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!loginname.Value</GroupExpression>
+                    </GroupExpressions>
                   </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!loginname.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
                   <TablixMembers>
-                    <TablixMember />
-                    <TablixMember />
+                    <TablixMember>
+                      <KeepWithGroup>After</KeepWithGroup>
+                    </TablixMember>
+                    <TablixMember>
+                      <KeepWithGroup>After</KeepWithGroup>
+                    </TablixMember>
+                    <TablixMember>
+                      <Group Name="table1_Details_Group">
+                        <DataElementName>Detail</DataElementName>
+                      </Group>
+                      <TablixMembers>
+                        <TablixMember />
+                      </TablixMembers>
+                      <Visibility>
+                        <Hidden>true</Hidden>
+                      </Visibility>
+                      <DataElementName>Detail_Collection</DataElementName>
+                      <DataElementOutput>Output</DataElementOutput>
+                      <KeepTogether>true</KeepTogether>
+                    </TablixMember>
                   </TablixMembers>
                   <Visibility>
                     <Hidden>=IIF(Parameters!Expand_All.Value = False, True, False)</Hidden>
                     <ToggleItem>ServerName</ToggleItem>
                   </Visibility>
-                  <DataElementName>Detail_Collection</DataElementName>
-                  <DataElementOutput>Output</DataElementOutput>
-                  <KeepTogether>true</KeepTogether>
                 </TablixMember>
               </TablixMembers>
             </TablixMember>
             <TablixMember>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ReportsDataset_isp_sqlsecure_report_getuserpermissions</DataSetName>
         <Top>1.0625in</Top>
-        <Height>0.74in</Height>
+        <Height>1.03in</Height>
         <Width>10in</Width>
         <Visibility>
-          <Hidden>=IIF(Count(Fields!connectionname.Value, "ReportsDataset_isp_sqlsecure_report_getuserpermissions") &gt; 0 And Parameters!level.Value = "Member", False, True)</Hidden>
+          <Hidden>=IIF(Count(Fields!connectionname.Value, "ReportsDataset_isp_sqlsecure_report_getuserpermissions") &gt; 0, False, True)</Hidden>
         </Visibility>
         <DataElementOutput>NoOutput</DataElementOutput>
         <Style>
@@ -329,15 +398,9 @@
           <Parameter Name="connectionname">
             <Value>=Parameters!serverName.Value</Value>
           </Parameter>
-          <Parameter Name="usebaseline">
-            <Value>=Parameters!usebaseline.Value</Value>
-          </Parameter>
-          <Parameter Name="policyid">
-            <Value>=Parameters!policyid.Value</Value>
-          </Parameter>
         </Parameters>
         <KeepTogether>true</KeepTogether>
-        <Top>3in</Top>
+        <Top>2.125in</Top>
         <Left>2.6875in</Left>
         <Height>1.375in</Height>
         <Width>7.27in</Width>
@@ -465,409 +528,11 @@
           </BottomBorder>
         </Style>
       </Rectangle>
-      <Tablix Name="table2">
-        <TablixBody>
-          <TablixColumns>
-            <TablixColumn>
-              <Width>0.1in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>9.9in</Width>
-            </TablixColumn>
-          </TablixColumns>
-          <TablixRows>
-            <TablixRow>
-              <Height>0.22in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="ServerName2">
-                      <CanGrow>true</CanGrow>
-                      <ToggleImage>
-                        <InitialState>=IIF(Parameters!Expand_All.Value = False, False, True)</InitialState>
-                      </ToggleImage>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>="SQL Server: " + Fields!connectionname.Value</Value>
-                              <Style>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <ZIndex>6</ZIndex>
-                      <Style>
-                        <BackgroundColor>Silver</BackgroundColor>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                    <ColSpan>2</ColSpan>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell />
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.25in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox48">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox48</rd:DefaultName>
-                      <Style>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Subreport Name="subreport4">
-                      <ReportName>SubReport_Logins</ReportName>
-                      <Parameters>
-                        <Parameter Name="rundate">
-                          <Value>=Code.getRunDate(Parameters!rundate.Value, False)</Value>
-                        </Parameter>
-                        <Parameter Name="user">
-                          <Value>=Parameters!user.Value</Value>
-                        </Parameter>
-                        <Parameter Name="usertype">
-                          <Value>=Parameters!usertype.Value</Value>
-                        </Parameter>
-                        <Parameter Name="server">
-                          <Value>=Fields!connectionname.Value</Value>
-                        </Parameter>
-                        <Parameter Name="level">
-                          <Value>=Parameters!level.Value</Value>
-                        </Parameter>
-                        <Parameter Name="usebaseline">
-                          <Value>=Parameters!usebaseline.Value</Value>
-                        </Parameter>
-                        <Parameter Name="policyid">
-                          <Value>=Parameters!policyid.Value</Value>
-                        </Parameter>
-                      </Parameters>
-                      <MergeTransactions>true</MergeTransactions>
-                      <KeepTogether>true</KeepTogether>
-                      <ZIndex>4</ZIndex>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                        <FontSize>9pt</FontSize>
-                      </Style>
-                    </Subreport>
-                    <rd:Selected>true</rd:Selected>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.25in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox42">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox42</rd:DefaultName>
-                      <Style>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Subreport Name="subreport5">
-                      <ReportName>SubReport_UsersPermissions</ReportName>
-                      <Parameters>
-                        <Parameter Name="rundate">
-                          <Value>=Code.getRunDate(Parameters!rundate.Value, False)</Value>
-                        </Parameter>
-                        <Parameter Name="user">
-                          <Value>=Parameters!user.Value</Value>
-                        </Parameter>
-                        <Parameter Name="usertype">
-                          <Value>=Parameters!usertype.Value</Value>
-                        </Parameter>
-                        <Parameter Name="permissiontype">
-                          <Value>=Parameters!permissiontype.Value</Value>
-                        </Parameter>
-                        <Parameter Name="server">
-                          <Value>=Fields!connectionname.Value</Value>
-                        </Parameter>
-                        <Parameter Name="Expand_All">
-                          <Value>=Parameters!Expand_All.Value</Value>
-                        </Parameter>
-                      </Parameters>
-                      <KeepTogether>true</KeepTogether>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
-                    </Subreport>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.21in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox15">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox3</rd:DefaultName>
-                      <ZIndex>1</ZIndex>
-                      <Style>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox53">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox53</rd:DefaultName>
-                      <Style>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-            <TablixRow>
-              <Height>0.1in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox16">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox4</rd:DefaultName>
-                      <ZIndex>3</ZIndex>
-                      <Style>
-                        <Border>
-                          <Color>#006699</Color>
-                          <Width>5pt</Width>
-                        </Border>
-                        <TopBorder>
-                          <Style>Solid</Style>
-                        </TopBorder>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox17">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox7</rd:DefaultName>
-                      <ZIndex>2</ZIndex>
-                      <Style>
-                        <Border>
-                          <Color>#006699</Color>
-                          <Width>5pt</Width>
-                        </Border>
-                        <TopBorder>
-                          <Style>Solid</Style>
-                        </TopBorder>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-              </TablixCells>
-            </TablixRow>
-          </TablixRows>
-        </TablixBody>
-        <TablixColumnHierarchy>
-          <TablixMembers>
-            <TablixMember />
-            <TablixMember />
-          </TablixMembers>
-        </TablixColumnHierarchy>
-        <TablixRowHierarchy>
-          <TablixMembers>
-            <TablixMember>
-              <Group Name="table1_Group4">
-                <GroupExpressions>
-                  <GroupExpression>=Fields!connectionname.Value</GroupExpression>
-                </GroupExpressions>
-              </Group>
-              <TablixMembers>
-                <TablixMember>
-                  <KeepTogether>true</KeepTogether>
-                </TablixMember>
-                <TablixMember>
-                  <Group Name="loginname">
-                    <GroupExpressions>
-                      <GroupExpression>=Fields!loginname.Value</GroupExpression>
-                    </GroupExpressions>
-                  </Group>
-                  <SortExpressions>
-                    <SortExpression>
-                      <Value>=Fields!loginname.Value</Value>
-                    </SortExpression>
-                  </SortExpressions>
-                  <TablixMembers>
-                    <TablixMember>
-                      <KeepWithGroup>After</KeepWithGroup>
-                    </TablixMember>
-                    <TablixMember>
-                      <KeepWithGroup>After</KeepWithGroup>
-                    </TablixMember>
-                    <TablixMember>
-                      <Group Name="table1_Details_Group2">
-                        <DataElementName>Detail</DataElementName>
-                      </Group>
-                      <TablixMembers>
-                        <TablixMember />
-                      </TablixMembers>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                      </Visibility>
-                      <DataElementName>Detail_Collection</DataElementName>
-                      <DataElementOutput>Output</DataElementOutput>
-                      <KeepTogether>true</KeepTogether>
-                    </TablixMember>
-                  </TablixMembers>
-                  <Visibility>
-                    <Hidden>=IIF(Parameters!Expand_All.Value = False, True, False)</Hidden>
-                    <ToggleItem>ServerName2</ToggleItem>
-                  </Visibility>
-                </TablixMember>
-              </TablixMembers>
-            </TablixMember>
-            <TablixMember>
-              <KeepTogether>true</KeepTogether>
-            </TablixMember>
-          </TablixMembers>
-        </TablixRowHierarchy>
-        <DataSetName>ReportsDataset_isp_sqlsecure_report_getuserpermissions</DataSetName>
-        <Top>1.86in</Top>
-        <Height>1.03in</Height>
-        <Width>10in</Width>
-        <ZIndex>4</ZIndex>
-        <Visibility>
-          <Hidden>=IIF(Count(Fields!connectionname.Value, "ReportsDataset_isp_sqlsecure_report_getuserpermissions") &gt; 0 And Parameters!level.Value = "User", False, True)</Hidden>
-        </Visibility>
-        <DataElementOutput>NoOutput</DataElementOutput>
-        <Style>
-          <BackgroundColor>White</BackgroundColor>
-        </Style>
-      </Tablix>
     </ReportItems>
-    <Height>4.5in</Height>
+    <Height>3.625in</Height>
     <Style />
   </Body>
-  <Width>10in</Width>
+  <Width>11in</Width>
   <Page>
     <PageHeader>
       <Height>1.75in</Height>
@@ -889,7 +554,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>User Permissions</Value>
+                  <Value>=Parameters!ReportTitle.Value</Value>
                   <Style>
                     <FontSize>16pt</FontSize>
                     <FontWeight>Bold</FontWeight>
@@ -917,7 +582,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Code.displayRunDate(Parameters!rundate.Value)</Value>
+                  <Value>=Parameters!UserRange.Value</Value>
                   <Style>
                     <FontStyle>Italic</FontStyle>
                   </Style>
@@ -1003,7 +668,7 @@
               <rd:DefaultName>textbox5</rd:DefaultName>
               <Left>5.8125in</Left>
               <Height>0.1875in</Height>
-              <Width>3.9375in</Width>
+              <Width>4.125in</Width>
               <ZIndex>2</ZIndex>
               <Style />
             </Textbox>
@@ -1026,7 +691,7 @@
               <Top>0.1875in</Top>
               <Left>5.8125in</Left>
               <Height>0.1875in</Height>
-              <Width>3.9375in</Width>
+              <Width>4.125in</Width>
               <ZIndex>3</ZIndex>
               <Style />
             </Textbox>
@@ -1243,7 +908,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>Copyright © 2005-2012 Idera, Inc. </Value>
+                  <Value>Copyright © 2005-2014 Idera, Inc. </Value>
                   <Style>
                     <FontSize>8pt</FontSize>
                     <TextDecoration>Underline</TextDecoration>
@@ -1310,7 +975,7 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
     <PageHeight>8.5in</PageHeight>
     <PageWidth>11in</PageWidth>
     <InteractiveHeight>11in</InteractiveHeight>
-    <InteractiveWidth>8.27in</InteractiveWidth>
+    <InteractiveWidth>8.5in</InteractiveWidth>
     <LeftMargin>0.5in</LeftMargin>
     <RightMargin>0.25in</RightMargin>
     <TopMargin>0.5in</TopMargin>
@@ -1323,7 +988,6 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
   <DataSources>
     <DataSource Name="DataSource1">
       <DataSourceReference>SQLsecure Data Source</DataSourceReference>
-      <rd:SecurityType>None</rd:SecurityType>
       <rd:DataSourceID>66e1ba6d-1315-48bc-8759-94d491b1430d</rd:DataSourceID>
     </DataSource>
   </DataSources>
@@ -1343,12 +1007,6 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
           </QueryParameter>
           <QueryParameter Name="@usertype">
             <Value>=Parameters!usertype.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@policyid">
-            <Value>=Parameters!policyid.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@usebaseline">
-            <Value>=Parameters!usebaseline.Value</Value>
           </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
@@ -1376,41 +1034,6 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="ListServers">
-      <Query>
-        <DataSourceName>DataSource1</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="@policyid">
-            <Value>=Parameters!policyid.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandType>StoredProcedure</CommandType>
-        <CommandText>dbo.isp_sqlsecure_report_getauditedserverlist</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="server">
-          <DataField>server</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
-    <DataSet Name="Policies">
-      <Query>
-        <DataSourceName>DataSource1</DataSourceName>
-        <CommandType>StoredProcedure</CommandType>
-        <CommandText>isp_sqlsecure_report_getpolicylist</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="policyid">
-          <DataField>policyid</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="policyname">
-          <DataField>policyname</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
   </DataSets>
   <ReportParameters>
     <ReportParameter Name="rundate">
@@ -1421,24 +1044,6 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
         </Values>
       </DefaultValue>
       <Prompt>Use current data as of:</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="policyid">
-      <DataType>Integer</DataType>
-      <DefaultValue>
-        <DataSetReference>
-          <DataSetName>Policies</DataSetName>
-          <ValueField>policyid</ValueField>
-        </DataSetReference>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>Policy:</Prompt>
-      <ValidValues>
-        <DataSetReference>
-          <DataSetName>Policies</DataSetName>
-          <ValueField>policyid</ValueField>
-          <LabelField>policyname</LabelField>
-        </DataSetReference>
-      </ValidValues>
     </ReportParameter>
     <ReportParameter Name="permissiontype">
       <DataType>String</DataType>
@@ -1463,14 +1068,13 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
     </ReportParameter>
     <ReportParameter Name="serverName">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
       <Prompt>Server:</Prompt>
-      <ValidValues>
-        <DataSetReference>
-          <DataSetName>ListServers</DataSetName>
-          <ValueField>server</ValueField>
-          <LabelField>server</LabelField>
-        </DataSetReference>
-      </ValidValues>
     </ReportParameter>
     <ReportParameter Name="usertype">
       <DataType>String</DataType>
@@ -1493,30 +1097,6 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
         </ParameterValues>
       </ValidValues>
     </ReportParameter>
-    <ReportParameter Name="user">
-      <DataType>String</DataType>
-      <Prompt>Login:</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="usebaseline">
-      <DataType>Boolean</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>False</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>Use Baseline:</Prompt>
-      <ValidValues>
-        <ParameterValues>
-          <ParameterValue>
-            <Value>True</Value>
-          </ParameterValue>
-          <ParameterValue>
-            <Value>False</Value>
-          </ParameterValue>
-        </ParameterValues>
-      </ValidValues>
-    </ReportParameter>
     <ReportParameter Name="Expand_All">
       <DataType>Boolean</DataType>
       <DefaultValue>
@@ -1524,7 +1104,7 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
           <Value>True</Value>
         </Values>
       </DefaultValue>
-      <Prompt>Expand All:</Prompt>
+      <Prompt>Expand All</Prompt>
       <ValidValues>
         <ParameterValues>
           <ParameterValue>
@@ -1536,26 +1116,19 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
         </ParameterValues>
       </ValidValues>
     </ReportParameter>
-    <ReportParameter Name="level">
+    <ReportParameter Name="user">
       <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>Member</Value>
-        </Values>
-      </DefaultValue>
-      <Prompt>Level:</Prompt>
-      <ValidValues>
-        <ParameterValues>
-          <ParameterValue>
-            <Value>Member</Value>
-            <Label>Member</Label>
-          </ParameterValue>
-          <ParameterValue>
-            <Value>User</Value>
-            <Label>User</Label>
-          </ParameterValue>
-        </ParameterValues>
-      </ValidValues>
+      <Prompt>Login:</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ReportTitle">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportTitle</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="UserRange">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>UserRange</Prompt>
     </ReportParameter>
   </ReportParameters>
   <Code>Function isValidDate(d as string) as Boolean
@@ -1636,7 +1209,7 @@ Function setDatabaseFilter(db As String)
 End Function
 
 Function setServerFilter(s As String)
-	If s.ToUpper() = "ALL SERVERS IN POLICY" Then
+	If s.ToUpper() = "ALL SERVERS" Then
 		Return "*"
 	Else
 		Return s
@@ -1660,7 +1233,7 @@ End Function
 
 Function permissionTypeToString(t As String) As String
 	If t = "X" Then
-		Return "Explicit"
+		Return "Assigned"
 	Else
 		Return "Effective"
 	End If
@@ -1673,7 +1246,7 @@ Function replaceSymbol(s As String)
 End Function
 
 Function replaceALL(s As String)
-	If s.ToUpper() = "ALL SERVERS IN POLICY" Then
+	If s.ToUpper() = "ALL SERVERS" Then
 		Return "%"
 	Else
 		Return s
@@ -1701,7 +1274,7 @@ Function GetSIDFromUser(UserName)
 End Function</Code>
   <EmbeddedImages>
     <EmbeddedImage Name="warning">
-            <MIMEType>image/png</MIMEType>
+      <MIMEType>image/png</MIMEType>
       <ImageData>iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAKnRFWHRDcmVhdGlvbiBUaW1lAE1pIDUgTXJ6IDIwMDMgMDE6MTY6MzYgKzAxMDAtSfIGAAAAB3RJTUUH0wMFDBUVe3K1WAAAAAlwSFlzAAAK8AAACvABQqw0mAAAAARnQU1BAACxjwv8YQUAAAY5SURBVHja7VdpbFRVFP7ue286a2emtGXa0tYyBbtZCnSBUiihYAHFkBYkwWKiRENCJFFBAkYBIyQ1oAiNUf8oSlxwIVETTYDwg9VoQDaJsZEECqXrtLNvb/G896YtBWNbRGOiNzm9b+7cd77vfPecc6fAf32wu3np9D4YfdfxsijiMUVGCjicttuwuXYDzv8jBH7Ygy/hKGnMr9kIg9GCztav0Xp8vz8zFVXT1uGXsfjixgr+23toiHGmhuJFuyEYrZCkGFyFSzCpZmWy14+WsfobE4GOj2C+1oldebPWs3jMC0n0QZEDiId7kFE0H4opef7ZFjT8bQQ6vXjBke122zMqgXg/gUegKGFACUGKeXB/7Sp2gwiefAXme06g/QPc54tgY+6MZyHGeiArEQJWLQoFEVLDD2t6JtLy3e6YCc/fcwK9UexML5hvFUxOAo2BEzh62QtO7gLHieQpDolUmVxTD38Qm75vRvZo/Aqj2dT2KeraPVheUNIERQpC9F2C0vYOrlyXEZeBqYW0yVWPmLkAvBHIq5hq6zp/7jVabRrJ94hleGUPhJsKzuZUPllqz6wi6YMInNmABzc50dZrh9VsRkYaj9MtlyFlPwqJM4JPknHqw8/kFJM4d+Z6nPhLRxBOxlqzM73UnjMbIoEjdBHHLpEq3Va4xvFIdTJERDO+ODkeyewyFBYmlQIoqJvK3ejGm6ceB3/XBK4dQHq/F1uzKtZQkvUDchS83IveAA+jkYcgCJqZjAKpkQxm8JGkEcgIwOV2IiXbNt07GavvmkB/P3Y4J5aPM9om
 QBGp3Mg5BANFroCnWQU3GAzgeAFZGXE6UAGMhYhEmCrFhymLJzK/D9vPbINzzASuHkC5P4zVWVOaKLu9OrhacklOVBbLYFzSoAKMGTGjtA8RzkYew/Qd7eVCsDgkuGc4xreL2DomAgrF0tqFvRllDTx5owU1+phGQuTscBcBaXZG0eskjAYeJdP8iMoW2k4KqCQoF2QxgOIFNsQkrD3WjKJRE/jxfawyJ9mq0/IXUvQBWokPmdp8jBPw0Bw/VYSBqCZhdoUHlAj0HNWiZ3xEI6GqwZGVPWxO8vRi96gIXNwLe6ADzXmVTzFRDCQiT4CzuKZGjMvFivoeSHISrZtQN6uLEjRFB+d0cE4lwZMKcgj5M+MwpKL+yBYsHZFAUMFLztzCLFtqEfX68C3Ri9rMWIT2ZKJqThhWC4eYaEL9vDaE4lYCDmoEOD6qgaskOIGOTRJRvQrsZg92fbwFxlvxhtXoz2+jwOPFvsKFmwXtoiEDoroKLKY9M6YrYjZ6qQf0ITc3gpp5PYiEHUPgnEpAbdcSGYFQu7OkAD4PxsWvI3jg1FBzGtYJj+/Et6nFixdnPbCUbrdeuulCtBrWjYW1EtNmFUCIwum4QN6jCIZcRJYAVQU06VVwmcholUnrNBOSQtm9fx18qU4ULdmB9mFHcL4Fj8QVw6LsKSsIPESVINFqwphETMXEZ1GLjLVdQsfRPnhOhGDtu6FHLtAR8XF61sF5Mo1EIkx1Lm+kHPOieVgOnKTfeFc78Eb+3LVMEsXEmUvDjemmOkTXr/jmkA9FTxeibE0VvjuaAovYpx0T44hcInL1qrv9simpoz82NH3yHKoHCXS34pmUnLxJqTk1kCVVdnnIGDUdjYSsEVE4GTalE3sOuuBKMyAz3YC3viqh0iRynKTJrRrP6Q3lj0btE+A8fXh1kAAl6cqJFU3UPkOJtwZMHmaMyNBNA95mQu10EdG4hZqMBeWlPiAJ2vcD0SsYkv72kVmgHc9sIPF7
 gJIjzeLMoVkcDswUil7RZlUJjQTlQNDixutbzqH6sAKOumHjsjaIsnrgkgbK3ZHedw5ZUnv7gAIyzvZc+4nuGRM5YGDa27oKup9bVCG2InW/gLkYy5dJaFzeR0WarPrQurb2wgiX/MXD2r6Dgwo4bNh64dC7C6jek12TyrRlHoksoieW0JXRwTLyrkrMKBsjBjt95ukHSIhuR0VPvD+PGhcO0T82n+OKWcCLw4Q6sg1l3X5KDAk1tMgrA1FQZLKib5QHmoei1wYJopDTuCaMuk9OHGDi1EgVkZ5lRRdOXeunWI447NjetBc9+H/8G8bvWyiEPl+STWMAAAAASUVORK5CYII=</ImageData>

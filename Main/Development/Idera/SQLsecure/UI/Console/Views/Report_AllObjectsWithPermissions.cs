@@ -63,6 +63,9 @@ namespace Idera.SQLsecure.UI.Console.Views
             //start off with the default value
             _comboBox_Server.Items.Add(Utility.Constants.ReportSelect_AllServers);
             _comboBox_Server.Text = Utility.Constants.ReportSelect_AllServers;
+            loadDatabasesList();
+
+            _comboBox_Level.SelectedIndex = 0;
         }
 
         #endregion
@@ -71,7 +74,10 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         // Main Report        
         private const string QueryDataSource = @"SQLsecure.dbo.isp_sqlsecure_report_allobjectswithpermissions";
+        private const string QueryDataSourceUser = @"SQLsecure.dbo.isp_sqlsecure_report_allobjectswithpermissions_user";
         private const string DataSourceName = @"ReportsDataset_isp_sqlsecure_report_allobjectswithpermissions";
+        private const string ReportEmbeddedResource = @"Idera.SQLsecure.UI.Console.Reports.Report_AllObjectsWithPermissions.rdlc";
+        private const string ReportEmbeddedResourceUser = @"Idera.SQLsecure.UI.Console.Reports.Report_AllObjectsWithPermissionsUser.rdlc";
 
         #endregion
 
@@ -113,6 +119,19 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             logX.loggerX.Info(@"Retrieve data for report All Objects With Permissions");
 
+            string databaseName = allserversvalue;
+            if (!_checkBox_allDatabases.Checked)
+            {
+                databaseName = string.Empty;
+                for (int i = 0; i < _listBox_database.Items.Count; i++)
+                {
+                    if (_listBox_database.GetSelected(i))
+                    {
+                        databaseName += (databaseName != string.Empty ? "," : "") + _listBox_database.Items[i].ToString();
+                    }
+                }
+            }
+
             try
             {
                 using (SqlConnection connection = new SqlConnection(Program.gController.Repository.ConnectionString))
@@ -121,7 +140,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                     connection.Open();
 
                     // Setup stored procedure
-                    SqlCommand cmd = new SqlCommand(QueryDataSource, connection);
+                    SqlCommand cmd = new SqlCommand(_comboBox_Level.SelectedIndex == 0 ? QueryDataSource : QueryDataSourceUser, connection);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandTimeout = SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry();
 
@@ -130,11 +149,13 @@ namespace Idera.SQLsecure.UI.Console.Views
                     SqlParameter paramPolicyid = new SqlParameter(SqlParamPolicyid, m_policyid);
                     SqlParameter paramServerName = new SqlParameter(SqlParamServerName2, getServerName(_comboBox_Server.Text));
                     SqlParameter paramUseBaseline = new SqlParameter(SqlParamUsebaseline, m_useBaseline);
+                    SqlParameter paramDatabaseName = new SqlParameter(SqlParamDatabaseName, databaseName);
 
                     cmd.Parameters.Add(paramRunDate);
                     cmd.Parameters.Add(paramPolicyid);
                     cmd.Parameters.Add(paramServerName);
                     cmd.Parameters.Add(paramUseBaseline);
+                    cmd.Parameters.Add(paramDatabaseName);
 
                     // Get data
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -145,6 +166,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                     rds.Name = DataSourceName;
                     rds.Value = ds.Tables[0];
                     _reportViewer.LocalReport.DataSources.Clear();
+                    _reportViewer.LocalReport.ReportEmbeddedResource = _comboBox_Level.SelectedIndex == 0 ? ReportEmbeddedResource : ReportEmbeddedResourceUser;
                     _reportViewer.LocalReport.DataSources.Add(rds);
                 }
             }
@@ -202,9 +224,60 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private void _comboBox_Server_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            loadDatabasesList();
             checkSelections();
         }
 
+        private void loadDatabasesList()
+        {
+            m_databasesListProcessing = true;
+            _checkBox_allDatabases.Checked = true;
+            _listBox_database.Items.Clear();
+            //_listBox_database.Items.Add(Utility.Constants.ReportSelect_AllDatabases);
+            //_listBox_database.SetSelected(0, true);
+            if (_comboBox_Server.Text != Utility.Constants.ReportSelect_AllServers)
+            {
+                List<Sql.Database> databases = Sql.Database.GetServerDatabases(_comboBox_Server.Text);
+                foreach (Sql.Database db in databases)
+                {
+                    _listBox_database.Items.Add(db.Name);
+                }
+                _checkBox_allDatabases.Enabled = true;
+            }
+            else
+            {
+                _checkBox_allDatabases.Enabled = false;
+            }
+            _listBox_database.Enabled = false;
+            m_databasesListProcessing = false;
+        }
+
         #endregion
+
+        private bool m_databasesListProcessing = false;
+
+        private void _listBox_database_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!m_databasesListProcessing)
+            {
+                m_databasesListProcessing = true;
+                _checkBox_allDatabases.Checked = false;
+                m_databasesListProcessing = false;
+            }
+        }
+
+        private void _checkBox_allDatabases_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!m_databasesListProcessing)
+            {
+                m_databasesListProcessing = true;
+                _listBox_database.Enabled = !_checkBox_allDatabases.Checked;
+                for (int i = 0; i < _listBox_database.Items.Count; i++)
+                {
+                    _listBox_database.SetSelected(i, !_checkBox_allDatabases.Checked);
+                }
+                m_databasesListProcessing = false;
+            }
+        }
     }
 }

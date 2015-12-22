@@ -362,6 +362,13 @@ namespace Idera.SQLsecure.Collector
         #region Main
         static void Main(string[] args)
         {
+            //for manual run (for developers)
+            /*args = new string[4];
+            args[0] = "-TargetInstance";
+            args[1] = "SS_SQL_SECURE\\MSSQLSERVER2012";
+            args[2] = "-Repository";
+            args[3] = "SS_SQL_SECURE\\MSSQLSERVER2014";*/
+
             string targetName = string.Empty;
             bool isOK = true;
             bool needToWriteFailedSnapshot = false;

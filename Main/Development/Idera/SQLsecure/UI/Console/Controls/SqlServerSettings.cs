@@ -560,6 +560,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
                             case Sql.ServerVersion.SQL2014:
                                 displayValue = Sql.VersionName.SQL2014;
                                 break;
+                            case Sql.ServerVersion.SQL2016:
+                                displayValue = Sql.VersionName.SQL2016;
+                                break;
                             default:
                                 displayValue = Sql.VersionName.Unsupported;
                                 break;

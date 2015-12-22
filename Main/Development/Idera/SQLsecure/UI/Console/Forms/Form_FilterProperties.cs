@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Idera.SQLsecure.UI.Console.Utility;
+using Idera.SQLsecure.UI.Console.Data;
 
 namespace Idera.SQLsecure.UI.Console.Forms
 {
@@ -15,7 +16,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         #region Fields
 
         private Sql.DataCollectionFilter m_Filter;
-        private Sql.ServerVersion m_Version;
+        private ServerInfo m_ServerInfo;
         private List<string> m_FiltersInListView;
         private bool m_IsEditAllowed;
         private TabControl m_HiddenPagesTabControl = new TabControl();
@@ -50,7 +51,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
 
             // TODO: handle read only
-            filterSelection1.Initialize(m_Filter, m_Version);
+            filterSelection1.Initialize(m_Filter, m_ServerInfo);
 
         }
 
@@ -98,19 +99,19 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         public Form_FilterProperties(
                 Sql.DataCollectionFilter filter,
-                Sql.ServerVersion version,
+                ServerInfo serverInfo,
                 List<string> filtersInListView,
                 bool isEditAllowed
             )
         {
             Debug.Assert(filter != null);
-            Debug.Assert(version != Sql.ServerVersion.Unsupported);
+            Debug.Assert(serverInfo.version != Sql.ServerVersion.Unsupported);
 
             InitializeComponent();
 
             // Initialize the fields.
             m_Filter = filter;
-            m_Version = version;
+            m_ServerInfo = serverInfo;
             m_FiltersInListView = filtersInListView;
             m_IsEditAllowed = isEditAllowed;
 
@@ -135,15 +136,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         public static DialogResult Process(
                 Sql.DataCollectionFilter filter,
-                Sql.ServerVersion version,
+                ServerInfo serverInfo,
                 List<string> filtersInListView,
                 bool isEditAllowed
             )
         {
             Debug.Assert(filter != null);
-            Debug.Assert(version != Sql.ServerVersion.Unsupported);
+            Debug.Assert(serverInfo.version != Sql.ServerVersion.Unsupported);
 
-            Form_FilterProperties form = new Form_FilterProperties(filter, version, filtersInListView, isEditAllowed);
+            Form_FilterProperties form = new Form_FilterProperties(filter, serverInfo, filtersInListView, isEditAllowed);
             return form.ShowDialog();
         }
 

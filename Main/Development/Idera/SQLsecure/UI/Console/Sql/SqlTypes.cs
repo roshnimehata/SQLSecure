@@ -27,6 +27,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         SQL2008R2,
         SQL2012,
         SQL2014,
+        SQL2016,
         Unsupported
     }
     public struct VersionName
@@ -37,6 +38,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public const string SQL2008R2 = @"SQL Server 2008 R2";
         public const string SQL2012 = @"SQL Server 2012";
         public const string SQL2014 = @"SQL Server 2014";
+        public const string SQL2016 = @"SQL Server 2016";
         public const string Unsupported = @"Unknown version";
     }
     public class ServicePack
@@ -86,6 +88,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
         {
             public static string[] Builds = new string[] { @"2000" };
             public static string[] BuildNames = new string[] { string.Empty };
+        }
+        public class SQL2016
+        {
+            public static string[] Builds = new string[] { @"700" };
+            public static string[] BuildNames = new string[] { "CTP3" };
         }
     }
 
@@ -1143,6 +1150,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         internal const string Sql2008R2VerPrefix = @"10.50.";
         internal const string Sql2012VerPrefix = @"11";
         internal const string Sql2014VerPrefix = @"12";
+        internal const string Sql2016VerPrefix = @"13";
 
         #endregion
 

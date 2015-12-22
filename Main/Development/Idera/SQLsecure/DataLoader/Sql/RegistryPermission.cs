@@ -209,6 +209,11 @@ namespace Idera.SQLsecure.Collector.Sql
         {
             get { return m_SQLVersionEnum == Sql.ServerVersion.SQL2014; }
         }
+        private bool Is2016
+        {
+            get { return m_SQLVersionEnum == Sql.ServerVersion.SQL2016; }
+        }
+
         public int NumOSObjectsWrittenToRepository
         {
             get { return m_OSObjectCount; }
@@ -687,7 +692,11 @@ namespace Idera.SQLsecure.Collector.Sql
                             }
                             else if (Is2014)
                             {
-                                regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server Native Client 11.0";
+                                regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server Native Client 12.0";
+                            }
+                            else if (Is2016)
+                            {
+                                regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server Native Client 13.0";
                             }
                             if (!string.IsNullOrEmpty(regSubKey))
                             {
@@ -718,6 +727,10 @@ namespace Idera.SQLsecure.Collector.Sql
                             else if (Is2014)
                             {
                                 regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server 2014 Redist";
+                            }
+                            else if (Is2016)
+                            {
+                                regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server 2016 Redist";
                             }
                             if (!string.IsNullOrEmpty(regSubKey))
                             {

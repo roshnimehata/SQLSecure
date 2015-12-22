@@ -88,6 +88,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             _comboBox_PermissionType.Items.Add(PermissionTypeEffective);
             _comboBox_PermissionType.SelectedItem = PermissionTypeExplicit;
             m_permissionType = Utility.Permissions.Type.Explicit;
+
+            _comboBox_Level.SelectedIndex = 0;
         }
 
         #endregion
@@ -96,6 +98,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         // Main Report
         private const string QueryDataSource = @"SQLsecure.dbo.isp_sqlsecure_report_getuserpermissions";
+        private const string QueryDataSourceUser = @"SQLsecure.dbo.isp_sqlsecure_report_getuserpermissions_user";
         private const string DataSourceName = @"ReportsDataset_isp_sqlsecure_report_getuserpermissions";
 
         // Sub-Reports
@@ -109,6 +112,9 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private const string PermissionTypeExplicit = @"Assigned";
         private const string PermissionTypeEffective = @"Effective";
+
+        private const string ReportEmbeddedResource = @"Idera.SQLsecure.UI.Console.Reports.Report_UsersPermissions.rdlc";
+        private const string ReportEmbeddedResourceUser = @"Idera.SQLsecure.UI.Console.Reports.Report_UsersPermissionsUser.rdlc";
 
         #endregion
 
@@ -147,6 +153,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             switch (e.ReportPath)
             {
                 case "SubReport_Logins":
+                case "SubReport_LoginsUser":
 
                     // This is the same dataset that the primary report uses, so just pass it again
                     // The full dataset is passed since it already contains all the data on the first run 
@@ -260,7 +267,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                     connection.Open();
 
                     // Setup stored procedure
-                    SqlCommand cmd = new SqlCommand(QueryDataSource, connection);
+                    SqlCommand cmd = new SqlCommand(_comboBox_Level.SelectedIndex == 0 ? QueryDataSource : QueryDataSourceUser, connection);
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     // Build parameters
@@ -286,6 +293,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                     rds.Name = DataSourceName;
                     rds.Value = m_userPermissions = ds.Tables[0].DefaultView;
                     _reportViewer.LocalReport.DataSources.Clear();
+                    _reportViewer.LocalReport.ReportEmbeddedResource = _comboBox_Level.SelectedIndex == 0 ? ReportEmbeddedResource : ReportEmbeddedResourceUser;
                     _reportViewer.LocalReport.DataSources.Add(rds);
                 }
 
