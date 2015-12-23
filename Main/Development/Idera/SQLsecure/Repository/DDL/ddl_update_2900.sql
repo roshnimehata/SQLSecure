@@ -22,16 +22,18 @@ BEGIN
 END
 else
 Begin
+	BEGIN TRANSACTION
 	ALTER TABLE dbo.[windowsaccount]
 	ADD [enabled] [bit] NOT NULL CONSTRAINT [DF_windowsaccount_enabled]  DEFAULT ((1))
 
+	DECLARE @SQL as varchar(4000)
+	SET @SQL ='
 	ALTER VIEW [dbo].[vwwindowsgroupmembers]
 	AS
 	SELECT DISTINCT a.snapshotid, a.sid, a.type, a.name, a.state, a.hashkey, b.groupsid
 	FROM         dbo.windowsaccount AS a INNER JOIN
-	                      dbo.windowsgroupmember AS b ON a.snapshotid = b.snapshotid AND a.sid = b.groupmember
-
+	                      dbo.windowsgroupmember AS b ON a.snapshotid = b.snapshotid AND a.sid = b.groupmember'
+	EXEC(@SQL)
+    	COMMIT
 end
 GO	
-
-
