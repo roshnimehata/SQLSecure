@@ -7,7 +7,7 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[isp_sqlsec
 drop procedure [dbo].[isp_sqlsecure_report_getuserpermissions_user]
 GO
 
-CREATE PROCEDURE [dbo].[isp_sqlsecure_report_getuserpermissions]
+CREATE PROCEDURE [dbo].[isp_sqlsecure_report_getuserpermissions_user]
 (
 	@user nvarchar(400),
 	@server nvarchar(400),
