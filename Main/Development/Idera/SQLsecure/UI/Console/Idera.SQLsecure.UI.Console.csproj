@@ -141,9 +141,7 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.SqlServer.Smo, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="Microsoft.SqlServer.Smo, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -1216,10 +1214,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report_ActivityHistory.rdlc" />
     <EmbeddedResource Include="Reports\Report_AllObjectsWithPermissions.rdlc" />
+    <EmbeddedResource Include="Reports\Report_AllObjectsWithPermissionsUser.rdlc" />
     <EmbeddedResource Include="Reports\Report_AuditedServers.rdlc" />
     <EmbeddedResource Include="Reports\Report_CrossServerLoginCheck.rdlc" />
     <EmbeddedResource Include="Reports\Report_DatabaseChaining.rdlc" />
     <EmbeddedResource Include="Reports\Report_DatabaseRoles.rdlc" />
+    <EmbeddedResource Include="Reports\Report_DatabaseRolesUser.rdlc" />
     <EmbeddedResource Include="Reports\Report_Filters.rdlc" />
     <EmbeddedResource Include="Reports\Report_GuestEnabledDatabases.rdlc" />
     <EmbeddedResource Include="Reports\Report_MailVulnerability.rdlc" />
@@ -1232,8 +1232,10 @@
     <EmbeddedResource Include="Reports\Report_SystemAdministratorVulnerability.rdlc" />
     <EmbeddedResource Include="Reports\Report_Users.rdlc" />
     <EmbeddedResource Include="Reports\Report_UsersPermissions.rdlc" />
+    <EmbeddedResource Include="Reports\Report_UsersPermissionsUser.rdlc" />
     <EmbeddedResource Include="Reports\Report_VulnerableFixedRoles.rdlc" />
     <EmbeddedResource Include="Reports\SubReport_Logins.rdlc" />
+    <EmbeddedResource Include="Reports\SubReport_LoginsUser.rdlc" />
     <EmbeddedResource Include="Reports\SubReport_ServersUsedSummary.rdlc" />
     <EmbeddedResource Include="Reports\SubReport_UsersPermissions.rdlc" />
     <EmbeddedResource Include="Views\Report_Users.resx">
