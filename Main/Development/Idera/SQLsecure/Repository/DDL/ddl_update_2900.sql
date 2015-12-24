@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------- */
-/* Schema changes for SQLsecure 2.8 schema version 2800                   */
+/* Schema changes for SQLsecure 2.9 schema version 2900                   */
 /* ---------------------------------------------------------------------- */
 
 SET QUOTED_IDENTIFIER ON
