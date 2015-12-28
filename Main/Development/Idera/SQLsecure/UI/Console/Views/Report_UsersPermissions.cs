@@ -75,8 +75,6 @@ namespace Idera.SQLsecure.UI.Console.Views
             instructions.AppendFormat(warningformat, Utility.Constants.ReportWarning_Resources);
             _label_Instructions.Text = instructions.ToString();
 
-            _reportViewer.LocalReport.SubreportProcessing += new SubreportProcessingEventHandler(SubreportProcessingEventHandler);
-
             _button_RunReport.Enabled = false;
 
             //start off with some default values
@@ -292,7 +290,10 @@ namespace Idera.SQLsecure.UI.Console.Views
                     ReportDataSource rds = new ReportDataSource();
                     rds.Name = DataSourceName;
                     rds.Value = m_userPermissions = ds.Tables[0].DefaultView;
+                    _reportViewer.Reset();
                     _reportViewer.LocalReport.DataSources.Clear();
+                    _reportViewer.LocalReport.SubreportProcessing += new SubreportProcessingEventHandler(SubreportProcessingEventHandler);
+                    _reportViewer.LocalReport.EnableHyperlinks = true;
                     _reportViewer.LocalReport.ReportEmbeddedResource = _comboBox_Level.SelectedIndex == 0 ? ReportEmbeddedResource : ReportEmbeddedResourceUser;
                     _reportViewer.LocalReport.DataSources.Add(rds);
                 }
