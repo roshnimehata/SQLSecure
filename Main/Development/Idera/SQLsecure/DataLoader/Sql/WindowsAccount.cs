@@ -80,7 +80,8 @@ namespace Idera.SQLsecure.Collector.Sql
         private static void addToAccountDataTable(
                 DataTable dtAccount,
                 int snapshotid,
-                Account account
+                Account account,
+                bool windowsOSAccount
             )
         {
             DataRow dr = dtAccount.NewRow();
@@ -95,6 +96,10 @@ namespace Idera.SQLsecure.Collector.Sql
             else
             {
                 dr[WindowsAccountDataTable.ParamName] = account.SamPath;
+            }
+            if (!windowsOSAccount)
+            {
+                dr[WindowsAccountDataTable.ParamEnabled] = account.Enabled;
             }
             dtAccount.Rows.Add(dr);
         }
@@ -172,7 +177,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                         accountSID.Add(group.Key.SID.SidString);
 
                                         // Add the group to the account data table.
-                                        addToAccountDataTable(dtAccount, snapshotid, group.Key);
+                                        addToAccountDataTable(dtAccount, snapshotid, group.Key, false);
                                     }
 
                                     // Process group members.
@@ -185,7 +190,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                             accountSID.Add(member.SID.SidString);
 
                                             // Add the member to the account data table.
-                                            addToAccountDataTable(dtAccount, snapshotid, member);
+                                            addToAccountDataTable(dtAccount, snapshotid, member, false);
                                         }
 
                                         // Add the member to the member data table.
@@ -227,7 +232,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                         accountSID.Add(user.SID.SidString);
 
                                         // Add the member to the account data table.
-                                        addToAccountDataTable(dtAccount, snapshotid, user);
+                                        addToAccountDataTable(dtAccount, snapshotid, user, false);
                                     }
 
                                     // Write to the repository if reached the batch size.
@@ -323,7 +328,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                         accountSID.Add(group.Key.SID.SidString);
 
                                         // Add the group to the account data table.
-                                        addToAccountDataTable(dtAccount, snapshotid, group.Key);
+                                        addToAccountDataTable(dtAccount, snapshotid, group.Key, true);
                                     }
 
                                     // Process group members.
@@ -336,7 +341,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                             accountSID.Add(member.SID.SidString);
 
                                             // Add the member to the account data table.
-                                            addToAccountDataTable(dtAccount, snapshotid, member);
+                                            addToAccountDataTable(dtAccount, snapshotid, member, true);
                                         }
 
                                         // Add the member to the member data table.
@@ -378,7 +383,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                         accountSID.Add(user.SID.SidString);
 
                                         // Add the member to the account data table.
-                                        addToAccountDataTable(dtAccount, snapshotid, user);
+                                        addToAccountDataTable(dtAccount, snapshotid, user, true);
                                     }
 
                                     // Write to the repository if reached the batch size.

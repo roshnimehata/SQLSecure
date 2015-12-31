@@ -26,7 +26,7 @@ namespace Idera.SQLsecure.Core.Accounts
     /// </summary>
     public class Account
     {
-
+        private const int OS_USER_DISABLED_FLAG = 0x0002;
 
         #region Fields & Enums
         private static LogX logX = new LogX("Idera.SQLsecure.Core.Accounts.Account");
@@ -35,6 +35,7 @@ namespace Idera.SQLsecure.Core.Accounts
         private Sid m_Sid;
         private string m_SamPath;
         private string m_AdsiPath;
+        private bool m_Enabled;
         private ObjectClass m_ObjectClass;
         private AccountStatusEnum m_accountStatus;
 
@@ -609,6 +610,7 @@ namespace Idera.SQLsecure.Core.Accounts
             m_AdsiPath = adsiPath;
             m_ObjectClass = objectClass;
             m_accountStatus = AccountStatusEnum.Account_Good;
+            m_Enabled = IsUserEnabled();
         }
 
         private Account(
@@ -621,6 +623,7 @@ namespace Idera.SQLsecure.Core.Accounts
             m_SamPath = samPath;
             m_ObjectClass = objectClass;
             m_accountStatus = AccountStatusEnum.Account_Good;
+            m_Enabled = true;
         }
 
         #endregion
@@ -657,6 +660,11 @@ namespace Idera.SQLsecure.Core.Accounts
         {
             get { return m_ObjectClass; }
             set { m_ObjectClass = value; }
+        }
+        public bool Enabled
+        {
+            get { return m_Enabled; }
+            set { m_Enabled = value; }
         }
         public bool IsNonDistributionGroup
         {
@@ -796,6 +804,36 @@ namespace Idera.SQLsecure.Core.Accounts
         {
             SecurityIdentifier lSid = new SecurityIdentifier(m_Sid.BinarySid, 0);
             return lSid.GetHashCode();
+        }
+
+        private bool IsUserEnabled()
+        {
+            if (Class != ObjectClass.User)
+            {
+                return true;
+            }
+
+            //todo check LDAP://
+            try
+            {
+                using (DirectoryEntry currentUser = new DirectoryEntry(AdsiPath))
+                {
+                    if (currentUser.Properties == null)
+                    {
+                        return false;
+                    }
+
+                    int flags = (int)currentUser.Properties["UserFlags"].Value;
+                    bool res = !Convert.ToBoolean(flags & OS_USER_DISABLED_FLAG);
+                    return res;
+                }
+            }
+            catch (Exception ex)
+            {
+                logX.loggerX.Info("Info - error encountered in processing IsUserEnabled");
+            }
+
+            return true;
         }
 
         #endregion

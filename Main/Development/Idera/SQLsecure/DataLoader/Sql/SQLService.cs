@@ -34,8 +34,9 @@ namespace Idera.SQLsecure.Collector.Sql
             MsDtsServer100,           // SQL Server Integration Services 10.0 (SQL2008)
             MSSQLServerADHelper100,   // SQL Active Directory Helper Service 10.0 (SQL2008)
             MSSQLFDLauncher,          // SQL Full-text Filter Daemon Launcher (SQL2008)
-            MsDtsServer110,           // SQL Server Integration Services 12.0 (SQL2014)
-            MsDtsServer120            // SQL Server Integration Services 12.0 (SQL2014)
+            MsDtsServer110,           // SQL Server Integration Services 11.0 (SQL2012)
+            MsDtsServer120,           // SQL Server Integration Services 12.0 (SQL2014)
+            MsDtsServer130,           // SQL Server Integration Services 13.0 (SQL2016)
         }
 
         private string m_Name;
@@ -104,7 +105,8 @@ namespace Idera.SQLsecure.Collector.Sql
                     "MSSQLServerADHelper100",   // SQL Active Directory Helper Service 10.0 (SQL2008)
                     "MSSQLFDLauncher",          // SQL Full-text Filter Daemon Launcher (SQL2008)
                     "MsDtsServer110",           // SQL Server Integration Services 11.0 (SQL2012)
-                    "MsDtsServer120"            // SQL Server Integration Services 12.0 (SQL2014)
+                    "MsDtsServer120",           // SQL Server Integration Services 12.0 (SQL2014)
+                    "MsDtsServer130",           // SQL Server Integration Services 13.0 (SQL2016)
                 };
             string[] serviceArrayInstance = new string[]
                 {
@@ -129,6 +131,7 @@ namespace Idera.SQLsecure.Collector.Sql
             }
 
             Type serviceType = typeof(SQLService.ServiceType);
+            //exclude services not belong to target version
             foreach (SQLService.ServiceType type in Enum.GetValues(serviceType))
             {
                 // Eliminate potential duplicate services when multiple versions on same machine.
@@ -143,7 +146,9 @@ namespace Idera.SQLsecure.Collector.Sql
                             type == SQLService.ServiceType.NSService ||
                             type == SQLService.ServiceType.NSWildcard ||
                             type == SQLService.ServiceType.MsDtsServer100 ||
-                            type == SQLService.ServiceType.MsDtsServer110)
+                            type == SQLService.ServiceType.MsDtsServer110 ||
+                            type == SQLService.ServiceType.MsDtsServer120 ||
+                            type == SQLService.ServiceType.MsDtsServer130)
                             continue;
                         break;
                     case ServerVersion.SQL2005:
@@ -151,7 +156,9 @@ namespace Idera.SQLsecure.Collector.Sql
                             type == SQLService.ServiceType.MSSQLFDLauncher ||
                             type == SQLService.ServiceType.MSSQLServerADHelper100 ||
                             type == SQLService.ServiceType.MsDtsServer100 ||
-                            type == SQLService.ServiceType.MsDtsServer110)
+                            type == SQLService.ServiceType.MsDtsServer110 ||
+                            type == SQLService.ServiceType.MsDtsServer120 ||
+                            type == SQLService.ServiceType.MsDtsServer130)
                             continue;
                         break;
                     case ServerVersion.SQL2008:
@@ -161,16 +168,39 @@ namespace Idera.SQLsecure.Collector.Sql
                             type == SQLService.ServiceType.msftesql ||
                             type == SQLService.ServiceType.MSSQLServerADHelper ||
                             type == SQLService.ServiceType.MsDtsServer ||
-                            type == SQLService.ServiceType.MsDtsServer110)
+                            type == SQLService.ServiceType.MsDtsServer110 ||
+                            type == SQLService.ServiceType.MsDtsServer120 ||
+                            type == SQLService.ServiceType.MsDtsServer130)
                             continue;
                         break;
                     case ServerVersion.SQL2012:
+                        if (type == SQLService.ServiceType.MSSearch ||
+                            type == SQLService.ServiceType.msftesql ||
+                            type == SQLService.ServiceType.MSSQLServerADHelper ||
+                            type == SQLService.ServiceType.MsDtsServer ||
+                            type == SQLService.ServiceType.MsDtsServer100 ||
+                            type == SQLService.ServiceType.MsDtsServer120 ||
+                            type == SQLService.ServiceType.MsDtsServer130)
+                            continue;
+                        break;
                     case ServerVersion.SQL2014:
                         if (type == SQLService.ServiceType.MSSearch ||
                             type == SQLService.ServiceType.msftesql ||
                             type == SQLService.ServiceType.MSSQLServerADHelper ||
                             type == SQLService.ServiceType.MsDtsServer ||
-                            type == SQLService.ServiceType.MsDtsServer100)
+                            type == SQLService.ServiceType.MsDtsServer100 ||
+                            type == SQLService.ServiceType.MsDtsServer110 ||
+                            type == SQLService.ServiceType.MsDtsServer130)
+                            continue;
+                        break;
+                    case ServerVersion.SQL2016:
+                        if (type == SQLService.ServiceType.MSSearch ||
+                            type == SQLService.ServiceType.msftesql ||
+                            type == SQLService.ServiceType.MSSQLServerADHelper ||
+                            type == SQLService.ServiceType.MsDtsServer ||
+                            type == SQLService.ServiceType.MsDtsServer100 ||
+                            type == SQLService.ServiceType.MsDtsServer110 ||
+                            type == SQLService.ServiceType.MsDtsServer120)
                             continue;
                         break;
                     default:

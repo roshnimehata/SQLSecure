@@ -120,7 +120,7 @@ SQLsecure - provides 3 Idera defined templates that exceed the guidelines from C
       <ReportKey>PCI Section 2.2</ReportKey>
       <ReportText>Is Guest user access available on the SQL Server?</ReportText>
       <Severity>1</Severity>
-      <SeverityValues>'master','tempdb'</SeverityValues>
+      <SeverityValues>'msdb','master','tempdb'</SeverityValues>
     </PolicyMetric>
     <PolicyMetric>
       <MetricId>7</MetricId>

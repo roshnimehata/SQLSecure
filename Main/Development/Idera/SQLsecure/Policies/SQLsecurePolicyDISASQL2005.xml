@@ -93,7 +93,7 @@ See the full SRR Checklist document for details on these items.</InterviewText>
       <ReportKey>DM1709\V0002451</ReportKey>
       <ReportText>Is Guest user access available on the SQL Server? The guest user ID in a database allows access by all Windows login IDs without requiring an individual database account. This allows unauthorized access to the database.</ReportText>
       <Severity>2</Severity>
-      <SeverityValues>'master','tempdb'</SeverityValues>
+      <SeverityValues>'msdb','master','tempdb'</SeverityValues>
     </PolicyMetric>
     <PolicyMetric>
       <MetricId>7</MetricId>

@@ -1076,6 +1076,8 @@ values
 		set valuedescription='When enabled, this check will identify a risk if any unauthorized accounts are members of the sysadmin server role. Specify the authorized accounts. Can use ''%'' as wildcard.'
 		where metricid=71
 	end
+if not exists (select 1 from dbo.classtype where classid=108)
+	begin 
 insert into dbo.classtype
         ( classid, classname, hashkey )
 values
@@ -1083,4 +1085,5 @@ values
           N'Availability Group', -- classname - nvarchar(500)
           null -- hashkey - nvarchar(256)
           )
+	end
 go

@@ -38,21 +38,30 @@ namespace Idera.SQLsecure.UI.Console.Views
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource7 = new Microsoft.Reporting.WinForms.ReportDataSource();
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource8 = new Microsoft.Reporting.WinForms.ReportDataSource();
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource9 = new Microsoft.Reporting.WinForms.ReportDataSource();
+
             this._label_Server = new System.Windows.Forms.Label();
             this._comboBox_Server = new System.Windows.Forms.ComboBox();
+            this._comboBox_Level = new System.Windows.Forms.ComboBox();
+            this._label_Level = new System.Windows.Forms.Label();
             this._panel_Report.SuspendLayout();
             this._gradientPanel_Selections.SuspendLayout();
             this.SuspendLayout();
             // 
             // _gradientPanel_Selections
             // 
+            this._gradientPanel_Selections.Controls.Add(this._comboBox_Level);
+            this._gradientPanel_Selections.Controls.Add(this._label_Level);
             this._gradientPanel_Selections.Controls.Add(this._comboBox_Server);
             this._gradientPanel_Selections.Controls.Add(this._label_Server);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._label_Server, 0);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._comboBox_Server, 0);
+            this._gradientPanel_Selections.Controls.SetChildIndex(this._label_Level, 0);
+            this._gradientPanel_Selections.Controls.SetChildIndex(this._comboBox_Level, 0);
             // 
             // _reportViewer
             // 
+            this._reportViewer.AutoScroll = true;
+            this._reportViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             reportDataSource1.Name = "ReportsDataset_isp_sqlsecure_report_getguestenabledservers";
             reportDataSource1.Value = null;
             reportDataSource2.Name = "ReportsDataset_isp_sqlsecure_report_getguestenabledservers";
@@ -105,8 +114,30 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._comboBox_Server.Name = "_comboBox_Server";
             this._comboBox_Server.Size = new System.Drawing.Size(427, 21);
             this._comboBox_Server.TabIndex = 0;
-            this._comboBox_Server.SelectionChangeCommitted += new System.EventHandler(this._comboBox_Server_SelectionChangeCommitted);
             this._comboBox_Server.DropDown += new System.EventHandler(this._comboBox_Server_DropDown);
+            this._comboBox_Server.SelectionChangeCommitted += new System.EventHandler(this._comboBox_Server_SelectionChangeCommitted);
+            // 
+            // _comboBox_Level
+            // 
+            this._comboBox_Level.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._comboBox_Level.FormattingEnabled = true;
+            this._comboBox_Level.Items.AddRange(new object[] {
+            "Member",
+            "User"});
+            this._comboBox_Level.Location = new System.Drawing.Point(77, 40);
+            this._comboBox_Level.Name = "_comboBox_Level";
+            this._comboBox_Level.Size = new System.Drawing.Size(140, 21);
+            this._comboBox_Level.TabIndex = 20;
+            // 
+            // _label_Level
+            // 
+            this._label_Level.AutoSize = true;
+            this._label_Level.BackColor = System.Drawing.Color.Transparent;
+            this._label_Level.Location = new System.Drawing.Point(35, 44);
+            this._label_Level.Name = "_label_Level";
+            this._label_Level.Size = new System.Drawing.Size(36, 13);
+            this._label_Level.TabIndex = 19;
+            this._label_Level.Text = "Level:";
             // 
             // Report_DatabaseRoles
             // 
@@ -125,5 +156,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private System.Windows.Forms.Label _label_Server;
         private System.Windows.Forms.ComboBox _comboBox_Server;
+        private System.Windows.Forms.ComboBox _comboBox_Level;
+        private System.Windows.Forms.Label _label_Level;
     }
 }

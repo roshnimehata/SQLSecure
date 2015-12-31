@@ -99,8 +99,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static String OPTIONS_FILE_EXTENSION_STR = @".options.xml";
 
-        public const int DalVersion = 2800;
-        public const int SchemaVersion = 2800;
+        public const int DalVersion = 2900;
+        public const int SchemaVersion = 2900;
 
         public const string COPYRIGHT_MSG = @"© Copyright 2005-2014 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
 

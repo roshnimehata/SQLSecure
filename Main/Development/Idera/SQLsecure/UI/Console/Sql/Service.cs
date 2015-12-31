@@ -42,6 +42,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             MSSQLServerADHelper100,     // SQL Active Directory Helper Service 10.0 (SQL2008)
             MSSQLFDLauncher,            // SQL Full-text Filter Daemon Launcher (SQL2008)
             MsDtsServer110,             // SQL Server Integration Services 11.0 (SQL2012)
+            MsDtsServer120,             // SQL Server Integration Services 12.0 (SQL2013)
+            MsDtsServer130,             // SQL Server Integration Services 13.0 (SQL2014)
             Unknown
         }
 

@@ -105,9 +105,9 @@ To eliminate this issue, visit the Microsoft Web site that is appropriate to you
       <MetricId>6</MetricId>
       <IsEnabled>true</IsEnabled>
       <ReportKey>Guest Permissions</ReportKey>
-      <ReportText>Is Guest user access available on the SQL Server? Recommendation: Remove access to the guest user if it is not required. The guest user cannot be dropped, but guest user can be disabled by revoking its CONNECT permission by executing REVOKE CONNECT FROM GUEST within any database other than master or tempdb.</ReportText>
+      <ReportText>Is Guest user access available on the SQL Server? Recommendation: Remove access to the guest user if it is not required. The guest user cannot be dropped, but guest user can be disabled by revoking its CONNECT permission by executing REVOKE CONNECT FROM GUEST within any database other than msdb, master or tempdb.</ReportText>
       <Severity>1</Severity>
-      <SeverityValues>'master','tempdb'</SeverityValues>
+      <SeverityValues>'msdb','master','tempdb'</SeverityValues>
     </PolicyMetric>
     <PolicyMetric>
       <MetricId>7</MetricId>

@@ -504,7 +504,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // list view and set the dirty flag.
             Sql.DataCollectionFilter filter = lvi.Tag as Sql.DataCollectionFilter;
             Debug.Assert(filter != null);
-            if (Form_FilterProperties.Process(filter, Sql.SqlHelper.ParseVersion(m_RegisteredServer.Version), FiltersInListView, m_IsEdit)
+            ServerVersion parsedVersion = Sql.SqlHelper.ParseVersion(m_RegisteredServer.Version);
+            Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedVersion, m_RegisteredServer.SQLServerAuthType == "W", 
+                m_RegisteredServer.SqlLogin, m_RegisteredServer.SqlPassword, m_RegisteredServer.FullConnectionName);
+            if (Form_FilterProperties.Process(filter, serverInfo, FiltersInListView, m_IsEdit)
                         == DialogResult.OK)
             {
                 ultraListView_Filters.Items.Remove(lvi);

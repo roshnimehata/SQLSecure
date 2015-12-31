@@ -1660,7 +1660,8 @@ namespace Idera.SQLsecure.Collector
                     numWarn += registryPermissions.GetUsersAndGroups(ref users, ref groups);
                     if (loadDomainInformation(m_snapshotId, true, users, groups, out wellKnownAccounts) != 0 || numWarn != 0)
                     {
-                        UpdateSuspectAccounts(true);
+                        //don't run this function because next code overwrites some snapshot results
+                        //UpdateSuspectAccounts(true);
                         strNewMessage = "Suspect Windows accounts encountered processing OS objects";
                         PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                         snapshotStatus = Constants.StatusWarning;
@@ -1725,7 +1726,8 @@ namespace Idera.SQLsecure.Collector
                     {
                         if (loadDomainInformation(m_snapshotId, false, users, windowsGroupLogins, out wellKnownAccounts) != 0)
                         {
-                            UpdateSuspectAccounts(false);
+                            //don't run this function because next code overwrites some snapshot results
+                            //UpdateSuspectAccounts(false);
                             strNewMessage = "Suspect Windows accounts encountered processing SQL Server logins";
                             PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                             snapshotStatus = Constants.StatusWarning;

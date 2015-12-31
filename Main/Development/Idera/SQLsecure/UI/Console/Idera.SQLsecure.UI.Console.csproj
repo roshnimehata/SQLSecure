@@ -187,8 +187,10 @@
     <Compile Include="ActiveDirectory\PackLPArray.cs" />
     <Compile Include="ActiveDirectory\PInvoke.cs" />
     <Compile Include="ActiveDirectory\StructsFlags.cs" />
-    <Compile Include="Controller.cs" />  
-    <Compile Include="Controls\AddEditFolders.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="Controls\AddEditFolders.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Controls\AddEditFolders.Designer.cs">
       <DependentUpon>AddEditFolders.cs</DependentUpon>
     </Compile>
@@ -433,6 +435,7 @@
     <Compile Include="Data\PolicyUsers.cs" />
     <Compile Include="Data\Report.cs" />
     <Compile Include="Data\ReportCard.cs" />
+    <Compile Include="Data\ServerInfo.cs" />
     <Compile Include="Data\SQLsecureActivity.cs" />
     <Compile Include="Data\Server.cs" />
     <Compile Include="Data\SqlServerSettings.cs" />
@@ -1213,10 +1216,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report_ActivityHistory.rdlc" />
     <EmbeddedResource Include="Reports\Report_AllObjectsWithPermissions.rdlc" />
+    <EmbeddedResource Include="Reports\Report_AllObjectsWithPermissionsUser.rdlc" />
     <EmbeddedResource Include="Reports\Report_AuditedServers.rdlc" />
     <EmbeddedResource Include="Reports\Report_CrossServerLoginCheck.rdlc" />
     <EmbeddedResource Include="Reports\Report_DatabaseChaining.rdlc" />
     <EmbeddedResource Include="Reports\Report_DatabaseRoles.rdlc" />
+    <EmbeddedResource Include="Reports\Report_DatabaseRolesUser.rdlc" />
     <EmbeddedResource Include="Reports\Report_Filters.rdlc" />
     <EmbeddedResource Include="Reports\Report_GuestEnabledDatabases.rdlc" />
     <EmbeddedResource Include="Reports\Report_MailVulnerability.rdlc" />
@@ -1229,8 +1234,10 @@
     <EmbeddedResource Include="Reports\Report_SystemAdministratorVulnerability.rdlc" />
     <EmbeddedResource Include="Reports\Report_Users.rdlc" />
     <EmbeddedResource Include="Reports\Report_UsersPermissions.rdlc" />
+    <EmbeddedResource Include="Reports\Report_UsersPermissionsUser.rdlc" />
     <EmbeddedResource Include="Reports\Report_VulnerableFixedRoles.rdlc" />
     <EmbeddedResource Include="Reports\SubReport_Logins.rdlc" />
+    <EmbeddedResource Include="Reports\SubReport_LoginsUser.rdlc" />
     <EmbeddedResource Include="Reports\SubReport_ServersUsedSummary.rdlc" />
     <EmbeddedResource Include="Reports\SubReport_UsersPermissions.rdlc" />
     <EmbeddedResource Include="Views\Report_Users.resx">
@@ -1819,7 +1826,7 @@
     <None Include="Resources\Report_SnapshotCompare_48.png" />
     <Content Include="Resources\Report_SQLsecureUsers_16.png" />
     <Content Include="Resources\Report_SQLsecureUsers_32.png" />
-    <Content Include="Resources\Report_SQLsecureUsers_48.png" />    
+    <Content Include="Resources\Report_SQLsecureUsers_48.png" />
     <EmbeddedResource Include="Controls\ControlPolicyAddServers.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ControlPolicyAddServers.cs</DependentUpon>
@@ -1844,7 +1851,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>ServerPrincipalPermissionsGrid.cs</DependentUpon>
     </EmbeddedResource>
-  
     <EmbeddedResource Include="Forms\Form_OSObjectPermissions.resx">
       <DependentUpon>Form_OSObjectPermissions.cs</DependentUpon>
       <SubType>Designer</SubType>

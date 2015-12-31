@@ -37,6 +37,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource6 = new Microsoft.Reporting.WinForms.ReportDataSource();
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource7 = new Microsoft.Reporting.WinForms.ReportDataSource();
             Microsoft.Reporting.WinForms.ReportDataSource reportDataSource8 = new Microsoft.Reporting.WinForms.ReportDataSource();
+
             this._label_Server = new System.Windows.Forms.Label();
             this._comboBox_Server = new System.Windows.Forms.ComboBox();
             this._label_PermissionType = new System.Windows.Forms.Label();
@@ -47,6 +48,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._radioButton_WindowsUser = new System.Windows.Forms.RadioButton();
             this._radioButton_SQLLogin = new System.Windows.Forms.RadioButton();
             this._label_LoginType = new System.Windows.Forms.Label();
+            this._label_Level = new System.Windows.Forms.Label();
+            this._comboBox_Level = new System.Windows.Forms.ComboBox();
             this._panel_Report.SuspendLayout();
             this._gradientPanel_Selections.SuspendLayout();
             this.SuspendLayout();
@@ -54,10 +57,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             // _panel_Report
             // 
             this._panel_Report.Location = new System.Drawing.Point(0, 98);
-            this._panel_Report.Size = new System.Drawing.Size(652, 468);
+            this._panel_Report.Size = new System.Drawing.Size(1058, 468);
             // 
             // _gradientPanel_Selections
             // 
+            this._gradientPanel_Selections.Controls.Add(this._comboBox_Level);
+            this._gradientPanel_Selections.Controls.Add(this._label_Level);
             this._gradientPanel_Selections.Controls.Add(this._label_LoginType);
             this._gradientPanel_Selections.Controls.Add(this._label_User);
             this._gradientPanel_Selections.Controls.Add(this._textBox_User);
@@ -68,7 +73,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._gradientPanel_Selections.Controls.Add(this._comboBox_PermissionType);
             this._gradientPanel_Selections.Controls.Add(this._label_Server);
             this._gradientPanel_Selections.Controls.Add(this._comboBox_Server);
-            this._gradientPanel_Selections.Size = new System.Drawing.Size(652, 98);
+            this._gradientPanel_Selections.Size = new System.Drawing.Size(1058, 98);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._comboBox_Server, 0);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._label_Server, 0);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._comboBox_PermissionType, 0);
@@ -79,6 +84,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._gradientPanel_Selections.Controls.SetChildIndex(this._textBox_User, 0);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._label_User, 0);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._label_LoginType, 0);
+            this._gradientPanel_Selections.Controls.SetChildIndex(this._label_Level, 0);
+            this._gradientPanel_Selections.Controls.SetChildIndex(this._comboBox_Level, 0);
             // 
             // _reportViewer
             // 
@@ -114,15 +121,15 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // _label_Description
             // 
-            this._label_Description.Size = new System.Drawing.Size(621, 17);
+            this._label_Description.Size = new System.Drawing.Size(1027, 17);
             // 
             // _label_ReportTitle
             // 
-            this._label_ReportTitle.Size = new System.Drawing.Size(636, 56);
+            this._label_ReportTitle.Size = new System.Drawing.Size(1042, 56);
             // 
             // _label_Instructions
             // 
-            this._label_Instructions.Size = new System.Drawing.Size(495, 361);
+            this._label_Instructions.Size = new System.Drawing.Size(901, 361);
             // 
             // _button_RunReport
             // 
@@ -146,8 +153,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._comboBox_Server.Name = "_comboBox_Server";
             this._comboBox_Server.Size = new System.Drawing.Size(406, 21);
             this._comboBox_Server.TabIndex = 4;
-            this._comboBox_Server.SelectionChangeCommitted += new System.EventHandler(this._comboBox_Server_SelectionChangeCommitted);
             this._comboBox_Server.DropDown += new System.EventHandler(this._comboBox_Server_DropDown);
+            this._comboBox_Server.SelectionChangeCommitted += new System.EventHandler(this._comboBox_Server_SelectionChangeCommitted);
             // 
             // _label_PermissionType
             // 
@@ -237,11 +244,34 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._label_LoginType.TabIndex = 14;
             this._label_LoginType.Text = "Login Type:";
             // 
+            // _label_Level
+            // 
+            this._label_Level.AutoSize = true;
+            this._label_Level.BackColor = System.Drawing.Color.Transparent;
+            this._label_Level.Location = new System.Drawing.Point(565, 18);
+            this._label_Level.Name = "_label_Level";
+            this._label_Level.Size = new System.Drawing.Size(36, 13);
+            this._label_Level.TabIndex = 15;
+            this._label_Level.Text = "Level:";
+            // 
+            // _comboBox_Level
+            // 
+            this._comboBox_Level.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._comboBox_Level.FormattingEnabled = true;
+            this._comboBox_Level.Items.AddRange(new object[] {
+            "Member",
+            "User"});
+            this._comboBox_Level.Location = new System.Drawing.Point(607, 13);
+            this._comboBox_Level.Name = "_comboBox_Level";
+            this._comboBox_Level.Size = new System.Drawing.Size(140, 21);
+            this._comboBox_Level.TabIndex = 16;
+            // 
             // Report_UsersPermissions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "Report_UsersPermissions";
+            this.Size = new System.Drawing.Size(1058, 588);
             this._panel_Report.ResumeLayout(false);
             this._panel_Report.PerformLayout();
             this._gradientPanel_Selections.ResumeLayout(false);
@@ -263,5 +293,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         private System.Windows.Forms.RadioButton _radioButton_WindowsUser;
         private System.Windows.Forms.RadioButton _radioButton_SQLLogin;
         private System.Windows.Forms.Label _label_LoginType;
+        private System.Windows.Forms.ComboBox _comboBox_Level;
+        private System.Windows.Forms.Label _label_Level;
     }
 }

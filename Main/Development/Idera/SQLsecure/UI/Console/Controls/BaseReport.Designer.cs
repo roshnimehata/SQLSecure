@@ -157,7 +157,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this._reportViewer.Size = new System.Drawing.Size(652, 486);
             this._reportViewer.TabIndex = 3;
             this._reportViewer.Visible = false;
+
+            //next line replaced because of compilation error for studio 2013
             this._reportViewer.Print += new System.ComponentModel.CancelEventHandler(this._reportViewer_Print);
+            //this._reportViewer.Print += new Microsoft.Reporting.WinForms.ReportPrintEventHandler(this._reportViewer_Print);
+
             this._reportViewer.Hyperlink += new Microsoft.Reporting.WinForms.HyperlinkEventHandler(this._reportViewer_Hyperlink);
             // 
             // _timer_Print

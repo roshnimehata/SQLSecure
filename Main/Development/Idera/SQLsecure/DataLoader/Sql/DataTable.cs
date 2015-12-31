@@ -353,7 +353,8 @@ namespace Idera.SQLsecure.Collector.Sql
                     colType = new DataColumn(ParamType, typeof(SqlString)),
                     colName = new DataColumn(ParamName, typeof(SqlString)),
                     colState = new DataColumn(ParamState, typeof(SqlString)),
-                    colHashkey = new DataColumn(ParamHashkey, typeof(SqlString)))
+                    colHashkey = new DataColumn(ParamHashkey, typeof(SqlString)),
+                    colEnabled = new DataColumn(ParamEnabled, typeof(SqlBoolean)))
             {
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
@@ -364,7 +365,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colType,
                                                                 colName,
                                                                 colState,
-                                                                colHashkey
+                                                                colHashkey,
+                                                                colEnabled
                                                             });
             }
 
@@ -377,6 +379,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamName = "name";
         internal const string ParamState = "state";
         internal const string ParamHashkey = "hashkey";
+        internal const string ParamEnabled = "enabled";
 
         internal const string RepositoryTable = "SQLsecure.dbo.windowsaccount";
     }

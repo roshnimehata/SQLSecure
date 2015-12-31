@@ -236,6 +236,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
             {
                 versionEnum = ServerVersion.SQL2014;
             }
+            else if (String.Compare(version, i, Constants.Sql2016VerPrefix, 0,
+                         Constants.Sql2016VerPrefix.Length) == 0)
+            {
+                versionEnum = ServerVersion.SQL2016;
+            }
             else
             {
                 versionEnum = ServerVersion.Unsupported;
@@ -274,8 +279,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 }
             }
 
-            if (ver == ServerVersion.SQL2000)
+
+            switch (ver)
             {
+                case ServerVersion.SQL2000:
+
                 for (int i = 0; i < ServicePack.SQL2000.Builds.Length; ++i)
                 {
                     if (build == ServicePack.SQL2000.Builds[i])
@@ -283,9 +291,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         SP = ServicePack.SQL2000.BuildNames[i];
                     }
                 }
-            }
-            else if (ver == ServerVersion.SQL2005)
-            {
+                    break;
+
+                case ServerVersion.SQL2005:
+
                 for (int i = 0; i < ServicePack.SQL2005.Builds.Length; ++i)
                 {
                     if (build == ServicePack.SQL2005.Builds[i])
@@ -293,9 +302,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         SP = ServicePack.SQL2005.BuildNames[i];
                     }
                 }
-            }
-            else if (ver == ServerVersion.SQL2008)
-            {
+                    break;
+
+                case ServerVersion.SQL2008:
+
                 for (int i = 0; i < ServicePack.SQL2008.Builds.Length; ++i)
                 {
                     if (build == ServicePack.SQL2008.Builds[i])
@@ -303,9 +313,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         SP = ServicePack.SQL2008.BuildNames[i];
                     }
                 }
-            }
-            else if (ver == ServerVersion.SQL2008R2)
-            {
+                    break;
+
+                case ServerVersion.SQL2008R2:
+                
                 for (int i = 0; i < ServicePack.SQL2008R2.Builds.Length; ++i)
                 {
                     if (build == ServicePack.SQL2008R2.Builds[i])
@@ -313,9 +324,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         SP = ServicePack.SQL2008R2.BuildNames[i];
                     }
                 }
-            }
-            else if (ver == ServerVersion.SQL2012)
-            {
+                    break;
+
+                case ServerVersion.SQL2012:
+               
                 for (int i = 0; i < ServicePack.SQL2012.Builds.Length; ++i)
                 {
                     if (build == ServicePack.SQL2012.Builds[i])
@@ -323,10 +335,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         SP = ServicePack.SQL2012.BuildNames[i];
                     }
                 }
-            }
+                    break;
 
-            else if (ver == ServerVersion.SQL2014)
-            {
+                case ServerVersion.SQL2014:
+
                 for (int i = 0; i < ServicePack.SQL2014.Builds.Length; ++i)
                 {
                     if (build == ServicePack.SQL2014.Builds[i])
@@ -334,7 +346,20 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         SP = ServicePack.SQL2014.BuildNames[i];
                     }
                 }
+                    break;
+
+                case ServerVersion.SQL2016:
+                
+                    for (int i = 0; i < ServicePack.SQL2016.Builds.Length; ++i)
+                    {
+                        if (build == ServicePack.SQL2016.Builds[i])
+                        {
+                            SP = ServicePack.SQL2016.BuildNames[i];
+                        }
             }
+                    break;
+            }
+
             return SP;
         }
 
@@ -371,6 +396,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
             else if (fversion == ServerVersion.SQL2014)
             {
                 ver = VersionName.SQL2014;
+            }
+            else if (fversion == ServerVersion.SQL2016)
+            {
+                ver = VersionName.SQL2016;
             }
             else
             {

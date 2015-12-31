@@ -440,7 +440,6 @@ namespace Idera.SQLsecure.Core.Accounts
                                 Sid wellKnownSid = new Sid(bSid);
                                 if (wellKnownSid.IsSpecialWellKnownSid())
                                 {
-                                    wellknownacct.AccountStatus = Account.AccountStatusEnum.Account_Suspected;
                                     if (!wellKnownGroups.Contains(samPath))
                                     {
                                         wellKnownGroups.Add(samPath);
@@ -664,7 +663,6 @@ namespace Idera.SQLsecure.Core.Accounts
                             // Write to WellKnownGroupList
                             if (groupSid.IsSpecialWellKnownSid())
                             {
-                                group.AccountStatus = Account.AccountStatusEnum.Account_Suspected;
                                 if (!wellKnownGroups.Contains(samPath))
                                 {
                                     wellKnownGroups.Add(samPath);

@@ -274,6 +274,11 @@ namespace Idera.SQLsecure.Collector.Sql
                 {
                     versionEnum = ServerVersion.SQL2014;
                 }
+                else if (String.Compare(version, 0, Constants.Sql2016VerPrefix, 0,
+                     Constants.Sql2016VerPrefix.Length) == 0)
+                {
+                    versionEnum = ServerVersion.SQL2016;
+                }
                 else
                 {
                     versionEnum = ServerVersion.Unsupported;

@@ -1769,6 +1769,10 @@ if err.number = 0 then
 	      	    	
 	   Case "12"
 	      
+	      	Session.Property("BSQLVER") = "TRUE"   
+	      	    	
+	   Case "13"
+	      
 	      	Session.Property("BSQLVER") = "TRUE"
 	      	
 	   Case Else
