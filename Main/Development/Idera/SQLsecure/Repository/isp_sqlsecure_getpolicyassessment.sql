@@ -5073,7 +5073,7 @@ AS
 																   and ss.groupsid = smm.sid
 														where
 															p.subsystem in ( select
-																				value
+																				Value
 																			 from
 																				#sevrVals )
 															and p.snapshotid = @snapshotid
