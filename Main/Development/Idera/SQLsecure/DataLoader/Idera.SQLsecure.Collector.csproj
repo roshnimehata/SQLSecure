@@ -80,6 +80,7 @@
     <Compile Include="Target.cs" />
     <Compile Include="Utility\Exception.cs" />
     <Compile Include="Utility\Logging.cs" />
+    <Compile Include="Utility\MemberEnumeration.cs" />
     <Compile Include="Utility\ProgramArgs.cs" />
     <Compile Include="Utility\WildMatch.cs" />
   </ItemGroup>
