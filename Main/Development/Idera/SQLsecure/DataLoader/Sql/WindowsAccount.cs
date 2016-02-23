@@ -19,6 +19,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
+using Idera.SQLsecure.Collector.Utility;
 
 namespace Idera.SQLsecure.Collector.Sql
 {
@@ -35,7 +36,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     || dtMembership.Rows.Count > Constants.RowBatchSize;
         }
 
-        private static void writeDataTables (
+        private static void writeDataTables(
                 SqlBulkCopy bcpAccount,
                 DataTable dtAccount,
                 SqlBulkCopy bcpMembership,
@@ -135,6 +136,26 @@ namespace Idera.SQLsecure.Collector.Sql
             {
                 return true;
             }
+
+            //experimental code for one way trust domains:
+            /*
+            try
+            {
+                MemberEnumeration memberEnum = new MemberEnumeration();
+                memberEnum.GetTrustedDomainsAndForests();
+
+                foreach (KeyValuePair<Account,List<Account>> item in groupMemberhips)
+                {
+                    List<Account> members = memberEnum.EnumerateADGroupMembers(item.Key);
+                    if (members != null && members.Count > 0)
+                        item.Value.AddRange(members);
+                }
+            }
+            catch (Exception ex)
+            {
+                logX.loggerX.Error("WARNING - Users in domain group enumeration error", ex);
+            }*/
+
 
             // Create a set to keep track of accounts already processed.
             List<string> accountSID = new List<string>();
@@ -249,7 +270,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     }
                 }
             }
-            catch ( Exception ex /*SqlException ex*/)
+            catch (Exception ex /*SqlException ex*/)
             {
                 string strMessage = "Saving windows accounts";
                 logX.loggerX.Error("WARNING -" + strMessage, ex);
