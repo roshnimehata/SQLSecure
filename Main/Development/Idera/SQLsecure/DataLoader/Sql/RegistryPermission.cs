@@ -686,17 +686,9 @@ namespace Idera.SQLsecure.Collector.Sql
                             {
                                 regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server Native Client 10.0";
                             }
-                            else if (Is2012)
+                            else if (Is2012 || Is2014 || Is2016)
                             {
                                 regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server Native Client 11.0";
-                            }
-                            else if (Is2014)
-                            {
-                                regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server Native Client 12.0";
-                            }
-                            else if (Is2016)
-                            {
-                                regSubKey = @"SOFTWARE\Microsoft\Microsoft SQL Server Native Client 13.0";
                             }
                             if (!string.IsNullOrEmpty(regSubKey))
                             {

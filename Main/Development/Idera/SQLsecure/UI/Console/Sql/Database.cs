@@ -49,7 +49,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         status
                     FROM SQLsecure.dbo.vwdatabases
                     WHERE snapshotid = (SELECT MAX(snapshotid) FROM SQLsecure.dbo.vwserversnapshot 
-                            WHERE connectionname = @servername and status ='W')";
+                            WHERE connectionname = @servername and (status ='W' or status ='S'))";
 
         private static string QuerySnapshotDatabase
                 = QuerySnapshotDatabases + @" AND dbid = @dbid";
@@ -298,7 +298,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private const string QueryTargetTablesAll2k = @"DECLARE @SQL NVARCHAR(4000) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.dbo.sysobjects AS tbl WHERE tbl.type=''U'' or tbl.type=''S'' or tbl.type=''IT''' FROM master.dbo.sysdatabases {0}
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.dbo.sysobjects AS tbl WHERE tbl.type=''U'' or tbl.type=''S'' or tbl.type=''IT''' FROM master.dbo.sysdatabases {0}
             SELECT @SQL = SUBSTRING(@SQL, 8, len(@SQL)) + ' order by name'
             EXECUTE(@SQL)";
 
@@ -322,7 +322,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private const string QueryTargetViewsAll2k = @"DECLARE @SQL NVARCHAR(4000) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.dbo.sysobjects AS tbl
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.dbo.sysobjects AS tbl
             WHERE (tbl.type = ''V'')' FROM master.dbo.sysdatabases {0}
             SELECT @SQL = SUBSTRING(@SQL, 8, len(@SQL)) + ' order by name'
             EXECUTE(@SQL)";
@@ -347,7 +347,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private const string QueryTargetFunctionsAll2k = @"DECLARE @SQL NVARCHAR(4000) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.dbo.sysobjects AS tbl
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.dbo.sysobjects AS tbl
             WHERE (tbl.type in (''TF'', ''FN'', ''IF'', ''FS'', ''FT'', ''AF''))' FROM master.dbo.sysdatabases {0}
             SELECT @SQL = SUBSTRING(@SQL, 8, len(@SQL)) + ' order by name'
             EXECUTE(@SQL)";
@@ -374,13 +374,13 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private const string QueryTargetTablesAll = @"DECLARE @SQL NVARCHAR(MAX) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.sys.tables AS tbl' FROM master.sys.databases {0}
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.sys.tables AS tbl' FROM master.sys.databases {0}
             SELECT @SQL = SUBSTRING(@SQL, 8, len(@SQL)) + ' order by name'
             EXECUTE(@SQL)";
 
         private const string QueryTargetTablesUser = @"DECLARE @SQL NVARCHAR(MAX) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.sys.tables AS tbl
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.sys.tables AS tbl
             WHERE CAST(
              case 
                 when tbl.is_ms_shipped = 1 then 1
@@ -402,7 +402,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private const string QueryTargetTablesSystem = @"DECLARE @SQL NVARCHAR(MAX) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.sys.tables AS tbl
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.sys.tables AS tbl
             WHERE CAST(
              case 
                 when tbl.is_ms_shipped = 1 then 1
@@ -424,14 +424,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private const string QueryTargetViewsAll = @"DECLARE @SQL NVARCHAR(MAX) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.sys.all_views AS tbl
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.sys.all_views AS tbl
             WHERE (tbl.type = ''V'')' FROM master.sys.databases {0}
             SELECT @SQL = SUBSTRING(@SQL, 8, len(@SQL)) + ' order by name'
             EXECUTE(@SQL)";
 
         private const string QueryTargetViewsUser = @"DECLARE @SQL NVARCHAR(MAX) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.sys.all_views AS tbl
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.sys.all_views AS tbl
             WHERE (tbl.type = ''V'')and(CAST(
              case 
                 when tbl.is_ms_shipped = 1 then 1
@@ -453,7 +453,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private const string QueryTargetViewsSystem = @"DECLARE @SQL NVARCHAR(MAX) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.sys.all_views AS tbl
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.sys.all_views AS tbl
             WHERE (tbl.type = ''V'')and(CAST(
              case 
                 when tbl.is_ms_shipped = 1 then 1
@@ -475,14 +475,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private const string QueryTargetFunctionsAll = @"DECLARE @SQL NVARCHAR(MAX) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.sys.all_objects AS tbl
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.sys.all_objects AS tbl
             WHERE (tbl.type in (''TF'', ''FN'', ''IF'', ''FS'', ''FT'', ''AF''))' FROM master.sys.databases {0}
             SELECT @SQL = SUBSTRING(@SQL, 8, len(@SQL)) + ' order by name'
             EXECUTE(@SQL)";
 
         private const string QueryTargetFunctionsUser = @"DECLARE @SQL NVARCHAR(MAX) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.sys.all_objects AS tbl
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.sys.all_objects AS tbl
             WHERE (tbl.type in (''TF'', ''FN'', ''IF'', ''FS'', ''FT'', ''AF''))and(CAST(
              case 
                 when tbl.is_ms_shipped = 1 then 1
@@ -504,7 +504,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private const string QueryTargetFunctionsSystem = @"DECLARE @SQL NVARCHAR(MAX) 
             SELECT @SQL = COALESCE(@SQL,'') + ' union ' + 
-            'select name from ' + QUOTENAME(name) + '.sys.all_objects AS tbl
+            'select name COLLATE DATABASE_DEFAULT as name from ' + QUOTENAME(name) + '.sys.all_objects AS tbl
             WHERE (tbl.type in (''TF'', ''FN'', ''IF'', ''FS'', ''FT'', ''AF''))and(CAST(
              case 
                 when tbl.is_ms_shipped = 1 then 1

@@ -137,9 +137,10 @@ namespace Idera.SQLsecure.Collector.Sql
                 return true;
             }
 
+            //experimental code for one way trust domains:
+            /*
             try
             {
-
                 MemberEnumeration memberEnum = new MemberEnumeration();
                 memberEnum.GetTrustedDomainsAndForests();
 
@@ -153,7 +154,7 @@ namespace Idera.SQLsecure.Collector.Sql
             catch (Exception ex)
             {
                 logX.loggerX.Error("WARNING - Users in domain group enumeration error", ex);
-            }
+            }*/
 
 
             // Create a set to keep track of accounts already processed.

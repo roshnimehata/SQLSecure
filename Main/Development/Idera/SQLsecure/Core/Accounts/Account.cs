@@ -813,7 +813,6 @@ namespace Idera.SQLsecure.Core.Accounts
                 return true;
             }
 
-            //todo check LDAP://
             try
             {
                 using (DirectoryEntry currentUser = new DirectoryEntry(AdsiPath))
@@ -823,14 +822,14 @@ namespace Idera.SQLsecure.Core.Accounts
                         return false;
                     }
 
-                    int flags = (int)currentUser.Properties["UserFlags"].Value;
+                    int flags = (int)(currentUser.Properties["UserFlags"].Value ?? currentUser.Properties["userAccountControl"].Value);
                     bool res = !Convert.ToBoolean(flags & OS_USER_DISABLED_FLAG);
                     return res;
                 }
             }
             catch (Exception ex)
             {
-                logX.loggerX.Info("Info - error encountered in processing IsUserEnabled");
+                logX.loggerX.Warn("Warning - error encountered in processing IsUserEnabled");
             }
 
             return true;
