@@ -3321,7 +3321,7 @@ Set oServer = Nothing</td><td/></row>
 		<col def="S0">TestTableCmd2</col>
 		<col def="S0">WinAuthentUserId</col>
 		<col def="S0">DsnODBCName</col>
-		<row><td>MSSQLServer</td><td>Microsoft SQL Server</td><td>sqloledb</td><td>Provider=</td><td>Server=</td><td>Initial Catalog=</td><td>User ID=</td><td>Password=</td><td>Integrated Security=SSPI</td><td>Network Library=DBMSSOCN</td><td>select name from master.dbo.sysdatabases where name = '%s'</td><td>select * from dbo.sysobjects where id = object_id('dbo.%s') and sysstat &amp; 0xf = 3</td><td>SELECT @@VERSION</td><td>-</td><td>(</td><td>(local);.</td><td>CREATE DATABASE [%s]</td><td>USE [%s]</td><td>0</td><td>select * from dbo.sysobjects where id = object_id('dbo.%2') and sysstat &amp; 0xf = 3</td><td/><td>{SQL Server}</td></row>
+		<row><td>MSSQLServer</td><td>Microsoft SQL Server</td><td>sqloledb</td><td>Provider=</td><td>Server=</td><td>Initial Catalog=</td><td>User ID=</td><td>Password=</td><td>Integrated Security=SSPI</td><td>Network Library=DBMSSOCN</td><td>select name from master.dbo.sysdatabases where name = '%s'</td><td>select * from dbo.sysobjects where id = object_id('dbo.%s') and sysstat &amp; 0xf = 3</td><td>SELECT SERVERPROPERTY('ProductVersion')</td><td></td><td></td><td>(local);.</td><td>CREATE DATABASE [%s]</td><td>USE [%s]</td><td>0</td><td>select * from dbo.sysobjects where id = object_id('dbo.%2') and sysstat &amp; 0xf = 3</td><td/><td>{SQL Server}</td></row>
 	</table>
 
 	<table name="ISSQLRequirement">
