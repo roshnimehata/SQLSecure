@@ -1100,7 +1100,7 @@
 		<row><td>SetupCompleteSuccess</td><td>CheckForUpdatesText</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
 		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Disable</td><td>&amp;Repository=3  OR (IS_UPGRADE=1 and !Repository=3)</td></row>
 		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Enable</td><td>&amp;Repository&lt;&gt;3</td></row>
-		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Show</td><td>NOT Installed  And (&amp;Console=3  OR (IS_UPGRADE=1 and !Repository=3))</td></row>
+		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Show</td><td>&amp;Console=3  OR (IS_UPGRADE=1 and !Repository=3)</td></row>
 		<row><td>SetupCompleteSuccess</td><td>CheckLaunchReadme</td><td>Show</td><td>SHOWLAUNCHREADME="-1"  And READMEFILETOLAUNCHATEND &lt;&gt; "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG</td></row>
 		<row><td>SetupCompleteSuccess</td><td>LaunchReadmeText</td><td>Show</td><td>0</td></row>
 		<row><td>SetupCompleteSuccess</td><td>TextLine2</td><td>Show</td><td>ProgressType2="installed" And ((ACTION&lt;&gt;"INSTALL") OR (NOT ISENABLEDWUSFINISHDIALOG) OR (ISENABLEDWUSFINISHDIALOG And Installed))</td></row>
@@ -1436,7 +1436,7 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpFatalExit</td><td>1</td><td>1</td></row>
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpSuccess</td><td>1</td><td>1</td></row>
-		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>LAUNCHPROGRAM and NOT Installed  And (&amp;Console=3  OR (IS_UPGRADE=1 and !Repository=3))</td><td>3</td></row>
+		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>LAUNCHPROGRAM And (&amp;Console=3  OR (IS_UPGRADE=1 and !Repository=3))</td><td>3</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupError</td><td>A</td><td>EndDialog</td><td>ErrorAbort</td><td>1</td><td>1</td></row>
 		<row><td>SetupError</td><td>C</td><td>EndDialog</td><td>ErrorCancel</td><td>1</td><td>0</td></row>
@@ -3492,28 +3492,28 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>##ID_STRING231##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
 		<row><td>##ID_STRING235##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
 		<row><td>##ID_STRING239##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING243##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING247##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING251##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING255##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING259##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING263##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING267##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING271##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING275##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
+		<row><td>##ID_STRING243##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING247##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING251##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING255##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING259##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING263##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING267##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING271##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING275##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
 		<row><td>##ID_STRING279##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1550133816</td></row>
-		<row><td>##ID_STRING283##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING287##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
+		<row><td>##ID_STRING283##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING287##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
 		<row><td>##ID_STRING291##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING295##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING299##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
+		<row><td>##ID_STRING295##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911945493</td></row>
+		<row><td>##ID_STRING299##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911945493</td></row>
 		<row><td>##ID_STRING303##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING307##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING311##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
+		<row><td>##ID_STRING307##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911945493</td></row>
+		<row><td>##ID_STRING311##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
 		<row><td>##ID_STRING315##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING319##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING323##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
-		<row><td>##ID_STRING327##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911995734</td></row>
+		<row><td>##ID_STRING319##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING323##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
+		<row><td>##ID_STRING327##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947541</td></row>
 		<row><td>##ID_STRING331##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
 		<row><td>##ID_STRING335##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
 		<row><td>##ID_STRING339##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
