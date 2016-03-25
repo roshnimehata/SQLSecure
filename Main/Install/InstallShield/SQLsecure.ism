@@ -1109,7 +1109,7 @@
 		<row><td>SetupCompleteSuccess</td><td>UpdateTextLine2</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
 		<row><td>SetupCompleteSuccess</td><td>UpdateTextLine3</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
 		<row><td>SetupCompleteSuccess</td><td>txtRun</td><td>Hide</td><td>&amp;Repository&lt;&gt;3</td></row>
-		<row><td>SetupCompleteSuccess</td><td>txtRun</td><td>Show</td><td>&amp;Repository=3</td></row>
+		<row><td>SetupCompleteSuccess</td><td>txtRun</td><td>Show</td><td>&amp;Repository=3 OR (IS_UPGRADE=1 and !Repository=3)</td></row>
 		<row><td>SetupInterrupted</td><td>BackLarge</td><td>Default</td><td>UpdateStarted</td></row>
 		<row><td>SetupInterrupted</td><td>BackLarge</td><td>Disable</td><td>NOT UpdateStarted</td></row>
 		<row><td>SetupInterrupted</td><td>BackLarge</td><td>Enable</td><td>UpdateStarted</td></row>
@@ -3337,7 +3337,7 @@ Set oServer = Nothing</td><td/></row>
 		<col def="S0">TestTableCmd2</col>
 		<col def="S0">WinAuthentUserId</col>
 		<col def="S0">DsnODBCName</col>
-		<row><td>MSSQLServer</td><td>Microsoft SQL Server</td><td>sqloledb</td><td>Provider=</td><td>Server=</td><td>Initial Catalog=</td><td>User ID=</td><td>Password=</td><td>Integrated Security=SSPI</td><td>Network Library=DBMSSOCN</td><td>select name from master.dbo.sysdatabases where name = '%s'</td><td>select * from dbo.sysobjects where id = object_id('dbo.%s') and sysstat &amp; 0xf = 3</td><td>SELECT SERVERPROPERTY('ProductVersion')</td><td></td><td></td><td>(local);.</td><td>CREATE DATABASE [%s]</td><td>USE [%s]</td><td>0</td><td>select * from dbo.sysobjects where id = object_id('dbo.%2') and sysstat &amp; 0xf = 3</td><td/><td>{SQL Server}</td></row>
+		<row><td>MSSQLServer</td><td>Microsoft SQL Server</td><td>sqloledb</td><td>Provider=</td><td>Server=</td><td>Initial Catalog=</td><td>User ID=</td><td>Password=</td><td>Integrated Security=SSPI</td><td>Network Library=DBMSSOCN</td><td>select name from master.dbo.sysdatabases where name = '%s'</td><td>select * from dbo.sysobjects where id = object_id('dbo.%s') and sysstat &amp; 0xf = 3</td><td>SELECT SERVERPROPERTY('ProductVersion')</td><td/><td/><td>(local);.</td><td>CREATE DATABASE [%s]</td><td>USE [%s]</td><td>0</td><td>select * from dbo.sysobjects where id = object_id('dbo.%2') and sysstat &amp; 0xf = 3</td><td/><td>{SQL Server}</td></row>
 	</table>
 
 	<table name="ISSQLRequirement">
@@ -3492,28 +3492,28 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>##ID_STRING231##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
 		<row><td>##ID_STRING235##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
 		<row><td>##ID_STRING239##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING243##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING247##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING251##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING255##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING259##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING263##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING267##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING271##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING275##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
+		<row><td>##ID_STRING243##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING247##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING251##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING255##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING259##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING263##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING267##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING271##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING275##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
 		<row><td>##ID_STRING279##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1550133816</td></row>
-		<row><td>##ID_STRING283##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING287##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
+		<row><td>##ID_STRING283##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING287##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
 		<row><td>##ID_STRING291##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING295##</td><td>1033</td><td>|</td><td>0</td><td/><td>287011118</td></row>
-		<row><td>##ID_STRING299##</td><td>1033</td><td>|</td><td>0</td><td/><td>287011118</td></row>
+		<row><td>##ID_STRING295##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING299##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
 		<row><td>##ID_STRING303##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING307##</td><td>1033</td><td>|</td><td>0</td><td/><td>287011118</td></row>
-		<row><td>##ID_STRING311##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
+		<row><td>##ID_STRING307##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING311##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
 		<row><td>##ID_STRING315##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING319##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING323##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
-		<row><td>##ID_STRING327##</td><td>1033</td><td>|</td><td>0</td><td/><td>287009070</td></row>
+		<row><td>##ID_STRING319##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING323##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
+		<row><td>##ID_STRING327##</td><td>1033</td><td>|</td><td>0</td><td/><td>-911947033</td></row>
 		<row><td>##ID_STRING331##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
 		<row><td>##ID_STRING335##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
 		<row><td>##ID_STRING339##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
