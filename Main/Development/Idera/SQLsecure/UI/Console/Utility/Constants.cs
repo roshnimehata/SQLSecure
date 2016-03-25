@@ -90,9 +90,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static String COMPANY_STR = @"Idera";
         public static String PRODUCT_STR = @"SQLsecure";
-        public static String PRODUCT_VER_STR = @"2.8";
+        public static String PRODUCT_VER_STR = @"2.9";
         // Previous version strings (newest first) to find previous option files
-        public static String[] PRODUCT_VER_STR_PREV = { @"2.7",@"2.6", @"2.5", @"2.0", @"1.2", @"1.1" };
+        public static String[] PRODUCT_VER_STR_PREV = { @"2.8",@"2.7",@"2.6", @"2.5", @"2.0", @"1.2", @"1.1" };
         public static String COMPONENT_STR = @"Console";
 
         public static String APP_TITLE_STR = COMPANY_STR + @" " + PRODUCT_STR + @" - {0}";
@@ -102,7 +102,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const int DalVersion = 2900;
         public const int SchemaVersion = 2900;
 
-        public const string COPYRIGHT_MSG = @"© Copyright 2005-2014 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
+        public const string COPYRIGHT_MSG = @"© Copyright 2005-2016 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
 
         public const string BETA_VERSION = ""; //" (BETA VERSION)"; 
 
@@ -177,7 +177,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         internal const string SetDefault = "-DefaultRepository"; // Save Installation Repository
         internal const string Verbose = "-Verbose";
 
-        internal const string CopyrightMsg = "\nCopyright © 2005-2014, Idera, Inc.";
+        internal const string CopyrightMsg = "\nCopyright © 2005-2016, Idera, Inc.";
         internal static string UsageMsg = "\n" + PRODUCT_STR + @"  audits SQL Server security data and associated\n"
                                                       + "Windows accounts.\n\n"
                                                       + "Usage: Idera." + PRODUCT_STR + @".Console\n"

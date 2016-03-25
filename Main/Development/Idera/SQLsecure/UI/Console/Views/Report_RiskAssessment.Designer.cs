@@ -137,9 +137,9 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._label_Server.Size = new System.Drawing.Size(65, 13);
             this._label_Server.TabIndex = 15;
             this._label_Server.Text = "SQL Server:";
+             // _checkbox_showAlertsOnly
             // 
-            // _checkbox_showAlertsOnly
-            // 
+            this._checkbox_showAlertsOnly.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this._checkbox_showAlertsOnly.AutoSize = true;
             this._checkbox_showAlertsOnly.Location = new System.Drawing.Point(435, 17);
             this._checkbox_showAlertsOnly.Name = "_checkbox_showAlertsOnly";
@@ -160,8 +160,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // ultraCombo_Assessment
             // 
-            this.ultraCombo_Assessment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.ultraCombo_Assessment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ultraCombo_Assessment.DropDownStyle = Infragistics.Win.DropDownStyle.DropDownList;
             this.ultraCombo_Assessment.Location = new System.Drawing.Point(78, 15);
             this.ultraCombo_Assessment.MaxDropDownItems = 12;
@@ -169,8 +169,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             this.ultraCombo_Assessment.Size = new System.Drawing.Size(349, 21);
             this.ultraCombo_Assessment.TabIndex = 22;
             this.ultraCombo_Assessment.SelectionChanged += new System.EventHandler(this.ultraCombo_Assessment_SelectionChanged);
-            this.ultraCombo_Assessment.AfterCloseUp += new System.EventHandler(this.ultraCombo_Assessment_AfterCloseUp);
             this.ultraCombo_Assessment.BeforeDropDown += new System.ComponentModel.CancelEventHandler(this.ultraCombo_Assessment_BeforeDropDown);
+            this.ultraCombo_Assessment.AfterCloseUp += new System.EventHandler(this.ultraCombo_Assessment_AfterCloseUp);
             // 
             // Report_RiskAssessment
             // 
