@@ -212,7 +212,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.listBox_AvailableObjects.FormattingEnabled = true;
             this.listBox_AvailableObjects.Location = new System.Drawing.Point(13, 93);
             this.listBox_AvailableObjects.Name = "listBox_AvailableObjects";
-            this.listBox_AvailableObjects.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.listBox_AvailableObjects.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_AvailableObjects.Size = new System.Drawing.Size(180, 199);
             this.listBox_AvailableObjects.TabIndex = 15;
             // 
@@ -221,7 +221,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.listBox_SelectedObjects.FormattingEnabled = true;
             this.listBox_SelectedObjects.Location = new System.Drawing.Point(319, 93);
             this.listBox_SelectedObjects.Name = "listBox_SelectedObjects";
-            this.listBox_SelectedObjects.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.listBox_SelectedObjects.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_SelectedObjects.Size = new System.Drawing.Size(180, 199);
             this.listBox_SelectedObjects.TabIndex = 16;
             // 
