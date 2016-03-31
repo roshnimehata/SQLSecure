@@ -103,7 +103,6 @@
       <Image Name="image1">
         <Sizing>Clip</Sizing>
         <Top>0.9375in</Top>
-        <Width>10in</Width>
         <Source>Embedded</Source>
         <Style />
         <ZIndex>4</ZIndex>
@@ -135,7 +134,6 @@
           </Textbox>
         </ReportItems>
         <Top>1.125in</Top>
-        <Width>10in</Width>
         <Style>
           <BorderColor>
             <Default>LightGrey</Default>
@@ -149,7 +147,6 @@
       </Rectangle>
       <Textbox Name="audit_date">
         <Top>0.8125in</Top>
-        <Width>10in</Width>
         <Style>
           <FontStyle>Italic</FontStyle>
           <TextAlign>Center</TextAlign>
@@ -161,7 +158,6 @@
       </Textbox>
       <Textbox Name="report_title">
         <Top>0.625in</Top>
-        <Width>10in</Width>
         <Style>
           <Color>#cc6600</Color>
           <FontSize>16pt</FontSize>
@@ -176,7 +172,6 @@
       </Textbox>
       <Image Name="header_graphic">
         <Sizing>Clip</Sizing>
-        <Width>10in</Width>
         <Source>Embedded</Source>
         <Style />
         <Height>0.583in</Height>
@@ -375,7 +370,7 @@ Function setServerFilter(s As String)
 		Return s
 	End If
 End Function</Code>
-  <Width>10.0625in</Width>
+  <Width>10in</Width>
   <Body>
     <ReportItems>
       <Chart Name="chart2">
@@ -465,7 +460,6 @@ End Function</Code>
           </Axis>
         </ValueAxis>
         <Type>Column</Type>
-        <Width>10in</Width>
         <Palette>SemiTransparent</Palette>
         <ChartData>
           <ChartSeries>
@@ -533,7 +527,6 @@ End Function</Code>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
-        <Width>10in</Width>
         <Style>
           <BorderColor>
             <Default>LightGrey</Default>
@@ -629,7 +622,6 @@ End Function</Code>
           </Axis>
         </ValueAxis>
         <Type>Bar</Type>
-        <Width>10in</Width>
         <Palette>SemiTransparent</Palette>
         <ChartData>
           <ChartSeries>
@@ -1935,7 +1927,6 @@ End Function</Code>
       <Image Name="footer_graphic">
         <Sizing>Clip</Sizing>
         <Top>0.0625in</Top>
-        <Width>10in</Width>
         <Source>Embedded</Source>
         <Style />
         <ZIndex>3</ZIndex>
@@ -1965,7 +1956,6 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
       </Textbox>
       <Textbox Name="pagenumber">
         <Top>0.375in</Top>
-        <Width>6.6875in</Width>
         <Style>
           <Color>DimGray</Color>
           <FontSize>9pt</FontSize>
@@ -1980,7 +1970,6 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
       </Textbox>
       <Textbox Name="generatedby">
         <Top>0.125in</Top>
-        <Width>8.375in</Width>
         <Style>
           <Color>DimGray</Color>
           <FontSize>9pt</FontSize>
