@@ -14,13 +14,13 @@ namespace Idera.SQLsecure.UI.Console.Controls
     public partial class ControlPolicyAddServers : UserControl
     {
         private static string DynamicAllServersCode = "";
-        private const string DynamicSqlVersion2000Code = "Left(version,2) ='8.'";
-        private const string DynamicSqlVersion2005Code = "Left(version,2) = '9.'";
+        private const string DynamicSqlVersion2000Code = "Left(version,3) ='08.'";
+        private const string DynamicSqlVersion2005Code = "Left(version,3) = '09.'";
         private const string DynamicSqlVersion2008Code = "Left(version,3) = '10.'";
         //private const string DynamicSqlVersion2008R2Code = "Left(version,4) = '10.5'";
         private const string DynamicSqlVersion2012Code = "Left(version,3) = '11.'";
         private const string DynamicSqlVersion2014Code = "Left(version,3) = '12.'";
-        private const string DynamicSqlVersion2016Code = "Left(version,3) = '14.'";
+        private const string DynamicSqlVersion2016Code = "Left(version,3) = '13.'";
 
 
         private const string TITLE_POLICY = "Policy";

@@ -1,3 +1,5 @@
+using Microsoft.Reporting.WinForms;
+
 namespace Idera.SQLsecure.UI.Console.Views
 {
     partial class Report_AllObjectsWithPermissions
@@ -158,7 +160,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._listBox_database.FormattingEnabled = true;
             this._listBox_database.Location = new System.Drawing.Point(174, 40);
             this._listBox_database.Name = "_listBox_database";
-            this._listBox_database.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this._listBox_database.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this._listBox_database.Size = new System.Drawing.Size(330, 69);
             this._listBox_database.TabIndex = 15;
             this._listBox_database.SelectedIndexChanged += new System.EventHandler(this._listBox_database_SelectedIndexChanged);

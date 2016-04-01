@@ -94,13 +94,12 @@
     <PrintOnFirstPage>true</PrintOnFirstPage>
     <ReportItems>
       <Image Name="image2">
-        <Sizing>Clip</Sizing>
+        <Sizing>Fit</Sizing>
         <Top>0.9375in</Top>
-        <Width>10in</Width>
         <Source>Embedded</Source>
         <Style />
         <ZIndex>4</ZIndex>
-        <Height>0.062in</Height>
+        <Height>0.0625in</Height>
         <Value>footer_wide</Value>
       </Image>
       <Rectangle Name="parameters">
@@ -128,7 +127,7 @@
           </Textbox>
         </ReportItems>
         <Top>1.125in</Top>
-        <Width>10in</Width>
+        <Width>9.375in</Width>
         <Style>
           <BorderColor>
             <Default>LightGrey</Default>
@@ -142,7 +141,6 @@
       </Rectangle>
       <Textbox Name="audit_date">
         <Top>0.8125in</Top>
-        <Width>10in</Width>
         <Style>
           <FontStyle>Italic</FontStyle>
           <TextAlign>Center</TextAlign>
@@ -154,7 +152,6 @@
       </Textbox>
       <Textbox Name="report_title">
         <Top>0.625in</Top>
-        <Width>10in</Width>
         <Style>
           <Color>#cc6600</Color>
           <FontSize>16pt</FontSize>
@@ -168,11 +165,11 @@
         <Value>=Parameters!ReportTitle.Value</Value>
       </Textbox>
       <Image Name="header_graphic">
-        <Sizing>Clip</Sizing>
-        <Width>10in</Width>
+        <Sizing>FitProportional</Sizing>
+        <MIMEType>image/png</MIMEType>
         <Source>Embedded</Source>
         <Style />
-        <Height>0.583in</Height>
+        <Height>0.5625in</Height>
         <Value>header_wide</Value>
       </Image>
     </ReportItems>
@@ -383,7 +380,7 @@ Function setServerFilter(s As String)
 	End If
 End Function
 </Code>
-  <Width>11.4in</Width>
+  <Width>9.625in</Width>
   <Body>
     <ReportItems>
       <Rectangle Name="recommendation">
@@ -401,7 +398,6 @@ End Function
             <Value>About:</Value>
           </Textbox>
           <Textbox Name="textbox13">
-            <Width>8.4375in</Width>
             <Style>
               <Color>#404040</Color>
             </Style>
@@ -411,7 +407,7 @@ End Function
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
-        <Width>10in</Width>
+        <Width>9.375in</Width>
         <Style>
           <BorderColor>
             <Default>LightGrey</Default>
@@ -435,7 +431,7 @@ End Function
         </Parameters>
         <Top>2.5625in</Top>
         <ReportName>SubReport_ServersUsedSummary</ReportName>
-        <Width>7.27in</Width>
+        <Width>6.6875in</Width>
         <ZIndex>2</ZIndex>
         <Left>2.6875in</Left>
       </Subreport>
@@ -462,7 +458,7 @@ End Function
           </Image>
           <Textbox Name="errMsg">
             <Top>0.1875in</Top>
-            <Width>6.1875in</Width>
+            <Width>8.625in</Width>
             <Style>
               <FontWeight>700</FontWeight>
             </Style>
@@ -473,7 +469,7 @@ End Function
           </Textbox>
         </ReportItems>
         <Top>0.0625in</Top>
-        <Width>9.8125in</Width>
+        <Width>9.3125in</Width>
         <Style>
           <BorderColor>
             <Default>Red</Default>
@@ -922,6 +918,7 @@ End Function
             </Header>
           </TableGroup>
         </TableGroups>
+        <Width>9.3875in</Width>
         <Details>
           <TableRows>
             <TableRow>
@@ -1386,22 +1383,22 @@ End Function
         </Header>
         <TableColumns>
           <TableColumn>
-            <Width>1in</Width>
+            <Width>0.625in</Width>
           </TableColumn>
           <TableColumn>
-            <Width>1in</Width>
+            <Width>0.8125in</Width>
           </TableColumn>
           <TableColumn>
-            <Width>1in</Width>
+            <Width>0.5in</Width>
           </TableColumn>
           <TableColumn>
-            <Width>2in</Width>
+            <Width>1.9375in</Width>
           </TableColumn>
           <TableColumn>
-            <Width>1.125in</Width>
+            <Width>0.6875in</Width>
           </TableColumn>
           <TableColumn>
-            <Width>1.6875in</Width>
+            <Width>1.375in</Width>
           </TableColumn>
           <TableColumn>
             <Width>1in</Width>
@@ -1410,7 +1407,7 @@ End Function
             <Width>0.14in</Width>
           </TableColumn>
           <TableColumn>
-            <Width>0.95in</Width>
+            <Width>0.8125in</Width>
           </TableColumn>
           <TableColumn>
             <Width>0.81in</Width>
@@ -1728,7 +1725,7 @@ End Function
         <ZIndex>5</ZIndex>
         <CanGrow>true</CanGrow>
         <Height>0.1875in</Height>
-        <Value>Copyright © 2005-2014 Idera, Inc. </Value>
+        <Value>Copyright © 2005-2016 Idera, Inc. </Value>
       </Textbox>
       <Image Name="idera_logo">
         <Sizing>Clip</Sizing>
@@ -1744,18 +1741,18 @@ End Function
         <Value>idera_logo_small</Value>
       </Image>
       <Image Name="footer_graphic">
-        <Sizing>Clip</Sizing>
+        <Sizing>Fit</Sizing>
         <Top>0.0625in</Top>
-        <Width>10in</Width>
+        <Width>9.3125in</Width>
         <Source>Embedded</Source>
         <Style />
         <ZIndex>3</ZIndex>
-        <Height>0.062in</Height>
+        <Height>0.0625in</Height>
         <Value>footer_wide</Value>
       </Image>
       <Textbox Name="executiontime">
         <Top>0.25in</Top>
-        <Width>8.365in</Width>
+        <Width>7.6875in</Width>
         <Style>
           <Color>DimGray</Color>
           <FontSize>9pt</FontSize>
@@ -1776,7 +1773,7 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
       </Textbox>
       <Textbox Name="pagenumber">
         <Top>0.375in</Top>
-        <Width>6.6875in</Width>
+        <Width>6in</Width>
         <Style>
           <Color>DimGray</Color>
           <FontSize>9pt</FontSize>
@@ -1791,7 +1788,7 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
       </Textbox>
       <Textbox Name="generatedby">
         <Top>0.125in</Top>
-        <Width>8.375in</Width>
+        <Width>7.6875in</Width>
         <Style>
           <Color>DimGray</Color>
           <FontSize>9pt</FontSize>

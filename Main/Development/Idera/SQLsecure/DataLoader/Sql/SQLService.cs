@@ -241,7 +241,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     }
                 }
                 ManagementScope scope = new ManagementScope(scopeStr.ToString(), options);
-
+                
                 try
                 {
                     scope.Connect();        //let's see if we can connect

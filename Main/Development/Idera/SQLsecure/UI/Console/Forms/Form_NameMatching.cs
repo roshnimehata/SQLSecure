@@ -98,7 +98,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 bldr = Sql.SqlHelper.ConstructConnectionString(m_serverInfo.connectionName, null, null);
             }
             else
-        {
+            {
                 bldr = Sql.SqlHelper.ConstructConnectionString(m_serverInfo.connectionName, m_serverInfo.login, m_serverInfo.password);
         }
 
