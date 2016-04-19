@@ -1706,6 +1706,84 @@ Select Case result
 End select
 
 Set conn = Nothing</td><td/></row>
+		<row><td>CheckSQLVersion</td><td>38</td><td/><td>
+sOS = Session.Property ("VersionNT")
+DBServer = Session.Property ("INSTANCE")
+DBUser = Session.Property ("SQLSERVER_USERNAME")
+DBPassword = Session.Property ("SQLSERVER_PASSWORD")
+DBMode = Session.Property ("SQLSERVER_AUTHENTICATION")
+
+err.number = 0
+on error resume next
+
+Set conn = CreateObject("adodb.connection")
+conn.Provider = "SQLOLEDB.1"
+
+if DBMode = 0 then   
+
+	conn.ConnectionString = "Data Source=" &amp; DBServer _
+		&amp; ";Integrated Security=SSPI;Initial Catalog=master"
+
+else
+
+	conn.ConnectionString = "user id="&amp; DBUser _
+		&amp; "; password=" &amp; DBPassword _
+		&amp; ";Data Source=" &amp; DBServer _
+		&amp; "; Initial Catalog=master;"
+
+end if
+
+conn.Open
+
+Set rs = conn.Execute("exec xp_msver ProductVersion")
+rs.MoveFirst
+ver = rs.Fields.Item(3).Value
+
+aVer = split(ver, ".")
+
+rs.Close
+
+if err.number = 0 then
+
+		
+    Select Case aVer(0)
+   
+	   Case "8"
+	
+        	Session.Property("BSQLVER") = "FALSE" 					
+	   
+	   Case "9"
+	   
+	   		Session.Property("BSQLVER") = "TRUE"		   		
+      		   
+	   Case "10"
+	      
+	      	Session.Property("BSQLVER") = "TRUE"
+	      	
+	   Case "11"
+	      
+	      	Session.Property("BSQLVER") = "TRUE"
+			
+		Case "12"
+	      
+	      	Session.Property("BSQLVER") = "TRUE"  
+	      	    	
+	   Case "13"
+	      
+	      	Session.Property("BSQLVER") = "TRUE"
+	      	
+	   Case Else
+	   
+	   	   	'MSGBOX "The provided Instance of SQL Server is an unsupported version.  Please provice another Instance to Install the " &amp; Session.Property("txtRepository") &amp; " too.", 48, Session.Property("ProductName")		
+	   
+	   		Session.Property("BSQLVER") = "FALSE" 
+	      
+	End Select
+
+end if
+
+Set conn = Nothing
+</td><td/></row>
 		<row><td>CheckSQLdmInstalled</td><td>1</td><td>ISScriptBridge.dll</td><td>f4</td><td/></row>
 		<row><td>CheckServiceSQLAcct</td><td>1</td><td>ISScriptBridge.dll</td><td>f6</td><td/></row>
 		<row><td>ConfirmINSTALLDirMedia</td><td>1</td><td>ISScriptBridge.dll</td><td>f5</td><td/></row>

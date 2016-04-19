@@ -1,0 +1,37 @@
+/*<meta />*/
+
+p.MyStyle
+{
+	font-family: Arial;
+	font-size: 12pt;
+	margin: 0px;
+}
+
+img
+{
+	border: none;
+}
+
+a.Popup
+{
+	
+}
+
+html
+{
+	padding-bottom: 1px;
+	border: none;
+	background-color: #a9a9a9;
+}
+
+li.Bullet
+{
+	page-break-inside: avoid;
+	color: #ff4905;
+	font-family: arial;
+	padding-bottom: 1pt;
+	padding-top: 1pt;
+	margin-left: 5pt;
+	margin-top: 1pt;
+}
+

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" class="" MadCap:lastBlockDepth="5" MadCap:lastHeight="921" MadCap:lastWidth="903">
+    <head><title>Configure the policy risks</title>
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" MadCap:stylesheetType="table" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Select security checks</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Select security checks</h2>
+        <p class="Body">
+            <MadCap:keyword term="security checks:select;policies:security checks, configure" />The Configure the Policy window allows you the define the security checks this policy should use to evaluate your audit data.</p>
+        <p class="Body">Security checks assess the vulnerability of specific Windows OS and SQL&#160;Server objects based on your criteria. After security checks are configured and your SQL&#160;Server instances are assigned to the policy, you can view the assessment results on the Security Summary view and on the Risk Assessment Report. </p>
+        <p class="Body">In addition, you can configure email notifications to be sent out when a particular risk level has been passed. For more information, see <a href="Configure Email Notification.htm">Configure Email Notifications</a>.</p>
+        <table class="TableStyle_Tip" style="mc-table-style: url('../Resources/TableStyles/Tip.css');" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                        <p>TIP</p>
+                    </td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                        <p>When security checks are setup for your policies, it is important that accurate criteria is entered. For example, a typo in the Windows Operating System Version metric criteria could cause erroneous findings.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What security check settings can I&#160;configure?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="DefinitionListTerm">Report Text</p>
+                <p class="DefinitionListBody">This text displays on your policy reports, such as the Risk Assessment report. By default, SQLsecure provides a report text question for each security check. You can edit this question so that it better fits your audit reporting needs.</p>
+                <p class="DefinitionListBody">For example, the Protocols security check includes the report text “Are unexpected Protocols enabled?”. If unexpected protocols are enabled, the report displays this question as well as the SQL Server instances on which the vulnerability was found.</p>
+                <p class="DefinitionListTerm">External Cross Reference</p>
+                <p class="DefinitionListBody">This field allows you to cross reference a security vulnerability included in your report to a number or name contained in an external security standard, such as a specific HIPAA&#160;regulation.</p>
+                <p class="DefinitionListTerm">Risk Level</p>
+                <p class="DefinitionListBody">This option allows you to set the severity of the risk posed by this finding. The risk level is important because it reflects how severe or risky a particular security finding is for your environment, allowing you to further customize security checks to meet your exact auditing needs. For example, finding an enabled Guest account on one instance may be a high risk, but on another instance it may be a low risk. The risk level also determines where the corresponding security finding appears on the policy or assessment Report Card and whether or not email notifications will be sent.</p>
+                <p class="DefinitionListTerm">Criteria</p>
+                <p class="DefinitionListBody">Some security checks allow you to configure the assessment criteria, such as specific user accounts, stored procedures, or the login audit level. Text entered in this field must use the exact spelling of the object being checked.</p>
+                <p class="DefinitionListBody"><span class="If_Then_Statement">If the criteria for this check is entered incorrectly</span>, it may fail to correctly display its finding in the Report Card. </p>
+                <table class="TableStyle_Tip" style="mc-table-style: url('../Resources/TableStyles/Tip.css'); margin-left: 0; margin-right: auto;" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                                <p>TIP</p>
+                            </td>
+                            <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                                <p>Some security check criteria support using the percent wildcard character (%) to specify objects whose names apply a naming convention. For example, to specify all users whose logon starts with <code>sql</code>, enter the following syntax:&#160;<code>domain\sql%</code>.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>When I am creating a new policy "from scratch", why are security checks already enabled?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">Even though you are creating a policy "from scratch", SQLsecure has enabled several common security checks you may need, to help you configure your policy quickly and easily. These security checks are also included in the default All Servers policy. You can add, edit, or disable any security check as needed. </p>
+                <table class="TableStyle_Tip" style="mc-table-style: url('../Resources/TableStyles/Tip.css');border-left-style: solid;border-left-width: 1px;border-left-color: #a9a9a9;border-right-style: solid;border-right-width: 1px;border-right-color: #a9a9a9;border-top-style: solid;border-top-width: 1px;border-top-color: #a9a9a9;border-bottom-style: solid;border-bottom-width: 1px;border-bottom-color: #a9a9a9;margin-left: 0;margin-right: auto;caption-side: top;" cellspacing="0">
+                    <col />
+                    <col />
+                    <tbody>
+                        <tr>
+                            <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                                <p>TIP</p>
+                            </td>
+                            <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">
+                                <p>By default, the All Servers policy enforces the Idera Level 2 - Balanced template.  For more information, see how <a href="Policy Templates.htm">policy templates</a> <![CDATA[ ]]>can help you achieve your SQL&#160;Server security goals.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What is the Import Settings option?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">This option allows you to import security check definitions from either a built-in policy template or an existing policy whose settings you previously exported. </p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

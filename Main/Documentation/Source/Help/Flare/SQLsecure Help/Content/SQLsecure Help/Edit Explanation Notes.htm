@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="4" MadCap:lastHeight="489" MadCap:lastWidth="916">
+    <head>
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+        <link href="../Resources/TableStyles/Tip.css" rel="stylesheet" MadCap:stylesheetType="table" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Edit explanation notes</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Edit explanation notes</h2>
+        <p class="Body">
+            <MadCap:keyword term="Saved Assessments:explanation notes;assessments:explanation notes;explanation notes" />Use the Edit Explanation Notes window to add or change the explanation notes associated with this security check. You can specify a different explanation note for each finding on each affected SQL&#160;Server instance.</p>
+        <p class="Body"> Explanation notes let you clarify why a specific finding has been found. For example, you may need to justify why a high or medium risk finding should be ignored due to a special configuration or need in your environment. </p>
+        <p class="Body">When a finding is explained, SQLsecure regards the finding as "ok"&#160;and changes the status of the security check in the assessment report card. <span class="If_Then_Statement">If you do not want the finding to be regarded as "ok"</span>, enter the appropriate note but leave the <span class="GUI_Item">Explained </span>option unchecked.</p>
+        <table style="mc-table-style: url('../Resources/TableStyles/Tip.css');" class="TableStyle_Tip" cellspacing="0">
+            <col />
+            <col />
+            <tbody>
+                <tr>
+                    <td class="TableStyle_Tip_Body_0_0_RowEnd_ColSep">
+                        <p>TIP</p>
+                    </td>
+                    <td class="TableStyle_Tip_Body_0_1_RowEnd_ColEnd">You can copy explanation notes from one assessment to another when you <a href="Compare Assessment Security Checks.htm">compare the assessment security checks</a>. </td>
+                </tr>
+            </tbody>
+        </table>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>Fields</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="DefinitionListTerm">Server</p>
+                <p class="DefinitionListBody">Provides the name of the SQL&#160;Server instance on which the security check found a violation.</p>
+                <p class="DefinitionListTerm">Risk</p>
+                <p class="DefinitionListBody">Provides the level of risk set for this security check (high, medium, or low).</p>
+                <p class="DefinitionListTerm">Explained</p>
+                <p class="DefinitionListBody">Indicates whether this security check finding has been explained for the specified instance. </p>
+                <p class="DefinitionListTerm">Notes</p>
+                <p class="DefinitionListBody">Displays the note that has been entered about each finding, per each affected SQL&#160;Server instance.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

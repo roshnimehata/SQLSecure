@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="7" MadCap:lastHeight="743" MadCap:lastWidth="916">
+    <head>
+    </head>
+    <body>
+        <h1 class="Heading1">New features and fixed issues</h1>
+        <p class="Body">SQLsecure 2.7 provides the following new features and fixed customer issues.</p>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>2.7 new features</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="DefinitionListTerm">New policy templates for PCI&#160;and HIPAA</p>
+                <p class="DefinitionListBody">The SQLsecure <a href="http://www.idera.com/Help/SQLsecure/2-7/Web/Default_CSH.htm#SQLsecure Help/Policy Templates.htm|WebHelpSkinSilver" target="_blank">policy templates</a> now address security standards for the Payment Card Industry (PCI) and the Health Insurance Portability and Accountability Act (HIPAA), allowing you to immediately begin accessing your SQL&#160;Server environment against these regulations.</p>
+                <p class="DefinitionListTerm">New weak password detection</p>
+                <p class="DefinitionListBody">SQLsecure now detects and analyses the <a href="http://www.idera.com/Help/SQLsecure/2-7/Web/Default_CSH.htm#SQLsecure Help/Configure Password Detection.htm|WebHelpSkinSilver" target="_blank">password health of SQL&#160;logins</a> on your audited SQL&#160;Server instances, reporting when passwords are blank or weak.</p>
+                <p class="DefinitionListTerm">New security checks</p>
+                <p class="DefinitionListBody">SQLsecure now provides these additional security checks to help you further harden the security of your SQL&#160;Server instances:</p>
+                <blockquote>
+                    <ul style="list-style-type: circle;">
+                        <li class="Bullet">Weak Passwords</li>
+                        <li class="Bullet">Public Role Has Permissions on Database User Objects</li>
+                        <li class="Bullet">Integration Services Roles Have Dangerous Security Principals</li>
+                        <li class="Bullet">Integration Services  Permissions Not Acceptable</li>
+                    </ul>
+                </blockquote>
+                <p class="DefinitionListBody">These security checks are enabled in the    <![CDATA[ ]]><a href="http://www.idera.com/Help/SQLsecure/2-7/Web/Default_CSH.htm#SQLsecure Help/Policy Templates.htm|WebHelpSkinSilver" target="_blank">Idera Level 3 policy template</a>. </p>
+                <p class="DefinitionListTerm">New FIPS support</p>
+                <p class="DefinitionListBody">SQLsecure now supports auditing and assessing the security of SQL Server instances located in environments that require <a href="http://www.idera.com/Help/SQLsecure/2-7/Web/Default_CSH.htm#SQLsecure Help/FIPS Compliance.htm|WebHelpSkinSilver" target="_blank">FIPS compliance</a>.</p>
+                <p class="DefinitionListTerm">New SQL&#160;Server 2012 support</p>
+                <p class="DefinitionListBody">SQLsecure now offers full support of SQL Server 2012 RTM.</p>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>2.7 fixed issues</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <ul style="list-style-type: circle;">
+                    <li class="Bullet">
+                        When changing server connection credentials, SQLsecure now identifies other audited SQL Server instances that use the same account and then lets you change their connection credentials as well.
+                    </li>
+                    <li class="Bullet">SQLsecure now correctly processes local account information for SQL Server instances operating in clustered environments. </li>
+                    <li class="Bullet">Snapshots that have been marked as baselines are no longer deleted from the SQLsecure Repository database during grooming.</li>
+                    <li class="Bullet">The SQLsecure Collector now correctly gets file permissions for service executable files when the file name is specified in upper case.</li>
+                    <li class="Bullet">The SQLsecure Collector now correctly gets permissions data for system databases that are not located on the local drive of the target SQL&#160;Server instance.</li>
+                    <li class="Bullet">SQLsecure now successfully displays the Server Security Report Card and generates the Risk Assessment report when the audited SQL&#160;Server instance and the instance hosting the SQLsecure Repository have been assigned different collations.</li>
+                    <li class="BulletLast">When scheduling monthly snapshots, SQLsecure now correctly applies the "3rd",“4th”, and “Last” options for specific days of the month.</li>
+                </ul>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

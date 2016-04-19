@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="SQLsecure Data Source">
+      <rd:DataSourceID>79d47d7a-6f1d-4516-85a8-f5ba16d95a6d</rd:DataSourceID>
+      <DataSourceReference>SQLsecure Data Source</DataSourceReference>
+    </DataSource>
+  </DataSources>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <Description>Sub-report showing snapshots used to generate the parent report.</Description>
+  <ReportParameters>
+    <ReportParameter Name="rundate">
+      <DataType>DateTime</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value>=System.DateTime.Today</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Data as of:</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="connectionname">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>All servers in policy</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>SQL Server:</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="usebaseline">
+      <DataType>Boolean</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>False</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>usebaseline</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="policyid">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>1</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>policyid</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+  </ReportParameters>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.27in</InteractiveWidth>
+  <rd:GridSpacing>0.0625in</rd:GridSpacing>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <RightMargin>0.5in</RightMargin>
+  <LeftMargin>0.5in</LeftMargin>
+  <BottomMargin>0.5in</BottomMargin>
+  <rd:ReportID>cf0865a8-27eb-40a4-a830-325ba09e7215</rd:ReportID>
+  <EmbeddedImages>
+    <EmbeddedImage Name="warning">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>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</ImageData>
+    </EmbeddedImage>
+    <EmbeddedImage Name="document_out">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAK3RFWHRDcmVhdGlvbiBUaW1lAE1vIDE1IEF1ZyAyMDA1IDExOjMxOjE0ICswMTAw2f4ZegAAAAd0SU1FB9MJAxczMxUJuG0AAAAJcEhZcwAACvAAAArwAUKsNJgAAAAEZ0FNQQAAsY8L/GEFAAABzUlEQVR42mNgoBAwwhgdM3b8B9G/f/8B83/B6F8Q+uev3yAqckJd5AqsJoEMwAcKmpb/r+vbCKIjkPUx4XIaUA/DPyD+/fc/w68//8Bi0SEuDHw8XMuRDWFC1oDiN0ZGsP8YoZ4UFuBmOHv+MgMrC1hgOYYBP3/+whlQIKNLM70ZFvysZ8hKcGEQ5meB28aCUAVx5tnzDxhAjgE5XUSED6iZkQHkg/9Ap+x7tpchdW8sQ6xaGSOmAVBgZCAPZ8vPBbKZf4LZf//9YwiwN2I4c+UQw60X9xgwDIAFwaHj98BOlpESYPjw6x1DTZQ3igXGcnIMM7ccZGDsZTj6v5jBGm4ALP6Zmf6DDQAFHihgf/z4gWIAyCUgDFT0B8UF//79gwcYyDWgKPz/j5Ghb90BiFOZWRjM9KQZLl57wqDwz4Dhccl+exQDfkBj4ecfiCH3Hn9gOOX1AGgQ0Nb/EEPNtkkxBCgFM4Qy5TIcY7DGng5+/Wdi+A3Ef4Ghf+fxR4bbQHzz4Uegwf8ZdPiNGWa5LWG4dP0BZiB+/wEJbRMjWaTUiOwlBoZdCocZXn/7w/D6/SdMA1hZGRjy6udBQwGRgv4juQ4UvKCwAYUH1QAAprXzO7xq+9kAAAAASUVORK5CYII=</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <PageWidth>11in</PageWidth>
+  <DataSets>
+    <DataSet Name="ReportsDataset_isp_sqlsecure_report_getauditedinstances">
+      <Fields>
+        <Field Name="connectionname">
+          <DataField>connectionname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="servername">
+          <DataField>servername</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="instancename">
+          <DataField>instancename</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="version">
+          <DataField>version</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="edition">
+          <DataField>edition</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="authenticationmode">
+          <DataField>authenticationmode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="os">
+          <DataField>os</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="loginauditmode">
+          <DataField>loginauditmode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="enableproxyaccount">
+          <DataField>enableproxyaccount</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="enablec2audittrace">
+          <DataField>enablec2audittrace</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="crossdbownershipchaining">
+          <DataField>crossdbownershipchaining</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="casesensitivemode">
+          <DataField>casesensitivemode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="numwindowsuser">
+          <DataField>numwindowsuser</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="numwindowsgroup">
+          <DataField>numwindowsgroup</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="numsqllogin">
+          <DataField>numsqllogin</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="snapshottime">
+          <DataField>snapshottime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>SQLsecure Data Source</DataSourceName>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>dbo.isp_sqlsecure_report_getauditedinstances</CommandText>
+        <QueryParameters>
+          <QueryParameter Name="@rundate">
+            <Value>=Parameters!rundate.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@connectionname">
+            <Value>=Code.setServerFilter(Parameters!connectionname.Value)</Value>
+          </QueryParameter>
+          <QueryParameter Name="@usebaseline">
+            <Value>=Parameters!usebaseline.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@policyid">
+            <Value>=Parameters!policyid.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+    </DataSet>
+  </DataSets>
+  <Author>Idera</Author>
+  <Code>Function displayDate (d as DateTime) as String
+	Dim dv as String
+
+	dv = d.ToLocalTime()
+
+	Return dv
+End Function
+
+Function setServerFilter(s As String)
+	If s.ToUpper() = "ALL SERVERS IN POLICY" Then
+		Return "ALL"
+	Else
+		Return s
+	End If
+End Function
+</Code>
+  <Width>7.27in</Width>
+  <Body>
+    <ReportItems>
+      <Image Name="image1">
+        <Sizing>AutoSize</Sizing>
+        <ToolTip>Open Filters Report</ToolTip>
+        <Top>1.1875in</Top>
+        <Action>
+          <Drillthrough>
+            <ReportName>Data Collection Filters Report</ReportName>
+            <Parameters>
+              <Parameter Name="serverName">
+                <Value>=Parameters!connectionname.Value</Value>
+              </Parameter>
+              <Parameter Name="policyid">
+                <Value>=Parameters!policyid.Value</Value>
+              </Parameter>
+              <Parameter Name="rundate">
+                <Value>=Parameters!rundate.Value</Value>
+              </Parameter>
+              <Parameter Name="usebaseline">
+                <Value>=Parameters!usebaseline.Value</Value>
+              </Parameter>
+            </Parameters>
+          </Drillthrough>
+        </Action>
+        <Width>0.16667in</Width>
+        <Source>Embedded</Source>
+        <Style />
+        <ZIndex>6</ZIndex>
+        <Left>7.0625in</Left>
+        <Height>0.16667in</Height>
+        <Value>document_out</Value>
+      </Image>
+      <Rectangle Name="errorRectangle">
+        <Left>0.072in</Left>
+        <ZIndex>5</ZIndex>
+        <Visibility>
+          <Hidden>=IIF(Count(Fields!connectionname.Value, "ReportsDataset_isp_sqlsecure_report_getauditedinstances") = 0, False, True)</Hidden>
+        </Visibility>
+        <ReportItems>
+          <Image Name="errGraphic">
+            <Sizing>AutoSize</Sizing>
+            <Width>0.58333in</Width>
+            <MIMEType>image/png</MIMEType>
+            <Source>Embedded</Source>
+            <Style>
+              <PaddingLeft>0.125in</PaddingLeft>
+              <PaddingRight>0.125in</PaddingRight>
+              <PaddingTop>0.125in</PaddingTop>
+              <PaddingBottom>0.125in</PaddingBottom>
+            </Style>
+            <ZIndex>1</ZIndex>
+            <Value>warning</Value>
+          </Image>
+          <Textbox Name="errMsg">
+            <Top>0.1875in</Top>
+            <Width>6.3125in</Width>
+            <Style>
+              <FontWeight>700</FontWeight>
+            </Style>
+            <CanGrow>true</CanGrow>
+            <Left>0.625in</Left>
+            <Height>0.1875in</Height>
+            <Value>="There are currently no snapshots."</Value>
+          </Textbox>
+        </ReportItems>
+        <Top>0.3125in</Top>
+        <Width>7.126in</Width>
+        <Style>
+          <BorderColor>
+            <Default>Red</Default>
+          </BorderColor>
+          <BorderStyle>
+            <Default>Dashed</Default>
+          </BorderStyle>
+          <BorderWidth>
+            <Default>2pt</Default>
+          </BorderWidth>
+        </Style>
+        <Height>0.584in</Height>
+      </Rectangle>
+      <Line Name="appendix_line_bottom">
+        <Top>1.875in</Top>
+        <Style>
+          <BorderColor>
+            <Default>#336699</Default>
+          </BorderColor>
+          <BorderStyle>
+            <Default>Solid</Default>
+          </BorderStyle>
+          <BorderWidth>
+            <Default>2pt</Default>
+          </BorderWidth>
+        </Style>
+        <ZIndex>4</ZIndex>
+      </Line>
+      <Line Name="appendix_line_top">
+        <Style>
+          <BorderColor>
+            <Default>#336699</Default>
+          </BorderColor>
+          <BorderStyle>
+            <Default>Solid</Default>
+          </BorderStyle>
+          <BorderWidth>
+            <Default>2pt</Default>
+          </BorderWidth>
+        </Style>
+        <ZIndex>3</ZIndex>
+        <Height>0in</Height>
+      </Line>
+      <Textbox Name="textbox1">
+        <Visibility>
+          <Hidden>=IIF(Count(Fields!connectionname.Value, "ReportsDataset_isp_sqlsecure_report_getauditedinstances") &gt; 0, False, True)</Hidden>
+        </Visibility>
+        <Top>0.9375in</Top>
+        <Action>
+          <Drillthrough>
+            <ReportName>SQLsecure_ControlDataCollectionConfigReport</ReportName>
+          </Drillthrough>
+        </Action>
+        <Width>7.0625in</Width>
+        <Style>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+        <ZIndex>2</ZIndex>
+        <CanGrow>true</CanGrow>
+        <Height>0.425in</Height>
+        <Value>The following snapshots were used to generate this report. For complete information on what audit data was captured, check the filter settings and status of each snapshot.</Value>
+      </Textbox>
+      <Textbox Name="textbox3">
+        <rd:DefaultName>textbox3</rd:DefaultName>
+        <Top>0.0625in</Top>
+        <Style>
+          <Color>#cc6600</Color>
+          <FontWeight>700</FontWeight>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+        <ZIndex>1</ZIndex>
+        <CanGrow>true</CanGrow>
+        <Height>0.1875in</Height>
+        <Value>APPENDIX:  Audit Data</Value>
+      </Textbox>
+      <Table Name="table1">
+        <DataSetName>ReportsDataset_isp_sqlsecure_report_getauditedinstances</DataSetName>
+        <Visibility>
+          <Hidden>=IIF(Count(Fields!connectionname.Value) &gt; 0, False, True)</Hidden>
+        </Visibility>
+        <Top>1.375in</Top>
+        <Width>7.0625in</Width>
+        <Details>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="servername">
+                      <rd:DefaultName>servername</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>= iif(RowNumber(Nothing) Mod 2, "White", "WhiteSmoke")</BackgroundColor>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BorderStyle>
+                          <Bottom>Solid</Bottom>
+                        </BorderStyle>
+                        <FontSize>9pt</FontSize>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <ZIndex>2</ZIndex>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!connectionname.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="version">
+                      <rd:DefaultName>version</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>= iif(RowNumber(Nothing) Mod 2, "White", "WhiteSmoke")</BackgroundColor>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BorderStyle>
+                          <Bottom>Solid</Bottom>
+                        </BorderStyle>
+                        <FontSize>9pt</FontSize>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <ZIndex>1</ZIndex>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!version.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="snapshottime">
+                      <rd:DefaultName>snapshottime</rd:DefaultName>
+                      <Style>
+                        <BackgroundColor>= iif(RowNumber(Nothing) Mod 2, "White", "WhiteSmoke")</BackgroundColor>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BorderStyle>
+                          <Bottom>Solid</Bottom>
+                        </BorderStyle>
+                        <FontSize>9pt</FontSize>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Code.displayDate(Fields!snapshottime.Value)</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>0.21in</Height>
+            </TableRow>
+          </TableRows>
+          <Sorting>
+            <SortBy>
+              <SortExpression>=Fields!connectionname.Value</SortExpression>
+              <Direction>Ascending</Direction>
+            </SortBy>
+          </Sorting>
+        </Details>
+        <Header>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox2">
+                      <rd:DefaultName>textbox2</rd:DefaultName>
+                      <Style>
+                        <BorderColor>
+                          <Default>Gray</Default>
+                        </BorderColor>
+                        <BorderStyle>
+                          <Bottom>Solid</Bottom>
+                        </BorderStyle>
+                        <BorderWidth>
+                          <Default>2pt</Default>
+                        </BorderWidth>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <ZIndex>5</ZIndex>
+                      <CanGrow>true</CanGrow>
+                      <Value>SQL Server</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox6">
+                      <rd:DefaultName>textbox6</rd:DefaultName>
+                      <Style>
+                        <BorderColor>
+                          <Default>Gray</Default>
+                        </BorderColor>
+                        <BorderStyle>
+                          <Bottom>Solid</Bottom>
+                        </BorderStyle>
+                        <BorderWidth>
+                          <Default>2pt</Default>
+                        </BorderWidth>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <ZIndex>4</ZIndex>
+                      <CanGrow>true</CanGrow>
+                      <Value>Version</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox7">
+                      <rd:DefaultName>textbox7</rd:DefaultName>
+                      <Style>
+                        <BorderColor>
+                          <Default>Gray</Default>
+                        </BorderColor>
+                        <BorderStyle>
+                          <Bottom>Solid</Bottom>
+                        </BorderStyle>
+                        <BorderWidth>
+                          <Default>2pt</Default>
+                        </BorderWidth>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <ZIndex>3</ZIndex>
+                      <CanGrow>true</CanGrow>
+                      <Value>Audited On</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>0.22in</Height>
+            </TableRow>
+          </TableRows>
+        </Header>
+        <TableColumns>
+          <TableColumn>
+            <Width>3.0625in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>2.375in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>1.625in</Width>
+          </TableColumn>
+        </TableColumns>
+        <Height>0.43in</Height>
+      </Table>
+    </ReportItems>
+    <Height>1.875in</Height>
+  </Body>
+  <Language>=User!Language</Language>
+  <TopMargin>0.5in</TopMargin>
+  <PageHeight>8.5in</PageHeight>
+</Report>

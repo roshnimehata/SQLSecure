@@ -1,0 +1,7 @@
+For generating test licenses, copy the License4Net.dll from the ThirdPartySoftware folder to this folder.   Then run the KeyUtil.exe
+-----------------------------------------
+To generate SQLsecure v1.1 license enter the following information:
+
+Product ID: 1000
+Version: does not matter, its not being used
+Key ID: any unique number, used by fullfillment for tracking licenses

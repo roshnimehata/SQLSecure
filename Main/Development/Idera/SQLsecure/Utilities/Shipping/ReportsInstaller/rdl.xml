@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<folder>
+	<reportfile>
+		<name>Alerts Report - Alert Activity</name>
+		<file>alerts.rdl</file>
+		<description>Show SQL compliance manager alert activity.</description>
+	</reportfile>
+	<reportfile>
+		<name>Application Audit Report - Application Activity</name>
+		<file>application_activity.rdl</file>
+		<description>List all activity by application.</description>
+	</reportfile>
+	<reportfile>
+		<name>Database Object Audit Report - Backup and DBCC Activity</name>
+		<file>mass_data_activity.rdl</file>
+		<description>List all backup, restore and DBCC activity.</description>
+	</reportfile>
+	<reportfile>
+		<name>Database Object Audit Report - Backup and DBCC Activity (last N days)</name>
+		<file>mass_data_activity_lastN.rdl</file>
+		<description>List all backup, restore and DBCC activity for last N days.</description>
+	</reportfile>
+	<reportfile>
+		<name>Database Object Audit Report - Object Activity</name>
+		<file>object_activity.rdl</file>
+		<description>List all activity for specified objects.</description>
+	</reportfile>
+	<reportfile>
+		<name>DDL Audit Report - Database Schema Change History</name>
+		<file>schema_change_history.rdl</file>
+		<description>List all schema changes made to specified databases.</description>
+	</reportfile>
+	<reportfile>
+		<name>DDL Audit Report - Database Schema Change History (last N days)</name>
+		<file>schema_change_history_lastN.rdl</file>
+		<description>List all schema changes made to specified databases in last N days.</description>
+	</reportfile>
+	<reportfile>
+		<name>Host Audit Report - Host Activity</name>
+		<file>host_activity.rdl</file>
+		<description>List all activity for specified hosts.</description>
+	</reportfile>
+   	<reportfile>
+		<name>Policy Audit Report - Agent History</name>
+		<file>agent_history.rdl</file>
+		<description>List all activity for SQL compliance manager Agent.</description>
+	</reportfile>
+   	<reportfile>
+		<name>Policy Audit Report - Audit Control Changes</name>
+		<file>audit_control_changes.rdl</file>
+		<description>List all changes to SQL compliance manager audit settings.</description>
+	</reportfile>
+   	<reportfile>
+		<name>Policy Audit Report - Integrity Check</name>
+		<file>integrity_check.rdl</file>
+		<description>List all integrity check violations.</description>
+	</reportfile>
+   	<reportfile>
+		<name>Security Audit Report - Change History (by object) (last N days)</name>
+		<file>object_priv_change_history_lastN.rdl</file>
+		<description>List security changes for specified objects in last N days.</description>
+	</reportfile>
+   	<reportfile>
+		<name>Security Audit Report - Change History (by object)</name>
+		<file>object_priv_change_history.rdl</file>
+		<description>List security changes for specified objects.</description>
+	</reportfile>
+   	<reportfile>
+		<name>Security Audit Report - Change History (by user)</name>
+		<file>user_security_controls_change.rdl</file>
+		<description>List security changes performed by specified users.</description>
+	</reportfile>
+   	<reportfile>
+		<name>Security Audit Report - Permission Denied Activity</name>
+		<file>permission_denied_activity.rdl</file>
+		<description>Lists all activity for which permission was denied.</description>
+	</reportfile>
+   	<reportfile>
+		<name>Security Audit Report - User Login History</name>
+		<file>user_login_history.rdl</file>
+		<description>List all login activity for specified users.</description>
+	</reportfile>
+	<reportfile>
+		<name>User Audit Report - Login Creation History</name>
+		<file>login_account_creation_history.rdl</file>
+		<description>List all login creation activity.</description>
+	</reportfile>
+	<reportfile>
+		<name>User Audit Report - Login Creation History (last N days)</name>
+		<file>login_account_creation_history_lastN.rdl</file>
+		<description>List all login creation activity in last N days.</description>
+	</reportfile>
+	<reportfile>
+		<name>User Audit Report - Login Deletion History</name>
+		<file>login_account_deletion_history.rdl</file>
+		<description>List all login deletion activity.</description>
+	</reportfile>
+	<reportfile>
+		<name>User Audit Report - Login Deletion History (last N days)</name>
+		<file>login_account_deletion_history_lastN.rdl</file>
+		<description>List all login deletion activity in last N days.</description>
+	</reportfile>
+	<reportfile>
+		<name>User Audit Report - User Activity History</name>
+		<file>user_activity_history.rdl</file>
+		<description>List all activity for specified users.</description>
+	</reportfile>
+	<reportfile>
+		<name>User Audit Report - Server Login Activity Summary</name>
+		<file>SQLcmReportLoginsAcrossInstancesSum.rdl</file>
+		<description>Lists login statistics per server with per login details.</description>
+	</reportfile>
+	<reportfile>
+		<name>Policy Audit Report - Alert Rules</name>
+		<file>SQLcmReportAlertRules.rdl</file>
+		<description>List alert rules.</description>
+	</reportfile>
+	<reportfile>
+		<name>Application Audit Report - Application Activity Statistics</name>
+		<file>SQLcmReportApplicationActivitySum.rdl</file>
+		<description>List a summary of application activity by activity type.</description>
+	</reportfile>
+	<reportfile>
+		<name>Audit Report - Daily Audit Activity Statistics</name>
+		<file>SQLcmReportAuditTraffic.rdl</file>
+		<description>Provides summary audit statistics per day.</description>
+	</reportfile>
+</folder>

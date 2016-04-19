@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CatapultTarget
+  Version="1"
+  Comment="SQLsecure Help"
+  Type="HtmlHelp"
+  Destinations=""
+  GlossaryTermConversion="marked"
+  MasterPage="/Content/Resources/MasterPages/NewPage.flmsp"
+  DefaultUrl="/Content/SQLsecure Help/Start Help.htm"
+  OutputFile="SQLsecure Help.chm"
+  GetLatestBeforeCompile="false"
+  OutputFolder="C:\SQLsecure\v2.6\Source\Help\Flare\SQLsecure Help\Output"
+  ConditionTagExpression="include[&quot;Default.Not in PDF&quot; or Default.ScreenOnly] exclude[Default.Google or &quot;Default.PDF Only&quot; or Default.PrintOnly or Default.SEO] "
+  FixHtmlHelpLinks="false"
+  MasterToc="/Project/TOCs/NewToc.fltoc"
+  MasterStylesheet="/Content/Resources/Stylesheets/Idera Stylesheet.css"
+  Skin="/Project/Skins/Default.flskn"></CatapultTarget>

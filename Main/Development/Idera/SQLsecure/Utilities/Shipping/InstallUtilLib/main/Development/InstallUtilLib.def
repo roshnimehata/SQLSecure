@@ -1,0 +1,13 @@
+LIBRARY	InstallUtilLib
+EXPORTS	
+	GiveLogonAsServicePriv	      @1
+	GiveActAsPartOfOSPriv	      @2
+	AddNtfsPermissions            @3
+	AddNtfsPermissionsBySid       @4
+	CreateDirAndGiveFullControl   @5
+	SetObjectAccess               @6
+	VerifyPassword                @7
+	GetEventLogRetentionInfo      @8
+	GetMediaType                  @9
+	ValidateSQLsafeLicense        @10
+	ConvertHexEncodedString       @11

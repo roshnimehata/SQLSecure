@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PolicyName>SRR SQL Server 2005 Checklist</PolicyName>
+  <PolicyDescription>These tests are a subset of the DISA guidelines for a security readiness review (SRR) of a Microsoft SQL Server RDBMS based on checks in V8 R 1.7  27 August 2010.</PolicyDescription>
+  <IsDynamic>true</IsDynamic>
+  <DynamicSelection />
+  <UseBaseline>false</UseBaseline>
+  <InterviewName>Microsoft SQL Server 2005 Database Security Checklist Overview</InterviewName>
+  <InterviewText>The SQLServer Database Security Readiness Review (SRR) targets conditions that
+undermine the integrity of security, contribute to inefficient security operations and
+administration, or may lead to interruption of production operations. Additionally, the
+review ensures the site has properly installed and implemented the database environment
+and that it is being managed in a way that is secure, efficient and effective. The items
+reviewed are derived from the general requirements listed in the Database Security
+Technical Implementation Guide (STIG) as they apply to a SQL Server installation. The
+Database STIG requirements are in turn derived from DOD policy documents, most
+notably, Department of Defense (DOD) Directive 8500.1 and DOD Instruction 8500.2
+and the Information Assurance (IA) Controls defined therein. This document and the
+security check procedures it provides are intended to be used to measure compliance with
+the security requirements listed in the Database STIG. Please see the Database STIG for
+additional security explanation and discussion to assist in understanding the nature of the
+security requirements.
+Each security item to review is listed in this document with a procedure for measuring
+compliance with the security requirement. The result of the procedure is a status of
+compliance with the requirement. Results are assigned as one of the following:
+   O = Open finding or non-compliance
+  NF = Not a Finding or in compliance
+  NA = Not Applicable or the item is not applicable to the database version, database use
+       or host platform being reviewed
+  NR = Not Reviewed or the procedure was not completed so compliance is not
+       determined
+  MR = Manual review. Can be the following check types:
+       1. Interview – Requires information found outside the DBMS
+       2. Manual – Requires information that cannot be automated
+       3. Verify – Requires verification of information found in the DBMS
+DISA Field Security Operations (FSO) has assigned a level of urgency to each finding
+based on Chief Information Officer (CIO) established criteria for certification and
+accreditation. All findings are based on regulations and guidelines. All findings require
+correction by the host organization. Category I findings are any vulnerabilities that
+provide an attacker immediate access into a machine, super user access, or access that
+bypasses a firewall. Category II findings are any vulnerabilities that provide information
+that has a high potential of giving access to an intruder. Category III findings are any
+vulnerabilities that provide information that potentially could lead to compromise.
+NOTE: Security patches required by the DOD IAVM process are reviewed during an
+operating system security review.
+
+Many of the checks in the checklist require either manual review or an interview with the DBA.
+See the full SRR Checklist document for details on these items.</InterviewText>
+  <PolicyMetrics>
+    <PolicyMetric>
+      <MetricId>1</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the nearest snapshot collection within an acceptable timeframe?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'30'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>2</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0001\V0005658, DG0003\V0005659</ReportKey>
+      <ReportText>Is the SQL Server version below the minimum acceptable level? The version of MS SQL Server must be listed by Microsoft as a supported version. Microsoft discontinues fixes for unsupported versions on reported dates. In order to maintain a secure environment, the installed version must continue to receive fixes for reported vulnerabilities. Maintaining the currency of the software version protects the database from known vulnerabilities.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues>'11.0.2100','10.50.2500','10.0.5500','9.00.5000'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>3</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM3566\V0002487</ReportKey>
+      <ReportText>Is SQL Authentication enabled on the SQL Server? SQL Server authentication does not provide a sufficiently robust password complexity and management capability to meet stringent security requirements. SQL Server allows use of Windows authentication, a more robust and security authentication service, to control access to the database.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>4</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0141\V0015644</ReportKey>
+      <ReportText>Is Login Auditing enabled on the SQL Server? Detection of suspicious activity including access attempts and successful access from unexpected places, during unexpected times, or other unusual indicators can support decisions to apply countermeasures to deter an attack. Without detection, malicious activity may proceed without impedance.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'Failure','All'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>5</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM6150\V0015201</ReportKey>
+      <ReportText>Is Cross Database Ownership Chaining enabled on the SQL Server? Cross database ownership chaining allows permissions to objects to be assigned by users other than the Information Owner. This allows access to objects that are not authorized directly by the Information Owner based on job functions defined by the owner. Unauthorized access may lead to a compromise of data integrity or confidentiality.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>6</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM1709\V0002451</ReportKey>
+      <ReportText>Is Guest user access available on the SQL Server? The guest user ID in a database allows access by all Windows login IDs without requiring an individual database account. This allows unauthorized access to the database.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'msdb','master','tempdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>7</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0074\V0015130</ReportKey>
+      <ReportText>Do Suspect Logins exist on the SQL Server? Unused or expired DBMS accounts provide a means for undetected, unauthorized access to the database.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>8</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM0510\V0002426</ReportKey>
+      <ReportText>Is C2 Audit Trace disabled on the SQL Server? The C2 audit mode uses a system-defined trace to collect audit information for MS SQL Server 2000 and higher. It utilizes all security event categories defined within SQL Server, not all of which are required by the Database STIG. Without required auditing, accountability and investigative support is limited.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>9</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is a Proxy Account enabled on the SQL Server?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>10</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0157\V0015651</ReportKey>
+      <ReportText>Is DAC enabled remotely on the SQL Server? Remote administration may expose configuration and sensitive data to unauthorized viewing during transit across the network or allow unauthorized administrative access to the DBMS to remote users. Where remote admin connection access is part of the designed and approved use of the SQL Server database, document the requirement in the System Security Plan. Where remote admin connection access is not required, disable its use.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>11</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Has anyone been granted permission to execute Integration Services stored procedures on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'sp_add_dtspackage','sp_enum_dtspackages','sp_add_job','sp_add_jobstep'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>13</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM0900\V0003335</ReportKey>
+      <ReportText>Is SQL Mail enabled? The SQL Mail, SQL Mail Extended Stored Procedures (XPs) and Database Mail XPs are used by database applications to provide email messages to and from the database. This capability may easily be abused to send malicious messages to remote users or systems. Disabling its use helps to protect the database from generating or receiving malicious email notifications.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>14</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM0901\V0003336</ReportKey>
+      <ReportText>Is SQL Agent Mail enabled? SQL Mail accepts incoming database commands via email. This can introduce malicious codes or viruses into the SQL server environment.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>15</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0014\V0015609</ReportKey>
+      <ReportText>Do the SQL Server sample databases exist? Demonstration and sample database objects and applications present publicly known attack points for malicious users. These demonstration and sample objects are meant to provide simple examples of coding specific functions and are not developed to prevent vulnerabilities from being introduced to the DBMS and host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'Northwind','pubs','AdventureWorks','AdventureWorksDW','AdventureWorksAS','DataEncryptDemo'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>16</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0131\V0015638</ReportKey>
+      <ReportText>Does "sa" account exist? Well-known DBMS account names are targeted most frequently by attackers and are thus more prone to providing unauthorized access to the database.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>17</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0128\V0015635</ReportKey>
+      <ReportText>Does "sa" account have a blank password? DBMS default passwords provide a commonly known and exploited means for unauthorized access to database installations.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>18</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are System Table updates allowed?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>19</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM1749\V0002458</ReportKey>
+      <ReportText>Does "Everyone" have view access to System Tables? Microsoft SQL Server defaults to allow all users to view the majority of the system tables. The system tables contain information such as login IDs, permissions, objects and even the text of all stored procedures. In a secure environment, any direct access granted to these tables by users bypasses security controls defined within the associated system procedures and views. The bypass of these controls can lead to unauthorized viewing of sensitive data.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>20</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM1761\V0002464</ReportKey>
+      <ReportText>Are startup stored procedures enabled? The DBMS startup process may be vulnerable to introduction of malicious or unauthorized actions.  Any use of automated execution of custom procedures provides an opportunity to deploy unauthorized code.  For some versions of SQL Server, audit requirements may only be met by audit procedures that are set to start automatically at system startup.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>21</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM1761\V0002464</ReportKey>
+      <ReportText>Are any unexpected stored procedures marked to run at startup? The DBMS startup process may be vulnerable to introduction of malicious or unauthorized actions.  Any use of automated execution of custom procedures provides an opportunity to deploy unauthorized code.  For some versions of SQL Server, audit requirements may only be met by audit procedures that are set to start automatically at system startup.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>22</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0091\V0003823</ReportKey>
+      <ReportText>Are any user stored procedures not encrypted? Source code may include information on data relationships, locations of sensitive data that are otherwise obscured, or other processing information that could aid a malicious user. Encoding or encryption of the custom source code objects within the database helps protect against this type of disclosure.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>23</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0099\V0015618</ReportKey>
+      <ReportText>Do user defined Extended Stored Procedures (XPs) exist? DBMSs may spawn additional external processes to execute procedures that are defined in the DBMS, but stored in external host files (external procedures). The spawned process used to execute the external procedure may operate within a different OS security context than the DBMS and provide unauthorized access to the host system. Review the Database and Object Name as generated. An example entry is in the form: master sp_batch_params This is interpreted as: The external procedure named SP_BATCH_PARAMS is active in the MASTER database. These external procedures are active, but not currently assigned permissions to any database accounts (external procedures assigned to accounts are listed in Check DG0120) and require documentation in the System Security Plan and authorization by the IAO.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>24</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM1758\V0002461</ReportKey>
+      <ReportText>Do inappropriate permissions exist on dangerous Extended Stored Procedures (XSPs)? The xp_cmdshell extended stored procedure allows execution of host executables outside the controls of database access permissions. This access may be exploited by malicious users who have compromised the integrity of the SQL Server database process to control the host operating system to perpetrate additional malicious activity.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'xp_cmdshell'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>25</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM2142\V0002485</ReportKey>
+      <ReportText>Is Remote Access enabled? The remote access option determines if connections to and from other Microsoft SQL Servers are allowed. Remote connections are used to support distributed queries and other data access and command executions across and between remote database hosts. The list of remote servers determines the servers that have defined for remote connections to and from the SQL Server instance. The list of remote logins determines which users on remote servers can connect to and from other SQL Servers. Remote servers and logins that are not properly secured can be used to compromise the server.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>26</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0152\V0015148,DM6015\V0015124</ReportKey>
+      <ReportText>Are unexpected Protocols enabled? Non-standard network ports, protocol or services configuration or usage could lead to bypass of network perimeter security controls and protections. The named pipes network protocol requires more ports to be opened on firewalls than TCP/IP. Managing and administering multiple network protocols may unnecessarily complicate network controls.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'TCP/IP'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>27</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0151\V0015648</ReportKey>
+      <ReportText>Are dynamic TCP Ports used? Use of static, default ports helps management of enterprise network device security controls. Use of non-default ports makes tracking and protection of published vulnerabilities to services and protocols more difficult to track and block. and may result in the exposure of the database to unintended network segments and users.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'dynamic'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>28</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is SQL Server visible for browsing?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>29</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM3763\V0002488</ReportKey>
+      <ReportText>Can anyone besides administrators execute SQL Agent CmdExec jobs on the SQL Server? SQL Server Agent CmdExec and ActiveScripting subsystems allow the execution of code by the host operating system under the security context. Allow use of these features only to SYSADMINs and use only where necessary to limit risk of database exploit to the host operating system. Members of the SYSADMIN group have access to all proxies and subsystems by default. Additional assignments are not necessary and would be considered suspect.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>30</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0100\V0015169</ReportKey>
+      <ReportText>Is replication Enabled on the SQL Server? Replication accounts may be used to access databases defined for the replication architecture. An exploit of a replication on one database could lead to the compromise of any database participating in the replication that uses the same account name and credentials. If the replication account is compromised and it has DBA privileges, the database is at additional risk to unauthorized or malicious action. Disable replication if replication is not required.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>31</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM0927\V0003838</ReportKey>
+      <ReportText>Do unexpected Registry Key Owners exist? Registry keys contain configuration data for the SQL Server services and applications. Unrestricted access or access unnecessary for operation can lead to a compromise of the application or disclosure of information that may lead to a successful attack or compromise of data.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'OS_DBA_GROUP_or_DBA_ACCT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>32</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM0927\V0003838</ReportKey>
+      <ReportText>Do unexpected Registry Key Permissions exist? Registry keys contain configuration data for the SQL Server services and applications. Unrestricted access or access unnecessary for operation can lead to a compromise of the application or disclosure of information that may lead to a successful attack or compromise of data</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'OS_DBA_GROUP_or_DBA_ACCT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>33</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0009\V0015608</ReportKey>
+      <ReportText>Are any SQL Server files on drives not using NTFS? The DBMS software libraries contain the executables used by the DBMS to operate. Unauthorized access to the libraries can result in malicious alteration or planting of operational executables. This may in turn jeopardize data stored in the DBMS and/or operation of the host system. As part of File permission checking, files should be on NTFS drives only.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>34</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0019\V0003805</ReportKey>
+      <ReportText>Do unexpected Executable File Owners exist? File and directory ownership imparts full privileges to the owner. These privileges should be restricted to a single, dedicated account to preserve proper chains of ownership and privilege assignment management.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'INSTALL_ACCT_OR_OWNER_ACCT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>35</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0009\V0015608</ReportKey>
+      <ReportText>Do unexpected Executable File Permissions exist? The DBMS software libraries contain the executables used by the DBMS to operate. Unauthorized access to the libraries can result in malicious alteration or planting of operational executables. This may in turn jeopardize data stored in the DBMS and/or operation of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'INSTALL_ACCT_OR_OWNER_ACCT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>36</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0019\V0003805</ReportKey>
+      <ReportText>Do unexpected Database File Owners exist? File and directory ownership imparts full privileges to the owner. These privileges should be restricted to a single, dedicated account to preserve proper chains of ownership and privilege assignment management.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'INSTALL_ACCT_OR_OWNER_ACCT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>37</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0009\V0015608</ReportKey>
+      <ReportText>Does "Everyone" have access to database files? The DBMS software libraries contain the executables used by the DBMS to operate. Unauthorized access to the libraries can result in malicious alteration or planting of operational executables. This may in turn jeopardize data stored in the DBMS and/or operation of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>38</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unexpected Database File Permissions exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>39</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is OS version at an acceptable level?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Microsoft Windows Server 2008 R2 Enterprise , Service Pack 1','Microsoft Windows Server 2008 R2 Standard , Service Pack 1','Microsoft Windows Web Server 2008 R2 , Service Pack 1','Microsoft® Windows Server® 2008 Enterprise , Service Pack 2','Microsoft® Windows Server® 2008 Enterprise without Hyper-V , Service Pack 2','Microsoft® Windows Server® 2008 Datacenter , Service Pack 2','Microsoft® Windows Server® 2008 Datacenter without Hyper-V , Service Pack 2','Microsoft® Windows Server® 2008 Standard , Service Pack 2','Microsoft® Windows Server® 2008 Standard without Hyper-V , Service Pack 2','Microsoft® Windows® Web Server 2008 , Service Pack 2','Microsoft(R) Windows(R) Server 2003, Enterprise Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003 Enterprise x64 Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003, Standard Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003 Standard x64 Edition, Service Pack 2'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>40</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0101\V0015620,DM0924\V0003835</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Service Login Account used? External applications spawned by the DBMS process may be executed under OS accounts assigned unnecessary privileges that can lead to unauthorized access to OS resources. Unauthorized access to OS resources can lead to the compromise of the OS, the DBMS and any other service provided by the host platform.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'SERVICE_SPECIFIC_ACCOUNT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>41</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Microsoft Reporting Services running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>42</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Analysis Services (OLAP) running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>43</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141,DM0924\V0003835</ReportKey>
+      <ReportText>Is an unacceptable Analysis Service Login Account used? Shared accounts do not provide separation of duties nor allow for assignment of least privileges for use by database processes and services. Without separation and least privilege, the exploit of one service or process is more likely to be able to compromise another or all other services. The Windows builtin Administrators group and LocalSystem account are assigned full privileges to the Windows operating system. These privileges are not required by the SQL Server service accounts for operation and, if assigned, could allow a successful attack of the SQL Server service to lead to a full compromise of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'SERVICE_SPECIFIC_ACCOUNT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>44</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Notification Services running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>45</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141,DM0924\V0003835</ReportKey>
+      <ReportText>Is an unacceptable Notification Service Login Account used? Shared accounts do not provide separation of duties nor allow for assignment of least privileges for use by database processes and services. Without separation and least privilege, the exploit of one service or process is more likely to be able to compromise another or all other services. The Windows builtin Administrators group and LocalSystem account are assigned full privileges to the Windows operating system. These privileges are not required by the SQL Server service accounts for operation and, if assigned, could allow a successful attack of the SQL Server service to lead to a full compromise of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'SERVICE_SPECIFIC_ACCOUNT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>46</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Integration Services running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>47</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141,DM0924\V0003835</ReportKey>
+      <ReportText>Is an unacceptable Integration Service Login Account used? Shared accounts do not provide separation of duties nor allow for assignment of least privileges for use by database processes and services. Without separation and least privilege, the exploit of one service or process is more likely to be able to compromise another or all other services. The Windows builtin Administrators group and LocalSystem account are assigned full privileges to the Windows operating system. These privileges are not required by the SQL Server service accounts for operation and, if assigned, could allow a successful attack of the SQL Server service to lead to a full compromise of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'SERVICE_SPECIFIC_ACCOUNT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>48</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the SQL Server Agent running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>49</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141,DM0924\V0003835</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Agent Service Login Account used? Shared accounts do not provide separation of duties nor allow for assignment of least privileges for use by database processes and services. Without separation and least privilege, the exploit of one service or process is more likely to be able to compromise another or all other services. The Windows builtin Administrators group and LocalSystem account are assigned full privileges to the Windows operating system. These privileges are not required by the SQL Server service accounts for operation and, if assigned, could allow a successful attack of the SQL Server service to lead to a full compromise of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'SERVICE_SPECIFIC_ACCOUNT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>50</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is Full-Text Search running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>51</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141,DM0924\V0003835</ReportKey>
+      <ReportText>Is an unacceptable Full-Text Search Service Login Account used? Shared accounts do not provide separation of duties nor allow for assignment of least privileges for use by database processes and services. Without separation and least privilege, the exploit of one service or process is more likely to be able to compromise another or all other services. The Windows builtin Administrators group and LocalSystem account are assigned full privileges to the Windows operating system. These privileges are not required by the SQL Server service accounts for operation and, if assigned, could allow a successful attack of the SQL Server service to lead to a full compromise of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'SERVICE_SPECIFIC_ACCOUNT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>52</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the SQL Server Browser running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>53</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141,DM0924\V0003835</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Browser Service Login Account used? Shared accounts do not provide separation of duties nor allow for assignment of least privileges for use by database processes and services. Without separation and least privilege, the exploit of one service or process is more likely to be able to compromise another or all other services. The Windows builtin Administrators group and LocalSystem account are assigned full privileges to the Windows operating system. These privileges are not required by the SQL Server service accounts for operation and, if assigned, could allow a successful attack of the SQL Server service to lead to a full compromise of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'SERVICE_SPECIFIC_ACCOUNT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>54</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any servers in the policy missing audit data?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>55</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Is audit data incomplete?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>56</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is any audit data from non baseline snapshots?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>57</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0125\V0015153</ReportKey>
+      <ReportText>Is the password policy enabled for all SQL Logins? Unchanged passwords provide a means for compromised passwords to be used for unauthorized access to DBMS accounts over a long time. Set SQL Server logins to check password expiration.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>58</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey>DM6196\V0015172</ReportKey>
+      <ReportText>Are any permissions granted to the public database role? The guest account is available to users that do not have authorized accounts on the database. The PUBLIC role is granted to all users of the database regardless of assigned job function. Assignment of object privileges to unauthorized users can compromise data integrity and/or confidentiality.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>59</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey>DG0079\V0015152</ReportKey>
+      <ReportText>Does any SQL Login have a blank password? Weak passwords are a primary target for attack to gain unauthorized access to databases and other systems. Where username/password is used for identification and authentication to the database, requiring the use of strong passwords can help prevent simple and more sophisticated methods for guessing at passwords.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>60</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any fixed roles assigned to the public role or guest user?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>61</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0116\V0015626</ReportKey>
+      <ReportText>Is the BUILTIN/Administrators group assigned to the sysadmin role? Roles assigned privileges to perform DDL and/or system configuration actions in the database can lead to compromise of any data in the database as well as operation of the DBMS itself. Restrict assignment of privileged roles to authorized personnel and database accounts to help prevent unauthorized activity.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>62</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0071\V0003815</ReportKey>
+      <ReportText>Is password expiration enabled for all SQL Logins? Changing passwords frequently can thwart password-guessing attempts or re-establish protection of a compromised DBMS account. Minor changes to passwords may not accomplish this as password guessing may be able to continue to build on previous guesses or the new password may be easily guessed using the old password.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>63</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the server a Domain Controller?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>67</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141,DM0924\V0003835</ReportKey>
+      <ReportText>Is an unacceptable Active Directory Helper Service Login Account used? Shared accounts do not provide separation of duties nor allow for assignment of least privileges for use by database processes and services. Without separation and least privilege, the exploit of one service or process is more likely to be able to compromise another or all other services. The Windows builtin Administrators group and LocalSystem account are assigned full privileges to the Windows operating system. These privileges are not required by the SQL Server service accounts for operation and, if assigned, could allow a successful attack of the SQL Server service to lead to a full compromise of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'SERVICE_SPECIFIC_ACCOUNT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>68</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141,DM0924\V0003835</ReportKey>
+      <ReportText>Is an unacceptable Reporting Service Login Account used? Shared accounts do not provide separation of duties nor allow for assignment of least privileges for use by database processes and services. Without separation and least privilege, the exploit of one service or process is more likely to be able to compromise another or all other services. The Windows builtin Administrators group and LocalSystem account are assigned full privileges to the Windows operating system. These privileges are not required by the SQL Server service accounts for operation and, if assigned, could allow a successful attack of the SQL Server service to lead to a full compromise of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'SERVICE_SPECIFIC_ACCOUNT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>69</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141,DM0924\V0003835</ReportKey>
+      <ReportText>Is an unacceptable VSS Writer Service Login Account used? Shared accounts do not provide separation of duties nor allow for assignment of least privileges for use by database processes and services. Without separation and least privilege, the exploit of one service or process is more likely to be able to compromise another or all other services. The Windows builtin Administrators group and LocalSystem account are assigned full privileges to the Windows operating system. These privileges are not required by the SQL Server service accounts for operation and, if assigned, could allow a successful attack of the SQL Server service to lead to a full compromise of the host system.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'SERVICE_SPECIFIC_ACCOUNT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>70</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is VSS Writer running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>71</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0070\V0002508</ReportKey>
+      <ReportText>Do unauthorized accounts have sysadmin privileges? Unauthorized user accounts provide unauthorized access to the database and may allow access to database objects. Only authorized users should be granted database accounts.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'AUTHORIZED_ADMIN'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>72</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the SQL Server sa account enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>73</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unauthorized users have the ALTER TRACE permission?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>74</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0117\V0015627</ReportKey>
+      <ReportText>Do unauthorized users have the CONTROL SERVER permission? Privileges granted outside the role of the administrative user job function are more likely to go unmanaged or without oversight for authorization. Maintenance of privileges using roles defined for discrete job functions offers improved oversight of administrative user privilege assignments and helps to protect against unauthorized privilege assignment.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>75</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM1758\V0002461</ReportKey>
+      <ReportText>Is xp_cmdshell enabled on the SQL Server? The xp_cmdshell extended stored procedure allows execution of host executables outside the controls of database access permissions. This access may be exploited by malicious users who have compromised the integrity of the SQL Server database process to control the host operating system to perpetrate additional malicious activity.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>76</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do required administrative accounts exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>77</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is password policy enforced on the sa account?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>78</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do the required administrative permissions exist on database files?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>79</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do the required administrative permissions exist on executable files?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>80</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do the required administrative permissions exist on registry keys?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>81</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are unapproved data files located on the system drive?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'%\master.mdf','%\mastlog.ldf','%\msdbdata.mdf','%\msdblog.ldf','%\model.mdf','%\modellog.ldf','%\distmdl.%','%\mssqlsystemresource.%','%\tempdb.mdf','%\templog.ldf'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>82</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are unapproved SQL Server installation directories on the system drive?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'C:\Program Files\Microsoft SQL Server\90\Shared','C:\Program Files\Microsoft SQL Server\100\Shared','C:\Program Files\Common Files\System\MSSearch\Bin','C:\Program Files (x86)\Microsoft SQL Server\90\Shared'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>83</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM6160\V0015166</ReportKey>
+      <ReportText>Are Ad Hoc Distributed Queries enabled? Adhoc queries allow undefined access to remote database sources. Access to untrusted databases could result in execution of malicious applications and/or a compromise of local data confidentiality and integrity.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>84</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0070\V0002508</ReportKey>
+      <ReportText>Do unauthorized SQL Logins exist on the SQL Server? Unauthorized user accounts provide unauthorized access to the database and may allow access to database objects. Only authorized users should be granted database accounts.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'sa'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>85</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any permissions granted to the public server role?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>86</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM6195\V0015173</ReportKey>
+      <ReportText>Is the trustworthy bit on for any unapproved databases? The TRUSTWORTHY database setting restricts access to database resources by databases that contain assemblies with the EXTERNAL_ACCESS or UNSAFE permission settings and modules that use impersonation of accounts assigned elevated privileges. Unless all assemblies and code for the database have been reviewed, especially in the case where databases have been detached and attached between server instances, leaving the TRUSTWORTHY status to off can help reduce threats from malicious assemblies or modules.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'msdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>87</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any unapproved databases owned by a system administrator?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'master','msdb','model','tempdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>88</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any unapproved trustworthy databases owned by a system administrator?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues>'msdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>89</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DM6196\V0015172</ReportKey>
+      <ReportText>Has the public database role been granted permissions on user database objects?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>90</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141</ReportKey>
+      <ReportText>Have any dangerous principals been added to the SSIS database roles?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'public','guest'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>91</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0102\V0015141</ReportKey>
+      <ReportText>Do unapproved users or roles have permissions on SSIS stored procedures?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'sp_add_dtspackage','sp_drop_dtspackage','sp_dts_addfolder','sp_dts_addlogentry','sp_dts_checkexists','sp_dts_deletefolder','sp_dts_deletepackage','sp_dts_getfolder','sp_dts_getpackage','sp_dts_getpackageroles','sp_dts_listfolders','sp_dts_listpackages','sp_dts_putpackage','sp_dts_renamefolder','sp_dts_setpackageroles','sp_dump_dtslog_all','sp_dump_dtspackagelog','sp_dump_dtssteplog','sp_dump_dtstasklog','sp_enum_dtspackagelog','sp_enum_dtspackages','sp_enum_dtssteplog','sp_enum_dtstasklog','sp_get_dtspackage','sp_get_dtsversion','sp_log_dtspackage_begin','sp_log_dtspackage_end','sp_log_dtsstep_begin','sp_log_dtsstep_end','sp_log_dtstask','sp_make_dtspackagename','sp_reassign_dtspackageowner','sp_ssis_addfolder','sp_ssis_addlogentry','sp_ssis_checkexists','sp_ssis_deletefolder','sp_ssis_deletepackage','sp_ssis_getfolder','sp_ssis_getpackage'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>92</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>DG0127\V0015634</ReportKey>
+      <ReportText>Does this SQL login have a weak password?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+  </PolicyMetrics>
+</Policy>

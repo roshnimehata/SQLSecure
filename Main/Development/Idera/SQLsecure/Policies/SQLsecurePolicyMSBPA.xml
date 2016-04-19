@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PolicyName>MS Best Practices Analyzer</PolicyName>
+  <PolicyDescription>Checks derived from the Microsoft SQL Server 2005 Best Practices Analyzer Security Recommendations</PolicyDescription>
+  <IsSystemPolicy>false</IsSystemPolicy>
+  <IsDynamic>true</IsDynamic>
+  <DynamicSelection />
+  <InterviewName>Microsoft SQL Server 2005 Best Practices Analyzer</InterviewName>
+  <InterviewText>Security Recommendations from Microsoft SQL Server 2005 Best Practices Analyzer (August 2008)
+
+BPA - SQL Server Agent Token Replacement
+This rule verifies the syntax used for SQL Server Agent tokens. Beginning with SQL Server 2005, the token syntax changed and [] brackets are no longer used to call out SQL Server Agent job step tokens. You must now use $() brackets, with escaped notation, or else token replacement will fail.
+
+Important:  
+Incorrect token replacement can lead to SQL injection attacks.
+For example, when using a token for the date, use "$(ESCAPE_DQUOTE (DATE))", not "[DATE]". 
+Note:  
+The choice of ESCAPE_DQUOTE or ESCAPE_SQUOTE is determined by the context of the expression that you are using. ESCAPE_xxx syntax only applies to SQL Server 2005 SP1 and later. 
+
+Recommendation:
+Use $() brackets with escaped notation for SQL Server Agent job step tokens.
+
+
+BPA - Secret Keys
+This rule determines the key algorithm and key strength of user-created symmetric and asymmetric secret keys.
+
+Recommendation:
+We recommend that you:
+   Use AES 128 bit and above to create symmetric keys for data encryption. If AES is not supported by the version of your operating system, use 3DES.
+   Do not create symmetric keys in SQL Server-shipped databases (master, msdb, model, and tempdb).
+   Use 1024 bit and above to create asymmetric keys.
+
+
+BPA - PUBLIC Can Access Some SQL Server 2000 DTS Stored Procedures - Additional Information (see Public Database Role Has Permissions security check)
+The public database role has EXECUTE permissions on some of the legacy Data Transformation Services (DTS) system stored procedures in the msdb database.
+By using the public database role to log on to the msdb database, a user can do the following tasks:
+   Get a list of DTS packages.
+   Retrieve the DTS packages themselves.
+   Save new DTS packages.
+However, only the owner of a package can modify or delete an existing DTS package. (To modify a DTS package, the owner of a package must save a new version of the package. DTS does not allow the owner of a package to overwrite the current version of the package.)
+The potential security issue occurs if an application uses a login that owns DTS packages to connect to SQL Server. In this scenario, there is the risk that a SQL injection attack could modify or delete existing DTS packages.
+
+SQL Server Version - Additional Information (see SQL Server Version security check for results)
+BPA - Apply Software Update to Itanium-based Servers 
+Running a linked server query on SQL Server for Itanium-based computers can cause a memory overwrite. This could cause in-memory data corruption, the system to stop responding, or access violations. To locate linked servers, query the sys.servers catalog view for values of isremote = 0.
+
+Recommendation:
+Update the Itanium-based server by using the following link or disable using linked servers.
+   Microsoft Knowledge Base article 913684
+   sys.servers (Transact-SQL)
+
+BPA - W32.Slammer Vulnerability
+This potential issue has been fixed in the latest service packs for SQL Server 2000 and SQL Server 2005.  SQL Server BPA will not detect all issues that can be improved by upgrading. Instead, SQL Server BPA will alert you to some of the more common issues where upgrading is a best practice recommendation.
+
+Recommendation:
+To eliminate this issue, visit the Microsoft Web site that is appropriate to your instance of SQL Server to obtain the latest service pack.
+
+BPA - Elevation of Privilege
+This potential issue has been fixed in the latest service packs for SQL Server 2000 and SQL Server 2005. SQL Server BPA will not detect all issues that can be improved by upgrading. Instead, SQL Server BPA will alert you to some of the more common issues where upgrading is a best practice recommendation.
+
+Recommendation:
+To eliminate this issue, visit the Microsoft Web site that is appropriate to your instance of SQL Server to obtain the latest service pack.</InterviewText>
+  <PolicyMetrics>
+    <PolicyMetric>
+      <MetricId>1</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Was the most recent snapshot collected within an acceptable timeframe?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'30'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>2</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>Elevation of Privilege</ReportKey>
+      <ReportText>Is SQL Server below the minimum acceptable version?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'11.0.2100','10.50.2500','10.0.5500','9.00.5000','8.00.2039'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>3</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>Authentication Mode</ReportKey>
+      <ReportText>Is SQL Authentication enabled on the SQL Server? Recommendation: When possible, use Windows Authentication. Windows Authentication uses Kerberos security protocol, provides password policy enforcement in terms of complexity validation for strong passwords (this policy only applies to Windows Server 2003 and later), provides support for account lockout, and supports password expiration.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>4</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the login auditing configuration acceptable?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Failure','All'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>5</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is Cross Database Ownership Chaining enabled on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>6</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>Guest Permissions</ReportKey>
+      <ReportText>Is Guest user access available on the SQL Server? Recommendation: Remove access to the guest user if it is not required. The guest user cannot be dropped, but guest user can be disabled by revoking its CONNECT permission by executing REVOKE CONNECT FROM GUEST within any database other than msdb, master or tempdb.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'msdb','master','tempdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>7</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do suspect logins exist on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>8</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is C2 Audit Trace disabled on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>9</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Agent Proxy Acct</ReportKey>
+      <ReportText>Is a Proxy Account enabled on the SQL Server? This rule determines whether the Public login is enabled for the SQL Server Agent proxy account. Typically, the proxy account is given elevated privileges, so someone using the Public login, which has fewer privileges, could take advantage of a higher privilege level. Recommendation: Remove the Public login from the SQL Server Agent proxy account.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>10</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is Dedicated Administrator Connection enabled remotely on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>11</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Integration Services enabled on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'sp_add_dtspackage','sp_enum_dtspackages','sp_add_job','sp_add_jobstep'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>13</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is SQL Mail enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>14</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is SQL Agent Mail enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>15</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do the SQL Server sample databases exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Northwind','pubs','AdventureWorks','AdventureWorksDW'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>16</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does the SQL Server "sa" account exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>17</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does SQL Server "sa" account have a blank password?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>18</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are System Table Updates allowed?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>19</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does Everyone have read access to system tables?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>20</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are startup stored procedures enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>21</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any unapproved stored procedures set to run at startup?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>22</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any user stored procedures not encrypted?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>23</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do user-defined Extended Stored Procedures (XSPs) exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>24</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do dangerous Extended Stored Procedures (XSPs) exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>25</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is Remote Access enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>26</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are unapproved protocols enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Shared Memory','TCP/IP'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>27</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are common TCP ports used?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'1433','1434'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>28</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is SQL Server visible to client computers?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>29</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Can anyone besides administrators execute SQL Agent CmdExec jobs on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>30</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is replication enabled on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>31</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unapproved registry key owners exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>32</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do users have unapproved access to registry keys?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>33</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any SQL Server files on drives not using NTFS?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>34</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unapproved executable file owners exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>35</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do users have unapproved access to executable files?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>36</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unapproved database file owners exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>37</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does Everyone have access to database files?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>38</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do users have unapproved access to database files?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>39</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is OS below the minimum acceptable version?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Microsoft Windows Server 2008 R2 Enterprise , Service Pack 1','Microsoft Windows Server 2008 R2 Standard , Service Pack 1','Microsoft Windows Web Server 2008 R2 , Service Pack 1','Microsoft® Windows Server® 2008 Enterprise , Service Pack 2','Microsoft® Windows Server® 2008 Enterprise without Hyper-V , Service Pack 2','Microsoft® Windows Server® 2008 Datacenter , Service Pack 2','Microsoft® Windows Server® 2008 Datacenter without Hyper-V , Service Pack 2','Microsoft® Windows Server® 2008 Standard , Service Pack 2','Microsoft® Windows Server® 2008 Standard without Hyper-V , Service Pack 2','Microsoft® Windows® Web Server 2008 , Service Pack 2','Microsoft(R) Windows(R) Server 2003, Enterprise Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003 Enterprise x64 Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003, Standard Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003 Standard x64 Edition, Service Pack 2'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>40</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Service Account</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Service account being used? Recommendation: Use a low-privilege domain account to run SQL Server services.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'LOW_PRIVILEGED_DOMAIN_USER'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>41</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Microsoft Reporting Services running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>42</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Analysis Services (OLAP) running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>43</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Service Account</ReportKey>
+      <ReportText>Is an unacceptable Analysis Services account being used? Recommendation: Use a low-privilege domain account to run SQL Server services.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'LOW_PRIVILEGED_DOMAIN_USER'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>44</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Notification Services running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>45</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Service Account</ReportKey>
+      <ReportText>Is an unacceptable Notification Services account being used? Recommendation: Use a low-privilege domain account to run SQL Server services.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'LOW_PRIVILEGED_DOMAIN_USER'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>46</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Integration Services running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>47</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Integration Svcs Acct</ReportKey>
+      <ReportText>Is an unacceptable Integration Services account being used? Recommendation: Run the Integration Services service under an account that has limited permissions such as the Network Service account. By default, the Integration Services service is installed and enabled when you select the SQL Server Integration Services component on the Components to Install page of the SQL Server Installation Wizard. You can only install one instance of the service on a computer. The service is registered to run under the Network Service account. (On computers that are running Windows 2000, the service runs under the Local System account.) This setting cannot be modified through the SQL Server Installation Wizard, and is not affected by any selections that you make on the Service Account page of the wizard.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'NETWORK_SERVICE'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>48</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the SQL Server Agent running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>49</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Service Account</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Agent Service account being used? Recommendation: Use a low-privilege domain account to run SQL Server services.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'LOW_PRIVILEGED_DOMAIN_USER'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>50</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is Full-Text Search running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>51</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Service Account</ReportKey>
+      <ReportText>Is an unacceptable Full-Text Search Service account being used?  Recommendation: Use a low-privilege domain account to run SQL Server services.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'LOW_PRIVILEGED_DOMAIN_USER'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>52</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the SQL Server Browser running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>53</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Service Account</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Browser Service account being used? Recommendation: Use a low-privilege domain account to run SQL Server services.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'LOW_PRIVILEGED_DOMAIN_USER'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>54</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any servers in the policy missing audit data?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>55</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is audit data incomplete?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>56</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is any audit data from a non-baseline snapshot?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>57</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Login Password Policy </ReportKey>
+      <ReportText>Is the password policy enabled for all SQL Logins? Recommendation: Enable "Enforce password policy" and "Password expiration" for all the SQL Server logins. Use ALTER LOGIN (Transact-SQL) to configure the password policy for the SQL Server login.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>58</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>PUBLIC Can Access DTS SPs</ReportKey>
+      <ReportText>Are any permissions granted to the public database role? Recommendation: Revoke EXECUTE permissions from the public database role on the following DTS system stored procedures in the msdb database:   sp_add_dtspackage, sp_drop_dtspackage,  sp_dump_dtslog_all, sp_dump_dtspackagelog, sp_dump_dtssteplog, sp_dump_dtstasklog, sp_enum_dtspackagelog, sp_enum_dtspackages, sp_enum_dtssteplog, sp_enum_dtstasklog, sp_get_dtspackage, sp_get_dtsversion, sp_log_dtspackage_begin, sp_log_dtspackage_end, sp_log_dtsstep_begin, sp_log_dtsstep_end, sp_log_dtstask, sp_make_dtspackagename, sp_reassign_dtspackageowner 
+Grant EXECUTE permissions only to users or groups that require them.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>59</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does any SQL Login have a blank password?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>60</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any fixed roles assigned to the public role or guest user?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>61</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>Remove BUILTIN\Administrators</ReportKey>
+      <ReportText>Is the BUILTIN/Administrators group assigned to the sysadmin role? By default, the Windows BUILTIN\Administrators group is added to the sysadmin SQL Server server-level role. This grants all local administrators on the system where SQL Server is installed full administrative rights to the database server and all its databases, which might not be intended. Recommendation: Remove the BUILTIN\Administrators group from the sysadmin SQL Server group. Administrative access should be provisioned to individual users as required, not to groups.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>62</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Login Password Policy </ReportKey>
+      <ReportText>Is password expiration enabled for all SQL Logins? Recommendation: Enable "Enforce password policy" and "Password expiration" for all the SQL Server logins. Use ALTER LOGIN (Transact-SQL) to configure the password policy for the SQL Server login.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>63</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server on PDC/BDC</ReportKey>
+      <ReportText>Is the server a Domain Controller? Recommendation: If it is possible, do not install SQL Server on a computer that is a primary domain controller or a backup domain controller. Installing a SQL Server 2005 failover cluster instance on a domain controller is not supported.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>67</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Service Account</ReportKey>
+      <ReportText>Is an unacceptable Active Directory Helper account being used? Recommendation: Use a low-privilege domain account to run SQL Server services.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'LOW_PRIVILEGED_DOMAIN_USER'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>68</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Service Account</ReportKey>
+      <ReportText>Is an unacceptable Reporting Services account being used? Recommendation: Use a low-privilege domain account to run SQL Server services.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'LOW_PRIVILEGED_DOMAIN_USER'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>69</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>SQL Server Service Account</ReportKey>
+      <ReportText>Is an unacceptable VSS Writer account being used? Recommendation: Use a low-privilege domain account to run SQL Server services.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'LOW_PRIVILEGED_DOMAIN_USER'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>70</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is VSS Writer running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>71</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unauthorized accounts have sysadmin privileges?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>72</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the SQL Server sa account enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>73</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unauthorized users have the ALTER TRACE permission?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>74</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unauthorized users have the CONTROL SERVER permission?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>75</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is xp_cmdshell enabled on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>76</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do required administrative accounts exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>77</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is password policy enforced on the sa account?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>78</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do the required administrative permissions exist on database files?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>79</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do the required administrative permissions exist on executable files?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>80</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do the required administrative permissions exist on registry keys?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>81</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are unapproved data files located on the system drive?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'%\master.mdf','%\mastlog.ldf','%\msdbdata.mdf','%\msdblog.ldf','%\model.mdf','%\modellog.ldf','%\distmdl.%','%\mssqlsystemresource.%','%\tempdb.mdf','%\templog.ldf'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>82</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are unapproved SQL Server installation directories on the system drive?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'C:\Program Files\Microsoft SQL Server\90\Shared','C:\Program Files\Microsoft SQL Server\100\Shared','C:\Program Files\Common Files\System\MSSearch\Bin','C:\Program Files (x86)\Microsoft SQL Server\90\Shared'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>83</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are Ad Hoc Distributed Queries enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>84</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unauthorized SQL Logins exist on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'sa'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>85</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any permissions granted to the public server role?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>86</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the trustworthy bit on for any unapproved databases?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'msdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>87</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any unapproved databases owned by a system administrator?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'master','msdb','model','tempdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>88</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>Trustworthy Bit</ReportKey>
+      <ReportText>Are any unapproved trustworthy databases owned by a system administrator? Recommendation: Turn off the trustworthy bit or change the dbo to a fixed server role other than sysadmin.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues>'msdb'</SeverityValues>
+    </PolicyMetric>
+  </PolicyMetrics>
+</Policy>

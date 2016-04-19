@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MsWordImport PreserveSourceStyles="False" KeepSourceLinks="True" ConvertInlineFormatting="True" AddContinuedLinks="false" AddContinuedFromLinks="false" ContinuedLinkFormat="(continued in {title})" ContinuedFromLinkFormat="(continued from {title})" UseMaxCharLimit="false" UseMinCharLimit="false" MaxCharLimit="10000" MinCharLimit="1000" LastCollectTime="04/21/2008 15:23:36" Stylesheet="../../Content/Resources/Stylesheets/Idera Stylesheet.css" LastImport="04/21/2008 15:24:03">
+    <ParagraphStyles>
+        <Map From="Heading1" To="h1.(MS Word Style)" />
+        <Map From="Heading2" To="h2.(MS Word Style)" />
+        <Map From="Heading3" To="h3.(MS Word Style)" />
+        <Map From="Heading4" To="h4.(MS Word Style)" />
+        <Map From="Heading5" To="h5.(MS Word Style)" />
+        <Map From="Heading6" To="h6.(MS Word Style)" />
+        <Map From="Heading 1" To="h1.Heading 1" />
+        <Map From="Heading 2" To="h2.Heading 2" />
+        <Map From="Heading 3" To="h3.Heading 3" />
+        <Map From="Heading 4" To="h4.Heading 4" />
+        <Map From="Heading 5" To="h5.Heading 5" />
+        <Map From="Heading 6" To="h6.Heading 6" />
+        <Map From="Body" To="p.Body" />
+        <Map From="Bullet" To="p.Bullet" />
+        <Map From="Bullet Last" To="p.BulletLast" />
+        <Map From="Definition List Body" To="p.DefinitionListBody" />
+        <Map From="Definition List Term" To="p.DefinitionListTerm" />
+        <Map From="Question" To="p.Question" />
+        <Map From="Spacer" To="p.Body" />
+        <Map From="Table Head Row" To="p.TableHeadRow" />
+        <Map From="Table Text" To="p.TableText" />
+        <Map From="Table Text Bullet" To="p.Bullet" />
+    </ParagraphStyles>
+    <CharacterStyles>
+        <Map From="Hyperlink" To="a.(MS Word Style)" />
+        <Map From="Code" To="span.Code_1_1" />
+        <Map From="Definition List Body Char" To="span.Definition_List_Body_Char" />
+        <Map From="Definition List Term Char" To="span.Definition_List_Term_Char" />
+        <Map From="GUI Item" To="span.GUIItem_1" />
+        <Map From="If Then Statement" To="span.If_Then_Statement" />
+    </CharacterStyles>
+    <Files>
+        <Url Source="../../../Window Descriptions/SQL Compliance Manager Window Help Clean.doc" AbsoluteSource="file:///C:/SQL compliance manager/Atlantic/Current/Help/Window Descriptions/SQL Compliance Manager Window Help Clean.doc" />
+    </Files>
+    <GeneratedFiles>
+        <Url Source="../../Content/NewImport/Management Console User Interface.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Add Privileged Users Window.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Activity Log Tab.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Add User Tables Window.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Alert Message Template Window.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Alert Rules Tab.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Alerts Tab.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Archive Audit Data Now Window.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Archive Properties Window.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Archive Properties Window1.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Archived Events Tab.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Attach Archive Database Window.htm" TimeStamp="4/21/2008 3:23:36 PM" />
+        <Url Source="../../Content/NewImport/Audit Events Tab.htm" TimeStamp="4/21/2008 3:23:39 PM" />
+        <Url Source="../../Content/NewImport/Audit Reports.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Audit Snapshot Preferences.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Audited Database Properties.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Audited Database Properties1.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Audited Database Properties2.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Audited Database Properties3.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Audited Database Properties4.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Archive Preferences Window.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Capture Audit Snapshot Window.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Change Log Tab.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Change Log Properties Window.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Check Repository Integrity.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Collection Server Status Window.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Configure Email Settings Window.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Configure Repository Databases.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Configure Repository Databases1.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Connect to Repository Window.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Console Preferences Window.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Deploy Reports Wizard Connect.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Deploy Reports Wizard SQL.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Deploy Reports Wizard Summary.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Console Preferences Window1.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Deploy SQLcompliance Agent.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Deploy SQLcompliance Agent1.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Deploy SQLcompliance Agent2.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Edit Alert Rule Wizard Additional.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Edit Alert Rule Wizard Alert.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Edit Alert Rule Wizard Finish.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Edit Alert Rule Wizard SQL.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Edit Alert Rule Wizard SQL1.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Edit Event Filter Wizard Finish.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Edit Event Filter Wizard SQL.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Edit Event Filter Wizard SQL1.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Edit Event Filter Wizard SQL2.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Event Filters Tab.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Event Properties Window General.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Event Properties Window Details.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Event Properties Window Data.htm" TimeStamp="4/21/2008 3:23:39 PM" />
+        <Url Source="../../Content/NewImport/Explore Activity Audited SQL.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Explore Activity Instance.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Explore Activity Database.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Groom Alerts Now Window.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Groom Audit Data Now Window.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Integrity Check Results Window.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Import Audit Settings Select.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Import Audit Settings Import.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Import Audit Settings Target.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Import Audit Settings Target1.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Import Audit Settings Summary.htm" TimeStamp="4/21/2008 3:23:37 PM" />
+        <Url Source="../../Content/NewImport/Manage SQL compliance manager.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Alert Rule Wizard Additional.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Alert Rule Wizard Alert.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Alert Rule Wizard Finish.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Alert Rule Wizard SQL.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Alert Rule Wizard SQL1.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Audited Database Wizard.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Audited Database Wizard1.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Audited Database Wizard2.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Audited Database Wizard3.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Audited Database Wizard4.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Audited Database Wizard5.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Audited Database Wizard6.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Audited Database Wizard7.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Event Filter Wizard Finish.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Event Filter Wizard SQL.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Event Filter Wizard SQL1.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Event Filter Wizard SQL2.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server1.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server2.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server3.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server4.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server5.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server6.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server7.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server8.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server9.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server10.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server11.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New Registered SQL Server12.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New SQL Server Login Wizard.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New SQL Server Login Wizard1.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/New SQL Server Login Wizard2.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Login Filtering Options Window.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Login Properties Window Database.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Login Properties Window General.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Registered SQL Server Properties.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Registered SQL Server Properties1.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Registered SQL Server Properties2.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Registered SQL Server Properties3.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Registered SQL Server Properties4.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Registered SQL Servers Tab.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Select SQL Server Window.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Specify Addresses Window.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/SQL Logins Tab.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/SQLcompliance Agent Properties.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/SQLcompliance Agent Properties1.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/SQLcompliance Agent Properties2.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/SQLcompliance Agent Properties3.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/SQLcompliance Agent Trace.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Specify Alert Criteria Windows.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Specify Event Filter Criteria.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Update Indexes Window.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Cluster Configuration Console.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Cluster Configuration Console1.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Add SQLcompliance Agent Service.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Add SQLcompliance Agent Service1.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Add SQLcompliance Agent Service2.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Add SQLcompliance Agent Service3.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/Add SQLcompliance Agent Service4.htm" TimeStamp="4/21/2008 3:23:38 PM" />
+        <Url Source="../../Content/NewImport/SQLcompliance Agent Details.htm" TimeStamp="4/21/2008 3:23:39 PM" />
+        <Url Source="../TOCs/NewImport.fltoc" TimeStamp="4/21/2008 3:23:39 PM" />
+    </GeneratedFiles>
+    <NewTopicStyles>
+        <StyleName Name="Heading 1" />
+        <StyleName Name="Heading 2" />
+    </NewTopicStyles>
+    <UsedParagraphStyles>
+        <StyleName Name="Body" />
+        <StyleName Name="Bullet" />
+        <StyleName Name="Bullet Last" />
+        <StyleName Name="Definition List Body" />
+        <StyleName Name="Definition List Term" />
+        <StyleName Name="Heading 1" />
+        <StyleName Name="Heading 2" />
+        <StyleName Name="Question" />
+        <StyleName Name="Spacer" />
+        <StyleName Name="Table Head Row" />
+        <StyleName Name="Table Text" />
+        <StyleName Name="Table Text Bullet" />
+    </UsedParagraphStyles>
+    <UsedCharacterStyles>
+        <StyleName Name="Code" />
+        <StyleName Name="Definition List Body Char" />
+        <StyleName Name="Definition List Term Char" />
+        <StyleName Name="GUI Item" />
+        <StyleName Name="If Then Statement" />
+    </UsedCharacterStyles>
+</MsWordImport>

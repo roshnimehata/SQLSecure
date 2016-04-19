@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CatapultToc
+  Version="1">
+  <TocEntry
+    Title="Access the SQLsecure Help"
+    Link="/Content/Access Help.htm" />
+  <TocEntry
+    Title="Welcome to SQLsecure Release Notes"
+    Link="/Content/Start Help.htm">
+    <TocEntry
+      Title="What is SQLsecure?"
+      Link="/Content/What is SQLsecure.htm"></TocEntry>
+    <TocEntry
+      Title="How does it help me?"
+      Link="/Content/How SQLsecure Helps You.htm" />
+    <TocEntry
+      Title="How does it work?"
+      Link="/Content/How SQLsecure works.htm" />
+    <TocEntry
+      Title="Find answers"
+      Link="/Content/Find Answers.htm">
+      <TocEntry
+        Title="Document conventions"
+        Link="/Content/Document Conventions.htm" />
+      <TocEntry
+        Title="How to use this Help system"
+        Link="/Content/Help System.htm" />
+    </TocEntry>
+    <TocEntry
+      Title="About Idera"
+      Link="/Content/About Idera.htm">
+      <TocEntry
+        Title="Contact Idera"
+        Link="/Content/Contacting Idera.htm" />
+      <TocEntry
+        Title="Idera products"
+        Link="/Content/Idera Products.htm" />
+      <TocEntry
+        Title="Legal notice"
+        Link="/Content/Legal Notice.htm" />
+    </TocEntry>
+  </TocEntry>
+  <TocEntry
+    Title="2.7 Release Notes"
+    Link="/Content/What's New.htm">
+    <TocEntry
+      Title="New features and fixed issues"
+      Link="/Content/New Features.htm" />
+    <TocEntry
+      Title="Previous features and fixed issues"
+      Link="/Content/Fixed Issues.htm" />
+    <TocEntry
+      Title="Known issues"
+      Link="/Content/Known Issues.htm" />
+    <TocEntry
+      Title="Recommended Idera Solutions"
+      Link="/Content/Recommended Idera Solutions.htm" />
+  </TocEntry>
+</CatapultToc>

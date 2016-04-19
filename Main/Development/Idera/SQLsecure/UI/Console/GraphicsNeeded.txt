@@ -1,0 +1,40 @@
+========================================================================================
+MainForm
+========================================================================================
+
+Icons
+-----
+- Product icon
+- Explore Permissions
+- Reports
+- Manage SQLsecure
+	- Registered Servers
+	- Logins
+	- License
+	- SQLsecure Activity
+
+- SQL Server
+	
+- Snapshots
+  - Successful
+  - Warnings
+  - Errors
+  - In Progress
+  
+  - Baseline
+  
+  - Scheduled
+  - Unscheduled (or this could be blank)
+	
+- Grids
+  - Filter
+  - Filter (currently filtered)
+  
+- Server/Database Principal Types
+  - Windows User
+  - Windows Group
+  - Sql Login
+  - Application Role
+  - Database Role
+  - Certificate
+  - Asymmetric Key

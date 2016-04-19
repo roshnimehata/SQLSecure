@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sed", "Sed\Sed.csproj", "{EDE5F21A-92BD-4372-9266-CA67DBD19C92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildUtilities", "BuildUtilities\BuildUtilities.csproj", "{14AE8D88-78DD-4DE6-A4F4-F1A42E7DE4CB}"
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 3
+		SccProjectName0 = BuildSolution
+		SccLocalPath0 = .
+		SccProvider0 = MSSCCI:Perforce\u0020SCM
+		SccProjectUniqueName1 = BuildUtilities\\BuildUtilities.csproj
+		SccProjectName1 = Perforce\u0020Project
+		SccLocalPath1 = .
+		SccProjectFilePathRelativizedFromConnection1 = BuildUtilities\\
+		SccProjectUniqueName2 = Sed\\Sed.csproj
+		SccProjectName2 = Perforce\u0020Project
+		SccLocalPath2 = .
+		SccProjectFilePathRelativizedFromConnection2 = Sed\\
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDE5F21A-92BD-4372-9266-CA67DBD19C92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE5F21A-92BD-4372-9266-CA67DBD19C92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE5F21A-92BD-4372-9266-CA67DBD19C92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE5F21A-92BD-4372-9266-CA67DBD19C92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14AE8D88-78DD-4DE6-A4F4-F1A42E7DE4CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14AE8D88-78DD-4DE6-A4F4-F1A42E7DE4CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14AE8D88-78DD-4DE6-A4F4-F1A42E7DE4CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14AE8D88-78DD-4DE6-A4F4-F1A42E7DE4CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

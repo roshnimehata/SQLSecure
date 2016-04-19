@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" MadCap:lastBlockDepth="6" MadCap:lastHeight="579" MadCap:lastWidth="890">
+    <head>
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <h1 class="Heading1">Fixed issues in this release</h1>
+        <p class="Body">
+            <MadCap:keyword term="Release Notes:fixed issues;fixed issues;issues fixed in this release" />This build includes many fixed issues, including the following updates.</p>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>2.6</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">SQLsecure 2.6 includes the following fixed issues.</p>
+                <ul style="list-style-type: circle;">
+                    <li>SQLsecure is now correctly collects database file permissions when the SQL Server files are located in the root directory of a drive.</li>
+                    <li>The SQLsecure Common TCP Port security check will now generate a finding if a SQL Server instance is using dynamic ports only when “dynamic” is entered in the configuration list.  Previously, dynamic ports would always generate a finding.</li>
+                    <li>The Full-Text Search Login Account Not Acceptable security check now correctly checks on and reports findings for all Full Text Search service logins on your audited SQL Server  instances.</li>
+                    <li>SQLsecure now correctly collects file permissions from audited SQL Server instances hosted by a clustered Windows 2008 Server computer.</li>
+                </ul>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>2.5</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">SQLsecure 2.5 included the following fixed issues.</p>
+                <ul style="list-style-type: circle;">
+                    <li class="Bullet">SQLsecure now correctly detects whether the SQL Server Agent is running on SQL Server instance hosting the Repository. This issue occurred when the SQL Server instance was configured to use a double-byte character set, such as the Turkish language.</li>
+                    <li class="Bullet">SQLsecure correctly excludes stored procedures listed in the Startup Stored Procedures security check criteria.</li>
+                    <li class="Bullet">SQLsecure now correctly collects audit data when you configure your snapshot filters to retrieve security information about System Only or User Only object types.</li>
+                    <li class="Bullet">SQLsecure now includes improved file data collection. Previously, when attempting to run a snapshot, SQLsecure had returned snapshot warnings and logged the following error: “Method failed with unexpected error code 53”.</li>
+                    <li class="Bullet">SQLsecure now correctly handles data collection from instances located in an Active-Active cluster running Windows Server 2008.</li>
+                    <li class="Bullet">The Database File Permissions Not Acceptable security check now includes the system resource database files for SQL Server 2005 or later. On SQL Server 2005 instances, if these database files are not located in the same folder as the Master database, then SQLsecure may not be able to find the files and thus the security check may not return a correct finding.</li>
+                    <li class="Bullet">The Audited SQL Server Properties window now correctly applies your policy membership changes.</li>
+                    <li class="BulletLast">SQLsecure now stores the Collector logs in the Idera installation directory by default.</li>
+                </ul>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+    </body>
+</html>

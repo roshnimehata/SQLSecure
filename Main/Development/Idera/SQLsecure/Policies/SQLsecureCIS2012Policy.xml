@@ -1,0 +1,1099 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PolicyName>CIS for SQL Server 2012</PolicyName>
+  <PolicyDescription>Center for Internet Security - Security Configuration Benchmark for Microsoft SQL Server 2012, January 12th, 2010</PolicyDescription>
+  <IsDynamic>true</IsDynamic>
+  <DynamicSelection />
+  <UseBaseline>false</UseBaseline>
+  <InterviewName>CIS Interview Checks</InterviewName>
+  <InterviewText>Benchmark for Microsoft SQL Server 2012, January 12th, 2010 
+
+1.1 Physical security - Place the SQL Server in an area where it will be physically secure. 
+Place the server where only authorized personnel can obtain access. 
+
+1.2 Domain environment - If the SQL Server is in a domain that is trusted by other domains, document the access granted by the trust.
+Ensure that the trusted domain has only the necessar rights to the SQL Server and its databases.
+
+1.3 SQL Servers accessed via Internet - If the SQL Server is being accessed via the Internet, place the SQL Server inside a DMZ with the Web Server. 
+Limit the database contents of this SQL Server to information meant for public dissemination only.
+
+1.4 SQL Servers accessed via Internet - Put a firewall between your server and the Internet. Block TCP port 1433 and UDP port 1434 on your perimeter firewall. If named instances are listening on additional ports, block those too. In a multi-tier environment, use multiple firewalls to create more secure screened subnets.
+Consider separating Web logic and business logic onto separate computers. 
+
+1.5 Encryption - Implement SSL. Use the fully-qualified DNS name of the server in the certificate to help prevent masquerading. 
+
+1.6 Test and development servers - Maintain test and development servers on a separate network segment from the production servers.
+Test patches carefully before applying them to production systems. 
+
+1.7 Dedicated Server - Install SQL Server on a computer that does not provide additional services, e.g., Web or Mail Services.
+Vulnerabilities in other application services could lead to a compromise of the SQL Server. 
+
+1.8.1 Windows accounts - Make sure the Windows guest account is disabled.
+
+1.8.2 Disk subsystem - Use RAID for critical data files.
+Raid Level 10 is recommended. Use the level of RAID which will provide the best reliability and performance for your environment. 
+ 
+1.8.3 Separate partitions - Create separate partitions for OS/SQL program files, SQL data files, and SQL transaction logs.
+Separate partitions provide greater protections via host and file permissions at the volume level as well as allowing greater control over data storage usage and monitoring of the database. 
+
+1.9 Services - Disable unused services on a SQL Server machine 
+The disabling of services has to be balanced with application requirements, since certain applications require the use of certain services to function correctly. 
+ 
+1.12 Local users group membership - Assign the local service account as a member of only the Users group.
+The ‘Users’ group is a local machine group.
+
+1.13 Domain service account group membership - Make a domain service account a member of only non-privileged groups.
+ 
+1.14 SQL Server service account rights - Grant the SQL Server service account(s) the following rights: Log on as a service, Act as part of the operating system, Log on as a batch job, Replace a process-level token, Bypass traverse checking, Adjust memory quotas for a process, Permission to start SQL Server Active Directory, Helper, Permission to start SQL Writer.
+These rights are assigned by default. 
+
+1.15 SQL Server Agent service account rights - Grant the SQL Server Agent service account(s) the following rights: Log on as a service, Act as part of the operating system (Only on Windows 2000), Log on as a batch job, Replace a process-level token, Bypass traverse checking, Adjust memory quotas for a process.
+These rights are assigned by default. 
+
+1.16 Integration Service account rights - Grant the Integration Service account(s) the following rights: 
+Log on as a service, Permission to write to the application event log, Bypass traverse checking, Create global objects, Impersonate a client after authentication
+
+1.17 SQL Server services account rights - Deny the service account the “Log on locally” right.
+The service accounts do not have a need to log on to the console. This will prevent a successful brute force attack from gaining access to the database server. 
+
+1.18 SQL Server services account rights - If a service account is a domain account, configure the account to have the Windows permission “Log on To” the database server only. 
+This, combined with the recommendation in item 1.15-1.17, will prevent an attempt to logon to any domain computer using the services account. 
+
+1.19.1 SQLServer Proxy accounts - Create dedicated user accounts specifically for proxies, and only use these proxy user accounts for running job steps. 
+A SQL Server Agent proxy defines the security context for a job step. A proxy provides SQL Server Agent with access to the security credentials for a Microsoft Windows user. Each proxy can be associated with one or more subsystems. A job step that uses the proxy can access the specified subsystems by using the security context of the Windows user. Before SQL Server Agent runs a job step that uses a proxy, SQL Server Agent impersonates the credentials defined in the proxy, and then runs the job step by using that security context.
+
+1.19.2 SQLServer Proxy accounts - Only grant the necessary permissions to proxy user accounts. Grant only those permissions actually required to run the job steps that are assigned to a given proxy account. 
+ 
+1.19.3 SQLServer Proxy accounts - Do not run the SQL Server Agent service under a Microsoft Windows account that is a member of the Windows Administrators group. 
+
+
+2.4 Naming conventions - In naming SQL Server instances, limit the instance name to less than 16 characters with no reference to a version number or other sensitive information. 
+Version or other sensitive information in the server name makes it easier for an attacker to develop an attack strategy against the server. 
+ 
+2.5 SQL Server instances - Keep an inventory of all versions, editions and languages of SQL Server.
+Include instances of SQLEXPRESS. SQL Scan and SQL Check are some of the tools that can be used to scan for instances of SQL Server within a domain. 
+
+
+3.2.1 Auto Restart SQL Server - Set the SQL Server service start mode to ‘Automatic’.
+This is found in the SQL Server Configuration Manager. Note: This recommendation is not applicable to clustered SQL instances.
+ 
+3.2.2 Auto Restart SQL Server Agent - If the SQL Server Agent is required, set the ‘SQL Server Agent’ start mode to ‘Automatic’.
+This is found in the SQL Server Configuration Manager. 
+
+3.2.3 Distributed Transaction Coordinator - Set the ‘Distributed Transaction Coordinator’ service start mode to ‘Disabled’ if this service is not required.
+This is found in the SQL Server Configuration Manager. 
+
+3.2.6 Backup/Restore from tape timeout - Set the Backup/Restore from tape timeout period to “Try for 5 minutes”.
+This option is found in the Database Settings page of SQL Server Properties window. 
+
+3.2.7 Media Retention - Set the default backup media retention to the minimum number of days needed to retain a full backup of the database. Ideally, this should be as high as your resources permit. 
+This option is found in the Database Settings page of SQL Server Properties window. (Idera SQLsafe provides a media Retention Policy)
+
+3.3 Data Directory - The default data directory should be a dedicated data partition  
+
+3.4 Data Directory - The default log directory should be a dedicated partition separate from all programs and data
+
+3.6 Other SQL Server Configuration Options - Set the number of logs retained based on the maximum number of restarts and log cyclings which may occur within your desired log retention window. The default value of 6 may be too low for many installations.
+Rotate logs on a regular schedule, weekly, bi-weekly etc. to prevent oversize logs. This option is found under Management-> SQL Server Logs ->Configure
+
+3.8 Trace Messages - Error Log/Include execution trace messages = off
+This is a defense in depth measure to reduce the threat of a disk exhaustion based denial of service. General Page on SQL Server Agent properties.
+
+3.16 Advanced Setting - SQL Server Event forwarding/Forward events to a different server = off
+SQL Server Agent properties page.
+
+
+4.1 Permissions on OS tools - Restrict access to the executables in the System32 directory eg. Explorer.exe and cmd.exe. 
+Remove the Users group’s permission (if any) to executables. Assign Administrators Full Control. 
+
+4.2 SQL Server install directory permissions - Modify the permissions to the [Drive]:\Program Files\Microsoft SQL Server directory. 
+Assign the SQL Server service account Full Control. Remove the Users group’s permission.
+
+4.3 SQL Server database instance directory permissions - Delete or secure old setup files. Protect files in the &lt;system drive&gt;:\Program Files\Microsoft SQL Server\MSSQL.X\MSSQL\Install, e.g., sqlstp.log, sqlsp.log and setup.iss. ‘.X’ represents the installations of various SQL Server installs due to the fact that multiple instances of SQL Server or SQL Express can be installed.
+If the current system was upgraded from SQL Server version 2000, check setup.iss in the %Windir% folder and the sqlstp.log in the Windows Temp folder for passwords. Microsoft distributes a free utility called Killpwd, which will locate and remove passwords found in these setup files from your system. This tool does not work with a native SQL 2005 installation. Microsoft is scheduled to release an updated tool, but no release date has been given at this time.
+
+4.4 Assigning System Administrators role - When assigning database administrators to the System Administrators role, map their Windows accounts to SQL logins, then assign them to the role. 
+Assign only authorized DBAs to the SQL Server System Administrators role. 
+
+4.7 OS Guests access - Deny database login for the Guests OS group. 
+Assuming your Guests group was not renamed as part of your OS lockdown: EXEC sp_denylogin 'Computer_Name\Guests' 
+
+4.8 Fixed Server Roles - Only use the fixed server roles sysadmin, serveradmin, setupadmin etc, to support DBA activity.
+Avoid assigning these roles to application database user accounts, application administrator accounts, application developer accounts or application roles. 
+
+4.10 Statement Permissions - Grant DDL statement permissions to only the database and schema owner, not individual users.
+DBO has all statement permissions for the database by default 
+
+4.11 Database Owners Permissions - Ensure dbo owns all user-created database schemas
+Having dbo own all user-created database schemas prevents issues raised when users need to be deleted 
+
+4.13 Stored Procedure Permissions - Grant execute permissions on stored procedures to database roles (not users). 
+ 
+4.14 Using the GRANT option - Do not assign the GRANT option of object permission to a user or role. 
+ 
+4.15 SQL Server Agent subsystem privileges - Restrict proxy access to required/approved subsystems
+Allowing access to CmdExec and ActiveX subsystems allows direct OS access and should be avoided unless business justifications for doing so exist. 
+ 
+4.16 User-defined Database Roles - Create user-defined database roles to assign permissions to objects in the database when a pre-defined database role does not supply the appropriate permissions to a group of users.
+Not all organizations have a need for user-defined database roles. This may not apply to all organizations. 
+ 
+4.17 Database Roles - Avoid nesting database roles.
+
+4.18 Users and Roles - Ensure that the members of the roles (users/groups/other roles) in the target database actually exist. 
+
+4.19 Application Roles - Use application roles to limit access to data to users of specific applications. Use encryption to protect the role name and password in the connection string. Use “EXECUTE AS WITH NO REVERT” or “WITH COOKIE” to allow individuals to access the application without knowing the password.
+This provides a permission based rather than password based mechanism to sandbox access.
+
+4.21 Linked or Remote Servers - Use linked servers rather than remote servers where required. Remove any unused linked servers or disable this feature. 
+Remote servers are available for backward compatibility purposes only. Applications that must execute stored procedures against remote instances of SQL Server should use linked servers instead. Remove (right-click the linked server and select delete from the Management Studio) or drop (sp_dropserver servername, 'droplogins') all linked servers and associated logins that are not required. If linked servers are not required, disable the feature by setting the "data access" option of sp_serveroption to 'false'.
+
+4.22 Linked or Remote Servers - Configure linked or remote servers to use Windows authentication where required. Disable linked servers otherwise. 
+When linking SQL Server databases, the user’s current identity will be used to authenticate the connection. 
+
+4.23 Linked Server logins - Allow linked server access only to those logins that need it. Disable linked servers otherwise. 
+
+4.24 Ad Hoc Data Access - Disable ad hoc data access on all providers except SQL OLE DB, for all users except members of the sysadmin fixed role.
+If SQL Authentication is used, Ad Hoc data access increases the probability of credential disclosure via the practice of embedding username and password in the provider string. For more information see: http://msdn.microsoft.com/en-us/library/ms179856(SQL.90).aspx
+
+
+5.3 SQL Server Logs - SQL Server audit data must be protected from loss. The SQL Server and SQL Server Agent logs must be backed up before they are overwritten.
+Adjust the number of logs to prevent data loss. The default is six. 
+
+5.5 Profiler Events - Capture events using SQL Profiler
+A third-party auditing tool may be used in lieu of SQL Profiler. (Use Idera SQL compliance manger)
+
+
+6.1 Backups – General - Use Full database backups combined with differential or transaction log backups to restore the database to a specific point in time.
+Database backups should be made to another server or disk that is not physically attached to the same server as the database. This will reduce the risk of total loss in case of disk failure. 
+
+6.2 System databases - It is important to include the system databases in your backup plan i.e. the master, msdb and model databases.
+The tempdb database contains no permanent data and does not require backups. 
+
+6.3 Backing up Master database - Backup the master database when any of the following events occur: 
+•A database is created or deleted 
+•Login accounts are created, deleted or modified 
+•Server-wide or database settings are modified 
+
+6.4 Backing up MSDB database - Backup the msdb database when any of the following events occur: 
+•Alerts, jobs, schedules or operators are created, deleted or modified 
+ 
+6.5 Backup Media Password - Password protect the backup media. (Use Idera SQLsafe)
+Assign a password to backups to reduce the probability of an incorrect data restore.
+Note: This password is not intended to prevent unauthorized access to backup data. See http://msdn.microsoft.com/en-us/library/ms186865(SQL.90).aspx for additional details.
+ 
+6.6 Access to Backup Files - Restrict access to the backup files to System Administrators.
+ 
+6.7 Access to Backup Files - Restrict restore permissions to DBAs.
+RESTORE permissions default to members of the sysadmin and dbcreator fixed server roles, and the owner (dbo) of the database. Holders of the CREATE DATABASE permission can restore a database that does not currently exist - avoid granting this permission to non-DBAs where possible.
+
+6.8 Recommended periodic administrative procedures - Run the Microsoft Baseline Security Analyzer weekly and follow the security recommendations as closely as possible to secure the operating system. (Use Idera SQLsecure)
+
+6.9 Recommended periodic administrative procedures - Run the SQL Best Practices Analyzer regularly and note any changes to the environment. 
+
+6.10 Enable Password Policy Enforcement - When a password change mechanism is introduced into clients and applications, enable password expiration. Always specify MUST_CHANGE when specifying a password on behalf of another principal. 
+
+6.11 Periodic scan of Role Members - Periodically scan fixed server and database roles to ensure that only trusted individuals are members. 
+
+6.12 Periodic scan of stored procedures - Verify stored procedures that have been set to AutoStart are secure. 
+
+
+7.1 SQL Server Agent service account - Configure replication agents to use a Windows account rather than a SQL Server Agent account. Grant only the required permissions to each agent.
+Use Windows Authentication for all replication agent connections. 
+
+7.2 Replication administration roles - Avoid modifying replication administration permissions assigned to the roles by default. Only assign authorized application administrators and DBAs these roles. 
+The permissions needed to support and administer replication are assigned to sysadmin, db_owner and replmonitor by default. 
+
+7.3 Snapshot share folder - Store the snapshot folder, which houses a snapshot of the replicated changes, on an explicit share and not an administrative share. 
+
+7.4 Publication Access List - The domain accounts used by the SQL Server Agent service and the Replication proxy account must be entered in the Publication Access List so that all replication agents will be able to participate in the replication process. 
+
+7.5 Secure Communications - Use secure connections, such as VPN or proxy servers, for all replication over the Internet. 
+
+7.6 Database connections - Configure the database connections for replication agents to use Windows authenticated logons. 
+
+7.7 Filtering - Employ replication filters to protect data by publishing only the desired vertical or horizontal subset.
+
+7.8 Distribution databases - All distribution databases and snapshot files must be located in protected and audited locations. 
+
+
+8.1 Ownership Chaining - Use ownership chaining within a single database to simplify permissions management. 
+Avoid using cross database ownership chaining.
+
+8.2 Role Assignments - Assign permissions to roles rather than users. The principle of “Least Privilege” applies, thus users should not be given access to roles they do not need for their job function. 
+Ensure that roles, rather than users own objects to avoid application changes when a user is dropped. 
+
+8.3 Encrypted connections - Enable encrypted connections between the user and the server. 
+Consider allowing only encrypted connections. When allowing SQL Server authentication, encrypt either the network layer with IPSec or the session with SSL 
+
+8.4 Error Handling - Do not propagate errors back to the user.
+Log errors or transmit them to the system administrator. 
+
+8.5 User Input - Prevent SQL injection by validating all user input before transmitting it to the server. 
+Only permit minimally privileged accounts to send user input to the server. Minimize the risk of SQL injection attack by using parameterized commands and stored procedures. 
+
+8.6 Developer awareness - Increase awareness of issues such as cross-site scripting, buffer overflows, SQL injection and dangerous APIs. 
+
+8.7 Developer awareness - Identify categories of threats that apply to your application, such as denial of service, escalation of privileges, spoofing, data tampering, information disclosure and repudiation. 
+
+8.8 Security reviews - Add security reviews to all stages of the application development lifecycle (from design to testing). 
+
+
+9. Surface Area Configuration Tool
+
+9.2 CLR Integration - Disable CLR Integration where not required
+Disabled by default.
+
+9.5 Native XML Web Services - Do not configure XML Web Services endpoints where not required
+Disabled by default.
+
+9.6 OLE Automation - Disable OLE Automation where not required
+Disabled by default. 
+
+9.7 Service Broker - Do not configure Service Broker endpoints where not required.
+Disabled by default.
+
+9.9 Web Assistant - Disable Web Assistant where not required
+Disabled by default.
+
+9.11 Ad Hoc Data Mining - Disable ad hoc data mining queries where not required
+
+9.12 Anonymous Connections - Disable anonymous connections to the Analysis Services where not required 
+
+9.13 Linked Objects - ” Enable links To other instances” should be disabled where not required. 
+
+9.14 Linked Objects - ” Enable links From other instances” should be disabled where not required. 
+ 
+9.15 User-Defined Functions - Disable loading of user-defined COM functions where not required 
+ 
+9.16 Scheduled Events and Report Delivery - Disable scheduled events and report delivery where not required 
+
+9.17 Web Service and HTTP Access - Disable Web Service and HTTP access where not required 
+
+9.18 Windows Integrated Security - Enable Windows integrated security for report data source connections</InterviewText>
+  <PolicyMetrics>
+    <PolicyMetric>
+      <MetricId>1</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 5.1</ReportKey>
+      <ReportText>Is the nearest snapshot collection within an acceptable timeframe? Recommendation: Prepare a schedule for reviewing audit information regularly.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'30'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>2</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 2.2</ReportKey>
+      <ReportText>Is the SQL Server version below the minimum acceptable level? Recommendation: Ensure the Current SQL Server service pack and hotfixes are installed.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'12.0.2000.8','11.0.2100','10.50.2500','10.0.5500','9.00.5000'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>3</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 2.6</ReportKey>
+      <ReportText>Is SQL Authentication enabled on the SQL Server? Recommendation: Select Windows authentication mode.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>4</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 5.2</ReportKey>
+      <ReportText>Is Login Auditing enabled on the SQL Server? Recommendation: At a minimum, enable failed login attempts. Auditing of failed login attempts only is enabled by default.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Failure','All'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>5</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 3.2.4, CIS 8.1</ReportKey>
+      <ReportText>Is Cross Database Ownership Chaining enabled on the SQL Server? Recommendation: Disable the cross_db_ownership_chaining option.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>6</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 4.9</ReportKey>
+      <ReportText>Is Guest user access available on the SQL Server? Recommendation: Remove the guest user from all databases except msdb, master and tempdb.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'msdb','master','tempdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>7</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do Suspect Logins exist on the SQL Server? </ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>8</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey>CIS 2.10</ReportKey>
+      <ReportText>Is C2 Audit Trace enabled on the SQL Server? Recommendation: C2 Audit Mode– Set to 1 if no custom defined audit trace is enabled.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>9</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.19.1</ReportKey>
+      <ReportText>Is a Proxy Account enabled on the SQL Server? Recommendation: Create dedicated user accounts specifically for proxies, and only use these proxy user accounts for running job steps.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'PROXY_ACCT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>10</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 9.3</ReportKey>
+      <ReportText>Is DAC enabled remotely on the SQL Server? Recommendation: Disable the Dedicated Administrator Connection where not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>11</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey>CIS 1.9.6</ReportKey>
+      <ReportText>Has anyone been granted permission to execute Integration Services stored procedures on the SQL Server? Recommendation: Disable the SSIS stored procedures or remove access if not required.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'sp_add_dtspackage','sp_enum_dtspackages','sp_add_job','sp_add_jobstep'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>13</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 3.7, CIS 9.4, CIS 9.8</ReportKey>
+      <ReportText>Is SQL Mail or Database Mail enabled? Recommendation: Disable SQL or Database Mail where messaging is not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>14</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.9, CIS 3.7, CIS 9.4</ReportKey>
+      <ReportText>Is SQL Agent Mail enabled? Recommendation: Disable service if not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>15</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 2.9</ReportKey>
+      <ReportText>Do the SQL Server sample databases exist? Recommendation: Do not install the sample databases. Delete all sample databases if they already exist.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Northwind','pubs','AdventureWorks','AdventureWorksDW'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>16</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 2.7</ReportKey>
+      <ReportText>Does "sa" account exist? Recommendation: The "sa" account should be renamed to something that is not easily identifiable as the "sa" account.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>17</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 2.8 (partial)</ReportKey>
+      <ReportText>Does "sa" account have a blank password? Recommendation: Use a strong password for the "sa" login account.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>18</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 3.2.5</ReportKey>
+      <ReportText>Are System Table updates allowed? Recommendation: Do not enable direct modifications to the system catalogs.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>19</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does "Everyone" have view access to System Tables?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>20</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 2.12</ReportKey>
+      <ReportText>Are startup stored procedures enabled? Recommendation: Disable scanning for startup.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>21</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 2.12, CIS 6.12</ReportKey>
+      <ReportText>Are any unexpected stored procedures marked to run at startup? Recommendation: Disable scanning for startup procedures.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>22</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 3.9</ReportKey>
+      <ReportText>Are any user stored procedures not encrypted? Recommendation: Ensure that all user-defined stored procedures are stored in encrypted format.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>23</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 3.10</ReportKey>
+      <ReportText>Do user defined Extended Stored Procedures (XPs) exist? Recommendation: Avoid using user-defined extended stored procedures. If extended functionality is required, use Common Language Runtime (CLR) assemblies instead.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>24</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 3.11-3.15, CIS 9.10</ReportKey>
+      <ReportText>Do inappropriate permissions exist on dangerous Extended Stored Procedures (XPs)? Recommendation: Disable access to these extended stored procedures if their use is not required.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'xp_cmdshell','xp_available_media','xp_dirtree','xp_dsninfo','xp_enumdsn','xp_enumerrorlogs','xp_enumgroups','xp_eventlog','xp_fixeddrives','xp_getfiledetails','xp_getnetname','xp_logevent','xp_loginconfig','xp_msver','xp_readerrorlog','xp_servicecontrol','xp_sprintf','xp_sscanf','xp_subdirs','xp_deletemail','xp_findnextmsg','xp_get_mapi_default_profile','xp_get_mapi_profiles','xp_readmail','xp_sendmail','xp_startmail','xp_stopmail','xp_cleanupwebtask','xp_convertwebtask','xp_dropwebtask','xp_enumcodepages','xp_makewebtask','xp_readwebtask','xp_runwebtask','sp_OACreate','sp_OADestroy','sp_OAGetErrorInfo','sp_OAGetProperty','sp_OAMethod','sp_OASetProperty','sp_OAStop','xp_regaddmultistring','xp_regdeletekey','xp_regdeletevalue','xp_regenumvalues','xp_regremovemultistring','xp_regwrite'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>25</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 2.11</ReportKey>
+      <ReportText>Is Remote Access enabled? Recommendation: Remote Access– Set to 0 unless replication is being used or the requirement is justified.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>26</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 3.1</ReportKey>
+      <ReportText>Are unexpected Protocols enabled? Recommendation: Disable the ‘Named Pipes’ network protocol.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Shared Memory','TCP/IP'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>27</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 2.3</ReportKey>
+      <ReportText>Are default TCP Ports used? Recommendation: Change SQL Server default ports from 1433 and 1434.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'1433','1434'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>28</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is SQL Server visible for browsing?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>29</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 4.15</ReportKey>
+      <ReportText>Can non sysadmins execute SQL Agent CmdExec jobs on the SQL Server? Recommendation: Restrict proxy access to required/approved subsystems.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>30</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.9, CIS 3.5</ReportKey>
+      <ReportText>Is replication Enabled on the SQL Server? Recommendation: Disable service if not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>31</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unexpected Registry Key Owners exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>32</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unexpected Registry Key Permissions exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>33</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.8.4</ReportKey>
+      <ReportText>Are any SQL Server files on drives not using NTFS? Recommendation: Format all volumes with NTFS.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>34</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unexpected Executable File Owners exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>35</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unexpected Executable File Permissions exist?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>36</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unexpected Database File Owners exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>37</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does "Everyone" have access to database files?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>38</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unexpected Database File Permissions exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>39</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is OS version at an acceptable level?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'Microsoft Windows Server 2008 R2 Enterprise , Service Pack 1','Microsoft Windows Server 2008 R2 Standard , Service Pack 1','Microsoft Windows Web Server 2008 R2 , Service Pack 1','Microsoft® Windows Server® 2008 Enterprise , Service Pack 2','Microsoft® Windows Server® 2008 Enterprise without Hyper-V , Service Pack 2','Microsoft® Windows Server® 2008 Datacenter , Service Pack 2','Microsoft® Windows Server® 2008 Datacenter without Hyper-V , Service Pack 2','Microsoft® Windows Server® 2008 Standard , Service Pack 2','Microsoft® Windows Server® 2008 Standard without Hyper-V , Service Pack 2','Microsoft® Windows® Web Server 2008 , Service Pack 2','Microsoft(R) Windows(R) Server 2003, Enterprise Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003 Enterprise x64 Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003, Standard Edition, Service Pack 2','Microsoft(R) Windows(R) Server 2003 Standard x64 Edition, Service Pack 2'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>40</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.10</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Service Login Account used? Recommendation: Use a low-privileged Local or Domain account for the MSSQLServer service.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'LOW_PRIVILEGE_SVC_ACCT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>41</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.9</ReportKey>
+      <ReportText>Are Microsoft Reporting Services running? Recommendation: Disable service if not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>42</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.9</ReportKey>
+      <ReportText>Are Analysis Services (OLAP) running? Recommendation: Disable service if not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>43</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is an unacceptable Analysis Service Login Account used?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>44</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.9</ReportKey>
+      <ReportText>Are Notification Services running? Recommendation: Disable services that are not in use.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>45</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is an unacceptable Notification Service Login Account used?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>46</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.9.6</ReportKey>
+      <ReportText>Are Integration Services running? Recommendation: Disable services that are not in use.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>47</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is an unacceptable Integration Service Login Account used?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>48</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the SQL Server Agent running?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>49</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.11, CIS 7.1</ReportKey>
+      <ReportText>Is an unacceptable SQL Server Agent Service Login Account used? Recommendation: Use a low privilege domain account if replication, DTS, or other inter-server connections are required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'LOW_PRIVILEGE_SVC_ACCT'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>50</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.9</ReportKey>
+      <ReportText>Is Full-Text Search running? Recommendation: Disable service if not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>51</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is an unacceptable Full-Text Search Service Login Account used?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>52</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.9.3, CIS 3.17</ReportKey>
+      <ReportText>Is the SQL Server Browser running? Recommendation: Disable service if not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>53</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is an unacceptable SQL Server Browser Service Login Account used?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>54</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 5.1</ReportKey>
+      <ReportText>Are any servers in the policy missing audit data? Recommendation: Make sure audit data is available for all servers.</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>55</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is audit data incomplete?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>56</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is any audit data from non baseline snapshots?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>57</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 6.10</ReportKey>
+      <ReportText>Is the password policy enabled for all SQL Logins? Recommendation: Enable password policy enforcement.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>58</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 4.12</ReportKey>
+      <ReportText>Are any permissions granted to the public database role? Recommendation: Do not grant permissions to PUBLIC or GUEST.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>59</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 4.6</ReportKey>
+      <ReportText>Does any SQL Login have a blank password? recommendation: Ensure that all SQL Logins have a strong password.</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>60</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 4.20</ReportKey>
+      <ReportText>Are any fixed roles assigned to the public role or guest user? Recommendation: Avoid assigning predefined roles to PUBLIC or GUEST.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>61</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 4.5</ReportKey>
+      <ReportText>Is the BUILTIN/Administrators group assigned to the sysadmin role? Recommendation: Remove the default BUILTIN\Administrators SQL login.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>62</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 6.10</ReportKey>
+      <ReportText>Is password expiration enabled for all SQL Logins? Recommendation: When a password change mechanism is introduced into clients and applications, enable password expiration. Always specify MUST_CHANGE when specifying a password on behalf of another principal.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>63</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 2.1</ReportKey>
+      <ReportText>Is the server a Domain Controller? Recommendation: Avoid installing SQL Server on a domain controller.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>67</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is an unacceptable Active Directory Helper account being used?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>68</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is an unacceptable Reporting Services account being used?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>69</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is an unacceptable VSS Writer account being used?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>70</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey>CIS 1.9</ReportKey>
+      <ReportText>Is VSS Writer running? Recommendation: Disable service if not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>71</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unauthorized accounts have sysadmin privileges?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>72</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the SQL Server sa account enabled?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>73</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unauthorized users have the ALTER TRACE permission?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>74</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unauthorized users have the CONTROL SERVER permission?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'none'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>75</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 9.10</ReportKey>
+      <ReportText>Is xp_cmdshell enabled on the SQL Server? Recommendation: Disable the xp_cmdshell stored procedure where not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>76</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do required administrative accounts exist?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>77</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is password policy enforced on the sa account?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>78</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do the required administrative permissions exist on database files?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>79</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Do the required administrative permissions exist on executable files?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>80</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do the required administrative permissions exist on registry keys?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>81</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are unapproved data files located on the system drive?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'%\master.mdf','%\mastlog.ldf','%\msdbdata.mdf','%\msdblog.ldf','%\model.mdf','%\modellog.ldf','%\distmdl.%','%\mssqlsystemresource.%','%\tempdb.mdf','%\templog.ldf'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>82</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is SQL Server installed on the system drive?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>83</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 4.24, CIS 9.1</ReportKey>
+      <ReportText>Are Ad Hoc Distributed Queries enabled? Recommendation: Disable Ad Hoc Remote Queries where not required.</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>84</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Do unauthorized SQL Logins exist on the SQL Server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'sa'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>85</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any permissions granted to the public server role?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>86</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is the trustworthy bit on for any unapproved databases?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'msdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>87</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any unapproved databases owned by a system administrator?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'master','msdb','model','tempdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>88</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are any unapproved trustworthy databases owned by a system administrator?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues>'msdb'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>89</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Has the public database role been granted permissions on user database objects?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>90</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey>CIS 1.9.6</ReportKey>
+      <ReportText>Have any dangerous principals been added to the SSIS database roles?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues>'public','guest'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>91</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey>CIS 1.9.6</ReportKey>
+      <ReportText>Do unapproved users or roles have permissions on SSIS stored procedures?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'sp_add_dtspackage','sp_drop_dtspackage','sp_dts_addfolder','sp_dts_addlogentry','sp_dts_checkexists','sp_dts_deletefolder','sp_dts_deletepackage','sp_dts_getfolder','sp_dts_getpackage','sp_dts_getpackageroles','sp_dts_listfolders','sp_dts_listpackages','sp_dts_putpackage','sp_dts_renamefolder','sp_dts_setpackageroles','sp_dump_dtslog_all','sp_dump_dtspackagelog','sp_dump_dtssteplog','sp_dump_dtstasklog','sp_enum_dtspackagelog','sp_enum_dtspackages','sp_enum_dtssteplog','sp_enum_dtstasklog','sp_get_dtspackage','sp_get_dtsversion','sp_log_dtspackage_begin','sp_log_dtspackage_end','sp_log_dtsstep_begin','sp_log_dtsstep_end','sp_log_dtstask','sp_make_dtspackagename','sp_reassign_dtspackageowner','sp_ssis_addfolder','sp_ssis_addlogentry','sp_ssis_checkexists','sp_ssis_deletefolder','sp_ssis_deletepackage','sp_ssis_getfolder','sp_ssis_getpackage'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>92</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does this SQL login have a weak password?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>95</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is Authentification mode set to Windows Only on servers with contained databases?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>96</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are there startup stored procedures that can be run or are owned by accounts without sysadmin permissions?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>97</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Are there SQL Server Agent job steps configured using with defined subsystems ?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues>'ActiveScripting','CmdExec','SSIS','PowerShell'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>98</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does the DISTRIBUTOR_ADMIN account exist?</ReportText>
+      <Severity>3</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>99</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Does the DISTRIBUTOR_ADMIN account exist?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>100</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Have you check infromation about database roles and their memebers?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>101</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Have you check infromation about server roles and their members?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>102</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Have you check infromation about server roles and their members?</ReportText>
+      <Severity>2</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>103</MetricId>
+      <IsEnabled>false</IsEnabled>
+      <ReportKey />
+      <ReportText>Is there objects with permissions granted to public role?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>104</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Is there CLR Enabled on the server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>105</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Is there Default Trace disabled on the server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>106</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Is maximum number of error log files is grater than or equal to 12?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>107</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Is there any orphaned users?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues>'MS_DataCollectorInternalUser'</SeverityValues>
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>108</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Is there Ole automation procedures enabled on the server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+    <PolicyMetric>
+      <MetricId>109</MetricId>
+      <IsEnabled>true</IsEnabled>
+      <ReportKey />
+      <ReportText>Is there Common criteria compliance disabled on the server?</ReportText>
+      <Severity>1</Severity>
+      <SeverityValues />
+    </PolicyMetric>
+  </PolicyMetrics>
+</Policy>

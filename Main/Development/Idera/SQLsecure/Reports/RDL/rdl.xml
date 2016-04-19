@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<folder>
+	<reportfile>
+		<name>Activity History Report</name>
+		<file>SQLsecure_Report_ActivityHistory.rdl</file>
+		<description>Show all SQLsecure activity history.</description>
+	</reportfile>
+	<reportfile>
+		<name>All User Permissions Report</name>
+		<file>SQLsecure_Report_AllObjectsWithPermissions.rdl</file>
+		<description>Show all objects with permissions in databases for all servers.</description>
+	</reportfile>
+	<reportfile>
+		<name>Audited SQL Servers Report</name>
+		<file>SQLsecure_Report_AuditedServers.rdl</file>
+		<description>Show all the SQL Server instances that are being audited by SQLsecure.</description>
+	</reportfile>
+	<reportfile>
+		<name>Cross Server Login Check Report</name>
+		<file>SQLsecure_Report_CrossServerLoginCheck.rdl</file>
+		<description>Show all SQL Servers where a selected user has access.</description>
+	</reportfile>
+	<reportfile>
+		<name>Database Chaining Enabled Report</name>
+		<file>SQLsecure_Report_DatabaseChaining.rdl</file>
+		<description>Show all SQL Server instances that have cross-database ownership chaining enabled.</description>
+	</reportfile>
+	<reportfile>
+		<name>Database Roles Report</name>
+		<file>SQLsecure_Report_DatabaseRoles.rdl</file>
+		<description>Show all direct members of Database Roles on all SQL Servers.</description>
+	</reportfile>
+	<reportfile>
+		<name>Data Collection Filters Report</name>
+		<file>SQLsecure_Report_Filters.rdl</file>
+		<description>Show the data collection filters for all SQL Server instances.</description>
+	</reportfile>
+	<reportfile>
+		<name>Guest Enabled Databases Report</name>
+		<file>SQLsecure_Report_GuestEnabledDatabases.rdl</file>
+		<description>Show all databases on a SQL Server instance where the Guest user has access.</description>
+	</reportfile>
+	<reportfile>
+		<name>Login Vulnerability Report</name>
+		<file>SQLsecure_Report_LoginVulnerability.rdl</file>
+		<description>Show all SQL Server logins with weak passwords.</description>
+	</reportfile>
+	<reportfile>
+		<name>Mail Vulnerability Report</name>
+		<file>SQLsecure_Report_MailVulnerability.rdl</file>
+		<description>Show all SQL Server instances with SQL Mail stored procedures.</description>
+	</reportfile>
+	<reportfile>
+		<name>Mixed Mode Authentication Report</name>
+		<file>SQLsecure_Report_MixedModeAuthentication.rdl</file>
+		<description>Show all SQL Server instances where Windows Authentication is not the only login method.</description>
+	</reportfile>
+	<reportfile>
+		<name>OS Vulnerability Report</name>
+		<file>SQLsecure_Report_OSVulnerability.rdl</file>
+		<description>Show all extended stored procedures that allow access to operating system features that could compromise system security.</description>
+	</reportfile>
+	<reportfile>
+		<name>Risk Assessment Report</name>
+		<file>SQLsecure_Report_RiskAssessment.rdl</file>
+		<description>Show all policy and risk assessment results.</description>
+	</reportfile>
+	<reportfile>
+		<name>Assessment Comparison Report</name>
+		<file>SQLsecure_Report_CompareAssessments.rdl</file>
+		<description>Compare two assessments.</description>
+	</reportfile>
+	<reportfile>
+		<name>Snapshot Comparison Report</name>
+		<file>SQLsecure_Report_CompareSnapshots.rdl</file>
+		<description>Compare two snapshots.</description>
+	</reportfile>
+	<reportfile>
+		<name>Server Logins and User Mappings Report</name>
+		<file>SQLsecure_Report_ServerLoginsAndUserMappings.rdl</file>
+		<description>Show all Server Logins and associated Database User Mappings for each SQL Server instance being audited.</description>
+	</reportfile>
+	<reportfile>
+		<name>Server Roles Report</name>
+		<file>SQLsecure_Report_ServerRoles.rdl</file>
+		<description>Show all direct members of Server Roles on all SQL Servers.</description>
+	</reportfile>
+	<reportfile>
+		<name>Servers with Dangerous Windows Groups Report</name>
+		<file>SQLsecure_Report_ServersWithDangerousGroups.rdl</file>
+		<description>Show all SQL Server instances that grant access to any OS controlled Windows Group.</description>
+	</reportfile>
+	<reportfile>
+		<name>Suspect Windows Accounts Report</name>
+		<file>SQLsecure_Report_SuspectWindowsAccounts.rdl</file>
+		<description>Show all the unresolved Windows Accounts that have Server Logins.</description>
+	</reportfile>
+	<reportfile>
+		<name>System Administrator Vulnerability Report</name>
+		<file>SQLsecure_Report_SystemAdministratorVulnerability.rdl</file>
+		<description>Show all SQL Server instances that include Built-in Administrators as members of the sysadmin role.</description>
+	</reportfile>
+	<reportfile>
+		<name>SQLsecure Users Report</name>
+		<file>SQLsecure_Report_Users.rdl</file>
+		<description>Show all SQLsecure users.</description>
+	</reportfile>
+	<reportfile>
+		<name>User Permissions</name>
+		<file>SQLsecure_Report_UsersPermissions.rdl</file>
+		<description>Shows all user permissions. WARNING: This report can run for many minutes!</description>
+	</reportfile>
+	<reportfile>
+		<name>Vulnerable Fixed Roles Report</name>
+		<file>SQLsecure_Report_VulnerableFixedRoles.rdl</file>
+		<description>Show all SQL Server instances that contain fixed roles assigned to public or guest.</description>
+	</reportfile>
+	<reportfile>
+		<name>SubReport_Logins</name>
+		<file>SubReport_Logins.rdl</file>
+		<description>Internal Use Only: Sub-report showing logins.</description>
+		<hidden>true</hidden>
+	</reportfile>
+	<reportfile>
+		<name>SubReport_ServersUsedSummary</name>
+		<file>SubReport_ServersUsedSummary.rdl</file>
+		<description>Internal Use Only: Sub-report showing snapshots used to generate the parent report.</description>
+		<hidden>true</hidden>
+	</reportfile>
+	<reportfile>
+		<name>SubReport_UsersPermissions</name>
+		<file>SubReport_UsersPermissions.rdl</file>
+		<description>Internal Use Only: Sub report showing object permissions.</description>
+		<hidden>true</hidden>
+	</reportfile>
+</folder>

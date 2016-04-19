@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns:MadCap="http://www.madcapsoftware.com/Schemas/MadCap.xsd" class="" MadCap:lastBlockDepth="5" MadCap:lastHeight="533" MadCap:lastWidth="898">
+    <head><title>Unavailable Databases</title>
+        <link href="../Resources/TableStyles/Idera Table Stylesheet.css" rel="stylesheet" MadCap:stylesheetType="table" />
+        <link href="../Resources/Stylesheets/Idera Stylesheet.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <h1 class="Heading1" MadCap:conditions="Default.ScreenOnly">Identify unavailable databases</h1>
+        <h2 class="Heading2" MadCap:conditions="Default.PrintOnly">Identify unavailable databases</h2>
+        <p class="Body">
+            <MadCap:keyword term="Unavailable Databases;auditing:unavailable databases;snapshots:unavailable databases" />The Unavailable Databases tab  lists the databases about which SQLsecure  was unable to collect SQL Server security data.</p>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What does the database status mean?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">SQLsecure displays one of the following status messages for each database listed:</p>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle_Idera_Table_Stylesheet" cellspacing="0">
+                    <col />
+                    <col />
+                    <thead>
+                        <tr>
+                            <th class="TableStyle_Idera_Table_Stylesheet_Head_0_0_RowSep_ColSep" style="font-size: 10pt;text-align: left;">
+                                <p class="TableHeadRow">Status Message</p>
+                            </th>
+                            <th class="TableStyle_Idera_Table_Stylesheet_Head_0_1_RowSep_ColEnd" style="font-size: 10pt;text-align: left;">
+                                <p class="TableHeadRow">Description</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColSep">
+                            <p class="TableText">Database is loading or exclusively locked</p>
+                        </td>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_1_RowSep_ColEnd">
+                            <p class="TableText">SQLsecure is unable to audit the database because it is either being backed up or has been otherwise locked.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColSep">
+                            <p class="TableText">Suspect</p>
+                        </td>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_1_RowSep_ColEnd">
+                            <p class="TableText">SQLsecure is unable to report any data on the database.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColSep">
+                            <p class="TableText">Not Accessible</p>
+                        </td>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_1_RowSep_ColEnd">
+                            <p class="TableText">SQLsecure is unable to access the database. This could be because the database has been moved or deleted.</p>
+                        </td>
+                    </tr>
+                </table>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <MadCap:dropDown>
+            <MadCap:dropDownHead>
+                <MadCap:dropDownHotspot>What options can I set on this tab?</MadCap:dropDownHotspot>
+            </MadCap:dropDownHead>
+            <MadCap:dropDownBody>
+                <p class="Body">You can set one of the following options:</p>
+                <table style="caption-side: top;mc-table-style: url('../Resources/TableStyles/Idera Table Stylesheet.css');" class="TableStyle_Idera_Table_Stylesheet" cellspacing="0">
+                    <col />
+                    <col />
+                    <thead>
+                        <tr>
+                            <th class="TableStyle_Idera_Table_Stylesheet_Head_0_0_RowSep_ColSep" style="text-align: left;font-size: 10pt;">
+                                <p class="TableHeadRow">Option</p>
+                            </th>
+                            <th class="TableStyle_Idera_Table_Stylesheet_Head_0_0_RowSep_ColEnd" style="text-align: left;font-size: 10pt;">
+                                <p class="TableHeadRow">Description</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColSep">
+                            <p class="TableText">Group By</p>
+                        </td>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColEnd">
+                            <p class="TableText">This button allows you to organize the list by the column headers</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColSep">
+                            <p class="TableText">Save as Excel File</p>
+                        </td>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColEnd">
+                            <p class="TableText">This button allows you to save your suspect windows accounts list to an Excel file</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColSep">
+                            <p class="TableText">Print</p>
+                        </td>
+                        <td class="TableStyle_Idera_Table_Stylesheet_Body_0_0_RowSep_ColEnd">
+                            <p class="TableText">This button allows you to print out your list</p>
+                        </td>
+                    </tr>
+                </table>
+            </MadCap:dropDownBody>
+        </MadCap:dropDown>
+        <p class="Body">&#160;</p>
+    </body>
+</html>
