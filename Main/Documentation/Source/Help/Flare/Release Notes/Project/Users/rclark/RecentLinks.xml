@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<RecentLinks>
-    <Dialog Name="B3.XmlTextKit.InsertHyperlinkDialog">
-        <Link Value="C:\SQLsecure\v2.7\Source\Help\Flare\Release Notes\Content\New Features.htm" />
-    </Dialog>
-    <Dialog Name="B3.XmlMdiEditorKit.ImageGeneralDialogPage">
-        <Link Value="C:\SQLsecure\v2.7\Source\Help\Flare\Release Notes\Content\Resources\Images\SQLsecureArch.png" />
-    </Dialog>
-</RecentLinks>
