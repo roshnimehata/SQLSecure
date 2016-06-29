@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-using Microsoft.SqlServer.Management.Smo;
 using Idera.SQLsecure.Core.Logger;
 
 namespace Idera.SQLsecure.UI.Console.Forms

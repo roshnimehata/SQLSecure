@@ -19,7 +19,6 @@ using System.Diagnostics;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.UI.Console.Utility;
 
-using Microsoft.SqlServer.Management.Smo;
 
 namespace Idera.SQLsecure.UI.Console.Sql
 {

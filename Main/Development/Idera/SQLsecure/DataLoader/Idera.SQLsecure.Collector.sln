@@ -1,5 +1,7 @@
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idera.SQLsecure.Collector", "Idera.SQLsecure.Collector.csproj", "{CA542F91-3C5E-4AEF-A28A-0FA2908374F4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0751253C-883D-4436-BBF4-0C56C553F850} = {0751253C-883D-4436-BBF4-0C56C553F850}
@@ -20,33 +22,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idera.SQLsecure.Core.Logger
 		{CC96DB8F-8FBA-4AF3-99BE-57FEF3A9E15C} = {CC96DB8F-8FBA-4AF3-99BE-57FEF3A9E15C}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Idera.SQLsecure.Core.EventMessages", "..\Core\EventMessages\Idera.SQLsecure.Core.EventMessages.vcproj", "{CC96DB8F-8FBA-4AF3-99BE-57FEF3A9E15C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Idera.SQLsecure.Core.EventMessages", "..\Core\EventMessages\Idera.SQLsecure.Core.EventMessages.vcxproj", "{CC96DB8F-8FBA-4AF3-99BE-57FEF3A9E15C}"
 EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 6
-		SccProjectName0 = Idera.SQLsecure.DataLoader
-		SccLocalPath0 = .
-		SccProvider0 = MSSCCI:Perforce\u0020SCM
-		SccProjectUniqueName1 = ..\\Core\\Accounts\\Idera.SQLsecure.Core.Accounts.csproj
-		SccProjectName1 = Idera.SQLsecure.Core
-		SccLocalPath1 = ..\\Core
-		SccProjectFilePathRelativizedFromConnection1 = Accounts\\
-		SccProjectUniqueName2 = ..\\Core\\Interop\\Idera.SQLsecure.Core.Interop.csproj
-		SccProjectName2 = Idera.SQLsecure.Core
-		SccLocalPath2 = ..\\Core
-		SccProjectFilePathRelativizedFromConnection2 = Interop\\
-		SccProjectUniqueName3 = ..\\Core\\Logger\\Idera.SQLsecure.Core.Logger.csproj
-		SccProjectName3 = Idera.SQLsecure.Core.Logger
-		SccLocalPath3 = ..\\Core
-		SccProjectFilePathRelativizedFromConnection3 = Logger\\
-		SccProjectUniqueName4 = ..\\Core\\EventMessages\\Idera.SQLsecure.Core.EventMessages.vcproj
-		SccProjectName4 = Idera.SQLsecure.Core.EventMessages
-		SccLocalPath4 = ..\\Core
-		SccProjectFilePathRelativizedFromConnection4 = EventMessages\\
-		SccProjectUniqueName5 = Idera.SQLsecure.Collector.csproj
-		SccLocalPath5 = .
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -109,5 +87,39 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.242.72:8080/tfs/defaultcollection
+		SccProjectUniqueName0 = ..\\Core\\EventMessages\\Idera.SQLsecure.Core.EventMessages.vcxproj
+		SccProjectName0 = ../Core
+		SccAuxPath0 = http://192.168.242.72:8080/tfs/defaultcollection
+		SccLocalPath0 = ..\\Core
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectFilePathRelativizedFromConnection0 = EventMessages\\
+		SccProjectUniqueName1 = ..\\Core\\Logger\\Idera.SQLsecure.Core.Logger.csproj
+		SccProjectName1 = ../Core
+		SccAuxPath1 = http://192.168.242.72:8080/tfs/defaultcollection
+		SccLocalPath1 = ..\\Core
+		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectFilePathRelativizedFromConnection1 = Logger\\
+		SccProjectUniqueName2 = ..\\Core\\Interop\\Idera.SQLsecure.Core.Interop.csproj
+		SccProjectName2 = ../Core
+		SccAuxPath2 = http://192.168.242.72:8080/tfs/defaultcollection
+		SccLocalPath2 = ..\\Core
+		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectFilePathRelativizedFromConnection2 = Interop\\
+		SccProjectUniqueName3 = ..\\Core\\Accounts\\Idera.SQLsecure.Core.Accounts.csproj
+		SccProjectName3 = ../Core
+		SccAuxPath3 = http://192.168.242.72:8080/tfs/defaultcollection
+		SccLocalPath3 = ..\\Core
+		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectFilePathRelativizedFromConnection3 = Accounts\\
+		SccProjectUniqueName4 = Idera.SQLsecure.Collector.csproj
+		SccProjectName4 = .
+		SccAuxPath4 = http://192.168.242.72:8080/tfs/defaultcollection
+		SccLocalPath4 = .
+		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 EndGlobal

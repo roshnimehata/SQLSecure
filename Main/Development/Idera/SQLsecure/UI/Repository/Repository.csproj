@@ -1,0 +1,840 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5F13A047-5F47-40BD-A4D0-85B4FC130C97}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ClassLibrary1</RootNamespace>
+    <AssemblyName>Repository</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+<SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
+    <SccProjectName>%24/SQl Secure 3.0/src/Main/Development/Idera/SQLsecure/UI/Repository</SccProjectName>
+    <SccLocalPath>.</SccLocalPath>
+    <SccAuxPath>http://192.168.242.72:8080/tfs/defaultcollection</SccAuxPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Repository\DDL\ddl.sql">
+      <Link>DDLs\ddl.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\ddl_update_2000.sql">
+      <Link>DDLs\ddl_update_2000.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\ddl_update_2500.sql">
+      <Link>DDLs\ddl_update_2500.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\ddl_update_2600.sql">
+      <Link>DDLs\ddl_update_2600.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\ddl_update_2700.sql">
+      <Link>DDLs\ddl_update_2700.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\ddl_update_2800.sql">
+      <Link>DDLs\ddl_update_2800.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\ddl_update_2900.sql">
+      <Link>DDLs\ddl_update_2900.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\footer.sql">
+      <Link>DDLs\footer.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\header.sql">
+      <Link>DDLs\header.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\Schema_900_Fix.sql">
+      <Link>DDLs\Schema_900_Fix.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2000_footer.sql">
+      <Link>DDLs\update_2000_footer.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2000_header.sql">
+      <Link>DDLs\update_2000_header.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2500_footer.sql">
+      <Link>DDLs\update_2500_footer.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2500_header.sql">
+      <Link>DDLs\update_2500_header.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2600_footer.sql">
+      <Link>DDLs\update_2600_footer.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2600_header.sql">
+      <Link>DDLs\update_2600_header.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2700_footer.sql">
+      <Link>DDLs\update_2700_footer.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2700_header.sql">
+      <Link>DDLs\update_2700_header.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2800_footer.sql">
+      <Link>DDLs\update_2800_footer.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2800_header.sql">
+      <Link>DDLs\update_2800_header.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2900_footer.sql">
+      <Link>DDLs\update_2900_footer.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_2900_header.sql">
+      <Link>DDLs\update_2900_header.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getaccesstype.sql">
+      <Link>Functions\fn_getaccesstype.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getactiontype.sql">
+      <Link>Functions\fn_getactiontype.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getassessmentname.sql">
+      <Link>Functions\fn_getassessmentname.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getassessmentstatename.sql">
+      <Link>Functions\fn_getassessmentstatename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getauditflagsnames.sql">
+      <Link>Functions\fn_getauditflagsnames.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getauthenticationmodename.sql">
+      <Link>Functions\fn_getauthenticationmodename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getccesstypename.sql">
+      <Link>Functions\fn_getccesstypename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getclassobjecttype.sql">
+      <Link>Functions\fn_getclassobjecttype.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getclasstype.sql">
+      <Link>Functions\fn_getclasstype.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getcoveringpermission.sql">
+      <Link>Functions\fn_getcoveringpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getdatabasename.sql">
+      <Link>Functions\fn_getdatabasename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getdatabaseobjectname.sql">
+      <Link>Functions\fn_getdatabaseobjectname.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getdatabaseprincipalid.sql">
+      <Link>Functions\fn_getdatabaseprincipalid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getdatabaseprincipalidwithobjectid.sql">
+      <Link>Functions\fn_getdatabaseprincipalidwithobjectid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getdatabaseprincipalname.sql">
+      <Link>Functions\fn_getdatabaseprincipalname.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getdatabaseprincipalnamewithobjectid.sql">
+      <Link>Functions\fn_getdatabaseprincipalnamewithobjectid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getdatabaseprincipaltype.sql">
+      <Link>Functions\fn_getdatabaseprincipaltype.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getdatabaseprincipaltypename.sql">
+      <Link>Functions\fn_getdatabaseprincipaltypename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getdefaultassessmentid.sql">
+      <Link>Functions\fn_getdefaultassessmentid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getfilesystemrightsnames.sql">
+      <Link>Functions\fn_getfilesystemrightsnames.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getloginauditmodename.sql">
+      <Link>Functions\fn_getloginauditmodename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getlogintypename.sql">
+      <Link>Functions\fn_getlogintypename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getobjectownerid.sql">
+      <Link>Functions\fn_getobjectownerid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getobjecttypename.sql">
+      <Link>Functions\fn_getobjecttypename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getobjecttypenamebyobjectid.sql">
+      <Link>Functions\fn_getobjecttypenamebyobjectid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getownerid.sql">
+      <Link>Functions\fn_getownerid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getpasswordstatusdescription.sql">
+      <Link>Functions\fn_getpasswordstatusdescription.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getpermissionlevelname.sql">
+      <Link>Functions\fn_getpermissionlevelname.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getpolicyseverityname.sql">
+      <Link>Functions\fn_getpolicyseverityname.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getregistryrightsnames.sql">
+      <Link>Functions\fn_getregistryrightsnames.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getschemaidwithobjectid.sql">
+      <Link>Functions\fn_getschemaidwithobjectid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getschemaname.sql">
+      <Link>Functions\fn_getschemaname.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getschemanamewithobjectid.sql">
+      <Link>Functions\fn_getschemanamewithobjectid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserverosobjectname.sql">
+      <Link>Functions\fn_getserverosobjectname.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserverosobjecttype.sql">
+      <Link>Functions\fn_getserverosobjecttype.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserverosobjecttypename.sql">
+      <Link>Functions\fn_getserverosobjecttypename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserveroswindowsaccountname.sql">
+      <Link>Functions\fn_getserveroswindowsaccountname.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserverprincipalidwithsid.sql">
+      <Link>Functions\fn_getserverprincipalidwithsid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserverprincipalname.sql">
+      <Link>Functions\fn_getserverprincipalname.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserverprincipalnamewithsid.sql">
+      <Link>Functions\fn_getserverprincipalnamewithsid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserverprincipaltype.sql">
+      <Link>Functions\fn_getserverprincipaltype.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserverprincipaltypename.sql">
+      <Link>Functions\fn_getserverprincipaltypename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserverroleprincipalid.sql">
+      <Link>Functions\fn_getserverroleprincipalid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getserverrolesid.sql">
+      <Link>Functions\fn_getserverrolesid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getsidprincipalid.sql">
+      <Link>Functions\fn_getsidprincipalid.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getsnapshotlist.sql">
+      <Link>Functions\fn_getsnapshotlist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getsnapshotstatus.sql">
+      <Link>Functions\fn_getsnapshotstatus.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_gettablename.sql">
+      <Link>Functions\fn_gettablename.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_getyesnotext.sql">
+      <Link>Functions\fn_getyesnotext.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_issql2000.sql">
+      <Link>Functions\fn_issql2000.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_isuseraliased.sql">
+      <Link>Functions\fn_isuseraliased.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_replacenullwithhyphen.sql">
+      <Link>Functions\fn_replacenullwithhyphen.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_splitbydelimiter.sql">
+      <Link>Functions\fn_splitbydelimiter.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addactivitylog.sql">
+      <Link>Procedures\isp_sqlsecure_addactivitylog.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addallregisteredserverinfo.sql">
+      <Link>Procedures\isp_sqlsecure_addallregisteredserverinfo.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addcollectorinfo.sql">
+      <Link>Procedures\isp_sqlsecure_addcollectorinfo.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addlicense.sql">
+      <Link>Procedures\isp_sqlsecure_addlicense.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addnewgroomingjob.sql">
+      <Link>Procedures\isp_sqlsecure_addnewgroomingjob.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addnewsnapshotjob.sql">
+      <Link>Procedures\isp_sqlsecure_addnewsnapshotjob.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addnotificationprovider.sql">
+      <Link>Procedures\isp_sqlsecure_addnotificationprovider.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addnotificationtoregisteredserver.sql">
+      <Link>Procedures\isp_sqlsecure_addnotificationtoregisteredserver.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addpolicy.sql">
+      <Link>Procedures\isp_sqlsecure_addpolicy.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addpolicychangelog.sql">
+      <Link>Procedures\isp_sqlsecure_addpolicychangelog.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addregisteredserver.sql">
+      <Link>Procedures\isp_sqlsecure_addregisteredserver.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addregisteredservertopolicy.sql">
+      <Link>Procedures\isp_sqlsecure_addregisteredservertopolicy.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addrule.sql">
+      <Link>Procedures\isp_sqlsecure_addrule.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_addruleheader.sql">
+      <Link>Procedures\isp_sqlsecure_addruleheader.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_checkallcredentials.sql">
+      <Link>Procedures\isp_sqlsecure_checkallcredentials.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_createassessmentfrompolicy.sql">
+      <Link>Procedures\isp_sqlsecure_createassessmentfrompolicy.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_createinitialjobs.sql">
+      <Link>Procedures\isp_sqlsecure_createinitialjobs.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getaccessinfo.sql">
+      <Link>Procedures\isp_sqlsecure_getaccessinfo.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getassessmentcomparison.sql">
+      <Link>Procedures\isp_sqlsecure_getassessmentcomparison.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getcompatibleversions.sql">
+      <Link>Procedures\isp_sqlsecure_getcompatibleversions.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getcoveringpermission.sql">
+      <Link>Procedures\isp_sqlsecure_getcoveringpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getdatabaseobjectinfo.sql">
+      <Link>Procedures\isp_sqlsecure_getdatabaseobjectinfo.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getdatabaseuserparents.sql">
+      <Link>Procedures\isp_sqlsecure_getdatabaseuserparents.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getdatabaseuserpermissions.sql">
+      <Link>Procedures\isp_sqlsecure_getdatabaseuserpermissions.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getdatabaseuserrole.sql">
+      <Link>Procedures\isp_sqlsecure_getdatabaseuserrole.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getdatabaseuserroles.sql">
+      <Link>Procedures\isp_sqlsecure_getdatabaseuserroles.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getdetailedpermission.sql">
+      <Link>Procedures\isp_sqlsecure_getdetailedpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getfixedloginrole.sql">
+      <Link>Procedures\isp_sqlsecure_getfixedloginrole.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getguestenabledservers.sql">
+      <Link>Procedures\isp_sqlsecure_getguestenabledservers.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getjobstatus.sql">
+      <Link>Procedures\isp_sqlsecure_getjobstatus.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getmsdbvalidroleslist.sql">
+      <Link>Procedures\isp_sqlsecure_getmsdbvalidroleslist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getobjectpermission.sql">
+      <Link>Procedures\isp_sqlsecure_getobjectpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getpolicyassessment.sql">
+      <Link>Procedures\isp_sqlsecure_getpolicyassessment.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getpolicyassessmentnotes.sql">
+      <Link>Procedures\isp_sqlsecure_getpolicyassessmentnotes.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getpolicymemberlist.sql">
+      <Link>Procedures\isp_sqlsecure_getpolicymemberlist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getpolicyserver.sql">
+      <Link>Procedures\isp_sqlsecure_getpolicyserver.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getpolicyserverlist.sql">
+      <Link>Procedures\isp_sqlsecure_getpolicyserverlist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getpolicyserverprincipal.sql">
+      <Link>Procedures\isp_sqlsecure_getpolicyserverprincipal.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getpolicysnapshotlist.sql">
+      <Link>Procedures\isp_sqlsecure_getpolicysnapshotlist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getrepositorydbinfo.sql">
+      <Link>Procedures\isp_sqlsecure_getrepositorydbinfo.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getserverpolicylist.sql">
+      <Link>Procedures\isp_sqlsecure_getserverpolicylist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getserverprincipalpermission.sql">
+      <Link>Procedures\isp_sqlsecure_getserverprincipalpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getserveruserpermission.sql">
+      <Link>Procedures\isp_sqlsecure_getserveruserpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getsnapshotcomparison.sql">
+      <Link>Procedures\isp_sqlsecure_getsnapshotcomparison.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getuserallexplicitpermission.sql">
+      <Link>Procedures\isp_sqlsecure_getuserallexplicitpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getuserapplicationrole.sql">
+      <Link>Procedures\isp_sqlsecure_getuserapplicationrole.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getuserexplicitpermission.sql">
+      <Link>Procedures\isp_sqlsecure_getuserexplicitpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getuserpermission.sql">
+      <Link>Procedures\isp_sqlsecure_getuserpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getweakpasswordlist.sql">
+      <Link>Procedures\isp_sqlsecure_getweakpasswordlist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getwindowsgroup.sql">
+      <Link>Procedures\isp_sqlsecure_getwindowsgroup.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getwindowsgroupparents.sql">
+      <Link>Procedures\isp_sqlsecure_getwindowsgroupparents.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_getwindowsgroupparentsos.sql">
+      <Link>Procedures\isp_sqlsecure_getwindowsgroupparentsos.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_groomsnapshots.sql">
+      <Link>Procedures\isp_sqlsecure_groomsnapshots.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_isadmin.sql">
+      <Link>Procedures\isp_sqlsecure_isadmin.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_isassessmentdatacurrent.sql">
+      <Link>Procedures\isp_sqlsecure_isassessmentdatacurrent.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_issqlagentrunning.sql">
+      <Link>Procedures\isp_sqlsecure_issqlagentrunning.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_issysadmin.sql">
+      <Link>Procedures\isp_sqlsecure_issysadmin.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_isversioncompatible.sql">
+      <Link>Procedures\isp_sqlsecure_isversioncompatible.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_listallgroomingjobs.sql">
+      <Link>Procedures\isp_sqlsecure_listallgroomingjobs.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_listallsnapshotjobs.sql">
+      <Link>Procedures\isp_sqlsecure_listallsnapshotjobs.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_listjobschedule.sql">
+      <Link>Procedures\isp_sqlsecure_listjobschedule.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_listjobstep.sql">
+      <Link>Procedures\isp_sqlsecure_listjobstep.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_listjobtarget.sql">
+      <Link>Procedures\isp_sqlsecure_listjobtarget.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_marksnapshotbaseline.sql">
+      <Link>Procedures\isp_sqlsecure_marksnapshotbaseline.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_processpermission.sql">
+      <Link>Procedures\isp_sqlsecure_processpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_processsuspectaccounts.sql">
+      <Link>Procedures\isp_sqlsecure_processsuspectaccounts.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_processsuspectaccountsos.sql">
+      <Link>Procedures\isp_sqlsecure_processsuspectaccountsos.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removealljobs.sql">
+      <Link>Procedures\isp_sqlsecure_removealljobs.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removedatabasedata.sql">
+      <Link>Procedures\isp_sqlsecure_removedatabasedata.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removejob.sql">
+      <Link>Procedures\isp_sqlsecure_removejob.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removelicense.sql">
+      <Link>Procedures\isp_sqlsecure_removelicense.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removenotificationfromregisteredserver.sql">
+      <Link>Procedures\isp_sqlsecure_removenotificationfromregisteredserver.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removenotificationprovider.sql">
+      <Link>Procedures\isp_sqlsecure_removenotificationprovider.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removepolicy.sql">
+      <Link>Procedures\isp_sqlsecure_removepolicy.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removeregisteredserver.sql">
+      <Link>Procedures\isp_sqlsecure_removeregisteredserver.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removeregisteredserverfrompolicy.sql">
+      <Link>Procedures\isp_sqlsecure_removeregisteredserverfrompolicy.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removerule.sql">
+      <Link>Procedures\isp_sqlsecure_removerule.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removeruleheader.sql">
+      <Link>Procedures\isp_sqlsecure_removeruleheader.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_removesnapshot.sql">
+      <Link>Procedures\isp_sqlsecure_removesnapshot.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_allobjectswithpermissions.sql">
+      <Link>Procedures\isp_sqlsecure_report_allobjectswithpermissions.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_allobjectswithpermissions_user.sql">
+      <Link>Procedures\isp_sqlsecure_report_allobjectswithpermissions_user.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_authentication.sql">
+      <Link>Procedures\isp_sqlsecure_report_authentication.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_checkdbchaining.sql">
+      <Link>Procedures\isp_sqlsecure_report_checkdbchaining.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_checksystemstoredprocedures.sql">
+      <Link>Procedures\isp_sqlsecure_report_checksystemstoredprocedures.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_checkweakpassword.sql">
+      <Link>Procedures\isp_sqlsecure_report_checkweakpassword.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_checkwellknowngroup.sql">
+      <Link>Procedures\isp_sqlsecure_report_checkwellknowngroup.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_checkxpmail.sql">
+      <Link>Procedures\isp_sqlsecure_report_checkxpmail.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_databaseroles.sql">
+      <Link>Procedures\isp_sqlsecure_report_databaseroles.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_databaseroles_user.sql">
+      <Link>Procedures\isp_sqlsecure_report_databaseroles_user.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_dbuserfixedrole.sql">
+      <Link>Procedures\isp_sqlsecure_report_dbuserfixedrole.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getactivityhistory.sql">
+      <Link>Procedures\isp_sqlsecure_report_getactivityhistory.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getassessmentlist.sql">
+      <Link>Procedures\isp_sqlsecure_report_getassessmentlist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getauditedinstances.sql">
+      <Link>Procedures\isp_sqlsecure_report_getauditedinstances.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getauditedserverlist.sql">
+      <Link>Procedures\isp_sqlsecure_report_getauditedserverlist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getauditedserverlistnoall.sql">
+      <Link>Procedures\isp_sqlsecure_report_getauditedserverlistnoall.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getauditfilters.sql">
+      <Link>Procedures\isp_sqlsecure_report_getauditfilters.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getcomparesnapshotinfo.sql">
+      <Link>Procedures\isp_sqlsecure_report_getcomparesnapshotinfo.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getdatabases.sql">
+      <Link>Procedures\isp_sqlsecure_report_getdatabases.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getdatabaseuserpermissions.sql">
+      <Link>Procedures\isp_sqlsecure_report_getdatabaseuserpermissions.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getguestenabledservers.sql">
+      <Link>Procedures\isp_sqlsecure_report_getguestenabledservers.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getpolicyinfo.sql">
+      <Link>Procedures\isp_sqlsecure_report_getpolicyinfo.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getpolicylist.sql">
+      <Link>Procedures\isp_sqlsecure_report_getpolicylist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getserveraccess.sql">
+      <Link>Procedures\isp_sqlsecure_report_getserveraccess.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getserversnapshotlist.sql">
+      <Link>Procedures\isp_sqlsecure_report_getserversnapshotlist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getsqlsecurelogins.sql">
+      <Link>Procedures\isp_sqlsecure_report_getsqlsecurelogins.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getuserdatabasepermissions.sql">
+      <Link>Procedures\isp_sqlsecure_report_getuserdatabasepermissions.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getuserinfo.sql">
+      <Link>Procedures\isp_sqlsecure_report_getuserinfo.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getuserpermissions.sql">
+      <Link>Procedures\isp_sqlsecure_report_getuserpermissions.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getuserpermissions_user.sql">
+      <Link>Procedures\isp_sqlsecure_report_getuserpermissions_user.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_getuserserveraccess.sql">
+      <Link>Procedures\isp_sqlsecure_report_getuserserveraccess.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_msdb_sp_check.sql">
+      <Link>Procedures\isp_sqlsecure_report_msdb_sp_check.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_orphanedlogins.sql">
+      <Link>Procedures\isp_sqlsecure_report_orphanedlogins.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_serverroles.sql">
+      <Link>Procedures\isp_sqlsecure_report_serverroles.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_sysadmin_administrator.sql">
+      <Link>Procedures\isp_sqlsecure_report_sysadmin_administrator.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_startalljobs.sql">
+      <Link>Procedures\isp_sqlsecure_startalljobs.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_startjob.sql">
+      <Link>Procedures\isp_sqlsecure_startjob.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_stopalljobs.sql">
+      <Link>Procedures\isp_sqlsecure_stopalljobs.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_stopjob.sql">
+      <Link>Procedures\isp_sqlsecure_stopjob.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updateallcredentials.sql">
+      <Link>Procedures\isp_sqlsecure_updateallcredentials.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updatenotificationprovider.sql">
+      <Link>Procedures\isp_sqlsecure_updatenotificationprovider.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updatepolicy.sql">
+      <Link>Procedures\isp_sqlsecure_updatepolicy.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updatepolicyassessmentnotes.sql">
+      <Link>Procedures\isp_sqlsecure_updatepolicyassessmentnotes.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updatepolicymetric.sql">
+      <Link>Procedures\isp_sqlsecure_updatepolicymetric.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updateregisteredserverauditfolders.sql">
+      <Link>Procedures\isp_sqlsecure_updateregisteredserverauditfolders.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updateregisteredservercredentials.sql">
+      <Link>Procedures\isp_sqlsecure_updateregisteredservercredentials.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updateregisteredserverinfo.sql">
+      <Link>Procedures\isp_sqlsecure_updateregisteredserverinfo.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updateregisteredservernotification.sql">
+      <Link>Procedures\isp_sqlsecure_updateregisteredservernotification.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updatereportconfigureinfo.sql">
+      <Link>Procedures\isp_sqlsecure_updatereportconfigureinfo.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updateretentionperiod.sql">
+      <Link>Procedures\isp_sqlsecure_updateretentionperiod.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updaterule.sql">
+      <Link>Procedures\isp_sqlsecure_updaterule.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updateruleheader.sql">
+      <Link>Procedures\isp_sqlsecure_updateruleheader.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updatesnapshotstatus.sql">
+      <Link>Procedures\isp_sqlsecure_updatesnapshotstatus.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_updateweakpasswordlist.sql">
+      <Link>Procedures\isp_sqlsecure_updateweakpasswordlist.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\MergeHeader.sql">
+      <Link>MergeHeader.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\RegisterServers.sql">
+      <Link>RegisterServers.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\sql_postscript.sql">
+      <Link>sql_postscript.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\testsecuritycheck.sql">
+      <Link>testsecuritycheck.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\version.sql">
+      <Link>version.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwallaccounts.sql">
+      <Link>Views\vwallaccounts.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwalldatabaserole.sql">
+      <Link>Views\vwalldatabaserole.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwallosaccounts.sql">
+      <Link>Views\vwallosaccounts.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwancillarywindowsgroup.sql">
+      <Link>Views\vwancillarywindowsgroup.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwapplicationactivity.sql">
+      <Link>Views\vwapplicationactivity.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwapplicationlicense.sql">
+      <Link>Views\vwapplicationlicense.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwcurrentversion.sql">
+      <Link>Views\vwcurrentversion.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwdatabasecolumnpermission.sql">
+      <Link>Views\vwdatabasecolumnpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwdatabasefixedrole.sql">
+      <Link>Views\vwdatabasefixedrole.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwdatabaseobject.sql">
+      <Link>Views\vwdatabaseobject.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwdatabaseobjectpermission.sql">
+      <Link>Views\vwdatabaseobjectpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwdatabasepermission.sql">
+      <Link>Views\vwdatabasepermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwdatabaseprincipal.sql">
+      <Link>Views\vwdatabaseprincipal.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwdatabaserolemember.sql">
+      <Link>Views\vwdatabaserolemember.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwdatabases.sql">
+      <Link>Views\vwdatabases.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwendpoint.sql">
+      <Link>Views\vwendpoint.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwfilesystemobject.sql">
+      <Link>Views\vwfilesystemobject.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwfilesystemobjectpermission.sql">
+      <Link>Views\vwfilesystemobjectpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwfilterrules.sql">
+      <Link>Views\vwfilterrules.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwfixeddatabaserolemember.sql">
+      <Link>Views\vwfixeddatabaserolemember.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwfixedserverrole.sql">
+      <Link>Views\vwfixedserverrole.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwfixedserverrolemember.sql">
+      <Link>Views\vwfixedserverrolemember.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwloginfixedserverrole.sql">
+      <Link>Views\vwloginfixedserverrole.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwnotificationprovider.sql">
+      <Link>Views\vwnotificationprovider.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwosobjectpermission.sql">
+      <Link>Views\vwosobjectpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwoswindowsaccount.sql">
+      <Link>Views\vwoswindowsaccount.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwoswindowsgroupmembers.sql">
+      <Link>Views\vwoswindowsgroupmembers.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwpolicy.sql">
+      <Link>Views\vwpolicy.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwpolicyassessment.sql">
+      <Link>Views\vwpolicyassessment.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwpolicychangelog.sql">
+      <Link>Views\vwpolicychangelog.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwpolicymetric.sql">
+      <Link>Views\vwpolicymetric.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwregisteredserver.sql">
+      <Link>Views\vwregisteredserver.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwregistrykey.sql">
+      <Link>Views\vwregistrykey.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwregistrykeypermission.sql">
+      <Link>Views\vwregistrykeypermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwreports.sql">
+      <Link>Views\vwreports.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwschema.sql">
+      <Link>Views\vwschema.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwschemapermission.sql">
+      <Link>Views\vwschemapermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwservernotification.sql">
+      <Link>Views\vwservernotification.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwserverprincipal.sql">
+      <Link>Views\vwserverprincipal.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwserverprotocol.sql">
+      <Link>Views\vwserverprotocol.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwserversnapshot.sql">
+      <Link>Views\vwserversnapshot.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwservice.sql">
+      <Link>Views\vwservice.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwsnapshotfilterrules.sql">
+      <Link>Views\vwsnapshotfilterrules.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwsql2005databasecolumnpermission.sql">
+      <Link>Views\vwsql2005databasecolumnpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwsql2005implicitdatabasecolumnpermission.sql">
+      <Link>Views\vwsql2005implicitdatabasecolumnpermission.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwwindowsaccount.sql">
+      <Link>Views\vwwindowsaccount.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\vwwindowsgroupmembers.sql">
+      <Link>Views\vwwindowsgroupmembers.sql</Link>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
