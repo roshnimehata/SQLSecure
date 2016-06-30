@@ -73,6 +73,7 @@
 	<property name="Framework.Version" value="v2.0.50727"/>
 	<property name="Framework.Install" value="c:/Windows/Microsoft.NET/Framework/${Framework.Version}"/>
 	<property name="nant.settings.currentframework" value="net-2.0"/>
+	<property name="build.MSBuild" value="C:/WINDOWS/Microsoft.NET/Framework/v4.0.30319/msbuild.exe" />
 
 	<property name="Build.Config" value="Release" unless="${property::exists('Build.Config')}" />
 	<property name="BuildNumberPlaceholder" value="9.88.777.666" />
@@ -199,19 +200,19 @@
 	<target name="Build.Compile">
 
 		<!-- Build the Collector solution -->
-	    	<exec program="msbuild" workingdir="${SQLsecure.Collector}">
+	    	<exec program="${build.MSBuild}" workingdir="${SQLsecure.Collector}">
 	      		<arg value="Idera.SQLsecure.Collector.sln"/>
 	      		<arg value="/p:Configuration=${Build.Config}"/>
 	    	</exec>
 
 	    	<!-- Build the Console solution -->
-	    	<exec program="msbuild" workingdir="${SQLsecure.UI.Console}">
+	    	<exec program="${build.MSBuild}" workingdir="${SQLsecure.UI.Console}">
 	      		<arg value="Idera.SQLsecure.UI.Console.sln"/>
 	      		<arg value="/p:Configuration=${Build.Config}"/>
 	    	</exec>
 
 	    	<!-- Build the Reports Installer solution -->
-	    	<exec program="msbuild" workingdir="${SQLsecure.Reports.Installer}">
+	    	<exec program="${build.MSBuild}" workingdir="${SQLsecure.Reports.Installer}">
 	      		<arg value="Idera.SQLsecure.Reports.Installer.sln"/>
 	      		<arg value="/p:Configuration=${Build.Config}"/>
 	    	</exec>

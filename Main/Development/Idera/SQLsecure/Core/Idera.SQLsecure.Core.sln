@@ -1,6 +1,8 @@
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Idera.SQLsecure.Core.EventMessages", "EventMessages\Idera.SQLsecure.Core.EventMessages.vcproj", "{CC96DB8F-8FBA-4AF3-99BE-57FEF3A9E15C}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Idera.SQLsecure.Core.EventMessages", "EventMessages\Idera.SQLsecure.Core.EventMessages.vcxproj", "{CC96DB8F-8FBA-4AF3-99BE-57FEF3A9E15C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idera.SQLsecure.Core.Logger", "Logger\Idera.SQLsecure.Core.Logger.csproj", "{459916BD-7353-4738-B6B0-8F29989AE5A6}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -12,26 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idera.SQLsecure.Core.Accounts", "Accounts\Idera.SQLsecure.Core.Accounts.csproj", "{0751253C-883D-4436-BBF4-0C56C553F850}"
 EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 5
-		SccProjectName0 = Idera.SQLsecure.Core
-		SccLocalPath0 = .
-		SccProvider0 = MSSCCI:Perforce\u0020SCM
-		SccProjectUniqueName1 = EventMessages\\Idera.SQLsecure.Core.EventMessages.vcproj
-		SccProjectName1 = Idera.SQLsecure.Core.EventMessages
-		SccLocalPath1 = .
-		SccProjectFilePathRelativizedFromConnection1 = EventMessages\\
-		SccProjectUniqueName2 = Logger\\Idera.SQLsecure.Core.Logger.csproj
-		SccProjectName2 = Idera.SQLsecure.Core.Logger
-		SccLocalPath2 = .
-		SccProjectFilePathRelativizedFromConnection2 = Logger\\
-		SccProjectUniqueName3 = Interop\\Idera.SQLsecure.Core.Interop.csproj
-		SccLocalPath3 = .
-		SccProjectFilePathRelativizedFromConnection3 = Interop\\
-		SccProjectUniqueName4 = Accounts\\Idera.SQLsecure.Core.Accounts.csproj
-		SccLocalPath4 = .
-		SccProjectFilePathRelativizedFromConnection4 = Accounts\\
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms

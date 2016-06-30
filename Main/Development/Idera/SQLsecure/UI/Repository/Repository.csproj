@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-<SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
+    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
     <SccProjectName>%24/SQl Secure 3.0/src/Main/Development/Idera/SQLsecure/UI/Repository</SccProjectName>
     <SccLocalPath>.</SccLocalPath>
     <SccAuxPath>http://192.168.242.72:8080/tfs/defaultcollection</SccAuxPath>
@@ -69,6 +69,9 @@
     <Content Include="..\..\Repository\DDL\ddl_update_2900.sql">
       <Link>DDLs\ddl_update_2900.sql</Link>
     </Content>
+    <Content Include="..\..\Repository\DDL\ddl_update_3000.sql">
+      <Link>DDLs\ddl_update_3000.sql</Link>
+    </Content>
     <Content Include="..\..\Repository\DDL\footer.sql">
       <Link>DDLs\footer.sql</Link>
     </Content>
@@ -113,7 +116,13 @@
     </Content>
     <Content Include="..\..\Repository\DDL\update_2900_header.sql">
       <Link>DDLs\update_2900_header.sql</Link>
-    </Content>
+    </Content>	
+    <Content Include="..\..\Repository\DDL\update_3000_header.sql">
+      <Link>DDLs\update_3000_header.sql</Link>
+    </Content>	
+    <Content Include="..\..\Repository\DDL\update_3000_footer.sql">
+      <Link>DDLs\update_3000_footer.sql</Link>
+    </Content>	
     <Content Include="..\..\Repository\fn_getaccesstype.sql">
       <Link>Functions\fn_getaccesstype.sql</Link>
     </Content>
