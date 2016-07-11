@@ -6424,6 +6424,82 @@ AS
 							select @metricthreshold = N'Server is vulnerable if users other than the default SSIS database roles have been granted permissions on an Integration Services stored procedure.'
 						end  
 
+				-- Other General Domain Accounts Check
+						else if ( @metricid = 111 ) 
+						begin
+							
+							-- Well-known security identifiers in Windows operating systems: https://support.microsoft.com/en-us/kb/243330
+							DECLARE @domainUsersSidPattern AS NVARCHAR(34);
+							DECLARE @everyoneSidString AS NVARCHAR(27);
+							DECLARE @authenticatedUsersSidString AS NVARCHAR (27);
+
+							SET @domainUsersSidPattern = '0x010500000000000515000000%01020000';
+							SET @everyoneSidString = '0x010100000000000100000000';
+							SET @authenticatedUsersSidString = '0x01010000000000050b000000';
+
+							DECLARE @generalUserPrincipals TABLE(
+								name nvarchar(128) NOT NULL
+							);
+
+							;WITH ConvertedSidsForCurrentSnapshot ([sid], name)
+							AS
+							(
+								SELECT CONVERT([varchar](512), sid, 1) as [sid], [name]
+								FROM [serverprincipal]
+								WHERE 
+									snapshotid = @snapshotid
+							)
+							INSERT INTO @generalUserPrincipals
+							SELECT [name] 
+							FROM ConvertedSidsForCurrentSnapshot
+							WHERE 
+								[sid] like @domainUsersSidPattern OR
+								[sid] IN (@everyoneSidString, @authenticatedUsersSidString)
+
+							IF NOT EXISTS ( SELECT 1 FROM @generalUserPrincipals) 
+								SELECT
+									@sevcode = @sevcodeok,
+									@metricval = N'There is no general domain accounts on the instance.' 
+							ELSE 
+								BEGIN 
+
+									DECLARE @userNamesList VARCHAR(MAX)
+									SET @userNamesList = ''
+									SELECT @userNamesList = @userNamesList + name + ','
+									FROM @generalUserPrincipals
+									SET @userNamesList =  SUBSTRING(@userNamesList , 1, LEN(@userNamesList)-1)
+									
+									SET @metricval = 'General domain accounts are added to the instance: ' + @userNamesList +'.'	
+									
+									INSERT INTO policyassessmentdetail
+									(
+										policyid,
+										assessmentid,
+										metricid,
+										snapshotid,
+										detailfinding,
+										databaseid,
+										objecttype,
+										objectid,
+										objectname 
+									)
+									values
+									(
+										@policyid,
+										@assessmentid,
+										@metricid,
+										@snapshotid,
+										@metricval,
+										null, -- database ID,
+										N'iSRV', -- object type
+										null,
+										@strval 
+									)
+									set @sevcode = @severity
+
+								END 
+							END  
+
 						--**************************** code added to handle user defined security checks, but never used (first added in version 2.5)
 						-- User implemented
 						else if (@metricid >= 1000)

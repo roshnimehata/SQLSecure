@@ -67,9 +67,9 @@ namespace Idera.SQLsecure.Collector.Sql
                             altuid = CAST(altuid AS int), 
                             hasaccess = CASE WHEN hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
                             owner = CAST (NULL AS int),
-                            defaultschemaname = CAST (NULL AS NVARCHAR),"
-                             + "isContainedUser =cast (0 as bit) "
-                             + "authenticationtype= 'NOT SUPPORTED' "
+                            defaultschemaname = CAST (NULL AS NVARCHAR),
+                            isContainedUser = CAST (0 as bit),
+                            authenticationtype = 'NOT SUPPORTED' "
                       + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".dbo.sysusers";
             }
             else if (version < ServerVersion.SQL2012)
