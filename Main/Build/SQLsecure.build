@@ -267,6 +267,7 @@
 			<fileset>
 				<include name="${SQLsecure.ThirdPartySoftware}/Microsoft.ReportViewer.WinForms.dll"/>
 				<include name="${SQLsecure.ThirdPartySoftware}/Microsoft.ReportViewer.Common.dll"/>
+				<include name="${SQLsecure.ThirdPartySoftware}/Microsoft.SqlServer.Smo.dll"/>
 				<include name="${SQLsecure.ThirdPartySoftware}/TracerX.exe.config"/>
 			</fileset>
 	    	</copy>
