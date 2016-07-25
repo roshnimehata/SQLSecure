@@ -9,16 +9,11 @@
  * (C) 2006 - Idera, a division of BBS Technologies, Inc.
  *******************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Data;
-using System.Data.SqlTypes;
 using System.Data.SqlClient;
 using System.Diagnostics;
-
 using Idera.SQLsecure.Core.Logger;
-using Idera.SQLsecure.UI.Console.Utility;
-
+using Idera.SQLsecure.UI.Console.SQL;
 
 namespace Idera.SQLsecure.UI.Console.Sql
 {
@@ -39,13 +34,39 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 out string fullName
             )
         {
-            Debug.Assert(!string.IsNullOrEmpty(instance));
-
             // Init return.
             version = string.Empty;
             machineName = string.Empty;
             instanceName = string.Empty;
             fullName = string.Empty;
+
+            var serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword);
+            var isServerInAoag = serverProperties.HadrManagerStatus == HadrManagerStatus.StartedAndRunning;
+
+            if (isServerInAoag)
+            {
+                var nodeProperties = GetSqlServerProperties(serverProperties.ServerName, sqlLogin, sqlPassword);
+                var isWhantConnectToTheClusterNotToTheNode = nodeProperties.LocalNetAddress != serverProperties.LocalNetAddress;
+
+                if (isWhantConnectToTheClusterNotToTheNode)
+                {
+                    version = serverProperties.Version;
+                    instanceName = serverProperties.InstanceName;
+                    fullName =
+                    machineName = serverProperties.HadrClusterName;
+                    return;
+                }
+            }
+
+            version = serverProperties.Version;
+            machineName = serverProperties.MachineName;
+            instanceName = serverProperties.InstanceName;
+            fullName = serverProperties.ServerName;
+        }
+
+        public static SQLServerProperties GetSqlServerProperties(string instance, string sqlLogin, string sqlPassword)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(instance));
 
             // Validate input.
             if (string.IsNullOrEmpty(instance))
@@ -54,67 +75,64 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 throw new ArgumentNullException("Instance is not specified");
             }
 
-            // Build the connection string.
-            SqlConnectionStringBuilder bldr = Sql.SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword);
+            instance = instance.Trim();
+            var result = new SQLServerProperties();
+            var bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword);
 
-            // Connect to the sql instance and get its properties.
-            using (SqlConnection connection = new SqlConnection(bldr.ConnectionString))
+            using (var connection = new SqlConnection(bldr.ConnectionString))
             {
-                // Open connection.
                 connection.Open();
 
-                // Get the version.
-                version = connection.ServerVersion;
-                string type = null;
-                string confQuery = @"select isnull(SERVERPROPERTY('IsClustered'),0) AS IsClusterd, 
+                var confQuery = @"select isnull(CONNECTIONPROPERTY('local_net_address'),'') AS LocalNetAddress, 
                                           isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
                                           isnull(SERVERPROPERTY('MachineName'),'')  as MachineName,
                                           isnull(SERVERPROPERTY('ServerName'),'') as ServerName,
-                                          isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName
+                                          isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName;
 
-                                   SELECT top 1 cluster_name FROM  sys.dm_hadr_cluster
-";
-
-
-                //Get server type 
-                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
-                    confQuery, null))
+                                   SELECT top 1 cluster_name as HadrClusterName FROM  sys.dm_hadr_cluster;";
+                using (var rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text, confQuery, null))
                 {
                     if (rdr.HasRows && rdr.Read())
                     {
-                        if (int.Parse(rdr["IsClusterd"].ToString()) == 1)
-                        {
-                            type = "C";
-                    }
+                        result.Version = connection.ServerVersion;
+                        result.InstanceName = rdr["InstanceName"].ToString();
+                        result.MachineName = rdr["MachineName"].ToString();
+                        result.ServerName = rdr["ServerName"].ToString();
+                        result.LocalNetAddress = rdr["LocalNetAddress"].ToString();
+                        result.HadrManagerStatus = GetHadrManagerStatus(rdr["HadrManagerStatus"].ToString());
 
-                        instanceName = rdr["InstanceName"].ToString();
-                        if (int.Parse(rdr["HadrManagerStatus"].ToString()) == 1)
+                        if (result.HadrManagerStatus == HadrManagerStatus.StartedAndRunning &&
+                            rdr.NextResult() &&
+                            rdr.HasRows &&
+                            rdr.Read())
                         {
-                            type = "A";
-                }
-                        if (type == "A")
-                        {
-
-                            if (rdr.NextResult()&&rdr.HasRows)
-                    {
-                                rdr.Read();
-                                fullName = machineName = rdr.GetString(0);
-                    }
-                }
-                        else
-                        {
-                            // Get the machine name.
-                            machineName = rdr["MachineName"].ToString();
-                                    // this should not be null, so if it is let there be an exception.
-                // Get the full name.
-                            fullName = rdr["ServerName"].ToString();
+                            result.HadrClusterName = rdr["HadrClusterName"].ToString();
                         }
                     }
                 }
 
                 SqlConnection.ClearPool(connection);
             }
-           
+
+            return result;
+        }
+
+        private static HadrManagerStatus GetHadrManagerStatus(string hadrManagerStatus)
+        {
+            int status;
+            int.TryParse(hadrManagerStatus, out status);
+
+            switch (status)
+            {
+                case 0:
+                    return HadrManagerStatus.NotStarted;
+                case 1:
+                    return HadrManagerStatus.StartedAndRunning;
+                case 2:
+                    return HadrManagerStatus.NotStartedAndFailed;
+                default:
+                    return HadrManagerStatus.NotApplicable;
+            }
         }
 
         public static bool ValidateSqlServerCredentials(

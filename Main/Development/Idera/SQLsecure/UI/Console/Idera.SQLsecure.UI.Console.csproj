@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="windows-1251"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -1439,6 +1439,7 @@
     <Compile Include="SQL\DataCollectionFilter.cs" />
     <Compile Include="SQL\Endpoint.cs" />
     <Compile Include="SQL\FileSystemObject.cs" />
+    <Compile Include="SQL\HadrManagerStatus.cs" />
     <Compile Include="SQL\Login.cs" />
     <Compile Include="SQL\NotificationProvider.cs" />
     <Compile Include="SQL\ObjectPermissions.cs" />
@@ -1455,6 +1456,7 @@
     <Compile Include="SQL\Service.cs" />
     <Compile Include="SQL\Snapshot.cs" />
     <Compile Include="SQL\SQLServer.cs" />
+    <Compile Include="SQL\SQLServerProperties.cs" />
     <Compile Include="SQL\SqlTypes.cs" />
     <Compile Include="SQL\Tags\Tag.cs" />
     <Compile Include="SQL\Tags\TaggedServer.cs" />
