@@ -518,7 +518,22 @@ namespace Idera.SQLsecure.UI.Console.Views
             buttonTool43.SharedProps.AppearancesLarge.Appearance = appearance22;
 
 
-
+            buttonTool2.SharedProps.Caption = "Create a Policy";
+            buttonTool4.SharedProps.Caption = "Register a Server";
+            buttonTool7.SharedProps.Caption = "Explore Users";
+            buttonTool8.SharedProps.Caption = "Explore Objects";
+            buttonTool10.SharedProps.Caption = "Configure Audit Settings";
+            labelTool1.SharedProps.Caption = "Baseline";
+            buttonTool11.SharedProps.Caption = "Change Settings";
+            labelTool5.SharedProps.Caption = "Use current data";
+            labelTool6.SharedProps.Caption = "Date";
+            buttonTool16.SharedProps.Caption = "Take a Snapshot";
+            buttonTool1.SharedProps.Caption = "Explore Roles";
+            buttonTool3.SharedProps.Caption = "View Reports";
+            buttonTool40.SharedProps.Caption = "Edit Settings";
+            buttonTool41.SharedProps.Caption = "Save as New Assessment";
+            buttonTool43.SharedProps.Caption = "Compare Assessments";
+            buttonTool46.SharedProps.Caption = "Import Servers";
 
             ribbonTab3.Groups.AddRange(new Infragistics.Win.UltraWinToolbars.RibbonGroup[] {
             ribbonGroup9,
@@ -535,36 +550,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._ultraToolbarsManager.ShowFullMenusDelay = 500;
             this._ultraToolbarsManager.ShowQuickCustomizeButton = false;
             this._ultraToolbarsManager.Style = Infragistics.Win.UltraWinToolbars.ToolbarStyle.WindowsVista;
-            buttonTool2.SharedPropsInternal.AppearancesLarge.Appearance = appearance21;
-            buttonTool2.SharedPropsInternal.Caption = "Create a Policy";
-            buttonTool2.SharedPropsInternal.DisplayStyle = Infragistics.Win.UltraWinToolbars.ToolDisplayStyle.ImageAndText;
-            buttonTool4.SharedPropsInternal.AppearancesLarge.Appearance = appearance12;
-            buttonTool4.SharedPropsInternal.Caption = "Register a Server";
-            buttonTool7.SharedPropsInternal.AppearancesLarge.Appearance = appearance13;
-            buttonTool7.SharedPropsInternal.Caption = "Explore Users";
-            buttonTool8.SharedPropsInternal.AppearancesLarge.Appearance = appearance14;
-            buttonTool8.SharedPropsInternal.Caption = "Explore Objects";
-            buttonTool10.SharedPropsInternal.AppearancesLarge.Appearance = appearance15;
-            buttonTool10.SharedPropsInternal.Caption = "Configure Audit Settings";
-            controlContainerTool1.SharedPropsInternal.Width = 211;
-            labelTool1.SharedPropsInternal.Caption = "Baseline";
-            buttonTool11.SharedPropsInternal.AppearancesLarge.Appearance = appearance17;
-            buttonTool11.SharedPropsInternal.Caption = "Change Settings";
-            labelTool5.SharedPropsInternal.Caption = "Use current data";
-            labelTool6.SharedPropsInternal.Caption = "Date";
-            buttonTool16.SharedPropsInternal.AppearancesLarge.Appearance = appearance18;
-            buttonTool16.SharedPropsInternal.Caption = "Take a Snapshot";
-            buttonTool1.SharedPropsInternal.AppearancesLarge.Appearance = appearance19;
-            buttonTool1.SharedPropsInternal.Caption = "Explore Roles";
-            buttonTool3.SharedPropsInternal.AppearancesLarge.Appearance = appearance20;
-            buttonTool3.SharedPropsInternal.Caption = "View Reports";
-            buttonTool40.SharedPropsInternal.AppearancesLarge.Appearance = appearance11;
-            buttonTool40.SharedPropsInternal.Caption = "Edit Settings";
-            buttonTool41.SharedPropsInternal.AppearancesLarge.Appearance = appearance16;
-            buttonTool41.SharedPropsInternal.Caption = "Save as New Assessment";
-            buttonTool43.SharedPropsInternal.AppearancesLarge.Appearance = appearance22;
-            buttonTool43.SharedPropsInternal.Caption = "Compare Assessments";
-            buttonTool46.SharedPropsInternal.Caption = "Import Servers";
+           
             this._ultraToolbarsManager.Tools.AddRange(new Infragistics.Win.UltraWinToolbars.ToolBase[] {
             buttonTool2,
             buttonTool4,

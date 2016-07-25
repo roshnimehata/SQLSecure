@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding="Windows-1251"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,10 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Idera.SQLsecure.UI.Console</RootNamespace>
     <AssemblyName>Idera.SQLsecure.UI.Console</AssemblyName>
-    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
-    <SccProjectName>%24/SQl Secure 3.0/src/Main/Development/Idera/SQLsecure/UI/Console</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
-    <SccAuxPath>http://192.168.242.72:8080/tfs/defaultcollection</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
     <ApplicationIcon>SQLsecure_product.ico</ApplicationIcon>
     <Win32Resource>
     </Win32Resource>
@@ -47,7 +47,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,7 +57,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup>
+   <ItemGroup>
     <Reference Include="Infragistics2.Excel.v9.1, Version=9.1.20091.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\ThirdPartySoftware\Infragistics2.Excel.v9.1.dll</HintPath>
@@ -488,6 +488,12 @@
     <Compile Include="Forms\Form_FolderPath.Designer.cs">
       <DependentUpon>Form_FolderPath.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Form_ImportServers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_ImportServers.Designer.cs">
+      <DependentUpon>Form_ImportServers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Form_OSObjectPermissions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -903,6 +909,16 @@
     <Compile Include="Forms\Form_License.Designer.cs">
       <DependentUpon>Form_License.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ImportStatusIcon.cs" />
+    <Compile Include="Import\CsvDataProvider.cs" />
+    <Compile Include="Import\CsvParser.cs" />
+    <Compile Include="Import\IImportDataProvider.cs" />
+    <Compile Include="Import\ImportSettings.cs" />
+    <Compile Include="Import\Models\ImportItem.cs" />
+    <Compile Include="Import\Models\SqlServerAuthenticationType.cs" />
+    <Compile Include="Import\PropertyOrderAttribute.cs" />
+    <Compile Include="Import\PropertyOrderAttributeComparer.cs" />
+    <Compile Include="Import\ServerImportManager.cs" />
     <Compile Include="Interfaces\ICommandHandler.cs" />
     <Compile Include="Interfaces\IDataContext.cs" />
     <Compile Include="Interfaces\IRefresh.cs" />
@@ -1047,6 +1063,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_FolderPath.resx">
       <DependentUpon>Form_FolderPath.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_ImportServers.resx">
+      <DependentUpon>Form_ImportServers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_PolicyProperties.resx">
       <SubType>Designer</SubType>
@@ -1438,8 +1457,8 @@
     <Compile Include="SQL\DatabasePrincipal.cs" />
     <Compile Include="SQL\DataCollectionFilter.cs" />
     <Compile Include="SQL\Endpoint.cs" />
-    <Compile Include="SQL\FileSystemObject.cs" />
-    <Compile Include="SQL\HadrManagerStatus.cs" />
+	<Compile Include="SQL\HadrManagerStatus.cs" />
+	<Compile Include="SQL\FileSystemObject.cs" />
     <Compile Include="SQL\Login.cs" />
     <Compile Include="SQL\NotificationProvider.cs" />
     <Compile Include="SQL\ObjectPermissions.cs" />
