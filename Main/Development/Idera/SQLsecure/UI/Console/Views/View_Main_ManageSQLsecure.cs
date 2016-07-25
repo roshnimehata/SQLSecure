@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Idera.SQLsecure.Core.Logger;
 using Infragistics.Win.UltraWinGrid;
 using Idera.SQLsecure.UI.Console.Controls;
+using Idera.SQLsecure.UI.Console.Forms;
 
 namespace Idera.SQLsecure.UI.Console.Views
 {
@@ -73,6 +74,11 @@ namespace Idera.SQLsecure.UI.Console.Views
             _smallTask_Register.TaskText = Utility.Constants.Task_Title_Register;
             _smallTask_Register.TaskImage = AppIcons.AppImage32(AppIcons.Enum32.RegisterSQLserver);
             _smallTask_Register.TaskHandler += new System.EventHandler(this.registerServer);
+
+            
+            _smallTask_Import.TaskText = Utility.Constants.Task_Title_Import;
+            _smallTask_Import.TaskImage = AppIcons.AppImage32(AppIcons.Enum32.RegisterSQLserver);
+            _smallTask_Import.TaskHandler += new System.EventHandler(this.ImportServers);
 
             _smallTask_Collect.TaskText = Utility.Constants.Task_Title_CollectData;
             _smallTask_Collect.TaskImage = AppIcons.AppImage32(AppIcons.Enum32.Snapshot);
@@ -338,6 +344,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             m_menuConfiguration.SnapshotItems[(int)Utility.MenuItems_Snapshots.Baseline] = false;
 
             _smallTask_Register.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.AuditSQLServer);
+            _smallTask_Import.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.AuditSQLServer);
+
             _smallTask_Collect.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Collect);
             _smallTask_Configure.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.ConfigureAuditSettings);
 
@@ -348,6 +356,12 @@ namespace Idera.SQLsecure.UI.Console.Views
         private void registerServer(object sender, EventArgs e)
         {
             showNewAuditServer();
+        }
+
+        private void ImportServers(object sender, EventArgs e)
+        {
+            Form_ImportServers.Process();
+            ShowRefresh();
         }
 
         private void collectData()

@@ -22,7 +22,7 @@ as
 
 	select @programname = program_name from master..sysprocesses where spid= @@spid and sid = SUSER_SID(SYSTEM_USER)
 
-	select @jobid2 = job_id from msdb.dbo.sysjobs where job_id = @jobid or name = @jobname
+	select @jobid2 = job_id from msdb.dbo.sysjobs where job_id = @jobid or UPPER(name) = UPPER(@jobname)
 	if (@jobid2 is null)
 	begin
 		set @errmsg = 'Error: Failed to remove job.'

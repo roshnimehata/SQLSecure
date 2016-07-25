@@ -5059,6 +5059,10 @@ namespace Idera.SQLsecure.UI.Console
 
         }
 
-
+        private void _toolStrip_ImportServers_Click(object sender, EventArgs e)
+        {
+            Form_ImportServers.Process();
+            refreshManageSQLsecureGroup();
+        }
     }
 }

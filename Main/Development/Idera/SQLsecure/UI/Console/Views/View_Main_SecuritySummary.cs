@@ -49,6 +49,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             public const string ExploreRoles = @"_buttonTool_ExploreRoles";
             public const string ExploreObjects = @"_buttonTool_ExploreObjects";
             public const string ViewReports = @"_buttonTool_ViewReports";
+            public const string ImportServers = @"_buttonTool_ImportServers";
         }
 
         private class RibbonAuditData
@@ -797,11 +798,19 @@ namespace Idera.SQLsecure.UI.Console.Views
                     case RibbonTaskButton.ViewReports:
                         showReports();
                         break;
+                    case RibbonTaskButton.ImportServers:
+                        ShowImportServers();
+                        break;
                     case RibbonAuditData.Select:
                         selectAuditData();
                         break;
                 }
             }
+        }
+
+        private void ShowImportServers()
+        {
+            Forms.Form_ImportServers.Process();
         }
 
         private void _ultraToolbarsManager_BeforeRibbonTabSelected(object sender, BeforeRibbonTabSelectedEventArgs e)

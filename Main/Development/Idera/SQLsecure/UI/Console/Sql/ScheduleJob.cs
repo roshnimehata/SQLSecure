@@ -725,8 +725,13 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        public static Guid AddJob(string connectionString, string newConnection,
+            string repositoryName, ScheduleData scheduleData)
+        {
+            return AddJob(connectionString, newConnection, repositoryName, scheduleData, true);
+        }
         public static Guid AddJob( string connectionString, string newConnection,
-                                   string repositoryName, ScheduleData scheduleData)
+                                   string repositoryName, ScheduleData scheduleData, bool showError)
         {
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
             Debug.Assert(!string.IsNullOrEmpty(newConnection));
@@ -796,7 +801,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
             catch (Exception ex)
             {
-                Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.DataCollectionErrorAddingJob, ex);
+                if (showError)
+                    Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection,
+                        Utility.ErrorMsgs.DataCollectionErrorAddingJob, ex);
+                else throw;
             }
 
             return jobID;
