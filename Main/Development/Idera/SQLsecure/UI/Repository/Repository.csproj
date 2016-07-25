@@ -116,13 +116,13 @@
     </Content>
     <Content Include="..\..\Repository\DDL\update_2900_header.sql">
       <Link>DDLs\update_2900_header.sql</Link>
-    </Content>	
+    </Content>
     <Content Include="..\..\Repository\DDL\update_3000_header.sql">
       <Link>DDLs\update_3000_header.sql</Link>
-    </Content>	
+    </Content>
     <Content Include="..\..\Repository\DDL\update_3000_footer.sql">
       <Link>DDLs\update_3000_footer.sql</Link>
-    </Content>	
+    </Content>
     <Content Include="..\..\Repository\fn_getaccesstype.sql">
       <Link>Functions\fn_getaccesstype.sql</Link>
     </Content>
@@ -281,6 +281,27 @@
     </Content>
     <Content Include="..\..\Repository\fn_splitbydelimiter.sql">
       <Link>Functions\fn_splitbydelimiter.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_AssignTagsToServer.sql">
+      <Link>Procedures\isp_AssignTagsToServer.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_AssignTagToServers.sql">
+      <Link>Procedures\isp_AssignTagToServers.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_DeleteTag.sql">
+      <Link>Procedures\isp_DeleteTag.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_GetServersByTag.sql">
+      <Link>Procedures\isp_GetServersByTag.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_GetTags.sql">
+      <Link>Procedures\isp_GetTags.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_InsertUpdateTag.sql">
+      <Link>Procedures\isp_InsertUpdateTag.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_RemoveServerFromTag.sql">
+      <Link>Procedures\isp_RemoveServerFromTag.sql</Link>
     </Content>
     <Content Include="..\..\Repository\isp_sqlsecure_addactivitylog.sql">
       <Link>Procedures\isp_sqlsecure_addactivitylog.sql</Link>
@@ -620,6 +641,9 @@
     </Content>
     <Content Include="..\..\Repository\isp_sqlsecure_report_serverroles.sql">
       <Link>Procedures\isp_sqlsecure_report_serverroles.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\isp_sqlsecure_report_suspectsqllogins.sql">
+      <Link>Procedures\isp_sqlsecure_report_suspectsqllogins.sql</Link>
     </Content>
     <Content Include="..\..\Repository\isp_sqlsecure_report_sysadmin_administrator.sql">
       <Link>Procedures\isp_sqlsecure_report_sysadmin_administrator.sql</Link>

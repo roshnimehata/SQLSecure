@@ -52,7 +52,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
         Report_RiskAssessment,
         Report_CompareAssessments,
         Report_CompareSnapshots,
-        Report_LoginVulnerability
+        Report_LoginVulnerability,
+        ServerGroupTags,
+        Report_SuspectSqlLogins
     }
 
     // These are the commands that need to be processed
@@ -219,6 +221,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public static String ReportNode_ServersWithDangerousGroups = ReportTitle_ServersWithDangerousGroups;
         public static String ReportNode_SystemAdministratorVulnerability = ReportTitle_SystemAdministratorVulnerability;
         public static String ReportNode_SuspectWindowsAccounts = ReportTitle_SuspectWindowsAccounts;
+        public static String ReportNode_SuspectSqlLogins = ReportTitle_SuspectSqlLogins;
         public static String ReportNode_VulnerableFixedRoles = ReportTitle_VulnerableFixedRoles;
         public static String ReportNode_CMDShellVulnerability = ReportTitle_CMDShellVulnerability;
         public static String ReportNode_MailVulnerability = ReportTitle_MailVulnerability;
@@ -241,6 +244,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const String ManagementNode_Logins = @"Logins";
         public const String ManagementNode_ManagePolicies = @"Manage Policies";
         public static String ManagementNode_Activity = PRODUCT_STR + @" Activity";
+        public const String TManagementNode_TagsNode = "Server Group Tags";
+
 
         // Snapshot Nodes
         public const string MoreSnapshots = "more Snapshots...";
@@ -399,6 +404,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string ReportTitle_SuspectWindowsAccounts = @"Suspect Windows Accounts";
         public static string ReportSummary_SuspectWindowsAccounts = @"Show all the unresolved Windows Accounts that have Server Logins.";
 
+        public const string ReportTitle_SuspectSqlLogins = @"Suspect SQL Logins";
+        public static string ReportSummary_SuspectSqlLogins = @"Show all SQL server logins that do not have permissions.";
+        
         public const string ReportTitle_ServerLoginsAndUserMappings = @"Server Logins and User Mappings";
         public static string ReportSummary_ServerLoginsAndUserMappings = @"Show all Server Logins and associated Database User Mappings for each SQL Server instance being audited.";
 

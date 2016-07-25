@@ -43,7 +43,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     showProperties();
                     break;
                 case Utility.ViewSpecificCommand.Refresh:
-                    showRefresh();
+                    ShowRefresh();
                     break;
                 case Utility.ViewSpecificCommand.UserPermissions:
                     showPermissions(Views.View_PermissionExplorer.Tab.UserPermissions);
@@ -97,7 +97,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             logX.loggerX.Error("Error - BaseView showProperties command called erroneously");
         }
 
-        protected virtual void showRefresh()
+        protected virtual void ShowRefresh()
         {
             // This should be overriden if needed by the View and should never be called
             logX.loggerX.Error("Error - BaseView showRefresh command called erroneously");
@@ -141,7 +141,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
         void Interfaces.IRefresh.RefreshView()
         {
-            showRefresh();
+            ShowRefresh();
         }
 
         #endregion

@@ -5209,136 +5209,83 @@ AS
   						-- sysadmin accounts with local administrator role
 						else if (@metricid = 99)
                         begin
+							declare @output					varchar(max);
+							declare @output_delim			varchar(2);
+							declare @max_output_str_length	int;
+							declare @char_index_for_trim	int;
+							set @max_output_str_length = 1010;
+							set @output = NULL;
+							set @output_delim = ', ';
+							set @char_index_for_trim = 0;
 
-                              declare @SysadminUsers table
-                                      (
-                                        username nvarchar(128) not null
-                                      );
+							with SuppressedAccounts as (select Value from dbo.splitbydelimiter(@severityvalues, ','))
+								select
+									@output = isnull(@output + @output_delim, '' ) + '''' + SPU.name + '''',
+									@char_index_for_trim = case 
+															when len(@output) < @max_output_str_length 
+															then len(@output)
+															else @char_index_for_trim 
+														   end
+								from
+								    dbo.serverrolemember as SRM
+								    inner join dbo.serverprincipal as SPU
+								        on SRM.snapshotid = SPU.snapshotid
+								           and SRM.snapshotid = @snapshotid
+								           and SRM.memberprincipalid = SPU.principalid
+								           and SPU.type <> 'R'
+								    inner join dbo.serverprincipal as SPR
+								        on SRM.snapshotid = SPR.snapshotid
+								           and SRM.principalid = SPR.principalid
+								           and SPR.type = 'R'
+								           and SPR.name = 'sysadmin'
+								    inner join dbo.serveroswindowsgroupmember as WGM
+								        on SPU.snapshotid = WGM.snapshotid
+								           and SPU.sid = WGM.groupmember
+								    inner join dbo.serveroswindowsaccount as WG
+								        on WGM.snapshotid = WG.snapshotid
+								           and WGM.groupsid = WG.sid
+								           and WG.name like '%\Administrators'
+								where not exists ( select 1 
+												   from SuppressedAccounts as sa 
+												   where SPU.name like sa.Value );
 
-                              declare @SuppressedAccounts table ( name
-                                                              nvarchar(200) )
+							if (len(@output) > @max_output_str_length)
+  								select  @output = substring(@output,1,@char_index_for_trim) + N', more...';
 
-                              insert    into @SuppressedAccounts
-                                        select
-                                            Value
-                                        from
-                                            dbo.splitbydelimiter(@severityvalues,
-                                                              ',')
 
-                              insert    into @SysadminUsers
-                                        select
-                                            SPU.name as username
-                                        from
-                                            dbo.serverrolemember as SRM
-                                            inner join dbo.serverprincipal as SPU
-                                                on SRM.snapshotid = SPU.snapshotid
-                                                   and SRM.snapshotid = @snapshotid
-                                                   and SRM.memberprincipalid = SPU.principalid
-                                                   and SPU.type <> 'R'
-                                            inner join dbo.serverprincipal as SPR
-                                                on SRM.snapshotid = SPR.snapshotid
-                                                   and SRM.principalid = SPR.principalid
-                                                   and SPR.type = 'R'
-                                                   and SPR.name = 'sysadmin'
-                                            inner join dbo.serveroswindowsgroupmember
-                                            as WGM
-                                                on SPU.snapshotid = WGM.snapshotid
-                                                   and SPU.sid = WGM.groupmember
-                                            inner join dbo.serveroswindowsaccount
-                                            as WG
-                                                on WGM.snapshotid = WG.snapshotid
-                                                   and WGM.groupsid = WG.sid
-                                                   and WG.name like '%\Administrators'
-                                        where
-                                            ( select
-                                                count(*)
-                                              from
-                                                @SuppressedAccounts as sa
-                                              where
-                                                SPU.name like sa.name
-                                            ) = 0
+							if ( @isadmin = 1 ) 
+							   insert into policyassessmentdetail (
+							             policyid,
+							             assessmentid,
+							             metricid,
+							             snapshotid,
+							             detailfinding,
+							             databaseid,
+							             objecttype,
+							             objectid,
+							             objectname )
+							      
+							   select   @policyid,
+							            @assessmentid,
+							            @metricid,
+							            @snapshotid,
+							            N'SQL SYSADMIN accounts that are in the local Administrator role: ''' + Value + N'''',
+							            null, -- database ID,
+							            N'DB', -- object type
+							            null, -- object id
+							            Value 
+							   from dbo.splitbydelimiter(@output, @output_delim);
 
-                              declare SysadminUsersCursor cursor
-                              for
-                                      select
-                                        username
-                                      from
-                                        @SysadminUsers
-                              open SysadminUsersCursor
-                              select
-                                @intval2 = 0
-                              fetch next from SysadminUsersCursor into @strval
-                              while @@fetch_status = 0 
-                                    begin
-                                          if (
-                                               @intval2 = 1
-                                               or len(@metricval)
-                                               + len(@strval) > 1010
-                                             ) 
-                                             begin
-                                                   if @intval2 = 0 
-                                                      select
-                                                        @metricval = @metricval
-                                                        + N', more...',
-                                                        @intval2 = 1
-                                             end
-                                          else 
-                                             select
-                                                @metricval = @metricval
-                                                + case when len(@metricval) > 0
-                                                       then N', '
-                                                       else N''
-                                                  end + N'''' + @strval
-                                                + N''''
+							if ( @output is null ) 
+							   select
+							      @sevcode = @sevcodeok,
+							      @metricval = N'None found.';
+							else 
+							   select
+							      @sevcode = @severity,
+							      @metricval = N'SQL SYSADMIN accounts that are in the local Administrator role: ' + @output;
 
-                                          if ( @isadmin = 1 ) 
-                                             insert into policyassessmentdetail
-                                                    (
-                                                      policyid,
-                                                      assessmentid,
-                                                      metricid,
-                                                      snapshotid,
-                                                      detailfinding,
-                                                      databaseid,
-                                                      objecttype,
-                                                      objectid,
-                                                      objectname 
-                                                    
-                                                    )
-                                             values
-                                                    (
-                                                      @policyid,
-                                                      @assessmentid,
-                                                      @metricid,
-                                                      @snapshotid,
-                                                      N'SQL SYSADMIN accounts that are in the local Administrator role: '''
-                                                      + @strval + N'''',
-                                                      null, -- database ID,
-                                                      N'DB', -- object type
-                                                      null, -- object id
-                                                      @strval 
-                                                    
-                                                    )
-															         
-                                          fetch next from SysadminUsersCursor into @strval
-                                    end
-
-                              if ( len(@metricval) = 0 ) 
-                                 select
-                                    @sevcode = @sevcodeok,
-                                    @metricval = N'None found.'
-                              else 
-                                 select
-                                    @sevcode = @severity,
-                                    @metricval = N'SQL SYSADMIN accounts that are in the local Administrator role: '
-                                    + @metricval
-
-                              select
-                                @metricthreshold = N'Server is vulnerable if SQL SYSADMIN accounts that are in the local Administrator role for the physical server other than: '
-                                + @severityvalues
-
-                              close SysadminUsersCursor
-                              deallocate SysadminUsersCursor
+							select @metricthreshold = N'Server is vulnerable if SQL SYSADMIN accounts that are in the local Administrator role for the physical server other than: ' + @severityvalues;
                         end                      
  
  						--information about database roles
@@ -6470,6 +6417,66 @@ AS
 									SET @userNamesList =  SUBSTRING(@userNamesList , 1, LEN(@userNamesList)-1)
 									
 									SET @metricval = 'General domain accounts are added to the instance: ' + @userNamesList +'.'	
+									
+									INSERT INTO policyassessmentdetail
+									(
+										policyid,
+										assessmentid,
+										metricid,
+										snapshotid,
+										detailfinding,
+										databaseid,
+										objecttype,
+										objectid,
+										objectname 
+									)
+									values
+									(
+										@policyid,
+										@assessmentid,
+										@metricid,
+										@snapshotid,
+										@metricval,
+										null, -- database ID,
+										N'iSRV', -- object type
+										null,
+										@strval 
+									)
+									set @sevcode = @severity
+
+								END 
+							END  
+
+				-- SQL Jobs and Agent Check
+						else if ( @metricid = 112 ) 
+						begin
+
+							DECLARE @jobsStepsWithoutProxy TABLE(
+								name nvarchar(128) NOT NULL,
+								step nvarchar(128) NULL
+							);
+
+							INSERT INTO @jobsStepsWithoutProxy
+							SELECT j.Name, j.Step  FROM [dbo].[sqljob] j
+							LEFT OUTER JOIN [dbo].[sqljobproxy] jp ON jp.proxyId = j.ProxyId
+							WHERE 
+								jp.proxyId is null AND
+								j.snapshotid = @snapshotid
+							ORDER BY j.Name, j.JobId
+
+							IF NOT EXISTS ( SELECT 1 FROM @jobsStepsWithoutProxy) 
+								SELECT
+									@sevcode = @sevcodeok,
+									@metricval = N'There is no job step without proxy account.' 
+							ELSE 
+								BEGIN 
+
+									DECLARE @jobStepsList VARCHAR(MAX)
+									SET @jobStepsList = ''
+									SELECT @jobStepsList = @jobStepsList + name + ': ' + step + CHAR(13) + CHAR(10)
+									FROM @jobsStepsWithoutProxy
+									
+									SET @metricval = 'There are jobs that have no proxy account: '+ CHAR(13) + CHAR(10) + @jobStepsList +''	
 									
 									INSERT INTO policyassessmentdetail
 									(

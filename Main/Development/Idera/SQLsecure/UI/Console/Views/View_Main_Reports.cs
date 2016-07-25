@@ -34,11 +34,11 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             _linkLabel_Configure.Enabled = Program.gController.isAdmin;
 
-            Data.Main_Reports context = (Data.Main_Reports) contextIn;
+            Data.Main_Reports context = (Data.Main_Reports)contextIn;
 
             if (context.Tab != Tab.None)
             {
-                    ultraTabControl1.SelectedTab = ultraTabControl1.Tabs[(int)context.Tab];
+                ultraTabControl1.SelectedTab = ultraTabControl1.Tabs[(int)context.Tab];
             }
 
             loadData();
@@ -129,6 +129,13 @@ namespace Idera.SQLsecure.UI.Console.Views
             commonTask_EntitlementReport_1.TaskText = Utility.Constants.ReportTitle_SuspectWindowsAccounts;
             commonTask_EntitlementReport_1.TaskDescription = Utility.Constants.ReportSummary_SuspectWindowsAccounts;
             commonTask_EntitlementReport_1.TaskHandler += new System.EventHandler(showOrphanedLogins);
+
+            commonTask_EntitlementReport_7.TaskImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_SuspectSqlLogins_32;
+            commonTask_EntitlementReport_7.HoverTaskImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_SuspectSqlLogins_48;
+            commonTask_EntitlementReport_7.TaskText = Utility.Constants.ReportTitle_SuspectSqlLogins;
+            commonTask_EntitlementReport_7.TaskDescription = Utility.Constants.ReportSummary_SuspectSqlLogins;
+            commonTask_EntitlementReport_7.TaskHandler += new System.EventHandler(showSqlLogins);
+
 
             commonTask_EntitlementReport_2.TaskImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_ServerLoginsAndUserMappings_32;
             commonTask_EntitlementReport_2.HoverTaskImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_ServerLoginsAndUserMappings_48;
@@ -231,7 +238,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
 
 
-            
+
             //This code fails in design mode and renders the form unviewable at times
             try
             {
@@ -241,7 +248,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                 commonTask_GeneralReport_3.Enabled =
                 commonTask_GeneralReport_4.Enabled =
                 commonTask_GeneralReport_5.Enabled =
-                
+
                 commonTask_EntitlementReport_1.Enabled =
                 commonTask_EntitlementReport_2.Enabled =
                 commonTask_EntitlementReport_3.Enabled =
@@ -257,8 +264,8 @@ namespace Idera.SQLsecure.UI.Console.Views
                 commonTask_VulnerabilityReport_6.Enabled =
                 commonTask_VulnerabilityReport_7.Enabled =
                 commonTask_VulnerabilityReport_8.Enabled =
-                commonTask_VulnerabilityReport_9.Enabled = 
-                
+                commonTask_VulnerabilityReport_9.Enabled =
+
                 commonTask_ComparisonReport_1.Enabled =
                 commonTask_ComparisonReport_2.Enabled = Program.gController.isViewer;
             }
@@ -394,6 +401,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             Program.gController.SetCurrentReport(Utility.Constants.ReportNode_SuspectWindowsAccounts);
             Program.gController.ShowRootView(new Utility.NodeTag(new Data.Report(string.Empty),
                                                         Utility.View.Report_SuspectWindowsAccounts));
+        }
+        private void showSqlLogins(object sender, EventArgs e)
+        {
+            Program.gController.SetCurrentReport(Utility.Constants.ReportNode_SuspectSqlLogins);
+            Program.gController.ShowRootView(new Utility.NodeTag(new Data.Report(string.Empty),
+                                                        Utility.View.Report_SuspectSqlLogins));
         }
 
         private void showFixedRolesAssignedToPublic(object sender, EventArgs e)

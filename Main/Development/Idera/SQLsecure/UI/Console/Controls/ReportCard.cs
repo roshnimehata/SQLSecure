@@ -941,7 +941,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     SqlParameter paramBaselineOnly = new SqlParameter(ParamBaselineOnly, SqlDbType.Bit, 0);
                     paramBaselineOnly.Value = m_context.UseBaseline;
                     SqlParameter paramRunDate = new SqlParameter(ParamRunDate, m_context.SelectionDate);
-
+                    if (m_serverInstance == null)//TODO CHECK IF THIS WORKS !!!! AND REMOVE
+                    {
+                        paramAlertsOnly.Value = 1;
+                        //   return;
+                    }
                     // Get Assessment
                     SqlCommand cmd = new SqlCommand(QueryGetAssessment, connection);
                     cmd.CommandType = CommandType.StoredProcedure;

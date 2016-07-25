@@ -63,6 +63,7 @@ namespace Idera.SQLsecure.UI.Console
         private Views.View_SQLsecureActivity m_View_SQLsecureActivity;
         private Views.View_Logins m_View_Logins;
         private Views.View_ManagePolicies m_View_ManagePolicies;
+        private Views.View_ServerTags m_View_ServerTags;
 
         // Reports group views
         private Views.View_Main_Reports m_View_Main_Reports;
@@ -89,6 +90,7 @@ namespace Idera.SQLsecure.UI.Console
         private Views.Report_RiskAssessment m_View_Report_RiskAssessment;
         private Views.Report_CompareAssessments m_View_Report_CompareAssessments;
         private Views.Report_CompareSnapshots m_View_Report_CompareSnapshots;
+        private Views.Report_SuspectSqlLogins m_View_Report_SuspectSqlLogins;
 
         #endregion
 
@@ -243,6 +245,9 @@ namespace Idera.SQLsecure.UI.Console
                 case Utility.View.ManagePolicies:
                     ret = m_View_ManagePolicies;
                     break;
+                case Utility.View.ServerGroupTags:
+                    ret = m_View_ServerTags;
+                    break;
 
                 // Reports group views
                 case Utility.View.Main_Reports:
@@ -271,6 +276,9 @@ namespace Idera.SQLsecure.UI.Console
                     break;
                 case Utility.View.Report_SuspectWindowsAccounts:
                     ret = m_View_Report_SuspectWindowsAccounts;
+                    break;
+                case Utility.View.Report_SuspectSqlLogins:
+                    ret = m_View_Report_SuspectSqlLogins;
                     break;
                 case Utility.View.Report_VulnerableFixedRoles:
                     ret = m_View_Report_VulnerableFixedRoles;
@@ -423,6 +431,7 @@ namespace Idera.SQLsecure.UI.Console
                 m_View_SQLsecureActivity = new Views.View_SQLsecureActivity();
                 m_View_Logins = new Views.View_Logins();
                 m_View_ManagePolicies = new Views.View_ManagePolicies();
+                m_View_ServerTags=new View_ServerTags();
 
                 // Reports group views
                 m_View_Main_Reports = new Views.View_Main_Reports();
@@ -434,6 +443,7 @@ namespace Idera.SQLsecure.UI.Console
                 m_View_Report_ServersWithDangerousGroups = new Views.Report_ServersWithDangerousGroups();
                 m_View_Report_SystemAdministratorVulnerability = new Views.Report_SystemAdministratorVulnerability();
                 m_View_Report_SuspectWindowsAccounts = new Views.Report_SuspectWindowsAccounts();
+                m_View_Report_SuspectSqlLogins = new Report_SuspectSqlLogins();
                 m_View_Report_VulnerableFixedRoles = new Views.Report_VulnerableFixedRoles();
                 m_View_Report_MailVulnerability = new Views.Report_MailVulnerability();
                 m_View_Report_LoginVulnerability = new Views.Report_LoginVulnerability();

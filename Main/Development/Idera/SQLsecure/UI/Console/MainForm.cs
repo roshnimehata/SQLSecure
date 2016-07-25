@@ -89,7 +89,7 @@ namespace Idera.SQLsecure.UI.Console
                                             {
                                                 // Display confirmation, if user confirms remove the assessment.
                                                 string caption = Utility.ErrorMsgs.RemoveAssessmentCaption;
-                                                if (DialogResult.Yes == Utility.MsgBox.ShowWarningConfirm(Utility.ErrorMsgs.RemoveAssessmentCaption, 
+                                                if (DialogResult.Yes == Utility.MsgBox.ShowWarningConfirm(Utility.ErrorMsgs.RemoveAssessmentCaption,
                                                     string.Format(Utility.ErrorMsgs.RemoveAssessmentConfirmMsg, policy.PolicyAssessmentName)))
                                                 {
                                                     try
@@ -166,7 +166,7 @@ namespace Idera.SQLsecure.UI.Console
                             }
                             else if (_explorerBar_SecuritySummaryTreeView.SelectedNode.Tag is Sql.RegisteredServer)
                             {
-                                rServer = ((Sql.RegisteredServer) _explorerBar_SecuritySummaryTreeView.SelectedNode.Tag);
+                                rServer = ((Sql.RegisteredServer)_explorerBar_SecuritySummaryTreeView.SelectedNode.Tag);
                                 Forms.Form_SqlServerProperties.Process(rServer.ConnectionName, Forms.Form_SqlServerProperties.RequestedOperation.EditCofiguration,
                                                                        Program.gController.isAdmin);
                                 Program.gController.RefreshCurrentView();
@@ -731,7 +731,7 @@ namespace Idera.SQLsecure.UI.Console
             bool canExplore = false;
             bool canRemovePolicy = false;
             bool canRemoveServer = false;
-            
+
             // Get node type that has been selected.
             // There are 2 types of nodes:
             // the policy or assessment at level 0
@@ -1358,7 +1358,7 @@ namespace Idera.SQLsecure.UI.Console
                         if (Program.gController.Repository.RegisteredServers.Count == 0)
                         {
                             Form_Welcome.Process();
-//                        Form_GettingStarted.Process();                        
+                            //                        Form_GettingStarted.Process();                        
                         }
 
                         // Verify all Registered Servers have Credentials
@@ -1411,7 +1411,7 @@ namespace Idera.SQLsecure.UI.Console
 
         private void WarnForTooManyRegisteredServers()
         {
-            if(!Program.gController.Repository.bbsProductLicense.IsLicneseGoodForServerCount(Program.gController.Repository.RegisteredServers.Count))
+            if (!Program.gController.Repository.bbsProductLicense.IsLicneseGoodForServerCount(Program.gController.Repository.RegisteredServers.Count))
             {
                 string message = Utility.ErrorMsgs.LicenseTooManyRegisteredServers;
                 Utility.MsgBox.ShowWarning(Utility.ErrorMsgs.LicenseCaption, message.ToString());
@@ -1424,7 +1424,7 @@ namespace Idera.SQLsecure.UI.Console
             StringBuilder message = new StringBuilder();
             foreach (BBSProductLicense.LicenseData licData in licenses)
             {
-                if(licData.isAboutToExpire)
+                if (licData.isAboutToExpire)
                 {
                     if (message.Length > 0)
                     {
@@ -2188,6 +2188,14 @@ namespace Idera.SQLsecure.UI.Console
             node.ImageIndex = node.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.Report_SuspectWindowsAccounts);
             CategoryNode.Nodes.Add(node);
 
+            // Add the builtin report node sql logins
+            node = new TreeNode(Utility.Constants.ReportNode_SuspectSqlLogins);
+            node.Name = Utility.Constants.ReportNode_SuspectSqlLogins;
+            node.Tag = new Utility.NodeTag(new Data.Report(node.Name),
+                                            Utility.View.Report_SuspectSqlLogins);
+            node.ImageIndex = node.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.Report_SuspectSqlLogins);
+            CategoryNode.Nodes.Add(node);
+
             // Add the builtin report node Server Database Users
             node = new TreeNode(Utility.Constants.ReportNode_ServerLoginsAndUserMappings);
             node.Name = Utility.Constants.ReportNode_ServerLoginsAndUserMappings;
@@ -2377,10 +2385,19 @@ namespace Idera.SQLsecure.UI.Console
 
             // Add the SQLsecure Activity main node
             node = new TreeNode(Utility.Constants.ManagementNode_Activity);
-            node.Tag = new Utility.NodeTag(new Data.SQLsecureActivity(node.Name),
-                                            Utility.View.SQLsecureActivity);
+            node.Tag = new Utility.NodeTag(new Data.SQLsecureActivity(node.Name), Utility.View.SQLsecureActivity);
+
             node.ImageIndex = node.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.SQLsecureActivity);
             _explorerBar_ManageSQLsecureTreeView.Nodes.Add(node);
+
+
+            //Server tags
+            node = new TreeNode(Utility.Constants.TManagementNode_TagsNode);
+            node.Tag = new Utility.NodeTag(new Data.SQLsecureActivity(node.Name), Utility.View.ServerGroupTags);
+
+            node.ImageIndex = node.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.SQLsecureActivity);//todo add icon here
+            _explorerBar_ManageSQLsecureTreeView.Nodes.Add(node);
+
 
             // End update.
             _explorerBar_ManageSQLsecureTreeView.EndUpdate();
@@ -2712,7 +2729,7 @@ namespace Idera.SQLsecure.UI.Console
                                     node.Tag = assessment;
                                     node.Text =
                                         node.Name = assessment.AssessmentName;
-                                    node.ImageIndex = 
+                                    node.ImageIndex =
                                         node.SelectedImageIndex = assessment.FindingIconIndex;
                                     if (node.IsSelected)
                                     {
@@ -2771,7 +2788,7 @@ namespace Idera.SQLsecure.UI.Console
                         selectedNode.Parent.Parent.Tag != null &&
                         selectedNode.Parent.Parent.Tag is Sql.Policy)
                     {
-                        Sql.Policy selectedPolicy = (Sql.Policy) selectedNode.Parent.Parent.Tag;
+                        Sql.Policy selectedPolicy = (Sql.Policy)selectedNode.Parent.Parent.Tag;
                         if (selectedPolicy.PolicyId == policy.PolicyId)
                         {
                             if (selectedNode.Tag != null &&
@@ -3328,68 +3345,68 @@ namespace Idera.SQLsecure.UI.Console
         {
             using (logX.loggerX.DebugCall("_explorerBar_SecuritySummaryPolicyTreeView_BeforeSelect"))
             {
-            Cursor = Cursors.WaitCursor;
+                Cursor = Cursors.WaitCursor;
 
-            // Handle the More Assessments here and cancel the selection change 
-            // because we don't want or need to refresh the other nodes
-            // However, if the current selection is a node in the same policy, it must be passed on 
-            // and refreshed because it is deleted and recreated in the More Assessments processing
-            if (e.Node.TreeView.Visible)
-            {
-                if (e.Node.Level == 0)
+                // Handle the More Assessments here and cancel the selection change 
+                // because we don't want or need to refresh the other nodes
+                // However, if the current selection is a node in the same policy, it must be passed on 
+                // and refreshed because it is deleted and recreated in the More Assessments processing
+                if (e.Node.TreeView.Visible)
                 {
-                    if (e.Node.Tag != null && e.Node.Tag.GetType() == typeof(Sql.Policy)
-                        && !Sql.Policy.IsPolicyRegistered(((Sql.Policy)e.Node.Tag).PolicyId))
+                    if (e.Node.Level == 0)
                     {
-                        e.Cancel = true;
-                        Cursor = Cursors.Default;
-                        Utility.MsgBox.ShowError(Utility.ErrorMsgs.PolicyCaption, Utility.ErrorMsgs.PolicyNotRegistered);
-                        Program.gController.SignalRefreshPoliciesEvent(0);
-                    }
-                }
-                else if (e.Node.Level == 1)
-                {
-                    e.Cancel = true;
-                    Cursor = Cursors.Default;
-                }
-                else if (e.Node.Level == 2)
-                {
-                    TreeNode policyNode = e.Node.Parent.Parent;
-                    TreeNode typeNode = e.Node.Parent;
-                    if (e.Node.Tag == null)
-                    {
-                        m_PreviousSelectedNode = _explorerBar_SecuritySummaryTreeView.SelectedNode;
-                        if (!e.Node.Parent.Equals(m_PreviousSelectedNode.Parent))
+                        if (e.Node.Tag != null && e.Node.Tag.GetType() == typeof(Sql.Policy)
+                            && !Sql.Policy.IsPolicyRegistered(((Sql.Policy)e.Node.Tag).PolicyId))
                         {
-                            // Begin update.
-                            _explorerBar_SecuritySummaryTreeView.BeginUpdate();
-
-                            int selectedAssessmentId = 0;
-                            if (m_PreviousSelectedNode != null
-                                && m_PreviousSelectedNode.Tag != null
-                                && m_PreviousSelectedNode.Tag is Sql.Policy)
-                            {
-                                selectedAssessmentId = ((Sql.Policy) m_PreviousSelectedNode.Tag).AssessmentId;
-                            }
-                            loadTreeViewPolicyAssessments(policyNode, e.Node.Parent.Nodes.Count + Utility.Constants.SnapshotCount, selectedAssessmentId);
-
-                            // End update.
-                            _explorerBar_SecuritySummaryTreeView.EndUpdate();
                             e.Cancel = true;
                             Cursor = Cursors.Default;
+                            Utility.MsgBox.ShowError(Utility.ErrorMsgs.PolicyCaption, Utility.ErrorMsgs.PolicyNotRegistered);
+                            Program.gController.SignalRefreshPoliciesEvent(0);
                         }
                     }
-                    else if (e.Node.Tag.GetType() == typeof(Sql.Policy)
-                            && !((Sql.Policy)policyNode.Tag).HasAssessment(((Sql.Policy)e.Node.Tag).AssessmentId))
+                    else if (e.Node.Level == 1)
                     {
                         e.Cancel = true;
                         Cursor = Cursors.Default;
-                        Utility.MsgBox.ShowError(Utility.ErrorMsgs.PolicyCaption, Utility.ErrorMsgs.AssessmentNotFound);
-                        Program.gController.SignalRefreshPoliciesEvent(0);
+                    }
+                    else if (e.Node.Level == 2)
+                    {
+                        TreeNode policyNode = e.Node.Parent.Parent;
+                        TreeNode typeNode = e.Node.Parent;
+                        if (e.Node.Tag == null)
+                        {
+                            m_PreviousSelectedNode = _explorerBar_SecuritySummaryTreeView.SelectedNode;
+                            if (!e.Node.Parent.Equals(m_PreviousSelectedNode.Parent))
+                            {
+                                // Begin update.
+                                _explorerBar_SecuritySummaryTreeView.BeginUpdate();
+
+                                int selectedAssessmentId = 0;
+                                if (m_PreviousSelectedNode != null
+                                    && m_PreviousSelectedNode.Tag != null
+                                    && m_PreviousSelectedNode.Tag is Sql.Policy)
+                                {
+                                    selectedAssessmentId = ((Sql.Policy)m_PreviousSelectedNode.Tag).AssessmentId;
+                                }
+                                loadTreeViewPolicyAssessments(policyNode, e.Node.Parent.Nodes.Count + Utility.Constants.SnapshotCount, selectedAssessmentId);
+
+                                // End update.
+                                _explorerBar_SecuritySummaryTreeView.EndUpdate();
+                                e.Cancel = true;
+                                Cursor = Cursors.Default;
+                            }
+                        }
+                        else if (e.Node.Tag.GetType() == typeof(Sql.Policy)
+                                && !((Sql.Policy)policyNode.Tag).HasAssessment(((Sql.Policy)e.Node.Tag).AssessmentId))
+                        {
+                            e.Cancel = true;
+                            Cursor = Cursors.Default;
+                            Utility.MsgBox.ShowError(Utility.ErrorMsgs.PolicyCaption, Utility.ErrorMsgs.AssessmentNotFound);
+                            Program.gController.SignalRefreshPoliciesEvent(0);
+                        }
                     }
                 }
             }
-        }
         }
 
         private void _explorerBar_SecuritySummaryPolicyTreeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -3488,14 +3505,14 @@ namespace Idera.SQLsecure.UI.Console
                                 if (((Sql.Policy)e.Node.Parent.Tag).IsAssessment)
                                 {
                                     nodeTag =
-                                        new Utility.NodeTag(new Data.PolicyAssessment((Sql.Policy)e.Node.Parent.Tag, 
-                                                            (Sql.RegisteredServer)e.Node.Tag), 
+                                        new Utility.NodeTag(new Data.PolicyAssessment((Sql.Policy)e.Node.Parent.Tag,
+                                                            (Sql.RegisteredServer)e.Node.Tag),
                                                             Utility.View.PolicyAssessment);
                                 }
                                 else
                                 {
                                     nodeTag =
-                                        new Utility.NodeTag(new Data.Main_SecuritySummary((Sql.Policy)e.Node.Parent.Tag, 
+                                        new Utility.NodeTag(new Data.Main_SecuritySummary((Sql.Policy)e.Node.Parent.Tag,
                                                             (Sql.RegisteredServer)e.Node.Tag),
                                                             Utility.View.Main_SecuritySummary);
                                 }
@@ -4191,7 +4208,7 @@ namespace Idera.SQLsecure.UI.Console
                     {
                         Sql.Policy policy = (Sql.Policy)node.Tag;
                         isPolicy = !policy.IsAssessment;
-                        canRemovePolicy = (policy.IsPolicy && !policy.IsSystemPolicy) || ( policy.IsAssessment && !policy.IsApprovedAssessment);
+                        canRemovePolicy = (policy.IsPolicy && !policy.IsSystemPolicy) || (policy.IsAssessment && !policy.IsApprovedAssessment);
                         isAssessment = policy.IsAssessment;
                         canUpdateAssessment = isAssessment && !policy.IsApprovedAssessment;
                         hasLog = policy.IsPublishedAssessment || policy.IsApprovedAssessment;
@@ -4559,9 +4576,9 @@ namespace Idera.SQLsecure.UI.Console
                 if (Form_ImportExportPolicySecuriyChecks.ProcessImport(policy, Program.gController.isAdmin))
                 {
                     if (Form_PolicyProperties.Process(policy, Program.gController.isAdmin, Form_PolicyProperties.RequestedOperation.ConfigureMetrics))
-                {
-                    Program.gController.SignalRefreshPoliciesEvent(0);
-                    }   
+                    {
+                        Program.gController.SignalRefreshPoliciesEvent(0);
+                    }
                 }
             }
 
@@ -5041,5 +5058,7 @@ namespace Idera.SQLsecure.UI.Console
         {
 
         }
+
+
     }
 }

@@ -1061,12 +1061,13 @@ namespace Idera.SQLsecure.Collector.Sql
                     colComand = new DataColumn(ParamCommand, typeof(SqlString)),
                     colSubSystem = new DataColumn(ParamSubSystem, typeof(SqlString)),
                     colOwnerSid = new DataColumn(ParamOwnerSid, typeof(SqlBinary)),
-                    colEnabled = new DataColumn(ParamEnabled, typeof(SqlInt16)))
+                    colEnabled = new DataColumn(ParamEnabled, typeof(SqlInt16)),
+                    colProxyId = new DataColumn(Paramproxyid, typeof(SqlInt32)))
             {
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("sqljob");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colJobId,
                                                                 colSnapshotid,
                                                                 colName,
@@ -1076,7 +1077,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colComand,
                                                                 colSubSystem,
                                                                 colOwnerSid,
-                                                                colEnabled
+                                                                colEnabled,
+                                                                colProxyId
                                                             });
             }
 
@@ -1093,6 +1095,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamStepName = "stepname";
         internal const string ParamCommand = "command";
         internal const string ParamSnapshotId = "SnapshotId";
+        internal const string Paramproxyid = "ProxyId";
 
 
         internal const string RepositoryTable = "SQLsecure.dbo.sqljob";

@@ -63,7 +63,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             }
         }
 
-        protected override void showRefresh()
+        protected override void ShowRefresh()
         {
             RefreshView();
 
@@ -135,7 +135,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             this._label_Summary.Text = Utility.Constants.ViewSummary_Server;
 
-            _snapshots.m_RefreshParentView += new UI.Console.Controls.Snapshots.RefreshViewHandlerDelegate(showRefresh);
+            _snapshots.m_RefreshParentView += new UI.Console.Controls.Snapshots.RefreshViewHandlerDelegate(ShowRefresh);
 
             // Initialize base class fields.
             m_menuConfiguration = new Utility.MenuConfiguration();

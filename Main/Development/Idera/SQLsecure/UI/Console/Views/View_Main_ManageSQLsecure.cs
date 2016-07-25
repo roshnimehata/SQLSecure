@@ -131,7 +131,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             string server = _grid.ActiveRow.Cells[colServer].Text;
             Forms.Form_RemoveRegisteredServer.Process(server);
-            showRefresh();
+            ShowRefresh();
         }
 
         protected override void showProperties()
@@ -142,7 +142,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             Forms.Form_SqlServerProperties.Process(server, Forms.Form_SqlServerProperties.RequestedOperation.GeneralProperties, Program.gController.isAdmin);
         }
 
-        protected override void showRefresh()
+        protected override void ShowRefresh()
         {
             loadDataSource();
         }
@@ -185,7 +185,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                     {
                         Utility.MsgBox.ShowError(this.Title, Utility.ErrorMsgs.ServerNotRegistered);
                         Program.gController.SignalRefreshServersEvent(false, null);
-                        showRefresh();
+                        ShowRefresh();
                     }
                 }
             }
@@ -205,7 +205,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         {
             Forms.Form_WizardRegisterSQLServer.Process();
 
-            showRefresh();
+            ShowRefresh();
         }
 
         #endregion
@@ -387,7 +387,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                 else
                 {
                     System.Threading.Thread.Sleep(1000);
-                    showRefresh();
+                    ShowRefresh();
                 }
             }
             else
@@ -713,7 +713,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         {
             Cursor = Cursors.WaitCursor;
 
-            showRefresh();
+            ShowRefresh();
 
             Cursor = Cursors.Default;
         }

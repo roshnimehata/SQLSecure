@@ -4,6 +4,10 @@
 
     public partial class ReportsDataset
     {
+        partial class isp_sqlsecure_report_orphanedloginsDataTable
+        {
+        }
+
         partial class isp_sqlsecure_report_getuserdatabasepermissionsDataTable
         {
         }
@@ -14,3 +18,10 @@
     }
 }
 
+
+namespace Idera.SQLsecure.UI.Console.Reports.ReportsDatasetTableAdapters {
+    
+    
+    public partial class isp_sqlsecure_report_suspectsqlloginsTableAdapter {
+    }
+}

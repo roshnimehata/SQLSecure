@@ -175,7 +175,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             High_Risk_Explained,
             Medium_Risk_Explained,
             Low_Risk_Explained,
-            No_Risk
+            No_Risk,
+
+            SequenceObjects,
+            Report_SuspectSqlLogins
         }
 
         // This enum is used as an index to AppImageList32 images
@@ -227,7 +230,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             Report_SuspectWindowsAccounts,
             Report_SystemAdminVulnerability,
             Report_OSVulnerabitlityViaXP,
-            Report_LoginVulnerability
+            Report_LoginVulnerability,
+            Report_SuspectSqlLogins
         }
 
         public enum EnumCommonTaskSmall
@@ -254,7 +258,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             Report_SuspectWindowsAccounts,
             Report_SystemAdminVulnerability,
             Report_OSVulnerabitlityViaXP,
-            Report_LoginVulnerability
+            Report_LoginVulnerability,
+            Report_SuspectSqlLogins
         }
 
         //16x16 image handlers

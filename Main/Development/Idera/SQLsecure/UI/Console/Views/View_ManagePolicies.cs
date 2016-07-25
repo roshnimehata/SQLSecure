@@ -91,7 +91,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         #region Overrides
 
-        protected override void showRefresh()
+        protected override void ShowRefresh()
         {
             Cursor = Cursors.WaitCursor;
             this._grid_Policies.BeginUpdate();
@@ -416,7 +416,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
                 EditPolicy(policyId, assessmentId);
 
-                showRefresh();
+                ShowRefresh();
                 SetActiveRow(_grid_Policies, policyName);
             }
         }
@@ -427,7 +427,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             Forms.Form_WizardCreatePolicy.Process();
 
-            showRefresh();
+            ShowRefresh();
 
             Cursor = Cursors.Default;
 
@@ -868,7 +868,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
                 EditPolicy(policyId, assessmentId);
                 
-                showRefresh();
+                ShowRefresh();
 
                 SetActiveRow(_grid_Assessments, policyName);
 

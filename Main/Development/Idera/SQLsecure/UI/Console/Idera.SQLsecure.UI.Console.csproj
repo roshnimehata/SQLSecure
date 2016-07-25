@@ -173,14 +173,6 @@
       <HintPath>packages\Unofficial.Microsoft.SQLServer.SMO.2014.12.0.2000.8\lib\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.SqlServer.Smo, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>packages\Unofficial.Microsoft.SQLServer.SMO.2014.12.0.2000.8\lib\Microsoft.SqlServer.Smo.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.SqlServer.SmoExtended, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>packages\Unofficial.Microsoft.SQLServer.SMO.2014.12.0.2000.8\lib\Microsoft.SqlServer.SmoExtended.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.SqlServer.SqlClrProvider, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>packages\Unofficial.Microsoft.SQLServer.SMO.2014.12.0.2000.8\lib\Microsoft.SqlServer.SqlClrProvider.dll</HintPath>
       <Private>True</Private>
@@ -484,6 +476,12 @@
     <Compile Include="Data\SQLsecureActivity.cs" />
     <Compile Include="Data\Server.cs" />
     <Compile Include="Data\SqlServerSettings.cs" />
+    <Compile Include="Forms\Form_CreateTag.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_CreateTag.Designer.cs">
+      <DependentUpon>Form_CreateTag.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Form_FolderPath.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1043,6 +1041,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>ViewSection.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_CreateTag.resx">
+      <DependentUpon>Form_CreateTag.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_FolderPath.resx">
       <DependentUpon>Form_FolderPath.cs</DependentUpon>
     </EmbeddedResource>
@@ -1275,7 +1277,10 @@
     <EmbeddedResource Include="Reports\Report_ServerLoginsAndUserMappings.rdlc" />
     <EmbeddedResource Include="Reports\Report_ServerRoles.rdlc" />
     <EmbeddedResource Include="Reports\Report_ServersWithDangerousGroups.rdlc" />
-    <EmbeddedResource Include="Reports\Report_SuspectWindowsAccounts.rdlc" />
+    <EmbeddedResource Include="Reports\Report_SuspectSqlLogins.rdlc" />
+    <EmbeddedResource Include="Reports\Report_SuspectWindowsAccounts.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report_SystemAdministratorVulnerability.rdlc" />
     <EmbeddedResource Include="Reports\Report_Users.rdlc" />
     <EmbeddedResource Include="Reports\Report_UsersPermissions.rdlc" />
@@ -1285,6 +1290,10 @@
     <EmbeddedResource Include="Reports\SubReport_LoginsUser.rdlc" />
     <EmbeddedResource Include="Reports\SubReport_ServersUsedSummary.rdlc" />
     <EmbeddedResource Include="Reports\SubReport_UsersPermissions.rdlc" />
+    <EmbeddedResource Include="Views\Report_SuspectSqlLogins.resx">
+      <DependentUpon>Report_SuspectSqlLogins.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Report_Users.resx">
       <DependentUpon>Report_Users.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1381,6 +1390,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>View_Main_SecuritySummary.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\View_ServerTags.resx">
+      <DependentUpon>View_ServerTags.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\View_PermissionExplorer.resx">
       <SubType>Designer</SubType>
       <DependentUpon>View_PermissionExplorer.cs</DependentUpon>
@@ -1398,7 +1411,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1441,6 +1456,9 @@
     <Compile Include="SQL\Snapshot.cs" />
     <Compile Include="SQL\SQLServer.cs" />
     <Compile Include="SQL\SqlTypes.cs" />
+    <Compile Include="SQL\Tags\Tag.cs" />
+    <Compile Include="SQL\Tags\TaggedServer.cs" />
+    <Compile Include="SQL\Tags\TagWorker.cs" />
     <Compile Include="SQL\User.cs" />
     <Compile Include="Utility\Constants.cs" />
     <Compile Include="Utility\DescriptionHelper.cs" />
@@ -1485,6 +1503,12 @@
     </Compile>
     <Compile Include="Views\Report_RiskAssessment.Designer.cs">
       <DependentUpon>Report_RiskAssessment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Report_SuspectSqlLogins.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Report_SuspectSqlLogins.Designer.cs">
+      <DependentUpon>Report_SuspectSqlLogins.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Report_Users.cs">
       <SubType>UserControl</SubType>
@@ -1617,6 +1641,12 @@
     </Compile>
     <Compile Include="Views\View_Main_SecuritySummary.Designer.cs">
       <DependentUpon>View_Main_SecuritySummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\View_ServerTags.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\View_ServerTags.Designer.cs">
+      <DependentUpon>View_ServerTags.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\View_ManagePolicies.cs">
       <SubType>UserControl</SubType>
@@ -2045,6 +2075,8 @@
     <None Include="Resources\warning_16.png" />
     <None Include="Resources\warning_50.png" />
     <None Include="Resources\server_16.png" />
+    <None Include="Resources\Report_SuspectSqlLogins_32.png" />
+    <None Include="Resources\Report_SuspectSqlLogins_48.png" />
     <Content Include="Resources\Report_VulnerableLogins_16.png" />
     <Content Include="Resources\Report_VulnerableLogins_32.png" />
     <Content Include="Resources\Report_VulnerableLogins_48.png" />

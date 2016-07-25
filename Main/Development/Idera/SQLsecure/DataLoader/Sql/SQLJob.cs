@@ -21,7 +21,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                             " st.last_run_date ," +
                                             " st.command ," +
                                             " st.step_name, " +
-                                            " st.subsystem" +
+                                            " st.subsystem," +
+                                            " st.proxy_id" +
                                             " FROM    msdb.dbo.sysjobs sj" +
                                             " JOIN [msdb].[sys].[servers] sv ON sj.originating_server_id = sv.server_id" +
                                             " JOIN msdb.dbo.sysjobsteps st ON sj.job_id = st.job_id" +
@@ -34,7 +35,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                             " st.last_run_date ," +
                                             " st.command ," +
                                             " st.step_name, " +
-                                            " st.subsystem" +
+                                            " st.subsystem," +
+                                            " st.proxy_id" +
                                             " FROM    msdb.dbo.sysjobs sj" +
                                             " JOIN msdb.dbo.sysjobsteps st ON sj.job_id = st.job_id";
 
@@ -93,6 +95,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const int ColCommand = 5;
         internal const int ColStepName = 6;
         internal const int ColSubSystem = 7;
+        internal const int ColProxyId = 8;
 
 
         public static bool Process(ServerVersion version,
@@ -159,6 +162,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                     SqlString stepname = rdr.GetSqlString(ColStepName);
                                     SqlString subsystem = rdr.GetSqlString(ColSubSystem);
 
+                                    SqlInt32 proxyId = rdr.IsDBNull(ColProxyId)? SqlInt32.Null : rdr.GetInt32(ColProxyId);
+
                                     DataRow dr = dataTable.NewRow();
                                     dr[SqlJobDataTable.ParamSnapshotId] = snapshotid;
                                     dr[SqlJobDataTable.ParamName] = name;
@@ -169,6 +174,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     dr[SqlJobDataTable.ParamSubSystem] = subsystem;
                                     dr[SqlJobDataTable.ParamOwnerSid] = owner;
                                     dr[SqlJobDataTable.ParamEnabled] = enabled;
+                                    dr[SqlJobDataTable.Paramproxyid] = proxyId;
 
                                     dataTable.Rows.Add(dr);
                                     if (dataTable.Rows.Count > Constants.RowBatchSize)

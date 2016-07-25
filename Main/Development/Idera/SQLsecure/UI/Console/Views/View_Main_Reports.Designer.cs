@@ -49,6 +49,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this.commonTask_EntitlementReport_6 = new Idera.SQLsecure.Controls.CommonTask();
             this.commonTask_EntitlementReport_2 = new Idera.SQLsecure.Controls.CommonTask();
             this.commonTask_EntitlementReport_1 = new Idera.SQLsecure.Controls.CommonTask();
+            this.commonTask_EntitlementReport_7 = new Idera.SQLsecure.Controls.CommonTask();
             this.commonTask_EntitlementReport_3 = new Idera.SQLsecure.Controls.CommonTask();
             this.ultraTabPageControl3 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -124,7 +125,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // ultraTabPageControl1
             // 
             this.ultraTabPageControl1.Controls.Add(this.tableLayoutPanel2);
-            this.ultraTabPageControl1.Location = new System.Drawing.Point(2, 24);
+            this.ultraTabPageControl1.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabPageControl1.Name = "ultraTabPageControl1";
             this.ultraTabPageControl1.Size = new System.Drawing.Size(644, 373);
             // 
@@ -152,6 +153,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_GeneralReport_6
             // 
+            this.commonTask_GeneralReport_6.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_GeneralReport_6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_GeneralReport_6.HoverTaskImage = null;
             this.commonTask_GeneralReport_6.Location = new System.Drawing.Point(3, 78);
@@ -164,6 +166,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_GeneralReport_4
             // 
+            this.commonTask_GeneralReport_4.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_GeneralReport_4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_GeneralReport_4.HoverTaskImage = null;
             this.commonTask_GeneralReport_4.Location = new System.Drawing.Point(217, 78);
@@ -176,6 +179,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_GeneralReport_5
             // 
+            this.commonTask_GeneralReport_5.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_GeneralReport_5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_GeneralReport_5.HoverTaskImage = null;
             this.commonTask_GeneralReport_5.Location = new System.Drawing.Point(431, 78);
@@ -188,6 +192,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_GeneralReport_2
             // 
+            this.commonTask_GeneralReport_2.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_GeneralReport_2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_GeneralReport_2.HoverTaskImage = null;
             this.commonTask_GeneralReport_2.Location = new System.Drawing.Point(217, 3);
@@ -200,6 +205,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_GeneralReport_1
             // 
+            this.commonTask_GeneralReport_1.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_GeneralReport_1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_GeneralReport_1.HoverTaskImage = null;
             this.commonTask_GeneralReport_1.Location = new System.Drawing.Point(3, 3);
@@ -212,6 +218,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_GeneralReport_3
             // 
+            this.commonTask_GeneralReport_3.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_GeneralReport_3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_GeneralReport_3.HoverTaskImage = null;
             this.commonTask_GeneralReport_3.Location = new System.Drawing.Point(431, 3);
@@ -225,7 +232,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // ultraTabPageControl2
             // 
             this.ultraTabPageControl2.Controls.Add(this.tableLayoutPanel3);
-            this.ultraTabPageControl2.Location = new System.Drawing.Point(-10000, -10000);
+            this.ultraTabPageControl2.Location = new System.Drawing.Point(1, 23);
             this.ultraTabPageControl2.Name = "ultraTabPageControl2";
             this.ultraTabPageControl2.Size = new System.Drawing.Size(644, 373);
             // 
@@ -241,23 +248,27 @@ namespace Idera.SQLsecure.UI.Console.Views
             this.tableLayoutPanel3.Controls.Add(this.commonTask_EntitlementReport_6, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.commonTask_EntitlementReport_2, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.commonTask_EntitlementReport_1, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.commonTask_EntitlementReport_7, 0, 2);
             this.tableLayoutPanel3.Controls.Add(this.commonTask_EntitlementReport_3, 1, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(644, 150);
+            this.tableLayoutPanel3.RowCount = 3;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(644, 210);
             this.tableLayoutPanel3.TabIndex = 6;
             // 
             // commonTask_EntitlementReport_4
             // 
+            this.commonTask_EntitlementReport_4.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_EntitlementReport_4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_EntitlementReport_4.HoverTaskImage = null;
-            this.commonTask_EntitlementReport_4.Location = new System.Drawing.Point(3, 78);
+            this.commonTask_EntitlementReport_4.Location = new System.Drawing.Point(3, 68);
             this.commonTask_EntitlementReport_4.Name = "commonTask_EntitlementReport_4";
-            this.commonTask_EntitlementReport_4.Size = new System.Drawing.Size(208, 69);
+            this.commonTask_EntitlementReport_4.Size = new System.Drawing.Size(208, 59);
             this.commonTask_EntitlementReport_4.TabIndex = 6;
             this.commonTask_EntitlementReport_4.TaskDescription = "Task Description";
             this.commonTask_EntitlementReport_4.TaskImage = ((System.Drawing.Image)(resources.GetObject("commonTask_EntitlementReport_4.TaskImage")));
@@ -265,11 +276,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_EntitlementReport_5
             // 
+            this.commonTask_EntitlementReport_5.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_EntitlementReport_5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_EntitlementReport_5.HoverTaskImage = null;
-            this.commonTask_EntitlementReport_5.Location = new System.Drawing.Point(217, 78);
+            this.commonTask_EntitlementReport_5.Location = new System.Drawing.Point(217, 68);
             this.commonTask_EntitlementReport_5.Name = "commonTask_EntitlementReport_5";
-            this.commonTask_EntitlementReport_5.Size = new System.Drawing.Size(208, 69);
+            this.commonTask_EntitlementReport_5.Size = new System.Drawing.Size(208, 59);
             this.commonTask_EntitlementReport_5.TabIndex = 5;
             this.commonTask_EntitlementReport_5.TaskDescription = "Task Description";
             this.commonTask_EntitlementReport_5.TaskImage = ((System.Drawing.Image)(resources.GetObject("commonTask_EntitlementReport_5.TaskImage")));
@@ -277,11 +289,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_EntitlementReport_6
             // 
+            this.commonTask_EntitlementReport_6.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_EntitlementReport_6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_EntitlementReport_6.HoverTaskImage = null;
-            this.commonTask_EntitlementReport_6.Location = new System.Drawing.Point(431, 78);
+            this.commonTask_EntitlementReport_6.Location = new System.Drawing.Point(431, 68);
             this.commonTask_EntitlementReport_6.Name = "commonTask_EntitlementReport_6";
-            this.commonTask_EntitlementReport_6.Size = new System.Drawing.Size(210, 69);
+            this.commonTask_EntitlementReport_6.Size = new System.Drawing.Size(210, 59);
             this.commonTask_EntitlementReport_6.TabIndex = 4;
             this.commonTask_EntitlementReport_6.TaskDescription = "Task Description";
             this.commonTask_EntitlementReport_6.TaskImage = ((System.Drawing.Image)(resources.GetObject("commonTask_EntitlementReport_6.TaskImage")));
@@ -289,11 +302,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_EntitlementReport_2
             // 
+            this.commonTask_EntitlementReport_2.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_EntitlementReport_2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_EntitlementReport_2.HoverTaskImage = null;
             this.commonTask_EntitlementReport_2.Location = new System.Drawing.Point(217, 3);
             this.commonTask_EntitlementReport_2.Name = "commonTask_EntitlementReport_2";
-            this.commonTask_EntitlementReport_2.Size = new System.Drawing.Size(208, 69);
+            this.commonTask_EntitlementReport_2.Size = new System.Drawing.Size(208, 59);
             this.commonTask_EntitlementReport_2.TabIndex = 3;
             this.commonTask_EntitlementReport_2.TaskDescription = "Task Description";
             this.commonTask_EntitlementReport_2.TaskImage = ((System.Drawing.Image)(resources.GetObject("commonTask_EntitlementReport_2.TaskImage")));
@@ -301,23 +315,38 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_EntitlementReport_1
             // 
+            this.commonTask_EntitlementReport_1.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_EntitlementReport_1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_EntitlementReport_1.HoverTaskImage = null;
             this.commonTask_EntitlementReport_1.Location = new System.Drawing.Point(3, 3);
             this.commonTask_EntitlementReport_1.Name = "commonTask_EntitlementReport_1";
-            this.commonTask_EntitlementReport_1.Size = new System.Drawing.Size(208, 69);
+            this.commonTask_EntitlementReport_1.Size = new System.Drawing.Size(208, 59);
             this.commonTask_EntitlementReport_1.TabIndex = 1;
             this.commonTask_EntitlementReport_1.TaskDescription = "Task Description";
             this.commonTask_EntitlementReport_1.TaskImage = ((System.Drawing.Image)(resources.GetObject("commonTask_EntitlementReport_1.TaskImage")));
             this.commonTask_EntitlementReport_1.TaskText = "Task Title";
             // 
+            // commonTask_EntitlementReport_7
+            // 
+            this.commonTask_EntitlementReport_7.BackColor = System.Drawing.Color.Transparent;
+            this.commonTask_EntitlementReport_7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.commonTask_EntitlementReport_7.HoverTaskImage = null;
+            this.commonTask_EntitlementReport_7.Location = new System.Drawing.Point(3, 133);
+            this.commonTask_EntitlementReport_7.Name = "commonTask_EntitlementReport_7";
+            this.commonTask_EntitlementReport_7.Size = new System.Drawing.Size(208, 14);
+            this.commonTask_EntitlementReport_7.TabIndex = 1;
+            this.commonTask_EntitlementReport_7.TaskDescription = "Task Description";
+            this.commonTask_EntitlementReport_7.TaskImage = ((System.Drawing.Image)(resources.GetObject("commonTask_EntitlementReport_7.TaskImage")));
+            this.commonTask_EntitlementReport_7.TaskText = "Task Title";
+            // 
             // commonTask_EntitlementReport_3
             // 
+            this.commonTask_EntitlementReport_3.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_EntitlementReport_3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_EntitlementReport_3.HoverTaskImage = null;
             this.commonTask_EntitlementReport_3.Location = new System.Drawing.Point(431, 3);
             this.commonTask_EntitlementReport_3.Name = "commonTask_EntitlementReport_3";
-            this.commonTask_EntitlementReport_3.Size = new System.Drawing.Size(210, 69);
+            this.commonTask_EntitlementReport_3.Size = new System.Drawing.Size(210, 59);
             this.commonTask_EntitlementReport_3.TabIndex = 2;
             this.commonTask_EntitlementReport_3.TaskDescription = "Task Description";
             this.commonTask_EntitlementReport_3.TaskImage = ((System.Drawing.Image)(resources.GetObject("commonTask_EntitlementReport_3.TaskImage")));
@@ -358,6 +387,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_VulnerabilityReport_9
             // 
+            this.commonTask_VulnerabilityReport_9.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_VulnerabilityReport_9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_VulnerabilityReport_9.HoverTaskImage = null;
             this.commonTask_VulnerabilityReport_9.Location = new System.Drawing.Point(431, 153);
@@ -370,6 +400,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_VulnerabilityReport_8
             // 
+            this.commonTask_VulnerabilityReport_8.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_VulnerabilityReport_8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_VulnerabilityReport_8.HoverTaskImage = null;
             this.commonTask_VulnerabilityReport_8.Location = new System.Drawing.Point(217, 153);
@@ -382,6 +413,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_VulnerabilityReport_7
             // 
+            this.commonTask_VulnerabilityReport_7.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_VulnerabilityReport_7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_VulnerabilityReport_7.HoverTaskImage = null;
             this.commonTask_VulnerabilityReport_7.Location = new System.Drawing.Point(3, 153);
@@ -394,6 +426,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_VulnerabilityReport_6
             // 
+            this.commonTask_VulnerabilityReport_6.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_VulnerabilityReport_6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_VulnerabilityReport_6.HoverTaskImage = null;
             this.commonTask_VulnerabilityReport_6.Location = new System.Drawing.Point(431, 78);
@@ -406,6 +439,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_VulnerabilityReport_5
             // 
+            this.commonTask_VulnerabilityReport_5.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_VulnerabilityReport_5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_VulnerabilityReport_5.HoverTaskImage = null;
             this.commonTask_VulnerabilityReport_5.Location = new System.Drawing.Point(217, 78);
@@ -418,6 +452,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_VulnerabilityReport_1
             // 
+            this.commonTask_VulnerabilityReport_1.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_VulnerabilityReport_1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_VulnerabilityReport_1.HoverTaskImage = null;
             this.commonTask_VulnerabilityReport_1.Location = new System.Drawing.Point(3, 3);
@@ -430,6 +465,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_VulnerabilityReport_3
             // 
+            this.commonTask_VulnerabilityReport_3.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_VulnerabilityReport_3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_VulnerabilityReport_3.HoverTaskImage = null;
             this.commonTask_VulnerabilityReport_3.Location = new System.Drawing.Point(431, 3);
@@ -442,6 +478,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_VulnerabilityReport_2
             // 
+            this.commonTask_VulnerabilityReport_2.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_VulnerabilityReport_2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_VulnerabilityReport_2.HoverTaskImage = null;
             this.commonTask_VulnerabilityReport_2.Location = new System.Drawing.Point(217, 3);
@@ -454,6 +491,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_VulnerabilityReport_4
             // 
+            this.commonTask_VulnerabilityReport_4.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_VulnerabilityReport_4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_VulnerabilityReport_4.HoverTaskImage = null;
             this.commonTask_VulnerabilityReport_4.Location = new System.Drawing.Point(3, 78);
@@ -491,6 +529,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_ComparisonReport_2
             // 
+            this.commonTask_ComparisonReport_2.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_ComparisonReport_2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_ComparisonReport_2.HoverTaskImage = null;
             this.commonTask_ComparisonReport_2.Location = new System.Drawing.Point(217, 3);
@@ -503,6 +542,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // commonTask_ComparisonReport_1
             // 
+            this.commonTask_ComparisonReport_1.BackColor = System.Drawing.Color.Transparent;
             this.commonTask_ComparisonReport_1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.commonTask_ComparisonReport_1.HoverTaskImage = null;
             this.commonTask_ComparisonReport_1.Location = new System.Drawing.Point(3, 3);
@@ -571,8 +611,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // _label_ReportingServicesSummary
             // 
-            this._label_ReportingServicesSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._label_ReportingServicesSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._label_ReportingServicesSummary.BackColor = System.Drawing.Color.Transparent;
             this._label_ReportingServicesSummary.Location = new System.Drawing.Point(1, 5);
             this._label_ReportingServicesSummary.Name = "_label_ReportingServicesSummary";
@@ -611,8 +651,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // ultraGroupBox2
             // 
-            this.ultraGroupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.ultraGroupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ultraGroupBox2.Controls.Add(this.label1);
             this.ultraGroupBox2.Controls.Add(this._label_Folder);
             this.ultraGroupBox2.Controls.Add(this.label2);
@@ -760,6 +800,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         private Idera.SQLsecure.Controls.CommonTask commonTask_GeneralReport_3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private Idera.SQLsecure.Controls.CommonTask commonTask_EntitlementReport_1;
+        private Idera.SQLsecure.Controls.CommonTask commonTask_EntitlementReport_7;
         private Idera.SQLsecure.Controls.CommonTask commonTask_EntitlementReport_3;
         private Idera.SQLsecure.Controls.CommonTask commonTask_GeneralReport_2;
         private Idera.SQLsecure.Controls.CommonTask commonTask_EntitlementReport_2;
