@@ -400,6 +400,7 @@ namespace Idera.SQLsecure.UI.Console
             _menuStrip_File_NewSQLServer.Image = AppIcons.AppImage16(AppIcons.Enum.AuditSQLServer);
             _menuStrip_File_NewLogin.Image = AppIcons.AppImage16(AppIcons.Enum.NewSQLsecureLogin);
             _menuStrip_File_ManageLicense.Image = AppIcons.AppImage16(AppIcons.Enum.ManageLicense);
+            _menuStrip_File_ImportSqlServers.Image = AppIcons.AppImage16(AppIcons.Enum.ImportServers);
             //deleted - _menuStrip_File_Print.Image = AppIcons.AppImage16(AppIcons.Enum.Print);
             //_menuStrip_File_Exit.Image = AppIcons.AppImage16(AppIcons.Enum.Exit);         - no image
 
@@ -442,6 +443,7 @@ namespace Idera.SQLsecure.UI.Console
             _toolStrip_Collect.Image = AppIcons.AppImage16(AppIcons.Enum.CollectDataSnapshot);
             _toolStrip_Baseline.Image = AppIcons.AppImage16(AppIcons.Enum.MarkAsBaseline);
             _toolStrip_Help.Image = AppIcons.AppImage16(AppIcons.Enum.HelpSM);
+            _toolStrip_ImportServers.Image = AppIcons.AppImage16(AppIcons.Enum.ImportServers);
 
             // Explorer Bar
             _explorerBar.Groups[(int)Utility.ExplorerBarGroup.SecuritySummary].Settings.AppearancesLarge.HeaderAppearance.Image =
@@ -5061,8 +5063,18 @@ namespace Idera.SQLsecure.UI.Console
 
         private void _toolStrip_ImportServers_Click(object sender, EventArgs e)
         {
+            DoImportSqlServers();
+        }
+
+        private void DoImportSqlServers()
+        {
             Form_ImportServers.Process();
             refreshManageSQLsecureGroup();
+        }
+
+        private void importSQLServersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoImportSqlServers();
         }
     }
 }

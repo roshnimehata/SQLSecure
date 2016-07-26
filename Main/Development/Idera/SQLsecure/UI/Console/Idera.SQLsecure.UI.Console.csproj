@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1251"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -57,7 +57,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-   <ItemGroup>
+  <ItemGroup>
     <Reference Include="Infragistics2.Excel.v9.1, Version=9.1.20091.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\ThirdPartySoftware\Infragistics2.Excel.v9.1.dll</HintPath>
@@ -1457,8 +1457,8 @@
     <Compile Include="SQL\DatabasePrincipal.cs" />
     <Compile Include="SQL\DataCollectionFilter.cs" />
     <Compile Include="SQL\Endpoint.cs" />
-	<Compile Include="SQL\HadrManagerStatus.cs" />
-	<Compile Include="SQL\FileSystemObject.cs" />
+    <Compile Include="SQL\HadrManagerStatus.cs" />
+    <Compile Include="SQL\FileSystemObject.cs" />
     <Compile Include="SQL\Login.cs" />
     <Compile Include="SQL\NotificationProvider.cs" />
     <Compile Include="SQL\ObjectPermissions.cs" />
@@ -1879,6 +1879,9 @@
     <None Include="Resources\HighRiskExplained_32.png" />
     <Content Include="Resources\HighRisk_16.png" />
     <Content Include="Resources\HighRisk_32.png" />
+    <Content Include="Resources\ImportServers_16.png" />
+    <Content Include="Resources\ImportServers_32.png" />
+    <Content Include="Resources\ImportServers_48.png" />
     <Content Include="Resources\keys_48.png" />
     <None Include="Resources\LowRiskExplained_16.png" />
     <None Include="Resources\LowRiskExplained_32.png" />

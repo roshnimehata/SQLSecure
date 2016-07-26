@@ -144,7 +144,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.lvImportStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvImportStatus.ItemSettings.DefaultImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.AuditSQLServer_16;
+            this.lvImportStatus.ItemSettings.DefaultImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.ImportServers_48;
             this.lvImportStatus.ItemSettings.SelectionType = Infragistics.Win.UltraWinListView.SelectionType.Single;
             this.lvImportStatus.ItemSettings.SubItemsVisibleInToolTipByDefault = true;
             this.lvImportStatus.Location = new System.Drawing.Point(12, 3);
@@ -208,7 +208,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.Description = "Import Servers from CSV file";
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "Form_ImportServers";
-            this.Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.server_add_48;
+            this.Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.ImportServers_48;
             this.Text = "Import Servers";
             this._bfd_ButtonPanel.ResumeLayout(false);
             this._bf_MainPanel.ResumeLayout(false);

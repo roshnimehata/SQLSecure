@@ -178,7 +178,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             No_Risk,
 
             SequenceObjects,
-            Report_SuspectSqlLogins
+            Report_SuspectSqlLogins,
+            ImportServers
         }
 
         // This enum is used as an index to AppImageList32 images

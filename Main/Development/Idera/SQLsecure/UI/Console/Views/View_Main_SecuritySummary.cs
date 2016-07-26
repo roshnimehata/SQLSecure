@@ -337,6 +337,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreUsers].SharedProps.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.UserPermissions);
             _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreRoles].SharedProps.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.UserPermissions);
             _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreObjects].SharedProps.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.ObjectPermissions);
+            _ultraToolbarsManager.Tools[RibbonTaskButton.ImportServers].SharedProps.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.AuditSQLServer);
 
             loadDataSource();
         }
@@ -529,7 +530,8 @@ namespace Idera.SQLsecure.UI.Console.Views
                 _ultraToolbarsManager.Tools[RibbonTaskButton.TakeSnapshot].SharedProps.Enabled =
                 _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreUsers].SharedProps.Enabled =
                 _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreRoles].SharedProps.Enabled =
-                _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreObjects].SharedProps.Enabled = false;
+                _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreObjects].SharedProps.Enabled=
+                _ultraToolbarsManager.Tools[RibbonTaskButton.ImportServers].SharedProps.Enabled = false;
 
             // Dock the controls that are not docked in the designer for visibility
             _policySummary.Dock =

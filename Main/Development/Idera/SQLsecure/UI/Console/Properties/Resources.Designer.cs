@@ -983,6 +983,36 @@ namespace Idera.SQLsecure.UI.Console.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ImportServers_16 {
+            get {
+                object obj = ResourceManager.GetObject("ImportServers_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ImportServers_32 {
+            get {
+                object obj = ResourceManager.GetObject("ImportServers_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ImportServers_48 {
+            get {
+                object obj = ResourceManager.GetObject("ImportServers_48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap keys_48 {
             get {
                 object obj = ResourceManager.GetObject("keys_48", resourceCulture);

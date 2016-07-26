@@ -307,7 +307,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         // Dialog - Set Report Server
         public const string SetReportServerHelpTopic = @"/x/TglK";//Use RS to Gen reports
 
-        public const string ImportServerHelpTopic = @""; //ToDo: Insert valid url here
+        public const string ImportServerHelpTopic = @"/x/nQPqAw";
 
         #region New for 2.5
 
