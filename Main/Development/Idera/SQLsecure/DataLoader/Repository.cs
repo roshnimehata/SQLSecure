@@ -441,9 +441,9 @@ namespace Idera.SQLsecure.Collector
         private const string NonQueryCreateErrorSnapshot =
                     @"INSERT INTO SQLsecure.dbo.serversnapshot 
                             (connectionname, servername, instancename, authenticationmode,
-                             starttime, endtime, status, snapshotcomment)
+                             starttime, endtime, status, snapshotcomment, registeredserverid)
                       VALUES (@connectionname, @servername, @instancename, @authenticationmode,
-                              @starttime, @endtime, @status, @snapshotcomment)";
+                              @starttime, @endtime, @status, @snapshotcomment, @registeredserverid)";
         private const string ParamConnectionname = "connectionname";
         private const string ParamServerName = "servername";
         private const string ParamInstanceName = "instancename";
@@ -471,7 +471,7 @@ namespace Idera.SQLsecure.Collector
                 {
                     // Open the connection.
                     repository.Open();
-
+                    
                     // Create a snapshot instance.
                     SqlParameter paramConnectionname = new SqlParameter(ParamConnectionname, serverInstance);
                     SqlParameter paramServerName = new SqlParameter(ParamServerName, server);
@@ -481,11 +481,12 @@ namespace Idera.SQLsecure.Collector
                     SqlParameter paramStatus = new SqlParameter(ParamStatus, Constants.StatusError);
                     SqlParameter paramAuthenticationmode = new SqlParameter(ParamAuthenticationmode, 'm');
                     SqlParameter paramSnapshotComment = new SqlParameter(ParamSnapshotComment, Target.lastErrorMsg);
+                    SqlParameter registeredServerId = new SqlParameter("registeredserverid", this.RegisteredServerId);
 
                     Sql.SqlHelper.ExecuteNonQuery(repository, CommandType.Text,
                                     NonQueryCreateErrorSnapshot, new SqlParameter[] { paramConnectionname, 
                                             paramServerName, paramInstanceName, paramAuthenticationmode, paramStarttime, 
-                                            paramEndtime, paramStatus, paramSnapshotComment });
+                                            paramEndtime, paramStatus, paramSnapshotComment, registeredServerId });
 
                     // Query to get the snapshotid.
                     using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(repository, null,
