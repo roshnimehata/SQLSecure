@@ -17,7 +17,7 @@ AS
                 INSERT  INTO dbo.server_tags
                         SELECT  @server_id ,
                                 tag_id
-                        FROM    tags
+                        FROM    tags t
                         WHERE   is_default = 1
                                 AND NOT EXISTS ( SELECT 1
                                                  FROM   server_tags st

@@ -6461,7 +6461,7 @@ AS
 							LEFT OUTER JOIN [dbo].[sqljobproxy] jp ON jp.proxyId = j.ProxyId
 							WHERE 
 								jp.proxyId is null AND
-								j.snapshotid = @snapshotid
+								j.SnapshotId = @snapshotid
 							ORDER BY j.Name, j.JobId
 
 							IF NOT EXISTS ( SELECT 1 FROM @jobsStepsWithoutProxy) 

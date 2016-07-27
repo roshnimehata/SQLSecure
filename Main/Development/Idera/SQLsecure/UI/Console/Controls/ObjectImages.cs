@@ -195,7 +195,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
             RegisterSQLserver,
             Report,
             ConfigureAuditSettings,
-            SecuritySummary
+            SecuritySummary,
+            Report_SuspectSqlLogins,
+            ImportServers
         }
 
         public enum EnumImageList48

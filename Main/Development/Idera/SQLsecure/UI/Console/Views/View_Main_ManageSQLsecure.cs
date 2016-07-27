@@ -77,7 +77,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             
             _smallTask_Import.TaskText = Utility.Constants.Task_Title_Import;
-            _smallTask_Import.TaskImage = AppIcons.AppImage32(AppIcons.Enum32.RegisterSQLserver);
+            _smallTask_Import.TaskImage = AppIcons.AppImage32(AppIcons.Enum32.ImportServers);
             _smallTask_Import.TaskHandler += new System.EventHandler(this.ImportServers);
 
             _smallTask_Collect.TaskText = Utility.Constants.Task_Title_CollectData;
@@ -100,7 +100,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             _cmsi_Server_removeSQLServer.Image = AppIcons.AppImage16(AppIcons.Enum.Remove);
             _cmsi_Server_collectDataSnapshot.Image = AppIcons.AppImage16(AppIcons.Enum.CollectDataSnapshot);
             _cmsi_Server_configureDataCollection.Image = AppIcons.AppImage16(AppIcons.Enum.ConfigureAuditSettingsSM);
-
+            
             _grid.DisplayLayout.GroupByBox.Hidden = true;
             _grid.DrawFilter = new Utility.HideFocusRectangleDrawFilter();
 

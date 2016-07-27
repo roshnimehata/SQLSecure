@@ -2,20 +2,20 @@ DECLARE @ver INT;
 SELECT  @ver = schemaversion
 FROM    currentversion;
 IF ( ISNULL(@ver, 900) <= 2999 )	-- Check to prevent this from running in future upgrades, but run for all prior versions at any version level because the version gets updated later
-    BEGIN
-
+BEGIN
+	declare @metricid int, @strval nvarchar(512)
 
 ---------------------Health checks-----------------------------------------------------------------------------------------------------------
 -----SQL Server Browser Running
         IF ( EXISTS ( SELECT    1
                       FROM      metric
                       WHERE     metricid = 28 ) )
-            BEGIN
+	BEGIN
                 UPDATE  metric
                 SET     metricname = 'SQL Server Browser Running'
                 WHERE   metricid = 28;
             END;
-        ELSE
+	ELSE
             INSERT  INTO metric
                     ( metricid ,
                       metricname ,
@@ -84,8 +84,8 @@ IF NOT EXISTS ( SELECT  *
                   isuserentered ,
                   ismultiselect ,
                   validvalues ,
-                  valuedescription
-		        )
+			valuedescription
+		)
         VALUES  ( @metricid , -- metricid - int
                   N'Configuration' , -- metrictype - nvarchar(32)
                   N'Other General Domain Accounts' , -- metricname - nvarchar(256)
@@ -93,7 +93,7 @@ IF NOT EXISTS ( SELECT  *
                   0 , -- isuserentered - bit
                   0 , -- ismultiselect - bit
                   N'' , -- validvalues - nvarchar(1024)
-                  N'When enabled, this check will identify a risk if  general domain accounts added to the instance.'  -- valuedescription - nvarchar(1024)									        
+            N'When enabled, this check will identify a risk if  general domain accounts added to the instance.'  -- valuedescription - nvarchar(1024)									        
                 );
 		
         INSERT  INTO dbo.policymetric
@@ -104,8 +104,8 @@ IF NOT EXISTS ( SELECT  *
                   reporttext ,
                   severity ,
                   severityvalues ,
-                  assessmentid
-		        )
+			assessmentid
+		)
         VALUES  ( 0 , -- policyid - int
                   @metricid , -- metricid - int
                   1 , -- isenabled - bit
@@ -113,7 +113,7 @@ IF NOT EXISTS ( SELECT  *
                   N'Is there any general domain accounts added to the instance?' , -- reporttext - nvarchar(4000)
                   3 , -- severity - int
                   N'' , -- severityvalues - nvarchar(4000)
-                  0  -- assessmentid - int
+            0  -- assessmentid - int
                 );
     END;
 
@@ -132,8 +132,8 @@ IF NOT EXISTS ( SELECT  *
                   isuserentered ,
                   ismultiselect ,
                   validvalues ,
-                  valuedescription
-		        )
+			valuedescription
+		)
         VALUES  ( @metricid , -- metricid - int
                   N'Access' , -- metrictype - nvarchar(32)
                   N'SQL Jobs and Agent' , -- metricname - nvarchar(256)
@@ -141,7 +141,7 @@ IF NOT EXISTS ( SELECT  *
                   0 , -- isuserentered - bit
                   0 , -- ismultiselect - bit
                   N'' , -- validvalues - nvarchar(1024)
-                  N'When enabled, this check will identify a risk if job step has no proxy account.'  -- valuedescription - nvarchar(1024)									        
+            N'When enabled, this check will identify a risk if job step has no proxy account.'  -- valuedescription - nvarchar(1024)									        
                 );
 		
         INSERT  INTO dbo.policymetric
@@ -152,8 +152,8 @@ IF NOT EXISTS ( SELECT  *
                   reporttext ,
                   severity ,
                   severityvalues ,
-                  assessmentid
-		        )
+			assessmentid
+		)
         VALUES  ( 0 , -- policyid - int
                   @metricid , -- metricid - int
                   1 , -- isenabled - bit
@@ -161,7 +161,7 @@ IF NOT EXISTS ( SELECT  *
                   N'Is there any job step that is running without proxy account?' , -- reporttext - nvarchar(4000)
                   3 , -- severity - int
                   N'' , -- severityvalues - nvarchar(4000)
-                  0  -- assessmentid - int
+            0  -- assessmentid - int
                 );
     END;
 	--- new versions for Operation System checks.
@@ -184,7 +184,7 @@ IF EXISTS ( SELECT  *
                                        WHERE    policyid = 0
                                                 AND assessmentid = 0
                                                 AND metricid = @metricid
-                                     )
+         )
             WHERE   policyid = 1
                     AND assessmentid = 1
                     AND metricid = @metricid;
@@ -216,5 +216,5 @@ INSERT  INTO dbo.server_tags
                                         AND st.server_id = r.registeredserverid );
 
 		
-		
-GO 
+
+GO

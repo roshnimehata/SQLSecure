@@ -14,7 +14,7 @@ DECLARE @ver INT;
 SELECT  @ver = schemaversion
 FROM    currentversion;
 IF ( ISNULL(@ver, 900) >= 3000 )
-    BEGIN
+BEGIN
         DECLARE @msg NVARCHAR(500);
         SET @msg = N'Database schema is not at a level that can be upgraded to version 3000';
         IF ( @ver IS NOT NULL )
@@ -26,9 +26,13 @@ IF ( ISNULL(@ver, 900) >= 3000 )
     END;
 
 ----SQL Jobs and Agent Check
-ALTER TABLE dbo.[sqljob]
-ADD [ProxyId] [INT] NULL;
-
+IF NOT EXISTS(
+	SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'sqljob' AND COLUMN_NAME = 'ProxyId'
+) 
+BEGIN
+	ALTER TABLE dbo.[sqljob]
+	ADD [ProxyId] [int] NULL;
+END
 
 
 SET QUOTED_IDENTIFIER ON;
@@ -51,7 +55,6 @@ CREATE TABLE [dbo].[tags]
 ON  [PRIMARY];
 
 
-ALTER TABLE [dbo].[tags] ADD  CONSTRAINT [DF_tags_is_default]  DEFAULT ((0)) FOR [is_default];
 
 ALTER TABLE tags ADD CONSTRAINT
 tag_unique_name UNIQUE NONCLUSTERED
@@ -59,6 +62,7 @@ tag_unique_name UNIQUE NONCLUSTERED
 name
 );
 
+GO 
 
 CREATE TABLE [dbo].[server_tags]
     (
