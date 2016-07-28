@@ -162,8 +162,8 @@ namespace Idera.SQLsecure.UI.Console.Views
 
                     newRow[colHeaderTagName] = p.Name;
                     newRow[colHeaderDesc] = p.Description;
-                    newRow[colHeaderHiddenTagID] = p.Id;                  
-
+                    newRow[colHeaderHiddenTagID] = p.Id;
+                    _dt_Tags.Rows.Add(newRow);
                 }
 
             }
