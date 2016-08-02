@@ -199,8 +199,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
 
         // View - Manage Tags
-        public const String ManageTagsHelpTopic = @"/x/WQlK";//Manage tags
-        public const String ManageTagsConceptTopic = @"/x/WQlK";//Manage tags
+        public const String ManageTagsHelpTopic = @"/x/CgDwAw";//Manage tags
+        public const String ManageTagsConceptTopic = @"/x/CgDwAw";//Manage tags
 
         //// Dialog Help Topics
         public const string CompareAssessmentsSummaryHelpTopic = @"/x/SQlK";//Compare Assessment Summaries

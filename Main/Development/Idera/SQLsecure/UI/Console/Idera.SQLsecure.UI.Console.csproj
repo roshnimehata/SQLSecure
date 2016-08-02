@@ -2106,6 +2106,9 @@
     <Content Include="Resources\Report_VulnerableLogins_48.png" />
     <Content Include="Resources\Schema_48.png" />
     <None Include="Resources\sequence_48.png" />
+    <None Include="Resources\ServerTag_16.png" />
+    <None Include="Resources\ServerTag_32.png" />
+    <None Include="Resources\ServerTag_48.png" />
     <Content Include="Resources\Services_48.png" />
     <None Include="Resources\SQLsecure_product.png" />
     <Content Include="Resources\SQLServerLogin_48.png" />

@@ -217,4 +217,55 @@ INSERT  INTO dbo.server_tags
 
 		
 
+
+---Encryption Check
+
+
+-----SQL Jobs and Agent Check
+SELECT  @metricid = 113;
+IF NOT EXISTS ( SELECT  *
+                FROM    metric
+                WHERE   metricid = @metricid )
+    BEGIN  
+        INSERT  INTO dbo.metric
+                ( metricid ,
+                  metrictype ,
+                  metricname ,
+                  metricdescription ,
+                  isuserentered ,
+                  ismultiselect ,
+                  validvalues ,
+			valuedescription
+		)
+        VALUES  ( @metricid , -- metricid - int
+                  N'Access' , -- metrictype - nvarchar(32)
+                  N'Encryption Methodst' , -- metricname - nvarchar(256)
+                  N'Determine whether there are encryption keys with algorithms other than supported.' , -- metricdescription - nvarchar(1024)
+                  1 , -- isuserentered - bit
+                  1 , -- ismultiselect - bit
+                  N'''AES_128'',''AES_192'',''AES_256''' , -- validvalues - nvarchar(1024)
+            N'When enabled, this check will identify a risk if there are encryption keys with encryption methods other than selected.'  -- valuedescription - nvarchar(1024)									        
+                );
+		
+        INSERT  INTO dbo.policymetric
+                ( policyid ,
+                  metricid ,
+                  isenabled ,
+                  reportkey ,
+                  reporttext ,
+                  severity ,
+                  severityvalues ,
+			assessmentid
+		)
+        VALUES  ( 0 , -- policyid - int
+                  @metricid , -- metricid - int
+                  1 , -- isenabled - bit
+                  N'' , -- reportkey - nvarchar(32)
+                  N'Is there any encryption keys with algorithms other than selected?' , -- reporttext - nvarchar(4000)
+                  3 , -- severity - int
+                  N'''AES_128'',''AES_192'',''AES_256''' , -- severityvalues - nvarchar(4000)
+            0  -- assessmentid - int
+                );
+    END;
+		
 GO

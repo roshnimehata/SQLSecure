@@ -988,9 +988,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                             }
                                             catch (SqlException ex)
                                             {
-                                                string strMessage = "Writing to Repository " + objType.ToString() + "s ";
+                                                string strMessage = string.Format("Writing to Repository {0}s ", objType.ToString());
                                                 logX.loggerX.Error("ERROR - " + strMessage, ex);
-                                                throw ex;
+                                                throw ;
                                             }
                                         }
                                     }
@@ -998,11 +998,26 @@ namespace Idera.SQLsecure.Collector.Sql
                             }
                         }
                     }
+                    if (isOk&&objType == SqlObjectType.Key)
+                    {
+                        try
+                        {
+                            EncryptionKeys.Process(version, targetConnection, repositoryConnection, snapshotid,
+                                              database.DbId, database.Name);
+                        }
+                        catch (SqlException ex)
+                        {
+                            string strMessage = string.Format("Writing to Repository {0}s ", objType);
+                            logX.loggerX.Error("ERROR - " + strMessage, ex);
+                            throw ;
+                        }
+                    }
+
                 }
                 catch (SqlException ex)
                 {
-                    string strMessage = "Processing " + objType.ToString() + "s";
-                    logX.loggerX.Error("ERROR - " + strMessage, ex);
+                    string strMessage = string.Format("Processing {0}s", objType.ToString());
+                    logX.loggerX.Error(string.Format("ERROR - {0}", strMessage), ex);
                     Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnection,
                                                                             snapshotid,
                                                                             Collector.Constants.ActivityType_Error,

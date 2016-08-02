@@ -150,6 +150,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.Description = "Create Server Group Tag";
             this.Name = "Form_CreateTag";
             this.Text = "Create Tag";
+            this.Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.ServerTag_48;
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.Form_SelectDatabase_HelpRequested);
             this._bfd_ButtonPanel.ResumeLayout(false);
             this._bf_MainPanel.ResumeLayout(false);

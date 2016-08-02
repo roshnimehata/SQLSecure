@@ -82,7 +82,7 @@
     <Compile Include="Sql\ServerPermission.cs" />
     <Compile Include="Sql\ServerPrincipal.cs" />
     <Compile Include="Sql\SqlHelper.cs" />
-    <!--<Compile Include="Sql\EncryptionKeys.cs" />-->
+    <Compile Include="Sql\EncryptionKeys.cs" />
     <Compile Include="Sql\SQLJob.cs" />
     <Compile Include="Sql\SQLService.cs" />
     <Compile Include="Sql\SqlTypes.cs" />

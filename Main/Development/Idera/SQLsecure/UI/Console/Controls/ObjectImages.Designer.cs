@@ -138,6 +138,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.AppImageList16.Images.SetKeyName(93, "sequence_48.png");
             this.AppImageList16.Images.SetKeyName(94, "Report_SuspectSqlLogins_16.png");
             this.AppImageList16.Images.SetKeyName(95, "ImportServers_16.png");
+            this.AppImageList16.Images.SetKeyName(96, "ServerTag_16.png");
             // 
             // AppImageList32
             // 
@@ -155,6 +156,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.AppImageList32.Images.SetKeyName(9, "SQLsecure.ico");
             this.AppImageList32.Images.SetKeyName(10, "Report_SuspectSqlLogins_32.png");
             this.AppImageList32.Images.SetKeyName(11, "ImportServers_32.png");
+            this.AppImageList32.Images.SetKeyName(12, "ServerTag_32.png");
             // 
             // AppImageListCommonTask
             // 

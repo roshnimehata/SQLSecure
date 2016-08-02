@@ -121,7 +121,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
 
             _smallTask_CreateTag.TaskHandler += CreateTag;
-            _smallTask_EditTag.TaskHandler += EditTag;
+           
 
 
             _grid_TagServers.Tag = _label_Assessments;
@@ -401,7 +401,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             band.Columns[colHeaderHiddenTagID].Hidden = true;
 
             band.Columns[colHeaderDesc].Header.Caption = "Tag Description";
-            band.Columns[colHeaderDesc].Header.ToolTipText = "";//todo add tool tip
+            band.Columns[colHeaderDesc].Header.ToolTipText = "Tag Description";
             band.Columns[colHeaderDesc].CellAppearance.TextHAlign = HAlign.Left;
 
 

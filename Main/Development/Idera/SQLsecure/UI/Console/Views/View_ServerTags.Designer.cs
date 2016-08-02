@@ -87,7 +87,6 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._toolStripButton_AuditsColumnChooser = new System.Windows.Forms.ToolStripButton();
             this._label_NoServers = new Infragistics.Win.Misc.UltraLabel();
             this._smallTask_CreateTag = new Idera.SQLsecure.UI.Console.Controls.SmallTask();
-            this._smallTask_EditTag = new Idera.SQLsecure.UI.Console.Controls.SmallTask();
             this._ultraPrintPreviewDialog = new Infragistics.Win.Printing.UltraPrintPreviewDialog(this.components);
             this._ultraGridPrintDocument = new Infragistics.Win.UltraWinGrid.UltraGridPrintDocument(this.components);
             this._ultraGridExcelExporter = new Infragistics.Win.UltraWinGrid.ExcelExport.UltraGridExcelExporter(this.components);
@@ -112,8 +111,6 @@ namespace Idera.SQLsecure.UI.Console.Views
             // _vw_TasksPanel
             // 
             this._vw_TasksPanel.Controls.Add(this._smallTask_CreateTag);
-            this._vw_TasksPanel.Controls.Add(this._smallTask_EditTag);
-            this._vw_TasksPanel.Controls.SetChildIndex(this._smallTask_EditTag, 0);
             this._vw_TasksPanel.Controls.SetChildIndex(this._smallTask_CreateTag, 0);
             this._vw_TasksPanel.Controls.SetChildIndex(this._smallTask_Help, 0);
             this._vw_TasksPanel.Controls.SetChildIndex(this._label_Summary, 0);
@@ -580,23 +577,11 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._smallTask_CreateTag.BackColor = System.Drawing.Color.Transparent;
             this._smallTask_CreateTag.Location = new System.Drawing.Point(11, 26);
             this._smallTask_CreateTag.Name = "_smallTask_CreateTag";
-            this._smallTask_CreateTag.Size = new System.Drawing.Size(127, 34);
+            this._smallTask_CreateTag.Size = new System.Drawing.Size(173, 34);
             this._smallTask_CreateTag.TabIndex = 5;
             this._smallTask_CreateTag.TaskDescription = "";
-            this._smallTask_CreateTag.TaskImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.add_policy_49;
+            this._smallTask_CreateTag.TaskImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.ServerTag_48;
             this._smallTask_CreateTag.TaskText = "Create Server Group Tag";
-            // 
-            // _smallTask_EditTag
-            // 
-            this._smallTask_EditTag.BackColor = System.Drawing.Color.Transparent;
-            this._smallTask_EditTag.Location = new System.Drawing.Point(155, 23);
-            this._smallTask_EditTag.Name = "_smallTask_EditTag";
-            this._smallTask_EditTag.Size = new System.Drawing.Size(163, 34);
-            this._smallTask_EditTag.TabIndex = 7;
-            this._smallTask_EditTag.TaskDescription = "";
-            this._smallTask_EditTag.TaskImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.edit_policy_49;
-            this._smallTask_EditTag.TaskText = "Configure Policy Settings";
-            this._smallTask_EditTag.Visible = false;
             // 
             // _ultraPrintPreviewDialog
             // 
@@ -656,7 +641,6 @@ namespace Idera.SQLsecure.UI.Console.Views
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton _toolStripButton_AuditsGroupBy;
         private System.Windows.Forms.ToolStripButton _toolStripButton_AuditsColumnChooser;
-        private Idera.SQLsecure.UI.Console.Controls.SmallTask _smallTask_EditTag;
         private Idera.SQLsecure.UI.Console.Controls.SmallTask _smallTask_CreateTag;
         private Infragistics.Win.Printing.UltraPrintPreviewDialog _ultraPrintPreviewDialog;
         private Infragistics.Win.UltraWinGrid.UltraGridPrintDocument _ultraGridPrintDocument;

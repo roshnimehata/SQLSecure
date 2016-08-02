@@ -94,3 +94,47 @@ ALTER TABLE [dbo].[server_tags] CHECK CONSTRAINT [FK_server_tags_tags];
 
 
 GO	
+
+/****** Object:  Table [dbo].[encryptionkey]    Script Date: 7/29/2016 4:46:46 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[encryptionkey](
+	[keyid] [INT] IDENTITY(1,1) NOT NULL,
+	[name] [NVARCHAR](255) NOT NULL,
+	[principalid] [INT] NULL,
+	[dbkeyid] [INT] NULL,
+	[keylength] [INT] NULL,
+	[algorithm] [NVARCHAR](50) NULL,
+	[algorithmdesc] [NVARCHAR](60) NULL,
+	[providertype] [NVARCHAR](60) NULL,
+	[snapshotid] [INT] NOT NULL,
+	[databaseid] [INT] NOT NULL,
+	[key_type] [NVARCHAR](50) NULL,
+ CONSTRAINT [PK_encryptionkey] PRIMARY KEY CLUSTERED 
+(
+	[keyid] ASC,
+	[snapshotid] ASC,
+	[databaseid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[encryptionkey]  WITH NOCHECK ADD  CONSTRAINT [FK_encryptionkey_serversnapshot] FOREIGN KEY([snapshotid])
+REFERENCES [dbo].[serversnapshot] ([snapshotid])
+GO
+
+ALTER TABLE [dbo].[encryptionkey] CHECK CONSTRAINT [FK_encryptionkey_serversnapshot]
+GO
+
+ALTER TABLE [dbo].[encryptionkey]  WITH CHECK ADD  CONSTRAINT [FK_encryptionkey_sqldatabase] FOREIGN KEY([snapshotid], [databaseid])
+REFERENCES [dbo].[sqldatabase] ([snapshotid], [dbid])
+GO
+
+ALTER TABLE [dbo].[encryptionkey] CHECK CONSTRAINT [FK_encryptionkey_sqldatabase]
+GO
+
