@@ -6,6 +6,9 @@
       <rd:DataSourceID>fcbb7e50-2eee-4f71-ace6-f57794efc1c3</rd:DataSourceID>
     </DataSource>
   </DataSources>
+    <BottomMargin>0.5in</BottomMargin>
+  <RightMargin>0.5in</RightMargin>
+  <PageWidth>11in</PageWidth>
    <ReportParameters>
     <ReportParameter Name="rundate">
       <DataType>String</DataType>
@@ -52,8 +55,141 @@
       <Prompt>UserRange</Prompt>
     </ReportParameter>
   </ReportParameters>
+    <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <rd:GridSpacing>0.0625in</rd:GridSpacing>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
   <Body>
     <ReportItems>
+	  <Rectangle Name="rectangle1">
+        <ReportItems>
+          <Textbox Name="textbox13">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>="This report shows all the Sql server logins that do not have any permissions."</Value>
+                    <Style>
+                      <Color>#404040</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Left>1.4375in</Left>
+            <Height>0.1875in</Height>
+            <Width>8.5625in</Width>
+            <Style />
+          </Textbox>
+          <Textbox Name="textbox10">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>About:</Value>
+                    <Style>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>#404040</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Left>0.0625in</Left>
+            <Height>0.1875in</Height>
+            <Width>1.375in</Width>
+            <ZIndex>1</ZIndex>
+            <Style />
+          </Textbox>
+        </ReportItems>
+        <DataElementOutput>ContentsOnly</DataElementOutput>
+        <Top>0.75in</Top>
+        <Height>0.1875in</Height>
+        <Width>10in</Width>
+        <ZIndex>4</ZIndex>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+          </Border>
+          <TopBorder>
+            <Style>Dotted</Style>
+          </TopBorder>
+          <BottomBorder>
+            <Style>Dotted</Style>
+          </BottomBorder>
+        </Style>
+      </Rectangle>
+      <Rectangle Name="recommendation_rectangle">
+        <ReportItems>
+          <Textbox Name="textbox8">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>="We need description from idera!!"</Value>
+                    <Style>
+                      <Color>#404040</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Left>1.4375in</Left>
+            <Height>0.5in</Height>
+            <Width>8.5625in</Width>
+            <Style />
+          </Textbox>
+          <Textbox Name="textbox4">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Recommendation:</Value>
+                    <Style>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>#404040</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Left>0.0625in</Left>
+            <Height>0.25in</Height>
+            <Width>1.375in</Width>
+            <ZIndex>1</ZIndex>
+            <Style />
+          </Textbox>
+        </ReportItems>
+        <DataElementOutput>ContentsOnly</DataElementOutput>
+        <Top>1.0625in</Top>
+        <Height>0.5in</Height>
+        <Width>10in</Width>
+        <ZIndex>3</ZIndex>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+          </Border>
+          <TopBorder>
+            <Style>Dotted</Style>
+          </TopBorder>
+          <BottomBorder>
+            <Style>Dotted</Style>
+          </BottomBorder>
+        </Style>
+      </Rectangle>
+     
       <Tablix Name="table_Data">
         <TablixBody>
           <TablixColumns>
@@ -615,135 +751,7 @@
         <ZIndex>1</ZIndex>
         <Style />
       </Subreport>
-      
-      <Rectangle Name="recommendation_rectangle">
-        <ReportItems>
-          <Textbox Name="textbox8">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>="We need description from idera!!"</Value>
-                    <Style>
-                      <Color>#404040</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Left>1.4375in</Left>
-            <Height>0.5in</Height>
-            <Width>8.5625in</Width>
-            <Style />
-          </Textbox>
-          <Textbox Name="textbox4">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Recommendation:</Value>
-                    <Style>
-                      <FontWeight>Bold</FontWeight>
-                      <Color>#404040</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Left>0.0625in</Left>
-            <Height>0.25in</Height>
-            <Width>1.375in</Width>
-            <ZIndex>1</ZIndex>
-            <Style />
-          </Textbox>
-        </ReportItems>
-        <DataElementOutput>ContentsOnly</DataElementOutput>
-        <Top>1.0625in</Top>
-        <Height>0.5in</Height>
-        <Width>10in</Width>
-        <ZIndex>3</ZIndex>
-        <Style>
-          <Border>
-            <Color>LightGrey</Color>
-          </Border>
-          <TopBorder>
-            <Style>Dotted</Style>
-          </TopBorder>
-          <BottomBorder>
-            <Style>Dotted</Style>
-          </BottomBorder>
-        </Style>
-      </Rectangle>
-      <Rectangle Name="rectangle1">
-        <ReportItems>
-          <Textbox Name="textbox13">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>="This report shows all the Sql server logins that do not have any permissions."</Value>
-                    <Style>
-                      <Color>#404040</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Left>1.4375in</Left>
-            <Height>0.1875in</Height>
-            <Width>8.5625in</Width>
-            <Style />
-          </Textbox>
-          <Textbox Name="textbox10">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>About:</Value>
-                    <Style>
-                      <FontWeight>Bold</FontWeight>
-                      <Color>#404040</Color>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Left>0.0625in</Left>
-            <Height>0.1875in</Height>
-            <Width>1.375in</Width>
-            <ZIndex>1</ZIndex>
-            <Style />
-          </Textbox>
-        </ReportItems>
-        <DataElementOutput>ContentsOnly</DataElementOutput>
-        <Top>0.75in</Top>
-        <Height>0.1875in</Height>
-        <Width>10in</Width>
-        <ZIndex>4</ZIndex>
-        <Style>
-          <Border>
-            <Color>LightGrey</Color>
-          </Border>
-          <TopBorder>
-            <Style>Dotted</Style>
-          </TopBorder>
-          <BottomBorder>
-            <Style>Dotted</Style>
-          </BottomBorder>
-        </Style>
-      </Rectangle>
+     
     </ReportItems>
     <Height>3.875in</Height>
     <Style />
@@ -1065,18 +1073,19 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
       <rd:DataSourceID>fcbb7e50-2eee-4f71-ace6-f57794efc1c3</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
+   <DataSets>
     <DataSet Name="ReportsDataset_isp_sqlsecure_report_suspectsqllogins">
       <Query>
-        <DataSourceName>SQLsecure_Data_Source</DataSourceName>
+    
+ <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+   <CommandType>StoredProcedure</CommandType>
+        <CommandText>dbo.isp_sqlsecure_report_orphanedlogins</CommandText>
         <QueryParameters>
           <QueryParameter Name="@rundate">
             <Value>=Code.getRunDate(Parameters!rundate.Value, true)</Value>
           </QueryParameter>
-        </QueryParameters>
-        <CommandType>StoredProcedure</CommandType>
-        <CommandText>dbo.isp_sqlsecure_report_orphanedlogins</CommandText>
-        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+        </QueryParameters>     
+        <DataSourceName>SQLsecure Data Source</DataSourceName>
       </Query>
       <Fields>
         <Field Name="connectionname">
@@ -1095,15 +1104,7 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
           <DataField>state</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-      </Fields>
-      <rd:DataSetInfo>
-        <rd:DataSetName>ReportsDataset</rd:DataSetName>
-        <rd:SchemaPath>C:\Code\TFS\SQL Secure 3.0\src\Main\Development\Idera\SQLsecure\UI\Console\Reports\ReportsDataset.xsd</rd:SchemaPath>
-        <rd:TableName>isp_sqlsecure_report_suspectsqllogins</rd:TableName>
-        <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
-        <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
-        <rd:TableAdapterName>isp_sqlsecure_report_suspectsqlloginsTableAdapter</rd:TableAdapterName>
-      </rd:DataSetInfo>
+      </Fields>     
     </DataSet>
   </DataSets>
  
