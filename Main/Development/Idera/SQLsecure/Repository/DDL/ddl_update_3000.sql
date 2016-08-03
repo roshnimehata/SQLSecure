@@ -138,3 +138,34 @@ GO
 ALTER TABLE [dbo].[encryptionkey] CHECK CONSTRAINT [FK_encryptionkey_sqldatabase]
 GO
 
+
+
+
+CREATE TABLE [dbo].[databasecertificates]
+    (
+      [certid] [INT] IDENTITY(1, 1) NOT NULL ,
+      [snapshotid] [INT] NOT NULL ,
+      [dbid] [INT] NOT NULL ,
+      [name] NVARCHAR(128) NOT NULL ,
+      [certificate_id] INT NOT NULL ,
+      [principal_id] INT NULL ,
+      [pvt_key_encryption_type] CHAR(2) NOT NULL ,
+      [pvt_key_encryption_type_desc] NVARCHAR(60) NULL ,
+      [is_active_for_begin_dialog] BIT NULL ,
+      [issuer_name] NVARCHAR(442) NULL ,
+      [cert_serial_number] NVARCHAR(64) NULL ,
+      [sid] VARBINARY(85) NULL ,
+      [string_sid] NVARCHAR(128) NULL ,
+      [subject] NVARCHAR(4000) NULL ,
+      [expiry_date] DATETIME NULL ,
+      [start_date] DATETIME NULL ,
+      [thumbprint] VARBINARY(32) NOT NULL ,
+      [attested_by] NVARCHAR(260) NULL ,
+      [pvt_key_last_backup_date] DATETIME NULL ,
+      CONSTRAINT [PK_databasecertificates] PRIMARY KEY CLUSTERED
+        ( [certid], [snapshotid], [dbid] )
+    ) 
+ALTER TABLE [dbo].[databasecertificates] WITH CHECK ADD CONSTRAINT [FK_sqldatabase] FOREIGN KEY ([snapshotid],[dbid])
+REFERENCES [dbo].[sqldatabase] ([snapshotid], [dbid])
+
+GO

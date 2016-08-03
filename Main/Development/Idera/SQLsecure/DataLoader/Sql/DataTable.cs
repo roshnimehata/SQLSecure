@@ -1368,7 +1368,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const int ColDbKeyId = 3;
         internal const int ColKeyLength = 4;
         internal const int ColAlgorithm = 5;
-        internal const int ColAlgorithmDesc =6;
+        internal const int ColAlgorithmDesc = 6;
         internal const int ColProviderType = 7;
         internal const int ColSnapshotId = 8;
         internal const int ColType = 9;
@@ -1378,6 +1378,87 @@ namespace Idera.SQLsecure.Collector.Sql
 
 
         internal const string RepositoryTable = "SQLsecure.dbo.encryptionkey";
+    }
+
+    internal static class CertificateTable
+    {
+        internal const string RepositoryTable = "SQLsecure.dbo.databasecertificates";
+
+        internal const string CertId = "certid";
+        internal const string SnapshotId = "snapshotid";
+        internal const string DbId = "dbid";
+        internal const string CertificateName = "name";
+        internal const string CertificateId = "certificate_id";
+        internal const string PrincipalId = "principal_id";
+        internal const string KeyEncryptionType = "pvt_key_encryption_type";
+        internal const string KeyEncryptionTypeDesc = "pvt_key_encryption_type_desc";
+        internal const string IsActiveForBeginDialog = "is_active_for_begin_dialog";
+        internal const string IssuerName = "issuer_name";
+        internal const string CertSerialNumber = "cert_serial_number";
+        internal const string Sid = "sid";
+        internal const string StringSid = "string_sid";
+        internal const string Subject = "subject";
+        internal const string ExpiryDate = "expiry_date";
+        internal const string StartDate = "start_date";
+        internal const string Thumbprint = "thumbprint";
+        internal const string AttestedBy = "attested_by";
+        internal const string KeyLastBackupDate = "pvt_key_last_backup_date";
+
+
+
+        public static DataTable Create()
+        {
+            DataTable dataTable;
+            using (DataColumn
+                certId = new DataColumn(CertId, typeof(SqlInt32)),
+                snapshotId = new DataColumn(SnapshotId, typeof(SqlInt32)),
+                dbId = new DataColumn(DbId, typeof(SqlInt32)),
+                certificateName = new DataColumn(CertificateName, typeof(SqlString)),
+                certificateId = new DataColumn(CertificateId, typeof(SqlInt32)),
+                principalId = new DataColumn(PrincipalId, typeof(SqlInt32)),
+                keyEncryptionType = new DataColumn(KeyEncryptionType, typeof(SqlString)),
+                keyEncryptionTypeDesc = new DataColumn(KeyEncryptionTypeDesc, typeof(SqlString)),
+                isActiveForBeginDialog = new DataColumn(IsActiveForBeginDialog, typeof(SqlBoolean)),
+                issuerName = new DataColumn(IssuerName, typeof(SqlString)),
+                certSerialNumber = new DataColumn(CertSerialNumber, typeof(SqlString)),
+                sid = new DataColumn(Sid, typeof(SqlBinary)),
+                stringSid = new DataColumn(StringSid, typeof(SqlString)),
+                subject = new DataColumn(Subject, typeof(SqlString)),
+                expiryDate = new DataColumn(ExpiryDate, typeof(SqlDateTime)),
+                startDate = new DataColumn(StartDate, typeof(SqlDateTime)),
+               thumbprint = new DataColumn(Thumbprint, typeof(SqlBinary)),
+                attestedBy = new DataColumn(AttestedBy, typeof(SqlString)),
+                keyLastBackupDate = new DataColumn(KeyLastBackupDate, typeof(SqlDateTime)))
+            {
+                dataTable = new DataTable("databasecertificates");
+                dataTable.Columns.AddRange(new DataColumn[]
+                {
+                    certId,
+                    snapshotId,
+                    dbId,
+                    certificateName,
+                    certificateId,
+                    principalId,
+                    keyEncryptionType,
+                    keyEncryptionTypeDesc,
+                    isActiveForBeginDialog,
+                    issuerName,
+                    certSerialNumber,
+                    sid,
+                    stringSid,
+                    subject,
+                    expiryDate,
+                    startDate,
+                    thumbprint,
+                    attestedBy,
+                    keyLastBackupDate
+                });
+            }
+
+
+            return dataTable;
+
+        }
     }
 
 

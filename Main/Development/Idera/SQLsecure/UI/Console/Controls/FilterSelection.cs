@@ -295,6 +295,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 filterObj = new FilterObject(RuleObjectType.Key, RuleScope.All, matchAll);
                 m_FilterObjects.Add(RuleObjectType.Key, filterObj);
 
+                //Certificates
+                filterObj = new FilterObject(RuleObjectType.Certificate, RuleScope.All, matchAll);
+                m_FilterObjects.Add(RuleObjectType.Certificate, filterObj);
+
                 // Sequence Objects
                 filterObj = new FilterObject(RuleObjectType.SequenceObject, RuleScope.All, matchAll);
                 m_FilterObjects.Add(RuleObjectType.SequenceObject, filterObj);
@@ -797,6 +801,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     break;
                 case RuleObjectType.Key:
                     m_objectTypeDisplay = "All Keys";
+                    m_rtfDisplay = m_objectTypeDisplay;
+                    m_isConfigurable = false;
+                    break;
+                case RuleObjectType.Certificate:
+                    m_objectTypeDisplay = "All Certificates";
                     m_rtfDisplay = m_objectTypeDisplay;
                     m_isConfigurable = false;
                     break;

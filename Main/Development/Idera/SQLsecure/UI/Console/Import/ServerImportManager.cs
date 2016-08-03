@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Security.Principal;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
+using Idera.SQLsecure.UI.Console.Controls;
+using Idera.SQLsecure.UI.Console.Data;
 using Idera.SQLsecure.UI.Console.Forms;
 using Idera.SQLsecure.UI.Console.Import.Models;
 using Idera.SQLsecure.UI.Console.Sql;
+using Idera.SQLsecure.UI.Console.SQL;
+using Server = Idera.SQLsecure.Core.Accounts.Server;
 
 namespace Idera.SQLsecure.UI.Console.Import
 {
@@ -54,6 +58,9 @@ namespace Idera.SQLsecure.UI.Console.Import
                     return false; //Skip importing of server
                 }
 
+                var parsedSqlServerVersion = SqlHelper.ParseVersion(sqlServerVersion);
+                Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedSqlServerVersion, itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication,
+                itemToImport.UserName, itemToImport.Password, connectionName);
                 try
                 {
                     if (repository.RegisteredServers.Find(connectionName) != null)
@@ -85,7 +92,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                 // Add rules to the repository.
                 try
                 {
-                    AddRulesToRepository(repository, instance, connectionName);
+                    AddRulesToRepository(repository, instance, serverInfo);
                 }
                 catch (Exception ex)
                 {
@@ -103,12 +110,39 @@ namespace Idera.SQLsecure.UI.Console.Import
                     errorList.Add(ex.Message);
                 }
 
+                try
+                {
+                    var server = repository.RegisteredServers.Find(connectionName);
+                    if(server!=null) AddServerToTags(server.RegisteredServerId);
+                }
+                catch (Exception ex)
+                {
+                    errorList.Add(ex.Message);
+                }
+
                 settings.ChangeStatus(ImportStatusIcon.Imported,
                     errorList.Count > 0
                         ? string.Format("Imported with errors: {0}", string.Join("\n", errorList.ToArray()))
                         : "Imported");
                 return isSuccessfulOperation;
             }
+        }
+
+        private static void AddServerToTags(int serverId)
+        {
+
+            try
+            {
+                List<string> tagsIds = new List<string>();
+
+                TagWorker.AssignServerToTags(serverId, tagsIds);
+            }
+            catch (Exception ex)
+            {
+                logX.loggerX.Error(ex.Message);
+                throw;
+            }
+
         }
 
         private static void UpdateCredentials(ImportItem itemToImport, Repository repository, string connectionName)
@@ -122,13 +156,17 @@ namespace Idera.SQLsecure.UI.Console.Import
                     : itemToImport.WindowsUserPassword);
         }
 
-        private static void AddRulesToRepository(Repository repository, string instance, string connectionName)
+        private static void AddRulesToRepository(Repository repository, string instance, ServerInfo serverInfo)
         {
             try
             {
                 var filter = new DataCollectionFilter(instance, "Default rule",
                     "Rule created when the server was imported");
-                filter.CreateFilter(repository.ConnectionString, connectionName);
+
+                var filterSelector = new FilterSelection();
+                filterSelector.Initialize(filter, serverInfo);
+                filterSelector.GetFilter(out filter);
+                filter.CreateFilter(repository.ConnectionString, serverInfo.connectionName);
             }
             catch (Exception ex)
             {

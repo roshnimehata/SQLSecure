@@ -96,6 +96,7 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_File_Connect = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_Sep0 = new System.Windows.Forms.ToolStripSeparator();
             this._menuStrip_File_NewSQLServer = new System.Windows.Forms.ToolStripMenuItem();
+            this._menuStrip_File_ImportSqlServers = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_NewLogin = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_Sep1 = new System.Windows.Forms.ToolStripSeparator();
             this._menuStrip_File_ManageLicense = new System.Windows.Forms.ToolStripMenuItem();
@@ -169,7 +170,6 @@ namespace Idera.SQLsecure.UI.Console
             this.toolStripMenuItem_NotifyClose = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog_ExportPolicy = new System.Windows.Forms.SaveFileDialog();
-            this._menuStrip_File_ImportSqlServers = new System.Windows.Forms.ToolStripMenuItem();
             this._viewSection_ReportSettings = new Idera.SQLsecure.UI.Console.Controls.ViewSection();
             this.label1 = new System.Windows.Forms.Label();
             this._checkBox_Report_BaselineOnly = new System.Windows.Forms.CheckBox();
@@ -216,10 +216,11 @@ namespace Idera.SQLsecure.UI.Console
             // ultraExplorerBarContainerControl4
             // 
             this.ultraExplorerBarContainerControl4.Controls.Add(this._splitContainer_SecuritySummary);
-            this.ultraExplorerBarContainerControl4.Location = new System.Drawing.Point(0, 25);
+            this.ultraExplorerBarContainerControl4.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraExplorerBarContainerControl4.Name = "ultraExplorerBarContainerControl4";
             this.ultraExplorerBarContainerControl4.Size = new System.Drawing.Size(308, 450);
             this.ultraExplorerBarContainerControl4.TabIndex = 3;
+            this.ultraExplorerBarContainerControl4.Visible = false;
             // 
             // _splitContainer_SecuritySummary
             // 
@@ -828,6 +829,13 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_File_NewSQLServer.Text = "Register a &SQL Server...";
             this._menuStrip_File_NewSQLServer.Click += new System.EventHandler(this._menuStrip_File_NewSQLServer_Click);
             // 
+            // _menuStrip_File_ImportSqlServers
+            // 
+            this._menuStrip_File_ImportSqlServers.Name = "_menuStrip_File_ImportSqlServers";
+            this._menuStrip_File_ImportSqlServers.Size = new System.Drawing.Size(231, 22);
+            this._menuStrip_File_ImportSqlServers.Text = "Import SQL Servers";
+            this._menuStrip_File_ImportSqlServers.Click += new System.EventHandler(this.importSQLServersToolStripMenuItem_Click);
+            // 
             // _menuStrip_File_NewLogin
             // 
             this._menuStrip_File_NewLogin.Name = "_menuStrip_File_NewLogin";
@@ -1432,13 +1440,6 @@ namespace Idera.SQLsecure.UI.Console
             this.saveFileDialog_ExportPolicy.FileName = "SQLsecurePolicy.xml";
             this.saveFileDialog_ExportPolicy.Filter = "SQLsecure Policy files|*.xml|All files|*.*";
             this.saveFileDialog_ExportPolicy.Title = "Export Policy";
-            // 
-            // _menuStrip_File_ImportSqlServers
-            // 
-            this._menuStrip_File_ImportSqlServers.Name = "_menuStrip_File_ImportSqlServers";
-            this._menuStrip_File_ImportSqlServers.Size = new System.Drawing.Size(231, 22);
-            this._menuStrip_File_ImportSqlServers.Text = "Import SQL Servers";
-            this._menuStrip_File_ImportSqlServers.Click += new System.EventHandler(this.importSQLServersToolStripMenuItem_Click);
             // 
             // _viewSection_ReportSettings
             // 
