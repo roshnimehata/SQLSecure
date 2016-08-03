@@ -123,6 +123,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             // _label_Summary
             // 
             this._label_Summary.Size = new System.Drawing.Size(514, 17);
+            this._label_Summary.Text = "";
+            this._label_Summary.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
             // splitContainer1
             // 
@@ -259,7 +261,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             this._cmsi_Tags_AddServer.Name = "_cmsi_Tags_AddServer";
             this._cmsi_Tags_AddServer.Size = new System.Drawing.Size(179, 22);
-            this._cmsi_Tags_AddServer.Text = "Add Server";
+            this._cmsi_Tags_AddServer.Text = "Add Server(s)";
             this._cmsi_Tags_AddServer.Click += new System.EventHandler(this.AddServersToTag);
             // 
             // _cmsi_Tags_edit

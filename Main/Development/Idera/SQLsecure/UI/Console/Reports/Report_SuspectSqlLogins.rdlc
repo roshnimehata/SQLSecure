@@ -1,5 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+ <DataSources>
+    <DataSource Name="SQLsecure Data Source">
+      <DataSourceReference>SQLsecure Data Source</DataSourceReference>
+      <rd:DataSourceID>fcbb7e50-2eee-4f71-ace6-f57794efc1c3</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+   <ReportParameters>
+    <ReportParameter Name="rundate">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>=System.DateTime.Now.ToShortDateString()</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Use current data as of:</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Expand_All">
+      <DataType>Boolean</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>True</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Expand All</Prompt>
+      <ValidValues>
+        <ParameterValues>
+          <ParameterValue>
+            <Value>True</Value>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>False</Value>
+          </ParameterValue>
+        </ParameterValues>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="serverName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>    
+      <Prompt>Server:</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ReportTitle">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportTitle</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="UserRange">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>UserRange</Prompt>
+    </ReportParameter>
+  </ReportParameters>
   <Body>
     <ReportItems>
       <Tablix Name="table_Data">
@@ -1054,57 +1106,7 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
-  <ReportParameters>
-    <ReportParameter Name="rundate">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>=System.DateTime.Now.ToShortDateString()</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>Use current data as of:</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="Expand_All">
-      <DataType>Boolean</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>True</Value>
-        </Values>
-      </DefaultValue>
-      <Prompt>Expand All</Prompt>
-      <ValidValues>
-        <ParameterValues>
-          <ParameterValue>
-            <Value>True</Value>
-          </ParameterValue>
-          <ParameterValue>
-            <Value>False</Value>
-          </ParameterValue>
-        </ParameterValues>
-      </ValidValues>
-    </ReportParameter>
-    <ReportParameter Name="serverName">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <DefaultValue>
-        <Values>
-          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
-        </Values>
-      </DefaultValue>
-      <Prompt>Server:</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ReportTitle">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportTitle</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="UserRange">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>UserRange</Prompt>
-    </ReportParameter>
-  </ReportParameters>
+ 
   <Code>Function isValidDate(d as string) as Boolean
 	Dim dt as DateTime
 

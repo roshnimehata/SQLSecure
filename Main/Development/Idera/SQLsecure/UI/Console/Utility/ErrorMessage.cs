@@ -370,5 +370,7 @@ Do you wish to remove SQL Server now?";
         public const string ImportSuccessfull = @"Import operation successfull";
         public const string ImportCancelled = @"Import operation cancelled";
         public const string RepositoryObjectNull = @"Repository object not specified";
+
+        public const string ManageTags = "Manage Server Group Tags";
     }
 }

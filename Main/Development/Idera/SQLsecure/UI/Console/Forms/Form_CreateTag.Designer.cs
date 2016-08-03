@@ -147,7 +147,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.CancelButton = this._button_Cancel;
             this.ClientSize = new System.Drawing.Size(565, 342);
-            this.Description = "Create Server Group Tag";
+            this.Description = "Manage Server Group Tag";
             this.Name = "Form_CreateTag";
             this.Text = "Create Tag";
             this.Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.ServerTag_48;

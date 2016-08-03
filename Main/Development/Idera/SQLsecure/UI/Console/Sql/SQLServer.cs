@@ -43,7 +43,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             var serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword);
             var isServerInAoag = serverProperties.HadrManagerStatus == HadrManagerStatus.StartedAndRunning;
 
-            if (isServerInAoag)
+            if (isServerInAoag)//todo check this 
             {
                 var nodeProperties = GetSqlServerProperties(serverProperties.ServerName, sqlLogin, sqlPassword);
                 var isWhantConnectToTheClusterNotToTheNode = nodeProperties.LocalNetAddress != serverProperties.LocalNetAddress;

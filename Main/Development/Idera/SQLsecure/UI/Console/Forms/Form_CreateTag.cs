@@ -11,8 +11,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
     {
         #region Constants
 
-        private const string Title = "Save as New Tag";
-
+        private const string Title = "Create Server Group Tag";
+        private const string TitleEdit = "Edit Server Group Tag";
 
         private const string ErrorTitle = @"Error Creating Tag";
         private const string ErrorMessageTitle = "The tag must have a name. Please enter a name before attempting to create the tag.";
@@ -26,12 +26,19 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             InitializeComponent();
 
-            this.Text = Title;
+            this.Text = TitleEdit;
             if (tag == null)
+            {
                 tag = new Tag();
+                this.Text = Title;
+            }
 
 
             ServerTag = tag;
+            if (tag.IsDefault)
+            {
+                _textBox_TagName.ReadOnly = true;
+            }
             _textBox_TagName.Text = ServerTag.Name;
             _textBox_Description.Text = ServerTag.Description;
 
@@ -118,7 +125,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             if (string.IsNullOrEmpty(tagName))
             {
 
-                MsgBox.ShowError(ErrorTitle,ErrorMessageTitle);
+                MsgBox.ShowError(ErrorTitle, ErrorMessageTitle);
                 DialogResult = DialogResult.None;
 
                 Cursor = Cursors.Default;
@@ -127,7 +134,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             var tag = TagWorker.GetTagByName(tagName);
             if (tag != null)
             {
-                MsgBox.ShowError(ErrorTitle,ErrorMessageExists);
+                MsgBox.ShowError(ErrorTitle, ErrorMessageExists);
                 DialogResult = DialogResult.None;
 
                 Cursor = Cursors.Default;
@@ -149,7 +156,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private void ShowHelpTopic()
         {
-            Program.gController.ShowTopic(Utility.Help.CreateAssessmentHelpTopic);
+            Program.gController.ShowTopic(Utility.Help.ManageTagsHelpTopic);
         }
 
         #endregion

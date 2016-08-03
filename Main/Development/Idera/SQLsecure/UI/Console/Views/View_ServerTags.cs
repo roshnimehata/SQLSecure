@@ -19,7 +19,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 {
     public partial class View_ServerTags : BaseView, IView
     {
-        private const string TitleConst = "Manage Tags";
+        private const string TitleConst = "Server Groups";
         #region IView
 
         void IView.SetContext(IDataContext contextIn)
@@ -108,7 +108,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         {
             InitializeComponent();
 
-            _label_Summary.Text = "Manage Tags";
+            _label_Summary.Text = "";
 
             _toolStripButton_PoliciesColumnChooser.Image =
                 _toolStripButton_AuditsColumnChooser.Image = AppIcons.AppImage16(AppIcons.Enum.GridFieldChooser);
@@ -192,7 +192,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private bool LoadTagServers(int tagId, bool bUpdate)
         {
-            _dt_Servers.Clear();
+           
             try
             {
                 var servers = TagWorker.GetTagServers(tagId);
@@ -277,8 +277,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                 }
                 catch (Exception ex)
                 {
-
-                    throw;
+                    MsgBox.ShowError(ErrorMsgs.ManageTags, ex.Message);                    
                 }
             }
 
@@ -344,7 +343,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                 }
                 catch (Exception ex)
                 {
-                    MsgBox.ShowError(ErrorMsgs.RegisterSqlServerCaption, ex.Message, ex);
+                    MsgBox.ShowError(ErrorMsgs.ManageTags, ex.Message);
                 }
 
             }
@@ -378,7 +377,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                 }
                 if (failedServer.Count != 0)
                 {
-                    MsgBox.ShowError(ErrorMsgs.RegisterSqlServerCaption, String.Format("Unable to start snapshot for next server(s) \n{0}", string.Join("\n,", failedServer.ToArray())));
+                    MsgBox.ShowError(ErrorMsgs.ManageTags, String.Format("Unable to start snapshot for next server(s) \n{0}", string.Join("\n,", failedServer.ToArray())));
                 }
 
 
@@ -395,13 +394,14 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             band.Columns[colHeaderTagName].Width = 200;
             band.Columns[colHeaderTagName].Header.ToolTipText = "Tag Name";
+            band.Columns[colHeaderTagName].Header.Caption = "Server Group Tag";
 
             band.Columns[colHeaderHiddenTagID].Header.Caption = "Tag ID";
             band.Columns[colHeaderHiddenTagID].Header.ToolTipText = "Tag ID used in Repository";
             band.Columns[colHeaderHiddenTagID].Hidden = true;
 
-            band.Columns[colHeaderDesc].Header.Caption = "Tag Description";
-            band.Columns[colHeaderDesc].Header.ToolTipText = "Tag Description";
+            band.Columns[colHeaderDesc].Header.Caption = "Description";
+            band.Columns[colHeaderDesc].Header.ToolTipText = "Description";
             band.Columns[colHeaderDesc].CellAppearance.TextHAlign = HAlign.Left;
 
 
@@ -620,6 +620,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         {
             bool enabled = false;
             bool hasServers = false;
+            _dt_Servers.Clear();
             if (_grid_Tags.ActiveRow != null && _grid_Tags.ActiveRow.IsDataRow)
             {
                 int policyId = (int)_grid_Tags.ActiveRow.Cells[colHeaderHiddenTagID].Value;              

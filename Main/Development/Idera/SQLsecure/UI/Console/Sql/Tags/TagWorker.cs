@@ -91,7 +91,7 @@ namespace Idera.SQLsecure.UI.Console.SQL
                             new SqlParameter("@servers",string.Join(",",servers.ToArray()))
                         });
 
-                    }                    
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -210,8 +210,11 @@ namespace Idera.SQLsecure.UI.Console.SQL
             {
                 try
                 {
-                    var tags = GetTagServers(tagId);
-                    if (tags.Count != 0) throw new ApplicationException("Tags assigned to servers can't be deleted!");
+                    var tag = GetTagById(tagId);
+                    if (tag.IsDefault) throw new ApplicationException("Default tag can't be removed!");
+                    if (tag.TaggedServers.Count != 0) throw new ApplicationException("Tags assigned to servers can't be removed! Please remove all associated Servers before proceeding.");
+                   
+
                     using (var conn = Program.gController.Repository.GetOpennedConnection())
                     {
                         SqlHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, DeleteTagSp,
@@ -285,7 +288,7 @@ namespace Idera.SQLsecure.UI.Console.SQL
                 new SqlParameter("@tag_name",updateTag.Name),
                 new SqlParameter("@description",updateTag.Description),
                 new SqlParameter("@tag_id",updateTag.Id<=0?(int?)null:updateTag.Id)
-                
+
             };
         }
 
