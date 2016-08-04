@@ -1317,8 +1317,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private void _PageTags_BeforeDisplay(object sender, EventArgs e)
         {
-            button2.Enabled = false;
-            button3.Enabled = false;
+            ClearSelection();
             RefreshGrid(false);
 
         }
@@ -1362,8 +1361,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
                     if (Form_CreateTag.Process(tag) != -1)
                         RefreshGrid(true);
-                    button2.Enabled = false;
-                    button3.Enabled = false;
+                    ClearSelection();
                 }
 
             }
@@ -1387,10 +1385,16 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         MsgBox.ShowError(ErrorMsgs.RegisterSqlServerCaption, ex.Message);
 
                     }
-                    button2.Enabled = false;
-                    button3.Enabled = false;
+                    ClearSelection();
                 }
             }
+        }
+
+        private void ClearSelection()
+        {
+            ulTags.SelectedItems.Clear();
+            button2.Enabled = false;
+            button3.Enabled = false;
         }
 
         private void ulTags_MouseDown(object sender, MouseEventArgs e)

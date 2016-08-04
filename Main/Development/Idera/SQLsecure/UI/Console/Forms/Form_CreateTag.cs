@@ -17,7 +17,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private const string ErrorTitle = @"Error Creating Tag";
         private const string ErrorMessageTitle = "The tag must have a name. Please enter a name before attempting to create the tag.";
         private const string ErrorMessageExists = "The tag with this name already exists. Please enter a another name before attempting to create the tag.";
-
+        private bool _isEdit;
         #endregion
 
         #region Ctors
@@ -27,10 +27,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
             InitializeComponent();
 
             this.Text = TitleEdit;
+            _isEdit = true;
             if (tag == null)
             {
                 tag = new Tag();
                 this.Text = Title;
+                _isEdit = false;
             }
 
 
@@ -132,7 +134,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 return;
             }
             var tag = TagWorker.GetTagByName(tagName);
-            if (tag != null)
+            if (tag != null && !_isEdit)
             {
                 MsgBox.ShowError(ErrorTitle, ErrorMessageExists);
                 DialogResult = DialogResult.None;
