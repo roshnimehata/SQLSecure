@@ -651,12 +651,12 @@
 		<loadtasks assembly="build/bin/BuildUtilities.dll" />
 		<!--p4edit view="${Perforce.Branch}/build/build.number"/-->
 
-		<!-- Generate the build/revision number -->
-		 <version path="build/build.number" startdate="${Build.StartDate}" prefix="SQLsecure" buildtype="MonthDay" revisiontype="Increment" />
+		<!-- Get the build/revision number -->
+		<versionex path="build/build.number" prefix="SQLsecure" buildtype="NoIncrement" revisiontype="NoIncrement" />
 		<!--p4submit changelist="Update build number" view="${Perforce.Branch}/build/build.number"/-->
 		
 		<!-- Set the build label used for P4 labeling, output dir & zip file -->
-		<property name="SQLsecure.BuildLabel" value="${SQLsecure.version}" />
+		<property name="SQLsecure.BuildLabel" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.buildnumber}.0" />
 	</target>
 	
 	<target name="Build.GenerateCommonAssemblyInfo">
