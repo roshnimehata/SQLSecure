@@ -24,7 +24,7 @@ AS
                    );
 
         SELECT  st.tag_id ,
-                rs.servername ,
+                rs.connectionname ,
                 rs.registeredserverid
         FROM    dbo.registeredserver rs
                 JOIN dbo.server_tags st ON st.server_id = rs.registeredserverid

@@ -312,7 +312,7 @@ namespace Idera.SQLsecure.UI.Console.SQL
             {
                 var resTag = new TaggedServer();
                 resTag.TagId = int.Parse(reader["tag_id"].ToString());
-                resTag.Name = reader["servername"].ToString();
+                resTag.Name = reader["connectionname"].ToString();
                 resTag.Id = int.Parse(reader["registeredserverid"].ToString());
 
                 return resTag;

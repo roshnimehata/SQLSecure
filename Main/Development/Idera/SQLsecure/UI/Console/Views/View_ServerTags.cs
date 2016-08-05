@@ -378,7 +378,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                 if (failedServer.Count != serversToRun.Count)
                 {
                     MsgBox.ShowInfo(ErrorMsgs.ManageTags,
-                        string.Format("Start snapshot for server group tag {0}.", tag.Name));
+                        string.Format("Start snapshot for Server Group Tag \"{0}\".", tag.Name));
                 }
                 if (failedServer.Count != 0)
                 {

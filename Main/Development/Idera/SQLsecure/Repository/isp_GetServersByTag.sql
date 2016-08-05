@@ -7,7 +7,7 @@ CREATE PROCEDURE [dbo].[isp_GetServersByTag]
     @tag_id INT = NULL
 AS
     BEGIN
-        SELECT  rs.connectionname AS servername ,
+        SELECT  rs.connectionname  ,
                 rs.registeredserverid ,
                 st.tag_id
         FROM    dbo.registeredserver rs
