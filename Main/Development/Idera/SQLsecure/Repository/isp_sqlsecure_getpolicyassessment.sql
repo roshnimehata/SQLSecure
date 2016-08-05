@@ -4792,135 +4792,137 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 + @severityvalues
                                                                 + '.';
                                                 END;
-                                                -- Unauthorized Accounts are sysadmins
-                                                ELSE
-                                                IF (@metricid = 71)
-                                                BEGIN
-                                                        IF (LEN(@severityvalues) > 0)
-                                                        BEGIN
-                                                                SELECT
-                                                                        @sql = N'declare sysadmincursor cursor for
-													select distinct name 
-														from #sysadminstbl 
-														where lower(name) not in ('
-                                                                        + LOWER(@severityvalues)
-                                                                        + N')';
-                                                                IF (CHARINDEX('%',
-                                                                        @severityvalues) > 0)
-                                                                BEGIN
-                                                                        SELECT
-                                                                                @strval = LOWER(@severityvalues),
-                                                                                @intval = CHARINDEX(''',''',
-                                                                                @strval);
-                                                                        WHILE (@intval > 0)
-                                                                        BEGIN
-                                                                                SELECT
-                                                                                        @intval2 = CHARINDEX('%',
-                                                                                        @strval);
-                                                                                IF (@intval2 < @intval)		-- this item contains a wildcard
-                                                                                        SELECT
-                                                                                                @sql = @sql
-                                                                                                + ' and lower(name) not like '
-                                                                                                + SUBSTRING(@strval,
-                                                                                                1, @intval);
-                                                                                SELECT
-                                                                                        @strval = SUBSTRING(@strval,
-                                                                                        @intval + 2,
-                                                                                        LEN(@strval)
-                                                                                        - (@intval + 1));
-                                                                                SELECT
-                                                                                        @intval = CHARINDEX(''',''',
-                                                                                        @strval);
-                                                                        END;
-                                                                        IF (LEN(@strval) > 0)
-                                                                        BEGIN
-                                                                                SELECT
-                                                                                        @intval2 = CHARINDEX('%',
-                                                                                        @strval);
-                                                                                IF (@intval2 > 0)		-- this item contains a wildcard
-                                                                                        SELECT
-                                                                                                @sql = @sql
-                                                                                                + ' and lower(name) not like '
-                                                                                                + @strval;
-                                                                        END;
-                                                                END;
-                                                                SELECT
-                                                                        @sql = @sql
-                                                                        + N' order by name';
-
-                                                                EXEC (@sql);
-                                                                OPEN sysadmincursor;
-
-                                                                SELECT
-                                                                        @intval = 0,
-                                                                        @intval2 = 0;
-                                                                FETCH NEXT FROM
-                                                                sysadmincursor INTO @strval;
-                                                                WHILE @@fetch_status = 0
-                                                                BEGIN
-                                                                        SELECT
-                                                                                @intval = @intval
-                                                                                + 1;
-                                                                        IF (LEN(@metricval)
-                                                                                + LEN(@strval)
-                                                                                + LEN(@strval2) > 1400)
-                                                                        BEGIN
-                                                                                IF @intval2 = 0
-                                                                                        SELECT
-                                                                                                @metricval = @metricval
-                                                                                                + N', more...',
-                                                                                                @intval2 = 1;
-                                                                        END;
-                                                                        ELSE
-                                                                                SELECT
-                                                                                        @metricval = @metricval
-                                                                                        + CASE
-                                                                                                WHEN LEN(@metricval) > 0 THEN N', '
-                                                                                                ELSE N''
-                                                                                        END + N''''
-                                                                                        + @strval
-                                                                                        + N'''';
-
-                                                                        IF (@isadmin = 1)
-                                                                                INSERT INTO policyassessmentdetail (policyid,
-                                                                                assessmentid,
-                                                                                metricid,
-                                                                                snapshotid,
-                                                                                detailfinding,
-                                                                                databaseid,
-                                                                                objecttype,
-                                                                                objectid,
-                                                                                objectname)
-                                                                                        VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Unauthorized sysadmin member found: ''' + @strval + N'''', NULL, -- database ID,
-                                                                                        N'iLOGN', -- object type
-                                                                                        NULL, @strval);
-
-                                                                        FETCH NEXT FROM
-                                                                        sysadmincursor INTO @strval;
-                                                                END;
-
-                                                                CLOSE sysadmincursor;
-                                                                DEALLOCATE sysadmincursor;
-
-                                                                IF (LEN(@metricval) = 0)
-                                                                        SELECT
-                                                                                @sevcode = @sevcodeok,
-                                                                                @metricval = N'No logins found.';
-                                                                ELSE
-                                                                        SELECT
-                                                                                @sevcode = @severity,
-                                                                                @metricval = N'sysadmin role has unauthorized members: '
-                                                                                + @metricval;
-                                                        END;
-                                                        ELSE
-                                                                SELECT
-                                                                        @sevcode = @sevcodeok,
-                                                                        @metricval = N'No list of unapproved logins was provided.';
-
-                                                        SELECT
-                                                                @metricthreshold = N'Server is vulnerable if the sysadmin server role members include other logins than: '
-                                                                + @severityvalues;
-                                                END;
+					-- Unauthorized Accounts Check
+											ELSE IF (@metricid = 71)
+											BEGIN
+												IF(LEN(@severityvalues) > 0)
+													BEGIN
+														IF OBJECT_ID('tempdb..#usersWithExtendedPermissions') IS NOT NULL
+															DROP TABLE #usersWithExtendedPermissions;
+														CREATE TABLE #usersWithExtendedPermissions
+														(name           NVARCHAR(128),
+														 permissionName NVARCHAR(128),
+														 isSysadmin     BIT
+														);
+														SELECT @sql = N'INSERT INTO #usersWithExtendedPermissions
+																											SELECT name, permissionName, isSysadmin FROM
+																													(
+																														select distinct name, ''sysadmin'' as permissionName, 1 as isSysadmin 
+																														from #sysadminstbl 
+																														UNION
+																														select distinct sprinc.name, permission as permissionName, 0 as isSysadmin from serverprincipal sprinc
+																														left outer join [dbo].[serverpermission] as spermis on spermis.grantee = sprinc.principalid
+																														where permission in (''IMPERSONATE ANY LOGIN'', ''SELECT ALL USER SECURABLES'', ''CONNECT ANY DATABASE'')
+																														and sprinc.snapshotid = '+CONVERT( NVARCHAR, @snapshotid)+'
+																														UNION
+																														select distinct dprinc.name, permission as permissionName, 0 as isSysadmin from databaseprincipal dprinc
+																														left outer join [dbo].[databaseobjectpermission] as dop on dop.grantee = dprinc.uid and dop.dbid = dprinc.dbid
+																														where permission in (''ALTER ANY COLUMN MASTER KEY'', ''ALTER ANY COLUMN ENCRYPTION KEY'', ''VIEW ANY COLUMN MASTER KEY DEFINITION'', ''VIEW ANY COLUMN ENCRYPTION KEY DEFINITION'', ''ALTER ANY SECURITY POLICY'', ''ALTER ANY MASK'', ''UNMASK'')
+																														and dprinc.snapshotid = '+CONVERT(NVARCHAR, @snapshotid)+'
+																													) result
+																											where lower(name) not in ('+LOWER(@severityvalues)+N')';
+														IF(CHARINDEX('%', @severityvalues) > 0)
+															BEGIN
+																SELECT @strval = LOWER(@severityvalues),
+																	   @intval = CHARINDEX(''',''', @strval);
+																WHILE(@intval > 0)
+																	BEGIN
+																		SELECT @intval2 = CHARINDEX('%', @strval);
+																		IF(@intval2 < @intval)		-- this item contains a wildcard
+																			SELECT @sql = @sql+' and lower(name) not like '+SUBSTRING(@strval, 1, @intval);
+																		SELECT @strval = SUBSTRING(@strval, @intval+2, LEN(@strval)-(@intval+1));
+																		SELECT @intval = CHARINDEX(''',''', @strval);
+																	END;
+																IF(LEN(@strval) > 0)
+																	BEGIN
+																		SELECT @intval2 = CHARINDEX('%', @strval);
+																		IF(@intval2 > 0)		-- this item contains a wildcard
+																			SELECT @sql = @sql+' and lower(name) not like '+@strval;
+																	END;
+															END;
+														SELECT @sql = @sql+N' order by name';
+														SELECT @sql = @sql+'
+																							declare sysadmincursor cursor for
+																							SELECT name, isSysadmin from #usersWithExtendedPermissions 
+																							GROUP BY name, isSysadmin 
+																							ORDER BY name';
+														EXEC (@sql);
+														OPEN sysadmincursor;
+														SELECT @intval = 0,
+															   @intval2 = 0;
+														DECLARE @unauthorizedUserName AS NVARCHAR(128), @isSysAdmin AS BIT;
+														FETCH NEXT FROM sysadmincursor INTO @unauthorizedUserName, @isSysAdmin;
+														WHILE @@fetch_status = 0
+															BEGIN
+																DECLARE @currentRoleText AS NVARCHAR(MAX);
+																SET @currentRoleText = '';
+																IF(EXISTS
+																  (
+																	  SELECT 1
+																	  FROM #usersWithExtendedPermissions
+																	  WHERE name = @unauthorizedUserName
+																  ))
+																	BEGIN
+																		DECLARE @unautorizedPermissionsList VARCHAR(MAX);
+																		SET @unautorizedPermissionsList = '';
+																		SELECT @unautorizedPermissionsList = @unautorizedPermissionsList+permissionName+', '
+																		FROM #usersWithExtendedPermissions
+																		WHERE name = @unauthorizedUserName;
+																		SET @unautorizedPermissionsList = SUBSTRING(@unautorizedPermissionsList, 1, LEN(@unautorizedPermissionsList)-1);
+																		SET @currentRoleText = ''''+@unauthorizedUserName+''' ('+@unautorizedPermissionsList+') ';
+																	END;
+																SELECT @intval = @intval + 1;
+																IF(LEN(@metricval) + LEN(@currentRoleText) + LEN(@strval2) > 1400)
+																	BEGIN
+																		IF @intval2 = 0
+																			SELECT @metricval = @metricval+N', more...',
+																				   @intval2 = 1;
+																	END;
+																ELSE
+																SELECT @metricval = @metricval+CASE
+																								   WHEN LEN(@metricval) > 0
+																								   THEN N', '
+																								   ELSE N''
+																							   END+N''+@currentRoleText+N'';
+																IF(@isadmin = 1)
+																	INSERT INTO policyassessmentdetail
+																	(policyid,
+																	 assessmentid,
+																	 metricid,
+																	 snapshotid,
+																	 detailfinding,
+																	 databaseid,
+																	 objecttype,
+																	 objectid,
+																	 objectname
+																	)
+																	VALUES
+																	(@policyid,
+																	 @assessmentid,
+																	 @metricid,
+																	 @snapshotid,
+																	 N'Unauthorized member found: '+@currentRoleText+N'',
+																	 NULL, -- database ID,
+																	 N'iLOGN', -- object type
+																	 NULL,
+																	 @strval
+																	);
+																FETCH NEXT FROM sysadmincursor INTO @unauthorizedUserName, @isSysAdmin;
+															END;
+														CLOSE sysadmincursor;
+														DEALLOCATE sysadmincursor;
+														IF(LEN(@metricval) = 0)
+															SELECT @sevcode = @sevcodeok,
+																   @metricval = N'No logins found.';
+														ELSE
+														SELECT @sevcode = @severity,
+															   @metricval = N'Unauthorized member found: '+@metricval;
+													END;
+												ELSE
+												SELECT @sevcode = @sevcodeok,
+													   @metricval = N'No list of unapproved logins was provided.';
+												SELECT @metricthreshold = N'Server is vulnerable if not authorized logins are sysadmins or they have extended permissions. Authorized logins are: '+@severityvalues;
+											END;
                                                 -- sa Account disabled  (this is a subset of metric 16)
                                                 ELSE
                                                 IF (@metricid = 72)
@@ -8929,6 +8931,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 SET @sevcode = @severity;
 
                                                         END;
+														IF OBJECT_ID('tempdb..#keys') IS NOT NULL DROP TABLE #keys;
                                                 END;
                                                 ELSE
                                                 IF (@metricid = 114)
@@ -8952,9 +8955,11 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 IF NOT EXISTS (SELECT
                                                                                 1
                                                                         FROM #certs)
+																		BEGIN
                                                                         SELECT
                                                                                 @sevcode = @sevcodeok,
                                                                                 @metricval = N'All certificate private keys were exported.';
+																				END
                                                                 ELSE
                                                                 BEGIN
 
@@ -8993,6 +8998,7 @@ AS -- <Idera SQLsecure version and copyright>
 
                                                                 END;
                                                         END;
+														IF OBJECT_ID('tempdb..#certs') IS NOT NULL DROP TABLE #certs;
                                                 END;
                                                 --**************************** code added to handle user defined security checks, but never used (first added in version 2.5)
                                                 -- User implemented

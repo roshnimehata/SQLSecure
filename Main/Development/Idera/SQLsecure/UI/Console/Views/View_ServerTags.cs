@@ -355,9 +355,9 @@ namespace Idera.SQLsecure.UI.Console.Views
             {
 
                 int tagId = (int)_grid_Tags.ActiveRow.Cells[colHeaderHiddenTagID].Value;
-                var servers = TagWorker.GetTagServers(tagId);
+                var tag = TagWorker.GetTagById(tagId);
                 List<RegisteredServer> serversToRun = new List<RegisteredServer>();
-                foreach (TaggedServer item in servers)
+                foreach (TaggedServer item in tag.TaggedServers)
                 {
                     serversToRun.Add(Program.gController.Repository.GetServer(item.Name));
 
@@ -374,6 +374,11 @@ namespace Idera.SQLsecure.UI.Console.Views
                     {
                         failedServer.Add(server.ConnectionName);
                     }
+                }
+                if (failedServer.Count != serversToRun.Count)
+                {
+                    MsgBox.ShowInfo(ErrorMsgs.ManageTags,
+                        string.Format("Start snapshot for server group tag {0}.", tag.Name));
                 }
                 if (failedServer.Count != 0)
                 {

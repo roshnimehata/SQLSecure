@@ -10,6 +10,14 @@
         public string Version { get; set; }
         public string HadrClusterName { get; set; }
 
+        public bool IsServerInAoag
+        {
+            get
+            {
+                return HadrManagerStatus == HadrManagerStatus.StartedAndRunning;
+            }
+        }
+
         public SQLServerProperties()
         {
             MachineName = string.Empty;

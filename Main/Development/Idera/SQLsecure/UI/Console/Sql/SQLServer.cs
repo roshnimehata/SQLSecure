@@ -41,14 +41,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
             fullName = string.Empty;
 
             var serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword);
-            var isServerInAoag = serverProperties.HadrManagerStatus == HadrManagerStatus.StartedAndRunning;
 
-            if (isServerInAoag)//todo check this 
+            if (serverProperties.IsServerInAoag)
             {
-                var nodeProperties = GetSqlServerProperties(serverProperties.ServerName, sqlLogin, sqlPassword);
-                var isWhantConnectToTheClusterNotToTheNode = nodeProperties.LocalNetAddress != serverProperties.LocalNetAddress;
+                SQLServerProperties nodeProperties;
+                var isConnectionDirectlyToTheNode = TryGetSqlServerProperties(serverProperties.ServerName, sqlLogin, sqlPassword, out nodeProperties) &&
+                                                    nodeProperties.LocalNetAddress == serverProperties.LocalNetAddress;
 
-                if (isWhantConnectToTheClusterNotToTheNode)
+                if (!isConnectionDirectlyToTheNode)
                 {
                     version = serverProperties.Version;
                     instanceName = serverProperties.InstanceName;
@@ -62,6 +62,21 @@ namespace Idera.SQLsecure.UI.Console.Sql
             machineName = serverProperties.MachineName;
             instanceName = serverProperties.InstanceName;
             fullName = serverProperties.ServerName;
+        }
+
+        public static bool TryGetSqlServerProperties(string instance, string sqlLogin, string sqlPassword, out SQLServerProperties serverProperties)
+        {
+            try
+            {
+                serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword);
+                return true;
+            }
+            catch
+            {
+                logX.loggerX.WarnFormat("Error while getting server properties. For instance: {0}.", instance);
+                serverProperties = null;
+                return false;
+            }
         }
 
         public static SQLServerProperties GetSqlServerProperties(string instance, string sqlLogin, string sqlPassword)

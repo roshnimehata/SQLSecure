@@ -455,6 +455,19 @@ IF ( ISNULL(@ver, 900) <= 2999 )	-- Check to prevent this from running in future
 
 
 
+-----Unauthorized Accounts Check
+		UPDATE metric 
+		SET
+			metricname = 'Unauthorized Account Check', 
+			valuedescription = 'When enabled, this check will identify a risk if any unauthorized accounts are members of the sysadmin server role or SoD roles like "CONNECT ANY DATABASE", "IMPERSONATE ANY LOGIN", "SELECT ALL USER SECURABLES", "ALTER ANY COLUMN MASTER KEY", "ALTER ANY COLUMN ENCRYPTION KEY", "VIEW ANY COLUMN MASTER KEY DEFINITION", "VIEW ANY COLUMN ENCRYPTION KEY DEFINITION", "ALTER ANY SECURITY POLICY", "ALTER ANY MASK", "UNMASK". Specify the unauthorized accounts. Can use ''%'' as wildcard.',
+			metricdescription =  'Determine whether unauthorized accounts have sysadmin privileges on the SQL Server or has SoD roles like "CONNECT ANY DATABASE", "IMPERSONATE ANY LOGIN", "SELECT ALL USER SECURABLES", "ALTER ANY COLUMN MASTER KEY", "ALTER ANY COLUMN ENCRYPTION KEY", "VIEW ANY COLUMN MASTER KEY DEFINITION", "VIEW ANY COLUMN ENCRYPTION KEY DEFINITION", "ALTER ANY SECURITY POLICY", "ALTER ANY MASK", "UNMASK"'
+		WHERE metricid = 71
+		
+		UPDATE policymetric
+		SET 
+			reporttext = 'Do unauthorized accounts have sysadmin privileges or "CONNECT ANY DATABASE", "IMPERSONATE ANY LOGIN", "SELECT ALL USER SECURABLES" or "ALTER ANY COLUMN MASTER KEY", "ALTER ANY COLUMN ENCRYPTION KEY", "VIEW ANY COLUMN MASTER KEY DEFINITION", "VIEW ANY COLUMN ENCRYPTION KEY DEFINITION", "ALTER ANY SECURITY POLICY", "ALTER ANY MASK", "UNMASK" roles?'
+		WHERE metricid = 71
+
 ---------------------End Health checks--------------------------------------------------------------------------------------------------------
 
 
