@@ -132,7 +132,7 @@
         </Style>
         <Height>0.5in</Height>
       </Rectangle>
-      <Rectangle Name="errorRectangle">
+      <!-- <Rectangle Name="errorRectangle">
         <Left>0.125in</Left>
         <ReportItems>
           <Image Name="errGraphic">
@@ -180,7 +180,7 @@
           </BorderColor>
         </Style>
         <Height>0.584in</Height>
-      </Rectangle>
+      </Rectangle> -->
       <Subreport Name="subreport1">
         <Left>2.6875in</Left>
         <MergeTransactions>true</MergeTransactions>
