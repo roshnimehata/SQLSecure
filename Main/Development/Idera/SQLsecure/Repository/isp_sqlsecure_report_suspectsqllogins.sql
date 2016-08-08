@@ -24,7 +24,10 @@ AS -- <Idera SQLsecure version and copyright>
     INSERT  #tmpservers
             EXEC [dbo].[isp_sqlsecure_getpolicymemberlist] @policyid = @policyid;  
 
-
+	declare @snapshotId as int;
+	
+	
+	            
     SELECT  d.connectionname ,
             a.name ,
             [type] = CASE WHEN a.type = 'G' THEN 'Group'
@@ -44,16 +47,24 @@ AS -- <Idera SQLsecure version and copyright>
             AND UPPER(d.connectionname) LIKE UPPER(@serverName)
             AND NOT EXISTS ( SELECT 1
                              FROM   serverpermission perm
-                             WHERE  perm.grantee = a.principalid )
+                             WHERE  perm.grantee = a.principalid AND perm.isgrant='Y' and perm.snapshotid IN (
+            SELECT  snapshotid
+            FROM    dbo.getsnapshotlist(@rundate, @usebaseline)))
             AND NOT EXISTS ( SELECT 1
                              FROM   databaseobjectpermission dbp
-                             WHERE  dbp.grantee = a.principalid )
+                             WHERE  dbp.grantee = a.principalid AND dbp.isgrant='Y' and dbp.snapshotid IN (
+            SELECT  snapshotid
+            FROM    dbo.getsnapshotlist(@rundate, @usebaseline)))
             AND NOT EXISTS ( SELECT 1
                              FROM   databaseprincipalpermission dbp
-                             WHERE  dbp.grantee = a.principalid )
+                             WHERE  dbp.grantee = a.principalid AND dbp.isgrant='Y'  and dbp.snapshotid IN (
+            SELECT  snapshotid
+            FROM    dbo.getsnapshotlist(@rundate, @usebaseline)))
             AND NOT EXISTS ( SELECT 1
                              FROM   databaseschemapermission dbp
-                             WHERE  dbp.grantee = a.principalid )
+                             WHERE  dbp.grantee = a.principalid AND dbp.isgrant='Y'  and dbp.snapshotid IN (
+            SELECT  snapshotid
+            FROM    dbo.getsnapshotlist(@rundate, @usebaseline)))
     GROUP BY d.connectionname ,
             a.name ,
             a.type

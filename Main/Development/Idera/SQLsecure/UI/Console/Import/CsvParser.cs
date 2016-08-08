@@ -214,14 +214,18 @@ namespace Idera.SQLsecure.UI.Console.Import
         {
             bool val;
             if (stringValue.Trim().Equals("1")) val = true; //allow to parse 1=true; 0=false
-            else bool.TryParse(stringValue, out val);
+            else
+            if (stringValue.Trim().Equals("0")) val = false; //allow to parse 1=true; 0=false
+            else if(!bool.TryParse(stringValue, out val))
+                throw new InvalidDataException("Cannot parse boolean value.");
             return val;
         }
 
         private static int IntValue(string stringValue)
         {
             int intValue;
-            int.TryParse(stringValue, out intValue);
+            if(!int.TryParse(stringValue, out intValue))
+                throw new InvalidDataException("Cannot parse integer value.");
             return intValue;
         }
         #endregion

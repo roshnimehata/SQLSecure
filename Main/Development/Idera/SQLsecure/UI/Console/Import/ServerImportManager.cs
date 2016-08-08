@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Authentication;
 using System.Security.Principal;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
@@ -9,6 +10,7 @@ using Idera.SQLsecure.UI.Console.Forms;
 using Idera.SQLsecure.UI.Console.Import.Models;
 using Idera.SQLsecure.UI.Console.Sql;
 using Idera.SQLsecure.UI.Console.SQL;
+using Idera.SQLsecure.UI.Console.Utility;
 using Server = Idera.SQLsecure.Core.Accounts.Server;
 
 namespace Idera.SQLsecure.UI.Console.Import
@@ -59,7 +61,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                 }
 
                 var parsedSqlServerVersion = SqlHelper.ParseVersion(sqlServerVersion);
-                Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedSqlServerVersion, itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication,
+                ServerInfo serverInfo = new ServerInfo(parsedSqlServerVersion, itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication,
                 itemToImport.UserName, itemToImport.Password, connectionName);
                 try
                 {
@@ -87,8 +89,26 @@ namespace Idera.SQLsecure.UI.Console.Import
                     logX.loggerX.Error(ex.Message);
                     return false;
                 }
+                var server = repository.RegisteredServers.Find(connectionName);
+               
+                //Add email notification
+                try
+                {
+                    int providerId = Program.gController.Repository.NotificationProvider.ProviderId;
+                    RegisteredServerNotification rSN =
+                        new RegisteredServerNotification(SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry());
+                    rSN.RegisteredServerId = server.RegisteredServerId;
+                    rSN.ProviderId = providerId;
+                    rSN.Recipients = string.Empty;
+                    rSN.SnapshotStatus = RegisteredServerNotification.SnapshotStatusNotification_Never;
+                    rSN.PolicyMetricSeverity = (int)RegisteredServerNotification.MetricSeverityNotificaiton.Never;
+                    rSN.AddNotificationProvider(repository.ConnectionString);
 
-
+                }
+                catch (Exception ex)
+                {
+                    errorList.Add(ex.Message);
+                }
                 // Add rules to the repository.
                 try
                 {
@@ -112,8 +132,8 @@ namespace Idera.SQLsecure.UI.Console.Import
 
                 try
                 {
-                    var server = repository.RegisteredServers.Find(connectionName);
-                    if(server!=null) AddServerToTags(server.RegisteredServerId);
+                   
+                     AddServerToTags(server.RegisteredServerId);
                 }
                 catch (Exception ex)
                 {
@@ -250,14 +270,7 @@ namespace Idera.SQLsecure.UI.Console.Import
             }
         }
 
-        private static bool IsWindowsCredentialsValid(ImportItem importItem)
-        {
-            string domain, user;
-
-            Path.SplitSamPath(importItem.UserName, out domain, out user);
-            if (string.IsNullOrEmpty(domain) || string.IsNullOrEmpty(user)) return false;
-            return true;
-        }
+      
 
         private static bool ValidateCredentials(ImportItem importItem, out string sqlServerVersion, out string machine,
             out string instance, out string fullName, out string errorMsg)
@@ -275,7 +288,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                         login = importItem.UserName;
                         password = importItem.Password;
                     }
-                    else if (IsWindowsCredentialsValid(importItem))
+                    else
                         impersonationContext = Impersonate(importItem.UserName, importItem.Password);
 
 

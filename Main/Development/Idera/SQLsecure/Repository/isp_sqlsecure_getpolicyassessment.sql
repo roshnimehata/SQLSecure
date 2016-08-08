@@ -8906,16 +8906,9 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         + ',' + CHAR(13)
                                                                         + CHAR(10)
                                                                 FROM #keys;
-                                                                SET @foundKeys = SUBSTRING(@foundKeys,
-                                                                1,
-                                                                LEN(@foundKeys)
-                                                                - 1);
-                                                                SET @metricval = 'There are keys that have not supported encryption method: '
-                                                                + CHAR(13)
-                                                                + CHAR(10)
-                                                                + @foundKeys
-                                                                + '';
-
+                                                                SET @foundKeys = SUBSTRING(@foundKeys,1,LEN(@foundKeys)- 1);
+                                                                SET @metricval = 'There are keys that have not supported encryption method: '+ CHAR(13)+ CHAR(10)+ @foundKeys+ '';
+																set @metricthreshold = 'Server is vulnerable if there are encryption methods other than : '+@severityvalues;
                                                                 INSERT INTO policyassessmentdetail (policyid,
                                                                 assessmentid,
                                                                 metricid,

@@ -294,7 +294,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         #region Common Tasks
 
         public const String Task_Title_Register = @"Register a SQL Server";
-        public const String Task_Title_Import = @"Import Servers";
+        public const String Task_Title_Import = @"Import SQL Servers";
         public const String Task_Descr_Register = @"Start auditing security data for a SQL Server and its databases";
         public const String Task_Title_Configure = @"Configure Audit Settings";
         public const String Task_Title_Configure_Short = @"Configure";

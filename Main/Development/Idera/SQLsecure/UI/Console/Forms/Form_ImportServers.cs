@@ -21,10 +21,22 @@ namespace Idera.SQLsecure.UI.Console.Forms
 {
     public partial class Form_ImportServers : Idera.SQLsecure.UI.Console.Controls.BaseDialogForm
     {
-       
+
+        private Form_ProcessDialog processdDialog;
+
+        private void CancelImportHandler(object sender, EventArgs e)
+        {
+            if (backgroundWorker.IsBusy && backgroundWorker.WorkerSupportsCancellation &&
+                    !backgroundWorker.CancellationPending)
+            {
+                backgroundWorker.CancelAsync();
+            }
+        }
+
         public Form_ImportServers()
         {
             InitializeComponent();
+
             backgroundWorker.DoWork += ProcessServersImport;
             backgroundWorker.RunWorkerCompleted += ImportFinished;
 
@@ -41,11 +53,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
 
 
-      
+
         private void ImportFinished(object sender, RunWorkerCompletedEventArgs e)
         {
             using (logX.loggerX.InfoCall())
             {
+                processdDialog.Close();
                 if (e.Error != null)
                 {
                     MsgBox.ShowError(ErrorMsgs.ImportServersCaption, ErrorMsgs.ImportedWithErrors);
@@ -53,10 +66,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 else if (e.Cancelled)
                 {
                     MsgBox.ShowWarning(ErrorMsgs.ImportServersCaption, ErrorMsgs.ImportCancelled);
-                    Close();
+
                 }
                 else MsgBox.ShowInfo(ErrorMsgs.ImportServersCaption, ErrorMsgs.ImportSuccessfull);
                 Program.gController.SignalRefreshServersEvent(true, string.Empty);
+
                 UnLockControls();
             }
         }
@@ -77,16 +91,18 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         //parse
                         List<ImportItem> parsedData = ParseFile();
 
-                        if (parsedData != null)
-                        {
-                            UpdateListViewItemsFromParsedData(parsedData);
-                        }
+                        if (parsedData.Count == 0) throw new InvalidDataException(ErrorMsgs.EmptyImportFileError);
+
+
+                        UpdateListViewItemsFromParsedData(parsedData);
+
                         CheckIfCanImport(lvImportStatus);
 
                     }
                 }
                 catch (Exception ex)
                 {
+                    textBox_ServersImportFile.Text = string.Empty;
                     logX.loggerX.Error(ex.Message);
                     MsgBox.ShowError(ErrorMsgs.ImportServersCaption, ex.Message);
 
@@ -154,6 +170,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     if (!backgroundWorker.IsBusy)
                     {
                         LockControls();
+                        ShowProcessDialog();
                         backgroundWorker.RunWorkerAsync(Program.gController.Repository);
                     }
 
@@ -168,21 +185,32 @@ namespace Idera.SQLsecure.UI.Console.Forms
             }
         }
 
+        private void ShowProcessDialog()
+        {
+            if (processdDialog == null || processdDialog.IsDisposed)
+                processdDialog = new Form_ProcessDialog(ErrorMsgs.ImportServersCaption,
+                    "Import in progress\nPress Cancel to stop", CancelImportHandler, Properties.Resources.ImportServers_48);
+            processdDialog.Show();
+        }
+
         private void LockControls()
         {
             ultraButton_OK.Enabled = false;
             button_Browse.Enabled = false;
             textBox_ServersImportFile.Enabled = false;
+            ultraButton_Cancel.Enabled = false;
         }
 
         private void UnLockControls()
         {
             ultraButton_OK.Enabled = true;
             button_Browse.Enabled = true;
+            ultraButton_Cancel.Enabled = true;
             textBox_ServersImportFile.Enabled = true;
         }
         private void ProcessServersImport(object sender, DoWorkEventArgs doWorkEventArgs)
         {
+
             using (logX.loggerX.InfoCall())
             {
                 var worker = sender as BackgroundWorker;
@@ -199,44 +227,45 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         if (backgroundWorker.CancellationPending)
                         {
                             doWorkEventArgs.Cancel = true;
-                            break;
+                            UpdateItemImportStatus(lvImport, ImportStatusIcon.Undefined, "Cancelled");
                         }
-                        try
-                        {
-                            ImportItem importItem = lvImport.Tag as ImportItem;
-                            if (importItem == null)
+                        else
+                            try
                             {
-                                UpdateItemImportStatus(lvImport, ImportStatusIcon.Error, "Not imported. Data is empty");
-
-                                continue; //skip element
-                            }
-
-                            if (lvImport.CheckState == CheckState.Unchecked)
-                            {
-                                UpdateItemImportStatus(lvImport, ImportStatusIcon.Undefined, "Skipped");
-                                continue;
-                            }
-
-                            var importSettings = new ImportSettings
-                            {
-                                ForcedServerRegistration = cbRegisterAnyway.Checked
-                            };
-                            importSettings.OnImportStatusChanged +=
-                                delegate(ImportStatusIcon importIcon, string statusMessage)
+                                ImportItem importItem = lvImport.Tag as ImportItem;
+                                if (importItem == null)
                                 {
-                                    UpdateItemImportStatus(lvImport, importIcon, statusMessage);
+                                    UpdateItemImportStatus(lvImport, ImportStatusIcon.Error, "Not imported. Data is empty");
+
+                                    continue; //skip element
+                                }
+
+                                if (lvImport.CheckState == CheckState.Unchecked)
+                                {
+                                    UpdateItemImportStatus(lvImport, ImportStatusIcon.Undefined, "Skipped");
+                                    continue;
+                                }
+
+                                var importSettings = new ImportSettings
+                                {
+                                    ForcedServerRegistration = cbRegisterAnyway.Checked
                                 };
+                                importSettings.OnImportStatusChanged +=
+                                    delegate (ImportStatusIcon importIcon, string statusMessage)
+                                    {
+                                        UpdateItemImportStatus(lvImport, importIcon, statusMessage);
+                                    };
 
-                            if (ServerImportManager.ImportItem(importItem, repository, importSettings) && worker != null)
-                                worker.ReportProgress(0,
-                                    importItem.ServerName.Trim().ToUpper(CultureInfo.InvariantCulture));
+                                if (ServerImportManager.ImportItem(importItem, repository, importSettings) && worker != null)
+                                    worker.ReportProgress(0,
+                                        importItem.ServerName.Trim().ToUpper(CultureInfo.InvariantCulture));
 
-                        }
-                        catch (Exception ex)
-                        {
-                            logX.loggerX.Error(ex.Message);
-                            UpdateItemImportStatus(lvImport, ImportStatusIcon.Error, ex.Message);
-                        }
+                            }
+                            catch (Exception ex)
+                            {
+                                logX.loggerX.Error(ex.Message);
+                                UpdateItemImportStatus(lvImport, ImportStatusIcon.Error, ex.Message);
+                            }
                     }
                 }
             }
@@ -260,7 +289,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                 MsgBox.ShowConfirm(ErrorMsgs.ImportServersCaption, ErrorMsgs.AllowSqlServersUpdate) ==
                                 DialogResult.No)
                             {
-                                
+
                                 return false;
                             }
                             else allowServerUpdates = true;
@@ -282,7 +311,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 if (lvImportStatus.InvokeRequired)
                 {
                     SetImportItemState setState = new SetImportItemState(UpdateItemImportStatus);
-                    this.Invoke(setState, new object[] {lvImport, statusIcon, statusMessage});
+                    this.Invoke(setState, new object[] { lvImport, statusIcon, statusMessage });
                 }
                 else
                 {
@@ -349,13 +378,26 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private void ultraButton_Cancel_Click(object sender, EventArgs e)
         {
-            if (backgroundWorker.IsBusy && backgroundWorker.WorkerSupportsCancellation &&
-                !backgroundWorker.CancellationPending)
+            try
             {
-                ultraButton_Cancel.Enabled = false;
-                backgroundWorker.CancelAsync();
+                if (cbDeleteCsvFileOnClose.Checked &&
+                    MessageBox.Show(ErrorMsgs.ConfirmCsvFileRemove, ErrorMsgs.ImportServersCaption,
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    File.Delete(ofd_OpenFileToImport.FileName);
+                }
+
+
+                Close();
             }
-            else Close();
+            catch (Exception ex)
+            {
+
+                logX.loggerX.Error(ex);
+                MsgBox.ShowError(ErrorMsgs.ImportServersCaption, ex.Message);
+                Close();
+
+            }
         }
 
         private void ultraButton_Help_Click(object sender, EventArgs e)

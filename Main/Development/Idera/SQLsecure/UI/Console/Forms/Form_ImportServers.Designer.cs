@@ -46,6 +46,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.colServerName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colImportStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.cbDeleteCsvFileOnClose = new System.Windows.Forms.CheckBox();
             this._bfd_ButtonPanel.SuspendLayout();
             this._bf_MainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lvImportStatus)).BeginInit();
@@ -64,6 +65,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _bf_MainPanel
             // 
+            this._bf_MainPanel.Controls.Add(this.cbDeleteCsvFileOnClose);
             this._bf_MainPanel.Controls.Add(this.lvImportStatus);
             this._bf_MainPanel.Controls.Add(this.cbRegisterAnyway);
             this._bf_MainPanel.Controls.Add(this.button_Browse);
@@ -102,7 +104,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraButton_Cancel.Name = "ultraButton_Cancel";
             this.ultraButton_Cancel.Size = new System.Drawing.Size(75, 23);
             this.ultraButton_Cancel.TabIndex = 11;
-            this.ultraButton_Cancel.Text = "&Cancel";
+            this.ultraButton_Cancel.Text = "&Close";
             this.ultraButton_Cancel.Click += new System.EventHandler(this.ultraButton_Cancel_Click);
             // 
             // button_Browse
@@ -131,7 +133,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // cbRegisterAnyway
             // 
             this.cbRegisterAnyway.AutoSize = true;
-            this.cbRegisterAnyway.Location = new System.Drawing.Point(12, 429);
+            this.cbRegisterAnyway.Location = new System.Drawing.Point(178, 429);
             this.cbRegisterAnyway.Name = "cbRegisterAnyway";
             this.cbRegisterAnyway.Size = new System.Drawing.Size(227, 17);
             this.cbRegisterAnyway.TabIndex = 9;
@@ -200,16 +202,28 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.backgroundWorker.WorkerReportsProgress = true;
             this.backgroundWorker.WorkerSupportsCancellation = true;
             // 
+            // cbDeleteCsvFileOnClose
+            // 
+            this.cbDeleteCsvFileOnClose.AutoSize = true;
+            this.cbDeleteCsvFileOnClose.Checked = true;
+            this.cbDeleteCsvFileOnClose.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbDeleteCsvFileOnClose.Location = new System.Drawing.Point(12, 429);
+            this.cbDeleteCsvFileOnClose.Name = "cbDeleteCsvFileOnClose";
+            this.cbDeleteCsvFileOnClose.Size = new System.Drawing.Size(160, 17);
+            this.cbDeleteCsvFileOnClose.TabIndex = 11;
+            this.cbDeleteCsvFileOnClose.Text = "Delete .csv file before close.";
+            this.cbDeleteCsvFileOnClose.UseVisualStyleBackColor = true;
+            // 
             // Form_ImportServers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(566, 583);
-            this.Description = "Import Servers from CSV file";
+            this.Description = "Import SQL Servers from CSV file";
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "Form_ImportServers";
             this.Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.ImportServers_48;
-            this.Text = "Import Servers";
+            this.Text = "Import SQL Servers";
             this._bfd_ButtonPanel.ResumeLayout(false);
             this._bf_MainPanel.ResumeLayout(false);
             this._bf_MainPanel.PerformLayout();
@@ -232,5 +246,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private System.Windows.Forms.ColumnHeader colImportStatus;
         private System.Windows.Forms.ImageList imageList1;
         private System.ComponentModel.BackgroundWorker backgroundWorker;
+        private System.Windows.Forms.CheckBox cbDeleteCsvFileOnClose;
     }
 }

@@ -527,7 +527,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             buttonTool40.SharedProps.Caption = "Edit Settings";
             buttonTool41.SharedProps.Caption = "Save as New Assessment";
             buttonTool43.SharedProps.Caption = "Compare Assessments";
-            buttonTool46.SharedProps.Caption = "Import Servers";
+            buttonTool46.SharedProps.Caption = "Import SQL Servers";
             Infragistics.Win.Appearance appearance21 = new Infragistics.Win.Appearance();
 
             Infragistics.Win.Appearance appearance12 = new Infragistics.Win.Appearance();

@@ -536,6 +536,12 @@
     <Compile Include="Forms\Form_PolicySnapshots.Designer.cs">
       <DependentUpon>Form_PolicySnapshots.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Form_ProcessDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_ProcessDialog.Designer.cs">
+      <DependentUpon>Form_ProcessDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Form_RefreshAuditData.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1079,6 +1085,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>Form_ImportPolicy.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_ProcessDialog.resx">
+      <DependentUpon>Form_ProcessDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_SnapshotAvailabilityGroupReplicaProperties.resx">
       <DependentUpon>Form_SnapshotAvailabilityGroupReplicaProperties.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1296,7 +1305,7 @@
     <EmbeddedResource Include="Reports\Report_ServerLoginsAndUserMappings.rdlc" />
     <EmbeddedResource Include="Reports\Report_ServerRoles.rdlc" />
     <EmbeddedResource Include="Reports\Report_ServersWithDangerousGroups.rdlc" />
-    <EmbeddedResource Include="Reports\Report_SuspectSqlLogins.rdlc" />
+	<EmbeddedResource Include="Reports\Report_SuspectSqlLogins.rdlc" />
     <EmbeddedResource Include="Reports\Report_SuspectWindowsAccounts.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

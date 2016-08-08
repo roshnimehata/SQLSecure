@@ -2397,7 +2397,7 @@ namespace Idera.SQLsecure.UI.Console
             node = new TreeNode(Utility.Constants.TManagementNode_TagsNode);
             node.Tag = new Utility.NodeTag(new Data.SQLsecureActivity(node.Name), Utility.View.ServerGroupTags);
 
-            node.ImageIndex = node.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.ServerTags );//todo add icon here
+            node.ImageIndex = node.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.ServerTags );
             _explorerBar_ManageSQLsecureTreeView.Nodes.Add(node);
 
 

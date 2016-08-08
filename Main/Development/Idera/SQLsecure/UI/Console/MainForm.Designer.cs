@@ -1269,7 +1269,7 @@ namespace Idera.SQLsecure.UI.Console
             this._toolStrip_ImportServers.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._toolStrip_ImportServers.Name = "_toolStrip_ImportServers";
             this._toolStrip_ImportServers.Size = new System.Drawing.Size(23, 22);
-            this._toolStrip_ImportServers.Text = "Import Servers";
+            this._toolStrip_ImportServers.Text = "Import SQL Servers";
             this._toolStrip_ImportServers.Click += new System.EventHandler(this._toolStrip_ImportServers_Click);
             // 
             // _toolStrip_NewLogin

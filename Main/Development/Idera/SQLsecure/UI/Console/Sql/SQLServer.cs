@@ -73,7 +73,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
             catch
             {
-                logX.loggerX.WarnFormat("Error while getting server properties. For instance: {0}.", instance);
+                logX.loggerX.WarnFormat("ERROR - while getting server properties. For instance: {0}.", instance);
                 serverProperties = null;
                 return false;
             }
@@ -97,14 +97,18 @@ namespace Idera.SQLsecure.UI.Console.Sql
             using (var connection = new SqlConnection(bldr.ConnectionString))
             {
                 connection.Open();
-
-                var confQuery = @"select isnull(CONNECTIONPROPERTY('local_net_address'),'') AS LocalNetAddress, 
-                                          isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
+                var isSQL2012OrHigher = IsSQL2012OrHigher(connection.ServerVersion);
+                var confQuery = @"select  isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
                                           isnull(SERVERPROPERTY('MachineName'),'')  as MachineName,
                                           isnull(SERVERPROPERTY('ServerName'),'') as ServerName,
-                                          isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName;
+                                          isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName;";
+                if (isSQL2012OrHigher)
+                {
+                    confQuery += @"SELECT top 1 cluster_name as HadrClusterName,
+                                          isnull(CONNECTIONPROPERTY('local_net_address'),'') as LocalNetAddress
+                                   FROM  sys.dm_hadr_cluster;";
+                }
 
-                                   SELECT top 1 cluster_name as HadrClusterName FROM  sys.dm_hadr_cluster;";
                 using (var rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text, confQuery, null))
                 {
                     if (rdr.HasRows && rdr.Read())
@@ -113,20 +117,39 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         result.InstanceName = rdr["InstanceName"].ToString();
                         result.MachineName = rdr["MachineName"].ToString();
                         result.ServerName = rdr["ServerName"].ToString();
-                        result.LocalNetAddress = rdr["LocalNetAddress"].ToString();
                         result.HadrManagerStatus = GetHadrManagerStatus(rdr["HadrManagerStatus"].ToString());
 
-                        if (result.HadrManagerStatus == HadrManagerStatus.StartedAndRunning &&
+                        if (isSQL2012OrHigher &&
+                            result.HadrManagerStatus == HadrManagerStatus.StartedAndRunning &&
                             rdr.NextResult() &&
                             rdr.HasRows &&
                             rdr.Read())
                         {
                             result.HadrClusterName = rdr["HadrClusterName"].ToString();
+                            result.LocalNetAddress = rdr["LocalNetAddress"].ToString();
                         }
                     }
                 }
 
                 SqlConnection.ClearPool(connection);
+            }
+
+            return result;
+        }
+
+        private static bool IsSQL2012OrHigher(string serverVersion)
+        {
+            var sql2012MajorVersion = 11;
+            var result = true;
+
+            try
+            {
+                var v = new Version(serverVersion);
+                result = v.Major >= sql2012MajorVersion;
+            }
+            catch
+            {
+                logX.loggerX.WarnFormat("ERROR - while parsing server version. For serverVersion: {0}.", serverVersion);
             }
 
             return result;
