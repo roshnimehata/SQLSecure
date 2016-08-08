@@ -315,7 +315,7 @@
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}.old"/>
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}"/>
 			<arg value="${BuildNumberPlaceholder}"/>
-			<arg value="${SQLsecure.version}"/>
+			<arg value="${SQLsecure.BuildVersion}"/>
 		</exec>
 		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
 
@@ -326,7 +326,7 @@
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.x64}.old"/>
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.x64}"/>
 			<arg value="${BuildNumberPlaceholder}"/>
-			<arg value="${SQLsecure.version}"/>
+			<arg value="${SQLsecure.BuildVersion}"/>
 		</exec>
 		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
 
@@ -337,7 +337,7 @@
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}.old"/>
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}"/>
 			<arg value="${BuildNumberPlaceholder}"/>
-			<arg value="${SQLsecure.version}"/>
+			<arg value="${SQLsecure.BuildVersion}"/>
 		</exec>
 		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
 
@@ -494,7 +494,7 @@
 			<filterchain>
 				<replacestring from="{platform}" to="x86" ignorecase="true" />
 				<replacestring from="{copyright}" to="${AssemblyInfo.Copyright}" ignorecase="true" />
-				<replacestring from="{appversion}" to="${SQLsecure.version}" ignorecase="true" />
+				<replacestring from="{appversion}" to="${SQLsecure.BuildVersion}" ignorecase="true" />
 				<replacestring from="{helpversion}" to="${help.version}" ignorecase="true" />
 				<replacestring from="{helpurl}" to="${help.url}" ignorecase="true" />
 			</filterchain>
@@ -516,7 +516,7 @@
 			<filterchain>
 				<replacestring from="{platform}" to="x64" ignorecase="true" />
 				<replacestring from="{copyright}" to="${AssemblyInfo.Copyright}" ignorecase="true" />
-				<replacestring from="{appversion}" to="${SQLsecure.version}" ignorecase="true" />
+				<replacestring from="{appversion}" to="${SQLsecure.BuildVersion}" ignorecase="true" />
 				<replacestring from="{helpversion}" to="${help.version}" ignorecase="true" />
 				<replacestring from="{helpurl}" to="${help.url}" ignorecase="true" />
 			</filterchain>
@@ -538,7 +538,7 @@
 			<filterchain>
 				<replacestring from="{platform}" to="ia64" ignorecase="true" />
 				<replacestring from="{copyright}" to="${AssemblyInfo.Copyright}" ignorecase="true" />
-				<replacestring from="{appversion}" to="${SQLsecure.version}" ignorecase="true" />
+				<replacestring from="{appversion}" to="${SQLsecure.BuildVersion}" ignorecase="true" />
 				<replacestring from="{helpversion}" to="${help.version}" ignorecase="true" />
 				<replacestring from="{helpurl}" to="${help.url}" ignorecase="true" />
 			</filterchain>
@@ -631,18 +631,16 @@
 		<attrib file="build/build.number" readonly="true"/>
 		
 		<!-- Set the build label used for P4 labeling, output dir & zip file -->
-		<property name="SQLsecure.BuildLabel" value="${SQLsecure.version}_${SQLsecure.Incremental.Label}" />
+		<property name="SQLsecure.BuildVersion" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.buildnumber}.0" />
+		<property name="SQLsecure.BuildLabel" value="${SQLsecure.BuildVersion}_${SQLsecure.Incremental.Label}" />
 	</target>
-	
-	
-	
 
 	<target name="Perforce.Sync">
 	    <!--p4sync force="true"  view="${Perforce.View}" /-->
 	</target>
 	
 	<target name="Build.ApplyVersionInfo">
-		<call target="Build.Version" unless="${property::exists('SQLsecure.version')}"/>
+		<call target="Build.Version" unless="${property::exists('SQLsecure.BuildVersion')}"/>
 		<call target="Build.GenerateCommonAssemblyInfo"/>
 	</target>
 	
@@ -656,7 +654,8 @@
 		<!--p4submit changelist="Update build number" view="${Perforce.Branch}/build/build.number"/-->
 		
 		<!-- Set the build label used for P4 labeling, output dir & zip file -->
-		<property name="SQLsecure.BuildLabel" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.buildnumber}.0" />
+		<property name="SQLsecure.BuildVersion" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.buildnumber}.0" />
+		<property name="SQLsecure.BuildLabel" value="${SQLsecure.BuildVersion}" />
 	</target>
 	
 	<target name="Build.GenerateCommonAssemblyInfo">
@@ -674,14 +673,13 @@
 				<attribute type="AssemblyCompanyAttribute" value="${AssemblyInfo.Company}" />
 				<attribute type="AssemblyProductAttribute" value="${AssemblyInfo.Product}" />
 				<attribute type="AssemblyCopyrightAttribute" value="${AssemblyInfo.Copyright}" />
-				<attribute type="AssemblyVersionAttribute" value="${SQLsecure.version}" />
+				<attribute type="AssemblyVersionAttribute" value="${SQLsecure.BuildVersion}" />
 			</attributes>
 	    	</asminfo>
 
     		<!-- Set the common assembly info file to read-only -->
 	    	<attrib file="${CommonAssemblyInfo}" readonly="true" />
 	</target>
-
 
 	<target name="Perforce.Label">
 		<!--p4label label="sqlsecure_${SQLsecure.BuildLabel}" view="${Perforce.View}"/-->
@@ -713,7 +711,5 @@
 			</fileset>
 		</copy>
 	</target>
-	
-	
 	
 </project>
