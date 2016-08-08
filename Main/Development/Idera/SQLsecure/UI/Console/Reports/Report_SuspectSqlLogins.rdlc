@@ -713,7 +713,7 @@ MNwOEwFwdMYT6XVG9WYbolwpDbcxhgJetZrMpZuKAhCRicN4K4Xf0o2oVG2JVMgmIalUk06HGRoHAnIg
     </EmbeddedImage>
   </EmbeddedImages>
   <DataSets>
-    <DataSet Name="ReportsDataset_isp_sqlsecure_report_orphanedlogins">
+    <DataSet Name="ReportsDataset_isp_sqlsecure_report_suspectsqllogins">
       <Query>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
         <CommandType>StoredProcedure</CommandType>
