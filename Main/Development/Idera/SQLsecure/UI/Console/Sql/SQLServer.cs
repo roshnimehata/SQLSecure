@@ -47,7 +47,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 SQLServerProperties nodeProperties;
                 var forcingTCP = "tcp:";
                 var tcpServerName = string.Concat(forcingTCP, serverProperties.ServerName);
-                var isConnectionDirectlyToTheNode = TryGetSqlServerProperties(tcpServerName, sqlLogin, sqlPassword, out nodeProperties) &&
+                var isLocalhost = string.IsNullOrEmpty(serverProperties.LocalNetAddress);
+                var isWeOnWantedNode = serverProperties.ClientNetAddress == serverProperties.LocalNetAddress;
+                var isConnectionDirectlyToTheNode = isLocalhost || isWeOnWantedNode ||
+                                                    TryGetSqlServerProperties(tcpServerName, sqlLogin, sqlPassword, out nodeProperties) &&
                                                     nodeProperties.LocalNetAddress == serverProperties.LocalNetAddress;
 
                 if (!isConnectionDirectlyToTheNode)
@@ -107,7 +110,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 if (isSQL2012OrHigher)
                 {
                     confQuery += @"SELECT top 1 cluster_name as HadrClusterName,
-                                          isnull(CONNECTIONPROPERTY('local_net_address'),'') as LocalNetAddress
+                                          isnull(CONNECTIONPROPERTY('local_net_address'),'') as LocalNetAddress,
+                                          isnull(CONNECTIONPROPERTY('client_net_address'),'') as ClientNetAddress
                                    FROM  sys.dm_hadr_cluster;";
                 }
 
@@ -129,6 +133,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         {
                             result.HadrClusterName = rdr["HadrClusterName"].ToString();
                             result.LocalNetAddress = rdr["LocalNetAddress"].ToString();
+                            result.ClientNetAddress = rdr["ClientNetAddress"].ToString();
                         }
                     }
                 }

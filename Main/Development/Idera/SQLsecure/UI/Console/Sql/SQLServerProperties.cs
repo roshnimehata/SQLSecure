@@ -7,6 +7,7 @@
         public string ServerName { get; set; }
         public string InstanceName { get; set; }
         public string LocalNetAddress { get; set; }
+        public string ClientNetAddress { get; set; }
         public string Version { get; set; }
         public string HadrClusterName { get; set; }
 
