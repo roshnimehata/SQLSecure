@@ -47,7 +47,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 SQLServerProperties nodeProperties;
                 var forcingTCP = "tcp:";
                 var tcpServerName = string.Concat(forcingTCP, serverProperties.ServerName);
-                var isConnectionDirectlyToTheNode = TryGetSqlServerProperties(serverProperties.ServerName, sqlLogin, sqlPassword, out nodeProperties) &&
+                var isConnectionDirectlyToTheNode = TryGetSqlServerProperties(tcpServerName, sqlLogin, sqlPassword, out nodeProperties) &&
                                                     nodeProperties.LocalNetAddress == serverProperties.LocalNetAddress;
 
                 if (!isConnectionDirectlyToTheNode)
