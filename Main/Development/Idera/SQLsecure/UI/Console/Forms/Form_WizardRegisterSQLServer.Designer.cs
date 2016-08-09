@@ -145,8 +145,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // _wizard
             // 
             this._wizard.BannerImage = ((System.Drawing.Image)(resources.GetObject("_wizard.BannerImage")));
-            this._wizard.Controls.Add(this._PageTags);
             this._wizard.Controls.Add(this._page_FilePermissionFolders);
+            this._wizard.Controls.Add(this._PageTags);
             this._wizard.Controls.Add(this._page_JobSchedule);
             this._wizard.Controls.Add(this._page_CollectData);
             this._wizard.Controls.Add(this._page_DefineFilters);
@@ -229,6 +229,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ulTags.Text = "ultraListView1";
             this.ulTags.View = Infragistics.Win.UltraWinListView.UltraListViewStyle.Details;
             this.ulTags.ViewSettingsDetails.CheckBoxStyle = Infragistics.Win.UltraWinListView.CheckBoxStyle.CheckBox;
+            this.ulTags.Leave += new System.EventHandler(this.ulTags_Leave);
             this.ulTags.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ulTags_MouseDown);
             // 
             // _page_DefineFilters

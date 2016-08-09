@@ -52,7 +52,6 @@ namespace Idera.SQLsecure.UI.Console.Views
 
 
         // UI Column Headings
-        private const string colTypeIcon = "TypeIcon";
         private const string colHeaderTagName = "TagName";
         private const string colHeaderHiddenTagID = "TagId";
         private const string colHeaderHiddenServerId = "ServerId";
@@ -69,10 +68,9 @@ namespace Idera.SQLsecure.UI.Console.Views
         private const string PrintHeaderDisplay = "{0} ({1} items)";
         private const string PrintHeaderTimeDisplay = "{0} as of {1}";
 
-        private const string valueListSeverity = @"Severity";
 
-        private const string RiskConfigured = "{0} configured";
-        private const string RiskFindings = "{0} of {1}";
+
+
 
         #endregion
 
@@ -82,6 +80,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         protected override void ShowRefresh()
         {
             Cursor = Cursors.WaitCursor;
+            LoadSelectedTagServers();
             _grid_Tags.BeginUpdate();
 
             string activeRowName = null;
@@ -91,6 +90,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             }
 
             LoadTags(false);
+
 
             SetActiveRow(_grid_Tags, activeRowName);
 
@@ -121,7 +121,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
 
             _smallTask_CreateTag.TaskHandler += CreateTag;
-           
+
 
 
             _grid_TagServers.Tag = _label_Assessments;
@@ -131,8 +131,11 @@ namespace Idera.SQLsecure.UI.Console.Views
             _dt_Tags.Columns.Add(colHeaderDesc, typeof(string));
             _dt_Tags.Columns.Add(colHeaderHiddenTagID, typeof(int));
 
+            DataColumn serverNameColumn = new DataColumn(colHeaderServerName, typeof(string));
+            _dt_Servers.Columns.Add(serverNameColumn);
+            _dt_Servers.PrimaryKey = new[] { serverNameColumn };
+            _dt_Servers.Columns.Add(colHeaderTagName, typeof(string));
 
-            _dt_Servers.Columns.Add(colHeaderServerName, typeof(string));
             _dt_Servers.Columns.Add(colHeaderHiddenServerId, typeof(int));
 
 
@@ -176,8 +179,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             {
                 _grid_Tags.BeginUpdate();
                 _grid_Tags.DataSource = _dt_Tags;
-                _grid_Tags.Selected.Rows.Clear();
-                _grid_Tags.Selected.Rows.Add(_grid_Tags.Rows[0]);
+                if (_grid_Tags.Selected.Rows.Count == 0)
+                {
+                    _grid_Tags.Selected.Rows.Add(_grid_Tags.Rows[0]);
+                    _grid_Tags.ActiveRow = _grid_Tags.Rows[0];
+                }
+
 
                 _grid_Tags.DataMember = "";
                 if (bUpdate)
@@ -187,23 +194,37 @@ namespace Idera.SQLsecure.UI.Console.Views
             }
 
             _label_Policies.Text = string.Format(TagHeaderDisplay, _grid_Tags.Rows.Count);
+            LoadSelectedTagServers();
 
         }
 
-        private bool LoadTagServers(int tagId, bool bUpdate)
+        private bool LoadTagServers(IEnumerable<int> tagIds, bool bUpdate)
         {
-           
+            bool hasRows = false;
             try
             {
-                var servers = TagWorker.GetTagServers(tagId);
-
-                if (servers.Count == 0) return false;
-                foreach (var server in servers)
+                foreach (int tagId in tagIds)
                 {
-                    DataRow newRow = _dt_Servers.NewRow();
-                    newRow[colHeaderServerName] = server.Name;
-                    newRow[colHeaderHiddenServerId] = server.Id;
-                    _dt_Servers.Rows.Add(newRow);
+                    var tag = TagWorker.GetTagById(tagId);
+
+
+                    foreach (var server in tag.TaggedServers)
+                    {
+                        if (!_dt_Servers.Rows.Contains(server.Name))
+                        {
+                            DataRow newRow = _dt_Servers.NewRow();
+                            newRow[colHeaderServerName] = server.Name;
+                            newRow[colHeaderHiddenServerId] = server.Id;
+                            _dt_Servers.Rows.Add(newRow);
+                            _dt_Servers.Rows.Find(server.Name)[colHeaderTagName] = tag.Name;
+                            hasRows = true;
+                        }
+                        else
+                        {
+                            var currentTag = _dt_Servers.Rows.Find(server.Name)[colHeaderTagName];
+                            _dt_Servers.Rows.Find(server.Name)[colHeaderTagName] = string.Format("{0}, {1}", currentTag, tag.Name);
+                        }
+                    }
                 }
 
             }
@@ -222,18 +243,10 @@ namespace Idera.SQLsecure.UI.Console.Views
             }
 
 
+            _label_NoServers.Visible = !hasRows;
+            _grid_TagServers.Visible = hasRows;
 
-            if (_grid_TagServers.Rows.Count == 0)
-            {
-                _label_NoServers.Visible = true;
-                _grid_TagServers.Visible = false;
-            }
-            else
-            {
-                _label_NoServers.Visible = false;
-                _grid_TagServers.Visible = true;
-            }
-            return true;
+            return hasRows;
 
         }
 
@@ -255,6 +268,8 @@ namespace Idera.SQLsecure.UI.Console.Views
                             grid.ActiveRow = row;
                         }
                     }
+                    LoadSelectedTagServers();
+
                 }
             }
         }
@@ -274,10 +289,11 @@ namespace Idera.SQLsecure.UI.Console.Views
                     var t = TagWorker.GetTagById(tagId);
                     if (t != null)
                         Form_CreateTag.Process(t);
+                    LoadSelectedTagServers();
                 }
                 catch (Exception ex)
                 {
-                    MsgBox.ShowError(ErrorMsgs.ManageTags, ex.Message);                    
+                    MsgBox.ShowError(ErrorMsgs.ManageTags, ex.Message);
                 }
             }
 
@@ -351,16 +367,13 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private void TakeSnapshot(object sender, EventArgs e)
         {
-            if (_grid_Tags.ActiveRow != null && _grid_Tags.ActiveRow.IsDataRow)
+            if (_dt_Servers.Rows.Count != 0)
             {
-
-                int tagId = (int)_grid_Tags.ActiveRow.Cells[colHeaderHiddenTagID].Value;
-                var tag = TagWorker.GetTagById(tagId);
                 List<RegisteredServer> serversToRun = new List<RegisteredServer>();
-                foreach (TaggedServer item in tag.TaggedServers)
+                var tags = GetSelectedTagsIds();
+                foreach (DataRow item in _dt_Servers.Rows)
                 {
-                    serversToRun.Add(Program.gController.Repository.GetServer(item.Name));
-
+                    serversToRun.Add(Program.gController.Repository.GetServer(item[colHeaderServerName].ToString()));
                 }
                 List<string> failedServer = new List<string>();
                 foreach (RegisteredServer server in serversToRun)
@@ -377,8 +390,15 @@ namespace Idera.SQLsecure.UI.Console.Views
                 }
                 if (failedServer.Count != serversToRun.Count)
                 {
+                    var tagsNamesArray = new List<string>();
+                    foreach (string value in tags.Values)
+                    {
+                        tagsNamesArray.Add(value);
+                    }
+                    var tagNames = string.Join(", ", tagsNamesArray.ToArray());
+
                     MsgBox.ShowInfo(ErrorMsgs.ManageTags,
-                        string.Format("Start snapshot for Server Group Tag \"{0}\".", tag.Name));
+                        string.Format("Start snapshot for Server Group Tag(s) \"{0}\".", tagNames));
                 }
                 if (failedServer.Count != 0)
                 {
@@ -396,7 +416,9 @@ namespace Idera.SQLsecure.UI.Console.Views
         private void _grid_Tag_InitializeLayout(object sender, InitializeLayoutEventArgs e)
         {
             UltraGridBand band = e.Layout.Bands[0];
-
+            e.Layout.Override.SelectTypeRow = SelectType.Extended;
+            _grid_Tags.DisplayLayout.Override.CellClickAction = CellClickAction.RowSelect;
+            band.Override.SelectTypeRow = SelectType.Extended;
             band.Columns[colHeaderTagName].Width = 200;
             band.Columns[colHeaderTagName].Header.ToolTipText = "Tag Name";
             band.Columns[colHeaderTagName].Header.Caption = "Server Group Tag";
@@ -421,6 +443,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             band.Columns[colHeaderServerName].Header.ToolTipText = "Server Name";
             band.Columns[colHeaderServerName].Header.Caption = "Server Name";
 
+            band.Columns[colHeaderTagName].Width = 200;
+            band.Columns[colHeaderTagName].Header.ToolTipText = "Tag Name";
+            band.Columns[colHeaderTagName].Header.Caption = "Tag Name";
+            band.Columns[colHeaderTagName].Hidden = true;
+
+
 
             band.Columns[colHeaderHiddenServerId].Header.Caption = "Server Id";
             band.Columns[colHeaderHiddenServerId].Header.ToolTipText = "Sever Id";
@@ -434,10 +462,6 @@ namespace Idera.SQLsecure.UI.Console.Views
             EditTag(null, null);
         }
 
-        private void _grid_Policies_AfterRowActivate(object sender, EventArgs e)
-        {
-            ValidateRow();
-        }
 
         private void _grid_Servers_AfterRowActivate(object sender, EventArgs e)
         {
@@ -452,7 +476,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private void _grid_MouseDown(object sender, MouseEventArgs e)
         {
-            // Note: this event handler is used for the MouseDown event on all grids
+            // Note: this event handler is used for the MouseDown event on all grids//if (items.Count == 1)
             UltraGrid grid = (UltraGrid)sender;
 
             UIElement elementMain = grid.DisplayLayout.UIElement;
@@ -463,17 +487,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             {
                 UltraGridCell cell = elementUnderMouse.GetContext(typeof(UltraGridCell)) as UltraGridCell;
 
-                if (cell != null)
-                {
-                    if (cell.Row.IsDataRow)
-                    {
-                        m_gridCellClicked = true;
-                        grid.Selected.Rows.Clear();
-                        cell.Row.Selected = true;
-                        grid.ActiveRow = cell.Row;
-                    }
-                }
-                else
+                if (cell == null)
                 {
                     m_gridCellClicked = false;
                     HeaderUIElement he = elementUnderMouse.GetAncestor(typeof(HeaderUIElement)) as HeaderUIElement;
@@ -618,24 +632,45 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private void _grid_Tags_MouseUp(object sender, MouseEventArgs e)
         {
-            ValidateRow();
+            LoadSelectedTagServers();
         }
 
-        private void ValidateRow()
+        private void LoadSelectedTagServers()
         {
-            bool enabled = false;
+
             bool hasServers = false;
             _dt_Servers.Clear();
-            if (_grid_Tags.ActiveRow != null && _grid_Tags.ActiveRow.IsDataRow)
+
+
+            var tagIds = GetSelectedTagsIds();
+
+            if (tagIds.Count != 0)
             {
-                int policyId = (int)_grid_Tags.ActiveRow.Cells[colHeaderHiddenTagID].Value;              
-                hasServers = LoadTagServers(policyId, true);
-                enabled = true;
+                hasServers = LoadTagServers(tagIds.Keys, true);
             }
-            _cmsi_Tags_Delete.Enabled = enabled;
-            _cmsi_Tags_AddServer.Enabled = enabled;
-            _cmsi_Tags_edit.Enabled = enabled;
+
+            _grid_TagServers.DisplayLayout.Bands[0].Columns[colHeaderTagName].Hidden = tagIds.Count <= 1;
+
+            _cmsi_Tags_Delete.Enabled = tagIds.Count == 1;
+            _cmsi_Tags_AddServer.Enabled = tagIds.Count == 1;
+            _cmsi_Tags_edit.Enabled = tagIds.Count == 1;
             _cmsi_Tags_TakeSnapshot.Enabled = hasServers;
+        }
+
+        private Dictionary<int, string> GetSelectedTagsIds()
+        {
+            var items = _grid_Tags.Selected.Rows;
+            Dictionary<int, string> tagIds = new Dictionary<int, string>();
+            foreach (UltraGridRow ultraGridRow in items)
+            {
+                if (ultraGridRow != null && ultraGridRow.IsDataRow)
+                {
+                    int tagId = (int)ultraGridRow.Cells[colHeaderHiddenTagID].Value;
+                    string tagName = ultraGridRow.Cells[colHeaderTagName].Value.ToString();
+                    tagIds.Add(tagId, tagName);
+                }
+            }
+            return tagIds;
         }
     }
 

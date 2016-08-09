@@ -392,6 +392,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 helpTopic = Utility.Help.RegisterSQLServerWizardHelpTopic;
             else if (_page_Servers.Visible)
                 helpTopic = Utility.Help.AddServerGeneralHelpTopic;
+            else if (_PageTags.Visible)
+                helpTopic = Utility.Help.ManageTagsHelpTopic;
             else if (_page_Credentials.Visible)
                 helpTopic = Utility.Help.AddServerCredentialsHelpTopic;
             else if (_page_FilePermissionFolders.Visible)
@@ -1400,6 +1402,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void ulTags_MouseDown(object sender, MouseEventArgs e)
         {
             button2.Enabled = button3.Enabled = ulTags.SelectedItems.Count != 0;        
+        }
+
+       
+
+        private void ulTags_Leave(object sender, EventArgs e)
+        {
+            ClearSelection();
         }
     }
 }
