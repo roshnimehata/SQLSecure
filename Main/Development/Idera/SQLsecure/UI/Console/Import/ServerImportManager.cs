@@ -123,7 +123,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                 // Add job to repository
                 try
                 {
-                    AddJobToRepository(repository, scheduleData, connectionName, serverName);
+                    AddJobToRepository(repository, scheduleData, connectionName);
                 }
                 catch (Exception ex)
                 {
@@ -196,7 +196,7 @@ namespace Idera.SQLsecure.UI.Console.Import
 
         }
 
-        private static void AddJobToRepository(Repository repository, ScheduleJob.ScheduleData scheduleData, string connectionName, string serverName)
+        private static void AddJobToRepository(Repository repository, ScheduleJob.ScheduleData scheduleData, string connectionName)
         {
             try
             {
@@ -206,7 +206,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                     repository.Instance, scheduleData, false);
 
                 // Update Registered Server with new jobID 
-                repository.GetServer(serverName).SetJobId(jobID);
+                repository.GetServer(connectionName).SetJobId(jobID);
             }
             catch (Exception ex)
             {

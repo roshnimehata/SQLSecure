@@ -45,6 +45,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             if (serverProperties.IsServerInAoag)
             {
                 SQLServerProperties nodeProperties;
+                var forcingTCP = "tcp:";
+                var tcpServerName = string.Concat(forcingTCP, serverProperties.ServerName);
                 var isConnectionDirectlyToTheNode = TryGetSqlServerProperties(serverProperties.ServerName, sqlLogin, sqlPassword, out nodeProperties) &&
                                                     nodeProperties.LocalNetAddress == serverProperties.LocalNetAddress;
 

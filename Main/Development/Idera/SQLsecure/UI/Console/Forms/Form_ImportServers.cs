@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Security.Principal;
-using System.Text;
 using System.Windows.Forms;
-using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
+using Idera.SQLsecure.UI.Console.Controls;
 using Idera.SQLsecure.UI.Console.Import;
 using Idera.SQLsecure.UI.Console.Import.Models;
 using Idera.SQLsecure.UI.Console.Sql;
 using Idera.SQLsecure.UI.Console.Utility;
 using Infragistics.Win.UltraWinListView;
-using Infragistics.Win.UltraWinTabs;
+using Help = Idera.SQLsecure.UI.Console.Utility.Help;
+using Resources = Idera.SQLsecure.UI.Console.Properties.Resources;
 
 namespace Idera.SQLsecure.UI.Console.Forms
 {
-    public partial class Form_ImportServers : Idera.SQLsecure.UI.Console.Controls.BaseDialogForm
+    public partial class Form_ImportServers : BaseDialogForm
     {
 
         private Form_ProcessDialog processdDialog;
@@ -165,7 +163,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         return;
                     }
 
-
+                    if (!ValidateIfLicenseExists()) return;
                     if (!ValidateIfServersExists()) return;
                     if (!backgroundWorker.IsBusy)
                     {
@@ -185,11 +183,32 @@ namespace Idera.SQLsecure.UI.Console.Forms
             }
         }
 
+        private bool ValidateIfLicenseExists()
+        {
+            var serversToImport = GetCheckedItems();
+            if (!Program.gController.Repository.bbsProductLicense.IsLicneseGoodForServerCount(Program.gController.Repository.RegisteredServers.Count + serversToImport.Count))
+            {
+                MsgBox.ShowError(ErrorMsgs.RegisterSqlServerCaption, ErrorMsgs.RegisterSqlServerNoLicenseMsg);
+                return false;
+            }
+            return true;
+        }
+
+        private List<UltraListViewItem> GetCheckedItems()
+        {
+            var result = new List<UltraListViewItem>();
+            foreach (var item in lvImportStatus.Items)
+            {
+                if (item.CheckState == CheckState.Checked) result.Add(item);
+            }
+            return result;
+        }
+
         private void ShowProcessDialog()
         {
             if (processdDialog == null || processdDialog.IsDisposed)
                 processdDialog = new Form_ProcessDialog(ErrorMsgs.ImportServersCaption,
-                    "Import in progress\nPress Cancel to stop", CancelImportHandler, Properties.Resources.ImportServers_48);
+                    "Import in progress\nPress Cancel to stop", CancelImportHandler, Resources.ImportServers_48);
             processdDialog.Show();
         }
 
@@ -292,7 +311,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
                                 return false;
                             }
-                            else allowServerUpdates = true;
+                            allowServerUpdates = true;
                         }
                     ;
                 }
@@ -310,8 +329,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             {
                 if (lvImportStatus.InvokeRequired)
                 {
-                    SetImportItemState setState = new SetImportItemState(UpdateItemImportStatus);
-                    this.Invoke(setState, new object[] { lvImport, statusIcon, statusMessage });
+                    SetImportItemState setState = UpdateItemImportStatus;
+                    Invoke(setState, lvImport, statusIcon, statusMessage);
                 }
                 else
                 {
@@ -380,11 +399,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             try
             {
-                if (cbDeleteCsvFileOnClose.Checked &&
-                    MessageBox.Show(ErrorMsgs.ConfirmCsvFileRemove, ErrorMsgs.ImportServersCaption,
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                if ((textBox_ServersImportFile.Text != string.Empty && File.Exists(textBox_ServersImportFile.Text)) &&
+                    (cbDeleteCsvFileOnClose.Checked &&
+                     MessageBox.Show(ErrorMsgs.ConfirmCsvFileRemove, ErrorMsgs.ImportServersCaption,
+                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes))
                 {
-                    File.Delete(ofd_OpenFileToImport.FileName);
+                    File.Delete(textBox_ServersImportFile.Text);
                 }
 
 
@@ -402,7 +422,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private void ultraButton_Help_Click(object sender, EventArgs e)
         {
-            Program.gController.ShowTopic(Utility.Help.ImportServerHelpTopic);
+            Program.gController.ShowTopic(Help.ImportServerHelpTopic);
         }
     }
 }

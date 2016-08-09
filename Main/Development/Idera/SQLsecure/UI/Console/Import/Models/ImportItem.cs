@@ -52,26 +52,42 @@ namespace Idera.SQLsecure.UI.Console.Import.Models
 
         private void Validate()
         {
-            if (AuthType == SqlServerAuthenticationType.SqlServerAuthentication && UseSameCredentials)
-                _validationErrors.Add(CannotUseCredentialsString);
             if(!Enum.IsDefined(typeof(SqlServerAuthenticationType), AuthType)) _validationErrors.Add(UnsupportedAuthTypeString);
             if (string.IsNullOrEmpty(ServerName)) _validationErrors.Add(ServerCannotBeEmptyString);
-            if (string.IsNullOrEmpty(UserName)) _validationErrors.Add(UserCannotBeEmptyString);
-            if (string.IsNullOrEmpty(Password)) _validationErrors.Add(PasswordCannotBeEmptyString);
-            if(!IsWindowsCredentialsFormatValid()) _validationErrors.Add(ErrorMsgs.SqlLoginWindowsUserNotSpecifiedMsg);
-            if(!UseSameCredentials && (string.IsNullOrEmpty(WindowsUserName) || string.IsNullOrEmpty(WindowsUserPassword)))
-                _validationErrors.Add(SpecifyUserString);
 
+            ValidateCredentials();
+            
 
             _validated = true;
         }
 
+        private void ValidateCredentials()
+        {
+            if (AuthType == SqlServerAuthenticationType.SqlServerAuthentication && UseSameCredentials)
+                _validationErrors.Add(CannotUseCredentialsString);
+            if (!IsWindowsCredentialsFormatValid()) _validationErrors.Add(ErrorMsgs.SqlLoginWindowsUserNotSpecifiedMsg);
+            if (string.IsNullOrEmpty(UserName)) _validationErrors.Add(UserCannotBeEmptyString);
+            if (string.IsNullOrEmpty(Password)) _validationErrors.Add(PasswordCannotBeEmptyString);
+
+            if (!UseSameCredentials && (string.IsNullOrEmpty(WindowsUserName) || string.IsNullOrEmpty(WindowsUserPassword)))
+                _validationErrors.Add(SpecifyUserString);
+
+
+            var isPasswordLengthValid = PasswordValidator.ValidatePasswordLength(Password);
+            if (!isPasswordLengthValid)
+            {
+                _validationErrors.Add(string.Format(Utility.Constants.PASSWORD_LENGTH_MESSAGE_FORMAT, Utility.Constants.MINIMUM_PASSWORD_LENGTH));
+            }
+        }
+
+
         private bool IsWindowsCredentialsFormatValid()
         {
             string domain, user;
-
+            
             Path.SplitSamPath(UserName, out domain, out user);
-            if (string.IsNullOrEmpty(domain) || string.IsNullOrEmpty(user)) return false;
+            if (AuthType == SqlServerAuthenticationType.WindowsAuthentication &&
+                (string.IsNullOrEmpty(domain) || string.IsNullOrEmpty(user))) return false;
             return true;
         }
     }
