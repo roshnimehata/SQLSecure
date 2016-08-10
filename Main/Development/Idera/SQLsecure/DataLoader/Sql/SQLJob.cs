@@ -36,7 +36,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                             " st.command ," +
                                             " st.step_name, " +
                                             " st.subsystem," +
-                                            " st.proxy_id" +
+                                            " null as proxy_id" +
                                             " FROM    msdb.dbo.sysjobs sj" +
                                             " JOIN msdb.dbo.sysjobsteps st ON sj.job_id = st.job_id";
 

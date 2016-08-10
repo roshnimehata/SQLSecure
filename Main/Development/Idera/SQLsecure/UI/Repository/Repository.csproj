@@ -126,6 +126,12 @@
     <Content Include="..\..\Repository\fn_getaccesstype.sql">
       <Link>Functions\fn_getaccesstype.sql</Link>
     </Content>
+    <Content Include="..\..\Repository\fn_getversionasdecimal.sql">
+      <Link>Functions\fn_getversionasdecimal.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\fn_normalizeversion.sql">
+      <Link>Functions\fn_normalizeversion.sql</Link>
+    </Content>
     <Content Include="..\..\Repository\fn_getactiontype.sql">
       <Link>Functions\fn_getactiontype.sql</Link>
     </Content>

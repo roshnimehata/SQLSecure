@@ -8831,6 +8831,10 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 SELECT
                                                                         @sevcode = @sevcodeok,
                                                                         @metricval = N'There is no job step without proxy account.';
+														ELSE IF(dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) < dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'9.')))
+																SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'SQL server 2000 does not support proxies.';
                                                         ELSE
                                                         BEGIN
 
