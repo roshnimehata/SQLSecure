@@ -2546,7 +2546,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                 IF (@metricid = 33)
                                                 BEGIN
                                                         SELECT
-                                                                @severityvalues = N'NTFS';
+                                                                @severityvalues = N'NTFS,REFS';
                                                         DECLARE drivecursor CURSOR FOR
                                                         SELECT DISTINCT
                                                                 LOWER(LEFT(objectname,
@@ -2554,7 +2554,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 disktype
                                                         FROM vwfilesystemobject
                                                         WHERE snapshotid = @snapshotid
-                                                        AND UPPER(disktype) <> @severityvalues;
+                                                        AND UPPER(disktype) not in (select value from splitbydelimiter(@severityvalues,','));
 
                                                         DECLARE @disktype nvarchar(16);
 
