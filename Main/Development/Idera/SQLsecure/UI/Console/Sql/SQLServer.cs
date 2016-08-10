@@ -57,8 +57,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 {
                     version = serverProperties.Version;
                     instanceName = serverProperties.InstanceName;
-                    fullName =
-                    machineName = serverProperties.HadrClusterName;
+                    fullName =machineName = serverProperties.HadrClusterName;
                     return;
                 }
             }

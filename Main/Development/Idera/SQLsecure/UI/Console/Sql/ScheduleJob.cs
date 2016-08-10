@@ -17,7 +17,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private const string QueryAddJob = @"SQLsecure.dbo.isp_sqlsecure_addnewsnapshotjob";
 
-   	    private const string ColParamConnectionname = "@connectionname";
+        private const string ColParamConnectionname = "@connectionname";
         private const string ColParamJobName = "@snapshotjobname";
         private const string ColParamJobDescription = "@jobdescription";
         private const string ColParamTargetServer = "@targetserver";
@@ -115,7 +115,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public const string JobStatus_NotRunning = "Not Running";
 
         private const string JobDateJoin = "{0} {1}";
-        private static string[] JobDateFormat = new string[]{ "yyyyMMdd Hmmss", "yyyyMMdd HHmmss", "yyyyMMdd hmmss" };
+        private static string[] JobDateFormat = new string[] { "yyyyMMdd Hmmss", "yyyyMMdd HHmmss", "yyyyMMdd hmmss" };
         private static string RowFilterJobID = ColJobListJobId + " = '{0}'";
 
         #endregion
@@ -235,7 +235,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             public DateTime LastRunDate;
             public string LastRun
             {
-                get 
+                get
                 {
                     if (LastRunDate == DateTime.MinValue)
                     {
@@ -250,7 +250,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             public DateTime NextRunDate;
             public string NextRun
             {
-                get 
+                get
                 {
                     if (NextRunDate == DateTime.MinValue)
                     {
@@ -289,7 +289,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     da.Fill(ds);
 
                     string isStarted = (string)ds.Tables[0].Rows[0][0];
-                    if( !string.IsNullOrEmpty(isStarted) )
+                    if (!string.IsNullOrEmpty(isStarted))
                     {
                         if (isStarted == "Y")
                         {
@@ -312,7 +312,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
             Debug.Assert(jobID != Guid.Empty);
             string status = "Unknown";
-            if(jobID == Guid.Empty)
+            if (jobID == Guid.Empty)
             {
                 return status;
             }
@@ -339,7 +339,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             catch (Exception ex)
             {
                 logX.loggerX.Error(Utility.ErrorMsgs.DataCollectionErrorGettingJobStatus, ex.Message);
-//                Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.DataCollectionErrorGettingJobStatus, ex);
+                //                Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.DataCollectionErrorGettingJobStatus, ex);
             }
 
             return status;
@@ -351,7 +351,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             return jobName;
         }
 
-        public static StartJobReturnCode StartJob(string connectionString, Guid jobID)
+        public static StartJobReturnCode StartJob(string connectionString, Guid jobID, bool showMessages = true)
         {
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
             StartJobReturnCode returnCode = StartJobReturnCode.UnknownError;
@@ -391,17 +391,17 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         break;
                     case 22022:
                         returnCode = StartJobReturnCode.JobAlreadyRunning;
-                        Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.JobAlreadyRunning, ex);
+                        if (showMessages) Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.JobAlreadyRunning, ex);
                         break;
                     default:
                         returnCode = StartJobReturnCode.UnknownError;
-                        Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.CantRunDataCollection, ex);
+                        if (showMessages) Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.CantRunDataCollection, ex);
                         break;
                 }
             }
             catch (Exception ex)
             {
-                Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.CantRunDataCollection, ex);
+                if (showMessages) Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.CantRunDataCollection, ex);
                 returnCode = StartJobReturnCode.UnknownError;
             }
 
@@ -593,7 +593,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     {
                         jobID = (Guid)ds.Tables[0].Rows[0][0];
                     }
-                    if(jobID == null || jobID == Guid.Empty)
+                    if (jobID == null || jobID == Guid.Empty)
                     {
                         // Set defaults for gromming schedule
                         // Every saturday at 3am
@@ -607,7 +607,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                                                     3, 0, 0);
                         scheduleData.freq_OnceAtTime = dt;
 
-                        jobID = AddGroomingJob(Program.gController.Repository.ConnectionString, 
+                        jobID = AddGroomingJob(Program.gController.Repository.ConnectionString,
                                                scheduleData);
                     }
 
@@ -668,7 +668,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     int FreqRelativeInterval = (int)ds.Tables[0].Rows[0][(int)SQLScheduleColumns.FreqRelativeInterval];
                     int FreqRecurrenceFactor = (int)ds.Tables[0].Rows[0][(int)SQLScheduleColumns.FreqRecurrenceFactor];
                     int StartTime = (int)ds.Tables[0].Rows[0][(int)SQLScheduleColumns.ActiveStartTime];
-                    int EndTime = (int)ds.Tables[0].Rows[0][(int)SQLScheduleColumns.ActiveEndTime]; 
+                    int EndTime = (int)ds.Tables[0].Rows[0][(int)SQLScheduleColumns.ActiveEndTime];
 
                     scheduleData.Enabled = (isEnabled == 0) ? false : true;
                     SetFrequencyTypeInScheduleData(FreqType, ref scheduleData);
@@ -681,17 +681,17 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     SetEndTimeInScheduleData(EndTime, ref scheduleData);
 
                     BuildDescription(ref scheduleData);
-                       
+
                 }
             }
             catch (Exception ex)
             {
                 isOk = false;
                 logX.loggerX.Error(Utility.ErrorMsgs.DataCollectionErrorGettingJob, ex.Message);
-//                Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.DataCollectionErrorGettingJob, ex);
+                //                Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.DataCollectionErrorGettingJob, ex);
             }
             return isOk;
-       }
+        }
 
         public static void RemoveJob(string connectionString, Guid jobID, string connectionName)
         {
@@ -714,14 +714,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     SqlParameter paramJobName = new SqlParameter(ColRemoveJobName, GetSnapshotJobName(connectionName));
 
                     Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                    NonQueryRemoveJob, new SqlParameter[] { paramJobId, paramJobName });        
+                                    NonQueryRemoveJob, new SqlParameter[] { paramJobId, paramJobName });
 
                 }
             }
             catch (Exception ex)
             {
                 logX.loggerX.Error(Utility.ErrorMsgs.DataCollectionErrorRemovingJob, ex.Message);
-//                Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.DataCollectionErrorRemovingJob, ex);
+                //                Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.DataCollectionErrorRemovingJob, ex);
             }
         }
 
@@ -730,7 +730,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         {
             return AddJob(connectionString, newConnection, repositoryName, scheduleData, true);
         }
-        public static Guid AddJob( string connectionString, string newConnection,
+        public static Guid AddJob(string connectionString, string newConnection,
                                    string repositoryName, ScheduleData scheduleData, bool showError)
         {
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
@@ -962,10 +962,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     break;
             }
 
-//            if(scheduleData.snapshotretentionPeriod > 0)
-//            {
-//                description.AppendFormat(" Snapshot data will be retained for {0} day(s).", scheduleData.snapshotretentionPeriod);
-//            }
+            //            if(scheduleData.snapshotretentionPeriod > 0)
+            //            {
+            //                description.AppendFormat(" Snapshot data will be retained for {0} day(s).", scheduleData.snapshotretentionPeriod);
+            //            }
 
             scheduleData.Description = description.ToString();
         }
@@ -1159,7 +1159,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         {
             int hours = time / 10000;
             int minutes = (time - (hours * 10000)) / 100;
-            int seconds = (time - (hours*10000) - (minutes*100));
+            int seconds = (time - (hours * 10000) - (minutes * 100));
 
             DateTime dt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
                                         hours, minutes, seconds);
@@ -1169,7 +1169,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private static void SetEndTimeInScheduleData(int time, ref ScheduleData scheduleData)
         {
-              scheduleData.freq_End = GetDateTimeFromSQLInt(time);
+            scheduleData.freq_End = GetDateTimeFromSQLInt(time);
         }
 
         private static int GetEndTime(ScheduleData scheduleData)
@@ -1227,7 +1227,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     scheduleData.monthly_SpecificRepeatRate = (uint)interval;
                     break;
             }
-            
+
         }
 
         private static int GetFreqRecurrenceFactor(int FreqType, ScheduleData scheduleData)
@@ -1275,7 +1275,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private static void SetFrequencySubDayTypeInScheduleData(int type, ref ScheduleData scheduleData)
         {
-            switch(type)
+            switch (type)
             {
                 case 1:
                     scheduleData.freq_Type = FrequencyType.FrequencyOnce;
@@ -1321,8 +1321,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             return type;
         }
 
-        private static void SetFrequencyIntervalInScheduleData(int type, 
-                                                              int interval, 
+        private static void SetFrequencyIntervalInScheduleData(int type,
+                                                              int interval,
                                                               ref ScheduleData scheduleData)
         {
             switch (type)
@@ -1366,14 +1366,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     int saturday = scheduleData.weekly_isSaturday ? 64 : 0;
                     interval = sunday | monday | tuesday | wednesday | thursday | friday | saturday;
                     break;
-                case 16:                    
+                case 16:
                     interval = (int)scheduleData.monthly_dayOfMonth;
                     break;
                 case 32:
                     interval = (int)scheduleData.monthly_SpecificDay;
                     break;
             }
-            
+
 
             return interval;
         }

@@ -491,7 +491,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             return status;
         }
 
-        public bool StartJob(out Guid newJobID, bool showMsgBoxes = false)
+        public bool StartJob(out Guid newJobID, bool showMsgBoxes = true)
         {
             bool bStarted = false;
             newJobID = JobId;
@@ -512,7 +512,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
 
             ScheduleJob.StartJobReturnCode resultCode;
-            resultCode = ScheduleJob.StartJob(Program.gController.Repository.ConnectionString, newJobID);
+            resultCode = ScheduleJob.StartJob(Program.gController.Repository.ConnectionString, newJobID, showMsgBoxes);
 
             if (resultCode == ScheduleJob.StartJobReturnCode.JobNotFound)
             {
