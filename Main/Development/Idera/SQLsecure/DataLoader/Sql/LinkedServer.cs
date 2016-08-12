@@ -17,12 +17,24 @@ namespace Idera.SQLsecure.Collector.Sql
 
         private const int FieldServerId = 0;
         private const int FieldName = 1;
+        private const string Sql2000Query = @" SELECT
+                                                CAST(srvid AS INT) AS server_id ,
+                                                srvname AS name
+                                            FROM
+                                                sysservers
+                                            WHERE
+                                                isremote = 1";
 
+        private const string SqlQuery = @"  SELECT
+                                            server_id ,
+                                            name
+                                        FROM
+                                            sys.servers
+                                        WHERE
+                                            is_linked = 1";
 
         private static string CreateQuery(ServerVersion serverVersion)
         {
-            const string  Sql2000Query = @"select server_id, name from sys.sysservers where isremote = 0";
-            const string SqlQuery = @"select server_id, name from sys.servers where is_linked = 1";
             
             return serverVersion < ServerVersion.SQL2005 ? Sql2000Query : SqlQuery;
         }

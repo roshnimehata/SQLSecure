@@ -14,15 +14,10 @@ namespace Idera.SQLsecure.Collector.Sql
     {
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Sql.LinkedServerPrincipal");
 
-        private const int FieldServerId = 0;
         private const string FieldPrincipalName = "name";
-
-        private static string CreateQuery(string linkedServerName, ServerVersion serverVersion)
-        {
-
-            const string Sql2000Query = @"SELECT DISTINCT
+        private const string Sql2000Query = @"SELECT DISTINCT
                                                 ISNULL(ll.rmtloginame, sp.name) AS [login],
-                                                srv.name AS servername INTO #linklogins
+                                                srv.srvname AS servername INTO #linklogins
                                         FROM sysservers AS srv
                                         INNER JOIN sysoledbusers ll
                                                 ON ll.rmtsrvid = CAST(srv.srvid AS int)
@@ -42,7 +37,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                         IF OBJECT_ID('tempdb..#linklogins') IS NOT NULL
                                                 DROP TABLE #linklogins;";
 
-            const string SqlQuery = @";WITH LinkedLogins([login], [servername])
+        private const string SqlQuery = @";WITH LinkedLogins([login], [servername])
                                     AS
                                     (
                                         SELECT
@@ -61,6 +56,11 @@ namespace Idera.SQLsecure.Collector.Sql
                                         (IS_SRVROLEMEMBER('sysadmin', name) = 1 OR IS_SRVROLEMEMBER('securityadmin', name) = 1) AND
                                         EXISTS(SELECT 1 FROM LinkedLogins WHERE [login] COLLATE SQL_Latin1_General_CP1_CI_AI  = l.name COLLATE SQL_Latin1_General_CP1_CI_AI  
                                         AND [servername] COLLATE SQL_Latin1_General_CP1_CI_AI = '{0}' )";
+
+        private static string CreateQuery(string linkedServerName, ServerVersion serverVersion)
+        {
+
+            
             return string.Format(serverVersion < ServerVersion.SQL2005 ? Sql2000Query : SqlQuery, linkedServerName);
         }
 

@@ -2554,7 +2554,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 disktype
                                                         FROM vwfilesystemobject
                                                         WHERE snapshotid = @snapshotid
-                                                        AND UPPER(disktype) not in (select value from splitbydelimiter(@severityvalues,','));
+                                                        AND UPPER(disktype) not in (select Value from splitbydelimiter(@severityvalues,','));
 
                                                         DECLARE @disktype nvarchar(16);
 
@@ -8935,10 +8935,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                 ELSE
                                                 IF (@metricid = 114)
                                                 BEGIN
-                                                        IF (
-                                                                @version > N'9.'
-                                                                OR @version < N'6.'
-                                                                )
+                                                        IF(dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) > dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'9.')))
                                                         BEGIN
                                                                 SELECT
                                                                         c.name,
