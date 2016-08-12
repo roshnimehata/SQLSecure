@@ -373,7 +373,121 @@ IF ( ISNULL(@ver, 900) <= 2999 )	-- Check to prevent this from running in future
                           N'Does certificate private keys were exported?' --reporttext
                         )
             END
-		
+		--Linked server security check
+		SELECT
+            @metricid = 115
+        IF NOT EXISTS ( SELECT
+                            *
+                        FROM
+                            metric
+                        WHERE
+                            metricid = @metricid )
+            BEGIN
+                INSERT  INTO metric
+                        (
+                          metricid ,
+                          metricname ,
+                          metrictype ,
+                          isuserentered ,
+                          ismultiselect ,
+                          validvalues ,
+                          valuedescription ,
+                          metricdescription
+                        )
+                VALUES
+                        (
+                          @metricid ,
+                          'Linked servers are configured' ,
+                          'Configuration' ,
+                          0 , --isuserentered
+                          0 , --ismultiselect
+                          N'' ,
+                          'When enabled, this check will identify a risk if there are configured linked servers' ,
+                          'Determine whether linked servers are configured'
+                        )
+
+
+                INSERT  INTO policymetric
+                        (
+                          policyid ,
+                          assessmentid ,
+                          metricid ,
+                          isenabled ,
+                          severity ,
+                          severityvalues ,
+                          reportkey ,
+                          reporttext
+                        )
+                VALUES
+                        (
+                          0 , --policyid
+                          0 ,--assesmentid
+                          @metricid ,
+                          1 , --isenabled
+                          2 , --severity
+                          N'' , --severityvalues
+                          N'' ,--reportkey
+                          N'Does linked servers are configured?' --reporttext
+                        )
+            END
+
+		--Linked server users security check
+		SELECT
+            @metricid = 116
+        IF NOT EXISTS ( SELECT
+                            *
+                        FROM
+                            metric
+                        WHERE
+                            metricid = @metricid )
+            BEGIN
+                INSERT  INTO metric
+                        (
+                          metricid ,
+                          metricname ,
+                          metrictype ,
+                          isuserentered ,
+                          ismultiselect ,
+                          validvalues ,
+                          valuedescription ,
+                          metricdescription
+                        )
+                VALUES
+                        (
+                          @metricid ,
+                          'Linked server is running as a member of sysadmin group' ,
+                          'Access' ,
+                          0 , --isuserentered
+                          0 , --ismultiselect
+                          N'' ,
+                          'When enabled, this check will identify a risk if thara linked servers that are running as a member of sysadmin group' ,
+                          'Determine whether linked servers are running as a member of sysadmin group'
+                        )
+
+
+                INSERT  INTO policymetric
+                        (
+                          policyid ,
+                          assessmentid ,
+                          metricid ,
+                          isenabled ,
+                          severity ,
+                          severityvalues ,
+                          reportkey ,
+                          reporttext
+                        )
+                VALUES
+                        (
+                          0 , --policyid
+                          0 ,--assesmentid
+                          @metricid ,
+                          1 , --isenabled
+                          3 , --severity
+                          N'' , --severityvalues
+                          N'' ,--reportkey
+                          N'Does linked servers are running as a member of sysadmin group?' --reporttext
+                        )
+            END
 
 ---------------------Update Policy Metrics with new checks--------------------------------------------------------------------------------------------------------
 
@@ -519,3 +633,5 @@ IF ( ISNULL(@ver, 900) <= 2999 )	-- Check to prevent this from running in future
 
     END;
 GO
+
+insert into filterruleclass (objectclass, objectvalue) values (50, 'LinkedServer')

@@ -42,6 +42,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         delegate void SetImportItemState(UltraListViewItem lvImport, ImportStatusIcon statusIcon, string statusMessage);
         private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Forms.Form_ImportServers");
+        private bool _imported;
+
         public static void Process()
         {
             var form = new Form_ImportServers();
@@ -82,6 +84,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 {
                     if (ofd_OpenFileToImport.ShowDialog() == DialogResult.OK)
                     {
+                        if (!textBox_ServersImportFile.Text.Equals(ofd_OpenFileToImport.FileName,
+                            StringComparison.InvariantCultureIgnoreCase))
+                            _imported = false;
+
                         textBox_ServersImportFile.Text = ofd_OpenFileToImport.FileName;
 
                         lvImportStatus.Items.Clear();
@@ -167,6 +173,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     if (!ValidateIfServersExists()) return;
                     if (!backgroundWorker.IsBusy)
                     {
+                        _imported = true;
                         LockControls();
                         ShowProcessDialog();
                         backgroundWorker.RunWorkerAsync(Program.gController.Repository);
@@ -399,7 +406,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             try
             {
-                if ((textBox_ServersImportFile.Text != string.Empty && File.Exists(textBox_ServersImportFile.Text)) &&
+                if (_imported && FileExists() &&
                     (cbDeleteCsvFileOnClose.Checked &&
                      MessageBox.Show(ErrorMsgs.ConfirmCsvFileRemove, ErrorMsgs.ImportServersCaption,
                          MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes))
@@ -418,6 +425,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 Close();
 
             }
+        }
+
+        private bool FileExists()
+        {
+            return textBox_ServersImportFile.Text != string.Empty && File.Exists(textBox_ServersImportFile.Text);
         }
 
         private void ultraButton_Help_Click(object sender, EventArgs e)

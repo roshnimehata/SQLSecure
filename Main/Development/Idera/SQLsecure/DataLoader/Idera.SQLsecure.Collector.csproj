@@ -78,6 +78,8 @@
     <Compile Include="Sql\Endpoint.cs" />
     <Compile Include="Sql\FilePermission.cs" />
     <Compile Include="Sql\FilterRule.cs" />
+    <Compile Include="Sql\LinkedServer.cs" />
+    <Compile Include="Sql\LinkedServerPrincipal.cs" />
     <Compile Include="Sql\RegistryPermission.cs" />
     <Compile Include="Sql\Schema.cs" />
     <Compile Include="Sql\ServerPermission.cs" />

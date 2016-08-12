@@ -8913,6 +8913,8 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 SET @foundKeys = SUBSTRING(@foundKeys,1,LEN(@foundKeys)- 1);
                                                                 SET @metricval = 'There are keys that have not supported encryption method: '+ CHAR(13)+ CHAR(10)+ @foundKeys+ '';
 																set @metricthreshold = 'Server is vulnerable if there are encryption methods other than : '+@severityvalues;
+																 SET @sevcode = @severity;
+														END;
                                                                 INSERT INTO policyassessmentdetail (policyid,
                                                                 assessmentid,
                                                                 metricid,
@@ -8925,9 +8927,9 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         VALUES (@policyid, @assessmentid, @metricid, @snapshotid, @metricval, NULL, -- database ID,
                                                                         N'DB', -- object type
                                                                         NULL, @strval);
-                                                                SET @sevcode = @severity;
+                                                               
 
-                                                        END;
+                                                        
 														IF OBJECT_ID('tempdb..#keys') IS NOT NULL DROP TABLE #keys;
                                                 END;
                                                 ELSE
@@ -8969,16 +8971,10 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                 + ',' + CHAR(13)
                                                                                 + CHAR(10)
                                                                         FROM #certs;
-                                                                        SET @foundCerts = SUBSTRING(@foundCerts,
-                                                                        1,
-                                                                        LEN(@foundCerts)
-                                                                        - 1);
-                                                                        SET @metricval = 'There are certificate private keys that have not being exported: '
-                                                                        + CHAR(13)
-                                                                        + CHAR(10)
-                                                                        + @foundCerts
-                                                                        + '';
-
+                                                                        SET @foundCerts = SUBSTRING(@foundCerts,1,LEN(@foundCerts)- 1);
+                                                                        SET @metricval = 'There are certificate private keys that have not being exported: '+ CHAR(13)+ CHAR(10)+ @foundCerts+ '';
+																		 SET @sevcode = @severity;
+																END;
                                                                         INSERT INTO policyassessmentdetail (policyid,
                                                                         assessmentid,
                                                                         metricid,
@@ -8991,12 +8987,154 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                 VALUES (@policyid, @assessmentid, @metricid, @snapshotid, @metricval, NULL, -- database ID,
                                                                                 N'DB', -- object type
                                                                                 NULL, @strval);
-                                                                        SET @sevcode = @severity;
+                                                                       
 
-                                                                END;
+                                                              IF OBJECT_ID('tempdb..#certs') IS NOT NULL DROP TABLE #certs;  
                                                         END;
-														IF OBJECT_ID('tempdb..#certs') IS NOT NULL DROP TABLE #certs;
+														
                                                 END;
+												ELSE
+                                              IF ( @metricid = 115 )
+													BEGIN
+
+													--Check if LinkedServers Used
+													SELECT servername 
+													INTO #linkedsrv
+													FROM linkedserver ls
+													WHERE ls.snapshotid = @snapshotid
+
+													IF NOT EXISTS (SELECT 1 FROM #linkedsrv)
+														BEGIN
+														--Linked servers not used
+
+														SELECT
+																		@sevcode = @sevcodeok ,
+																		@metricval = N'Linked Servers are not configured.';
+														END
+													ELSE
+														BEGIN
+														--Linked servers used add warning
+														DECLARE @foundLinkedServer VARCHAR(MAX);
+																SET @foundLinkedServer = '';
+																SELECT
+																	@foundLinkedServer = @foundLinkedServer + servername
+																	+ ',' + CHAR(13) + CHAR(10)
+																FROM
+																	#linkedsrv;
+																SET @foundLinkedServer = SUBSTRING(@foundLinkedServer, 1,
+																							LEN(@foundLinkedServer) - 1);
+																SET @metricval = 'Thre are linked servers configured: '
+																	+ CHAR(13) + CHAR(10) + @foundLinkedServer + '';
+																SET @sevcode = @severity;
+														END;
+
+													INSERT  INTO policyassessmentdetail
+																		(
+																		  policyid ,
+																		  assessmentid ,
+																		  metricid ,
+																		  snapshotid ,
+																		  detailfinding ,
+																		  databaseid ,
+																		  objecttype ,
+																		  objectid ,
+																		  objectname
+																		)
+																VALUES
+																		(
+																		  @policyid ,
+																		  @assessmentid ,
+																		  @metricid ,
+																		  @snapshotid ,
+																		  @metricval ,
+																		  NULL , -- database ID,
+																		  N'iLOGN' , -- object type
+																		  NULL ,
+																		  @strval
+																		);
+
+													IF OBJECT_ID('tempdb..#linkedsrv') IS NOT NULL DROP TABLE #linkedsrv;
+													
+													--End Check if Linked Servers Used
+
+													END
+													ELSE
+													--Check if configured linked servers has security holes
+													 IF ( @metricid = 116 )
+													BEGIN
+                                                        
+														SELECT
+															ls.servername ,
+															lsp.principal
+														INTO
+															#linksrvusr
+														FROM
+															dbo.linkedserver ls
+														JOIN dbo.linkedserverprincipal lsp
+														ON  ls.serverid = lsp.serverid
+															AND ls.snapshotid = lsp.snapshotid
+														WHERE
+															ls.snapshotid = @snapshotid
+            
+
+
+														IF NOT EXISTS ( SELECT
+																			1
+																		FROM
+																			#linksrvusr )
+															BEGIN
+																SELECT
+																	@sevcode = @sevcodeok ,
+																	@metricval = N'There are no linked servers that are running as a member of sysadmin group.';
+															END
+														ELSE
+															BEGIN
+
+																DECLARE @foundLinkedServerUser VARCHAR(MAX);
+																SET @foundLinkedServerUser = '';
+																SELECT
+																	@foundLinkedServerUser = @foundLinkedServerUser + servername + ' - ' + principal
+																	+ ',' + CHAR(13) + CHAR(10)
+																FROM
+																	#linksrvusr;
+																SET @foundLinkedServerUser = SUBSTRING(@foundLinkedServerUser, 1,
+																							LEN(@foundLinkedServerUser) - 1);
+																SET @metricval = 'Thre are linked servers that are runnung as a member of sysadmin group: '
+																	+ CHAR(13) + CHAR(10) + @foundLinkedServerUser + '';
+																SET @sevcode = @severity;
+																	
+															END
+																INSERT  INTO policyassessmentdetail
+																		(
+																		  policyid ,
+																		  assessmentid ,
+																		  metricid ,
+																		  snapshotid ,
+																		  detailfinding ,
+																		  databaseid ,
+																		  objecttype ,
+																		  objectid ,
+																		  objectname
+																		)
+																VALUES
+																		(
+																		  @policyid ,
+																		  @assessmentid ,
+																		  @metricid ,
+																		  @snapshotid ,
+																		  @metricval ,
+																		  NULL , -- database ID,
+																		  N'iLOGN' , -- object type
+																		  NULL ,
+																		  @strval
+																		);
+																
+																   IF OBJECT_ID('tempdb..#linksrvusr') IS NOT NULL DROP TABLE #linksrvusr;
+																  
+															END;
+                                                        
+     
+                                                
                                                 --**************************** code added to handle user defined security checks, but never used (first added in version 2.5)
                                                 -- User implemented
                                                 ELSE

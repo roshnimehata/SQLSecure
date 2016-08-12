@@ -168,4 +168,43 @@ CREATE TABLE [dbo].[databasecertificates]
 ALTER TABLE [dbo].[databasecertificates] WITH CHECK ADD CONSTRAINT [FK_sqldatabase] FOREIGN KEY ([snapshotid],[dbid])
 REFERENCES [dbo].[sqldatabase] ([snapshotid], [dbid])
 
+IF NOT EXISTS ( SELECT
+                    1
+                FROM
+                    sysobjects
+                WHERE
+                    name = 'linkedserver'
+                    AND xtype = 'U' )
+    BEGIN
+        CREATE TABLE [dbo].[linkedserver]
+            (
+              [snapshotid] [INT] NOT NULL ,
+              [serverid] [INT] NOT NULL ,
+              [servername] [NVARCHAR](255) NOT NULL ,
+              CONSTRAINT [PK_linkedservers] PRIMARY KEY CLUSTERED
+                ( [snapshotid],[serverid] )
+            )
+    END;
+
+IF NOT EXISTS ( SELECT
+                    1
+                FROM
+                    sysobjects
+                WHERE
+                    name = 'linkedserverprincipal'
+                    AND xtype = 'U' )
+    BEGIN
+        CREATE TABLE [dbo].[linkedserverprincipal]
+            (
+              [lspid] INT IDENTITY(1, 1)
+                          NOT NULL ,
+              [snapshotid] [INT] NOT NULL ,
+              [serverid] [INT] NOT NULL ,
+              [principal] [NVARCHAR](255) NOT NULL ,
+              CONSTRAINT [PK_linkedserverprincipals] PRIMARY KEY CLUSTERED
+                ( [lspid], [snapshotid] )
+            )
+        ALTER TABLE [dbo].[linkedserverprincipal] WITH CHECK ADD CONSTRAINT[FK_linkedserver] FOREIGN KEY([snapshotid],[serverid]) REFERENCES [dbo].[linkedserver]([snapshotid], [serverid])
+    END;
+
 GO

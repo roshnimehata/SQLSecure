@@ -1301,7 +1301,81 @@ namespace Idera.SQLsecure.Collector.Sql
     }
 
 
+    internal static class LinkedServersDataTable
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable;
 
+            using (DataColumn colSnapshotId = new DataColumn(ParamSnapshotId, typeof (SqlInt32)),
+                colServerId = new DataColumn(ParamServerId, typeof (SqlInt32)),
+                colServerName = new DataColumn(ParamServerName, typeof (SqlString)))
+            {
+                // Create the data table object & define itsParamumns.
+                // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("linkedserver");
+                dataTable.Columns.AddRange(new DataColumn[]
+                {
+                    colSnapshotId,
+                    colServerId,
+                    colServerName
+                });
+
+            }
+
+
+            return dataTable;
+        }
+
+
+        internal const string ParamSnapshotId = "snapshotid";
+        internal const string ParamServerId = "serverid";
+        internal const string ParamServerName = "servername";
+
+        internal const int ColServerId = 0;
+        internal const int ColServerName = 1;
+        internal const int ColSnapshotId = 2;
+
+        internal const string RepositoryTable = "SQLsecure.dbo.linkedserver";
+    }
+
+    internal static class LinkedServerPrincipalDataTable
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable;
+            using (DataColumn colId = new DataColumn(Id, typeof(SqlInt32)), 
+                colSnapshotId = new DataColumn(ParamSnapshotId, typeof(SqlInt32)),
+                colServerId = new DataColumn(ParamServerId, typeof(SqlInt32)),
+                colPrincipalName = new DataColumn(ParamPrincipalName, typeof (SqlString)))
+            {
+                // Create the data table object & define itsParamumns.
+                // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("linkedserverprincipal");
+                dataTable.Columns.AddRange(new DataColumn[]
+                {
+                    colId,
+                    colSnapshotId,
+                    colServerId,
+                    colPrincipalName
+                });
+
+            }
+
+            return dataTable;
+        }
+
+        internal const string Id = "lspid";
+        internal const string ParamSnapshotId = "snapshotid";
+        internal const string ParamServerId = "serverid";
+        internal const string ParamPrincipalName = "principal";
+
+        internal const int ColServerId = 0;
+        internal const int ColServerName = 1;
+        internal const int ColPrincipalName = 2;
+
+        internal const string RepositoryTable = "SQLsecure.dbo.linkedserverprincipal";
+    }
 
     internal static class EncryptionKeyDataTable
     {
