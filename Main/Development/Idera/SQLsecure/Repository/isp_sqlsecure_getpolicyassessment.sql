@@ -8889,13 +8889,15 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 Value
                                                         FROM dbo.splitbydelimiter(@severityvalues,
                                                         ','));
-
+														set @metricthreshold = 'Server is vulnerable if there are encryption methods other than : '+@severityvalues;
                                                         IF NOT EXISTS (SELECT
                                                                         1
                                                                 FROM #keys)
+
                                                                 SELECT
                                                                         @sevcode = @sevcodeok,
                                                                         @metricval = N'There is no keys with not allowed encryption methods.';
+																		
                                                         ELSE
                                                         BEGIN
 
@@ -8912,7 +8914,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 FROM #keys;
                                                                 SET @foundKeys = SUBSTRING(@foundKeys,1,LEN(@foundKeys)- 1);
                                                                 SET @metricval = 'There are keys that have not supported encryption method: '+ CHAR(13)+ CHAR(10)+ @foundKeys+ '';
-																set @metricthreshold = 'Server is vulnerable if there are encryption methods other than : '+@severityvalues;
+																
 																 SET @sevcode = @severity;
 														END;
                                                                 INSERT INTO policyassessmentdetail (policyid,

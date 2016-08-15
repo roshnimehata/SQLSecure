@@ -31,13 +31,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_WizardRegisterSQLServer));
             Infragistics.Win.UltraWinListView.UltraListViewSubItemColumn ultraListViewSubItemColumn1 = new Infragistics.Win.UltraWinListView.UltraListViewSubItemColumn("Description");
             this._wizard = new Divelements.WizardFramework.Wizard();
+            this._page_FilePermissionFolders = new Divelements.WizardFramework.WizardPage();
             this._PageTags = new Divelements.WizardFramework.WizardPage();
             this.button3 = new Infragistics.Win.Misc.UltraButton();
             this.button2 = new Infragistics.Win.Misc.UltraButton();
             this.btAdd = new Infragistics.Win.Misc.UltraButton();
             this.ulTags = new Infragistics.Win.UltraWinListView.UltraListView();
             this._page_DefineFilters = new Divelements.WizardFramework.WizardPage();
-            this.filterSelection1 = new Idera.SQLsecure.UI.Console.Controls.FilterSelection();
             this._page_JobSchedule = new Divelements.WizardFramework.WizardPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label_AgentStatus = new System.Windows.Forms.Label();
@@ -66,7 +66,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.radioButton_SendEmailOnError = new System.Windows.Forms.RadioButton();
             this.radioButton_SendEmailWarningOrError = new System.Windows.Forms.RadioButton();
             this._page_ConfigureSMTPEmail = new Divelements.WizardFramework.WizardPage();
-            this.controlSMTPEmailConfig1 = new Idera.SQLsecure.UI.Console.Controls.controlSMTPEmailConfig();
             this.panel2 = new System.Windows.Forms.Panel();
             this.button_Test = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
@@ -85,8 +84,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.checkBox_CollectData = new System.Windows.Forms.CheckBox();
             this._page_Finish = new Divelements.WizardFramework.FinishPage();
             this._rtb_Finish = new System.Windows.Forms.RichTextBox();
-            this._page_FilePermissionFolders = new Divelements.WizardFramework.WizardPage();
-            this.addEditFoldersControl = new Idera.SQLsecure.UI.Console.Controls.AddEditFolders();
             this._page_Credentials = new Divelements.WizardFramework.WizardPage();
             this._grpbx_SQLServerCredentials = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -112,7 +109,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._lbl_Server = new System.Windows.Forms.Label();
             this._page_Introduction = new Divelements.WizardFramework.IntroductionPage();
             this._rtb_Introduction = new System.Windows.Forms.RichTextBox();
+            this.filterSelection1 = new Idera.SQLsecure.UI.Console.Controls.FilterSelection();
+            this.controlSMTPEmailConfig1 = new Idera.SQLsecure.UI.Console.Controls.controlSMTPEmailConfig();
+            this.addEditFoldersControl = new Idera.SQLsecure.UI.Console.Controls.AddEditFolders();
             this._wizard.SuspendLayout();
+            this._page_FilePermissionFolders.SuspendLayout();
             this._PageTags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ulTags)).BeginInit();
             this._page_DefineFilters.SuspendLayout();
@@ -134,7 +135,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             ((System.ComponentModel.ISupportInitialize)(this.ultraListView_Policies)).BeginInit();
             this._page_CollectData.SuspendLayout();
             this._page_Finish.SuspendLayout();
-            this._page_FilePermissionFolders.SuspendLayout();
             this._page_Credentials.SuspendLayout();
             this._grpbx_SQLServerCredentials.SuspendLayout();
             this._grpbx_WindowsGMCredentials.SuspendLayout();
@@ -145,8 +145,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // _wizard
             // 
             this._wizard.BannerImage = ((System.Drawing.Image)(resources.GetObject("_wizard.BannerImage")));
-            this._wizard.Controls.Add(this._page_FilePermissionFolders);
             this._wizard.Controls.Add(this._PageTags);
+            this._wizard.Controls.Add(this._page_FilePermissionFolders);
             this._wizard.Controls.Add(this._page_JobSchedule);
             this._wizard.Controls.Add(this._page_CollectData);
             this._wizard.Controls.Add(this._page_DefineFilters);
@@ -165,6 +165,18 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._wizard.Size = new System.Drawing.Size(514, 536);
             this._wizard.TabIndex = 0;
             this._wizard.HelpRequested += new System.Windows.Forms.HelpEventHandler(this._wizard_HelpRequested);
+            // 
+            // _page_FilePermissionFolders
+            // 
+            this._page_FilePermissionFolders.Controls.Add(this.addEditFoldersControl);
+            this._page_FilePermissionFolders.Description = "Specify folders to be audited for collecting file system permission information";
+            this._page_FilePermissionFolders.Location = new System.Drawing.Point(19, 73);
+            this._page_FilePermissionFolders.Name = "_page_FilePermissionFolders";
+            this._page_FilePermissionFolders.NextPage = this._PageTags;
+            this._page_FilePermissionFolders.PreviousPage = this._page_Credentials;
+            this._page_FilePermissionFolders.Size = new System.Drawing.Size(476, 403);
+            this._page_FilePermissionFolders.TabIndex = 1011;
+            this._page_FilePermissionFolders.Text = "Specify Audit Folders";
             // 
             // _PageTags
             // 
@@ -229,8 +241,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ulTags.Text = "ultraListView1";
             this.ulTags.View = Infragistics.Win.UltraWinListView.UltraListViewStyle.Details;
             this.ulTags.ViewSettingsDetails.CheckBoxStyle = Infragistics.Win.UltraWinListView.CheckBoxStyle.CheckBox;
-            this.ulTags.Leave += new System.EventHandler(this.ulTags_Leave);
             this.ulTags.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ulTags_MouseDown);
+            this.ulTags.ItemSettings.HideSelection = false;
             // 
             // _page_DefineFilters
             // 
@@ -247,15 +259,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._page_DefineFilters.TextColor = System.Drawing.Color.Navy;
             this._page_DefineFilters.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_DefineFilters_BeforeMoveNext);
             this._page_DefineFilters.BeforeDisplay += new System.EventHandler(this._page_DefineFilters_BeforeDisplay);
-            // 
-            // filterSelection1
-            // 
-            this.filterSelection1.AutoSize = true;
-            this.filterSelection1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.filterSelection1.Location = new System.Drawing.Point(0, 0);
-            this.filterSelection1.Name = "filterSelection1";
-            this.filterSelection1.Size = new System.Drawing.Size(476, 403);
-            this.filterSelection1.TabIndex = 0;
             // 
             // _page_JobSchedule
             // 
@@ -314,8 +317,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Location = new System.Drawing.Point(64, 22);
@@ -339,7 +342,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _txtbx_ScheduleDescription
             // 
-            this._txtbx_ScheduleDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this._txtbx_ScheduleDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this._txtbx_ScheduleDescription.BackColor = System.Drawing.Color.GhostWhite;
             this._txtbx_ScheduleDescription.ForeColor = System.Drawing.Color.SlateGray;
@@ -600,15 +603,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._page_ConfigureSMTPEmail.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_ConfigureSMTPEmail_BeforeMoveNext);
             this._page_ConfigureSMTPEmail.BeforeDisplay += new System.EventHandler(this._page_ConfigureSMTPEmail_BeforeDisplay);
             // 
-            // controlSMTPEmailConfig1
-            // 
-            this.controlSMTPEmailConfig1.BackColor = System.Drawing.Color.Transparent;
-            this.controlSMTPEmailConfig1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.controlSMTPEmailConfig1.Location = new System.Drawing.Point(0, 32);
-            this.controlSMTPEmailConfig1.Name = "controlSMTPEmailConfig1";
-            this.controlSMTPEmailConfig1.Size = new System.Drawing.Size(476, 335);
-            this.controlSMTPEmailConfig1.TabIndex = 7;
-            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.button_Test);
@@ -821,27 +815,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._rtb_Finish.Size = new System.Drawing.Size(324, 385);
             this._rtb_Finish.TabIndex = 1;
             this._rtb_Finish.Text = "";
-            // 
-            // _page_FilePermissionFolders
-            // 
-            this._page_FilePermissionFolders.Controls.Add(this.addEditFoldersControl);
-            this._page_FilePermissionFolders.Description = "Specify folders to be audited for collecting file system permission information";
-            this._page_FilePermissionFolders.Location = new System.Drawing.Point(19, 73);
-            this._page_FilePermissionFolders.Name = "_page_FilePermissionFolders";
-            this._page_FilePermissionFolders.NextPage = this._PageTags;
-            this._page_FilePermissionFolders.PreviousPage = this._page_Credentials;
-            this._page_FilePermissionFolders.Size = new System.Drawing.Size(476, 403);
-            this._page_FilePermissionFolders.TabIndex = 1011;
-            this._page_FilePermissionFolders.Text = "Specify Audit Folders";
-            // 
-            // addEditFoldersControl
-            // 
-            this.addEditFoldersControl.AutoSize = true;
-            this.addEditFoldersControl.Location = new System.Drawing.Point(3, 3);
-            this.addEditFoldersControl.Name = "addEditFoldersControl";
-            this.addEditFoldersControl.Size = new System.Drawing.Size(470, 388);
-            this.addEditFoldersControl.TabIndex = 0;
-            this.addEditFoldersControl.TargetServerName = "";
             // 
             // _page_Credentials
             // 
@@ -1114,6 +1087,33 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._rtb_Introduction.TabIndex = 0;
             this._rtb_Introduction.Text = "";
             // 
+            // filterSelection1
+            // 
+            this.filterSelection1.AutoSize = true;
+            this.filterSelection1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.filterSelection1.Location = new System.Drawing.Point(0, 0);
+            this.filterSelection1.Name = "filterSelection1";
+            this.filterSelection1.Size = new System.Drawing.Size(476, 403);
+            this.filterSelection1.TabIndex = 0;
+            // 
+            // controlSMTPEmailConfig1
+            // 
+            this.controlSMTPEmailConfig1.BackColor = System.Drawing.Color.Transparent;
+            this.controlSMTPEmailConfig1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.controlSMTPEmailConfig1.Location = new System.Drawing.Point(0, 32);
+            this.controlSMTPEmailConfig1.Name = "controlSMTPEmailConfig1";
+            this.controlSMTPEmailConfig1.Size = new System.Drawing.Size(476, 335);
+            this.controlSMTPEmailConfig1.TabIndex = 7;
+            // 
+            // addEditFoldersControl
+            // 
+            this.addEditFoldersControl.AutoSize = true;
+            this.addEditFoldersControl.Location = new System.Drawing.Point(3, 3);
+            this.addEditFoldersControl.Name = "addEditFoldersControl";
+            this.addEditFoldersControl.Size = new System.Drawing.Size(470, 388);
+            this.addEditFoldersControl.TabIndex = 0;
+            this.addEditFoldersControl.TargetServerName = "";
+            // 
             // Form_WizardRegisterSQLServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1130,6 +1130,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Register a SQL Server";
             this._wizard.ResumeLayout(false);
+            this._page_FilePermissionFolders.ResumeLayout(false);
+            this._page_FilePermissionFolders.PerformLayout();
             this._PageTags.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ulTags)).EndInit();
             this._page_DefineFilters.ResumeLayout(false);
@@ -1157,8 +1159,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             ((System.ComponentModel.ISupportInitialize)(this.ultraListView_Policies)).EndInit();
             this._page_CollectData.ResumeLayout(false);
             this._page_Finish.ResumeLayout(false);
-            this._page_FilePermissionFolders.ResumeLayout(false);
-            this._page_FilePermissionFolders.PerformLayout();
             this._page_Credentials.ResumeLayout(false);
             this._grpbx_SQLServerCredentials.ResumeLayout(false);
             this._grpbx_SQLServerCredentials.PerformLayout();
@@ -1253,7 +1253,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private Divelements.WizardFramework.WizardPage _PageTags;
         private Infragistics.Win.UltraWinListView.UltraListView ulTags;
         private Infragistics.Win.Misc.UltraButton button3;
-        private Infragistics.Win.Misc.UltraButton  button2;
+        private Infragistics.Win.Misc.UltraButton button2;
         private Infragistics.Win.Misc.UltraButton btAdd;
     }
 }

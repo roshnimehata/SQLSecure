@@ -1406,9 +1406,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
        
 
-        private void ulTags_Leave(object sender, EventArgs e)
-        {
-            ClearSelection();
-        }
+
+     
     }
 }
