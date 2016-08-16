@@ -14,7 +14,7 @@ namespace Idera.SQLsecure.Collector.Sql
     {
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Sql.EncryptionKeys");
 
-        public const string GetKeysQuery = @"SELECT  name ,
+        public const string GetKeysQuery2008AndAbove = @"SELECT  name ,
                                                 principal_id ,
                                                 symmetric_key_id ,
                                                 key_length ,
@@ -33,9 +33,29 @@ namespace Idera.SQLsecure.Collector.Sql
                                                 provider_type,
                                                 'iAK' as type
                                         FROM    {0}.sys.asymmetric_keys;";
-        
 
-        
+        public const string GetKeysQuery2005 = @"SELECT  name ,
+                                                principal_id ,
+                                                symmetric_key_id ,
+                                                key_length ,
+                                                key_algorithm ,
+                                                algorithm_desc ,
+                                               '' provider_type,
+	                                            'iSK' as type
+                                        FROM    {0}.sys.symmetric_keys
+                                        UNION
+                                        SELECT  name ,
+                                                principal_id ,
+                                                asymmetric_key_id ,
+                                                key_length ,
+                                                algorithm ,
+                                                algorithm_desc ,
+                                                '' provider_type,
+                                                'iAK' as type
+                                        FROM    {0}.sys.asymmetric_keys;";
+
+
+
 
 
         internal const int ColName = 0;
@@ -47,12 +67,21 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const int ColProviderType = 6;
         internal const int ColType = 7;
 
+        private static string GetQuery(ServerVersion version)
+        {
+            if (version == ServerVersion.SQL2000)
+                return string.Empty;
+            if (version == ServerVersion.SQL2005)
+                return GetKeysQuery2005;
+            return GetKeysQuery2008AndAbove;
+        }
+
 
         public static bool Process(ServerVersion version,
             string targetConnection,
             string repositoryConnection,
             int snapshotid,
-            int databaseId,string databaseName)
+            int databaseId, string databaseName)
         {
             Debug.Assert(version != ServerVersion.Unsupported);
             Debug.Assert(!string.IsNullOrEmpty(targetConnection));
@@ -61,6 +90,8 @@ namespace Idera.SQLsecure.Collector.Sql
             bool isOk = true;
             targetConnection = Sql.SqlHelper.AppendDatabaseToConnectionString(targetConnection, "master");
             Program.ImpersonationContext wi = Program.SetLocalImpersonationContext();
+            if (version == ServerVersion.SQL2000) return true;
+
             using (SqlConnection target = new SqlConnection(targetConnection),
                 repository = new SqlConnection(repositoryConnection))
             {
@@ -82,8 +113,8 @@ namespace Idera.SQLsecure.Collector.Sql
                         {
                             // Process each rule to collect the table objects.
 
-                            string query = string.Format(GetKeysQuery, databaseName);
-                           
+                            string query = string.Format(GetQuery(version), databaseName);
+
 
                             Debug.Assert(!string.IsNullOrEmpty(query));
 
@@ -114,7 +145,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     dr[EncryptionKeyDataTable.ParamProviderType] = provType;
                                     dr[EncryptionKeyDataTable.ParamPrincipalId] = principalId;
                                     dr[EncryptionKeyDataTable.ParamDbKeyId] = dbId;
-                                    dr[EncryptionKeyDataTable.ParamKeyLength] =keyLength;
+                                    dr[EncryptionKeyDataTable.ParamKeyLength] = keyLength;
                                     dr[EncryptionKeyDataTable.ParamDatabaseId] = databaseId;
                                     dr[EncryptionKeyDataTable.ParamType] = type;
 
@@ -180,7 +211,7 @@ namespace Idera.SQLsecure.Collector.Sql
             return isOk;
         }
 
-       
+
 
 
     }

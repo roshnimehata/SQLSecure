@@ -8875,7 +8875,12 @@ AS -- <Idera SQLsecure version and copyright>
                                                 IF (@metricid = 113)
                                                 BEGIN
 
-
+												IF(dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) < dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'9.')))
+													BEGIN
+															SELECT  @sevcode = @sevcodeok, @metricval = N'Check can''t be applied to SQL Server 2000.';
+													END
+													ELSE
+													BEGIN
                                                         SELECT
                                                                 e.name,
                                                                 e.algorithmdesc,
@@ -8933,6 +8938,7 @@ AS -- <Idera SQLsecure version and copyright>
 
                                                         
 														IF OBJECT_ID('tempdb..#keys') IS NOT NULL DROP TABLE #keys;
+														END;
                                                 END;
                                                 ELSE
                                                 IF (@metricid = 114)
