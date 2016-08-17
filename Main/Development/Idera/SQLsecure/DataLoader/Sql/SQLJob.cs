@@ -14,19 +14,28 @@ namespace Idera.SQLsecure.Collector.Sql
     {
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Sql.SqlJob");
 
-        public const string GetJobsQuery = "SELECT  sj.name ," +
-                                            " sj.owner_sid ," +
-                                            " sj.enabled ," +
-                                            " sj.description ," +
-                                            " st.last_run_date ," +
-                                            " st.command ," +
-                                            " st.step_name, " +
-                                            " st.subsystem," +
-                                            " st.proxy_id" +
-                                            " FROM    msdb.dbo.sysjobs sj" +
-                                            " JOIN [msdb].[sys].[servers] sv ON sj.originating_server_id = sv.server_id" +
-                                            " JOIN msdb.dbo.sysjobsteps st ON sj.job_id = st.job_id" +
-                                            " WHERE sv.name='{0}'";
+        public const string GetJobsQuery =
+            "SELECT  sj.name ," +
+            "	   sj.owner_sid ," +
+            "	   sj.enabled ," +
+            "	   sj.description ," +
+            "	   st.last_run_date ," +
+            "	   st.command ," +
+            "	   st.step_name, " +
+            "	   st.subsystem," +
+            "	   st.proxy_id" +
+            "    FROM    msdb.dbo.sysjobs sj" +
+            "	   JOIN [msdb].[sys].[servers] sv ON sj.originating_server_id = sv.server_id" +
+            "	   JOIN msdb.dbo.sysjobsteps st ON sj.job_id = st.job_id" +
+            "    WHERE sv.name=" +
+            "	 (" +
+            "	     select TOP 1 result.name from" +
+            "	     ( " +
+            "		    (select name from [msdb].[sys].[servers] where name = '{0}')" +
+            "		    UNION" +
+            "		    (select name from [msdb].[sys].[servers] where server_id = 0)" +
+            "	      ) as result" +
+            "	 )";
 
         public const string GetJobsQuerySQL2000 = "SELECT  sj.name ," +
                                             " sj.owner_sid ," +

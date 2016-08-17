@@ -4843,15 +4843,15 @@ AS -- <Idera SQLsecure version and copyright>
 														SELECT @sql = @sql+N' order by name';
 														SELECT @sql = @sql+'
 																							declare sysadmincursor cursor for
-																							SELECT name, isSysadmin from #usersWithExtendedPermissions 
-																							GROUP BY name, isSysadmin 
+																							SELECT name from #usersWithExtendedPermissions 
+																							GROUP BY name 
 																							ORDER BY name';
 														EXEC (@sql);
 														OPEN sysadmincursor;
 														SELECT @intval = 0,
 															   @intval2 = 0;
-														DECLARE @unauthorizedUserName AS NVARCHAR(128), @isSysAdmin AS BIT;
-														FETCH NEXT FROM sysadmincursor INTO @unauthorizedUserName, @isSysAdmin;
+														DECLARE @unauthorizedUserName AS NVARCHAR(128);
+														FETCH NEXT FROM sysadmincursor INTO @unauthorizedUserName;
 														WHILE @@fetch_status = 0
 															BEGIN
 																DECLARE @currentRoleText AS NVARCHAR(MAX);
@@ -4907,7 +4907,7 @@ AS -- <Idera SQLsecure version and copyright>
 																	 NULL,
 																	 @strval
 																	);
-																FETCH NEXT FROM sysadmincursor INTO @unauthorizedUserName, @isSysAdmin;
+																FETCH NEXT FROM sysadmincursor INTO @unauthorizedUserName;
 															END;
 														CLOSE sysadmincursor;
 														DEALLOCATE sysadmincursor;
@@ -8728,7 +8728,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                 BEGIN
 
                                                         -- Well-known security identifiers in Windows operating systems: https://support.microsoft.com/en-us/kb/243330
-                                                        DECLARE @domainUsersSidPattern AS nvarchar(34);
+                                                        DECLARE @domainUsersSidPattern AS nvarchar(35);
                                                         DECLARE @everyoneSidString AS nvarchar(27);
                                                         DECLARE @authenticatedUsersSidString AS nvarchar(27);
 
@@ -8815,15 +8815,16 @@ AS -- <Idera SQLsecure version and copyright>
 
                                                         INSERT INTO @jobsStepsWithoutProxy
                                                                 SELECT
-                                                                        j.Name,
-                                                                        j.Step
+																	j.Name,
+																	j.Step
                                                                 FROM [dbo].[sqljob] j
-                                                                LEFT OUTER JOIN [dbo].[sqljobproxy] jp
-                                                                        ON jp.proxyId = j.ProxyId
-                                                                WHERE jp.proxyId IS NULL
-                                                                AND j.SnapshotId = @snapshotid
-                                                                ORDER BY j.Name,
-                                                                j.JobId;
+																JOIN serversnapshot ss ON ss.snapshotid =  j.snapshotid
+                                                                WHERE 
+																	j.proxyId IS NULL AND 
+																	j.SnapshotId = @snapshotid
+                                                                ORDER BY 
+																	j.Name,
+																	j.JobId;
 
                                                         IF NOT EXISTS (SELECT
                                                                         1
@@ -8842,7 +8843,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 SET @jobStepsList = '';
                                                                 SELECT
                                                                         @jobStepsList = @jobStepsList
-                                                                        + name + ': '
+                                                                        + name + '; '
                                                                         + step + CHAR(13)
                                                                         + CHAR(10)
                                                                 FROM @jobsStepsWithoutProxy;
@@ -8868,6 +8869,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 SET @sevcode = @severity;
 
                                                         END;
+														DELETE FROM @jobsStepsWithoutProxy
                                                 END;
 
                                                 ---Encryption methods 

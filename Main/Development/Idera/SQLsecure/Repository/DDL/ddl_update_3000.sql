@@ -125,15 +125,15 @@ CREATE TABLE [dbo].[encryptionkey](
 GO
 
 ALTER TABLE [dbo].[encryptionkey]  WITH NOCHECK ADD  CONSTRAINT [FK_encryptionkey_serversnapshot] FOREIGN KEY([snapshotid])
-REFERENCES [dbo].[serversnapshot] ([snapshotid])
+REFERENCES [dbo].[serversnapshot] ([snapshotid]) ON DELETE CASCADE;
 GO
 
 ALTER TABLE [dbo].[encryptionkey] CHECK CONSTRAINT [FK_encryptionkey_serversnapshot]
 GO
 
 ALTER TABLE [dbo].[encryptionkey]  WITH CHECK ADD  CONSTRAINT [FK_encryptionkey_sqldatabase] FOREIGN KEY([snapshotid], [databaseid])
-REFERENCES [dbo].[sqldatabase] ([snapshotid], [dbid])
-GO
+REFERENCES [dbo].[sqldatabase] ([snapshotid], [dbid]) ON DELETE CASCADE;
+go
 
 ALTER TABLE [dbo].[encryptionkey] CHECK CONSTRAINT [FK_encryptionkey_sqldatabase]
 GO
