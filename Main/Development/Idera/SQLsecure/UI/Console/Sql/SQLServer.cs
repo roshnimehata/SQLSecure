@@ -97,7 +97,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             instance = instance.Trim();
             SQLServerProperties result = new SQLServerProperties();
-            string bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword);
+            SqlConnectionStringBuilder bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword);
 
             using (SqlConnection connection = new SqlConnection(bldr.ConnectionString))
             {
