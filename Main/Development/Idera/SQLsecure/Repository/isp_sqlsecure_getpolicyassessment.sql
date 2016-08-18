@@ -8852,9 +8852,8 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 SET @jobStepsList = '';
                                                                 SELECT
                                                                         @jobStepsList = @jobStepsList
-                                                                        + name + '; '
-                                                                        + step + CHAR(13)
-                                                                        + CHAR(10)
+                                                                        + 'Job: "' + name + '" Step: "'
+                                                                        + step + '"; '
                                                                 FROM @jobsStepsWithoutProxy;
 
                                                                 SET @metricval = 'There are jobs that have no proxy account: '

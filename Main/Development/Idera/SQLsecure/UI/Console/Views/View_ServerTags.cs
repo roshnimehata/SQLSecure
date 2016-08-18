@@ -206,7 +206,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                 foreach (int tagId in tagIds)
                 {
                     var tag = TagWorker.GetTagById(tagId);
-
+                    if (tag == null) return false;//tag was removed
 
                     foreach (var server in tag.TaggedServers)
                     {
