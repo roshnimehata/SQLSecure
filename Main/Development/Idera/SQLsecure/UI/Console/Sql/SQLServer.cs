@@ -41,16 +41,16 @@ namespace Idera.SQLsecure.UI.Console.Sql
             instanceName = string.Empty;
             fullName = string.Empty;
 
-            var serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword);
+            SQLServerProperties serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword);
 
             if (serverProperties.IsServerInAoag)
             {
                 SQLServerProperties nodeProperties;
-                var forcingTCP = "tcp:";
-                var tcpServerName = string.Concat(forcingTCP, serverProperties.ServerName);
-                var isLocalhost = string.IsNullOrEmpty(serverProperties.LocalNetAddress);
-                var isWeOnWantedNode = serverProperties.ClientNetAddress == serverProperties.LocalNetAddress;
-                var isConnectionDirectlyToTheNode = isLocalhost || isWeOnWantedNode ||
+                string forcingTCP = "tcp:";
+                string tcpServerName = string.Concat(forcingTCP, serverProperties.ServerName);
+                string isLocalhost = string.IsNullOrEmpty(serverProperties.LocalNetAddress);
+                bool isWeOnWantedNode = serverProperties.ClientNetAddress == serverProperties.LocalNetAddress;
+                bool isConnectionDirectlyToTheNode = isLocalhost || isWeOnWantedNode ||
                                                     TryGetSqlServerProperties(tcpServerName, sqlLogin, sqlPassword, out nodeProperties) &&
                                                     nodeProperties.LocalNetAddress == serverProperties.LocalNetAddress;
 
@@ -96,14 +96,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
 
             instance = instance.Trim();
-            var result = new SQLServerProperties();
-            var bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword);
+            SQLServerProperties result = new SQLServerProperties();
+            string bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword);
 
-            using (var connection = new SqlConnection(bldr.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(bldr.ConnectionString))
             {
                 connection.Open();
-                var isSQL2012OrHigher = IsSQL2012OrHigher(connection.ServerVersion);
-                var confQuery = @"select  isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
+                bool isSQL2012OrHigher = IsSQL2012OrHigher(connection.ServerVersion);
+                string confQuery = @"select  isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
                                           isnull(SERVERPROPERTY('MachineName'),'')  as MachineName,
                                           isnull(SERVERPROPERTY('ServerName'),'') as ServerName,
                                           isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName;";
@@ -115,7 +115,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                                    FROM  sys.dm_hadr_cluster;";
                 }
 
-                using (var rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text, confQuery, null))
+                using (SqlDataReader rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text, confQuery, null))
                 {
                     if (rdr.HasRows && rdr.Read())
                     {
@@ -146,12 +146,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         private static bool IsSQL2012OrHigher(string serverVersion)
         {
-            var sql2012MajorVersion = 11;
-            var result = true;
+            int sql2012MajorVersion = 11;
+            bool result = true;
 
             try
             {
-                var v = new Version(serverVersion);
+                Version v = new Version(serverVersion);
                 result = v.Major >= sql2012MajorVersion;
             }
             catch
