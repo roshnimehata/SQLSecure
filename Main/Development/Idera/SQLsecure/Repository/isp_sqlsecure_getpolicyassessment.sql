@@ -15,7 +15,9 @@ CREATE PROCEDURE [dbo].[isp_sqlsecure_getpolicyassessment] (@policyid int,
 @registeredserverid int = 0,
 @alertsonly bit = 0,
 @usebaseline bit = 0,
-@rundate datetime = NULL) WITH ENCRYPTION
+@rundate datetime = NULL,
+@fullRefresh int = 1
+) WITH ENCRYPTION
 AS -- <Idera SQLsecure version and copyright>
         --
         -- Description :
@@ -215,6 +217,13 @@ AS -- <Idera SQLsecure version and copyright>
                 DELETE FROM @returnservertbl
                 WHERE registeredserverid != @registeredserverid;
         END;
+
+		
+    -- accept the current assessment unless fullRefresh is true
+	if (@fullRefresh != 1)
+	begin
+		SET @valid = 1
+	end
 
         IF (@valid = 1)
         BEGIN
