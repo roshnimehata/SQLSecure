@@ -117,7 +117,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                     SqlDateTime startDate = rdr.GetSqlDateTime((int)DatabaseCertificateColumns.StartDate);
                                     var thumbprint = rdr.GetSqlBinary((int)DatabaseCertificateColumns.Thumbprint);
                                     SqlString attestedBy = rdr.GetSqlString((int)DatabaseCertificateColumns.AttestedBy);
-                                    SqlDateTime keyLastBackupDate = rdr.GetSqlDateTime((int)DatabaseCertificateColumns.KeyLastBackupDate);
+                                    SqlDateTime keyLastBackupDate = rdr.IsDBNull((int)DatabaseCertificateColumns.KeyLastBackupDate) ? SqlDateTime.Null : rdr.GetSqlDateTime((int)DatabaseCertificateColumns.KeyLastBackupDate);
+                                    
 
 
                                     // Update the datatable.
