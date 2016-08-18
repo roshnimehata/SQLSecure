@@ -1486,6 +1486,8 @@
     <Compile Include="Views\Report_OSVulnerability.cs">
       <SubType>UserControl</SubType>
     </Compile>
+	 <Compile Include="SQL\SQLServerProperties.cs" />
+	 <Compile Include="SQL\HadrManagerStatus.cs" />
     <Compile Include="Views\Report_OSVulnerability.Designer.cs">
       <DependentUpon>Report_OSVulnerability.cs</DependentUpon>
     </Compile>
