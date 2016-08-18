@@ -13,6 +13,7 @@ using Infragistics.Win.UltraWinGrid;
 using Help = Idera.SQLsecure.UI.Console.Utility.Help;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 using System.Collections.Generic;
+using System.Threading;
 using Idera.SQLsecure.UI.Console.Sql;
 
 namespace Idera.SQLsecure.UI.Console.Views
@@ -376,18 +377,33 @@ namespace Idera.SQLsecure.UI.Console.Views
                     serversToRun.Add(Program.gController.Repository.GetServer(item[colHeaderServerName].ToString()));
                 }
                 List<string> failedServer = new List<string>();
+                List<Thread> threads = new List<Thread>();
+
                 foreach (RegisteredServer server in serversToRun)
                 {
                     Guid guid;
-                    if (server.StartJob(out guid, false))
+                    Thread thread = new Thread(() =>
                     {
-                        server.SetJobId(guid);
-                    }
-                    else
-                    {
-                        failedServer.Add(server.ConnectionName);
-                    }
+                        if (server.StartJob(out guid, false))
+                        {
+                            server.SetJobId(guid);
+                        }
+                        else
+                        {
+                            failedServer.Add(server.ConnectionName);
+                        }
+                      
+                    });
+                    Thread.Sleep(1000);
+                    thread.Start();
+                    threads.Add(thread);
                 }
+                while (!threads.TrueForAll(a => a.ThreadState == ThreadState.Stopped))
+                {
+                    Thread.Sleep(1000);
+                }
+
+
                 if (failedServer.Count != serversToRun.Count)
                 {
                     var tagsNamesArray = new List<string>();
