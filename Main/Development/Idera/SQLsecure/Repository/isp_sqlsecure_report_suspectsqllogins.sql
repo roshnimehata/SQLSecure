@@ -24,9 +24,18 @@ AS -- <Idera SQLsecure version and copyright>
     INSERT  #tmpservers
             EXEC [dbo].[isp_sqlsecure_getpolicymemberlist] @policyid = @policyid;  
 
-	declare @snapshotId as int;
-	
-	
+    SELECT  snapshotid ,
+            connectionname
+    INTO    #ids
+    FROM    serversnapshot d
+    WHERE   d.snapshotid IN (
+            SELECT  snapshotid
+            FROM    dbo.getsnapshotlist(@rundate, @usebaseline) )
+            AND d.registeredserverid IN ( SELECT    registeredserverid
+                                          FROM      #tmpservers )
+            AND UPPER(d.connectionname) LIKE UPPER(@serverName);
+            
+            
 	            
     SELECT  d.connectionname ,
             a.name ,
@@ -38,33 +47,38 @@ AS -- <Idera SQLsecure version and copyright>
 		--		otherwise the entire domain is suspect
             '' [state]
     FROM    vwserverprincipal a
-            INNER JOIN serversnapshot d ON a.snapshotid = d.snapshotid
-    WHERE   a.snapshotid IN (
-            SELECT  snapshotid
-            FROM    dbo.getsnapshotlist(@rundate, @usebaseline) )
-            AND d.registeredserverid IN ( SELECT    registeredserverid
-                                          FROM      #tmpservers )
-            AND UPPER(d.connectionname) LIKE UPPER(@serverName)
-            AND NOT EXISTS ( SELECT 1
-                             FROM   serverpermission perm
-                             WHERE  perm.grantee = a.principalid AND perm.isgrant='Y' and perm.snapshotid IN (
-            SELECT  snapshotid
-            FROM    dbo.getsnapshotlist(@rundate, @usebaseline)))
+            INNER JOIN #ids d ON a.snapshotid = d.snapshotid
+    WHERE   NOT EXISTS ( SELECT 1
+                         FROM   serverpermission perm
+                         WHERE  perm.grantee = a.principalid
+                                AND perm.isgrant = 'Y'
+                                AND perm.snapshotid IN ( SELECT
+                                                              snapshotid
+                                                         FROM #ids ) )
             AND NOT EXISTS ( SELECT 1
                              FROM   databaseobjectpermission dbp
-                             WHERE  dbp.grantee = a.principalid AND dbp.isgrant='Y' and dbp.snapshotid IN (
-            SELECT  snapshotid
-            FROM    dbo.getsnapshotlist(@rundate, @usebaseline)))
+                             WHERE  dbp.grantee = a.principalid
+                                    AND dbp.isgrant = 'Y'
+                                    AND dbp.snapshotid IN ( SELECT
+                                                              snapshotid
+                                                            FROM
+                                                              #ids ) )
             AND NOT EXISTS ( SELECT 1
                              FROM   databaseprincipalpermission dbp
-                             WHERE  dbp.grantee = a.principalid AND dbp.isgrant='Y'  and dbp.snapshotid IN (
-            SELECT  snapshotid
-            FROM    dbo.getsnapshotlist(@rundate, @usebaseline)))
+                             WHERE  dbp.grantee = a.principalid
+                                    AND dbp.isgrant = 'Y'
+                                    AND dbp.snapshotid IN ( SELECT
+                                                              snapshotid
+                                                            FROM
+                                                              #ids ) )
             AND NOT EXISTS ( SELECT 1
                              FROM   databaseschemapermission dbp
-                             WHERE  dbp.grantee = a.principalid AND dbp.isgrant='Y'  and dbp.snapshotid IN (
-            SELECT  snapshotid
-            FROM    dbo.getsnapshotlist(@rundate, @usebaseline)))
+                             WHERE  dbp.grantee = a.principalid
+                                    AND dbp.isgrant = 'Y'
+                                    AND dbp.snapshotid IN ( SELECT
+                                                              snapshotid
+                                                            FROM
+                                                              #ids ) )
     GROUP BY d.connectionname ,
             a.name ,
             a.type
@@ -72,4 +86,5 @@ AS -- <Idera SQLsecure version and copyright>
             a.name;
 
     DROP TABLE #tmpservers;
+    DROP TABLE #ids;
 
