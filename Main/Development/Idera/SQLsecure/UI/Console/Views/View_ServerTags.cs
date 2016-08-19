@@ -13,6 +13,7 @@ using Infragistics.Win.UltraWinGrid;
 using Help = Idera.SQLsecure.UI.Console.Utility.Help;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using Idera.SQLsecure.UI.Console.Sql;
 
@@ -21,6 +22,9 @@ namespace Idera.SQLsecure.UI.Console.Views
     public partial class View_ServerTags : BaseView, IView
     {
         private const string TitleConst = "Server Groups";
+        private BackgroundWorker _backgroundWorker;
+        private const int JobStartDelay = 1000;
+        private bool _isCanceled = false;
         #region IView
 
         void IView.SetContext(IDataContext contextIn)
@@ -42,6 +46,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         }
 
         #endregion
+
 
 
         #region fields
@@ -109,6 +114,12 @@ namespace Idera.SQLsecure.UI.Console.Views
         {
             InitializeComponent();
 
+            _backgroundWorker = new BackgroundWorker();
+
+            _backgroundWorker.DoWork += BackgroundWorkerOnDoWork;
+            _backgroundWorker.ProgressChanged += BackgroundWorkerOnProgressChanged;
+            _backgroundWorker.RunWorkerCompleted += BackgroundWorkerOnRunWorkerCompleted;
+            _backgroundWorker.WorkerReportsProgress = true;
             _label_Summary.Text = "";
 
             _toolStripButton_PoliciesColumnChooser.Image =
@@ -147,6 +158,82 @@ namespace Idera.SQLsecure.UI.Console.Views
 
 
         }
+
+        readonly List<RegisteredServer> _serversToRun = new List<RegisteredServer>();
+        List<string> _failedServer = new List<string>();
+        private Form_ProcessDialog _processdDialog;
+        private string _currentServer;
+        private void BackgroundWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            _processdDialog.Close();
+        }
+
+        private void BackgroundWorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
+        {
+            _processdDialog.Message = string.Format("Starting snapshot on server {0}", progressChangedEventArgs.UserState.ToString());
+
+
+        }
+
+        private void ShowProcessDialog()
+        {
+            if (_processdDialog == null || _processdDialog.IsDisposed)
+                _processdDialog = new Form_ProcessDialog(ErrorMsgs.ManageTags, "Running snapshots for tag\nPress Cancel to stop", OnCancel, Properties.Resources.ServerTag_48);
+            _processdDialog.Show();
+        }
+
+        private void OnCancel(object sender, EventArgs eventArgs)
+        {
+            _isCanceled = true;
+        }
+
+
+        private void BackgroundWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
+        {
+
+            if (_dt_Servers.Rows.Count != 0)
+            {
+
+                var tags = GetSelectedTagsIds();
+                var tagsNamesArray = new List<string>();
+                foreach (string value in tags.Values)
+                {
+                    tagsNamesArray.Add(value);
+                }
+                var tagNames = string.Join(", ", tagsNamesArray.ToArray());
+                MsgBox.ShowInfo(ErrorMsgs.ManageTags, string.Format("Starting snapshot for Server Group Tag(s) \"{0}\".", tagNames));
+                foreach (DataRow item in _dt_Servers.Rows)
+                {
+                    _serversToRun.Add(Program.gController.Repository.GetServer(item[colHeaderServerName].ToString()));
+                }
+
+
+                foreach (RegisteredServer server in _serversToRun)
+                {
+                    if (_isCanceled) return;
+
+                    Guid guid;
+                    _backgroundWorker.ReportProgress(0, server.ConnectionName);
+                    if (server.StartJob(out guid, false))
+                    {
+                        server.SetJobId(guid);
+                    }
+                    else
+                    {
+                        _failedServer.Add(server.ConnectionName);
+                    }
+                    _currentServer = server.ConnectionName;
+                    Thread.Sleep(JobStartDelay);
+                }
+                if (_failedServer.Count != 0)
+                {
+                    MsgBox.ShowError(ErrorMsgs.ManageTags, String.Format("Unable to start snapshot for next server(s) \n{0}", string.Join(", \n", _failedServer.ToArray())));
+                }
+
+
+            }
+        }
+
         #endregion
 
 
@@ -368,61 +455,10 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private void TakeSnapshot(object sender, EventArgs e)
         {
-            if (_dt_Servers.Rows.Count != 0)
-            {
-                List<RegisteredServer> serversToRun = new List<RegisteredServer>();
-                var tags = GetSelectedTagsIds();
-                foreach (DataRow item in _dt_Servers.Rows)
-                {
-                    serversToRun.Add(Program.gController.Repository.GetServer(item[colHeaderServerName].ToString()));
-                }
-                List<string> failedServer = new List<string>();
-                List<Thread> threads = new List<Thread>();
+            ShowProcessDialog();
+            _backgroundWorker.RunWorkerAsync();
+            //_processdDialog.Close();
 
-                foreach (RegisteredServer server in serversToRun)
-                {
-                    Guid guid;
-                    Thread thread = new Thread(() =>
-                    {
-                        if (server.StartJob(out guid, false))
-                        {
-                            server.SetJobId(guid);
-                        }
-                        else
-                        {
-                            failedServer.Add(server.ConnectionName);
-                        }
-                      
-                    });
-                    Thread.Sleep(1000);
-                    thread.Start();
-                    threads.Add(thread);
-                }
-                while (!threads.TrueForAll(a => a.ThreadState == ThreadState.Stopped))
-                {
-                    Thread.Sleep(1000);
-                }
-
-
-                if (failedServer.Count != serversToRun.Count)
-                {
-                    var tagsNamesArray = new List<string>();
-                    foreach (string value in tags.Values)
-                    {
-                        tagsNamesArray.Add(value);
-                    }
-                    var tagNames = string.Join(", ", tagsNamesArray.ToArray());
-
-                    MsgBox.ShowInfo(ErrorMsgs.ManageTags,
-                        string.Format("Start snapshot for Server Group Tag(s) \"{0}\".", tagNames));
-                }
-                if (failedServer.Count != 0)
-                {
-                    MsgBox.ShowError(ErrorMsgs.ManageTags, String.Format("Unable to start snapshot for next server(s) \n{0}", string.Join("\n,", failedServer.ToArray())));
-                }
-
-
-            }
         }
 
         #endregion
