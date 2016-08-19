@@ -166,19 +166,21 @@ namespace Idera.SQLsecure.UI.Console.Views
         private void BackgroundWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
         {
             _processdDialog.Close();
+            if (_failedServer.Count != 0)
+            {
+                MsgBox.ShowError(ErrorMsgs.ManageTags, String.Format("Unable to start snapshot for next server(s) \n{0}", string.Join(", \n", _failedServer.ToArray())));
+            }
         }
 
         private void BackgroundWorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
         {
             _processdDialog.Message = string.Format("Starting snapshot on server {0}", progressChangedEventArgs.UserState.ToString());
-
-
         }
 
         private void ShowProcessDialog()
         {
             if (_processdDialog == null || _processdDialog.IsDisposed)
-                _processdDialog = new Form_ProcessDialog(ErrorMsgs.ManageTags, "Running snapshots for tag\nPress Cancel to stop", OnCancel, Properties.Resources.ServerTag_48);
+                _processdDialog = new Form_ProcessDialog(ErrorMsgs.ManageTags, "Running snapshots for tag(s)\nPress Cancel to stop", OnCancel, Properties.Resources.ServerTag_48);
             _processdDialog.Show();
         }
 
@@ -194,19 +196,10 @@ namespace Idera.SQLsecure.UI.Console.Views
             if (_dt_Servers.Rows.Count != 0)
             {
 
-                var tags = GetSelectedTagsIds();
-                var tagsNamesArray = new List<string>();
-                foreach (string value in tags.Values)
-                {
-                    tagsNamesArray.Add(value);
-                }
-                var tagNames = string.Join(", ", tagsNamesArray.ToArray());
-                MsgBox.ShowInfo(ErrorMsgs.ManageTags, string.Format("Starting snapshot for Server Group Tag(s) \"{0}\".", tagNames));
                 foreach (DataRow item in _dt_Servers.Rows)
                 {
                     _serversToRun.Add(Program.gController.Repository.GetServer(item[colHeaderServerName].ToString()));
                 }
-
 
                 foreach (RegisteredServer server in _serversToRun)
                 {
@@ -220,17 +213,12 @@ namespace Idera.SQLsecure.UI.Console.Views
                     }
                     else
                     {
-                        _failedServer.Add(server.ConnectionName);
+                        if (!_failedServer.Contains(server.ConnectionName))
+                            _failedServer.Add(server.ConnectionName);
                     }
                     _currentServer = server.ConnectionName;
                     Thread.Sleep(JobStartDelay);
                 }
-                if (_failedServer.Count != 0)
-                {
-                    MsgBox.ShowError(ErrorMsgs.ManageTags, String.Format("Unable to start snapshot for next server(s) \n{0}", string.Join(", \n", _failedServer.ToArray())));
-                }
-
-
             }
         }
 

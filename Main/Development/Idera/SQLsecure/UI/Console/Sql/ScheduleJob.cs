@@ -801,6 +801,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
             catch (Exception ex)
             {
+                logX.m_logX.Error(string.Format("Exception during start job for{0}",newConnection),ex);
                 if (showError)
                     Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection,
                         Utility.ErrorMsgs.DataCollectionErrorAddingJob, ex);
