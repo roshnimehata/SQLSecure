@@ -8983,7 +8983,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                 @foundCerts = @foundCerts
                                                                                 + name + ' - '
                                                                                 + databasename
-                                                                                + ',' + CHAR(13)
+                                                                                + ', ' + CHAR(13)
                                                                                 + CHAR(10)
                                                                         FROM #certs;
                                                                         SET @foundCerts = SUBSTRING(@foundCerts,1,LEN(@foundCerts)- 1);
@@ -9033,7 +9033,7 @@ AS -- <Idera SQLsecure version and copyright>
 																SET @foundLinkedServer = '';
 																SELECT
 																	@foundLinkedServer = @foundLinkedServer + servername
-																	+ ',' + CHAR(13) + CHAR(10)
+																	+ ', ' + CHAR(13) + CHAR(10)
 																FROM
 																	#linkedsrv;
 																SET @foundLinkedServer = SUBSTRING(@foundLinkedServer, 1,
@@ -9109,7 +9109,7 @@ AS -- <Idera SQLsecure version and copyright>
 																SET @foundLinkedServerUser = '';
 																SELECT
 																	@foundLinkedServerUser = @foundLinkedServerUser + servername + ' - ' + principal
-																	+ ',' + CHAR(13) + CHAR(10)
+																	+ ', ' + CHAR(13) + CHAR(10)
 																FROM
 																	#linksrvusr;
 																SET @foundLinkedServerUser = SUBSTRING(@foundLinkedServerUser, 1,

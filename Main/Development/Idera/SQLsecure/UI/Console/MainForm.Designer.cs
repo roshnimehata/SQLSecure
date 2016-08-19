@@ -29,12 +29,12 @@ namespace Idera.SQLsecure.UI.Console
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            Infragistics.Win.Appearance appearance1 = new Infragistics.Win.Appearance();
+            Infragistics.Win.UltraWinSchedule.CalendarCombo.DateButton dateButton1 = new Infragistics.Win.UltraWinSchedule.CalendarCombo.DateButton();
             Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarGroup ultraExplorerBarGroup1 = new Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarGroup();
             Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarGroup ultraExplorerBarGroup2 = new Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarGroup();
             Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarGroup ultraExplorerBarGroup3 = new Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarGroup();
             Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarGroup ultraExplorerBarGroup4 = new Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarGroup();
-            Infragistics.Win.Appearance appearance1 = new Infragistics.Win.Appearance();
-            Infragistics.Win.UltraWinSchedule.CalendarCombo.DateButton dateButton1 = new Infragistics.Win.UltraWinSchedule.CalendarCombo.DateButton();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ultraExplorerBarContainerControl4 = new Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarContainerControl();
             this._splitContainer_SecuritySummary = new System.Windows.Forms.SplitContainer();
@@ -64,7 +64,11 @@ namespace Idera.SQLsecure.UI.Console
             this._cmsi_Policy_refresh = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this._cmsi_Policy_properties = new System.Windows.Forms.ToolStripMenuItem();
+            this._headerStrip_Policies = new Idera.SQLsecure.UI.Console.Controls.HeaderStrip();
+            this._toolStripLabel_Policies = new System.Windows.Forms.ToolStripLabel();
             this._explorerBar_SecuritySummaryTreeView = new System.Windows.Forms.TreeView();
+            this._headerStrip_PolicyServers = new Idera.SQLsecure.UI.Console.Controls.HeaderStrip();
+            this._toolStripLabel_PolicyServers = new System.Windows.Forms.ToolStripLabel();
             this.ultraExplorerBarContainerControl1 = new Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarContainerControl();
             this._explorerBar_ExplorePermissionsTreeView = new System.Windows.Forms.TreeView();
             this._contextMenuStrip_Server = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -85,12 +89,23 @@ namespace Idera.SQLsecure.UI.Console
             this._cmsi_Server_properties = new System.Windows.Forms.ToolStripMenuItem();
             this.ultraExplorerBarContainerControl2 = new Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarContainerControl();
             this._explorerBar_ReportsTreeView = new System.Windows.Forms.TreeView();
+            this._viewSection_ReportSettings = new Idera.SQLsecure.UI.Console.Controls.ViewSection();
+            this.label1 = new System.Windows.Forms.Label();
+            this._checkBox_Report_BaselineOnly = new System.Windows.Forms.CheckBox();
+            this._dateTimePicker_Report_Time = new System.Windows.Forms.DateTimePicker();
+            this.label2 = new System.Windows.Forms.Label();
+            this._checkBox_Report_IncludeTime = new System.Windows.Forms.CheckBox();
+            this._comboBox_Report_Policies = new System.Windows.Forms.ComboBox();
+            this._dateTimePicker_Reports = new Infragistics.Win.UltraWinSchedule.UltraCalendarCombo();
             this.ultraExplorerBarContainerControl3 = new Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarContainerControl();
             this._explorerBar_ManageSQLsecureTreeView = new System.Windows.Forms.TreeView();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this._splitContainer = new System.Windows.Forms.SplitContainer();
             this._explorerBar = new Infragistics.Win.UltraWinExplorerBar.UltraExplorerBar();
             this._resultPane = new System.Windows.Forms.Panel();
+            this._resultHeader = new Idera.SQLsecure.UI.Console.Controls.HeaderStrip();
+            this._resultTitleLabel = new System.Windows.Forms.ToolStripLabel();
+            this._resultShowHideButton = new System.Windows.Forms.ToolStripButton();
             this._menuStrip = new System.Windows.Forms.MenuStrip();
             this._menuStrip_File = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_Connect = new System.Windows.Forms.ToolStripMenuItem();
@@ -170,29 +185,19 @@ namespace Idera.SQLsecure.UI.Console
             this.toolStripMenuItem_NotifyClose = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog_ExportPolicy = new System.Windows.Forms.SaveFileDialog();
-            this._viewSection_ReportSettings = new Idera.SQLsecure.UI.Console.Controls.ViewSection();
-            this.label1 = new System.Windows.Forms.Label();
-            this._checkBox_Report_BaselineOnly = new System.Windows.Forms.CheckBox();
-            this._dateTimePicker_Report_Time = new System.Windows.Forms.DateTimePicker();
-            this.label2 = new System.Windows.Forms.Label();
-            this._checkBox_Report_IncludeTime = new System.Windows.Forms.CheckBox();
-            this._comboBox_Report_Policies = new System.Windows.Forms.ComboBox();
-            this._dateTimePicker_Reports = new Infragistics.Win.UltraWinSchedule.UltraCalendarCombo();
-            this._headerStrip_Policies = new Idera.SQLsecure.UI.Console.Controls.HeaderStrip();
-            this._toolStripLabel_Policies = new System.Windows.Forms.ToolStripLabel();
-            this._headerStrip_PolicyServers = new Idera.SQLsecure.UI.Console.Controls.HeaderStrip();
-            this._toolStripLabel_PolicyServers = new System.Windows.Forms.ToolStripLabel();
-            this._resultHeader = new Idera.SQLsecure.UI.Console.Controls.HeaderStrip();
-            this._resultTitleLabel = new System.Windows.Forms.ToolStripLabel();
-            this._resultShowHideButton = new System.Windows.Forms.ToolStripButton();
             this.ultraExplorerBarContainerControl4.SuspendLayout();
             this._splitContainer_SecuritySummary.Panel1.SuspendLayout();
             this._splitContainer_SecuritySummary.Panel2.SuspendLayout();
             this._splitContainer_SecuritySummary.SuspendLayout();
             this._contextMenuStrip_Policy.SuspendLayout();
+            this._headerStrip_Policies.SuspendLayout();
+            this._headerStrip_PolicyServers.SuspendLayout();
             this.ultraExplorerBarContainerControl1.SuspendLayout();
             this._contextMenuStrip_Server.SuspendLayout();
             this.ultraExplorerBarContainerControl2.SuspendLayout();
+            this._viewSection_ReportSettings.ViewPanel.SuspendLayout();
+            this._viewSection_ReportSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._dateTimePicker_Reports)).BeginInit();
             this.ultraExplorerBarContainerControl3.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -202,25 +207,19 @@ namespace Idera.SQLsecure.UI.Console
             this._splitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._explorerBar)).BeginInit();
             this._explorerBar.SuspendLayout();
+            this._resultHeader.SuspendLayout();
             this._menuStrip.SuspendLayout();
             this._toolStrip.SuspendLayout();
             this.contextMenuStrip_NotifyIcon.SuspendLayout();
-            this._viewSection_ReportSettings.ViewPanel.SuspendLayout();
-            this._viewSection_ReportSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._dateTimePicker_Reports)).BeginInit();
-            this._headerStrip_Policies.SuspendLayout();
-            this._headerStrip_PolicyServers.SuspendLayout();
-            this._resultHeader.SuspendLayout();
             this.SuspendLayout();
             // 
             // ultraExplorerBarContainerControl4
             // 
             this.ultraExplorerBarContainerControl4.Controls.Add(this._splitContainer_SecuritySummary);
-            this.ultraExplorerBarContainerControl4.Location = new System.Drawing.Point(-10000, -10000);
+            this.ultraExplorerBarContainerControl4.Location = new System.Drawing.Point(0, 25);
             this.ultraExplorerBarContainerControl4.Name = "ultraExplorerBarContainerControl4";
             this.ultraExplorerBarContainerControl4.Size = new System.Drawing.Size(308, 450);
             this.ultraExplorerBarContainerControl4.TabIndex = 3;
-            this.ultraExplorerBarContainerControl4.Visible = false;
             // 
             // _splitContainer_SecuritySummary
             // 
@@ -457,6 +456,28 @@ namespace Idera.SQLsecure.UI.Console
             this._cmsi_Policy_properties.Text = "Properties";
             this._cmsi_Policy_properties.Click += new System.EventHandler(this._cmsi_Policy_properties_Click);
             // 
+            // _headerStrip_Policies
+            // 
+            this._headerStrip_Policies.AutoSize = false;
+            this._headerStrip_Policies.Font = new System.Drawing.Font("Arial", 12.75F, System.Drawing.FontStyle.Bold);
+            this._headerStrip_Policies.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this._headerStrip_Policies.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this._headerStrip_Policies.HotTrackEnabled = false;
+            this._headerStrip_Policies.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._toolStripLabel_Policies});
+            this._headerStrip_Policies.Location = new System.Drawing.Point(0, 0);
+            this._headerStrip_Policies.Name = "_headerStrip_Policies";
+            this._headerStrip_Policies.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this._headerStrip_Policies.Size = new System.Drawing.Size(308, 25);
+            this._headerStrip_Policies.TabIndex = 4;
+            // 
+            // _toolStripLabel_Policies
+            // 
+            this._toolStripLabel_Policies.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this._toolStripLabel_Policies.Name = "_toolStripLabel_Policies";
+            this._toolStripLabel_Policies.Size = new System.Drawing.Size(69, 20);
+            this._toolStripLabel_Policies.Text = "Policies";
+            // 
             // _explorerBar_SecuritySummaryTreeView
             // 
             this._explorerBar_SecuritySummaryTreeView.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -472,6 +493,28 @@ namespace Idera.SQLsecure.UI.Console
             this._explorerBar_SecuritySummaryTreeView.VisibleChanged += new System.EventHandler(this._explorerBar_SecuritySummaryTreeView_VisibleChanged);
             this._explorerBar_SecuritySummaryTreeView.Enter += new System.EventHandler(this._explorerBar_SecuritySummaryTreeView_Enter);
             this._explorerBar_SecuritySummaryTreeView.Leave += new System.EventHandler(this._explorerBar_SecuritySummaryTreeView_Leave);
+            // 
+            // _headerStrip_PolicyServers
+            // 
+            this._headerStrip_PolicyServers.AutoSize = false;
+            this._headerStrip_PolicyServers.Font = new System.Drawing.Font("Arial", 12.75F, System.Drawing.FontStyle.Bold);
+            this._headerStrip_PolicyServers.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this._headerStrip_PolicyServers.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this._headerStrip_PolicyServers.HotTrackEnabled = false;
+            this._headerStrip_PolicyServers.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._toolStripLabel_PolicyServers});
+            this._headerStrip_PolicyServers.Location = new System.Drawing.Point(0, 0);
+            this._headerStrip_PolicyServers.Name = "_headerStrip_PolicyServers";
+            this._headerStrip_PolicyServers.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this._headerStrip_PolicyServers.Size = new System.Drawing.Size(308, 25);
+            this._headerStrip_PolicyServers.TabIndex = 5;
+            // 
+            // _toolStripLabel_PolicyServers
+            // 
+            this._toolStripLabel_PolicyServers.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this._toolStripLabel_PolicyServers.Name = "_toolStripLabel_PolicyServers";
+            this._toolStripLabel_PolicyServers.Size = new System.Drawing.Size(141, 20);
+            this._toolStripLabel_PolicyServers.Text = "Servers in Policy";
             // 
             // ultraExplorerBarContainerControl1
             // 
@@ -647,6 +690,120 @@ namespace Idera.SQLsecure.UI.Console
             this._explorerBar_ReportsTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._explorerBar_ReportsTreeView_NodeMouseClick);
             this._explorerBar_ReportsTreeView.Enter += new System.EventHandler(this._explorerBar_ReportsTreeView_Enter);
             // 
+            // _viewSection_ReportSettings
+            // 
+            this._viewSection_ReportSettings.BackColor = System.Drawing.Color.White;
+            this._viewSection_ReportSettings.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this._viewSection_ReportSettings.HeaderGradientBorderStyle = Idera.SQLsecure.UI.Console.Controls.GradientPanel.GradientBorderStyle.Fixed3DOut;
+            this._viewSection_ReportSettings.HeaderGradientColor = System.Drawing.Color.DarkGray;
+            this._viewSection_ReportSettings.HeaderGradientCornerStyle = Idera.SQLsecure.UI.Console.Controls.GradientPanel.GradientCornerStyle.Square;
+            this._viewSection_ReportSettings.HeaderTextColor = System.Drawing.SystemColors.ControlText;
+            this._viewSection_ReportSettings.Location = new System.Drawing.Point(0, 288);
+            this._viewSection_ReportSettings.Name = "_viewSection_ReportSettings";
+            this._viewSection_ReportSettings.Size = new System.Drawing.Size(231, 162);
+            this._viewSection_ReportSettings.TabIndex = 4;
+            this._viewSection_ReportSettings.Title = "Report Settings";
+            // 
+            // _viewSection_ReportSettings.Panel
+            // 
+            this._viewSection_ReportSettings.ViewPanel.BackColor = System.Drawing.Color.Transparent;
+            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this.label1);
+            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this._checkBox_Report_BaselineOnly);
+            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this._dateTimePicker_Report_Time);
+            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this.label2);
+            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this._checkBox_Report_IncludeTime);
+            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this._comboBox_Report_Policies);
+            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this._dateTimePicker_Reports);
+            this._viewSection_ReportSettings.ViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._viewSection_ReportSettings.ViewPanel.GradientColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this._viewSection_ReportSettings.ViewPanel.Location = new System.Drawing.Point(0, 20);
+            this._viewSection_ReportSettings.ViewPanel.Name = "Panel";
+            this._viewSection_ReportSettings.ViewPanel.Rotation = 270F;
+            this._viewSection_ReportSettings.ViewPanel.Size = new System.Drawing.Size(231, 142);
+            this._viewSection_ReportSettings.ViewPanel.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.label1.Location = new System.Drawing.Point(3, 5);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(210, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Create reports from most current data as of:";
+            // 
+            // _checkBox_Report_BaselineOnly
+            // 
+            this._checkBox_Report_BaselineOnly.AutoSize = true;
+            this._checkBox_Report_BaselineOnly.Location = new System.Drawing.Point(22, 121);
+            this._checkBox_Report_BaselineOnly.Name = "_checkBox_Report_BaselineOnly";
+            this._checkBox_Report_BaselineOnly.Size = new System.Drawing.Size(179, 17);
+            this._checkBox_Report_BaselineOnly.TabIndex = 6;
+            this._checkBox_Report_BaselineOnly.Text = "Use baseline snapshot data only";
+            this._checkBox_Report_BaselineOnly.UseVisualStyleBackColor = true;
+            // 
+            // _dateTimePicker_Report_Time
+            // 
+            this._dateTimePicker_Report_Time.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this._dateTimePicker_Report_Time.Location = new System.Drawing.Point(115, 50);
+            this._dateTimePicker_Report_Time.Name = "_dateTimePicker_Report_Time";
+            this._dateTimePicker_Report_Time.ShowUpDown = true;
+            this._dateTimePicker_Report_Time.Size = new System.Drawing.Size(88, 20);
+            this._dateTimePicker_Report_Time.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.label2.Location = new System.Drawing.Point(3, 77);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(194, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Create reports using servers from policy:";
+            // 
+            // _checkBox_Report_IncludeTime
+            // 
+            this._checkBox_Report_IncludeTime.AutoSize = true;
+            this._checkBox_Report_IncludeTime.Location = new System.Drawing.Point(22, 53);
+            this._checkBox_Report_IncludeTime.Name = "_checkBox_Report_IncludeTime";
+            this._checkBox_Report_IncludeTime.Size = new System.Drawing.Size(87, 17);
+            this._checkBox_Report_IncludeTime.TabIndex = 2;
+            this._checkBox_Report_IncludeTime.Text = "Include Time";
+            this._checkBox_Report_IncludeTime.UseVisualStyleBackColor = true;
+            this._checkBox_Report_IncludeTime.CheckedChanged += new System.EventHandler(this._checkBox_Report_IncludeTime_CheckedChanged);
+            // 
+            // _comboBox_Report_Policies
+            // 
+            this._comboBox_Report_Policies.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._comboBox_Report_Policies.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._comboBox_Report_Policies.Location = new System.Drawing.Point(6, 94);
+            this._comboBox_Report_Policies.MaxDropDownItems = 50;
+            this._comboBox_Report_Policies.Name = "_comboBox_Report_Policies";
+            this._comboBox_Report_Policies.Size = new System.Drawing.Size(220, 21);
+            this._comboBox_Report_Policies.TabIndex = 4;
+            this._comboBox_Report_Policies.SelectionChangeCommitted += new System.EventHandler(this._comboBox_Report_Policies_SelectionChangeCommitted);
+            // 
+            // _dateTimePicker_Reports
+            // 
+            this._dateTimePicker_Reports.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            appearance1.FontData.Name = "Microsoft Sans Serif";
+            appearance1.FontData.SizeInPoints = 8.5F;
+            appearance1.ImageHAlign = Infragistics.Win.HAlign.Right;
+            this._dateTimePicker_Reports.Appearance = appearance1;
+            this._dateTimePicker_Reports.BackColor = System.Drawing.SystemColors.Window;
+            this._dateTimePicker_Reports.ButtonStyle = Infragistics.Win.UIElementButtonStyle.VisualStudio2005Button;
+            this._dateTimePicker_Reports.DateButtons.Add(dateButton1);
+            this._dateTimePicker_Reports.DayOfWeekCaptionStyle = Infragistics.Win.UltraWinSchedule.DayOfWeekCaptionStyle.ShortDescription;
+            this._dateTimePicker_Reports.Format = "D";
+            this._dateTimePicker_Reports.Location = new System.Drawing.Point(6, 23);
+            this._dateTimePicker_Reports.Name = "_dateTimePicker_Reports";
+            this._dateTimePicker_Reports.NonAutoSizeHeight = 21;
+            this._dateTimePicker_Reports.Size = new System.Drawing.Size(220, 21);
+            this._dateTimePicker_Reports.TabIndex = 3;
+            this._dateTimePicker_Reports.Value = new System.DateTime(2008, 2, 26, 0, 0, 0, 0);
+            // 
             // ultraExplorerBarContainerControl3
             // 
             this.ultraExplorerBarContainerControl3.Controls.Add(this._explorerBar_ManageSQLsecureTreeView);
@@ -771,6 +928,43 @@ namespace Idera.SQLsecure.UI.Console
             this._resultPane.Name = "_resultPane";
             this._resultPane.Size = new System.Drawing.Size(879, 592);
             this._resultPane.TabIndex = 1;
+            // 
+            // _resultHeader
+            // 
+            this._resultHeader.AutoSize = false;
+            this._resultHeader.Font = new System.Drawing.Font("Arial", 12.75F, System.Drawing.FontStyle.Bold);
+            this._resultHeader.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this._resultHeader.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this._resultHeader.HotTrackEnabled = false;
+            this._resultHeader.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._resultTitleLabel,
+            this._resultShowHideButton});
+            this._resultHeader.Location = new System.Drawing.Point(0, 0);
+            this._resultHeader.Name = "_resultHeader";
+            this._resultHeader.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
+            this._resultHeader.Size = new System.Drawing.Size(879, 25);
+            this._resultHeader.TabIndex = 0;
+            this._resultHeader.Text = "headerStrip1";
+            // 
+            // _resultTitleLabel
+            // 
+            this._resultTitleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this._resultTitleLabel.Name = "_resultTitleLabel";
+            this._resultTitleLabel.Size = new System.Drawing.Size(42, 20);
+            this._resultTitleLabel.Text = "Title";
+            // 
+            // _resultShowHideButton
+            // 
+            this._resultShowHideButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this._resultShowHideButton.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._resultShowHideButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this._resultShowHideButton.Image = ((System.Drawing.Image)(resources.GetObject("_resultShowHideButton.Image")));
+            this._resultShowHideButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this._resultShowHideButton.Name = "_resultShowHideButton";
+            this._resultShowHideButton.Size = new System.Drawing.Size(116, 20);
+            this._resultShowHideButton.Text = "toolStripButton1";
+            this._resultShowHideButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this._resultShowHideButton.Click += new System.EventHandler(this._ShowHideButton_Click);
             // 
             // _menuStrip
             // 
@@ -1441,201 +1635,6 @@ namespace Idera.SQLsecure.UI.Console
             this.saveFileDialog_ExportPolicy.Filter = "SQLsecure Policy files|*.xml|All files|*.*";
             this.saveFileDialog_ExportPolicy.Title = "Export Policy";
             // 
-            // _viewSection_ReportSettings
-            // 
-            this._viewSection_ReportSettings.BackColor = System.Drawing.Color.White;
-            this._viewSection_ReportSettings.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this._viewSection_ReportSettings.HeaderGradientBorderStyle = Idera.SQLsecure.UI.Console.Controls.GradientPanel.GradientBorderStyle.Fixed3DOut;
-            this._viewSection_ReportSettings.HeaderGradientColor = System.Drawing.Color.DarkGray;
-            this._viewSection_ReportSettings.HeaderGradientCornerStyle = Idera.SQLsecure.UI.Console.Controls.GradientPanel.GradientCornerStyle.Square;
-            this._viewSection_ReportSettings.HeaderTextColor = System.Drawing.SystemColors.ControlText;
-            this._viewSection_ReportSettings.Location = new System.Drawing.Point(0, 288);
-            this._viewSection_ReportSettings.Name = "_viewSection_ReportSettings";
-            this._viewSection_ReportSettings.Size = new System.Drawing.Size(231, 162);
-            this._viewSection_ReportSettings.TabIndex = 4;
-            this._viewSection_ReportSettings.Title = "Report Settings";
-            // 
-            // _viewSection_ReportSettings.Panel
-            // 
-            this._viewSection_ReportSettings.ViewPanel.BackColor = System.Drawing.Color.Transparent;
-            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this.label1);
-            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this._checkBox_Report_BaselineOnly);
-            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this._dateTimePicker_Report_Time);
-            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this.label2);
-            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this._checkBox_Report_IncludeTime);
-            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this._comboBox_Report_Policies);
-            this._viewSection_ReportSettings.ViewPanel.Controls.Add(this._dateTimePicker_Reports);
-            this._viewSection_ReportSettings.ViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._viewSection_ReportSettings.ViewPanel.GradientColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
-            this._viewSection_ReportSettings.ViewPanel.Location = new System.Drawing.Point(0, 20);
-            this._viewSection_ReportSettings.ViewPanel.Name = "Panel";
-            this._viewSection_ReportSettings.ViewPanel.Rotation = 270F;
-            this._viewSection_ReportSettings.ViewPanel.Size = new System.Drawing.Size(231, 142);
-            this._viewSection_ReportSettings.ViewPanel.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this.label1.Location = new System.Drawing.Point(3, 5);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(210, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Create reports from most current data as of:";
-            // 
-            // _checkBox_Report_BaselineOnly
-            // 
-            this._checkBox_Report_BaselineOnly.AutoSize = true;
-            this._checkBox_Report_BaselineOnly.Location = new System.Drawing.Point(22, 121);
-            this._checkBox_Report_BaselineOnly.Name = "_checkBox_Report_BaselineOnly";
-            this._checkBox_Report_BaselineOnly.Size = new System.Drawing.Size(179, 17);
-            this._checkBox_Report_BaselineOnly.TabIndex = 6;
-            this._checkBox_Report_BaselineOnly.Text = "Use baseline snapshot data only";
-            this._checkBox_Report_BaselineOnly.UseVisualStyleBackColor = true;
-            // 
-            // _dateTimePicker_Report_Time
-            // 
-            this._dateTimePicker_Report_Time.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this._dateTimePicker_Report_Time.Location = new System.Drawing.Point(115, 50);
-            this._dateTimePicker_Report_Time.Name = "_dateTimePicker_Report_Time";
-            this._dateTimePicker_Report_Time.ShowUpDown = true;
-            this._dateTimePicker_Report_Time.Size = new System.Drawing.Size(88, 20);
-            this._dateTimePicker_Report_Time.TabIndex = 1;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this.label2.Location = new System.Drawing.Point(3, 77);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(194, 13);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Create reports using servers from policy:";
-            // 
-            // _checkBox_Report_IncludeTime
-            // 
-            this._checkBox_Report_IncludeTime.AutoSize = true;
-            this._checkBox_Report_IncludeTime.Location = new System.Drawing.Point(22, 53);
-            this._checkBox_Report_IncludeTime.Name = "_checkBox_Report_IncludeTime";
-            this._checkBox_Report_IncludeTime.Size = new System.Drawing.Size(87, 17);
-            this._checkBox_Report_IncludeTime.TabIndex = 2;
-            this._checkBox_Report_IncludeTime.Text = "Include Time";
-            this._checkBox_Report_IncludeTime.UseVisualStyleBackColor = true;
-            this._checkBox_Report_IncludeTime.CheckedChanged += new System.EventHandler(this._checkBox_Report_IncludeTime_CheckedChanged);
-            // 
-            // _comboBox_Report_Policies
-            // 
-            this._comboBox_Report_Policies.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._comboBox_Report_Policies.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this._comboBox_Report_Policies.Location = new System.Drawing.Point(6, 94);
-            this._comboBox_Report_Policies.MaxDropDownItems = 50;
-            this._comboBox_Report_Policies.Name = "_comboBox_Report_Policies";
-            this._comboBox_Report_Policies.Size = new System.Drawing.Size(220, 21);
-            this._comboBox_Report_Policies.TabIndex = 4;
-            this._comboBox_Report_Policies.SelectionChangeCommitted += new System.EventHandler(this._comboBox_Report_Policies_SelectionChangeCommitted);
-            // 
-            // _dateTimePicker_Reports
-            // 
-            this._dateTimePicker_Reports.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            appearance1.FontData.Name = "Microsoft Sans Serif";
-            appearance1.FontData.SizeInPoints = 8.5F;
-            appearance1.ImageHAlign = Infragistics.Win.HAlign.Right;
-            this._dateTimePicker_Reports.Appearance = appearance1;
-            this._dateTimePicker_Reports.BackColor = System.Drawing.SystemColors.Window;
-            this._dateTimePicker_Reports.ButtonStyle = Infragistics.Win.UIElementButtonStyle.VisualStudio2005Button;
-            this._dateTimePicker_Reports.DateButtons.Add(dateButton1);
-            this._dateTimePicker_Reports.DayOfWeekCaptionStyle = Infragistics.Win.UltraWinSchedule.DayOfWeekCaptionStyle.ShortDescription;
-            this._dateTimePicker_Reports.Format = "D";
-            this._dateTimePicker_Reports.Location = new System.Drawing.Point(6, 23);
-            this._dateTimePicker_Reports.Name = "_dateTimePicker_Reports";
-            this._dateTimePicker_Reports.NonAutoSizeHeight = 21;
-            this._dateTimePicker_Reports.Size = new System.Drawing.Size(220, 21);
-            this._dateTimePicker_Reports.TabIndex = 3;
-            this._dateTimePicker_Reports.Value = new System.DateTime(2008, 2, 26, 0, 0, 0, 0);
-            // 
-            // _headerStrip_Policies
-            // 
-            this._headerStrip_Policies.AutoSize = false;
-            this._headerStrip_Policies.Font = new System.Drawing.Font("Arial", 12.75F, System.Drawing.FontStyle.Bold);
-            this._headerStrip_Policies.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this._headerStrip_Policies.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this._headerStrip_Policies.HotTrackEnabled = false;
-            this._headerStrip_Policies.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._toolStripLabel_Policies});
-            this._headerStrip_Policies.Location = new System.Drawing.Point(0, 0);
-            this._headerStrip_Policies.Name = "_headerStrip_Policies";
-            this._headerStrip_Policies.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this._headerStrip_Policies.Size = new System.Drawing.Size(308, 25);
-            this._headerStrip_Policies.TabIndex = 4;
-            // 
-            // _toolStripLabel_Policies
-            // 
-            this._toolStripLabel_Policies.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this._toolStripLabel_Policies.Name = "_toolStripLabel_Policies";
-            this._toolStripLabel_Policies.Size = new System.Drawing.Size(69, 20);
-            this._toolStripLabel_Policies.Text = "Policies";
-            // 
-            // _headerStrip_PolicyServers
-            // 
-            this._headerStrip_PolicyServers.AutoSize = false;
-            this._headerStrip_PolicyServers.Font = new System.Drawing.Font("Arial", 12.75F, System.Drawing.FontStyle.Bold);
-            this._headerStrip_PolicyServers.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this._headerStrip_PolicyServers.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this._headerStrip_PolicyServers.HotTrackEnabled = false;
-            this._headerStrip_PolicyServers.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._toolStripLabel_PolicyServers});
-            this._headerStrip_PolicyServers.Location = new System.Drawing.Point(0, 0);
-            this._headerStrip_PolicyServers.Name = "_headerStrip_PolicyServers";
-            this._headerStrip_PolicyServers.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this._headerStrip_PolicyServers.Size = new System.Drawing.Size(308, 25);
-            this._headerStrip_PolicyServers.TabIndex = 5;
-            // 
-            // _toolStripLabel_PolicyServers
-            // 
-            this._toolStripLabel_PolicyServers.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this._toolStripLabel_PolicyServers.Name = "_toolStripLabel_PolicyServers";
-            this._toolStripLabel_PolicyServers.Size = new System.Drawing.Size(141, 20);
-            this._toolStripLabel_PolicyServers.Text = "Servers in Policy";
-            // 
-            // _resultHeader
-            // 
-            this._resultHeader.AutoSize = false;
-            this._resultHeader.Font = new System.Drawing.Font("Arial", 12.75F, System.Drawing.FontStyle.Bold);
-            this._resultHeader.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this._resultHeader.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this._resultHeader.HotTrackEnabled = false;
-            this._resultHeader.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this._resultTitleLabel,
-            this._resultShowHideButton});
-            this._resultHeader.Location = new System.Drawing.Point(0, 0);
-            this._resultHeader.Name = "_resultHeader";
-            this._resultHeader.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this._resultHeader.Size = new System.Drawing.Size(879, 25);
-            this._resultHeader.TabIndex = 0;
-            this._resultHeader.Text = "headerStrip1";
-            // 
-            // _resultTitleLabel
-            // 
-            this._resultTitleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this._resultTitleLabel.Name = "_resultTitleLabel";
-            this._resultTitleLabel.Size = new System.Drawing.Size(42, 20);
-            this._resultTitleLabel.Text = "Title";
-            // 
-            // _resultShowHideButton
-            // 
-            this._resultShowHideButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this._resultShowHideButton.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._resultShowHideButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this._resultShowHideButton.Image = ((System.Drawing.Image)(resources.GetObject("_resultShowHideButton.Image")));
-            this._resultShowHideButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this._resultShowHideButton.Name = "_resultShowHideButton";
-            this._resultShowHideButton.Size = new System.Drawing.Size(116, 20);
-            this._resultShowHideButton.Text = "toolStripButton1";
-            this._resultShowHideButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this._resultShowHideButton.Click += new System.EventHandler(this._ShowHideButton_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1655,9 +1654,17 @@ namespace Idera.SQLsecure.UI.Console
             this._splitContainer_SecuritySummary.Panel2.ResumeLayout(false);
             this._splitContainer_SecuritySummary.ResumeLayout(false);
             this._contextMenuStrip_Policy.ResumeLayout(false);
+            this._headerStrip_Policies.ResumeLayout(false);
+            this._headerStrip_Policies.PerformLayout();
+            this._headerStrip_PolicyServers.ResumeLayout(false);
+            this._headerStrip_PolicyServers.PerformLayout();
             this.ultraExplorerBarContainerControl1.ResumeLayout(false);
             this._contextMenuStrip_Server.ResumeLayout(false);
             this.ultraExplorerBarContainerControl2.ResumeLayout(false);
+            this._viewSection_ReportSettings.ViewPanel.ResumeLayout(false);
+            this._viewSection_ReportSettings.ViewPanel.PerformLayout();
+            this._viewSection_ReportSettings.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this._dateTimePicker_Reports)).EndInit();
             this.ultraExplorerBarContainerControl3.ResumeLayout(false);
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
@@ -1669,21 +1676,13 @@ namespace Idera.SQLsecure.UI.Console
             this._splitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this._explorerBar)).EndInit();
             this._explorerBar.ResumeLayout(false);
+            this._resultHeader.ResumeLayout(false);
+            this._resultHeader.PerformLayout();
             this._menuStrip.ResumeLayout(false);
             this._menuStrip.PerformLayout();
             this._toolStrip.ResumeLayout(false);
             this._toolStrip.PerformLayout();
             this.contextMenuStrip_NotifyIcon.ResumeLayout(false);
-            this._viewSection_ReportSettings.ViewPanel.ResumeLayout(false);
-            this._viewSection_ReportSettings.ViewPanel.PerformLayout();
-            this._viewSection_ReportSettings.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this._dateTimePicker_Reports)).EndInit();
-            this._headerStrip_Policies.ResumeLayout(false);
-            this._headerStrip_Policies.PerformLayout();
-            this._headerStrip_PolicyServers.ResumeLayout(false);
-            this._headerStrip_PolicyServers.PerformLayout();
-            this._resultHeader.ResumeLayout(false);
-            this._resultHeader.PerformLayout();
             this.ResumeLayout(false);
 
         }

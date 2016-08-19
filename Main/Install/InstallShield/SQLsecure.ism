@@ -271,7 +271,7 @@
 		<row><td>Image_Banner</td><td/><td>&lt;PATH_IMAGES&gt;\Banner.bmp</td></row>
 		<row><td>Image_BannerLarge</td><td/><td>&lt;PATH_IMAGES&gt;\BannerLarge.bmp</td></row>
 		<row><td>Image_GUI</td><td/><td>&lt;PATH_IMAGES&gt;\GUI.bmp</td></row>
-		<row><td>Image_Intro</td><td/><td>&lt;PATH_IMAGES&gt;\Intro.jpg</td></row>
+		<row><td>Image_Intro</td><td/><td>&lt;PATH_IMAGES&gt;\splash.bmp</td></row>
 		<row><td>Image_Overview</td><td/><td>&lt;PATH_IMAGES&gt;\Overview.bmp</td></row>
 		<row><td>Image_Server</td><td/><td>&lt;PATH_IMAGES&gt;\Server.bmp</td></row>
 		<row><td>InstallScript</td><td/><td>&lt;ISProjectDataFolder&gt;\Script Files\Setup.inx</td></row>
@@ -292,6 +292,7 @@
 		<row><td>NewBinary4</td><td/><td>&lt;ISProductFolder&gt;\Redist\Language Independent\OS Independent\WarningIcon.ibd</td></row>
 		<row><td>NewBinary5</td><td/><td>&lt;ISProjectFolder&gt;\images\splash.bmp</td></row>
 		<row><td>NewBinary6</td><td/><td>&lt;ISProductFolder&gt;\Redist\Language Independent\OS Independent\CustomSetupIco.ibd</td></row>
+		<row><td>NewBinary7</td><td/><td>&lt;PATH_IMAGES&gt;\splash.bmp</td></row>
 		<row><td>NewBinary8</td><td/><td>&lt;ISProductFolder&gt;\Redist\Language Independent\OS Independent\RemoveIco.ibd</td></row>
 		<row><td>NewBinary9</td><td/><td>&lt;ISProductFolder&gt;\Redist\Language Independent\OS Independent\SetupIcon.ibd</td></row>
 		<row><td>SetAllUsers.dll</td><td/><td>&lt;ISProductFolder&gt;\redist\language independent\i386\SetAllUsers.dll</td></row>
@@ -510,28 +511,24 @@
 		<row><td>AdminNetworkLocation</td><td>InstallNow</td><td>PushButton</td><td>230</td><td>243</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS__IsAdminInstallPoint_Install##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>AdminNetworkLocation</td><td>LBBrowse</td><td>Text</td><td>21</td><td>90</td><td>100</td><td>10</td><td>3</td><td/><td>##IDS__IsAdminInstallPoint_NetworkLocation##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>AdminNetworkLocation</td><td>SetupPathEdit</td><td>PathEdit</td><td>21</td><td>102</td><td>330</td><td>17</td><td>3</td><td>TARGETDIR</td><td/><td>Browse</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>AdminWelcome</td><td>Back</td><td>PushButton</td><td>164</td><td>243</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>Cancel</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>AdminWelcome</td><td>Cancel</td><td>PushButton</td><td>301</td><td>243</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>Next</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>AdminWelcome</td><td>DlgTitleSplash</td><td>Text</td><td>135</td><td>8</td><td>225</td><td>45</td><td>65539</td><td/><td>##IDS__IsAdminInstallPointWelcome_Wizard##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>AdminWelcome</td><td>Line</td><td>Line</td><td>0</td><td>234</td><td>374</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>AdminWelcome</td><td>Next</td><td>PushButton</td><td>230</td><td>243</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>Back</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>AdminWelcome</td><td>SplashImage</td><td>Bitmap</td><td>0</td><td>0</td><td>374</td><td>234</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary5</td></row>
-		<row><td>AdminWelcome</td><td>TextLine2</td><td>Text</td><td>135</td><td>55</td><td>228</td><td>45</td><td>65539</td><td/><td>##IDS__IsAdminInstallPointWelcome_ServerImage##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>AdminWelcome</td><td>Back</td><td>PushButton</td><td>239</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>Cancel</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>AdminWelcome</td><td>Cancel</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>Next</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>AdminWelcome</td><td>DlgTitleSplash</td><td>Text</td><td>151</td><td>8</td><td>225</td><td>45</td><td>65539</td><td/><td>##IDS__IsAdminInstallPointWelcome_Wizard##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>AdminWelcome</td><td>Next</td><td>PushButton</td><td>305</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>Back</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>AdminWelcome</td><td>SplashImage</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary7</td></row>
+		<row><td>AdminWelcome</td><td>TextLine2</td><td>Text</td><td>151</td><td>55</td><td>228</td><td>45</td><td>65539</td><td/><td>##IDS__IsAdminInstallPointWelcome_ServerImage##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>CancelSetup</td><td>Icon</td><td>Icon</td><td>15</td><td>15</td><td>24</td><td>24</td><td>5242881</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary4</td></row>
 		<row><td>CancelSetup</td><td>No</td><td>PushButton</td><td>135</td><td>57</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS__IsCancelDlg_No##</td><td>Yes</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>CancelSetup</td><td>Text</td><td>Text</td><td>48</td><td>15</td><td>194</td><td>30</td><td>3</td><td/><td>##IDS__IsCancelDlg_ConfirmCancel##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>CancelSetup</td><td>Yes</td><td>PushButton</td><td>62</td><td>57</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS__IsCancelDlg_Yes##</td><td>No</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING100##</td><td>CancelLarge</td><td/><td/><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>ConfigRepository</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING97##</td><td>rbConfigRepo</td><td/><td/><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>DlgDescLarge</td><td>Text</td><td>21</td><td>23</td><td>445</td><td>18</td><td>65539</td><td/><td>##NEW_STRING98##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##NEW_STRING99##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>ImageMain</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048577</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Server</td></row>
-		<row><td>ConfigRepository</td><td>NextLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING101##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>rbConfigRepo</td><td>RadioButtonGroup</td><td>308</td><td>94</td><td>76</td><td>42</td><td>3</td><td>CONFIG_REPOSITORY</td><td/><td>BackLarge</td><td/><td/><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>txtQuestion</td><td>Text</td><td>284</td><td>63</td><td>237</td><td>34</td><td>65539</td><td/><td>##NEW_STRING140##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ConfigRepository</td><td>BackLarge</td><td>PushButton</td><td>231</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING100##</td><td>CancelLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>ConfigRepository</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING97##</td><td>rbConfigRepo</td><td/><td/><td/><td/><td/></row>
+		<row><td>ConfigRepository</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>205</td><td>18</td><td>65539</td><td/><td>##NEW_STRING98##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ConfigRepository</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>189</td><td>16</td><td>65539</td><td/><td>##NEW_STRING99##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ConfigRepository</td><td>ImageMain</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048577</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary7</td></row>
+		<row><td>ConfigRepository</td><td>NextLarge</td><td>PushButton</td><td>297</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING101##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ConfigRepository</td><td>rbConfigRepo</td><td>RadioButtonGroup</td><td>174</td><td>94</td><td>76</td><td>42</td><td>3</td><td>CONFIG_REPOSITORY</td><td/><td>BackLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>ConfigRepository</td><td>txtQuestion</td><td>Text</td><td>150</td><td>63</td><td>237</td><td>34</td><td>65539</td><td/><td>##NEW_STRING140##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ConsoleNotCompatible</td><td>Bitmap1</td><td>Bitmap</td><td>0</td><td>0</td><td>250</td><td>266</td><td>0</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ConsoleNotCompatible</td><td>Bitmap2</td><td>Bitmap</td><td>0</td><td>0</td><td>374</td><td>44</td><td>1048577</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Banner</td></row>
 		<row><td>ConsoleNotCompatible</td><td>BottomLine</td><td>Line</td><td>0</td><td>109</td><td>340</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
@@ -542,15 +539,12 @@
 		<row><td>ConsoleNotCompatible</td><td>Text5</td><td>Text</td><td>20</td><td>51</td><td>234</td><td>15</td><td>3</td><td/><td>##NEW_STRING117##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ConsoleNotCompatible</td><td>Text6</td><td>Text</td><td>46</td><td>118</td><td>278</td><td>41</td><td>3</td><td/><td>##NEW_STRING118##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ConsoleNotCompatible</td><td>Yes</td><td>PushButton</td><td>184</td><td>81</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING116##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>CustomSetup</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>CustomSetup</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>CustomSetup</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>374</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>CustomSetup</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>CustomSetup</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>CustomSetup</td><td>DlgDesc</td><td>Text</td><td>16</td><td>23</td><td>292</td><td>25</td><td>65539</td><td/><td>##IDS__IsCustomSelectionDlg_SelectFeatures##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>CustomSetup</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##IDS__IsCustomSelectionDlg_CustomSetup##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>CustomSetup</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>CustomSetup</td><td>NextLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>CustomSetup</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>CustomSetup</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>CustomSetup</td><td>DlgDesc</td><td>Text</td><td>151</td><td>23</td><td>292</td><td>25</td><td>65539</td><td/><td>##IDS__IsCustomSelectionDlg_SelectFeatures##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>CustomSetup</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>230</td><td>16</td><td>65539</td><td/><td>##IDS__IsCustomSelectionDlg_CustomSetup##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>CustomSetup</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary7</td></row>
+		<row><td>CustomSetup</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>CustomSetupTips</td><td>Banner</td><td>Bitmap</td><td>0</td><td>0</td><td>374</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_Banner</td></row>
 		<row><td>CustomSetupTips</td><td>BannerLine</td><td>Line</td><td>0</td><td>44</td><td>374</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>CustomSetupTips</td><td>DlgDesc</td><td>Text</td><td>21</td><td>23</td><td>292</td><td>25</td><td>65539</td><td/><td>##IDS_SetupTips_CustomSetupDescription##</td><td/><td/><td>0</td><td/><td/><td/></row>
@@ -627,21 +621,18 @@
 		<row><td>DatabaseNotFound</td><td>Yes</td><td>PushButton</td><td>184</td><td>81</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING116##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>DatabaseNotFound</td><td>txtDetails</td><td>Text</td><td>46</td><td>118</td><td>278</td><td>41</td><td>3</td><td/><td>##NEW_STRING144##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>DatabaseNotFound</td><td>txtErrorTitle</td><td>Text</td><td>8</td><td>8</td><td>259</td><td>31</td><td>65539</td><td/><td>##NEW_STRING145##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>DestinationFolder</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>Browse</td><td>PushButton</td><td>467</td><td>113</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS__DestinationFolder_Change##</td><td>rbInstlallLoc</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>edInstallDir</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>DestFolder</td><td>Icon</td><td>283</td><td>61</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary12</td></row>
-		<row><td>DestinationFolder</td><td>DlgDescLarge</td><td>Text</td><td>21</td><td>23</td><td>445</td><td>18</td><td>65539</td><td/><td>##IDS__DestinationFolder_ChangeFolder##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>DlgTitle</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##IDS__DestinationFolder_DestinationFolder##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>ImageMain</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048577</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Overview</td></row>
-		<row><td>DestinationFolder</td><td>LocLabel</td><td>Text</td><td>317</td><td>67</td><td>178</td><td>11</td><td>3</td><td/><td>##IDS__DestinationFolder_InstallTo##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>NextLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>Text2</td><td>Text</td><td>297</td><td>190</td><td>111</td><td>14</td><td>3</td><td/><td>##NEW_STRING131##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>edInstallDir</td><td>Edit</td><td>284</td><td>91</td><td>249</td><td>16</td><td>3</td><td>INSTALLDIR</td><td>##NEW_STRING23##</td><td>Browse</td><td/><td/><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>rbInstlallLoc</td><td>RadioButtonGroup</td><td>305</td><td>205</td><td>175</td><td>50</td><td>3</td><td>ApplicationUsers</td><td/><td>NextLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>DestinationFolder</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>DestinationFolder</td><td>Browse</td><td>PushButton</td><td>341</td><td>112</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS__DestinationFolder_Change##</td><td>rbInstlallLoc</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>DestinationFolder</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>edInstallDir</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>DestinationFolder</td><td>DestFolder</td><td>Icon</td><td>157</td><td>59</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary12</td></row>
+		<row><td>DestinationFolder</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>275</td><td>18</td><td>65539</td><td/><td>##IDS__DestinationFolder_ChangeFolder##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>DestinationFolder</td><td>DlgTitle</td><td>Text</td><td>151</td><td>6</td><td>251</td><td>16</td><td>65539</td><td/><td>##IDS__DestinationFolder_DestinationFolder##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>DestinationFolder</td><td>ImageMain</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048577</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>DestinationFolder</td><td>LocLabel</td><td>Text</td><td>191</td><td>65</td><td>178</td><td>11</td><td>3</td><td/><td>##IDS__DestinationFolder_InstallTo##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>DestinationFolder</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>DestinationFolder</td><td>Text2</td><td>Text</td><td>171</td><td>188</td><td>111</td><td>14</td><td>3</td><td/><td>##NEW_STRING131##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>DestinationFolder</td><td>edInstallDir</td><td>Edit</td><td>158</td><td>89</td><td>249</td><td>16</td><td>3</td><td>INSTALLDIR</td><td>##NEW_STRING23##</td><td>Browse</td><td/><td/><td/><td/><td/></row>
+		<row><td>DestinationFolder</td><td>rbInstlallLoc</td><td>RadioButtonGroup</td><td>179</td><td>203</td><td>175</td><td>50</td><td>3</td><td>ApplicationUsers</td><td/><td>NextLarge</td><td/><td/><td/><td/><td/></row>
 		<row><td>DiskSpaceRequirements</td><td>Banner</td><td>Bitmap</td><td>0</td><td>0</td><td>374</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_Banner</td></row>
 		<row><td>DiskSpaceRequirements</td><td>BannerLine</td><td>Line</td><td>0</td><td>44</td><td>374</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>DiskSpaceRequirements</td><td>Bitmap1</td><td>Bitmap</td><td>0</td><td>0</td><td>250</td><td>266</td><td>0</td><td/><td/><td>Bitmap1</td><td/><td/><td/><td/><td/></row>
@@ -681,69 +672,53 @@
 		<row><td>InstallChangeFolder</td><td>Tail</td><td>PathEdit</td><td>21</td><td>207</td><td>332</td><td>17</td><td>15</td><td>_BrowseProperty</td><td>##IDS__IsBrowseFolderDlg_11##</td><td>OK</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>InstallChangeFolder</td><td>TailText</td><td>Text</td><td>21</td><td>193</td><td>99</td><td>13</td><td>3</td><td/><td>##IDS__IsBrowseFolderDlg_FolderName##</td><td>Bitmap1</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>InstallChangeFolder</td><td>Up</td><td>PushButton</td><td>310</td><td>66</td><td>19</td><td>19</td><td>3670019</td><td/><td/><td>NewFolder</td><td>##IDS__IsBrowseFolderDlg_UpOneLevel##</td><td>0</td><td/><td/><td>NewBinary3</td></row>
-		<row><td>InstallWelcome</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>1</td><td/><td>##ID_STRING60##</td><td>CancelLarge</td><td>##ID_STRING62##</td><td>0</td><td/><td/><td/></row>
-		<row><td>InstallWelcome</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td>##ID_STRING116##</td><td/><td>##ID_STRING118##</td><td>0</td><td/><td/><td/></row>
-		<row><td>InstallWelcome</td><td>Bitmap5</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>0</td><td/><td>##ID_STRING88##</td><td/><td>##ID_STRING90##</td><td/><td/><td/><td>NewBinary46</td></row>
-		<row><td>InstallWelcome</td><td>Bitmap6</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td>##ID_STRING92##</td><td/><td>##ID_STRING94##</td><td/><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>InstallWelcome</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>1</td><td>1</td><td/><td>##ID_STRING96##</td><td/><td>##ID_STRING98##</td><td/><td/><td/><td/></row>
-		<row><td>InstallWelcome</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING120##</td><td>NextLarge</td><td>##ID_STRING122##</td><td>0</td><td/><td/><td/></row>
-		<row><td>InstallWelcome</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>410</td><td>25</td><td>65539</td><td/><td>##ID_STRING104##</td><td/><td>##ID_STRING106##</td><td/><td/><td/><td/></row>
-		<row><td>InstallWelcome</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td>##ID_STRING64##</td><td/><td>##ID_STRING66##</td><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>InstallWelcome</td><td>NextLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING84##</td><td>BackLarge</td><td>##ID_STRING86##</td><td>0</td><td/><td/><td/></row>
-		<row><td>InstallWelcome</td><td>dlgUpgrade</td><td>Text</td><td>13</td><td>7</td><td>397</td><td>25</td><td>65538</td><td/><td>##ID_STRING68##</td><td/><td>##ID_STRING70##</td><td/><td/><td/><td/></row>
-		<row><td>InstallWelcome</td><td>txtCopyright</td><td>Text</td><td>304</td><td>133</td><td>213</td><td>73</td><td>65539</td><td/><td>##ID_STRING72##</td><td/><td>##ID_STRING74##</td><td>0</td><td/><td/><td/></row>
-		<row><td>InstallWelcome</td><td>txtUpgrade</td><td>Text</td><td>302</td><td>73</td><td>220</td><td>45</td><td>65538</td><td/><td>##ID_STRING76##</td><td/><td>##ID_STRING78##</td><td/><td/><td/><td/></row>
-		<row><td>InstallWelcome</td><td>txtWelcome</td><td>Text</td><td>302</td><td>73</td><td>220</td><td>45</td><td>65539</td><td/><td>##ID_STRING80##</td><td/><td>##ID_STRING82##</td><td>0</td><td/><td/><td/></row>
-		<row><td>LicenseAgreement</td><td>Agree</td><td>RadioButtonGroup</td><td>279</td><td>224</td><td>202</td><td>34</td><td>3</td><td>AgreeToLicense</td><td/><td>ISPrintButton</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>LicenseAgreement</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>LicenseAgreement</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>LicenseAgreement</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>LicenseAgreement</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>LicenseAgreement</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>Agree</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>LicenseAgreement</td><td>DlgDesc</td><td>Text</td><td>21</td><td>23</td><td>292</td><td>25</td><td>65539</td><td/><td>##IDS__IsLicenseDlg_ReadLicenseAgreement##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>LicenseAgreement</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##IDS__IsLicenseDlg_LicenseAgreement##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>LicenseAgreement</td><td>ISPrintButton</td><td>PushButton</td><td>490</td><td>222</td><td>47</td><td>17</td><td>3</td><td/><td>##IDS_PRINT_BUTTON##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>LicenseAgreement</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>LicenseAgreement</td><td>Memo</td><td>ScrollableText</td><td>280</td><td>55</td><td>257</td><td>159</td><td>7</td><td/><td/><td/><td/><td>0</td><td/><td>&lt;PATH_DOCUMENTATION&gt;\Idera - Trial Software License Agreement.rtf</td><td/></row>
-		<row><td>LicenseAgreement</td><td>NextLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>Licensing</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING191##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>Licensing</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>Licensing</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING188##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>DlgDescLarge</td><td>Text</td><td>21</td><td>23</td><td>445</td><td>18</td><td>65539</td><td/><td>##NEW_STRING189##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##NEW_STRING190##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>Licensing</td><td>NextLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING192##</td><td>Text4</td><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>RadioButtonGroup</td><td>RadioButtonGroup</td><td>286</td><td>105</td><td>202</td><td>73</td><td>3</td><td>LICENSETYPE</td><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>Text1</td><td>Text</td><td>287</td><td>228</td><td>205</td><td>15</td><td>65539</td><td/><td>##NEW_STRING138##</td><td>NextLarge</td><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>Text3</td><td>Text</td><td>287</td><td>58</td><td>244</td><td>36</td><td>65539</td><td/><td>##NEW_STRING195##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>Text4</td><td>Text</td><td>301</td><td>166</td><td>205</td><td>15</td><td>65539</td><td/><td>##NEW_STRING196##</td><td>edKey</td><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>Text5</td><td>Text</td><td>301</td><td>122</td><td>214</td><td>20</td><td>65539</td><td/><td>##NEW_STRING197##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>Licensing</td><td>edKey</td><td>Edit</td><td>307</td><td>189</td><td>214</td><td>16</td><td>3</td><td>LICENSE_KEY</td><td/><td>Text1</td><td/><td/><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>MaintenanceType</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>RadioGroup</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>DlgDescLarge</td><td>Text</td><td>21</td><td>23</td><td>445</td><td>18</td><td>65539</td><td/><td>##IDS__IsMaintenanceDlg_MaitenanceOptions##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##IDS__IsMaintenanceDlg_ProgramMaintenance##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>Ico1</td><td>Icon</td><td>297</td><td>90</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary11</td></row>
-		<row><td>MaintenanceType</td><td>Ico3</td><td>Icon</td><td>297</td><td>165</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary8</td></row>
-		<row><td>MaintenanceType</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>MaintenanceType</td><td>NextLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>RadioGroup</td><td>RadioButtonGroup</td><td>292</td><td>58</td><td>200</td><td>170</td><td>3</td><td>_IsMaintenance</td><td>##IDS__IsMaintenanceDlg_11##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>Text1</td><td>Text</td><td>327</td><td>87</td><td>200</td><td>35</td><td>3</td><td/><td>##IDS__IsMaintenanceDlg_ChangeFeatures##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>Text3</td><td>Text</td><td>327</td><td>162</td><td>200</td><td>35</td><td>3</td><td/><td>##IDS__IsMaintenanceDlg_RemoveProductName##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceWelcome</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceWelcome</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>MaintenanceWelcome</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>MaintenanceWelcome</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceWelcome</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceWelcome</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##IDS__IsMaintenanceWelcome_WizardWelcome##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceWelcome</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>MaintenanceWelcome</td><td>NextLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>MaintenanceWelcome</td><td>TextLine2</td><td>Text</td><td>302</td><td>73</td><td>220</td><td>50</td><td>65539</td><td/><td>##IDS__IsMaintenanceWelcome_MaintenanceOptionsDescription##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>InstallWelcome</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##ID_STRING60##</td><td>CancelLarge</td><td>##ID_STRING62##</td><td>0</td><td/><td/><td/></row>
+		<row><td>InstallWelcome</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING120##</td><td>NextLarge</td><td>##ID_STRING122##</td><td>0</td><td/><td/><td/></row>
+		<row><td>InstallWelcome</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>277</td><td>25</td><td>65539</td><td/><td>##ID_STRING104##</td><td/><td>##ID_STRING106##</td><td/><td/><td/><td/></row>
+		<row><td>InstallWelcome</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td>##ID_STRING64##</td><td/><td>##ID_STRING66##</td><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>InstallWelcome</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING84##</td><td>BackLarge</td><td>##ID_STRING86##</td><td>0</td><td/><td/><td/></row>
+		<row><td>InstallWelcome</td><td>dlgUpgrade</td><td>Text</td><td>151</td><td>7</td><td>272</td><td>25</td><td>65538</td><td/><td>##ID_STRING68##</td><td/><td>##ID_STRING70##</td><td/><td/><td/><td/></row>
+		<row><td>InstallWelcome</td><td>txtCopyright</td><td>Text</td><td>154</td><td>139</td><td>213</td><td>73</td><td>65539</td><td/><td>##ID_STRING72##</td><td/><td>##ID_STRING74##</td><td>0</td><td/><td/><td/></row>
+		<row><td>InstallWelcome</td><td>txtUpgrade</td><td>Text</td><td>153</td><td>79</td><td>220</td><td>45</td><td>65538</td><td/><td>##ID_STRING76##</td><td/><td>##ID_STRING78##</td><td/><td/><td/><td/></row>
+		<row><td>InstallWelcome</td><td>txtWelcome</td><td>Text</td><td>153</td><td>79</td><td>220</td><td>45</td><td>65539</td><td/><td>##ID_STRING80##</td><td/><td>##ID_STRING82##</td><td>0</td><td/><td/><td/></row>
+		<row><td>LicenseAgreement</td><td>Agree</td><td>RadioButtonGroup</td><td>154</td><td>223</td><td>202</td><td>34</td><td>3</td><td>AgreeToLicense</td><td/><td>ISPrintButton</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>LicenseAgreement</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>LicenseAgreement</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>Agree</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>LicenseAgreement</td><td>DlgDesc</td><td>Text</td><td>151</td><td>23</td><td>292</td><td>25</td><td>65539</td><td/><td>##IDS__IsLicenseDlg_ReadLicenseAgreement##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>LicenseAgreement</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>168</td><td>16</td><td>65539</td><td/><td>##IDS__IsLicenseDlg_LicenseAgreement##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>LicenseAgreement</td><td>ISPrintButton</td><td>PushButton</td><td>364</td><td>221</td><td>47</td><td>17</td><td>3</td><td/><td>##IDS_PRINT_BUTTON##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>LicenseAgreement</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>LicenseAgreement</td><td>Memo</td><td>ScrollableText</td><td>154</td><td>54</td><td>257</td><td>159</td><td>7</td><td/><td/><td/><td/><td>0</td><td/><td>&lt;PATH_DOCUMENTATION&gt;\Idera - Trial Software License Agreement.rtf</td><td/></row>
+		<row><td>LicenseAgreement</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>Licensing</td><td>BackLarge</td><td>PushButton</td><td>231</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING191##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>Licensing</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING188##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>Licensing</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>199</td><td>18</td><td>65539</td><td/><td>##NEW_STRING189##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>Licensing</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>232</td><td>16</td><td>65539</td><td/><td>##NEW_STRING190##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>Licensing</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>Licensing</td><td>NextLarge</td><td>PushButton</td><td>297</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING192##</td><td>Text4</td><td/><td/><td/><td/><td/></row>
+		<row><td>Licensing</td><td>RadioButtonGroup</td><td>RadioButtonGroup</td><td>152</td><td>105</td><td>202</td><td>73</td><td>3</td><td>LICENSETYPE</td><td/><td/><td/><td/><td/><td/><td/></row>
+		<row><td>Licensing</td><td>Text1</td><td>Text</td><td>154</td><td>228</td><td>205</td><td>15</td><td>65539</td><td/><td>##NEW_STRING138##</td><td>NextLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>Licensing</td><td>Text3</td><td>Text</td><td>154</td><td>58</td><td>244</td><td>36</td><td>65539</td><td/><td>##NEW_STRING195##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>Licensing</td><td>Text4</td><td>Text</td><td>167</td><td>166</td><td>205</td><td>15</td><td>65539</td><td/><td>##NEW_STRING196##</td><td>edKey</td><td/><td/><td/><td/><td/></row>
+		<row><td>Licensing</td><td>Text5</td><td>Text</td><td>167</td><td>122</td><td>214</td><td>20</td><td>65539</td><td/><td>##NEW_STRING197##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>Licensing</td><td>edKey</td><td>Edit</td><td>173</td><td>189</td><td>214</td><td>16</td><td>3</td><td>LICENSE_KEY</td><td/><td>Text1</td><td/><td/><td/><td/><td/></row>
+		<row><td>MaintenanceType</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceType</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>RadioGroup</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceType</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>223</td><td>18</td><td>65539</td><td/><td>##IDS__IsMaintenanceDlg_MaitenanceOptions##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceType</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>120</td><td>16</td><td>65539</td><td/><td>##IDS__IsMaintenanceDlg_ProgramMaintenance##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceType</td><td>Ico1</td><td>Icon</td><td>159</td><td>90</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary11</td></row>
+		<row><td>MaintenanceType</td><td>Ico3</td><td>Icon</td><td>159</td><td>165</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary8</td></row>
+		<row><td>MaintenanceType</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>MaintenanceType</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceType</td><td>RadioGroup</td><td>RadioButtonGroup</td><td>154</td><td>58</td><td>200</td><td>170</td><td>3</td><td>_IsMaintenance</td><td>##IDS__IsMaintenanceDlg_11##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceType</td><td>Text1</td><td>Text</td><td>189</td><td>87</td><td>200</td><td>35</td><td>3</td><td/><td>##IDS__IsMaintenanceDlg_ChangeFeatures##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceType</td><td>Text3</td><td>Text</td><td>189</td><td>162</td><td>200</td><td>35</td><td>3</td><td/><td>##IDS__IsMaintenanceDlg_RemoveProductName##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceWelcome</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceWelcome</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceWelcome</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##IDS__IsMaintenanceWelcome_WizardWelcome##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceWelcome</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>MaintenanceWelcome</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>MaintenanceWelcome</td><td>TextLine2</td><td>Text</td><td>151</td><td>73</td><td>220</td><td>50</td><td>65539</td><td/><td>##IDS__IsMaintenanceWelcome_MaintenanceOptionsDescription##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>OutOfSpace</td><td>Banner</td><td>Bitmap</td><td>0</td><td>0</td><td>374</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_Banner</td></row>
 		<row><td>OutOfSpace</td><td>BannerLine</td><td>Line</td><td>0</td><td>44</td><td>374</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>OutOfSpace</td><td>BlankImage</td><td>Bitmap</td><td>0</td><td>0</td><td>250</td><td>266</td><td>0</td><td/><td/><td>BlankImage</td><td/><td/><td/><td/><td/></row>
@@ -753,51 +728,39 @@
 		<row><td>OutOfSpace</td><td>DlgTitle</td><td>Text</td><td>13</td><td>6</td><td>292</td><td>25</td><td>65539</td><td/><td>##IDS__IsDiskSpaceDlg_OutOfDiskSpace##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>OutOfSpace</td><td>List</td><td>VolumeCostList</td><td>21</td><td>95</td><td>332</td><td>120</td><td>393223</td><td/><td>##IDS__IsDiskSpaceDlg_Numbers##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>OutOfSpace</td><td>Resume</td><td>PushButton</td><td>301</td><td>243</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS__IsDiskSpaceDlg_OK##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>PatchWelcome</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>PatchWelcome</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>PatchWelcome</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>PatchWelcome</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>UpdateLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>PatchWelcome</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##IDS__IsPatchDlg_WelcomePatchWizard##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>PatchWelcome</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>PatchWelcome</td><td>Line1</td><td>Line</td><td>0</td><td>49</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>PatchWelcome</td><td>TextLine2</td><td>Text</td><td>302</td><td>73</td><td>220</td><td>45</td><td>65539</td><td/><td>##IDS__IsPatchDlg_PatchClickUpdate##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS__IsPatchDlg_Update##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>ReadyToInstall</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>InstallLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>DlgDescLarge</td><td>Text</td><td>21</td><td>23</td><td>445</td><td>18</td><td>65539</td><td/><td>##IDS__IsVerifyReadyDlg_WizardReady##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>DlgText</td><td>Text</td><td>287</td><td>67</td><td>240</td><td>20</td><td>3</td><td/><td>##IDS__IsVerifyReadyDlg_ClickInstall##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>DlgText1</td><td>Text</td><td>287</td><td>86</td><td>244</td><td>24</td><td>3</td><td/><td>##IDS__IsVerifyReadyDlg_BackOrCancel##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>DlgTitle2</td><td>Text</td><td>13</td><td>6</td><td>292</td><td>25</td><td>65538</td><td/><td>##IDS__IsVerifyReadyDlg_ReadyRepair##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>DlgTitle3</td><td>Text</td><td>13</td><td>6</td><td>292</td><td>25</td><td>65538</td><td/><td>##IDS__IsVerifyReadyDlg_ReadyInstall##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65538</td><td/><td>##IDS__IsVerifyReadyDlg_ModifyReady##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToInstall</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>PushButton</td><td>388</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS__IsVerifyReadyDlg_Install##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToRemove</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING209##</td><td/><td>##ID_STRING211##</td><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToRemove</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td>##ID_STRING217##</td><td/><td>##ID_STRING219##</td><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>ReadyToRemove</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td>##ID_STRING213##</td><td/><td>##ID_STRING215##</td><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToRemove</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>1</td><td>1</td><td/><td>##ID_STRING197##</td><td/><td>##ID_STRING199##</td><td/><td/><td/><td/></row>
-		<row><td>ReadyToRemove</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING221##</td><td/><td>##ID_STRING223##</td><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToRemove</td><td>DlgDescLarge</td><td>Text</td><td>21</td><td>23</td><td>445</td><td>18</td><td>65539</td><td/><td>##ID_STRING225##</td><td/><td>##ID_STRING227##</td><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToRemove</td><td>DlgText</td><td>Text</td><td>289</td><td>60</td><td>242</td><td>24</td><td>3</td><td/><td>##ID_STRING205##</td><td/><td>##ID_STRING207##</td><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToRemove</td><td>DlgText1</td><td>Text</td><td>289</td><td>98</td><td>227</td><td>23</td><td>3</td><td/><td>##ID_STRING189##</td><td/><td>##ID_STRING191##</td><td>0</td><td/><td/><td/></row>
+		<row><td>PatchWelcome</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>PatchWelcome</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>UpdateLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>PatchWelcome</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##IDS__IsPatchDlg_WelcomePatchWizard##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>PatchWelcome</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>PatchWelcome</td><td>TextLine2</td><td>Text</td><td>151</td><td>73</td><td>220</td><td>45</td><td>65539</td><td/><td>##IDS__IsPatchDlg_PatchClickUpdate##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS__IsPatchDlg_Update##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToInstall</td><td>BackLarge</td><td>PushButton</td><td>231</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToInstall</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>InstallLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToInstall</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>226</td><td>18</td><td>65539</td><td/><td>##IDS__IsVerifyReadyDlg_WizardReady##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToInstall</td><td>DlgText</td><td>Text</td><td>151</td><td>67</td><td>240</td><td>20</td><td>3</td><td/><td>##IDS__IsVerifyReadyDlg_ClickInstall##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToInstall</td><td>DlgText1</td><td>Text</td><td>151</td><td>86</td><td>244</td><td>24</td><td>3</td><td/><td>##IDS__IsVerifyReadyDlg_BackOrCancel##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToInstall</td><td>DlgTitle2</td><td>Text</td><td>151</td><td>6</td><td>215</td><td>25</td><td>65538</td><td/><td>##IDS__IsVerifyReadyDlg_ReadyRepair##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToInstall</td><td>DlgTitle3</td><td>Text</td><td>151</td><td>6</td><td>209</td><td>25</td><td>65538</td><td/><td>##IDS__IsVerifyReadyDlg_ReadyInstall##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToInstall</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>281</td><td>16</td><td>65538</td><td/><td>##IDS__IsVerifyReadyDlg_ModifyReady##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToInstall</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS__IsVerifyReadyDlg_Install##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToRemove</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING209##</td><td/><td>##ID_STRING211##</td><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToRemove</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING221##</td><td/><td>##ID_STRING223##</td><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToRemove</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>304</td><td>18</td><td>65539</td><td/><td>##ID_STRING225##</td><td/><td>##ID_STRING227##</td><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToRemove</td><td>DlgText</td><td>Text</td><td>151</td><td>60</td><td>242</td><td>24</td><td>3</td><td/><td>##ID_STRING205##</td><td/><td>##ID_STRING207##</td><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToRemove</td><td>DlgText1</td><td>Text</td><td>151</td><td>98</td><td>227</td><td>23</td><td>3</td><td/><td>##ID_STRING189##</td><td/><td>##ID_STRING191##</td><td>0</td><td/><td/><td/></row>
 		<row><td>ReadyToRemove</td><td>DlgText2</td><td>Text</td><td>289</td><td>111</td><td>233</td><td>24</td><td>3</td><td/><td>##ID_STRING201##</td><td/><td>##ID_STRING203##</td><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToRemove</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##ID_STRING229##</td><td/><td>##ID_STRING231##</td><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToRemove</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td>##ID_STRING193##</td><td/><td>##ID_STRING195##</td><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>ReadyToRemove</td><td>RemoveLarge</td><td>PushButton</td><td>388</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING233##</td><td/><td>##ID_STRING235##</td><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToUpgrade</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToUpgrade</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>ReadyToUpgrade</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToUpgrade</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>1</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ReadyToUpgrade</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToUpgrade</td><td>DlgDescLarge</td><td>Text</td><td>21</td><td>23</td><td>445</td><td>18</td><td>65539</td><td/><td>##IDS__IsVerifyReadyDlg_WizardReady##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToUpgrade</td><td>DlgText</td><td>Text</td><td>287</td><td>67</td><td>240</td><td>20</td><td>3</td><td/><td>##NEW_STRING155##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ReadyToUpgrade</td><td>DlgText1</td><td>Text</td><td>287</td><td>86</td><td>244</td><td>24</td><td>3</td><td/><td>##IDS__IsVerifyReadyDlg_BackOrCancel##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToUpgrade</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##IDS__IsVerifyReadyDlg_ModifyReady##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ReadyToUpgrade</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>PushButton</td><td>388</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING153##</td><td>CancelLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>ReadyToRemove</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>232</td><td>16</td><td>65539</td><td/><td>##ID_STRING229##</td><td/><td>##ID_STRING231##</td><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToRemove</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td>##ID_STRING193##</td><td/><td>##ID_STRING195##</td><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>ReadyToRemove</td><td>RemoveLarge</td><td>PushButton</td><td>299</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING233##</td><td/><td>##ID_STRING235##</td><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToUpgrade</td><td>BackLarge</td><td>PushButton</td><td>231</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToUpgrade</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToUpgrade</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>244</td><td>18</td><td>65539</td><td/><td>##IDS__IsVerifyReadyDlg_WizardReady##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToUpgrade</td><td>DlgText</td><td>Text</td><td>151</td><td>67</td><td>240</td><td>20</td><td>3</td><td/><td>##NEW_STRING155##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ReadyToUpgrade</td><td>DlgText1</td><td>Text</td><td>151</td><td>86</td><td>244</td><td>24</td><td>3</td><td/><td>##IDS__IsVerifyReadyDlg_BackOrCancel##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToUpgrade</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>256</td><td>16</td><td>65539</td><td/><td>##IDS__IsVerifyReadyDlg_ModifyReady##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>ReadyToUpgrade</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING153##</td><td>CancelLarge</td><td/><td/><td/><td/><td/></row>
 		<row><td>SQLBrowse</td><td>BlankImage</td><td>Bitmap</td><td>0</td><td>0</td><td>250</td><td>266</td><td>0</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SQLBrowse</td><td>BottomLineSmall</td><td>Line</td><td>0</td><td>232</td><td>272</td><td>1</td><td>1</td><td/><td/><td/><td/><td>0</td><td>0</td><td/><td/></row>
 		<row><td>SQLBrowse</td><td>CancelOther</td><td>PushButton</td><td>194</td><td>241</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>TxtSQLBrowse</td><td/><td>0</td><td/><td/><td/></row>
@@ -852,25 +815,21 @@
 		<row><td>SQLLoginAuthentication</td><td>lblLogin</td><td>Text</td><td>47</td><td>51</td><td>47</td><td>14</td><td>65539</td><td/><td>##NEW_STRING86##</td><td>txtSQLCredentials</td><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLoginAuthentication</td><td>lblPassword</td><td>Text</td><td>48</td><td>81</td><td>47</td><td>13</td><td>65539</td><td/><td>##NEW_STRING85##</td><td>edSQLuser</td><td/><td/><td/><td/><td/></row>
 		<row><td>SQLLoginAuthentication</td><td>txtSQLCredentials</td><td>Text</td><td>11</td><td>11</td><td>296</td><td>28</td><td>65539</td><td/><td>##NEW_STRING87##</td><td>lblPassword</td><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING44##</td><td>CancelLarge</td><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>ServiceCredentials</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>CancelLarge</td><td>PushButton</td><td>465</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING41##</td><td>Text6</td><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>Change</td><td>PushButton</td><td>382</td><td>208</td><td>55</td><td>17</td><td>3</td><td/><td>##NEW_STRING61##</td><td>NextLarge</td><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>CheckBox1</td><td>CheckBox</td><td>132</td><td>213</td><td>186</td><td>15</td><td>3</td><td>SERVICE_SQLAUTHENTICATION</td><td>##NEW_STRING60##</td><td>Change</td><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>DlgDescLarge</td><td>Text</td><td>21</td><td>23</td><td>445</td><td>18</td><td>65539</td><td/><td>##NEW_STRING42##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##NEW_STRING43##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>Edit1</td><td>Edit</td><td>246</td><td>113</td><td>133</td><td>16</td><td>3</td><td>SERVICEUSERNAME</td><td/><td>Text5</td><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>Edit2</td><td>Edit</td><td>246</td><td>137</td><td>133</td><td>16</td><td>2097155</td><td>SERVICEPASSWORD</td><td/><td>CheckBox1</td><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>ServiceCredentials</td><td>Line3</td><td>Line</td><td>127</td><td>178</td><td>346</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>NextLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING45##</td><td>BackLarge</td><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>Text3</td><td>Text</td><td>130</td><td>184</td><td>300</td><td>22</td><td>3</td><td/><td>##NEW_STRING59##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>Text4</td><td>Text</td><td>133</td><td>89</td><td>214</td><td>14</td><td>3</td><td/><td>##NEW_STRING48##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>Text5</td><td>Text</td><td>160</td><td>136</td><td>47</td><td>13</td><td>3</td><td/><td>##NEW_STRING49##</td><td>Edit2</td><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>Text6</td><td>Text</td><td>160</td><td>115</td><td>70</td><td>13</td><td>3</td><td/><td>##NEW_STRING50##</td><td>Edit1</td><td/><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>Text7</td><td>Text</td><td>132</td><td>50</td><td>345</td><td>24</td><td>65539</td><td/><td>##NEW_STRING53##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING44##</td><td>CancelLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING41##</td><td>Text6</td><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>Change</td><td>PushButton</td><td>377</td><td>208</td><td>55</td><td>17</td><td>3</td><td/><td>##NEW_STRING61##</td><td>NextLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>CheckBox1</td><td>CheckBox</td><td>154</td><td>214</td><td>186</td><td>15</td><td>3</td><td>SERVICE_SQLAUTHENTICATION</td><td>##NEW_STRING60##</td><td>Change</td><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>271</td><td>18</td><td>65539</td><td/><td>##NEW_STRING42##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>280</td><td>16</td><td>65539</td><td/><td>##NEW_STRING43##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>Edit1</td><td>Edit</td><td>268</td><td>114</td><td>133</td><td>16</td><td>3</td><td>SERVICEUSERNAME</td><td/><td>Text5</td><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>Edit2</td><td>Edit</td><td>268</td><td>138</td><td>133</td><td>16</td><td>2097155</td><td>SERVICEPASSWORD</td><td/><td>CheckBox1</td><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>ServiceCredentials</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING45##</td><td>BackLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>Text3</td><td>Text</td><td>151</td><td>184</td><td>281</td><td>22</td><td>3</td><td/><td>##NEW_STRING59##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>Text4</td><td>Text</td><td>154</td><td>90</td><td>214</td><td>14</td><td>3</td><td/><td>##NEW_STRING48##</td><td/><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>Text5</td><td>Text</td><td>181</td><td>136</td><td>47</td><td>13</td><td>3</td><td/><td>##NEW_STRING49##</td><td>Edit2</td><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>Text6</td><td>Text</td><td>181</td><td>115</td><td>70</td><td>13</td><td>3</td><td/><td>##NEW_STRING50##</td><td>Edit1</td><td/><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>Text7</td><td>Text</td><td>151</td><td>50</td><td>292</td><td>24</td><td>65539</td><td/><td>##NEW_STRING53##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ServiceSQLAuthentication</td><td>CancelOther</td><td>PushButton</td><td>286</td><td>112</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING91##</td><td>lblPassword</td><td/><td/><td/><td/><td/></row>
 		<row><td>ServiceSQLAuthentication</td><td>OK</td><td>PushButton</td><td>208</td><td>112</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING92##</td><td>CancelOther</td><td/><td/><td/><td/><td/></row>
 		<row><td>ServiceSQLAuthentication</td><td>edSQLUser</td><td>Edit</td><td>108</td><td>51</td><td>151</td><td>16</td><td>3</td><td>SERVICE_SQL_USERNAME</td><td/><td>OK</td><td/><td/><td/><td/><td/></row>
@@ -878,19 +837,16 @@
 		<row><td>ServiceSQLAuthentication</td><td>lblLogin</td><td>Text</td><td>47</td><td>51</td><td>47</td><td>14</td><td>65539</td><td/><td>##NEW_STRING93##</td><td>edSQLpassword</td><td/><td/><td/><td/><td/></row>
 		<row><td>ServiceSQLAuthentication</td><td>lblPassword</td><td>Text</td><td>47</td><td>81</td><td>47</td><td>13</td><td>65539</td><td/><td>##NEW_STRING94##</td><td>txtSQLCredentials</td><td/><td/><td/><td/><td/></row>
 		<row><td>ServiceSQLAuthentication</td><td>txtSQLCredentials</td><td>Text</td><td>11</td><td>11</td><td>296</td><td>28</td><td>65539</td><td/><td>##NEW_STRING96##</td><td>lblLogin</td><td/><td/><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>1</td><td/><td>##ID_STRING385##</td><td>CancelLarge</td><td>##ID_STRING387##</td><td>0</td><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td>##ID_STRING365##</td><td/><td>##ID_STRING367##</td><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
-		<row><td>SetupCompleteError</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td>##ID_STRING389##</td><td/><td>##ID_STRING391##</td><td>0</td><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>BottomLineLarge</td><td>Line</td><td>276</td><td>264</td><td>267</td><td>1</td><td>1</td><td/><td>##ID_STRING393##</td><td/><td>##ID_STRING395##</td><td/><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>CancelLarge</td><td>PushButton</td><td>466</td><td>271</td><td>66</td><td>17</td><td>1</td><td/><td>##ID_STRING357##</td><td>FinishLarge</td><td>##ID_STRING359##</td><td>0</td><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>DlgTitleLarge</td><td>Text</td><td>13</td><td>6</td><td>400</td><td>16</td><td>65539</td><td/><td>##ID_STRING345##</td><td/><td>##ID_STRING347##</td><td/><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>PushButton</td><td>386</td><td>271</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING373##</td><td>BackLarge</td><td>##ID_STRING375##</td><td>0</td><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>FinishText1</td><td>Text</td><td>292</td><td>103</td><td>228</td><td>50</td><td>65539</td><td/><td>##ID_STRING337##</td><td/><td>##ID_STRING339##</td><td>0</td><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>FinishText2</td><td>Text</td><td>292</td><td>159</td><td>228</td><td>25</td><td>65539</td><td/><td>##ID_STRING349##</td><td/><td>##ID_STRING351##</td><td>0</td><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>ImageMain_Intro</td><td>Bitmap</td><td>4</td><td>49</td><td>270</td><td>241</td><td>1048581</td><td/><td>##ID_STRING353##</td><td/><td>##ID_STRING355##</td><td/><td/><td/><td>Image_Intro</td></row>
-		<row><td>SetupCompleteError</td><td>RestContText1</td><td>Text</td><td>292</td><td>103</td><td>228</td><td>50</td><td>65539</td><td/><td>##ID_STRING333##</td><td/><td>##ID_STRING335##</td><td>0</td><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>RestContText2</td><td>Text</td><td>292</td><td>159</td><td>228</td><td>25</td><td>65539</td><td/><td>##ID_STRING329##</td><td/><td>##ID_STRING331##</td><td>0</td><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>TextLine2</td><td>Text</td><td>292</td><td>78</td><td>228</td><td>25</td><td>65539</td><td/><td>##ID_STRING341##</td><td/><td>##ID_STRING343##</td><td>0</td><td/><td/><td/></row>
+		<row><td>SetupCompleteError</td><td>BackLarge</td><td>PushButton</td><td>230</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##ID_STRING385##</td><td>CancelLarge</td><td>##ID_STRING387##</td><td>0</td><td/><td/><td/></row>
+		<row><td>SetupCompleteError</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##ID_STRING357##</td><td>FinishLarge</td><td>##ID_STRING359##</td><td>0</td><td/><td/><td/></row>
+		<row><td>SetupCompleteError</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>226</td><td>16</td><td>65539</td><td/><td>##ID_STRING345##</td><td/><td>##ID_STRING347##</td><td/><td/><td/><td/></row>
+		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>PushButton</td><td>296</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##ID_STRING373##</td><td>BackLarge</td><td>##ID_STRING375##</td><td>0</td><td/><td/><td/></row>
+		<row><td>SetupCompleteError</td><td>FinishText1</td><td>Text</td><td>154</td><td>103</td><td>228</td><td>50</td><td>65539</td><td/><td>##ID_STRING337##</td><td/><td>##ID_STRING339##</td><td>0</td><td/><td/><td/></row>
+		<row><td>SetupCompleteError</td><td>FinishText2</td><td>Text</td><td>154</td><td>160</td><td>228</td><td>25</td><td>65539</td><td/><td>##ID_STRING349##</td><td/><td>##ID_STRING351##</td><td>0</td><td/><td/><td/></row>
+		<row><td>SetupCompleteError</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048581</td><td/><td>##ID_STRING353##</td><td/><td>##ID_STRING355##</td><td/><td/><td/><td>Image_Intro</td></row>
+		<row><td>SetupCompleteError</td><td>RestContText1</td><td>Text</td><td>154</td><td>103</td><td>228</td><td>50</td><td>65539</td><td/><td>##ID_STRING333##</td><td/><td>##ID_STRING335##</td><td>0</td><td/><td/><td/></row>
+		<row><td>SetupCompleteError</td><td>RestContText2</td><td>Text</td><td>154</td><td>160</td><td>228</td><td>25</td><td>65539</td><td/><td>##ID_STRING329##</td><td/><td>##ID_STRING331##</td><td>0</td><td/><td/><td/></row>
+		<row><td>SetupCompleteError</td><td>TextLine2</td><td>Text</td><td>154</td><td>79</td><td>228</td><td>25</td><td>65539</td><td/><td>##ID_STRING341##</td><td/><td>##ID_STRING343##</td><td>0</td><td/><td/><td/></row>
 		<row><td>SetupCompleteSuccess</td><td>BackLarge</td><td>PushButton</td><td>320</td><td>271</td><td>66</td><td>17</td><td>1</td><td/><td>##ID_STRING321##</td><td/><td>##ID_STRING323##</td><td>0</td><td/><td/><td/></row>
 		<row><td>SetupCompleteSuccess</td><td>BannerLarge</td><td>Bitmap</td><td>0</td><td>0</td><td>543</td><td>44</td><td>1</td><td/><td>##ID_STRING317##</td><td/><td>##ID_STRING319##</td><td>0</td><td/><td/><td>Image_BannerLarge</td></row>
 		<row><td>SetupCompleteSuccess</td><td>BannerLineLarge</td><td>Line</td><td>0</td><td>44</td><td>543</td><td>0</td><td>1</td><td/><td>##ID_STRING309##</td><td/><td>##ID_STRING311##</td><td>0</td><td/><td/><td/></row>
@@ -1915,40 +1871,40 @@ Set oServer = Nothing</td><td/></row>
 		<col def="I4">ISResourceId</col>
 		<row><td>AdminChangeFolder</td><td>50</td><td>50</td><td>374</td><td>266</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>Tail</td><td>OK</td><td>Cancel</td><td>Install Point Browse</td><td/><td>0</td><td/></row>
 		<row><td>AdminNetworkLocation</td><td>50</td><td>50</td><td>374</td><td>266</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>SetupPathEdit</td><td>InstallNow</td><td>Cancel</td><td>Network Location</td><td/><td>0</td><td/></row>
-		<row><td>AdminWelcome</td><td>50</td><td>50</td><td>374</td><td>266</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>Next</td><td>Next</td><td>Cancel</td><td>Administration Welcome</td><td/><td>0</td><td/></row>
+		<row><td>AdminWelcome</td><td>50</td><td>50</td><td>455</td><td>325</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>Next</td><td>Next</td><td>Cancel</td><td>Administration Welcome</td><td/><td>0</td><td/></row>
 		<row><td>CancelSetup</td><td>50</td><td>50</td><td>260</td><td>85</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>No</td><td>No</td><td>No</td><td>Cancel</td><td/><td>0</td><td/></row>
-		<row><td>ConfigRepository</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##ID_STRING51##</td><td>BackLarge</td><td>NextLarge</td><td>CancelLarge</td><td/><td/><td/><td/></row>
+		<row><td>ConfigRepository</td><td>50</td><td>50</td><td>455</td><td>325</td><td>3</td><td>##ID_STRING51##</td><td>BackLarge</td><td>NextLarge</td><td>CancelLarge</td><td/><td/><td/><td/></row>
 		<row><td>ConsoleNotCompatible</td><td>50</td><td>50</td><td>340</td><td>167</td><td>3</td><td>##ID_STRING49##</td><td>No</td><td>Yes</td><td>No</td><td/><td/><td/><td/></row>
-		<row><td>CustomSetup</td><td>50</td><td>50</td><td>543</td><td>295</td><td>35</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>BackLarge</td><td>NextLarge</td><td>CancelLarge</td><td>Custom Selection</td><td/><td>0</td><td/></row>
+		<row><td>CustomSetup</td><td>50</td><td>50</td><td>455</td><td>325</td><td>35</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>BackLarge</td><td>NextLarge</td><td>CancelLarge</td><td>Custom Selection</td><td/><td>0</td><td/></row>
 		<row><td>CustomSetupTips</td><td>50</td><td>50</td><td>374</td><td>266</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>OK</td><td>OK</td><td>OK</td><td>Custom Setup Tips</td><td/><td>0</td><td/></row>
 		<row><td>CustomerInformation</td><td>50</td><td>50</td><td>374</td><td>266</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>NameEdit</td><td>Next</td><td>Cancel</td><td>Identification</td><td/><td>0</td><td/></row>
 		<row><td>DatabaseBeta</td><td>50</td><td>50</td><td>340</td><td>167</td><td>3</td><td>##NEW_STRING178##</td><td>OK</td><td>OK</td><td>OK</td><td/><td/><td/><td/></row>
 		<row><td>DatabaseFolder</td><td>50</td><td>50</td><td>374</td><td>266</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>Back</td><td>Next</td><td>Cancel</td><td>Database Folder</td><td/><td>0</td><td/></row>
 		<row><td>DatabaseInvalidVersion</td><td>50</td><td>50</td><td>340</td><td>167</td><td>3</td><td>##ID_STRING49##</td><td>NoControl</td><td>PushButton1</td><td>PushButton1</td><td/><td/><td/><td/></row>
 		<row><td>DatabaseNotFound</td><td>50</td><td>50</td><td>340</td><td>167</td><td>3</td><td>##ID_STRING49##</td><td>No</td><td>Yes</td><td>No</td><td/><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>edInstallDir</td><td>NextLarge</td><td>CancelLarge</td><td>Destination Folder</td><td/><td>0</td><td/></row>
+		<row><td>DestinationFolder</td><td>50</td><td>50</td><td>455</td><td>325</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>edInstallDir</td><td>NextLarge</td><td>CancelLarge</td><td>Destination Folder</td><td/><td>0</td><td/></row>
 		<row><td>DiskSpaceRequirements</td><td>50</td><td>50</td><td>374</td><td>266</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>Bitmap1</td><td>OK</td><td>OK</td><td>Feature Details</td><td/><td>0</td><td/></row>
 		<row><td>Error</td><td>50</td><td>50</td><td>318</td><td>109</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>OK</td><td>OK</td><td>OK</td><td>Error Message box</td><td/><td>0</td><td/></row>
 		<row><td>FilesInUse</td><td>50</td><td>50</td><td>374</td><td>266</td><td>19</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>Retry</td><td>Retry</td><td>Exit</td><td>Files in Use</td><td/><td>0</td><td/></row>
 		<row><td>InstallChangeFolder</td><td>50</td><td>50</td><td>374</td><td>266</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>Tail</td><td>OK</td><td>Cancel</td><td>Browse</td><td/><td>0</td><td/></row>
-		<row><td>InstallWelcome</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>NextLarge</td><td>NextLarge</td><td>CancelLarge</td><td>Welcome Panel</td><td/><td>0</td><td/></row>
-		<row><td>LicenseAgreement</td><td>50</td><td>50</td><td>543</td><td>295</td><td>2</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>Agree</td><td>NextLarge</td><td>CancelLarge</td><td>License Agreement</td><td/><td>0</td><td/></row>
-		<row><td>Licensing</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##ID_STRING147##</td><td>edKey</td><td>NextLarge</td><td>CancelLarge</td><td/><td/><td/><td/></row>
-		<row><td>MaintenanceType</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>BackLarge</td><td>NextLarge</td><td>CancelLarge</td><td>Change, Reinstall, Remove</td><td/><td>0</td><td/></row>
-		<row><td>MaintenanceWelcome</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>BackLarge</td><td>NextLarge</td><td>CancelLarge</td><td>Maintenance Welcome</td><td/><td>0</td><td/></row>
+		<row><td>InstallWelcome</td><td>50</td><td>50</td><td>455</td><td>325</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>NextLarge</td><td>NextLarge</td><td>CancelLarge</td><td>Welcome Panel</td><td/><td>0</td><td/></row>
+		<row><td>LicenseAgreement</td><td>50</td><td>50</td><td>455</td><td>325</td><td>2</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>Agree</td><td>NextLarge</td><td>CancelLarge</td><td>License Agreement</td><td/><td>0</td><td/></row>
+		<row><td>Licensing</td><td>50</td><td>50</td><td>455</td><td>324</td><td>3</td><td>##ID_STRING147##</td><td>edKey</td><td>NextLarge</td><td>CancelLarge</td><td/><td/><td/><td/></row>
+		<row><td>MaintenanceType</td><td>50</td><td>50</td><td>455</td><td>325</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>BackLarge</td><td>NextLarge</td><td>CancelLarge</td><td>Change, Reinstall, Remove</td><td/><td>0</td><td/></row>
+		<row><td>MaintenanceWelcome</td><td>50</td><td>50</td><td>455</td><td>325</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>BackLarge</td><td>NextLarge</td><td>CancelLarge</td><td>Maintenance Welcome</td><td/><td>0</td><td/></row>
 		<row><td>OutOfSpace</td><td>50</td><td>50</td><td>374</td><td>266</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>BlankImage</td><td>Resume</td><td>Resume</td><td>Out Of Disk Space</td><td/><td>0</td><td/></row>
-		<row><td>PatchWelcome</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##IDS__IsPatchDlg_PatchWizard##</td><td>BackLarge</td><td>UpdateLarge</td><td>CancelLarge</td><td>Patch Panel</td><td/><td>0</td><td/></row>
-		<row><td>ReadyToInstall</td><td>50</td><td>50</td><td>543</td><td>295</td><td>35</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>InstallLarge</td><td>InstallLarge</td><td>CancelLarge</td><td>Ready to Install</td><td/><td>0</td><td/></row>
-		<row><td>ReadyToRemove</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>RemoveLarge</td><td>RemoveLarge</td><td>CancelLarge</td><td>Verify Remove</td><td/><td>0</td><td/></row>
-		<row><td>ReadyToUpgrade</td><td>50</td><td>50</td><td>543</td><td>295</td><td>35</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>CancelLarge</td><td>NextLarge</td><td>CancelLarge</td><td>Ready to Install</td><td/><td>0</td><td/></row>
+		<row><td>PatchWelcome</td><td>50</td><td>50</td><td>455</td><td>325</td><td>3</td><td>##IDS__IsPatchDlg_PatchWizard##</td><td>BackLarge</td><td>UpdateLarge</td><td>CancelLarge</td><td>Patch Panel</td><td/><td>0</td><td/></row>
+		<row><td>ReadyToInstall</td><td>50</td><td>50</td><td>455</td><td>325</td><td>35</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>InstallLarge</td><td>InstallLarge</td><td>CancelLarge</td><td>Ready to Install</td><td/><td>0</td><td/></row>
+		<row><td>ReadyToRemove</td><td>50</td><td>50</td><td>455</td><td>325</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>RemoveLarge</td><td>RemoveLarge</td><td>CancelLarge</td><td>Verify Remove</td><td/><td>0</td><td/></row>
+		<row><td>ReadyToUpgrade</td><td>50</td><td>50</td><td>455</td><td>325</td><td>35</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>CancelLarge</td><td>NextLarge</td><td>CancelLarge</td><td>Ready to Install</td><td/><td>0</td><td/></row>
 		<row><td>SQLBrowse</td><td>50</td><td>50</td><td>272</td><td>265</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>lstSQLServer</td><td>OKOther</td><td>CancelOther</td><td>SQL Server List Browse</td><td/><td>0</td><td/></row>
 		<row><td>SQLBrowse_All</td><td>50</td><td>50</td><td>272</td><td>265</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>lstSQLServer</td><td>OKOther</td><td>CancelOther</td><td>SQL Server List Browse</td><td/><td>0</td><td/></row>
 		<row><td>SQLLocation</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##ID_STRING51##</td><td>BackLarge</td><td>NextLarge</td><td>CancelLarge</td><td/><td/><td/><td/></row>
 		<row><td>SQLLogin</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>cboServers</td><td>NextLarge</td><td>CancelLarge</td><td>SQL Server Login</td><td/><td>0</td><td/></row>
 		<row><td>SQLLoginAuthentication</td><td>50</td><td>50</td><td>364</td><td>142</td><td>3</td><td>##NEW_STRING119##</td><td>edSQLuser</td><td>OKOther</td><td>CancelOther</td><td/><td/><td/><td/></row>
-		<row><td>ServiceCredentials</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##ID_STRING40##</td><td>Text5</td><td>NextLarge</td><td>CancelLarge</td><td/><td/><td/><td/></row>
+		<row><td>ServiceCredentials</td><td>50</td><td>50</td><td>455</td><td>325</td><td>3</td><td>##ID_STRING40##</td><td>Text5</td><td>NextLarge</td><td>CancelLarge</td><td/><td/><td/><td/></row>
 		<row><td>ServiceSQLAuthentication</td><td>50</td><td>50</td><td>364</td><td>142</td><td>3</td><td>##ID_STRING50##</td><td>OK</td><td>OK</td><td>CancelOther</td><td/><td/><td/><td/></row>
-		<row><td>SetupCompleteError</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>FinishLarge</td><td>FinishLarge</td><td>FinishLarge</td><td>Fatal Error</td><td/><td>0</td><td/></row>
+		<row><td>SetupCompleteError</td><td>50</td><td>50</td><td>455</td><td>325</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>FinishLarge</td><td>FinishLarge</td><td>FinishLarge</td><td>Fatal Error</td><td/><td>0</td><td/></row>
 		<row><td>SetupCompleteSuccess</td><td>50</td><td>50</td><td>543</td><td>295</td><td>3</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>FinishLarge</td><td>FinishLarge</td><td>FinishLarge</td><td>Exit</td><td/><td>0</td><td/></row>
 		<row><td>SetupError</td><td>50</td><td>50</td><td>270</td><td>110</td><td>65543</td><td>##IDS__IsErrorDlg_InstallerInfo##</td><td>ErrorText</td><td>O</td><td>C</td><td>Error</td><td/><td>0</td><td/></row>
 		<row><td>SetupInitialization</td><td>50</td><td>50</td><td>543</td><td>295</td><td>5</td><td>##IDS_PRODUCTNAME_INSTALLSHIELD##</td><td>CancelLarge</td><td>CancelLarge</td><td>CancelLarge</td><td>Setup Initialization</td><td/><td>0</td><td/></row>
@@ -3380,11 +3336,11 @@ Set oServer = Nothing</td><td/></row>
 		<col def="S0">Comment</col>
 		<col def="I4">TimeStamp</col>
 		<row><td>##ID_STRING102##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1290133202</td></row>
-		<row><td>##ID_STRING106##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
+		<row><td>##ID_STRING106##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
 		<row><td>##ID_STRING110##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1290133202</td></row>
 		<row><td>##ID_STRING114##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1290133202</td></row>
-		<row><td>##ID_STRING118##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
-		<row><td>##ID_STRING122##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
+		<row><td>##ID_STRING118##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
+		<row><td>##ID_STRING122##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
 		<row><td>##ID_STRING126##</td><td>1033</td><td>|</td><td>0</td><td/><td>622484812</td></row>
 		<row><td>##ID_STRING130##</td><td>1033</td><td>|</td><td>0</td><td/><td>1620831977</td></row>
 		<row><td>##ID_STRING134##</td><td>1033</td><td>|</td><td>0</td><td/><td>622484812</td></row>
@@ -3401,18 +3357,18 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>##ID_STRING179##</td><td>1033</td><td>|</td><td>0</td><td/><td>1620831977</td></row>
 		<row><td>##ID_STRING183##</td><td>1033</td><td>|</td><td>0</td><td/><td>1620831977</td></row>
 		<row><td>##ID_STRING187##</td><td>1033</td><td>|</td><td>0</td><td/><td>1620831977</td></row>
-		<row><td>##ID_STRING191##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
-		<row><td>##ID_STRING195##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
-		<row><td>##ID_STRING199##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
-		<row><td>##ID_STRING203##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
-		<row><td>##ID_STRING207##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711261172</td></row>
-		<row><td>##ID_STRING211##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
-		<row><td>##ID_STRING215##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
-		<row><td>##ID_STRING219##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
-		<row><td>##ID_STRING223##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
-		<row><td>##ID_STRING227##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
-		<row><td>##ID_STRING231##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
-		<row><td>##ID_STRING235##</td><td>1033</td><td>|</td><td>0</td><td/><td>-711259124</td></row>
+		<row><td>##ID_STRING191##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675342844</td></row>
+		<row><td>##ID_STRING195##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675342844</td></row>
+		<row><td>##ID_STRING199##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675361500</td></row>
+		<row><td>##ID_STRING203##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675342844</td></row>
+		<row><td>##ID_STRING207##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675342844</td></row>
+		<row><td>##ID_STRING211##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675342844</td></row>
+		<row><td>##ID_STRING215##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675361500</td></row>
+		<row><td>##ID_STRING219##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675361500</td></row>
+		<row><td>##ID_STRING223##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675342844</td></row>
+		<row><td>##ID_STRING227##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675342844</td></row>
+		<row><td>##ID_STRING231##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675342844</td></row>
+		<row><td>##ID_STRING235##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675342844</td></row>
 		<row><td>##ID_STRING239##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
 		<row><td>##ID_STRING243##</td><td>1033</td><td>|</td><td>0</td><td/><td>-240887582</td></row>
 		<row><td>##ID_STRING247##</td><td>1033</td><td>|</td><td>0</td><td/><td>-240887582</td></row>
@@ -3436,33 +3392,33 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>##ID_STRING319##</td><td>1033</td><td>|</td><td>0</td><td/><td>-240887582</td></row>
 		<row><td>##ID_STRING323##</td><td>1033</td><td>|</td><td>0</td><td/><td>-240887582</td></row>
 		<row><td>##ID_STRING327##</td><td>1033</td><td>|</td><td>0</td><td/><td>-240887582</td></row>
-		<row><td>##ID_STRING331##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
-		<row><td>##ID_STRING335##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
-		<row><td>##ID_STRING339##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
-		<row><td>##ID_STRING343##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
-		<row><td>##ID_STRING347##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
-		<row><td>##ID_STRING351##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
-		<row><td>##ID_STRING355##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
-		<row><td>##ID_STRING359##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
+		<row><td>##ID_STRING331##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
+		<row><td>##ID_STRING335##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
+		<row><td>##ID_STRING339##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
+		<row><td>##ID_STRING343##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
+		<row><td>##ID_STRING347##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
+		<row><td>##ID_STRING351##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
+		<row><td>##ID_STRING355##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
+		<row><td>##ID_STRING359##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
 		<row><td>##ID_STRING363##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1550143383</td></row>
-		<row><td>##ID_STRING367##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
+		<row><td>##ID_STRING367##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
 		<row><td>##ID_STRING371##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1550143383</td></row>
-		<row><td>##ID_STRING375##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
+		<row><td>##ID_STRING375##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
 		<row><td>##ID_STRING379##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1550143383</td></row>
 		<row><td>##ID_STRING383##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1550143383</td></row>
-		<row><td>##ID_STRING387##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
-		<row><td>##ID_STRING391##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
-		<row><td>##ID_STRING395##</td><td>1033</td><td>|</td><td>0</td><td/><td>1763557711</td></row>
-		<row><td>##ID_STRING62##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
-		<row><td>##ID_STRING66##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
-		<row><td>##ID_STRING70##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
-		<row><td>##ID_STRING74##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
-		<row><td>##ID_STRING78##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
-		<row><td>##ID_STRING82##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
-		<row><td>##ID_STRING86##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
-		<row><td>##ID_STRING90##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
-		<row><td>##ID_STRING94##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
-		<row><td>##ID_STRING98##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1574909395</td></row>
+		<row><td>##ID_STRING387##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
+		<row><td>##ID_STRING391##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
+		<row><td>##ID_STRING395##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675340700</td></row>
+		<row><td>##ID_STRING62##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
+		<row><td>##ID_STRING66##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
+		<row><td>##ID_STRING70##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
+		<row><td>##ID_STRING74##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
+		<row><td>##ID_STRING78##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
+		<row><td>##ID_STRING82##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
+		<row><td>##ID_STRING86##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
+		<row><td>##ID_STRING90##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
+		<row><td>##ID_STRING94##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
+		<row><td>##ID_STRING98##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675341756</td></row>
 		<row><td>COMPANY_NAME</td><td>1033</td><td>Idera</td><td>0</td><td/><td>731452233</td></row>
 		<row><td>DN_AlwaysInstall</td><td>1033</td><td>Always Install</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>1033</td><td>The color settings of your system are not adequate for running [ProductName].</td><td>0</td><td/><td>-1256677244</td></row>
@@ -3803,7 +3759,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>IDS_INSTALLSHIELD_FORMATTED</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_ISSCRIPT_VERSION_MISSING</td><td>1033</td><td>The InstallScript engine is missing from this machine.  If available, please run ISScript.msi, or contact your support personnel for further assistance.</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_ISSCRIPT_VERSION_OLD</td><td>1033</td><td>The InstallScript engine on this machine is older than the version required to run this setup.  If available, please install the latest version of ISScript.msi, or contact your support personnel for further assistance.</td><td>0</td><td/><td>-1256677244</td></row>
-		<row><td>IDS_NEXT</td><td>1033</td><td>&amp;Next &gt;</td><td>0</td><td/><td>-1256677244</td></row>
+		<row><td>IDS_NEXT</td><td>1033</td><td>{&amp;ArialBlue10}{\ArialBlue10}&amp;Next</td><td>0</td><td/><td>-2078004408</td></row>
 		<row><td>IDS_OK</td><td>1033</td><td>OK</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_PRINT_BUTTON</td><td>1033</td><td>&amp;Print</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_PRODUCTNAME_INSTALLSHIELD</td><td>1033</td><td>[ProductName] - Setup Wizard</td><td>0</td><td/><td>865710349</td></row>
@@ -5385,11 +5341,11 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<col def="I4">ISControlId</col>
 		<row><td>AgreeToLicense</td><td>1</td><td>No</td><td>0</td><td>15</td><td>199</td><td>15</td><td>##IDS__AgreeToLicense_0##</td><td/><td>0</td></row>
 		<row><td>AgreeToLicense</td><td>2</td><td>Yes</td><td>0</td><td>0</td><td>175</td><td>15</td><td>##IDS__AgreeToLicense_1##</td><td/><td>0</td></row>
-		<row><td>ApplicationUsers</td><td>1</td><td>AllUsers</td><td>0</td><td>7</td><td>171</td><td>14</td><td>##ID_STRING210##</td><td/><td>0</td></row>
+		<row><td>ApplicationUsers</td><td>1</td><td>AllUsers</td><td>0</td><td>8</td><td>171</td><td>14</td><td>##ID_STRING210##</td><td/><td>0</td></row>
 		<row><td>ApplicationUsers</td><td>2</td><td>OnlyCurrentUser</td><td>0</td><td>23</td><td>166</td><td>14</td><td>##ID_STRING396##</td><td/><td>0</td></row>
 		<row><td>CONFIG_REPOSITORY</td><td>1</td><td>Yes</td><td>7</td><td>3</td><td>61</td><td>18</td><td>##NEW_STRING141##</td><td/><td>0</td></row>
 		<row><td>CONFIG_REPOSITORY</td><td>2</td><td>No</td><td>7</td><td>24</td><td>52</td><td>13</td><td>##NEW_STRING142##</td><td/><td>0</td></row>
-		<row><td>LICENSETYPE</td><td>1</td><td>License</td><td>1</td><td>42</td><td>199</td><td>15</td><td>##NEW_STRING193##</td><td/><td>0</td></row>
+		<row><td>LICENSETYPE</td><td>1</td><td>License</td><td>2</td><td>42</td><td>199</td><td>15</td><td>##NEW_STRING193##</td><td/><td>0</td></row>
 		<row><td>LICENSETYPE</td><td>2</td><td>Trial</td><td>0</td><td>0</td><td>175</td><td>15</td><td>##NEW_STRING194##</td><td/><td>0</td></row>
 		<row><td>ServiceLogin1</td><td>1</td><td>1</td><td>3</td><td>6</td><td>112</td><td>11</td><td>##NEW_STRING69##</td><td/><td>0</td></row>
 		<row><td>ServiceLogin1</td><td>2</td><td>2</td><td>3</td><td>63</td><td>119</td><td>14</td><td>##NEW_STRING70##</td><td/><td>0</td></row>
