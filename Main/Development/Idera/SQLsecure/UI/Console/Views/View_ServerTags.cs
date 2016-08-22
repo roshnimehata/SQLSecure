@@ -446,7 +446,9 @@ namespace Idera.SQLsecure.UI.Console.Views
         private void TakeSnapshot(object sender, EventArgs e)
         {
             ShowProcessDialog();
+            _isCanceled = false;
             _backgroundWorker.RunWorkerAsync();
+
             //_processdDialog.Close();
 
         }
