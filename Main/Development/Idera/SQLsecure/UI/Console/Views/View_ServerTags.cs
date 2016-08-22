@@ -195,7 +195,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             if (_dt_Servers.Rows.Count != 0)
             {
-
+                _failedServer.Clear();
                 foreach (DataRow item in _dt_Servers.Rows)
                 {
                     _serversToRun.Add(Program.gController.Repository.GetServer(item[colHeaderServerName].ToString()));
@@ -217,8 +217,10 @@ namespace Idera.SQLsecure.UI.Console.Views
                             _failedServer.Add(server.ConnectionName);
                     }
                     _currentServer = server.ConnectionName;
+                   
                     Thread.Sleep(JobStartDelay);
                 }
+                _serversToRun.Clear();
             }
         }
 
