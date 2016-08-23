@@ -8827,9 +8827,9 @@ AS -- <Idera SQLsecure version and copyright>
 																	j.Name,
 																	j.Step
                                                                 FROM [dbo].[sqljob] j
-																JOIN serversnapshot ss ON ss.snapshotid =  j.snapshotid
+																JOIN serversnapshot ss ON ss.snapshotid =  j.SnapshotId
                                                                 WHERE 
-																	j.proxyId IS NULL AND 
+																	j.ProxyId IS NULL AND 
 																	j.SnapshotId = @snapshotid
                                                                 ORDER BY 
 																	j.Name,
