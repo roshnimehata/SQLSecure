@@ -192,7 +192,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private bool ValidateIfLicenseExists()
         {
-            var serversToImport = GetCheckedItems();
+            var serversToImport = GetCheckedNewItems();
             if (!Program.gController.Repository.bbsProductLicense.IsLicneseGoodForServerCount(Program.gController.Repository.RegisteredServers.Count + serversToImport.Count))
             {
                 MsgBox.ShowError(ErrorMsgs.RegisterSqlServerCaption, ErrorMsgs.RegisterSqlServerNoLicenseMsg);
@@ -201,14 +201,19 @@ namespace Idera.SQLsecure.UI.Console.Forms
             return true;
         }
 
-        private List<UltraListViewItem> GetCheckedItems()
+        private List<UltraListViewItem> GetCheckedNewItems()
         {
             var result = new List<UltraListViewItem>();
             foreach (var item in lvImportStatus.Items)
             {
-                if (item.CheckState == CheckState.Checked) result.Add(item);
+                if (item.CheckState == CheckState.Checked && !IsServerAlreadyRegistered(item.Text)) result.Add(item);
             }
             return result;
+        }
+
+        private static bool IsServerAlreadyRegistered(string serverName)
+        {
+            return Program.gController.Repository.RegisteredServers.Find(serverName) != null;
         }
 
         private void ShowProcessDialog()
@@ -309,7 +314,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     if (importItem == null || lvImport.CheckState != CheckState.Checked) continue; //skip element
 
                     if (!allowServerUpdates)
-                        if (Program.gController.Repository.RegisteredServers.Find(importItem.ServerName) != null)
+                        if (IsServerAlreadyRegistered(importItem.ServerName))
                         {
                             if (
                                 MsgBox.ShowConfirm(ErrorMsgs.ImportServersCaption, ErrorMsgs.AllowSqlServersUpdate) ==

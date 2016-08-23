@@ -8986,7 +8986,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                 + ', ' + CHAR(13)
                                                                                 + CHAR(10)
                                                                         FROM #certs;
-                                                                        SET @foundCerts = SUBSTRING(@foundCerts,1,LEN(@foundCerts)- 1);
+                                                                        SET @foundCerts = SUBSTRING(@foundCerts,1,LEN(@foundCerts)- 2);
                                                                         SET @metricval = 'There are certificate private keys that have not being exported: '+ CHAR(13)+ CHAR(10)+ @foundCerts+ '';
 																		 SET @sevcode = @severity;
 																END;
@@ -9037,7 +9037,7 @@ AS -- <Idera SQLsecure version and copyright>
 																FROM
 																	#linkedsrv;
 																SET @foundLinkedServer = SUBSTRING(@foundLinkedServer, 1,
-																							LEN(@foundLinkedServer) - 1);
+																							LEN(@foundLinkedServer) - 2);
 																SET @metricval = 'Thre are linked servers configured: '
 																	+ CHAR(13) + CHAR(10) + @foundLinkedServer + '';
 																SET @sevcode = @severity;
@@ -9113,7 +9113,7 @@ AS -- <Idera SQLsecure version and copyright>
 																FROM
 																	#linksrvusr;
 																SET @foundLinkedServerUser = SUBSTRING(@foundLinkedServerUser, 1,
-																							LEN(@foundLinkedServerUser) - 1);
+																							LEN(@foundLinkedServerUser) - 2);
 																SET @metricval = 'Thre are linked servers that are runnung as a member of sysadmin group: '
 																	+ CHAR(13) + CHAR(10) + @foundLinkedServerUser + '';
 																SET @sevcode = @severity;

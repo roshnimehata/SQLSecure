@@ -203,7 +203,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
                 foreach (RegisteredServer server in _serversToRun)
                 {
-                    if (_isCanceled) return;
+                    if (_isCanceled) break;
 
                     Guid guid;
                     _backgroundWorker.ReportProgress(0, server.ConnectionName);
@@ -448,9 +448,6 @@ namespace Idera.SQLsecure.UI.Console.Views
             ShowProcessDialog();
             _isCanceled = false;
             _backgroundWorker.RunWorkerAsync();
-
-            //_processdDialog.Close();
-
         }
 
         #endregion

@@ -73,7 +73,6 @@ namespace Idera.SQLsecure.Collector.Sql
                 ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
             )
         {
-            Debugger.Launch();
             Debug.Assert(!string.IsNullOrEmpty(targetConnection));
             Debug.Assert(!string.IsNullOrEmpty(repositoryConnection));
             Stopwatch sw = new Stopwatch();

@@ -613,7 +613,7 @@
 		<row><td>DestinationFolder</td><td>DestFolder</td><td>Icon</td><td>166</td><td>60</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary12</td></row>
 		<row><td>DestinationFolder</td><td>DlgDescLarge</td><td>Text</td><td>159</td><td>31</td><td>248</td><td>18</td><td>65539</td><td/><td>##IDS__DestinationFolder_ChangeFolder##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>DestinationFolder</td><td>DlgTitle</td><td>Text</td><td>151</td><td>15</td><td>256</td><td>16</td><td>65539</td><td/><td>##IDS__DestinationFolder_DestinationFolder##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>DestinationFolder</td><td>ImageMain</td><td>Bitmap</td><td>3</td><td>1</td><td>139</td><td>324</td><td>1048577</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary7</td></row>
+		<row><td>DestinationFolder</td><td>ImageMain</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048577</td><td/><td/><td/><td/><td/><td/><td/><td>Image_GUI</td></row>
 		<row><td>DestinationFolder</td><td>LocLabel</td><td>Text</td><td>200</td><td>66</td><td>178</td><td>11</td><td>3</td><td/><td>##IDS__DestinationFolder_InstallTo##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>DestinationFolder</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>DestinationFolder</td><td>Text2</td><td>Text</td><td>180</td><td>189</td><td>111</td><td>14</td><td>3</td><td/><td>##NEW_STRING131##</td><td/><td/><td/><td/><td/><td/></row>
@@ -667,7 +667,7 @@
 		<row><td>LicenseAgreement</td><td>DlgDesc</td><td>Text</td><td>158</td><td>26</td><td>229</td><td>25</td><td>65539</td><td/><td>##IDS__IsLicenseDlg_ReadLicenseAgreement##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>LicenseAgreement</td><td>DlgTitleLarge</td><td>Text</td><td>150</td><td>9</td><td>198</td><td>16</td><td>65539</td><td/><td>##IDS__IsLicenseDlg_LicenseAgreement##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>LicenseAgreement</td><td>ISPrintButton</td><td>PushButton</td><td>384</td><td>216</td><td>47</td><td>17</td><td>3</td><td/><td>##IDS_PRINT_BUTTON##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>LicenseAgreement</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>1</td><td>139</td><td>324</td><td>1048581</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary7</td></row>
+		<row><td>LicenseAgreement</td><td>ImageMain_Intro</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048577</td><td/><td/><td/><td/><td/><td/><td/><td>Image_GUI</td></row>
 		<row><td>LicenseAgreement</td><td>Memo</td><td>ScrollableText</td><td>153</td><td>50</td><td>286</td><td>159</td><td>7</td><td/><td/><td/><td/><td>0</td><td/><td>&lt;PATH_DOCUMENTATION&gt;\Idera - Trial Software License Agreement.rtf</td><td/></row>
 		<row><td>LicenseAgreement</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>Licensing</td><td>BackLarge</td><td>PushButton</td><td>231</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING191##</td><td/><td/><td/><td/><td/><td/></row>
