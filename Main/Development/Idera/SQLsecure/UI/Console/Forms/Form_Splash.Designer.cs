@@ -42,7 +42,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.SQLsecure_splash;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(466, 305);
+            this.ClientSize = new System.Drawing.Size(500, 300);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form_Splash";
             this.ShowInTaskbar = false;

@@ -116,7 +116,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="We need description from idera!!"</Value>
+            <Value>="Show all the SQL Logins that do not have any permissions assigned."</Value>
           </Textbox>
         </ReportItems>
         <Top>1.0625in</Top>
