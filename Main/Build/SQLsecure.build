@@ -69,6 +69,9 @@
 	<!-- Use TStamp to set a proerty to the the current datetime defining the format -->
 	<tstamp property="Build.DateTime" pattern="MM-dd-yyyy.HHmm" verbose="true" />
 
+	<!-- Environment variables -->
+	<property name="Workspace.Path" value="${environment::get-variable('SQLSecureBuild')}" />
+	
 	<!-- Nant Properties -->
 	<property name="Framework.Version" value="v2.0.50727"/>
 	<property name="Framework.Install" value="c:/Windows/Microsoft.NET/Framework/${Framework.Version}"/>
@@ -565,30 +568,30 @@
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
-	      		<arg value="C:\Idera\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure.zip"/>
+	      		<arg value="${Workspace.Path}\Build\BuildCompileOutput\SQLsecure.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\x86\Full\*.*"/>
 	    	</exec>
 		<exec program="${WinZip}\wzzip">
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
-	      		<arg value="C:\Idera\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure-x64.zip"/>
+	      		<arg value="${Workspace.Path}\Build\BuildCompileOutput\SQLsecure-x64.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\x64\Full\*.*"/>
 	    	</exec>
 		<exec program="${WinZip}\wzzip">
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
-	      		<arg value="C:\Idera\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure-ia64.zip"/>
+	      		<arg value="${Workspace.Path}\Build\BuildCompileOutput\SQLsecure-ia64.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\ia64\Full\*.*"/>
 	    	</exec>
 	    	
 		<!-- Build absolute packager -->
-	    <exec program="InstallationKit.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
+	    <exec program="InstallationKit.bat" workingdir="${Workspace.Path}\Build">
 		</exec>
-		<exec program="InstallationKit-x64.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
+		<exec program="InstallationKit-x64.bat" workingdir="${Workspace.Path}\Build">
 		</exec>
-		<exec program="InstallationKit-ia64.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
+		<exec program="InstallationKit-ia64.bat" workingdir="${Workspace.Path}\Build">
 	    	</exec>
 	    	
         <!-- Zip the EXE (used for HTTP downloads where we dont want an EXE) -->
@@ -684,7 +687,7 @@
 	<target name="Perforce.Label">
 		<!--p4label label="sqlsecure_${SQLsecure.BuildLabel}" view="${Perforce.View}"/-->
 		<!--p4labelsync label="sqlsecure_${SQLsecure.BuildLabel}"  view="${Perforce.View}"/-->
-		<exec program="LockLabel.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
+		<exec program="LockLabel.bat" workingdir="${Workspace.Path}\Build">
 			<arg value="sqlsecure_${SQLsecure.BuildLabel}"/>
 	    	</exec>
 	</target>
@@ -696,7 +699,7 @@
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
 	      		<arg value="C:\Idera\SQLsecure_${SQLsecure.BuildLabel}.zip"/>
-	      		<arg value="C:\Idera\SQLsecure\*.*"/>
+	      		<arg value="${Workspace.Path}\*.*"/>
 	    	</exec>
 	</target>
 	
