@@ -347,16 +347,16 @@ switch (pADORecordSetObj(0))
                 bUpgradeDAL = TRUE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
-			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");  
 
-			 case "2900":
+			case "2900":
                 
                 bUpgradeDAL = TRUE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
-			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
-				
-		    case "3000":
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");		    
+
+			 case "3000":
                 
                 bUpgradeDAL = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
@@ -427,8 +427,15 @@ switch (pADORecordSetObj(0))
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
 			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			
+			case "2900":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");    
 
-	        case "2900":
+	        case "3000":
  
                 bUpgrade = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
@@ -1629,8 +1636,13 @@ switch (pADORecordSetObj(0))
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
 			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");  
 			 
-			 case "2900":
-                
+			  case "2900":   
+			 	bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");   
+                                                                
+             case "3000":
                 bUpgradeDAL = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
@@ -1698,6 +1710,13 @@ switch (pADORecordSetObj(0))
 			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");   
 			    
 	        case "2900":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");  
+			    
+	        case "3000":
  
                 bUpgrade = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
