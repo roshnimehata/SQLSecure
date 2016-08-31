@@ -177,7 +177,7 @@
 
 	<!-- <property name="SQLsecure.Obfuscate.Output" value="${SQLsecure.Compile.Output}/obfuscated"/> -->
 
-	<property name="SQLsecure.Development.Builds" value="//iderafs.redhouse.hq/Development/Development/SQLsecure/Builds/Version 2.8"/>
+	
 	<property name="SQLsecure.Development.Archives" value="//iderafs.redhouse.hq/Development/Development/SQLsecure/Archives/"/>
 
 	<!-- Perforce Information -->
@@ -190,9 +190,7 @@
 	<!-- Version Information -->
 	<property name="Build.StartDate" value="03/01/2012"/>
 	
-	<!-- Build share -->
-	<property name="dir.Development.SQLsecure.Builds" value="\\iderafs.redhouse.hq\Development\Development\SQLsecure\Builds"/>
-
+	
 	<!-- ***************************************************************************** -->
 	<!--                            Build Steps                                        -->
 	<!-- ***************************************************************************** -->
@@ -635,7 +633,10 @@
 		
 		<!-- Set the build label used for P4 labeling, output dir & zip file -->
 		<property name="SQLsecure.BuildVersion" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.buildnumber}.0" />
+		
 		<property name="SQLsecure.BuildLabel" value="${SQLsecure.BuildVersion}_${SQLsecure.Incremental.Label}" />
+		
+
 	</target>
 
 	<target name="Perforce.Sync">
@@ -659,6 +660,11 @@
 		<!-- Set the build label used for P4 labeling, output dir & zip file -->
 		<property name="SQLsecure.BuildVersion" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.buildnumber}.0" />
 		<property name="SQLsecure.BuildLabel" value="${SQLsecure.BuildVersion}" />
+		
+		<!-- Build share -->
+	<property name="SQLsecure.Development.Builds" value="//iderafs.redhouse.hq/Development/Development/SQLsecure/Builds/Version ${SQLsecure.major}.${SQLsecure.minor}/${SQLsecure.buildbranch}"/>
+	<property name="dir.Development.SQLsecure.Builds" value="\\iderafs.redhouse.hq\Development\Development\SQLsecure\Builds\Version ${SQLsecure.major}.${SQLsecure.minor}\${SQLsecure.buildbranch}"/>
+
 	</target>
 	
 	<target name="Build.GenerateCommonAssemblyInfo">
