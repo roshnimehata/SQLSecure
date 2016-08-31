@@ -31,7 +31,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                thumbprint ,
                                attested_by ,
                                pvt_key_last_backup_date 
-                           FROM {0}.sys.certificates";
+                           FROM [{0}].sys.certificates";
 
         private const string query2005 = @"SELECT name ,
                                certificate_id ,
@@ -49,7 +49,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                thumbprint ,
                                attested_by ,
                                NULL AS pvt_key_last_backup_date 
-                           FROM {0}.sys.certificates";
+                           FROM [{0}].sys.certificates";
 
 
         public static string CreateQuery(Database database, ServerVersion serverVersion)
