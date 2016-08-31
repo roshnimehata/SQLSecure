@@ -29,7 +29,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
     {
         #region Types
 
-        public class RegisteredServerList: List<RegisteredServer>
+        public class RegisteredServerList : List<RegisteredServer>
         {
             /// <summary>
             /// Searches for the Registered Server with a ConnectionName matching the passed Name ignoring any port number
@@ -253,6 +253,15 @@ namespace Idera.SQLsecure.UI.Console.Sql
         {
             get { return m_IsValid ? m_ConnectionStringBuilder.ConnectionString : ""; }
         }
+
+        public SqlConnection GetOpennedConnection()
+        {
+            var conn = new SqlConnection(Program.gController.Repository.ConnectionString);
+            conn.Open();
+            return conn;
+        }
+
+
 
         public string UserName
         {
@@ -594,7 +603,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         }
         #endregion
 
-  
+
         static public void addLogin(string storedProcName, string loginName)
         {
             string safeLoginName = SqlHelper.CreateSafeString(loginName);
@@ -616,12 +625,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
             catch (SqlException ex)
             {
                 string message = string.Empty;
-                switch((uint)ex.Number)
+                switch ((uint)ex.Number)
                 {
                     case 0x3ab0:  // Group already exist
                     case 0x3aaf: // Login already exist, don't show error
-                        // Do nothing
-                    break;
+                                 // Do nothing
+                        break;
                     case 0x3c29: // Name format is OK, but name not found
                     case 0x3c2f: // Not valid format for windows name DOMAIN\user
                         message = string.Format(Utility.ErrorMsgs.AddLoginErrorInvalidUser, safeLoginName);
@@ -642,8 +651,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         static public void deleteLogin(string loginName)
         {
-            string sql = String.Format( "exec master..sp_revokelogin {0}",
-                                         SqlHelper.CreateSafeString(loginName) );
+            string sql = String.Format("exec master..sp_revokelogin {0}",
+                                         SqlHelper.CreateSafeString(loginName));
             try
             {
                 using (SqlConnection connection = new SqlConnection(Program.gController.Repository.ConnectionString))
@@ -663,7 +672,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         //--------------------------------------------------------------------
         // AddToRole
         //--------------------------------------------------------------------
-        static public void AddToRole( string login, string rolename )
+        static public void AddToRole(string login, string rolename)
         {
             string sql = String.Format("exec master..sp_addsrvrolemember {0}, {1}",
                                         SqlHelper.CreateSafeString(login),
@@ -685,12 +694,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         }
 
-        
+
 
         //--------------------------------------------------------------------
         // RemoveFromRole
         //--------------------------------------------------------------------
-        static public void RemoveFromRole( string login, string rolename )
+        static public void RemoveFromRole(string login, string rolename)
         {
             string sql = String.Format("exec master..sp_dropsrvrolemember {0}, {1}",
                                         SqlHelper.CreateSafeString(login),
@@ -772,7 +781,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_notificationProvider = Idera.SQLsecure.Core.Accounts.NotificationProvider.LoadNotificationProvider(m_ConnectionStringBuilder.ConnectionString, Utility.SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry());
         }
 
-       
+
         #region License Management
 
         public void ResetLicense()
@@ -940,5 +949,5 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         #endregion
     }
-          
+
 }

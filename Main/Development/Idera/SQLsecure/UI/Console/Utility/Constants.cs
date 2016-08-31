@@ -52,7 +52,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
         Report_RiskAssessment,
         Report_CompareAssessments,
         Report_CompareSnapshots,
-        Report_LoginVulnerability
+        Report_LoginVulnerability,
+        ServerGroupTags,
+        Report_SuspectSqlLogins
     }
 
     // These are the commands that need to be processed
@@ -99,8 +101,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static String OPTIONS_FILE_EXTENSION_STR = @".options.xml";
 
-        public const int DalVersion = 2900;
-        public const int SchemaVersion = 2900;
+        public const int DalVersion = 3000;
+        public const int SchemaVersion = 3000;
 
         public const string COPYRIGHT_MSG = @"© Copyright 2005-2016 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
 
@@ -219,6 +221,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public static String ReportNode_ServersWithDangerousGroups = ReportTitle_ServersWithDangerousGroups;
         public static String ReportNode_SystemAdministratorVulnerability = ReportTitle_SystemAdministratorVulnerability;
         public static String ReportNode_SuspectWindowsAccounts = ReportTitle_SuspectWindowsAccounts;
+        public static String ReportNode_SuspectSqlLogins = ReportTitle_SuspectSqlLogins;
         public static String ReportNode_VulnerableFixedRoles = ReportTitle_VulnerableFixedRoles;
         public static String ReportNode_CMDShellVulnerability = ReportTitle_CMDShellVulnerability;
         public static String ReportNode_MailVulnerability = ReportTitle_MailVulnerability;
@@ -241,6 +244,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const String ManagementNode_Logins = @"Logins";
         public const String ManagementNode_ManagePolicies = @"Manage Policies";
         public static String ManagementNode_Activity = PRODUCT_STR + @" Activity";
+        public const String TManagementNode_TagsNode = "Server Group Tags";
+
 
         // Snapshot Nodes
         public const string MoreSnapshots = "more Snapshots...";
@@ -289,6 +294,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         #region Common Tasks
 
         public const String Task_Title_Register = @"Register a SQL Server";
+        public const String Task_Title_Import = @"Import SQL Servers";
         public const String Task_Descr_Register = @"Start auditing security data for a SQL Server and its databases";
         public const String Task_Title_Configure = @"Configure Audit Settings";
         public const String Task_Title_Configure_Short = @"Configure";
@@ -399,6 +405,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string ReportTitle_SuspectWindowsAccounts = @"Suspect Windows Accounts";
         public static string ReportSummary_SuspectWindowsAccounts = @"Show all the unresolved Windows Accounts that have Server Logins.";
 
+        public const string ReportTitle_SuspectSqlLogins = @"Suspect SQL Logins";
+        public static string ReportSummary_SuspectSqlLogins = @"Show all SQL server logins that do not have permissions.";
+        
         public const string ReportTitle_ServerLoginsAndUserMappings = @"Server Logins and User Mappings";
         public static string ReportSummary_ServerLoginsAndUserMappings = @"Show all Server Logins and associated Database User Mappings for each SQL Server instance being audited.";
 

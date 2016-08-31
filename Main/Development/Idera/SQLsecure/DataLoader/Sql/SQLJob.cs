@@ -14,31 +14,42 @@ namespace Idera.SQLsecure.Collector.Sql
     {
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Sql.SqlJob");
 
-        public static string GetJobsQuery = "SELECT  sj.name ," +
-                                            " sj.owner_sid ," +
-                                            " sj.enabled ," +
-                                            " sj.description ," +
-                                            " st.last_run_date ," +
-                                            " st.command ," +
-                                            " st.step_name, " +
-                                            " st.subsystem" +
-                                            " FROM    msdb.dbo.sysjobs sj" +
-                                            " JOIN [msdb].[sys].[servers] sv ON sj.originating_server_id = sv.server_id" +
-                                            " JOIN msdb.dbo.sysjobsteps st ON sj.job_id = st.job_id" +
-                                            " WHERE sv.name='{0}'";
+        public const string GetJobsQuery =
+            "SELECT  sj.name ," +
+            "	   sj.owner_sid ," +
+            "	   sj.enabled ," +
+            "	   sj.description ," +
+            "	   st.last_run_date ," +
+            "	   st.command ," +
+            "	   st.step_name, " +
+            "	   st.subsystem," +
+            "	   st.proxy_id" +
+            "    FROM    msdb.dbo.sysjobs sj" +
+            "	   JOIN [msdb].[sys].[servers] sv ON sj.originating_server_id = sv.server_id" +
+            "	   JOIN msdb.dbo.sysjobsteps st ON sj.job_id = st.job_id" +
+            "    WHERE sv.name=" +
+            "	 (" +
+            "	     select TOP 1 result.name from" +
+            "	     ( " +
+            "		    (select name from [msdb].[sys].[servers] where name = '{0}')" +
+            "		    UNION" +
+            "		    (select name from [msdb].[sys].[servers] where server_id = 0)" +
+            "	      ) as result" +
+            "	 )";
 
-        public static string GetJobsQuerySQL2000 = "SELECT  sj.name ," +
+        public const string GetJobsQuerySQL2000 = "SELECT  sj.name ," +
                                             " sj.owner_sid ," +
                                             " sj.enabled ," +
                                             " sj.description ," +
                                             " st.last_run_date ," +
                                             " st.command ," +
                                             " st.step_name, " +
-                                            " st.subsystem" +
+                                            " st.subsystem," +
+                                            " null as proxy_id" +
                                             " FROM    msdb.dbo.sysjobs sj" +
                                             " JOIN msdb.dbo.sysjobsteps st ON sj.job_id = st.job_id";
 
-        public static string GetProxiesQuery = "SELECT  sp.proxy_id proxyId ," +
+        public const string GetProxiesQuery = "SELECT  sp.proxy_id proxyId ," +
                                              "sp.name proxyName," +
                                              "sp.credential_id credentialId," +
                                              "enabled enabled," +
@@ -52,7 +63,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                              " JOIN msdb.dbo.syssubsystems sb ON ss.subsystem_id = sb.subsystem_id " +
                                              " JOIN sys.credentials sc ON sc.credential_id=sp.credential_id";
 
-        public static string GetProxiesQuerySQL2000 = "SELECT  NULL proxyId ," +
+        public const string GetProxiesQuerySQL2000 = "SELECT  NULL proxyId ," +
                                              "NULL proxyName," +
                                              "NULL credentialId," +
                                              "NULL enabled," +
@@ -63,28 +74,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                              "NULL credentialIdentity " +
                                              " WHERE 1 = 2 ";
 
-        public static string InsertJobsQuery = "INSERT INTO sqlsecure.dbo.sqljob" +
-                                               "  ([Name]" +
-                                               "  ,[Desciprion]" +
-                                               "  ,[Step]" +
-                                               "  ,[LastRunDate]" +
-                                               "  ,[Command]" +
-                                               "  ,[SubSystem]" +
-                                               "  ,[Ownersid]" +
-                                               "  ,[Enabled]" +
-                                               "  ,[SnapshotId])" +
-                                               "  VALUES" +
-                                               " (@Name" +
-                                               " ,@Desciprion" +
-                                               " ,@Step" +
-                                               " ,@LastRunDate" +
-                                               " ,@Command" +
-                                               " ,@SubSystem" +
-                                               " ,@Ownersid" +
-                                               " ,@Enabled" +
-                                               ",@SnapshotId)";
-
-
+       
         internal const int ColName = 0;
         internal const int ColOwnerSid = 1;
         internal const int ColEnabled = 2;
@@ -93,6 +83,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const int ColCommand = 5;
         internal const int ColStepName = 6;
         internal const int ColSubSystem = 7;
+        internal const int ColProxyId = 8;
 
 
         public static bool Process(ServerVersion version,
@@ -159,6 +150,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                     SqlString stepname = rdr.GetSqlString(ColStepName);
                                     SqlString subsystem = rdr.GetSqlString(ColSubSystem);
 
+                                    SqlInt32 proxyId = rdr.IsDBNull(ColProxyId)? SqlInt32.Null : rdr.GetInt32(ColProxyId);
+
                                     DataRow dr = dataTable.NewRow();
                                     dr[SqlJobDataTable.ParamSnapshotId] = snapshotid;
                                     dr[SqlJobDataTable.ParamName] = name;
@@ -169,6 +162,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     dr[SqlJobDataTable.ParamSubSystem] = subsystem;
                                     dr[SqlJobDataTable.ParamOwnerSid] = owner;
                                     dr[SqlJobDataTable.ParamEnabled] = enabled;
+                                    dr[SqlJobDataTable.Paramproxyid] = proxyId;
 
                                     dataTable.Rows.Add(dr);
                                     if (dataTable.Rows.Count > Constants.RowBatchSize)

@@ -117,7 +117,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         #region Overrides
 
-        protected override void showRefresh()
+        protected override void ShowRefresh()
         {
             Cursor = Cursors.WaitCursor;
             this._grid_Logins.BeginUpdate();
@@ -143,7 +143,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             {
                 string loginName = _grid_Logins.ActiveRow.Cells[colHeaderName].Text;
                 deleteLogin(loginName);
-                showRefresh();
+                ShowRefresh();
             }
         }
 
@@ -155,7 +155,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                 string access = _grid_Logins.ActiveRow.Cells[colHeaderServerAccess].Text;
                 string permission = _grid_Logins.ActiveRow.Cells[colHeaderPermission].Text;
                 Forms.Form_LoginProperties.Process(loginName, access, permission);
-                showRefresh();
+                ShowRefresh();
                 SetActiveRow(loginName);
             }
         }
@@ -166,7 +166,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             if (newLogin != null)
             {
-                showRefresh();
+                ShowRefresh();
                 SetActiveRow(newLogin);
             }
         }
@@ -428,7 +428,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            showRefresh();
+            ShowRefresh();
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)

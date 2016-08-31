@@ -38,6 +38,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool44 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_Compare");
             Infragistics.Win.UltraWinToolbars.RibbonGroup ribbonGroup2 = new Infragistics.Win.UltraWinToolbars.RibbonGroup("_ribbonGroup_Summary_ServerActions");
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool13 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_AddServer");
+            Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool45 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_ImportServers");
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool15 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_Configure");
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool17 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_CollectData");
             Infragistics.Win.UltraWinToolbars.RibbonGroup ribbonGroup3 = new Infragistics.Win.UltraWinToolbars.RibbonGroup("_ribbonGroup_Summary_CommonTasks");
@@ -87,33 +88,22 @@ namespace Idera.SQLsecure.UI.Console.Views
             Infragistics.Win.UltraWinToolbars.LabelTool labelTool11 = new Infragistics.Win.UltraWinToolbars.LabelTool("_labelTool_AuditDataCurrent");
             Infragistics.Win.UltraWinToolbars.LabelTool labelTool12 = new Infragistics.Win.UltraWinToolbars.LabelTool("_labelTool_AuditDataDate");
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool2 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_AddPolicy");
-            Infragistics.Win.Appearance appearance21 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool4 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_AddServer");
-            Infragistics.Win.Appearance appearance12 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool7 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_ExploreUsers");
-            Infragistics.Win.Appearance appearance13 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool8 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_ExploreObjects");
-            Infragistics.Win.Appearance appearance14 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool10 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_Configure");
-            Infragistics.Win.Appearance appearance15 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ControlContainerTool controlContainerTool1 = new Infragistics.Win.UltraWinToolbars.ControlContainerTool("_ControlContainerTool_Selection");
             Infragistics.Win.UltraWinToolbars.LabelTool labelTool1 = new Infragistics.Win.UltraWinToolbars.LabelTool("_labelTool_AuditDataBaseline");
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool11 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_SelectAuditData");
-            Infragistics.Win.Appearance appearance17 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.LabelTool labelTool5 = new Infragistics.Win.UltraWinToolbars.LabelTool("_labelTool_AuditDataCurrent");
             Infragistics.Win.UltraWinToolbars.LabelTool labelTool6 = new Infragistics.Win.UltraWinToolbars.LabelTool("_labelTool_AuditDataDate");
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool16 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_CollectData");
-            Infragistics.Win.Appearance appearance18 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool1 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_ExploreRoles");
-            Infragistics.Win.Appearance appearance19 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool3 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_ViewReports");
-            Infragistics.Win.Appearance appearance20 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool40 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_EditPolicy");
-            Infragistics.Win.Appearance appearance11 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool41 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_CopyPolicy");
-            Infragistics.Win.Appearance appearance16 = new Infragistics.Win.Appearance();
             Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool43 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_Compare");
-            Infragistics.Win.Appearance appearance22 = new Infragistics.Win.Appearance();
+            Infragistics.Win.UltraWinToolbars.ButtonTool buttonTool46 = new Infragistics.Win.UltraWinToolbars.ButtonTool("_buttonTool_ImportServers");
             this._contextMenuStrip_Users = new System.Windows.Forms.ContextMenuStrip(this.components);
             this._cmsi_Users_viewGroupMembers = new System.Windows.Forms.ToolStripMenuItem();
             this._cmsi_Users_showPermissions = new System.Windows.Forms.ToolStripMenuItem();
@@ -126,17 +116,17 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._panel_Body = new System.Windows.Forms.Panel();
             this._panel_View = new System.Windows.Forms.Panel();
             this._label_Msg = new System.Windows.Forms.Label();
-            this._policySummary = new Idera.SQLsecure.UI.Console.Controls.PolicySummary();
-            this._policyUsers = new Idera.SQLsecure.UI.Console.Controls.PolicyUsers();
-            this._sqlServerSettings = new Idera.SQLsecure.UI.Console.Controls.SqlServerSettings();
-            this._panel_Header = new System.Windows.Forms.Panel();
-            this._pictureBox_Tagline = new System.Windows.Forms.PictureBox();
             this._imageList = new System.Windows.Forms.ImageList(this.components);
             this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left = new Infragistics.Win.UltraWinToolbars.UltraToolbarsDockArea();
-            this._ultraToolbarsManager = new Infragistics.Win.UltraWinToolbars.UltraToolbarsManager(this.components);
             this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right = new Infragistics.Win.UltraWinToolbars.UltraToolbarsDockArea();
             this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top = new Infragistics.Win.UltraWinToolbars.UltraToolbarsDockArea();
             this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom = new Infragistics.Win.UltraWinToolbars.UltraToolbarsDockArea();
+            this._panel_Header = new System.Windows.Forms.Panel();
+            this._pictureBox_Tagline = new System.Windows.Forms.PictureBox();
+            this._policySummary = new Idera.SQLsecure.UI.Console.Controls.PolicySummary();
+            this._policyUsers = new Idera.SQLsecure.UI.Console.Controls.PolicyUsers();
+            this._sqlServerSettings = new Idera.SQLsecure.UI.Console.Controls.SqlServerSettings();
+            this._ultraToolbarsManager = new Infragistics.Win.UltraWinToolbars.UltraToolbarsManager(this.components);
             this._contextMenuStrip_Users.SuspendLayout();
             this._panel_Body.SuspendLayout();
             this._panel_View.SuspendLayout();
@@ -157,53 +147,53 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._cmsi_Users_Save,
             this._cmsi_Users_Print});
             this._contextMenuStrip_Users.Name = "_contextMenuStrip";
-            this._contextMenuStrip_Users.Size = new System.Drawing.Size(186, 148);
+            this._contextMenuStrip_Users.Size = new System.Drawing.Size(189, 148);
             // 
             // _cmsi_Users_viewGroupMembers
             // 
             this._cmsi_Users_viewGroupMembers.Name = "_cmsi_Users_viewGroupMembers";
-            this._cmsi_Users_viewGroupMembers.Size = new System.Drawing.Size(185, 22);
+            this._cmsi_Users_viewGroupMembers.Size = new System.Drawing.Size(188, 22);
             this._cmsi_Users_viewGroupMembers.Text = "View Group Members";
             // 
             // _cmsi_Users_showPermissions
             // 
             this._cmsi_Users_showPermissions.Name = "_cmsi_Users_showPermissions";
-            this._cmsi_Users_showPermissions.Size = new System.Drawing.Size(185, 22);
+            this._cmsi_Users_showPermissions.Size = new System.Drawing.Size(188, 22);
             this._cmsi_Users_showPermissions.Text = "Show Permissions";
             // 
             // _toolStripSeparator_Server
             // 
             this._toolStripSeparator_Server.Name = "_toolStripSeparator_Server";
-            this._toolStripSeparator_Server.Size = new System.Drawing.Size(182, 6);
+            this._toolStripSeparator_Server.Size = new System.Drawing.Size(185, 6);
             // 
             // _cmsi_Users_ColumnChooser
             // 
             this._cmsi_Users_ColumnChooser.Name = "_cmsi_Users_ColumnChooser";
-            this._cmsi_Users_ColumnChooser.Size = new System.Drawing.Size(185, 22);
+            this._cmsi_Users_ColumnChooser.Size = new System.Drawing.Size(188, 22);
             this._cmsi_Users_ColumnChooser.Text = "Select Columns";
             // 
             // _cmsi_Users_viewGroupByBox
             // 
             this._cmsi_Users_viewGroupByBox.CheckOnClick = true;
             this._cmsi_Users_viewGroupByBox.Name = "_cmsi_Users_viewGroupByBox";
-            this._cmsi_Users_viewGroupByBox.Size = new System.Drawing.Size(185, 22);
+            this._cmsi_Users_viewGroupByBox.Size = new System.Drawing.Size(188, 22);
             this._cmsi_Users_viewGroupByBox.Text = "Group By Box";
             // 
             // _toolStripSeparator_Grid
             // 
             this._toolStripSeparator_Grid.Name = "_toolStripSeparator_Grid";
-            this._toolStripSeparator_Grid.Size = new System.Drawing.Size(182, 6);
+            this._toolStripSeparator_Grid.Size = new System.Drawing.Size(185, 6);
             // 
             // _cmsi_Users_Save
             // 
             this._cmsi_Users_Save.Name = "_cmsi_Users_Save";
-            this._cmsi_Users_Save.Size = new System.Drawing.Size(185, 22);
+            this._cmsi_Users_Save.Size = new System.Drawing.Size(188, 22);
             this._cmsi_Users_Save.Text = "Save to Excel";
             // 
             // _cmsi_Users_Print
             // 
             this._cmsi_Users_Print.Name = "_cmsi_Users_Print";
-            this._cmsi_Users_Print.Size = new System.Drawing.Size(185, 22);
+            this._cmsi_Users_Print.Size = new System.Drawing.Size(188, 22);
             this._cmsi_Users_Print.Text = "Print";
             // 
             // _panel_Body
@@ -211,23 +201,23 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._panel_Body.Controls.Add(this._panel_View);
             this._panel_Body.Controls.Add(this._panel_Header);
             this._panel_Body.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._panel_Body.Location = new System.Drawing.Point(0, 122);
+            this._panel_Body.Location = new System.Drawing.Point(0, 127);
             this._panel_Body.Name = "_panel_Body";
-            this._panel_Body.Size = new System.Drawing.Size(640, 439);
+            this._panel_Body.Size = new System.Drawing.Size(640, 434);
             this._panel_Body.TabIndex = 6;
             // 
             // _panel_View
             // 
-            this._panel_View.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._panel_View.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._panel_View.Controls.Add(this._label_Msg);
             this._panel_View.Controls.Add(this._policySummary);
             this._panel_View.Controls.Add(this._policyUsers);
             this._panel_View.Controls.Add(this._sqlServerSettings);
             this._panel_View.Location = new System.Drawing.Point(0, 0);
             this._panel_View.Name = "_panel_View";
-            this._panel_View.Size = new System.Drawing.Size(640, 387);
+            this._panel_View.Size = new System.Drawing.Size(640, 382);
             this._panel_View.TabIndex = 8;
             // 
             // _label_Msg
@@ -239,6 +229,78 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._label_Msg.TabIndex = 11;
             this._label_Msg.Text = "message area";
             this._label_Msg.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // _imageList
+            // 
+            this._imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_imageList.ImageStream")));
+            this._imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this._imageList.Images.SetKeyName(0, "ExploreUserPermissions_16.png");
+            this._imageList.Images.SetKeyName(1, "ExploreObjectPermissions_16.png");
+            // 
+            // _View_Main_SecuritySummary_Toolbars_Dock_Area_Left
+            // 
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(255)))));
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.DockedPosition = Infragistics.Win.UltraWinToolbars.DockedPosition.Left;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.Location = new System.Drawing.Point(0, 127);
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.Name = "_View_Main_SecuritySummary_Toolbars_Dock_Area_Left";
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.Size = new System.Drawing.Size(0, 434);
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.ToolbarsManager = this._ultraToolbarsManager;
+            // 
+            // _View_Main_SecuritySummary_Toolbars_Dock_Area_Right
+            // 
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(255)))));
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.DockedPosition = Infragistics.Win.UltraWinToolbars.DockedPosition.Right;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.Location = new System.Drawing.Point(640, 127);
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.Name = "_View_Main_SecuritySummary_Toolbars_Dock_Area_Right";
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.Size = new System.Drawing.Size(0, 434);
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.ToolbarsManager = this._ultraToolbarsManager;
+            // 
+            // _View_Main_SecuritySummary_Toolbars_Dock_Area_Top
+            // 
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(255)))));
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.DockedPosition = Infragistics.Win.UltraWinToolbars.DockedPosition.Top;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.Location = new System.Drawing.Point(0, 0);
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.Name = "_View_Main_SecuritySummary_Toolbars_Dock_Area_Top";
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.Size = new System.Drawing.Size(640, 127);
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.ToolbarsManager = this._ultraToolbarsManager;
+            // 
+            // _View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom
+            // 
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(255)))));
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.DockedPosition = Infragistics.Win.UltraWinToolbars.DockedPosition.Bottom;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.ForeColor = System.Drawing.SystemColors.ControlText;
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.Location = new System.Drawing.Point(0, 561);
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.Name = "_View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom";
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.Size = new System.Drawing.Size(640, 0);
+            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.ToolbarsManager = this._ultraToolbarsManager;
+            // 
+            // _panel_Header
+            // 
+            this._panel_Header.BackgroundImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.UI_header;
+            this._panel_Header.Controls.Add(this._pictureBox_Tagline);
+            this._panel_Header.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this._panel_Header.Location = new System.Drawing.Point(0, 384);
+            this._panel_Header.Name = "_panel_Header";
+            this._panel_Header.Size = new System.Drawing.Size(640, 50);
+            this._panel_Header.TabIndex = 7;
+            // 
+            // _pictureBox_Tagline
+            // 
+            this._pictureBox_Tagline.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._pictureBox_Tagline.BackColor = System.Drawing.Color.Transparent;
+            this._pictureBox_Tagline.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.UI_header_tagline;
+            this._pictureBox_Tagline.Location = new System.Drawing.Point(303, -1);
+            this._pictureBox_Tagline.Name = "_pictureBox_Tagline";
+            this._pictureBox_Tagline.Size = new System.Drawing.Size(337, 50);
+            this._pictureBox_Tagline.TabIndex = 6;
+            this._pictureBox_Tagline.TabStop = false;
             // 
             // _policySummary
             // 
@@ -266,45 +328,6 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._sqlServerSettings.TabIndex = 0;
             this._sqlServerSettings.Visible = false;
             // 
-            // _panel_Header
-            // 
-            this._panel_Header.BackgroundImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.UI_header;
-            this._panel_Header.Controls.Add(this._pictureBox_Tagline);
-            this._panel_Header.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this._panel_Header.Location = new System.Drawing.Point(0, 389);
-            this._panel_Header.Name = "_panel_Header";
-            this._panel_Header.Size = new System.Drawing.Size(640, 50);
-            this._panel_Header.TabIndex = 7;
-            // 
-            // _pictureBox_Tagline
-            // 
-            this._pictureBox_Tagline.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._pictureBox_Tagline.BackColor = System.Drawing.Color.Transparent;
-            this._pictureBox_Tagline.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.UI_header_tagline;
-            this._pictureBox_Tagline.Location = new System.Drawing.Point(303, -1);
-            this._pictureBox_Tagline.Name = "_pictureBox_Tagline";
-            this._pictureBox_Tagline.Size = new System.Drawing.Size(337, 50);
-            this._pictureBox_Tagline.TabIndex = 6;
-            this._pictureBox_Tagline.TabStop = false;
-            // 
-            // _imageList
-            // 
-            this._imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("_imageList.ImageStream")));
-            this._imageList.TransparentColor = System.Drawing.Color.Transparent;
-            this._imageList.Images.SetKeyName(0, "ExploreUserPermissions_16.png");
-            this._imageList.Images.SetKeyName(1, "ExploreObjectPermissions_16.png");
-            // 
-            // _View_Main_SecuritySummary_Toolbars_Dock_Area_Left
-            // 
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(255)))));
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.DockedPosition = Infragistics.Win.UltraWinToolbars.DockedPosition.Left;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.Location = new System.Drawing.Point(0, 122);
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.Name = "_View_Main_SecuritySummary_Toolbars_Dock_Area_Left";
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.Size = new System.Drawing.Size(0, 439);
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Left.ToolbarsManager = this._ultraToolbarsManager;
-            // 
             // _ultraToolbarsManager
             // 
             this._ultraToolbarsManager.DesignerFlags = 1;
@@ -330,12 +353,15 @@ namespace Idera.SQLsecure.UI.Console.Views
             ribbonGroup2.Caption = "Server Actions";
             buttonTool13.InstanceProps.MinimumSizeOnRibbon = Infragistics.Win.UltraWinToolbars.RibbonToolSize.Large;
             buttonTool13.InstanceProps.PreferredSizeOnRibbon = Infragistics.Win.UltraWinToolbars.RibbonToolSize.Large;
+            buttonTool45.InstanceProps.MinimumSizeOnRibbon = Infragistics.Win.UltraWinToolbars.RibbonToolSize.Large;
+            buttonTool45.InstanceProps.PreferredSizeOnRibbon = Infragistics.Win.UltraWinToolbars.RibbonToolSize.Large;
             buttonTool15.InstanceProps.MinimumSizeOnRibbon = Infragistics.Win.UltraWinToolbars.RibbonToolSize.Large;
             buttonTool15.InstanceProps.PreferredSizeOnRibbon = Infragistics.Win.UltraWinToolbars.RibbonToolSize.Large;
             buttonTool17.InstanceProps.MinimumSizeOnRibbon = Infragistics.Win.UltraWinToolbars.RibbonToolSize.Large;
             buttonTool17.InstanceProps.PreferredSizeOnRibbon = Infragistics.Win.UltraWinToolbars.RibbonToolSize.Large;
             ribbonGroup2.Tools.AddRange(new Infragistics.Win.UltraWinToolbars.ToolBase[] {
             buttonTool13,
+            buttonTool45,
             buttonTool15,
             buttonTool17});
             ribbonGroup3.Caption = "Common Tasks";
@@ -486,47 +512,88 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._ultraToolbarsManager.ShowFullMenusDelay = 500;
             this._ultraToolbarsManager.ShowQuickCustomizeButton = false;
             this._ultraToolbarsManager.Style = Infragistics.Win.UltraWinToolbars.ToolbarStyle.WindowsVista;
-            appearance21.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.environment_add_32;
-            buttonTool2.SharedProps.AppearancesLarge.Appearance = appearance21;
             buttonTool2.SharedProps.Caption = "Create a Policy";
-            buttonTool2.SharedProps.DisplayStyle = Infragistics.Win.UltraWinToolbars.ToolDisplayStyle.ImageAndText;
-            appearance12.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.server_add_32;
-            buttonTool4.SharedProps.AppearancesLarge.Appearance = appearance12;
             buttonTool4.SharedProps.Caption = "Register a Server";
-            appearance13.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_UserPermissions_32;
-            buttonTool7.SharedProps.AppearancesLarge.Appearance = appearance13;
             buttonTool7.SharedProps.Caption = "Explore Users";
-            appearance14.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.box_view_32;
-            buttonTool8.SharedProps.AppearancesLarge.Appearance = appearance14;
             buttonTool8.SharedProps.Caption = "Explore Objects";
-            appearance15.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.configure_audit_settings_32;
-            buttonTool10.SharedProps.AppearancesLarge.Appearance = appearance15;
             buttonTool10.SharedProps.Caption = "Configure Audit Settings";
-            controlContainerTool1.SharedProps.Width = 211;
             labelTool1.SharedProps.Caption = "Baseline";
-            appearance17.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_DataCollectionFilters_32;
-            buttonTool11.SharedProps.AppearancesLarge.Appearance = appearance17;
             buttonTool11.SharedProps.Caption = "Change Settings";
             labelTool5.SharedProps.Caption = "Use current data";
             labelTool6.SharedProps.Caption = "Date";
+            buttonTool16.SharedProps.Caption = "Take a Snapshot";
+            buttonTool1.SharedProps.Caption = "Explore Roles";
+            buttonTool3.SharedProps.Caption = "View Reports";
+            buttonTool40.SharedProps.Caption = "Edit Settings";
+            buttonTool41.SharedProps.Caption = "Save as New Assessment";
+            buttonTool43.SharedProps.Caption = "Compare Assessments";
+            buttonTool46.SharedProps.Caption = "Import SQL Servers";
+            Infragistics.Win.Appearance appearance21 = new Infragistics.Win.Appearance();
+
+            Infragistics.Win.Appearance appearance12 = new Infragistics.Win.Appearance();
+
+            Infragistics.Win.Appearance appearance13 = new Infragistics.Win.Appearance();
+
+            Infragistics.Win.Appearance appearance14 = new Infragistics.Win.Appearance();
+
+            Infragistics.Win.Appearance appearance15 = new Infragistics.Win.Appearance();
+
+
+
+            Infragistics.Win.Appearance appearance17 = new Infragistics.Win.Appearance();
+
+
+            Infragistics.Win.Appearance appearance18 = new Infragistics.Win.Appearance();
+
+            Infragistics.Win.Appearance appearance19 = new Infragistics.Win.Appearance();
+
+            Infragistics.Win.Appearance appearance20 = new Infragistics.Win.Appearance();
+
+            Infragistics.Win.Appearance appearance11 = new Infragistics.Win.Appearance();
+
+            Infragistics.Win.Appearance appearance16 = new Infragistics.Win.Appearance();
+
+            Infragistics.Win.Appearance appearance22 = new Infragistics.Win.Appearance();
+            Infragistics.Win.Appearance appearance23 = new Infragistics.Win.Appearance();
+            appearance23.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.ImportServers_32;
+
+            buttonTool46.SharedProps.AppearancesLarge.Appearance = appearance23;
+            appearance21.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.environment_add_32;
+            buttonTool2.SharedProps.AppearancesLarge.Appearance = appearance21;
+
+
+            appearance12.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.server_add_32;
+            buttonTool4.SharedProps.AppearancesLarge.Appearance = appearance12;
+
+            appearance13.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_UserPermissions_32;
+            buttonTool7.SharedProps.AppearancesLarge.Appearance = appearance13;
+
+            appearance14.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.box_view_32;
+            buttonTool8.SharedProps.AppearancesLarge.Appearance = appearance14;
+
+            appearance15.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.configure_audit_settings_32;
+            buttonTool10.SharedProps.AppearancesLarge.Appearance = appearance15;
+
+            appearance17.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_DataCollectionFilters_32;
+            buttonTool11.SharedProps.AppearancesLarge.Appearance = appearance17;
+
             appearance18.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.camera_32;
             buttonTool16.SharedProps.AppearancesLarge.Appearance = appearance18;
-            buttonTool16.SharedProps.Caption = "Take a Snapshot";
+
             appearance19.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_ServerRoles_32;
             buttonTool1.SharedProps.AppearancesLarge.Appearance = appearance19;
-            buttonTool1.SharedProps.Caption = "Explore Roles";
+
             appearance20.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.report_32;
             buttonTool3.SharedProps.AppearancesLarge.Appearance = appearance20;
-            buttonTool3.SharedProps.Caption = "View Reports";
+
             appearance11.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.environment_edit_32;
             buttonTool40.SharedProps.AppearancesLarge.Appearance = appearance11;
-            buttonTool40.SharedProps.Caption = "Edit Settings";
+
             appearance16.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.Assessment_SaveAs_48;
             buttonTool41.SharedProps.AppearancesLarge.Appearance = appearance16;
-            buttonTool41.SharedProps.Caption = "Save as New Assessment";
+
             appearance22.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_AssessmentCompare_48;
             buttonTool43.SharedProps.AppearancesLarge.Appearance = appearance22;
-            buttonTool43.SharedProps.Caption = "Compare Assessments";
             this._ultraToolbarsManager.Tools.AddRange(new Infragistics.Win.UltraWinToolbars.ToolBase[] {
             buttonTool2,
             buttonTool4,
@@ -543,43 +610,11 @@ namespace Idera.SQLsecure.UI.Console.Views
             buttonTool3,
             buttonTool40,
             buttonTool41,
-            buttonTool43});
+            buttonTool43,
+            buttonTool46});
+            this._ultraToolbarsManager.BeforeRibbonTabSelected += new Infragistics.Win.UltraWinToolbars.BeforeRibbonTabSelectedEventHandler(this._ultraToolbarsManager_BeforeRibbonTabSelected);
             this._ultraToolbarsManager.BeforeToolbarListDropdown += new Infragistics.Win.UltraWinToolbars.BeforeToolbarListDropdownEventHandler(this._ultraToolbarsManager_BeforeToolbarListDropdown);
             this._ultraToolbarsManager.ToolClick += new Infragistics.Win.UltraWinToolbars.ToolClickEventHandler(this._ultraToolbarsManager_ToolClick);
-            this._ultraToolbarsManager.BeforeRibbonTabSelected += new Infragistics.Win.UltraWinToolbars.BeforeRibbonTabSelectedEventHandler(this._ultraToolbarsManager_BeforeRibbonTabSelected);
-            // 
-            // _View_Main_SecuritySummary_Toolbars_Dock_Area_Right
-            // 
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(255)))));
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.DockedPosition = Infragistics.Win.UltraWinToolbars.DockedPosition.Right;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.Location = new System.Drawing.Point(640, 122);
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.Name = "_View_Main_SecuritySummary_Toolbars_Dock_Area_Right";
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.Size = new System.Drawing.Size(0, 439);
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Right.ToolbarsManager = this._ultraToolbarsManager;
-            // 
-            // _View_Main_SecuritySummary_Toolbars_Dock_Area_Top
-            // 
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(255)))));
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.DockedPosition = Infragistics.Win.UltraWinToolbars.DockedPosition.Top;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.Location = new System.Drawing.Point(0, 0);
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.Name = "_View_Main_SecuritySummary_Toolbars_Dock_Area_Top";
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.Size = new System.Drawing.Size(640, 122);
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Top.ToolbarsManager = this._ultraToolbarsManager;
-            // 
-            // _View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom
-            // 
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.AccessibleRole = System.Windows.Forms.AccessibleRole.Grouping;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(219)))), ((int)(((byte)(255)))));
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.DockedPosition = Infragistics.Win.UltraWinToolbars.DockedPosition.Bottom;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.ForeColor = System.Drawing.SystemColors.ControlText;
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.Location = new System.Drawing.Point(0, 561);
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.Name = "_View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom";
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.Size = new System.Drawing.Size(640, 0);
-            this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom.ToolbarsManager = this._ultraToolbarsManager;
             // 
             // View_Main_SecuritySummary
             // 
@@ -593,8 +628,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             this.Controls.Add(this._View_Main_SecuritySummary_Toolbars_Dock_Area_Bottom);
             this.Name = "View_Main_SecuritySummary";
             this.Size = new System.Drawing.Size(640, 561);
-            this.Leave += new System.EventHandler(this.View_Main_SecuritySummary_Leave);
             this.Enter += new System.EventHandler(this.View_Main_SecuritySummary_Enter);
+            this.Leave += new System.EventHandler(this.View_Main_SecuritySummary_Leave);
             this._contextMenuStrip_Users.ResumeLayout(false);
             this._panel_Body.ResumeLayout(false);
             this._panel_View.ResumeLayout(false);

@@ -35,7 +35,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string IderaProducts = @"http://www.idera.com/Products/Default.aspx";
         public const string CheckUpdates = @"http://www.idera.com/webscripts/VersionCheck.aspx?productid={0}&v={1}";
         public const string productID = "sqlsecure";
-        public const string productVersion = "2900";
+        public const string productVersion = "3000";
         public const string ABOUT_IDERA = "http://wiki.idera.com/x/0whK";
 
         #endregion
@@ -197,6 +197,11 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const String ManagePoliciesHelpTopic = @"/x/WQlK";//Manage Policies
         public const String ManagePoliciesConceptTopic = @"/x/WQlK";//Manage Policies
 
+
+        // View - Manage Tags
+        public const String ManageTagsHelpTopic = @"/x/CgDwAw";//Manage tags
+        public const String ManageTagsConceptTopic = @"/x/CgDwAw";//Manage tags
+
         //// Dialog Help Topics
         public const string CompareAssessmentsSummaryHelpTopic = @"/x/SQlK";//Compare Assessment Summaries
         public const string CompareAssessmentsSecurityChecksHelpTopic = @"/x/SglK";//Compare Assessment Security Checks
@@ -301,6 +306,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string BaselineSnapshotHelpTopic = @"/x/CAlK";//Designate a baseline snapshot
         // Dialog - Set Report Server
         public const string SetReportServerHelpTopic = @"/x/TglK";//Use RS to Gen reports
+
+        public const string ImportServerHelpTopic = @"/x/nQPqAw";
 
         #region New for 2.5
 

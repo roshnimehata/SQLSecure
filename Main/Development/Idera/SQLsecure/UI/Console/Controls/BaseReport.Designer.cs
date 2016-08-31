@@ -1,3 +1,5 @@
+using Microsoft.Reporting.WinForms;
+
 namespace Idera.SQLsecure.UI.Console.Controls
 {
     partial class BaseReport
@@ -160,7 +162,6 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             //next line replaced because of compilation error for studio 2013
             this._reportViewer.Print += new System.ComponentModel.CancelEventHandler(this._reportViewer_Print);
-            //this._reportViewer.Print += new Microsoft.Reporting.WinForms.ReportPrintEventHandler(this._reportViewer_Print);
 
             this._reportViewer.Hyperlink += new Microsoft.Reporting.WinForms.HyperlinkEventHandler(this._reportViewer_Hyperlink);
             // 

@@ -499,8 +499,8 @@ namespace Idera.SQLsecure.Collector
                                                 m_Repository.ConnectionString,
                                                 programArgs.TargetInstance,
                                                 0,
-                                                Collector.Constants.ActivityType_Error,
-                                                Collector.Constants.ActivityEvent_Error,
+                                                Constants.ActivityType_Error,
+                                                Constants.ActivityEvent_Error,
                                                 "Target " + programArgs.TargetInstance + " could not be found");
                                             AppLog.WriteAppEventError(SQLsecureEvent.DlErrOpenTargetConnectionFailed,
                                                                       SQLsecureCat.DlValidationCat,

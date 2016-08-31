@@ -118,6 +118,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         Function = 45,
         Synonym = 46,
         SequenceObject = 48,
+        LinkedServer = 50,
         Unknown = 0xFF
     }
 
@@ -296,7 +297,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             AvailabilityGroups,
             AvailabilityGroup,
             AvailabilityGroupReplica,
-            SequenceObject
+            SequenceObject,
+            LinkedServer
         }
 
         // TypeEnum/Object type string name map element.
@@ -400,7 +402,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             "Always On Availability Groups",
             "Always On Availability Group",
             "Availability Group Replica",
-            "Sequence Object"
+            "Sequence Object",
+            "LinkedServer"
         };
 
         private static TypeStringElement[] m_TypeStringMap = new TypeStringElement[] {

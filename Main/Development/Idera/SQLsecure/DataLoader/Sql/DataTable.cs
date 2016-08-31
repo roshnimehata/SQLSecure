@@ -46,17 +46,17 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverprincipal");
-                dataTable.Columns.AddRange(new DataColumn[] { 
-                                                                colSnapshotId, 
-                                                                colPrincipalId, 
-                                                                colSid, 
-                                                                colName, 
-                                                                colType, 
-                                                                colServerAccess, 
-                                                                colServerDeny, 
-                                                                colDisabled, 
+                dataTable.Columns.AddRange(new DataColumn[] {
+                                                                colSnapshotId,
+                                                                colPrincipalId,
+                                                                colSid,
+                                                                colName,
+                                                                colType,
+                                                                colServerAccess,
+                                                                colServerDeny,
+                                                                colDisabled,
                                                                 colIsExpirationChecked,
-                                                                colIsPolicyChecked, 
+                                                                colIsPolicyChecked,
                                                                 colHashkey,
                                                                 colIsPasswordNull,
                                                                 colDefaultDatabase,
@@ -101,11 +101,11 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverprincipal");
-                dataTable.Columns.AddRange(new DataColumn[] { 
-                                                                colSnapshotId, 
-                                                                colPrincipalId, 
-                                                                colMemberPrincipalId, 
-                                                                colHashkey 
+                dataTable.Columns.AddRange(new DataColumn[] {
+                                                                colSnapshotId,
+                                                                colPrincipalId,
+                                                                colMemberPrincipalId,
+                                                                colHashkey
                                                             });
             }
 
@@ -139,16 +139,16 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("endpoint");
-                dataTable.Columns.AddRange(new DataColumn[] { 
-                                                                colSnapshotId, 
-                                                                colEndpointId, 
-                                                                colPrincipalId, 
-                                                                colName, 
-                                                                colType, 
-                                                                colProtocol, 
-                                                                colState, 
-                                                                colIsadminendpoint, 
-                                                                colHashkey 
+                dataTable.Columns.AddRange(new DataColumn[] {
+                                                                colSnapshotId,
+                                                                colEndpointId,
+                                                                colPrincipalId,
+                                                                colName,
+                                                                colType,
+                                                                colProtocol,
+                                                                colState,
+                                                                colIsadminendpoint,
+                                                                colHashkey
                                                             });
             }
 
@@ -190,7 +190,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverpermission");
-                dataTable.Columns.AddRange(new DataColumn[] { 
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colMajorId,
                                                                 colMinorId,
@@ -237,7 +237,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverfilterruleheader");
-                dataTable.Columns.AddRange(new DataColumn[] { 
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colWindowsGroupName,
                                                            });
@@ -271,7 +271,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverfilterruleheader");
-                dataTable.Columns.AddRange(new DataColumn[] { 
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colFilteruleheaderid,
                                                                 colRulename,
@@ -317,7 +317,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverfilterrule");
-                dataTable.Columns.AddRange(new DataColumn[] { 
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colFilteruleheaderid,
                                                                 colFilterruleid,
@@ -359,7 +359,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("windowsaccount");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colSid,
                                                                 colType,
@@ -398,7 +398,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("windowsgroupmember");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colGroupsid,
                                                                 colGroupmember,
@@ -433,7 +433,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serveroswindowsaccount");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colSid,
                                                                 colType,
@@ -470,7 +470,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serveroswindowsgroupmember");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colGroupsid,
                                                                 colGroupmember,
@@ -513,14 +513,14 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("databaseprincipal");
-                dataTable.Columns.AddRange(new DataColumn[] { 
-                                                                colSnapshotId, 
+                dataTable.Columns.AddRange(new DataColumn[] {
+                                                                colSnapshotId,
                                                                 colDbid,
                                                                 colUid,
                                                                 colOwner,
-                                                                colName, 
+                                                                colName,
                                                                 colUsersid,
-                                                                colType, 
+                                                                colType,
                                                                 colIsalias,
                                                                 colAltuid,
                                                                 colHasaccess,
@@ -566,12 +566,12 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverprincipal");
-                dataTable.Columns.AddRange(new DataColumn[] { 
-                                                                colSnapshotId, 
+                dataTable.Columns.AddRange(new DataColumn[] {
+                                                                colSnapshotId,
                                                                 colDbid,
                                                                 colGroupuid,
                                                                 colRolememberuid,
-                                                                colHashkey 
+                                                                colHashkey
                                                             });
             }
 
@@ -615,7 +615,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("databaseobject");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colDbid,
                                                                 colClassid,
@@ -674,7 +674,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("databaseschema");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colDbid,
                                                                 colSchemaid,
@@ -720,7 +720,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("databaseobjectpermission");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colDbid,
                                                                 colObjectid,
@@ -779,7 +779,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("databaseobjectpermission");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colDbid,
                                                                 colUid,
@@ -836,7 +836,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("databaseschemapermission");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colDbid,
                                                                 colSchemaid,
@@ -889,7 +889,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverservice");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colServiceType,
                                                                 colName,
@@ -934,7 +934,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverosobject");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 osObjectId,
                                                                 colObjectType,
@@ -978,14 +978,14 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverosobjectpermission");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 osObjectId,
                                                                 colAuditFlags,
                                                                 colFileSystemRights,
                                                                 colSID,
                                                                 colAccessType,
-                                                                colIsInherited                                                                
+                                                                colIsInherited
                                                             });
             }
 
@@ -1021,7 +1021,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("serverprotocol");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colSnapshotId,
                                                                 colProtocolName,
                                                                 colIPAddress,
@@ -1061,12 +1061,13 @@ namespace Idera.SQLsecure.Collector.Sql
                     colComand = new DataColumn(ParamCommand, typeof(SqlString)),
                     colSubSystem = new DataColumn(ParamSubSystem, typeof(SqlString)),
                     colOwnerSid = new DataColumn(ParamOwnerSid, typeof(SqlBinary)),
-                    colEnabled = new DataColumn(ParamEnabled, typeof(SqlInt16)))
+                    colEnabled = new DataColumn(ParamEnabled, typeof(SqlInt16)),
+                    colProxyId = new DataColumn(Paramproxyid, typeof(SqlInt32)))
             {
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("sqljob");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colJobId,
                                                                 colSnapshotid,
                                                                 colName,
@@ -1076,7 +1077,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colComand,
                                                                 colSubSystem,
                                                                 colOwnerSid,
-                                                                colEnabled
+                                                                colEnabled,
+                                                                colProxyId
                                                             });
             }
 
@@ -1093,6 +1095,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamStepName = "stepname";
         internal const string ParamCommand = "command";
         internal const string ParamSnapshotId = "SnapshotId";
+        internal const string Paramproxyid = "ProxyId";
 
 
         internal const string RepositoryTable = "SQLsecure.dbo.sqljob";
@@ -1109,7 +1112,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     colName = new DataColumn(ParamName, typeof(SqlString)),
                     colSubSystemId = new DataColumn(ParamSubSystemId, typeof(SqlInt32)),
                     colUserId = new DataColumn(ParamUserSid, typeof(SqlBinary)),
-                    colSubSystem= new DataColumn(ParamSubSystem, typeof(SqlString)),
+                    colSubSystem = new DataColumn(ParamSubSystem, typeof(SqlString)),
                     colCredentialId = new DataColumn(ParamCredentialId, typeof(SqlInt32)),
                     colCredentialName = new DataColumn(ParamCredentialName, typeof(SqlString)),
                     colCredentialIdentity = new DataColumn(ParamCredentialIdentity, typeof(SqlString)),
@@ -1118,7 +1121,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("sqljobproxy");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colProxyId,
                                                                 colSnapshotid,
                                                                 colName,
@@ -1146,7 +1149,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamCredentialName = "credentialName";
         internal const string ParamCredentialIdentity = "credentialIdentity";
 
-        internal const int ColProxyId =0;
+        internal const int ColProxyId = 0;
         internal const int ColName = 1;
         internal const int ColCredentialId = 2;
         internal const int ColEnabled = 3;
@@ -1180,7 +1183,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define itsParamumns.
                 // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("availabilitygroups");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                colGroupId,
                                                                colName,
                                                                colResourceId,
@@ -1239,7 +1242,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // Create the data table object & define itsParamumns.
                 // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
                 dataTable = new DataTable("availabilityreplicas");
-                dataTable.Columns.AddRange(new DataColumn[] {  
+                dataTable.Columns.AddRange(new DataColumn[] {
                                                                 colReplicaid ,
                                                                 colSnapshotid ,
                                                                 colGroupid ,
@@ -1277,7 +1280,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamModifyDate = "modifydate";
         internal const string ParamReplicaMetadataId = "replicametadataid";
 
-       
+
 
         internal const int ColReplicaid = 0;
         internal const int ColGroupId = 1;
@@ -1295,6 +1298,241 @@ namespace Idera.SQLsecure.Collector.Sql
 
 
         internal const string RepositoryTable = "SQLsecure.dbo.availabilityreplicas";
+    }
+
+
+    internal static class LinkedServersDataTable
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable;
+
+            using (DataColumn colSnapshotId = new DataColumn(ParamSnapshotId, typeof (SqlInt32)),
+                colServerId = new DataColumn(ParamServerId, typeof (SqlInt32)),
+                colServerName = new DataColumn(ParamServerName, typeof (SqlString)))
+            {
+                // Create the data table object & define itsParamumns.
+                // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("linkedserver");
+                dataTable.Columns.AddRange(new DataColumn[]
+                {
+                    colSnapshotId,
+                    colServerId,
+                    colServerName
+                });
+
+            }
+
+
+            return dataTable;
+        }
+
+
+        internal const string ParamSnapshotId = "snapshotid";
+        internal const string ParamServerId = "serverid";
+        internal const string ParamServerName = "servername";
+
+        internal const int ColServerId = 0;
+        internal const int ColServerName = 1;
+        internal const int ColSnapshotId = 2;
+
+        internal const string RepositoryTable = "SQLsecure.dbo.linkedserver";
+    }
+
+    internal static class LinkedServerPrincipalDataTable
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable;
+            using (DataColumn colId = new DataColumn(Id, typeof(SqlInt32)), 
+                colSnapshotId = new DataColumn(ParamSnapshotId, typeof(SqlInt32)),
+                colServerId = new DataColumn(ParamServerId, typeof(SqlInt32)),
+                colPrincipalName = new DataColumn(ParamPrincipalName, typeof (SqlString)))
+            {
+                // Create the data table object & define itsParamumns.
+                // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("linkedserverprincipal");
+                dataTable.Columns.AddRange(new DataColumn[]
+                {
+                    colId,
+                    colSnapshotId,
+                    colServerId,
+                    colPrincipalName
+                });
+
+            }
+
+            return dataTable;
+        }
+
+        internal const string Id = "lspid";
+        internal const string ParamSnapshotId = "snapshotid";
+        internal const string ParamServerId = "serverid";
+        internal const string ParamPrincipalName = "principal";
+
+        internal const int ColServerId = 0;
+        internal const int ColServerName = 1;
+        internal const int ColPrincipalName = 2;
+
+        internal const string RepositoryTable = "SQLsecure.dbo.linkedserverprincipal";
+    }
+
+    internal static class EncryptionKeyDataTable
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable = null;
+            using (DataColumn colKeyId = new DataColumn(ParamKeyId, typeof(SqlInt32)),
+                              colPrincipalId = new DataColumn(ParamPrincipalId, typeof(SqlInt32)),
+                              colName = new DataColumn(ParamName, typeof(SqlString)),
+                              colDbKeyId = new DataColumn(ParamDbKeyId, typeof(SqlInt32)),
+                              colKeyLength = new DataColumn(ParamKeyLength, typeof(SqlInt32)),
+                              colAlgorithm = new DataColumn(ParamAlgorithm, typeof(SqlString)),
+                              colAlgorithmDesc = new DataColumn(ParamAlgorithmDesc, typeof(SqlString)),
+                              colProviderType = new DataColumn(ParamProviderType, typeof(SqlString)),
+                              colDbId = new DataColumn(ParamDatabaseId, typeof(SqlInt32)),
+                              colSnapshotId = new DataColumn(ParamSnapshotId, typeof(SqlInt32)),
+                              colType = new DataColumn(ParamType, typeof(SqlString)))
+            {
+                // Create the data table object & define itsParamumns.
+                // NOTE : THE ORDER OF THEParamUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("encryptionkey");
+                dataTable.Columns.AddRange(new DataColumn[] {
+                                                              colKeyId,
+                                                              colName,
+                                                              colPrincipalId,
+                                                              colDbKeyId,
+                                                              colKeyLength,
+                                                              colAlgorithm,
+                                                              colAlgorithmDesc,
+                                                              colProviderType,
+                                                              colSnapshotId,
+                                                              colDbId,
+                                                              colType
+                                                             });
+
+            }
+            //todo add database id 
+            return dataTable;
+        }
+
+
+
+
+        internal const string ParamKeyId = "keyid";
+        internal const string ParamName = "name";
+        internal const string ParamPrincipalId = "principalid";
+        internal const string ParamDbKeyId = "dbkeyid";
+        internal const string ParamKeyLength = "keylength";
+        internal const string ParamAlgorithm = "algorithm";
+        internal const string ParamAlgorithmDesc = "algorithmdesc";
+        internal const string ParamProviderType = "providertype";
+        internal const string ParamDatabaseId = "databaseid";
+        internal const string ParamSnapshotId = "snapshotid";
+        internal const string ParamType = "key_type";
+
+
+
+
+
+
+        internal const int ColKeyId = 0;
+        internal const int ColName = 1;
+        internal const int ColPrincipalId = 2;
+        internal const int ColDbKeyId = 3;
+        internal const int ColKeyLength = 4;
+        internal const int ColAlgorithm = 5;
+        internal const int ColAlgorithmDesc = 6;
+        internal const int ColProviderType = 7;
+        internal const int ColSnapshotId = 8;
+        internal const int ColType = 9;
+
+
+
+
+
+        internal const string RepositoryTable = "SQLsecure.dbo.encryptionkey";
+    }
+
+    internal static class CertificateTable
+    {
+        internal const string RepositoryTable = "SQLsecure.dbo.databasecertificates";
+
+        internal const string CertId = "certid";
+        internal const string SnapshotId = "snapshotid";
+        internal const string DbId = "dbid";
+        internal const string CertificateName = "name";
+        internal const string CertificateId = "certificate_id";
+        internal const string PrincipalId = "principal_id";
+        internal const string KeyEncryptionType = "pvt_key_encryption_type";
+        internal const string KeyEncryptionTypeDesc = "pvt_key_encryption_type_desc";
+        internal const string IsActiveForBeginDialog = "is_active_for_begin_dialog";
+        internal const string IssuerName = "issuer_name";
+        internal const string CertSerialNumber = "cert_serial_number";
+        internal const string Sid = "sid";
+        internal const string StringSid = "string_sid";
+        internal const string Subject = "subject";
+        internal const string ExpiryDate = "expiry_date";
+        internal const string StartDate = "start_date";
+        internal const string Thumbprint = "thumbprint";
+        internal const string AttestedBy = "attested_by";
+        internal const string KeyLastBackupDate = "pvt_key_last_backup_date";
+
+
+
+        public static DataTable Create()
+        {
+            DataTable dataTable;
+            using (DataColumn
+                certId = new DataColumn(CertId, typeof(SqlInt32)),
+                snapshotId = new DataColumn(SnapshotId, typeof(SqlInt32)),
+                dbId = new DataColumn(DbId, typeof(SqlInt32)),
+                certificateName = new DataColumn(CertificateName, typeof(SqlString)),
+                certificateId = new DataColumn(CertificateId, typeof(SqlInt32)),
+                principalId = new DataColumn(PrincipalId, typeof(SqlInt32)),
+                keyEncryptionType = new DataColumn(KeyEncryptionType, typeof(SqlString)),
+                keyEncryptionTypeDesc = new DataColumn(KeyEncryptionTypeDesc, typeof(SqlString)),
+                isActiveForBeginDialog = new DataColumn(IsActiveForBeginDialog, typeof(SqlBoolean)),
+                issuerName = new DataColumn(IssuerName, typeof(SqlString)),
+                certSerialNumber = new DataColumn(CertSerialNumber, typeof(SqlString)),
+                sid = new DataColumn(Sid, typeof(SqlBinary)),
+                stringSid = new DataColumn(StringSid, typeof(SqlString)),
+                subject = new DataColumn(Subject, typeof(SqlString)),
+                expiryDate = new DataColumn(ExpiryDate, typeof(SqlDateTime)),
+                startDate = new DataColumn(StartDate, typeof(SqlDateTime)),
+               thumbprint = new DataColumn(Thumbprint, typeof(SqlBinary)),
+                attestedBy = new DataColumn(AttestedBy, typeof(SqlString)),
+                keyLastBackupDate = new DataColumn(KeyLastBackupDate, typeof(SqlDateTime)))
+            {
+                dataTable = new DataTable("databasecertificates");
+                dataTable.Columns.AddRange(new DataColumn[]
+                {
+                    certId,
+                    snapshotId,
+                    dbId,
+                    certificateName,
+                    certificateId,
+                    principalId,
+                    keyEncryptionType,
+                    keyEncryptionTypeDesc,
+                    isActiveForBeginDialog,
+                    issuerName,
+                    certSerialNumber,
+                    sid,
+                    stringSid,
+                    subject,
+                    expiryDate,
+                    startDate,
+                    thumbprint,
+                    attestedBy,
+                    keyLastBackupDate
+                });
+            }
+
+
+            return dataTable;
+
+        }
     }
 
 

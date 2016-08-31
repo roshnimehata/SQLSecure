@@ -6,8 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-using Microsoft.SqlServer.Management.Smo;
 using Idera.SQLsecure.Core.Logger;
+using Idera.SQLsecure.UI.Console.Sql;
 
 namespace Idera.SQLsecure.UI.Console.Forms
 {
@@ -15,11 +15,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
     {
         #region Ctors
 
-        public Form_SelectServer()
+        public Form_SelectServer(bool alowMultiSelect = false)
         {
             InitializeComponent();
 
             m_SelectedServer = "";
+            _listView_Servers.MultiSelect = alowMultiSelect;
+            SelectedServers = new List<string>();
         }
 
         #endregion
@@ -38,16 +40,17 @@ namespace Idera.SQLsecure.UI.Console.Forms
             get { return m_SelectedServer; }
         }
 
+        public List<string> SelectedServers { get; set; }
         #endregion
 
         #region Helpers
 
         public bool LoadServers()
         {
-            return LoadServers(true);
+            return LoadServers(false);
         }
 
-        public bool LoadServers(bool includeRegistered)
+        public bool LoadServers(bool registeredOnly)
         {
             // Get the data source enumerator object.
             bool isOk = true;
@@ -56,27 +59,39 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // Get the data sources and fill the list view.
             try
             {
-                // Get data sources.
-                using (DataTable servers = serversEnum.GetDataSources())
+                if (!registeredOnly)
                 {
-                    // Process each row and populate the list view.
-                    foreach (DataRow row in servers.Rows)
+                    // Get data sources.
+                    using (DataTable servers = serversEnum.GetDataSources())
                     {
-                        // Check that the server is not null.
-                        if (!row.IsNull("ServerName"))
+                        // Process each row and populate the list view.
+                        foreach (DataRow row in servers.Rows)
                         {
-                            // Construct the instance name.
-                            string serverInstance = (string)row["ServerName"];
-                            if (!row.IsNull("InstanceName"))
+                            // Check that the server is not null.
+                            if (!row.IsNull("ServerName"))
                             {
-                                serverInstance = serverInstance + @"\" + (string)row["InstanceName"];
-                            }
+                                // Construct the instance name.
+                                string serverInstance = (string)row["ServerName"];
+                                if (!row.IsNull("InstanceName"))
+                                {
+                                    serverInstance = serverInstance + @"\" + (string)row["InstanceName"];
+                                }
 
-                            // Update the list view.
-                            ListViewItem lvi = _listView_Servers.Items.Add(serverInstance);
+                                // Update the list view.
+                                _listView_Servers.Items.Add(serverInstance);
+                            }
                         }
                     }
                 }
+                else
+                {
+                    var servers = RegisteredServer.LoadRegisteredServers(Program.gController.Repository.ConnectionString);
+                    foreach (RegisteredServer item in servers)
+                    {
+                        _listView_Servers.Items.Add(item.FullName);
+                    }
+                }
+
             }
             catch (Exception ex)
             {
@@ -103,6 +118,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void _button_OK_Click(object sender, EventArgs e)
         {
             m_SelectedServer = _listView_Servers.SelectedItems[0].Text;
+            foreach (ListViewItem item in _listView_Servers.SelectedItems)
+            {
+                SelectedServers.Add(item.Text);
+            }
         }
 
         private void _listView_Servers_DoubleClick(object sender, EventArgs e)

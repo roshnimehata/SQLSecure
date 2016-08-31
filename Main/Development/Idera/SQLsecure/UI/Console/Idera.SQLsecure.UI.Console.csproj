@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Windows-1252"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,14 +10,34 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Idera.SQLsecure.UI.Console</RootNamespace>
     <AssemblyName>Idera.SQLsecure.UI.Console</AssemblyName>
-    <SccProvider>MSSCCI:Perforce SCM</SccProvider>
-    <SccProjectName>Idera.SQLsecure.UI.Console</SccProjectName>
-    <SccLocalPath>.</SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
     <ApplicationIcon>SQLsecure_product.ico</ApplicationIcon>
     <Win32Resource>
     </Win32Resource>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,7 +47,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -141,7 +161,24 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.SqlServer.Smo, Version=9.0.242.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Unofficial.Microsoft.SQLServer.SMO.2014.12.0.2000.8\lib\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.ConnectionInfoExtended, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Unofficial.Microsoft.SQLServer.SMO.2014.12.0.2000.8\lib\Microsoft.SqlServer.ConnectionInfoExtended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Unofficial.Microsoft.SQLServer.SMO.2014.12.0.2000.8\lib\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.SqlClrProvider, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Unofficial.Microsoft.SQLServer.SMO.2014.12.0.2000.8\lib\Microsoft.SqlServer.SqlClrProvider.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.SqlEnum, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Unofficial.Microsoft.SQLServer.SMO.2014.12.0.2000.8\lib\Microsoft.SqlServer.SqlEnum.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
@@ -439,11 +476,23 @@
     <Compile Include="Data\SQLsecureActivity.cs" />
     <Compile Include="Data\Server.cs" />
     <Compile Include="Data\SqlServerSettings.cs" />
+    <Compile Include="Forms\Form_CreateTag.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_CreateTag.Designer.cs">
+      <DependentUpon>Form_CreateTag.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Form_FolderPath.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Form_FolderPath.Designer.cs">
       <DependentUpon>Form_FolderPath.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Form_ImportServers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_ImportServers.Designer.cs">
+      <DependentUpon>Form_ImportServers.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Form_OSObjectPermissions.cs">
       <SubType>Form</SubType>
@@ -486,6 +535,12 @@
     </Compile>
     <Compile Include="Forms\Form_PolicySnapshots.Designer.cs">
       <DependentUpon>Form_PolicySnapshots.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Form_ProcessDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form_ProcessDialog.Designer.cs">
+      <DependentUpon>Form_ProcessDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Form_RefreshAuditData.cs">
       <SubType>Form</SubType>
@@ -860,6 +915,16 @@
     <Compile Include="Forms\Form_License.Designer.cs">
       <DependentUpon>Form_License.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ImportStatusIcon.cs" />
+    <Compile Include="Import\CsvDataProvider.cs" />
+    <Compile Include="Import\CsvParser.cs" />
+    <Compile Include="Import\IImportDataProvider.cs" />
+    <Compile Include="Import\ImportSettings.cs" />
+    <Compile Include="Import\Models\ImportItem.cs" />
+    <Compile Include="Import\Models\SqlServerAuthenticationType.cs" />
+    <Compile Include="Import\PropertyOrderAttribute.cs" />
+    <Compile Include="Import\PropertyOrderAttributeComparer.cs" />
+    <Compile Include="Import\ServerImportManager.cs" />
     <Compile Include="Interfaces\ICommandHandler.cs" />
     <Compile Include="Interfaces\IDataContext.cs" />
     <Compile Include="Interfaces\IRefresh.cs" />
@@ -998,8 +1063,15 @@
       <SubType>Designer</SubType>
       <DependentUpon>ViewSection.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_CreateTag.resx">
+      <DependentUpon>Form_CreateTag.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_FolderPath.resx">
       <DependentUpon>Form_FolderPath.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_ImportServers.resx">
+      <DependentUpon>Form_ImportServers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_PolicyProperties.resx">
       <SubType>Designer</SubType>
@@ -1012,6 +1084,9 @@
     <EmbeddedResource Include="Forms\Form_ImportPolicy.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Form_ImportPolicy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Form_ProcessDialog.resx">
+      <DependentUpon>Form_ProcessDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_SnapshotAvailabilityGroupReplicaProperties.resx">
       <DependentUpon>Form_SnapshotAvailabilityGroupReplicaProperties.cs</DependentUpon>
@@ -1230,7 +1305,10 @@
     <EmbeddedResource Include="Reports\Report_ServerLoginsAndUserMappings.rdlc" />
     <EmbeddedResource Include="Reports\Report_ServerRoles.rdlc" />
     <EmbeddedResource Include="Reports\Report_ServersWithDangerousGroups.rdlc" />
-    <EmbeddedResource Include="Reports\Report_SuspectWindowsAccounts.rdlc" />
+	<EmbeddedResource Include="Reports\Report_SuspectSqlLogins.rdlc" />
+    <EmbeddedResource Include="Reports\Report_SuspectWindowsAccounts.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Report_SystemAdministratorVulnerability.rdlc" />
     <EmbeddedResource Include="Reports\Report_Users.rdlc" />
     <EmbeddedResource Include="Reports\Report_UsersPermissions.rdlc" />
@@ -1240,6 +1318,10 @@
     <EmbeddedResource Include="Reports\SubReport_LoginsUser.rdlc" />
     <EmbeddedResource Include="Reports\SubReport_ServersUsedSummary.rdlc" />
     <EmbeddedResource Include="Reports\SubReport_UsersPermissions.rdlc" />
+    <EmbeddedResource Include="Views\Report_SuspectSqlLogins.resx">
+      <DependentUpon>Report_SuspectSqlLogins.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Report_Users.resx">
       <DependentUpon>Report_Users.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1336,6 +1418,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>View_Main_SecuritySummary.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\View_ServerTags.resx">
+      <DependentUpon>View_ServerTags.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\View_PermissionExplorer.resx">
       <SubType>Designer</SubType>
       <DependentUpon>View_PermissionExplorer.cs</DependentUpon>
@@ -1353,6 +1439,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1364,7 +1453,6 @@
     </Compile>
     <Compile Include="Reports\ReportsDataset.cs">
       <DependentUpon>ReportsDataset.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\ReportsDataset.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1378,6 +1466,7 @@
     <Compile Include="SQL\DatabasePrincipal.cs" />
     <Compile Include="SQL\DataCollectionFilter.cs" />
     <Compile Include="SQL\Endpoint.cs" />
+    <Compile Include="SQL\HadrManagerStatus.cs" />
     <Compile Include="SQL\FileSystemObject.cs" />
     <Compile Include="SQL\Login.cs" />
     <Compile Include="SQL\NotificationProvider.cs" />
@@ -1395,7 +1484,11 @@
     <Compile Include="SQL\Service.cs" />
     <Compile Include="SQL\Snapshot.cs" />
     <Compile Include="SQL\SQLServer.cs" />
+    <Compile Include="SQL\SQLServerProperties.cs" />
     <Compile Include="SQL\SqlTypes.cs" />
+    <Compile Include="SQL\Tags\Tag.cs" />
+    <Compile Include="SQL\Tags\TaggedServer.cs" />
+    <Compile Include="SQL\Tags\TagWorker.cs" />
     <Compile Include="SQL\User.cs" />
     <Compile Include="Utility\Constants.cs" />
     <Compile Include="Utility\DescriptionHelper.cs" />
@@ -1440,6 +1533,12 @@
     </Compile>
     <Compile Include="Views\Report_RiskAssessment.Designer.cs">
       <DependentUpon>Report_RiskAssessment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Report_SuspectSqlLogins.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\Report_SuspectSqlLogins.Designer.cs">
+      <DependentUpon>Report_SuspectSqlLogins.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Report_Users.cs">
       <SubType>UserControl</SubType>
@@ -1572,6 +1671,12 @@
     </Compile>
     <Compile Include="Views\View_Main_SecuritySummary.Designer.cs">
       <DependentUpon>View_Main_SecuritySummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\View_ServerTags.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\View_ServerTags.Designer.cs">
+      <DependentUpon>View_ServerTags.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\View_ManagePolicies.cs">
       <SubType>UserControl</SubType>
@@ -1783,6 +1888,9 @@
     <None Include="Resources\HighRiskExplained_32.png" />
     <Content Include="Resources\HighRisk_16.png" />
     <Content Include="Resources\HighRisk_32.png" />
+    <Content Include="Resources\ImportServers_16.png" />
+    <Content Include="Resources\ImportServers_32.png" />
+    <Content Include="Resources\ImportServers_48.png" />
     <Content Include="Resources\keys_48.png" />
     <None Include="Resources\LowRiskExplained_16.png" />
     <None Include="Resources\LowRiskExplained_32.png" />
@@ -2000,11 +2108,16 @@
     <None Include="Resources\warning_16.png" />
     <None Include="Resources\warning_50.png" />
     <None Include="Resources\server_16.png" />
+    <None Include="Resources\Report_SuspectSqlLogins_32.png" />
+    <None Include="Resources\Report_SuspectSqlLogins_48.png" />
     <Content Include="Resources\Report_VulnerableLogins_16.png" />
     <Content Include="Resources\Report_VulnerableLogins_32.png" />
     <Content Include="Resources\Report_VulnerableLogins_48.png" />
     <Content Include="Resources\Schema_48.png" />
     <None Include="Resources\sequence_48.png" />
+    <None Include="Resources\ServerTag_16.png" />
+    <None Include="Resources\ServerTag_32.png" />
+    <None Include="Resources\ServerTag_48.png" />
     <Content Include="Resources\Services_48.png" />
     <None Include="Resources\SQLsecure_product.png" />
     <Content Include="Resources\SQLServerLogin_48.png" />
@@ -2144,6 +2257,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

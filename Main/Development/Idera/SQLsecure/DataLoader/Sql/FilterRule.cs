@@ -27,7 +27,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
         // ------------- Helpers -------------
         #region Helpers
-        private static uint processServerLevelFilter (
+        private static uint processServerLevelFilter(
                 Filter filter,
                 List<Filter.Rule> serverObjectRules
             )
@@ -55,7 +55,7 @@ namespace Idera.SQLsecure.Collector.Sql
         private static uint processDatabaseLevelFilter(
                 Filter filter,
                 List<Database> databases,
-                Dictionary<string, Dictionary<int,List<Filter.Rule>>> databaseRules
+                Dictionary<string, Dictionary<int, List<Filter.Rule>>> databaseRules
             )
         {
             Debug.Assert(filter != null);
@@ -69,10 +69,10 @@ namespace Idera.SQLsecure.Collector.Sql
             {
                 // Create/get database rules.
                 bool isDbRulesNew = false;
-                Dictionary<int,List<Filter.Rule>> dbRules = null;
+                Dictionary<int, List<Filter.Rule>> dbRules = null;
                 if (!databaseRules.TryGetValue(db.Name, out dbRules))
                 {
-                    dbRules = new Dictionary<int,List<Filter.Rule>>();
+                    dbRules = new Dictionary<int, List<Filter.Rule>>();
                     isDbRulesNew = true;
                 }
 
@@ -105,7 +105,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         if (isClassRulesNew && classRules.Count > 0)
                         {
                             dbRules.Add((int)filterRule.ObjectType, classRules);
-                        }                       
+                        }
                     }
 
                     // If a new db list was created, then add it to the dictionary.
@@ -244,7 +244,7 @@ namespace Idera.SQLsecure.Collector.Sql
             }
 
             // Empty filter list, return.
-            if(filterList == null || filterList.Count == 0)
+            if (filterList == null || filterList.Count == 0)
             {
                 logX.loggerX.Info("INFO - no filters to save");
                 return true;
@@ -302,7 +302,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                 //    continue;
                                 //}
                                 // Write server rules to the data table.
-                                if(f.ServerLevelRules != null)
+                                if (f.ServerLevelRules != null)
                                 {
                                     foreach (Filter.Rule sr in f.ServerLevelRules)
                                     {
@@ -342,10 +342,10 @@ namespace Idera.SQLsecure.Collector.Sql
                 {
                     string strMessage = "Update snapshot filter tables";
                     logX.loggerX.Error("ERROR - " + strMessage, ex);
-                    Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnectionString, 
-                                                                            snapshotid, 
-                                                                            Collector.Constants.ActivityType_Error, 
-                                                                            Collector.Constants.ActivityEvent_Error, 
+                    Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnectionString,
+                                                                            snapshotid,
+                                                                            Collector.Constants.ActivityType_Error,
+                                                                            Collector.Constants.ActivityEvent_Error,
                                                                             strMessage + ex.Message);
                     AppLog.WriteAppEventError(SQLsecureEvent.ExErrExceptionRaised, SQLsecureCat.DlDataLoadCat,
                         strMessage, ex.Message);
@@ -387,13 +387,13 @@ namespace Idera.SQLsecure.Collector.Sql
                 List<Database> databases,
                 List<Filter> filters,
                 out List<Filter.Rule> serverObjectRules,
-                out Dictionary<string, Dictionary<int,List<Filter.Rule>>> databaseRules
+                out Dictionary<string, Dictionary<int, List<Filter.Rule>>> databaseRules
             )
         {
             // Init return.
             bool isOk = true;
             serverObjectRules = new List<Filter.Rule>();
-            databaseRules = new Dictionary<string, Dictionary<int,List<Filter.Rule>>>();
+            databaseRules = new Dictionary<string, Dictionary<int, List<Filter.Rule>>>();
             uint numDatabaseRulesProcessed = 0;
             uint numServerRulesProcessed = 0;
             SqlInt32 id = 0;
@@ -427,12 +427,12 @@ namespace Idera.SQLsecure.Collector.Sql
             logX.loggerX.Info("INFO - Optimize Filters: " + numServerRulesProcessed + " Server filters reduced to "
                 + serverObjectRules.Count);
             int numDatabaseRules = 0;
-            foreach (KeyValuePair<string,Dictionary<int, List<Sql.Filter.Rule>>> dbObjRules in databaseRules)
+            foreach (KeyValuePair<string, Dictionary<int, List<Sql.Filter.Rule>>> dbObjRules in databaseRules)
             {
                 numDatabaseRules += dbObjRules.Value.Count;
             }
             logX.loggerX.Info("INFO - Optimize Filters: " + numDatabaseRulesProcessed + " Database filters reduced to "
-                + numDatabaseRules);            
+                + numDatabaseRules);
             return isOk;
         }
         #endregion
@@ -612,7 +612,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     }
 
                     // If this rules scope is bigger or the two scopes are the same.
-                    if(ScopeEnum == FilterScope.Any || ScopeEnum == rule.ScopeEnum)
+                    if (ScopeEnum == FilterScope.Any || ScopeEnum == rule.ScopeEnum)
                     {
                         // If match strings are the same, return true.
                         if (matchStringsSame(m_WildMatch.MatchString, rule.m_WildMatch.MatchString))
@@ -622,7 +622,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
                         // If match strings wildcards select objects already selected.
                         // -----------------------------------------------------------
-                        for(int i = 0; i < rule.m_WildMatch.MatchString.Length && i < m_WildMatch.MatchString.Length; i++)
+                        for (int i = 0; i < rule.m_WildMatch.MatchString.Length && i < m_WildMatch.MatchString.Length; i++)
                         {
                             // So long as chars match keep looking for '*' at last char in string
                             // ------------------------------------------------------------------
@@ -669,7 +669,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
         // ------------- Ctors -------------
         #region Ctors
-        public Filter (
+        public Filter(
                 SqlInt32 headerId,
                 SqlString name,
                 SqlString createdBy,
@@ -684,7 +684,7 @@ namespace Idera.SQLsecure.Collector.Sql
             m_CreatedOn = createdOn;
             m_LastModifiedBy = modifiedBy;
             m_LastModifiedOn = modifiedOn;
-        }  
+        }
         #endregion
 
         // ------------- Properties -------------
@@ -717,13 +717,13 @@ namespace Idera.SQLsecure.Collector.Sql
         {
             get
             {
-                if (m_SrvrLvlRules.Count != 0) 
-                { 
-                    return FilterType.ServerLevel; 
+                if (m_SrvrLvlRules.Count != 0)
+                {
+                    return FilterType.ServerLevel;
                 }
-                else if (m_DbRules.Count != 0 || m_DbLvlRules.Count != 0) 
-                { 
-                    return FilterType.DatabaseLevel; 
+                else if (m_DbRules.Count != 0 || m_DbLvlRules.Count != 0)
+                {
+                    return FilterType.DatabaseLevel;
                 }
                 else
                 {
@@ -773,6 +773,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 {
                     case SqlObjectType.Login:
                     case SqlObjectType.Endpoint:
+                    case SqlObjectType.LinkedServer:
                         if (m_DbLvlRules.Count == 0)
                         {
                             m_SrvrLvlRules.Add(rule);
@@ -799,7 +800,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     case SqlObjectType.View:
                     case SqlObjectType.Function:
                     case SqlObjectType.Synonym:
-                    case  SqlObjectType.SequenceObject:
+                    case SqlObjectType.SequenceObject:
                         if (m_SrvrLvlRules.Count == 0)
                         {
                             if (rule.ObjectTypeEnum == SqlObjectType.Database)
@@ -847,6 +848,6 @@ namespace Idera.SQLsecure.Collector.Sql
         }
         #endregion
     }
-          
-          
+
+
 }

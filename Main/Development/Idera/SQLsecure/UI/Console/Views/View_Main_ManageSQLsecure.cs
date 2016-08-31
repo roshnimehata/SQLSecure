@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Idera.SQLsecure.Core.Logger;
 using Infragistics.Win.UltraWinGrid;
 using Idera.SQLsecure.UI.Console.Controls;
+using Idera.SQLsecure.UI.Console.Forms;
 
 namespace Idera.SQLsecure.UI.Console.Views
 {
@@ -74,6 +75,11 @@ namespace Idera.SQLsecure.UI.Console.Views
             _smallTask_Register.TaskImage = AppIcons.AppImage32(AppIcons.Enum32.RegisterSQLserver);
             _smallTask_Register.TaskHandler += new System.EventHandler(this.registerServer);
 
+            
+            _smallTask_Import.TaskText = Utility.Constants.Task_Title_Import;
+            _smallTask_Import.TaskImage = AppIcons.AppImage32(AppIcons.Enum32.ImportServers);
+            _smallTask_Import.TaskHandler += new System.EventHandler(this.ImportServers);
+
             _smallTask_Collect.TaskText = Utility.Constants.Task_Title_CollectData;
             _smallTask_Collect.TaskImage = AppIcons.AppImage32(AppIcons.Enum32.Snapshot);
             _smallTask_Collect.TaskHandler += new System.EventHandler(this.collectDataTask);
@@ -94,7 +100,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             _cmsi_Server_removeSQLServer.Image = AppIcons.AppImage16(AppIcons.Enum.Remove);
             _cmsi_Server_collectDataSnapshot.Image = AppIcons.AppImage16(AppIcons.Enum.CollectDataSnapshot);
             _cmsi_Server_configureDataCollection.Image = AppIcons.AppImage16(AppIcons.Enum.ConfigureAuditSettingsSM);
-
+            
             _grid.DisplayLayout.GroupByBox.Hidden = true;
             _grid.DrawFilter = new Utility.HideFocusRectangleDrawFilter();
 
@@ -131,7 +137,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             string server = _grid.ActiveRow.Cells[colServer].Text;
             Forms.Form_RemoveRegisteredServer.Process(server);
-            showRefresh();
+            ShowRefresh();
         }
 
         protected override void showProperties()
@@ -142,7 +148,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             Forms.Form_SqlServerProperties.Process(server, Forms.Form_SqlServerProperties.RequestedOperation.GeneralProperties, Program.gController.isAdmin);
         }
 
-        protected override void showRefresh()
+        protected override void ShowRefresh()
         {
             loadDataSource();
         }
@@ -185,7 +191,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                     {
                         Utility.MsgBox.ShowError(this.Title, Utility.ErrorMsgs.ServerNotRegistered);
                         Program.gController.SignalRefreshServersEvent(false, null);
-                        showRefresh();
+                        ShowRefresh();
                     }
                 }
             }
@@ -205,7 +211,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         {
             Forms.Form_WizardRegisterSQLServer.Process();
 
-            showRefresh();
+            ShowRefresh();
         }
 
         #endregion
@@ -338,6 +344,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             m_menuConfiguration.SnapshotItems[(int)Utility.MenuItems_Snapshots.Baseline] = false;
 
             _smallTask_Register.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.AuditSQLServer);
+            _smallTask_Import.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.AuditSQLServer);
+
             _smallTask_Collect.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Collect);
             _smallTask_Configure.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.ConfigureAuditSettings);
 
@@ -348,6 +356,12 @@ namespace Idera.SQLsecure.UI.Console.Views
         private void registerServer(object sender, EventArgs e)
         {
             showNewAuditServer();
+        }
+
+        private void ImportServers(object sender, EventArgs e)
+        {
+            Form_ImportServers.Process();
+            ShowRefresh();
         }
 
         private void collectData()
@@ -387,7 +401,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                 else
                 {
                     System.Threading.Thread.Sleep(1000);
-                    showRefresh();
+                    ShowRefresh();
                 }
             }
             else
@@ -713,7 +727,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         {
             Cursor = Cursors.WaitCursor;
 
-            showRefresh();
+            ShowRefresh();
 
             Cursor = Cursors.Default;
         }

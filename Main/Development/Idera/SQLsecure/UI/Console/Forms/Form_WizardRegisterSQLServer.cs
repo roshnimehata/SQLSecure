@@ -12,6 +12,7 @@ using Idera.SQLsecure.UI.Console.Sql;
 using Idera.SQLsecure.UI.Console.Utility;
 using Infragistics.Win.UltraWinListView;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
+using Idera.SQLsecure.UI.Console.SQL;
 
 namespace Idera.SQLsecure.UI.Console.Forms
 {
@@ -61,13 +62,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private bool needToConfigureSMTPProvider;
         private bool needToConfigureEmail;
         private bool hasSelectablePolicy;
-
+        private List<Tag> Tags = new List<Tag>();
         enum NextAction
         {
             RunCollection,
             LaunchProperties,
             Nothing
-        }        
+        }
 
         #endregion
 
@@ -107,7 +108,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 else
                 {
                     UltraListViewItem li2 = ultraListView_DynamicPolicies.Items.Add(null, p.PolicyName);
-                    li2.Tag = p;                    
+                    li2.Tag = p;
                 }
             }
 
@@ -121,7 +122,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // Default to notfiy on Vulnerablity Moderate
             radioButtonSendEmailFindingHigh.Checked = true;
 
-            controlSMTPEmailConfig1.RegisterDataOKDelegate(SMTPDataEntered); 
+            controlSMTPEmailConfig1.RegisterDataOKDelegate(SMTPDataEntered);
             controlSMTPEmailConfig1.InitializeControl(Program.gController.Repository.NotificationProvider);
             needToConfigureSMTPProvider = !Program.gController.Repository.NotificationProvider.IsValid();
             needToConfigureEmail = string.IsNullOrEmpty(Program.gController.Repository.NotificationProvider.ServerName);
@@ -195,7 +196,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         public static void Process()
         {
             // Do we have any available licenses for a new server
-            if(!Program.gController.Repository.bbsProductLicense.IsLicneseGoodForServerCount(Program.gController.Repository.RegisteredServers.Count+1))
+            if (!Program.gController.Repository.bbsProductLicense.IsLicneseGoodForServerCount(Program.gController.Repository.RegisteredServers.Count + 1))
             {
                 Utility.MsgBox.ShowError(Utility.ErrorMsgs.RegisterSqlServerCaption, Utility.ErrorMsgs.RegisterSqlServerNoLicenseMsg);
                 return;
@@ -216,18 +217,18 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 {
                     string sqlLogin = form.textbox_SqlLogin.Text;
                     string sqlPassword = form.textbox_SqlLoginPassword.Text;
-                    if(form.radioButton_WindowsAuth.Checked )
+                    if (form.radioButton_WindowsAuth.Checked)
                     {
                         sqlLogin = form.textBox_SQLWindowsUser.Text;
                         sqlPassword = form.textBox_SQLWindowsPassword.Text;
                     }
-                    
+
                     string[] auditFolders = form.addEditFoldersControl.GetFolders();
                     Sql.RegisteredServer.AddServer(Program.gController.Repository.ConnectionString,
-                                        form.m_Connection, form.m_ConnectionPort, form.m_Machine, form.m_Instance, 
+                                        form.m_Connection, form.m_ConnectionPort, form.m_Machine, form.m_Instance,
                                         form.radioButton_WindowsAuth.Checked ? "W" : "S",
-                                        sqlLogin, sqlPassword, 
-                                        form.textbox_WindowsUser.Text, form.textbox_WindowsPassword.Text, 
+                                        sqlLogin, sqlPassword,
+                                        form.textbox_WindowsUser.Text, form.textbox_WindowsPassword.Text,
                                         form.m_Version, (int)form.numericUpDown_KeepSnapshotDays.Value, auditFolders);
 
                     // Notify controller that a new server was added.
@@ -240,17 +241,17 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 }
 
                 // Add Server to requested Policies
-                if(isOk)
+                if (isOk)
                 {
                     rID = Sql.RegisteredServer.GetServer(form.m_Connection).RegisteredServerId;
-                    foreach(Policy p in form.m_Polices)
+                    foreach (Policy p in form.m_Polices)
                     {
                         Sql.RegisteredServer.AddRegisteredServerToPolicy(rID, p.PolicyId, p.AssessmentId);
                     }
                 }
 
                 // Add Email Notification
-                if(isOk)
+                if (isOk)
                 {
                     if (form.needToConfigureSMTPProvider)
                     {
@@ -322,7 +323,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 {
                     try
                     {
-                        Guid jobID = Sql.ScheduleJob.AddJob(Program.gController.Repository.ConnectionString, 
+                        Guid jobID = Sql.ScheduleJob.AddJob(Program.gController.Repository.ConnectionString,
                                               form.m_Connection,
                                               Program.gController.Repository.Instance,
                                               form.m_scheduleData);
@@ -358,6 +359,25 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         Utility.MsgBox.ShowError(Utility.ErrorMsgs.RegisterSqlServerCaption, Utility.ErrorMsgs.AddJobToRepositoryFailedMsg, ex);
                     }
                 }
+                //tags
+                if (isOk)
+                {
+                    try
+                    {
+                        List<string> tagsIds = new List<string>();
+                        foreach (var item in form.ulTags.CheckedItems)
+                        {
+                            var tagId = item.Tag.ToString();
+                            tagsIds.Add(tagId);
+                        }
+                        TagWorker.AssignServerToTags(rID, tagsIds);
+                    }
+                    catch (Exception ex)
+                    {
+                        isOk = false;
+                        Utility.MsgBox.ShowError(Utility.ErrorMsgs.RegisterSqlServerCaption, Utility.ErrorMsgs.AddJobToRepositoryFailedMsg, ex);
+                    }
+                }
             }
         }
 
@@ -370,8 +390,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
             string helpTopic = Utility.Help.RegisterSQLServerWizardHelpTopic;
             if (_page_Introduction.Visible)
                 helpTopic = Utility.Help.RegisterSQLServerWizardHelpTopic;
-            else if(_page_Servers.Visible)
+            else if (_page_Servers.Visible)
                 helpTopic = Utility.Help.AddServerGeneralHelpTopic;
+            else if (_PageTags.Visible)
+                helpTopic = Utility.Help.ManageTagsHelpTopic;
             else if (_page_Credentials.Visible)
                 helpTopic = Utility.Help.AddServerCredentialsHelpTopic;
             else if (_page_FilePermissionFolders.Visible)
@@ -423,7 +445,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.Cursor = Cursors.Default;
         }
 
-       
+
 
         private void _txtbx_Server_TextChanged(object sender, EventArgs e)
         {
@@ -435,7 +457,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             Debug.Assert(!string.IsNullOrEmpty(_txtbx_Server.Text));
 
-            if(string.IsNullOrEmpty(_txtbx_Server.Text))
+            if (string.IsNullOrEmpty(_txtbx_Server.Text))
             {
                 e.Cancel = true;
             }
@@ -577,16 +599,16 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             bool allowMoveNext = true;
 
-            if(radioButton_WindowsAuth.Checked)
+            if (radioButton_WindowsAuth.Checked)
             {
                 allowMoveNext = !string.IsNullOrEmpty(textBox_SQLWindowsUser.Text)
                                 && !string.IsNullOrEmpty(textBox_SQLWindowsPassword.Text);
             }
-            
-            if(allowMoveNext && radioButton_SQLServerAuth.Checked)
+
+            if (allowMoveNext && radioButton_SQLServerAuth.Checked)
             {
                 allowMoveNext = !string.IsNullOrEmpty(textbox_SqlLogin.Text)
-                                && !string.IsNullOrEmpty(textbox_SqlLoginPassword.Text);                
+                                && !string.IsNullOrEmpty(textbox_SqlLoginPassword.Text);
             }
             //if(allowMoveNext)
             //{
@@ -619,12 +641,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void _page_Credentials_BeforeDisplay(object sender, EventArgs e)
         {
             updateCredentialsPageMoveNext();
-            
+
         }
         private void _page_Credentials_AfterDisplay(object sender, EventArgs e)
         {
             textBox_SQLWindowsUser.Focus();
-        }   
+        }
 
         private void _chkbx_SQLCredentials_CheckedChanged(object sender, EventArgs e)
         {
@@ -699,7 +721,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 }
 
                 // Check if the account format is correct.
-                if(isOk)
+                if (isOk)
                 {
                     string domain = string.Empty;
                     string user = string.Empty;
@@ -756,7 +778,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     isWindowsCredentails = false;
                 }
             }
-        
+
 
             // Get SQL Server properties and validate them.
             if (allowRegisterAnyway)
@@ -764,7 +786,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 try
                 {
                     showWorking.Show("Verifying SQL Server Credentials...", this);
-                    if(radioButton_SQLServerAuth.Checked)
+                    if (radioButton_SQLServerAuth.Checked)
                     {
                         login = textbox_SqlLogin.Text;
                         password = textbox_SqlLoginPassword.Text;
@@ -778,7 +800,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                 Impersonation.GetCurrentIdentity(textBox_SQLWindowsUser.Text, textBox_SQLWindowsPassword.Text);
                             targetImpersonationContext = wi.Impersonate();
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             if (msgBldr.Length > 0) { msgBldr.Remove(0, msgBldr.Length); }
                             msgBldr.AppendFormat("Could not validate the windows authentication credentials for connecting to SQL Server {0}.", _txtbx_Server.Text.ToUpper());
@@ -795,7 +817,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         // Try connecting to SQLserver...
                         try
                         {
-                            showWorking.UpdateText(string.Format("Connecting to SQL Server {0}...",_txtbx_Server.Text.ToUpper()));
+                            showWorking.UpdateText(string.Format("Connecting to SQL Server {0}...", _txtbx_Server.Text.ToUpper()));
                             Sql.SqlServer.GetSqlServerProperties(_txtbx_Server.Text, login, password,
                                                                     out version, out machine, out instance, out connection);
                             if (targetImpersonationContext != null)
@@ -804,15 +826,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                 targetImpersonationContext.Dispose();
                                 targetImpersonationContext = null;
                             }
-                            if(!checkVersionAndRegistration(version, connection))
+                            if (!checkVersionAndRegistration(version, connection))
                             {
                                 isOk = false;
-                                allowRegisterAnyway = false;                                
+                                allowRegisterAnyway = false;
                             }
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
-                            if (msgBldr.Length > 0) { msgBldr.Remove(0,msgBldr.Length); }
+                            if (msgBldr.Length > 0) { msgBldr.Remove(0, msgBldr.Length); }
                             msgBldr.AppendFormat("Could not establish a connection with SQL Server {0}.", _txtbx_Server.Text.ToUpper());
                             msgBldr.AppendFormat("\r\n\r\nError: {0}", ex.Message);
                             machine = Path.GetComputerFromSQLServerInstance(_txtbx_Server.Text);
@@ -860,8 +882,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             string errorMsg;
                             Server.ServerAccess sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text,
                                                      out errorMsg);
-//                            Server s = new Server(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, null);
-                            if(sa != Server.ServerAccess.OK)
+                            //                            Server s = new Server(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, null);
+                            if (sa != Server.ServerAccess.OK)
                             {
                                 isOk = false;
                                 if (msgBldr.Length > 0) { msgBldr.Remove(0, msgBldr.Length); }
@@ -886,7 +908,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         //    targetImpersonationContext.Dispose();
                         //    targetImpersonationContext = null;
                         //}
-                    }                 
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -907,7 +929,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 }
             }
 
-            if(!isOk)
+            if (!isOk)
             {
                 showWorking.Close();
                 Activate();
@@ -924,7 +946,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 }
                 else
                 {
-                    if(!string.IsNullOrEmpty(msgBldr.ToString()))
+                    if (!string.IsNullOrEmpty(msgBldr.ToString()))
                     {
                         MsgBox.ShowError(ErrorMsgs.RegisterSqlServerCaption, msgBldr.ToString());
                     }
@@ -949,7 +971,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         }
 
         #endregion
-    
+
         #region Data Collection Filter
 
         private void _page_DefineFilters_BeforeDisplay(object sender, EventArgs e)
@@ -958,14 +980,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             m_Filter = new Sql.DataCollectionFilter(m_Connection, "Default rule", "Rule created when the server was registered");
 
             ServerVersion parsedVersion = Sql.SqlHelper.ParseVersion(m_Version);
-            Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedVersion, radioButton_WindowsAuth.Checked, 
+            Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedVersion, radioButton_WindowsAuth.Checked,
                 textBox_SQLWindowsUser.Text, textBox_SQLWindowsPassword.Text, m_Connection);
             filterSelection1.Initialize(m_Filter, serverInfo);
         }
 
         private void _page_DefineFilters_BeforeMoveNext(object sender, CancelEventArgs e)
         {
-            filterSelection1.GetFilter(out m_Filter);                      
+            filterSelection1.GetFilter(out m_Filter);
         }
 
         #endregion
@@ -979,12 +1001,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private void _page_JobSchedule_BeforeMoveBack(object sender, CancelEventArgs e)
         {
-            
+
         }
 
         private void _page_JobSchedule_BeforeMoveNext(object sender, CancelEventArgs e)
         {
-           
+
         }
 
         private void checkBox_EnableScheduling_CheckedChanged(object sender, EventArgs e)
@@ -1055,7 +1077,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             StringBuilder summary = new StringBuilder();
             summary.Append(WizardFinishTextPrefix);
             summary.Append(WizardFinishTextSQLServer);
-            string serverRFT = server.Replace("\\","\\\\");
+            string serverRFT = server.Replace("\\", "\\\\");
             summary.Append(serverRFT);
             summary.Append(WizardFinishTextCredentials);
             summary.Append(credentials);
@@ -1079,13 +1101,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void _page_Finish_BeforeDisplay(object sender, EventArgs e)
         {
             // Build up the finish summary strings.
-            string server = _txtbx_Server.Text 
+            string server = _txtbx_Server.Text
                             + (string.Compare(_txtbx_Server.Text, m_Connection, true) != 0 ? (" (" + m_Connection + ")") : string.Empty);
             string credentials = "Specified credentials";
             StringBuilder filter = new StringBuilder();
             filter.Append(@"\par" + m_Filter.GetFilterDetailsForSubReport() + @"\pard");
             string dataCollection = "Do not collect data after server registration.";
-            if(m_nextAction == NextAction.RunCollection)
+            if (m_nextAction == NextAction.RunCollection)
             {
                 dataCollection = "Collect data after server registration.";
             }
@@ -1098,7 +1120,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             }
             StringBuilder email = new StringBuilder("No Email notification requested.");
             string emailStatus = string.Empty;
-            if(checkBoxEmailForCollectionStatus.Checked)
+            if (checkBoxEmailForCollectionStatus.Checked)
             {
                 if (radioButtonAlways.Checked)
                 {
@@ -1114,22 +1136,22 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 }
             }
             String emailFindings = string.Empty;
-            if(checkBoxEmailFindings.Checked)
+            if (checkBoxEmailFindings.Checked)
             {
-                if(radioButtonSendEmailFindingAny.Checked)
+                if (radioButtonSendEmailFindingAny.Checked)
                 {
                     emailFindings = "Send Email notification after data collection always.";
                 }
-                else if(radioButtonSendEmailFindingHighMedium.Checked)
+                else if (radioButtonSendEmailFindingHighMedium.Checked)
                 {
                     emailFindings = "Send Email notification after data collection on Error or Warning.";
                 }
-                 else if(radioButtonSendEmailFindingHigh.Checked)
+                else if (radioButtonSendEmailFindingHigh.Checked)
                 {
                     emailFindings = "Send Email notification after data collection only on Error.";
                 }
             }
-            if(checkBoxEmailForCollectionStatus.Checked || checkBoxEmailFindings.Checked)
+            if (checkBoxEmailForCollectionStatus.Checked || checkBoxEmailFindings.Checked)
             {
                 email.Remove(0, email.Length);
                 email.Append(emailStatus);
@@ -1138,8 +1160,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                   : ""));
                 email.AppendFormat("\\par{{\\f1\\tab}} : Recipient - {0}", textBox_Recipient.Text);
             }
-            _rtb_Finish.Rtf = buildWizardFinishSummary(server.ToUpper(), 
-                credentials, filter.ToString(), m_scheduleData.Description, email.ToString(), 
+            _rtb_Finish.Rtf = buildWizardFinishSummary(server.ToUpper(),
+                credentials, filter.ToString(), m_scheduleData.Description, email.ToString(),
                 policies.ToString(), dataCollection);
         }
 
@@ -1173,7 +1195,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             _page_ConfigureSMTPEmail.AllowMoveNext = entered;
         }
-       
+
         private void wizardPage1_BeforeDisplay(object sender, EventArgs e)
         {
 
@@ -1195,14 +1217,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             {
                 m_Polices.Add((Console.Sql.Policy)policy.Tag);
             }
-        }         
+        }
 
         private void checkBoxEmailForCollectionStatus_CheckedChanged(object sender, EventArgs e)
         {
             radioButtonAlways.Enabled = checkBoxEmailForCollectionStatus.Checked;
             radioButton_SendEmailWarningOrError.Enabled = checkBoxEmailForCollectionStatus.Checked;
             radioButton_SendEmailOnError.Enabled = checkBoxEmailForCollectionStatus.Checked;
-            if(!checkBoxEmailFindings.Checked && !checkBoxEmailForCollectionStatus.Checked)
+            if (!checkBoxEmailFindings.Checked && !checkBoxEmailForCollectionStatus.Checked)
             {
                 textBox_Recipient.Enabled = false;
                 _page_NotificationOptions.AllowMoveNext = true;
@@ -1248,7 +1270,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     // Skip SMTP Email Config if already setup
                     _page_CollectData.PreviousPage = _page_NotificationOptions;
                 }
-            }   
+            }
         }
 
         private void button_Test_Click(object sender, EventArgs e)
@@ -1285,6 +1307,106 @@ namespace Idera.SQLsecure.UI.Console.Forms
         }
 
         #endregion
-        
+
+
+
+        private void btAdd_Click(object sender, EventArgs e)
+        {
+            if (Form_CreateTag.Process(null) != -1)
+                RefreshGrid(true);
+
+        }
+
+        private void _PageTags_BeforeDisplay(object sender, EventArgs e)
+        {
+            ClearSelection();
+            RefreshGrid(false);
+
+        }
+
+        private void RefreshGrid(bool clearGrid)
+        {
+            try
+            {
+              
+                var tags = TagWorker.GetTags();
+                if (clearGrid) ulTags.Items.Clear();
+                foreach (Tag tag in tags)
+                {
+                    if (ulTags.Items.Exists(tag.Name))
+                        continue;
+
+                    var item = new UltraListViewItem(tag.Name, new[] { tag.Description })
+                    {
+                        Tag = tag.Id.ToString(),
+                        Key = tag.Name
+                    };
+                    ulTags.Items.Add(item);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MsgBox.ShowError(ErrorMsgs.RegisterSqlServerCaption, ex.Message, ex);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+           
+            if (ulTags.SelectedItems.Count != 0)
+            {
+                int tagId;
+                if (int.TryParse(ulTags.SelectedItems[0].Tag.ToString(), out tagId))
+                {
+                    var tag = TagWorker.GetTagById(tagId);
+
+                    if (Form_CreateTag.Process(tag) != -1)
+                        RefreshGrid(true);
+                    ClearSelection();
+                }
+
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (ulTags.SelectedItems.Count != 0)
+            {
+                int tagId;
+                if (int.TryParse(ulTags.SelectedItems[0].Tag.ToString(), out tagId))
+                {
+                    try
+                    {
+                        TagWorker.DeleteTag(tagId);
+                        RefreshGrid(true);
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        MsgBox.ShowError(ErrorMsgs.RegisterSqlServerCaption, ex.Message);
+
+                    }
+                    ClearSelection();
+                }
+            }
+        }
+
+        private void ClearSelection()
+        {
+            ulTags.SelectedItems.Clear();
+            button2.Enabled = false;
+            button3.Enabled = false;
+        }
+
+        private void ulTags_MouseDown(object sender, MouseEventArgs e)
+        {
+            button2.Enabled = button3.Enabled = ulTags.SelectedItems.Count != 0;        
+        }
+
+       
+
+
+     
     }
 }

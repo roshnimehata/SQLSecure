@@ -8,17 +8,17 @@
  *
  * (C) 2006 - 2008 - Idera, a division of BBS Technologies, Inc.
  *******************************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlTypes;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Diagnostics;
-using System.Text;
-
-using Idera.SQLsecure.Core.Logger;
-using Idera.SQLsecure.UI.Console.Utility;
 using Idera.SQLsecure.Core.Accounts;
+using Idera.SQLsecure.Core.Logger;
+using Idera.SQLsecure.UI.Console.Forms;
+using Idera.SQLsecure.UI.Console.Utility;
 
 namespace Idera.SQLsecure.UI.Console.Sql
 {
@@ -72,21 +72,21 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private SqlString m_CrossDbOwnershipChaining;
         private SqlString m_CaseSensitiveMode;
         private SqlString m_auditfoldersstring;
-        private SqlGuid     m_jobid;
+        private SqlGuid m_jobid;
         private SqlDateTime m_LastCollectionTime;
-        private SqlInt32    m_LastCollectionSnapshotId;
+        private SqlInt32 m_LastCollectionSnapshotId;
         private SqlDateTime m_CurrentCollectionTime;
-        private SqlString   m_CurrentCollectionStatus;
-        private SqlInt32    m_SnapshotRetentionPeriod;
-        private bool        m_IsDataCollectionInProgress;
-        private bool        m_ShowDataCollectionComplete;
-        private String      m_ServerIsDomainController;
-        private String      m_ReplicationEnabled;
-        private String      m_SaPasswordEmpty;
-        private int         m_LastSnapshotId = 0;
+        private SqlString m_CurrentCollectionStatus;
+        private SqlInt32 m_SnapshotRetentionPeriod;
+        private bool m_IsDataCollectionInProgress;
+        private bool m_ShowDataCollectionComplete;
+        private String m_ServerIsDomainController;
+        private String m_ReplicationEnabled;
+        private String m_SaPasswordEmpty;
+        private int m_LastSnapshotId;
 
-        Forms.Form_StartSnapshotJobAndShowProgress m_StartSnapshotForm = null;
-        
+        Form_StartSnapshotJobAndShowProgress m_StartSnapshotForm;
+
         #endregion
 
         #region Ctors
@@ -99,7 +99,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         }
 
         public RegisteredServer()
-        {}
+        { }
 
         #endregion
 
@@ -131,14 +131,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public string LastCollectionTime { get { return (m_LastCollectionTime.IsNull ? string.Empty : m_LastCollectionTime.Value.ToLocalTime().ToString(Utility.Constants.DATETIME_FORMAT)); } }
         public int LastCollectionSnapshotId { get { return (m_LastCollectionSnapshotId.IsNull ? 0 : m_LastCollectionSnapshotId.Value); } }
         public string CurrentCollectionTime { get { return (m_CurrentCollectionTime.IsNull ? string.Empty : m_CurrentCollectionTime.Value.ToLocalTime().ToString(Utility.Constants.DATETIME_FORMAT)); } }
-        public string CurrentCollectionStatus { get { return Snapshot.GetStatusStr(m_CurrentCollectionStatus.IsNull ? string.Empty : m_CurrentCollectionStatus.Value.ToString());  } }
+        public string CurrentCollectionStatus { get { return Snapshot.GetStatusStr(m_CurrentCollectionStatus.IsNull ? string.Empty : m_CurrentCollectionStatus.Value); } }
         public int SnapshotRetentionPeriod { get { return (m_SnapshotRetentionPeriod.IsNull ? 0 : m_SnapshotRetentionPeriod.Value); } }
         public String ServerIsDomainController { get { return YesNoStr(m_ServerIsDomainController); } }
         public String ReplicationEnabled { get { return YesNoStr(m_ReplicationEnabled); } }
         public String SaPasswordEmpty { get { return YesNoStr(m_SaPasswordEmpty); } }
 
-        public string VersionFriendly { get { return Sql.SqlHelper.ParseVersionFriendly(m_Version.Value); } }
-        public string VersionFriendlyLong { get { return Sql.SqlHelper.ParseVersionFriendly(m_Version.Value, true); } }
+        public string VersionFriendly { get { return SqlHelper.ParseVersionFriendly(m_Version.Value); } }
+        public string VersionFriendlyLong { get { return SqlHelper.ParseVersionFriendly(m_Version.Value, true); } }
         public string AuditFoldersString { get { return m_auditfoldersstring.IsNull ? string.Empty : m_auditfoldersstring.Value.ToLower(); } }
 
         public string NextCollectionTime
@@ -146,8 +146,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             get
             {
                 string audittime = string.Empty;
-                Sql.ScheduleJob.JobData jobdata;
- 
+                ScheduleJob.JobData jobdata;
+
                 if (ScheduleJob.GetJobData(Program.gController.Repository.ConnectionString, JobId, out jobdata) != Guid.Empty)
                 {
                     audittime = jobdata.NextRun;
@@ -162,7 +162,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_jobid = jobId;
         }
 
-        public void SetStartSnapshotForm(Forms.Form_StartSnapshotJobAndShowProgress form)
+        public void SetStartSnapshotForm(Form_StartSnapshotJobAndShowProgress form)
         {
             m_StartSnapshotForm = form;
         }
@@ -273,7 +273,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         // Register server.
         private const string NonQueryRegisterServer = @"SQLsecure.dbo.isp_sqlsecure_addregisteredserver";
-	    private const string ParamRegisterServerConnectionname = "@connectionname";
+        private const string ParamRegisterServerConnectionname = "@connectionname";
         private const string ParamRegisterServerConnectionport = "@connectionport";
         private const string ParamRegisterServerServername = "@servername";
         private const string ParamRegisterServerInstancename = "@instancename";
@@ -335,7 +335,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_SqlPassword = rdr.GetSqlString((int)RegisteredServerColumn.SqlPassword);
             m_WindowsUser = rdr.GetSqlString((int)RegisteredServerColumn.WindowsUser);
             m_WindowsPassword = rdr.GetSqlString((int)RegisteredServerColumn.WindowsPassword);
-            m_SQLServerAuthType = rdr.GetSqlString((int) RegisteredServerColumn.SqlServerAuthType);
+            m_SQLServerAuthType = rdr.GetSqlString((int)RegisteredServerColumn.SqlServerAuthType);
             m_AuthenticationMode = rdr.GetSqlString((int)RegisteredServerColumn.AuthenticationMode);
             m_OS = rdr.GetSqlString((int)RegisteredServerColumn.OS);
             m_Version = rdr.GetSqlString((int)RegisteredServerColumn.Version);
@@ -363,7 +363,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         public int GetLatestSnapshotId()
         {
-            return RegisteredServer.GetLatestSnapshotId(ConnectionName);
+            return GetLatestSnapshotId(ConnectionName);
         }
 
         static public int GetLatestSnapshotId(string serverInstance)
@@ -376,7 +376,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 using (SqlConnection connection = new SqlConnection(Program.gController.Repository.ConnectionString))
                 {
                     connection.Open();
-                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                    using (SqlDataReader rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text,
                                                     string.Format(QueryGetLatestSnapshotId, serverInstance), null))
                     {
                         if (rdr.HasRows)
@@ -411,8 +411,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
                     // Check if the instance is registered.
                     SqlParameter param = new SqlParameter(ParamGetServerPolicyListRegisteredServerID, registerServerId);
-                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.StoredProcedure,
-                                                    NonQueryGetServerPolicyList, new SqlParameter[] { param }))
+                    using (SqlDataReader rdr = SqlHelper.ExecuteReader(connection, null, CommandType.StoredProcedure,
+                                                    NonQueryGetServerPolicyList, new[] { param }))
                     {
                         if (rdr.HasRows)
                         {
@@ -420,7 +420,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                             {
                                 int id = rdr.GetInt32(0);
                                 policyIds.Add(id);
-                            }                            
+                            }
                         }
                     }
                 }
@@ -428,7 +428,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             catch (SqlException ex)
             {
                 logX.loggerX.Error("Error - Unable to refresh Retrieve Policy list for server from the Repository", ex);
-//                MsgBox.ShowError(Utility.ErrorMsgs.CantGetRegisteredServer, ex.Message);
+                //                MsgBox.ShowError(Utility.ErrorMsgs.CantGetRegisteredServer, ex.Message);
             }
 
             return policyIds;
@@ -449,7 +449,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         auditDate.HasValue ? string.Format(AuditDateFmt, auditDate) : @"NULL",
                                       Convert.ToInt32(useBaseline), serverInstance);
 
-                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text, query, null))
+                    using (SqlDataReader rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text, query, null))
                     {
                         if (rdr.HasRows)
                         {
@@ -474,13 +474,13 @@ namespace Idera.SQLsecure.UI.Console.Sql
             comment = string.Empty;
             string status = string.Empty;
 
-            Sql.Snapshot snapshot = null;
-            
+            Snapshot snapshot = null;
+
             if (snapshotID != 0)
             {
                 // Retrieve snapshot & its filters.
-                snapshot = Sql.Snapshot.GetSnapShot(snapshotID);
-                
+                snapshot = Snapshot.GetSnapShot(snapshotID);
+
                 if (snapshot != null)
                 {
                     comment = snapshot.SnapshotComment.Trim();
@@ -491,51 +491,51 @@ namespace Idera.SQLsecure.UI.Console.Sql
             return status;
         }
 
-        public bool StartJob(out Guid newJobID)
+        public bool StartJob(out Guid newJobID, bool showMsgBoxes = true)
         {
             bool bStarted = false;
             newJobID = JobId;
             m_LastSnapshotId = GetLatestSnapshotId();
 
-            Utility.ActivityLog.CreateApplicationActivityEventInRepository(
+            ActivityLog.CreateApplicationActivityEventInRepository(
                 Program.gController.Repository.ConnectionString,
                 ConnectionName,
-                Utility.ActivityLog.ActivityCategory_Job,
-                Utility.ActivityLog.ActivityType_Info,
-                Utility.ActivityLog.ActivityEvent_Start,
+                ActivityLog.ActivityCategory_Job,
+                ActivityLog.ActivityType_Info,
+                ActivityLog.ActivityEvent_Start,
                 string.Format("Starting manual snapshot collection for {0} ", ConnectionName));
 
             if (!Program.gController.Repository.bbsProductLicense.IsLicneseGoodForServerCount(Program.gController.Repository.RegisteredServers.Count))
             {
-                Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.LicenseTooManyRegisteredServers);
+               if(showMsgBoxes) MsgBox.ShowError(ErrorMsgs.SQLsecureDataCollection, ErrorMsgs.LicenseTooManyRegisteredServers);
                 return false;
             }
 
-            Sql.ScheduleJob.StartJobReturnCode resultCode;
-            resultCode = Sql.ScheduleJob.StartJob(Program.gController.Repository.ConnectionString, newJobID);
-            
-            if (resultCode == Sql.ScheduleJob.StartJobReturnCode.JobNotFound)
+            ScheduleJob.StartJobReturnCode resultCode;
+            resultCode = ScheduleJob.StartJob(Program.gController.Repository.ConnectionString, newJobID, showMsgBoxes);
+
+            if (resultCode == ScheduleJob.StartJobReturnCode.JobNotFound)
             {
-                Sql.ScheduleJob.ScheduleData scheduleData = new Sql.ScheduleJob.ScheduleData();
+                ScheduleJob.ScheduleData scheduleData = new ScheduleJob.ScheduleData();
                 scheduleData.SetDefaults();
                 scheduleData.Enabled = false;
-                newJobID = Sql.ScheduleJob.AddJob(Program.gController.Repository.ConnectionString, m_ConnectionName.Value,
+                newJobID = ScheduleJob.AddJob(Program.gController.Repository.ConnectionString, m_ConnectionName.Value,
                                        Program.gController.Repository.Instance, scheduleData);
                 if (newJobID != Guid.Empty)
                 {
-                    resultCode = Sql.ScheduleJob.StartJob(Program.gController.Repository.ConnectionString, newJobID);
+                    resultCode = ScheduleJob.StartJob(Program.gController.Repository.ConnectionString, newJobID);
                 }
-                if (resultCode == Sql.ScheduleJob.StartJobReturnCode.Success)
+                if (resultCode == ScheduleJob.StartJobReturnCode.Success)
                 {
-                    Utility.MsgBox.ShowWarning(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.SQLServerNoJobFoundCreateWarning);
+                    if (showMsgBoxes) MsgBox.ShowWarning(ErrorMsgs.SQLsecureDataCollection, ErrorMsgs.SQLServerNoJobFoundCreateWarning);
                 }
             }
-            else if (resultCode == Sql.ScheduleJob.StartJobReturnCode.AgentNotStarted)
+            else if (resultCode == ScheduleJob.StartJobReturnCode.AgentNotStarted)
             {
-                Utility.MsgBox.ShowError(Utility.ErrorMsgs.SQLsecureDataCollection, Utility.ErrorMsgs.SQLServerAgentNotStarted);
+                if (showMsgBoxes) MsgBox.ShowError(ErrorMsgs.SQLsecureDataCollection, ErrorMsgs.SQLServerAgentNotStarted);
             }
 
-            if (resultCode == Sql.ScheduleJob.StartJobReturnCode.Success)
+            if (resultCode == ScheduleJob.StartJobReturnCode.Success)
             {
                 bStarted = true;
             }
@@ -554,14 +554,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
             notifyText = null;
             notifyTitle = null;
             string jobStatus;
-            
+
             if (HasCollectionEndedInThisInterval(out jobStatus))
             {
                 notifyTitle = NotifyCollectionCompleteSuccessTitle;
                 notifyText = string.Format(NotifyCollectionCompleteSuccessFmt, FullName);
 
-                if ((!(string.Compare(jobStatus, Sql.ScheduleJob.JobStatus_Succeeded, true) == 0))
-                    || m_LastSnapshotId == GetLatestSnapshotId())                    
+                if ((!(string.Compare(jobStatus, ScheduleJob.JobStatus_Succeeded, true) == 0))
+                    || m_LastSnapshotId == GetLatestSnapshotId())
                 {
                     notifyTitle = NotifyCollectionCompleteFailureTitle;
                     notifyText = string.Format(NotifyCollectionCompleteFailureFmt, FullName);
@@ -573,12 +573,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
         {
             jobStatus = null;
             bool isFinished = false;
-            
+
             if (m_IsDataCollectionInProgress && !m_jobid.IsNull)
             {
-                jobStatus = Sql.ScheduleJob.GetJobStatus(Program.gController.Repository.ConnectionString, m_jobid.Value);
-                
-                if( ! (string.Compare(jobStatus, Sql.ScheduleJob.JobStatus_Running, true) == 0) )
+                jobStatus = ScheduleJob.GetJobStatus(Program.gController.Repository.ConnectionString, m_jobid.Value);
+
+                if (!(string.Compare(jobStatus, ScheduleJob.JobStatus_Running, true) == 0))
                 {
                     isFinished = true;
                     m_IsDataCollectionInProgress = false;
@@ -604,8 +604,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
                     // Check if the instance is registered.
                     SqlParameter param = new SqlParameter(ParamGetRegisteredServerInstance, m_ConnectionName);
-                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
-                                                    QueryGetRegisteredServer, new SqlParameter[] { param }))
+                    using (SqlDataReader rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                                                    QueryGetRegisteredServer, new[] { param }))
                     {
                         if (rdr.HasRows && rdr.Read())
                         {
@@ -617,7 +617,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             catch (SqlException ex)
             {
                 logX.loggerX.Error("Error - Unable to refresh Registered Server from the Repository", ex);
-                MsgBox.ShowError(Utility.ErrorMsgs.CantGetRegisteredServer, ex.Message);
+                MsgBox.ShowError(ErrorMsgs.CantGetRegisteredServer, ex.Message);
             }
         }
 
@@ -630,7 +630,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 foreach (RegisteredServer newserver in serverlist)
                 {
                     RegisteredServer oldserver = Program.gController.Repository.RegisteredServers.Find(newserver.ConnectionName);
-                    
+
                     if (oldserver != null)
                     {
                         newserver.DataCollectionInProgress = oldserver.DataCollectionInProgress;
@@ -659,7 +659,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         // Open the connection.
                         connection.Open();
 
-                        using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                        using (SqlDataReader rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text,
                                                         QueryGetAllRegisteredServers, null))
                         {
                             while (rdr.Read())
@@ -674,13 +674,13 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
             catch (SqlException ex)
             {
-                logX.loggerX.Error(string.Format(Utility.ErrorMsgs.ErrorStub, Utility.ErrorMsgs.CantGetRegisteredServers), ex);
-                MsgBox.ShowError(Utility.ErrorMsgs.CantGetRegisteredServers, ex.Message);
+                logX.loggerX.Error(string.Format(ErrorMsgs.ErrorStub, ErrorMsgs.CantGetRegisteredServers), ex);
+                MsgBox.ShowError(ErrorMsgs.CantGetRegisteredServers, ex.Message);
             }
             catch (Exception ex)
             {
-                logX.loggerX.Error(string.Format(Utility.ErrorMsgs.ErrorStub, Utility.ErrorMsgs.CantGetRegisteredServers), ex);
-                MsgBox.ShowError(Utility.ErrorMsgs.CantGetRegisteredServers, ex.Message);
+                logX.loggerX.Error(string.Format(ErrorMsgs.ErrorStub, ErrorMsgs.CantGetRegisteredServers), ex);
+                MsgBox.ShowError(ErrorMsgs.CantGetRegisteredServers, ex.Message);
             }
 
             return serverList;
@@ -711,18 +711,18 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
                         // Check if the instance is registerred.
                         SqlParameter param = new SqlParameter(ParamIsServerRegisteredInstance, instance);
-                        using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                        using (SqlDataReader rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text,
                                                                                QueryIsServerRegistererd,
-                                                                               new SqlParameter[] {param}))
+                                                                               new[] { param }))
                         {
                             isRegistered = rdr.HasRows;
                         }
                     }
                 }
-                catch(SqlException ex)
+                catch (SqlException ex)
                 {
-                    logX.loggerX.Error(string.Format(Utility.ErrorMsgs.ErrorStub, Utility.ErrorMsgs.CantGetRegisteredServer), ex);
-                    MsgBox.ShowError(Utility.ErrorMsgs.RegisteredServerCaption, Utility.ErrorMsgs.CantGetRegisteredServer, ex);
+                    logX.loggerX.Error(string.Format(ErrorMsgs.ErrorStub, ErrorMsgs.CantGetRegisteredServer), ex);
+                    MsgBox.ShowError(ErrorMsgs.RegisteredServerCaption, ErrorMsgs.CantGetRegisteredServer, ex);
                 }
             }
 
@@ -742,7 +742,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 string windowsPassword,
                 string version,
                 int retentionPeriod,
-                string[] auditFolders 
+                string[] auditFolders
             )
         {
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
@@ -771,13 +771,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 SqlParameter paramServerlogin = new SqlParameter(ParamRegisterServerServerlogin, windowsUser);
                 SqlParameter paramServerpassword = new SqlParameter(ParamRegisterServerServerpassword, cipherWindowsPassword);
                 SqlParameter paramVersion = new SqlParameter(ParamRegisterServerVersion, version);
-                SqlParameter paramRetentionPeriod = new SqlParameter(ParamRegisterServerRetentionPeriod, retentionPeriod); 
+                SqlParameter paramRetentionPeriod = new SqlParameter(ParamRegisterServerRetentionPeriod, retentionPeriod);
                 SqlParameter paramAuditFoldersString = new SqlParameter(ParamAuditFoldersString, auditFoldersString);
 
-                Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                NonQueryRegisterServer, new SqlParameter[] { paramConnectionname, paramConnectionport, paramServername, 
-                                                        paramInstancename, paramAuthmode, paramLoginname, paramLoginpassword, 
-                                                            paramServerlogin, paramServerpassword, paramVersion, paramRetentionPeriod, paramAuditFoldersString});
+                SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
+                                NonQueryRegisterServer, paramConnectionname, paramConnectionport, paramServername, paramInstancename, paramAuthmode, paramLoginname, paramLoginpassword, paramServerlogin, paramServerpassword, paramVersion, paramRetentionPeriod, paramAuditFoldersString);
             }
         }
 
@@ -787,9 +785,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
             Debug.Assert(!string.IsNullOrEmpty(removeConnection));
             Debug.Assert(!removeConnection.Contains(","));
 
-            Sql.RegisteredServer registeredServer = null;
-            Sql.RegisteredServer.GetServer(connectionString, removeConnection, out registeredServer);
-            Sql.ScheduleJob.RemoveJob(connectionString, registeredServer.JobId, Sql.ScheduleJob.GetSnapshotJobName(registeredServer.ConnectionName));
+            RegisteredServer registeredServer = null;
+            GetServer(connectionString, removeConnection, out registeredServer);
+            ScheduleJob.RemoveJob(connectionString, registeredServer.JobId, ScheduleJob.GetSnapshotJobName(registeredServer.ConnectionName));
 
             // Open connection to repository and remove server.
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -800,8 +798,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 // Setup register server params.
                 SqlParameter paramConnectionname = new SqlParameter(ParamRemoveServerConnectionname, removeConnection);
 
-                Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                NonQueryRemoveServer, new SqlParameter[] { paramConnectionname });                                              
+                SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
+                                NonQueryRemoveServer, paramConnectionname);
             }
         }
 
@@ -831,8 +829,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
                 // Check if the instance is registered.
                 SqlParameter param = new SqlParameter(ParamGetRegisteredServerInstance, instance);
-                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
-                                                QueryGetRegisteredServer, new SqlParameter[] { param }))
+                using (SqlDataReader rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                                                QueryGetRegisteredServer, new[] { param }))
                 {
                     if (rdr.HasRows && rdr.Read())
                     {
@@ -857,12 +855,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 SqlParameter paramConnectionname = new SqlParameter(ParamUpdateRetentionPeriodConnectionname, connectionName);
                 SqlParameter paramRetentionPeriod = new SqlParameter(ParamUpdateRetentionPeriod, retentionPeriod);
 
-                Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                NonQueryUpdateRetentionPeriod, new SqlParameter[] { paramConnectionname, paramRetentionPeriod });
+                SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
+                                NonQueryUpdateRetentionPeriod, paramConnectionname, paramRetentionPeriod);
             }
         }
 
-        static public void UpdateCredentials (
+        static public void UpdateCredentials(
                 string connectionString,
                 string connectionName,
                 string sqlLogin,
@@ -893,13 +891,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 SqlParameter paramServerlogin = new SqlParameter(ParamChangeServerCredentialsServerlogin, windowsUser);
                 SqlParameter paramServerpassword = new SqlParameter(ParamChangeServerCredentialsServerpassword, cipherWindowsPassword);
 
-                Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                NonQueryChangeServerCredentials, new SqlParameter[] { paramConnectionname, paramLogingname, paramLoginpassword,
-                                                                                        paramAuthmode, paramServerlogin, paramServerpassword });
+                SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
+                                NonQueryChangeServerCredentials, paramConnectionname, paramLogingname, paramLoginpassword, paramAuthmode, paramServerlogin, paramServerpassword);
             }
         }
 
-        static public void UpdateFolders(string connectionString, string connectionName, string[] folders )
+        static public void UpdateFolders(string connectionString, string connectionName, string[] folders)
         {
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
 
@@ -916,13 +913,13 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     SqlParameter paramConnectionname = new SqlParameter(ParamChangeServerCredentialsConnectionname, connectionName);
                     SqlParameter paramAuditFoldersString = new SqlParameter(ParamAuditFoldersString, auditFoldersString);
                     SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                                  NonQueryChangeAuditFolders, new SqlParameter[] { paramConnectionname, paramAuditFoldersString });
+                                                  NonQueryChangeAuditFolders, paramConnectionname, paramAuditFoldersString);
                 }
             }
             catch (Exception ex)
             {
                 logX.loggerX.Error(string.Format("Failed to update audit folders. Error message: {0}", ex.Message));
-            }   
+            }
         }
 
         static public void AddRegisteredServerToPolicy(int registeredServerId, int policyId)
@@ -939,15 +936,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     SqlParameter paramRegisteredServerId = new SqlParameter(ParamRegistedServerId, registeredServerId);
                     SqlParameter paramPolicyId = new SqlParameter(ParamPolicyId, policyId);
 
-                    Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                                  NonQueryAddRegisteredServerToPolicy, new SqlParameter[]
-                                                                         { paramRegisteredServerId, paramPolicyId });
+                    SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
+                                                  NonQueryAddRegisteredServerToPolicy, paramRegisteredServerId, paramPolicyId);
                 }
             }
             catch (Exception ex)
             {
                 logX.loggerX.Error(string.Format("Failed to add Registered Server to policy error message: {0}", ex.Message));
-            }            
+            }
         }
 
         static public void AddRegisteredServerToPolicy(int registeredServerId, int policyId, int assessmentId)
@@ -965,8 +961,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     SqlParameter paramPolicyId = new SqlParameter(ParamPolicyId, policyId);
                     SqlParameter paramAssessmentId = new SqlParameter(ParamAssessmentId, assessmentId);
 
-                    Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                                  NonQueryAddRegisteredServerToPolicy, new SqlParameter[] { paramRegisteredServerId, paramPolicyId, paramAssessmentId });
+                    SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
+                                                  NonQueryAddRegisteredServerToPolicy, paramRegisteredServerId, paramPolicyId, paramAssessmentId);
                 }
             }
             catch (Exception ex)
@@ -990,8 +986,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     SqlParameter paramPolicyId = new SqlParameter(ParamPolicyId, policyId);
                     SqlParameter paramAssessmentId = new SqlParameter(ParamAssessmentId, assessmentId);
 
-                    Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                                  NonQueryRemoveRegisteredServerFromPolicy, new SqlParameter[] { paramRegisteredServerId, paramPolicyId, paramAssessmentId });
+                    SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
+                                                  NonQueryRemoveRegisteredServerFromPolicy, paramRegisteredServerId, paramPolicyId, paramAssessmentId);
                 }
             }
             catch (Exception ex)
@@ -1005,7 +1001,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             Debug.Assert(!string.IsNullOrEmpty(server));
 
             string full = server;
-            
+
             if (!string.IsNullOrEmpty(instance))
             {
                 full += @"\" + instance;

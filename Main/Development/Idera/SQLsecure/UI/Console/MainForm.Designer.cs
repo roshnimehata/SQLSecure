@@ -105,11 +105,13 @@ namespace Idera.SQLsecure.UI.Console
             this._resultPane = new System.Windows.Forms.Panel();
             this._resultHeader = new Idera.SQLsecure.UI.Console.Controls.HeaderStrip();
             this._resultTitleLabel = new System.Windows.Forms.ToolStripLabel();
+            this._resultShowHideButton = new System.Windows.Forms.ToolStripButton();
             this._menuStrip = new System.Windows.Forms.MenuStrip();
             this._menuStrip_File = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_Connect = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_Sep0 = new System.Windows.Forms.ToolStripSeparator();
             this._menuStrip_File_NewSQLServer = new System.Windows.Forms.ToolStripMenuItem();
+            this._menuStrip_File_ImportSqlServers = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_NewLogin = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_Sep1 = new System.Windows.Forms.ToolStripSeparator();
             this._menuStrip_File_ManageLicense = new System.Windows.Forms.ToolStripMenuItem();
@@ -144,6 +146,7 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_Tools_ReportingServices_Configure = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_Tools_Separator_ReportingServices = new System.Windows.Forms.ToolStripSeparator();
             this.configureSMPTEmaiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configureWeakPasswordDetectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_Help = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_Help_ThisWindow = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_Help_Sep0 = new System.Windows.Forms.ToolStripSeparator();
@@ -160,29 +163,28 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_Help_Sep3 = new System.Windows.Forms.ToolStripSeparator();
             this._menuStrip_Help_About = new System.Windows.Forms.ToolStripMenuItem();
             this._toolStrip = new System.Windows.Forms.ToolStrip();
+            this._toolStrip_NewSQLServer = new System.Windows.Forms.ToolStripButton();
+            this._toolStrip_ImportServers = new System.Windows.Forms.ToolStripButton();
+            this._toolStrip_NewLogin = new System.Windows.Forms.ToolStripButton();
             this._toolStrip_Sep0 = new System.Windows.Forms.ToolStripSeparator();
+            this._toolStrip_Remove = new System.Windows.Forms.ToolStripButton();
+            this._toolStrip_ConfigureDataCollection = new System.Windows.Forms.ToolStripButton();
+            this._toolStrip_Properties = new System.Windows.Forms.ToolStripButton();
+            this._toolStrip_Refresh = new System.Windows.Forms.ToolStripButton();
             this._toolStrip_Sep1 = new System.Windows.Forms.ToolStripSeparator();
+            this._toolStrip_UserPermissions = new System.Windows.Forms.ToolStripButton();
+            this._toolStrip_ObjectPermissions = new System.Windows.Forms.ToolStripButton();
             this._toolStrip_Sep2 = new System.Windows.Forms.ToolStripSeparator();
+            this._toolStrip_Collect = new System.Windows.Forms.ToolStripButton();
+            this._toolStrip_Baseline = new System.Windows.Forms.ToolStripButton();
             this._toolStrip_Sep3 = new System.Windows.Forms.ToolStripSeparator();
+            this._toolStrip_Help = new System.Windows.Forms.ToolStripButton();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip_NotifyIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenu_NotifyShow = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_NotifyClose = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog_ExportPolicy = new System.Windows.Forms.SaveFileDialog();
-            this.configureWeakPasswordDetectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._resultShowHideButton = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_NewSQLServer = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_NewLogin = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_Remove = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_ConfigureDataCollection = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_Properties = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_Refresh = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_UserPermissions = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_ObjectPermissions = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_Collect = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_Baseline = new System.Windows.Forms.ToolStripButton();
-            this._toolStrip_Help = new System.Windows.Forms.ToolStripButton();
             this.ultraExplorerBarContainerControl4.SuspendLayout();
             this._splitContainer_SecuritySummary.Panel1.SuspendLayout();
             this._splitContainer_SecuritySummary.Panel2.SuspendLayout();
@@ -216,7 +218,7 @@ namespace Idera.SQLsecure.UI.Console
             this.ultraExplorerBarContainerControl4.Controls.Add(this._splitContainer_SecuritySummary);
             this.ultraExplorerBarContainerControl4.Location = new System.Drawing.Point(0, 25);
             this.ultraExplorerBarContainerControl4.Name = "ultraExplorerBarContainerControl4";
-            this.ultraExplorerBarContainerControl4.Size = new System.Drawing.Size(231, 450);
+            this.ultraExplorerBarContainerControl4.Size = new System.Drawing.Size(308, 450);
             this.ultraExplorerBarContainerControl4.TabIndex = 3;
             // 
             // _splitContainer_SecuritySummary
@@ -237,7 +239,7 @@ namespace Idera.SQLsecure.UI.Console
             this._splitContainer_SecuritySummary.Panel2.Controls.Add(this._explorerBar_SecuritySummaryTreeView);
             this._splitContainer_SecuritySummary.Panel2.Controls.Add(this._headerStrip_PolicyServers);
             this._splitContainer_SecuritySummary.Panel2MinSize = 44;
-            this._splitContainer_SecuritySummary.Size = new System.Drawing.Size(231, 450);
+            this._splitContainer_SecuritySummary.Size = new System.Drawing.Size(308, 450);
             this._splitContainer_SecuritySummary.SplitterDistance = 212;
             this._splitContainer_SecuritySummary.SplitterWidth = 3;
             this._splitContainer_SecuritySummary.TabIndex = 3;
@@ -252,14 +254,14 @@ namespace Idera.SQLsecure.UI.Console
             this._explorerBar_SecuritySummaryPolicyTreeView.HideSelection = false;
             this._explorerBar_SecuritySummaryPolicyTreeView.Location = new System.Drawing.Point(0, 25);
             this._explorerBar_SecuritySummaryPolicyTreeView.Name = "_explorerBar_SecuritySummaryPolicyTreeView";
-            this._explorerBar_SecuritySummaryPolicyTreeView.Size = new System.Drawing.Size(231, 187);
+            this._explorerBar_SecuritySummaryPolicyTreeView.Size = new System.Drawing.Size(308, 187);
             this._explorerBar_SecuritySummaryPolicyTreeView.TabIndex = 3;
+            this._explorerBar_SecuritySummaryPolicyTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this._explorerBar_SecuritySummaryPolicyTreeView_BeforeSelect);
+            this._explorerBar_SecuritySummaryPolicyTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._explorerBar_SecuritySummaryPolicyTreeView_AfterSelect);
+            this._explorerBar_SecuritySummaryPolicyTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._explorerBar_SecuritySummaryPolicyTreeView_NodeMouseClick);
             this._explorerBar_SecuritySummaryPolicyTreeView.VisibleChanged += new System.EventHandler(this._explorerBar_SecuritySummaryPolicyTreeView_VisibleChanged);
             this._explorerBar_SecuritySummaryPolicyTreeView.Enter += new System.EventHandler(this._explorerBar_SecuritySummaryPolicyTreeView_Enter);
-            this._explorerBar_SecuritySummaryPolicyTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._explorerBar_SecuritySummaryPolicyTreeView_AfterSelect);
             this._explorerBar_SecuritySummaryPolicyTreeView.Leave += new System.EventHandler(this._explorerBar_SecuritySummaryPolicyTreeView_Leave);
-            this._explorerBar_SecuritySummaryPolicyTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._explorerBar_SecuritySummaryPolicyTreeView_NodeMouseClick);
-            this._explorerBar_SecuritySummaryPolicyTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this._explorerBar_SecuritySummaryPolicyTreeView_BeforeSelect);
             // 
             // _contextMenuStrip_Policy
             // 
@@ -466,7 +468,7 @@ namespace Idera.SQLsecure.UI.Console
             this._headerStrip_Policies.Location = new System.Drawing.Point(0, 0);
             this._headerStrip_Policies.Name = "_headerStrip_Policies";
             this._headerStrip_Policies.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this._headerStrip_Policies.Size = new System.Drawing.Size(231, 25);
+            this._headerStrip_Policies.Size = new System.Drawing.Size(308, 25);
             this._headerStrip_Policies.TabIndex = 4;
             // 
             // _toolStripLabel_Policies
@@ -484,13 +486,13 @@ namespace Idera.SQLsecure.UI.Console
             this._explorerBar_SecuritySummaryTreeView.HideSelection = false;
             this._explorerBar_SecuritySummaryTreeView.Location = new System.Drawing.Point(0, 25);
             this._explorerBar_SecuritySummaryTreeView.Name = "_explorerBar_SecuritySummaryTreeView";
-            this._explorerBar_SecuritySummaryTreeView.Size = new System.Drawing.Size(231, 210);
+            this._explorerBar_SecuritySummaryTreeView.Size = new System.Drawing.Size(308, 210);
             this._explorerBar_SecuritySummaryTreeView.TabIndex = 2;
+            this._explorerBar_SecuritySummaryTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._explorerBar_SecuritySummaryTreeView_AfterSelect);
+            this._explorerBar_SecuritySummaryTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._explorerBar_SecuritySummaryTreeView_NodeMouseClick);
             this._explorerBar_SecuritySummaryTreeView.VisibleChanged += new System.EventHandler(this._explorerBar_SecuritySummaryTreeView_VisibleChanged);
             this._explorerBar_SecuritySummaryTreeView.Enter += new System.EventHandler(this._explorerBar_SecuritySummaryTreeView_Enter);
-            this._explorerBar_SecuritySummaryTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._explorerBar_SecuritySummaryTreeView_AfterSelect);
             this._explorerBar_SecuritySummaryTreeView.Leave += new System.EventHandler(this._explorerBar_SecuritySummaryTreeView_Leave);
-            this._explorerBar_SecuritySummaryTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._explorerBar_SecuritySummaryTreeView_NodeMouseClick);
             // 
             // _headerStrip_PolicyServers
             // 
@@ -504,7 +506,7 @@ namespace Idera.SQLsecure.UI.Console
             this._headerStrip_PolicyServers.Location = new System.Drawing.Point(0, 0);
             this._headerStrip_PolicyServers.Name = "_headerStrip_PolicyServers";
             this._headerStrip_PolicyServers.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this._headerStrip_PolicyServers.Size = new System.Drawing.Size(231, 25);
+            this._headerStrip_PolicyServers.Size = new System.Drawing.Size(308, 25);
             this._headerStrip_PolicyServers.TabIndex = 5;
             // 
             // _toolStripLabel_PolicyServers
@@ -533,12 +535,12 @@ namespace Idera.SQLsecure.UI.Console
             this._explorerBar_ExplorePermissionsTreeView.Name = "_explorerBar_ExplorePermissionsTreeView";
             this._explorerBar_ExplorePermissionsTreeView.Size = new System.Drawing.Size(231, 450);
             this._explorerBar_ExplorePermissionsTreeView.TabIndex = 0;
+            this._explorerBar_ExplorePermissionsTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this._explorerBar_ExplorePermissionsTreeView_BeforeSelect);
+            this._explorerBar_ExplorePermissionsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._explorerBar_ExplorePermissionsTreeView_AfterSelect);
+            this._explorerBar_ExplorePermissionsTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._explorerBar_ExplorePermissionsTreeView_NodeMouseClick);
             this._explorerBar_ExplorePermissionsTreeView.VisibleChanged += new System.EventHandler(this._explorerBar_ExplorePermissionsTreeView_VisibleChanged);
             this._explorerBar_ExplorePermissionsTreeView.Enter += new System.EventHandler(this._explorerBar_ExplorePermissionsTreeView_Enter);
-            this._explorerBar_ExplorePermissionsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._explorerBar_ExplorePermissionsTreeView_AfterSelect);
             this._explorerBar_ExplorePermissionsTreeView.Leave += new System.EventHandler(this._explorerBar_ExplorePermissionsTreeView_Leave);
-            this._explorerBar_ExplorePermissionsTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._explorerBar_ExplorePermissionsTreeView_NodeMouseClick);
-            this._explorerBar_ExplorePermissionsTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this._explorerBar_ExplorePermissionsTreeView_BeforeSelect);
             // 
             // _contextMenuStrip_Server
             // 
@@ -610,7 +612,7 @@ namespace Idera.SQLsecure.UI.Console
             this._cmsi_Server_configureAuditSettings.Size = new System.Drawing.Size(216, 22);
             this._cmsi_Server_configureAuditSettings.Text = "Configure Audit Settings...";
             this._cmsi_Server_configureAuditSettings.ToolTipText = "Configure audit filters and collector account credentials use to collect audit da" +
-                "ta";
+    "ta";
             this._cmsi_Server_configureAuditSettings.Click += new System.EventHandler(this._cmsi_Server_configureDataCollection_Click);
             // 
             // _cmsi_Server_collectDataSnapshot
@@ -683,10 +685,10 @@ namespace Idera.SQLsecure.UI.Console
             this._explorerBar_ReportsTreeView.Name = "_explorerBar_ReportsTreeView";
             this._explorerBar_ReportsTreeView.Size = new System.Drawing.Size(231, 288);
             this._explorerBar_ReportsTreeView.TabIndex = 1;
-            this._explorerBar_ReportsTreeView.Enter += new System.EventHandler(this._explorerBar_ReportsTreeView_Enter);
+            this._explorerBar_ReportsTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this._explorerBar_ReportsTreeView_BeforeSelect);
             this._explorerBar_ReportsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._explorerBar_ReportsTreeView_AfterSelect);
             this._explorerBar_ReportsTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._explorerBar_ReportsTreeView_NodeMouseClick);
-            this._explorerBar_ReportsTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this._explorerBar_ReportsTreeView_BeforeSelect);
+            this._explorerBar_ReportsTreeView.Enter += new System.EventHandler(this._explorerBar_ReportsTreeView_Enter);
             // 
             // _viewSection_ReportSettings
             // 
@@ -772,8 +774,8 @@ namespace Idera.SQLsecure.UI.Console
             // 
             // _comboBox_Report_Policies
             // 
-            this._comboBox_Report_Policies.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._comboBox_Report_Policies.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._comboBox_Report_Policies.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this._comboBox_Report_Policies.Location = new System.Drawing.Point(6, 94);
             this._comboBox_Report_Policies.MaxDropDownItems = 50;
@@ -784,11 +786,10 @@ namespace Idera.SQLsecure.UI.Console
             // 
             // _dateTimePicker_Reports
             // 
-            this._dateTimePicker_Reports.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._dateTimePicker_Reports.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             appearance1.FontData.Name = "Microsoft Sans Serif";
             appearance1.FontData.SizeInPoints = 8.5F;
-            appearance1.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.calendar_down;
             appearance1.ImageHAlign = Infragistics.Win.HAlign.Right;
             this._dateTimePicker_Reports.Appearance = appearance1;
             this._dateTimePicker_Reports.BackColor = System.Drawing.SystemColors.Window;
@@ -822,10 +823,10 @@ namespace Idera.SQLsecure.UI.Console
             this._explorerBar_ManageSQLsecureTreeView.ShowLines = false;
             this._explorerBar_ManageSQLsecureTreeView.Size = new System.Drawing.Size(231, 450);
             this._explorerBar_ManageSQLsecureTreeView.TabIndex = 2;
-            this._explorerBar_ManageSQLsecureTreeView.Enter += new System.EventHandler(this._explorerBar_ManageSQLsecureTreeView_Enter);
+            this._explorerBar_ManageSQLsecureTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this._explorerBar_ManageSQLsecureTreeView_BeforeSelect);
             this._explorerBar_ManageSQLsecureTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._explorerBar_ManageSQLsecureTreeView_AfterSelect);
             this._explorerBar_ManageSQLsecureTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this._explorerBar_ManageSQLsecureTreeView_NodeMouseClick);
-            this._explorerBar_ManageSQLsecureTreeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this._explorerBar_ManageSQLsecureTreeView_BeforeSelect);
+            this._explorerBar_ManageSQLsecureTreeView.Enter += new System.EventHandler(this._explorerBar_ManageSQLsecureTreeView_Enter);
             // 
             // toolStripContainer1
             // 
@@ -835,13 +836,13 @@ namespace Idera.SQLsecure.UI.Console
             // 
             this.toolStripContainer1.ContentPanel.BackColor = System.Drawing.Color.Transparent;
             this.toolStripContainer1.ContentPanel.Controls.Add(this._splitContainer);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(892, 617);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1190, 617);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
             this.toolStripContainer1.RightToolStripPanelVisible = false;
-            this.toolStripContainer1.Size = new System.Drawing.Size(892, 666);
+            this.toolStripContainer1.Size = new System.Drawing.Size(1190, 666);
             this.toolStripContainer1.TabIndex = 0;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -867,8 +868,8 @@ namespace Idera.SQLsecure.UI.Console
             this._splitContainer.Panel2.BackColor = System.Drawing.Color.White;
             this._splitContainer.Panel2.Controls.Add(this._resultPane);
             this._splitContainer.Panel2.Controls.Add(this._resultHeader);
-            this._splitContainer.Size = new System.Drawing.Size(892, 617);
-            this._splitContainer.SplitterDistance = 231;
+            this._splitContainer.Size = new System.Drawing.Size(1190, 617);
+            this._splitContainer.SplitterDistance = 308;
             this._splitContainer.SplitterWidth = 3;
             this._splitContainer.TabIndex = 0;
             this._splitContainer.TabStop = false;
@@ -911,7 +912,7 @@ namespace Idera.SQLsecure.UI.Console
             this._explorerBar.Location = new System.Drawing.Point(0, 0);
             this._explorerBar.Name = "_explorerBar";
             this._explorerBar.ShowDefaultContextMenu = false;
-            this._explorerBar.Size = new System.Drawing.Size(231, 617);
+            this._explorerBar.Size = new System.Drawing.Size(308, 617);
             this._explorerBar.Style = Infragistics.Win.UltraWinExplorerBar.UltraExplorerBarStyle.OutlookNavigationPane;
             this._explorerBar.TabIndex = 0;
             this._explorerBar.SelectedGroupChanging += new Infragistics.Win.UltraWinExplorerBar.SelectedGroupChangingEventHandler(this._explorerBar_SelectedGroupChanging);
@@ -925,7 +926,7 @@ namespace Idera.SQLsecure.UI.Console
             this._resultPane.Dock = System.Windows.Forms.DockStyle.Fill;
             this._resultPane.Location = new System.Drawing.Point(0, 25);
             this._resultPane.Name = "_resultPane";
-            this._resultPane.Size = new System.Drawing.Size(658, 592);
+            this._resultPane.Size = new System.Drawing.Size(879, 592);
             this._resultPane.TabIndex = 1;
             // 
             // _resultHeader
@@ -941,7 +942,7 @@ namespace Idera.SQLsecure.UI.Console
             this._resultHeader.Location = new System.Drawing.Point(0, 0);
             this._resultHeader.Name = "_resultHeader";
             this._resultHeader.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this._resultHeader.Size = new System.Drawing.Size(658, 25);
+            this._resultHeader.Size = new System.Drawing.Size(879, 25);
             this._resultHeader.TabIndex = 0;
             this._resultHeader.Text = "headerStrip1";
             // 
@@ -951,6 +952,19 @@ namespace Idera.SQLsecure.UI.Console
             this._resultTitleLabel.Name = "_resultTitleLabel";
             this._resultTitleLabel.Size = new System.Drawing.Size(42, 20);
             this._resultTitleLabel.Text = "Title";
+            // 
+            // _resultShowHideButton
+            // 
+            this._resultShowHideButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this._resultShowHideButton.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._resultShowHideButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this._resultShowHideButton.Image = ((System.Drawing.Image)(resources.GetObject("_resultShowHideButton.Image")));
+            this._resultShowHideButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this._resultShowHideButton.Name = "_resultShowHideButton";
+            this._resultShowHideButton.Size = new System.Drawing.Size(116, 20);
+            this._resultShowHideButton.Text = "toolStripButton1";
+            this._resultShowHideButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this._resultShowHideButton.Click += new System.EventHandler(this._ShowHideButton_Click);
             // 
             // _menuStrip
             // 
@@ -966,7 +980,7 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_Help});
             this._menuStrip.Location = new System.Drawing.Point(0, 0);
             this._menuStrip.Name = "_menuStrip";
-            this._menuStrip.Size = new System.Drawing.Size(892, 24);
+            this._menuStrip.Size = new System.Drawing.Size(1190, 24);
             this._menuStrip.TabIndex = 0;
             this._menuStrip.Text = "_menuStrip";
             this._menuStrip.MenuActivate += new System.EventHandler(this._menuStrip_MenuActivate);
@@ -977,6 +991,7 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_File_Connect,
             this._menuStrip_File_Sep0,
             this._menuStrip_File_NewSQLServer,
+            this._menuStrip_File_ImportSqlServers,
             this._menuStrip_File_NewLogin,
             this._menuStrip_File_Sep1,
             this._menuStrip_File_ManageLicense,
@@ -986,8 +1001,8 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_File.Name = "_menuStrip_File";
             this._menuStrip_File.Size = new System.Drawing.Size(37, 20);
             this._menuStrip_File.Text = "&File";
-            this._menuStrip_File.DropDownOpening += new System.EventHandler(this._menuStrip_File_DropDownOpening);
             this._menuStrip_File.DropDownClosed += new System.EventHandler(this.menu_DropDownClosed);
+            this._menuStrip_File.DropDownOpening += new System.EventHandler(this._menuStrip_File_DropDownOpening);
             // 
             // _menuStrip_File_Connect
             // 
@@ -1007,6 +1022,13 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_File_NewSQLServer.Size = new System.Drawing.Size(231, 22);
             this._menuStrip_File_NewSQLServer.Text = "Register a &SQL Server...";
             this._menuStrip_File_NewSQLServer.Click += new System.EventHandler(this._menuStrip_File_NewSQLServer_Click);
+            // 
+            // _menuStrip_File_ImportSqlServers
+            // 
+            this._menuStrip_File_ImportSqlServers.Name = "_menuStrip_File_ImportSqlServers";
+            this._menuStrip_File_ImportSqlServers.Size = new System.Drawing.Size(231, 22);
+            this._menuStrip_File_ImportSqlServers.Text = "Import SQL Servers";
+            this._menuStrip_File_ImportSqlServers.Click += new System.EventHandler(this.importSQLServersToolStripMenuItem_Click);
             // 
             // _menuStrip_File_NewLogin
             // 
@@ -1051,8 +1073,8 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_Edit.Name = "_menuStrip_Edit";
             this._menuStrip_Edit.Size = new System.Drawing.Size(39, 20);
             this._menuStrip_Edit.Text = "&Edit";
-            this._menuStrip_Edit.DropDownOpening += new System.EventHandler(this._menuStrip_Edit_DropDownOpening);
             this._menuStrip_Edit.DropDownClosed += new System.EventHandler(this.menu_DropDownClosed);
+            this._menuStrip_Edit.DropDownOpening += new System.EventHandler(this._menuStrip_Edit_DropDownOpening);
             // 
             // _menuStrip_Edit_Remove
             // 
@@ -1101,8 +1123,8 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_View.Name = "_menuStrip_View";
             this._menuStrip_View.Size = new System.Drawing.Size(44, 20);
             this._menuStrip_View.Text = "&View";
-            this._menuStrip_View.DropDownOpening += new System.EventHandler(this._menuStrip_View_DropDownOpening);
             this._menuStrip_View.DropDownClosed += new System.EventHandler(this.menu_DropDownClosed);
+            this._menuStrip_View.DropDownOpening += new System.EventHandler(this._menuStrip_View_DropDownOpening);
             // 
             // _menuStrip_View_Tasks
             // 
@@ -1166,8 +1188,8 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_Permissions.Name = "_menuStrip_Permissions";
             this._menuStrip_Permissions.Size = new System.Drawing.Size(57, 20);
             this._menuStrip_Permissions.Text = "E&xplore";
-            this._menuStrip_Permissions.DropDownOpening += new System.EventHandler(this._menuStrip_Permissions_DropDownOpening);
             this._menuStrip_Permissions.DropDownClosed += new System.EventHandler(this.menu_DropDownClosed);
+            this._menuStrip_Permissions.DropDownOpening += new System.EventHandler(this._menuStrip_Permissions_DropDownOpening);
             // 
             // _menuStrip_Permissions_UserPermissions
             // 
@@ -1193,8 +1215,8 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_Snapshots.Name = "_menuStrip_Snapshots";
             this._menuStrip_Snapshots.Size = new System.Drawing.Size(73, 20);
             this._menuStrip_Snapshots.Text = "&Snapshots";
-            this._menuStrip_Snapshots.DropDownOpening += new System.EventHandler(this._menuStrip_Snapshots_DropDownOpening);
             this._menuStrip_Snapshots.DropDownClosed += new System.EventHandler(this.menu_DropDownClosed);
+            this._menuStrip_Snapshots.DropDownOpening += new System.EventHandler(this._menuStrip_Snapshots_DropDownOpening);
             // 
             // _menuStrip_Snapshots_Collect
             // 
@@ -1228,8 +1250,8 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_Tools.Name = "_menuStrip_Tools";
             this._menuStrip_Tools.Size = new System.Drawing.Size(48, 20);
             this._menuStrip_Tools.Text = "&Tools";
-            this._menuStrip_Tools.DropDownOpening += new System.EventHandler(this._menuStrip_Tools_DropDownOpening);
             this._menuStrip_Tools.DropDownClosed += new System.EventHandler(this.menu_DropDownClosed);
+            this._menuStrip_Tools.DropDownOpening += new System.EventHandler(this._menuStrip_Tools_DropDownOpening);
             // 
             // _menuStrip_Tools_ReportingServices
             // 
@@ -1274,6 +1296,13 @@ namespace Idera.SQLsecure.UI.Console
             this.configureSMPTEmaiToolStripMenuItem.Text = "&Configure SMTP Email...";
             this.configureSMPTEmaiToolStripMenuItem.Click += new System.EventHandler(this.configureSMPTEmaiToolStripMenuItem_Click);
             // 
+            // configureWeakPasswordDetectionToolStripMenuItem
+            // 
+            this.configureWeakPasswordDetectionToolStripMenuItem.Name = "configureWeakPasswordDetectionToolStripMenuItem";
+            this.configureWeakPasswordDetectionToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.configureWeakPasswordDetectionToolStripMenuItem.Text = "Configure Weak Password Detection...";
+            this.configureWeakPasswordDetectionToolStripMenuItem.Click += new System.EventHandler(this.configureWeakPasswordDetectionTollStripMenuItem_Click);
+            // 
             // _menuStrip_Help
             // 
             this._menuStrip_Help.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1291,8 +1320,8 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_Help.Name = "_menuStrip_Help";
             this._menuStrip_Help.Size = new System.Drawing.Size(44, 20);
             this._menuStrip_Help.Text = "&Help";
-            this._menuStrip_Help.DropDownOpening += new System.EventHandler(this._menuStrip_Help_DropDownOpening);
             this._menuStrip_Help.DropDownClosed += new System.EventHandler(this.menu_DropDownClosed);
+            this._menuStrip_Help.DropDownOpening += new System.EventHandler(this._menuStrip_Help_DropDownOpening);
             // 
             // _menuStrip_Help_ThisWindow
             // 
@@ -1397,6 +1426,7 @@ namespace Idera.SQLsecure.UI.Console
             this._toolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this._toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this._toolStrip_NewSQLServer,
+            this._toolStrip_ImportServers,
             this._toolStrip_NewLogin,
             this._toolStrip_Sep0,
             this._toolStrip_Remove,
@@ -1413,94 +1443,8 @@ namespace Idera.SQLsecure.UI.Console
             this._toolStrip_Help});
             this._toolStrip.Location = new System.Drawing.Point(3, 24);
             this._toolStrip.Name = "_toolStrip";
-            this._toolStrip.Size = new System.Drawing.Size(289, 25);
+            this._toolStrip.Size = new System.Drawing.Size(312, 25);
             this._toolStrip.TabIndex = 1;
-            // 
-            // _toolStrip_Sep0
-            // 
-            this._toolStrip_Sep0.Name = "_toolStrip_Sep0";
-            this._toolStrip_Sep0.Size = new System.Drawing.Size(6, 25);
-            // 
-            // _toolStrip_Sep1
-            // 
-            this._toolStrip_Sep1.Name = "_toolStrip_Sep1";
-            this._toolStrip_Sep1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // _toolStrip_Sep2
-            // 
-            this._toolStrip_Sep2.Name = "_toolStrip_Sep2";
-            this._toolStrip_Sep2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // _toolStrip_Sep3
-            // 
-            this._toolStrip_Sep3.Name = "_toolStrip_Sep3";
-            this._toolStrip_Sep3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.notifyIcon1.BalloonTipText = "Data Collection for SQLserver GregVM is complete. You can now view information ab" +
-                "out this server.";
-            this.notifyIcon1.BalloonTipTitle = "SQLsecure Data Collection Complete";
-            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip_NotifyIcon;
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "Idera SQLsecure";
-            this.notifyIcon1.Visible = true;
-            // 
-            // contextMenuStrip_NotifyIcon
-            // 
-            this.contextMenuStrip_NotifyIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenu_NotifyShow,
-            this.toolStripMenuItem_NotifyClose});
-            this.contextMenuStrip_NotifyIcon.Name = "contextMenuStrip_NotifyIcon";
-            this.contextMenuStrip_NotifyIcon.ShowImageMargin = false;
-            this.contextMenuStrip_NotifyIcon.Size = new System.Drawing.Size(137, 48);
-            // 
-            // toolStripMenu_NotifyShow
-            // 
-            this.toolStripMenu_NotifyShow.Name = "toolStripMenu_NotifyShow";
-            this.toolStripMenu_NotifyShow.Size = new System.Drawing.Size(136, 22);
-            this.toolStripMenu_NotifyShow.Text = "Show SQLsecure";
-            this.toolStripMenu_NotifyShow.Click += new System.EventHandler(this.toolStripMenu_NotifyShow_Click);
-            // 
-            // toolStripMenuItem_NotifyClose
-            // 
-            this.toolStripMenuItem_NotifyClose.Name = "toolStripMenuItem_NotifyClose";
-            this.toolStripMenuItem_NotifyClose.Size = new System.Drawing.Size(136, 22);
-            this.toolStripMenuItem_NotifyClose.Text = "Exit SQLsecure";
-            this.toolStripMenuItem_NotifyClose.Click += new System.EventHandler(this.toolStripMenuItem_NotifyClose_Click);
-            // 
-            // timer1
-            // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 3000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // saveFileDialog_ExportPolicy
-            // 
-            this.saveFileDialog_ExportPolicy.FileName = "SQLsecurePolicy.xml";
-            this.saveFileDialog_ExportPolicy.Filter = "SQLsecure Policy files|*.xml|All files|*.*";
-            this.saveFileDialog_ExportPolicy.Title = "Export Policy";
-            // 
-            // configureWeakPasswordDetectionToolStripMenuItem
-            // 
-            this.configureWeakPasswordDetectionToolStripMenuItem.Name = "configureWeakPasswordDetectionToolStripMenuItem";
-            this.configureWeakPasswordDetectionToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
-            this.configureWeakPasswordDetectionToolStripMenuItem.Text = "Configure Weak Password Detection...";
-            this.configureWeakPasswordDetectionToolStripMenuItem.Click += new System.EventHandler(this.configureWeakPasswordDetectionTollStripMenuItem_Click);
-            // 
-            // _resultShowHideButton
-            // 
-            this._resultShowHideButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this._resultShowHideButton.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._resultShowHideButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
-            this._resultShowHideButton.Image = ((System.Drawing.Image)(resources.GetObject("_resultShowHideButton.Image")));
-            this._resultShowHideButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this._resultShowHideButton.Name = "_resultShowHideButton";
-            this._resultShowHideButton.Size = new System.Drawing.Size(116, 20);
-            this._resultShowHideButton.Text = "toolStripButton1";
-            this._resultShowHideButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this._resultShowHideButton.Click += new System.EventHandler(this._ShowHideButton_Click);
             // 
             // _toolStrip_NewSQLServer
             // 
@@ -1513,6 +1457,15 @@ namespace Idera.SQLsecure.UI.Console
             this._toolStrip_NewSQLServer.ToolTipText = "Register a SQL Server";
             this._toolStrip_NewSQLServer.Click += new System.EventHandler(this._toolStrip_NewSQLServer_Click);
             // 
+            // _toolStrip_ImportServers
+            // 
+            this._toolStrip_ImportServers.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this._toolStrip_ImportServers.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this._toolStrip_ImportServers.Name = "_toolStrip_ImportServers";
+            this._toolStrip_ImportServers.Size = new System.Drawing.Size(23, 22);
+            this._toolStrip_ImportServers.Text = "Import SQL Servers";
+            this._toolStrip_ImportServers.Click += new System.EventHandler(this._toolStrip_ImportServers_Click);
+            // 
             // _toolStrip_NewLogin
             // 
             this._toolStrip_NewLogin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -1523,6 +1476,11 @@ namespace Idera.SQLsecure.UI.Console
             this._toolStrip_NewLogin.Text = "New SQL Server Login";
             this._toolStrip_NewLogin.ToolTipText = "New SQLsecure Login";
             this._toolStrip_NewLogin.Click += new System.EventHandler(this._toolStrip_NewLogin_Click);
+            // 
+            // _toolStrip_Sep0
+            // 
+            this._toolStrip_Sep0.Name = "_toolStrip_Sep0";
+            this._toolStrip_Sep0.Size = new System.Drawing.Size(6, 25);
             // 
             // _toolStrip_Remove
             // 
@@ -1565,6 +1523,11 @@ namespace Idera.SQLsecure.UI.Console
             this._toolStrip_Refresh.Text = "Refresh";
             this._toolStrip_Refresh.Click += new System.EventHandler(this._toolStrip_Refresh_Click);
             // 
+            // _toolStrip_Sep1
+            // 
+            this._toolStrip_Sep1.Name = "_toolStrip_Sep1";
+            this._toolStrip_Sep1.Size = new System.Drawing.Size(6, 25);
+            // 
             // _toolStrip_UserPermissions
             // 
             this._toolStrip_UserPermissions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -1586,6 +1549,11 @@ namespace Idera.SQLsecure.UI.Console
             this._toolStrip_ObjectPermissions.ToolTipText = "Explore Object Permissions";
             this._toolStrip_ObjectPermissions.Click += new System.EventHandler(this._toolStrip_ObjectPermissions_Click);
             // 
+            // _toolStrip_Sep2
+            // 
+            this._toolStrip_Sep2.Name = "_toolStrip_Sep2";
+            this._toolStrip_Sep2.Size = new System.Drawing.Size(6, 25);
+            // 
             // _toolStrip_Collect
             // 
             this._toolStrip_Collect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -1606,6 +1574,11 @@ namespace Idera.SQLsecure.UI.Console
             this._toolStrip_Baseline.Text = "Mark as Baseline";
             this._toolStrip_Baseline.Click += new System.EventHandler(this._toolStrip_Baseline_Click);
             // 
+            // _toolStrip_Sep3
+            // 
+            this._toolStrip_Sep3.Name = "_toolStrip_Sep3";
+            this._toolStrip_Sep3.Size = new System.Drawing.Size(6, 25);
+            // 
             // _toolStrip_Help
             // 
             this._toolStrip_Help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -1615,6 +1588,52 @@ namespace Idera.SQLsecure.UI.Console
             this._toolStrip_Help.Size = new System.Drawing.Size(23, 22);
             this._toolStrip_Help.Text = "Help";
             this._toolStrip_Help.Click += new System.EventHandler(this._toolStrip_Help_Click);
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.notifyIcon1.BalloonTipText = "Data Collection for SQLserver GregVM is complete. You can now view information ab" +
+    "out this server.";
+            this.notifyIcon1.BalloonTipTitle = "SQLsecure Data Collection Complete";
+            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip_NotifyIcon;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "Idera SQLsecure";
+            this.notifyIcon1.Visible = true;
+            // 
+            // contextMenuStrip_NotifyIcon
+            // 
+            this.contextMenuStrip_NotifyIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenu_NotifyShow,
+            this.toolStripMenuItem_NotifyClose});
+            this.contextMenuStrip_NotifyIcon.Name = "contextMenuStrip_NotifyIcon";
+            this.contextMenuStrip_NotifyIcon.ShowImageMargin = false;
+            this.contextMenuStrip_NotifyIcon.Size = new System.Drawing.Size(137, 48);
+            // 
+            // toolStripMenu_NotifyShow
+            // 
+            this.toolStripMenu_NotifyShow.Name = "toolStripMenu_NotifyShow";
+            this.toolStripMenu_NotifyShow.Size = new System.Drawing.Size(136, 22);
+            this.toolStripMenu_NotifyShow.Text = "Show SQLsecure";
+            this.toolStripMenu_NotifyShow.Click += new System.EventHandler(this.toolStripMenu_NotifyShow_Click);
+            // 
+            // toolStripMenuItem_NotifyClose
+            // 
+            this.toolStripMenuItem_NotifyClose.Name = "toolStripMenuItem_NotifyClose";
+            this.toolStripMenuItem_NotifyClose.Size = new System.Drawing.Size(136, 22);
+            this.toolStripMenuItem_NotifyClose.Text = "Exit SQLsecure";
+            this.toolStripMenuItem_NotifyClose.Click += new System.EventHandler(this.toolStripMenuItem_NotifyClose_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 3000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // saveFileDialog_ExportPolicy
+            // 
+            this.saveFileDialog_ExportPolicy.FileName = "SQLsecurePolicy.xml";
+            this.saveFileDialog_ExportPolicy.Filter = "SQLsecure Policy files|*.xml|All files|*.*";
+            this.saveFileDialog_ExportPolicy.Title = "Export Policy";
             // 
             // MainForm
             // 
@@ -1627,9 +1646,9 @@ namespace Idera.SQLsecure.UI.Console
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "MainForm";
             this.Text = "Idera SQLsecure";
-            this.Load += new System.EventHandler(this.MainForm_Load);
             this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ultraExplorerBarContainerControl4.ResumeLayout(false);
             this._splitContainer_SecuritySummary.Panel1.ResumeLayout(false);
             this._splitContainer_SecuritySummary.Panel2.ResumeLayout(false);
@@ -1817,6 +1836,8 @@ namespace Idera.SQLsecure.UI.Console
         private System.Windows.Forms.ToolStripMenuItem _cmsi_Policy_viewLog;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem configureWeakPasswordDetectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton _toolStrip_ImportServers;
+        private System.Windows.Forms.ToolStripMenuItem _menuStrip_File_ImportSqlServers;
     }
 }
 

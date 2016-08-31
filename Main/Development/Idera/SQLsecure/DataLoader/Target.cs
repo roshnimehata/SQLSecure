@@ -904,7 +904,7 @@ namespace Idera.SQLsecure.Collector
                                                     version,
                                                     edition,
                                                     Constants.StatusInProgress,
-                                // loginAuditMode,
+                                                    // loginAuditMode,
                                                     crossDbOwnership,
                                                     enableC2AuditTrace,
                                                     enableProxyAcct,
@@ -977,7 +977,7 @@ namespace Idera.SQLsecure.Collector
 
                     try
                     {
-                  
+
                         isOk = SqlJob.ProcessProxies(m_VersionEnum, ConnectionString,
                             m_Repository.ConnectionString, snapshotid, servername);
 
@@ -1007,7 +1007,7 @@ namespace Idera.SQLsecure.Collector
                     }
                     Program.RestoreImpersonationContext(ic);
                 }
-                if (isOk && m_VersionEnum != ServerVersion.Unsupported && m_VersionEnum>=ServerVersion.SQL2012)
+                if (isOk && m_VersionEnum != ServerVersion.Unsupported && m_VersionEnum >= ServerVersion.SQL2012)
                 {
                     Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
 
@@ -1598,7 +1598,7 @@ namespace Idera.SQLsecure.Collector
                             strNewMessage = string.Format("Failed to load file permissions for '{0}' audit folder", auditFolder);
                             PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                             snapshotStatus = Constants.StatusWarning;
-                        }   
+                        }
                     }
 
                     if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
@@ -1721,6 +1721,23 @@ namespace Idera.SQLsecure.Collector
 
                     // Load group memberships.
                     sw.Reset();
+
+                    //Process LinkedServer permissions
+                    sw.Start();
+                    if (isOk)
+                    {
+                        
+                        if (!LinkedServer.Process(ConnectionString, m_Repository.ConnectionString, m_snapshotId, ref metricsData))
+                        {
+                            strNewMessage = "Failed to process server objects";
+                            PostActivityMessage(ref strErrorMessage, strNewMessage, Constants.ActivityType_Error);
+                            snapshotStatus = Constants.StatusError;
+                            isOk = false;
+                        }
+                    }
+                    sw.Reset();
+
+
                     sw.Start();
                     if (isOk)
                     {

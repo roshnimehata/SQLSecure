@@ -155,7 +155,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         #region overrides
 
-        protected override void showRefresh()
+        protected override void ShowRefresh()
         {
             Cursor = Cursors.WaitCursor;
 
@@ -470,7 +470,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         {
             Cursor = Cursors.WaitCursor;
 
-            showRefresh();
+            ShowRefresh();
 
             Cursor = Cursors.Default;
         } 

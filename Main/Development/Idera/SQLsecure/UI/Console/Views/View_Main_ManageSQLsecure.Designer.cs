@@ -83,6 +83,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._systemStatus = new Idera.SQLsecure.UI.Console.Controls.SystemStatus();
             this.panel4 = new System.Windows.Forms.Panel();
             this._viewSection_Servers = new Idera.SQLsecure.UI.Console.Controls.ViewSection();
+            this._smallTask_Import = new Idera.SQLsecure.UI.Console.Controls.SmallTask();
             this._vw_MainPanel.SuspendLayout();
             this._vw_TasksPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._grid)).BeginInit();
@@ -105,28 +106,31 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._vw_MainPanel.Controls.Add(this._viewSection_Servers);
             this._vw_MainPanel.Controls.Add(this._panel_Status);
             this._vw_MainPanel.Location = new System.Drawing.Point(0, 72);
-            this._vw_MainPanel.Size = new System.Drawing.Size(652, 516);
+            this._vw_MainPanel.Size = new System.Drawing.Size(782, 516);
             // 
             // _vw_TasksPanel
             // 
+            this._vw_TasksPanel.Controls.Add(this._smallTask_Import);
             this._vw_TasksPanel.Controls.Add(this._smallTask_Configure);
             this._vw_TasksPanel.Controls.Add(this._smallTask_Collect);
             this._vw_TasksPanel.Controls.Add(this._smallTask_Register);
-            this._vw_TasksPanel.Size = new System.Drawing.Size(652, 72);
+            this._vw_TasksPanel.Size = new System.Drawing.Size(782, 72);
             this._vw_TasksPanel.Controls.SetChildIndex(this._smallTask_Register, 0);
             this._vw_TasksPanel.Controls.SetChildIndex(this._smallTask_Help, 0);
             this._vw_TasksPanel.Controls.SetChildIndex(this._label_Summary, 0);
             this._vw_TasksPanel.Controls.SetChildIndex(this._smallTask_Collect, 0);
             this._vw_TasksPanel.Controls.SetChildIndex(this._smallTask_Configure, 0);
+            this._vw_TasksPanel.Controls.SetChildIndex(this._smallTask_Import, 0);
             // 
             // _smallTask_Help
             // 
-            this._smallTask_Help.Location = new System.Drawing.Point(534, 31);
+            this._smallTask_Help.Location = new System.Drawing.Point(794, 31);
             this._smallTask_Help.Size = new System.Drawing.Size(110, 34);
             // 
             // _label_Summary
             // 
             this._label_Summary.Location = new System.Drawing.Point(1, 1);
+            this._label_Summary.Size = new System.Drawing.Size(896, 29);
             // 
             // _grid
             // 
@@ -219,13 +223,13 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this._grid.Location = new System.Drawing.Point(0, 19);
             this._grid.Name = "_grid";
-            this._grid.Size = new System.Drawing.Size(646, 254);
+            this._grid.Size = new System.Drawing.Size(776, 254);
             this._grid.TabIndex = 3;
-            this._grid.MouseDown += new System.Windows.Forms.MouseEventHandler(this._grid_MouseDown);
-            this._grid.KeyDown += new System.Windows.Forms.KeyEventHandler(this._grid_KeyDown);
-            this._grid.DoubleClick += new System.EventHandler(this._grid_DoubleClick);
             this._grid.InitializeLayout += new Infragistics.Win.UltraWinGrid.InitializeLayoutEventHandler(this._grid_InitializeLayout);
             this._grid.AfterSelectChange += new Infragistics.Win.UltraWinGrid.AfterSelectChangeEventHandler(this._grid_AfterSelectChange);
+            this._grid.DoubleClick += new System.EventHandler(this._grid_DoubleClick);
+            this._grid.KeyDown += new System.Windows.Forms.KeyEventHandler(this._grid_KeyDown);
+            this._grid.MouseDown += new System.Windows.Forms.MouseEventHandler(this._grid_MouseDown);
             // 
             // _contextMenuStrip_Server
             // 
@@ -243,13 +247,13 @@ namespace Idera.SQLsecure.UI.Console.Views
             this.toolStripSeparator3,
             this._cmsi_Server_properties});
             this._contextMenuStrip_Server.Name = "_contextMenuStrip_ExplorePermission";
-            this._contextMenuStrip_Server.Size = new System.Drawing.Size(220, 220);
+            this._contextMenuStrip_Server.Size = new System.Drawing.Size(221, 220);
             this._contextMenuStrip_Server.Opening += new System.ComponentModel.CancelEventHandler(this._contextMenuStrip_Server_Opening);
             // 
             // _cmsi_Server_exploreUserPermissions
             // 
             this._cmsi_Server_exploreUserPermissions.Name = "_cmsi_Server_exploreUserPermissions";
-            this._cmsi_Server_exploreUserPermissions.Size = new System.Drawing.Size(219, 22);
+            this._cmsi_Server_exploreUserPermissions.Size = new System.Drawing.Size(220, 22);
             this._cmsi_Server_exploreUserPermissions.Text = "Explore User Permissions";
             this._cmsi_Server_exploreUserPermissions.ToolTipText = "Explore SQL Server permissions assigned to a user";
             this._cmsi_Server_exploreUserPermissions.Click += new System.EventHandler(this._cmsi_Server_exploreUserPermissions_Click);
@@ -257,7 +261,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // _cmsi_Server_exploreSnapshot
             // 
             this._cmsi_Server_exploreSnapshot.Name = "_cmsi_Server_exploreSnapshot";
-            this._cmsi_Server_exploreSnapshot.Size = new System.Drawing.Size(219, 22);
+            this._cmsi_Server_exploreSnapshot.Size = new System.Drawing.Size(220, 22);
             this._cmsi_Server_exploreSnapshot.Text = "Explore Object Permissions";
             this._cmsi_Server_exploreSnapshot.ToolTipText = "Explore SQL Server permissions of an audited SQL Server Snapshot";
             this._cmsi_Server_exploreSnapshot.Click += new System.EventHandler(this._cmsi_Server_exploreSnapshot_Click);
@@ -265,19 +269,19 @@ namespace Idera.SQLsecure.UI.Console.Views
             // _cmsi_Server_viewAuditHistory
             // 
             this._cmsi_Server_viewAuditHistory.Name = "_cmsi_Server_viewAuditHistory";
-            this._cmsi_Server_viewAuditHistory.Size = new System.Drawing.Size(219, 22);
+            this._cmsi_Server_viewAuditHistory.Size = new System.Drawing.Size(220, 22);
             this._cmsi_Server_viewAuditHistory.Text = "View Server Summary";
             this._cmsi_Server_viewAuditHistory.Click += new System.EventHandler(this._cmsi_Server_viewAuditHistory_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(216, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(217, 6);
             // 
             // _cmsi_Server_registerSQLServer
             // 
             this._cmsi_Server_registerSQLServer.Name = "_cmsi_Server_registerSQLServer";
-            this._cmsi_Server_registerSQLServer.Size = new System.Drawing.Size(219, 22);
+            this._cmsi_Server_registerSQLServer.Size = new System.Drawing.Size(220, 22);
             this._cmsi_Server_registerSQLServer.Text = "Register a SQL Server...";
             this._cmsi_Server_registerSQLServer.ToolTipText = "Register a new SQL Server instance to audit";
             this._cmsi_Server_registerSQLServer.Click += new System.EventHandler(this._cmsi_Server_registerSQLServer_Click);
@@ -285,7 +289,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // _cmsi_Server_removeSQLServer
             // 
             this._cmsi_Server_removeSQLServer.Name = "_cmsi_Server_removeSQLServer";
-            this._cmsi_Server_removeSQLServer.Size = new System.Drawing.Size(219, 22);
+            this._cmsi_Server_removeSQLServer.Size = new System.Drawing.Size(220, 22);
             this._cmsi_Server_removeSQLServer.Text = "Remove SQL Server";
             this._cmsi_Server_removeSQLServer.ToolTipText = "Remove selected SQL Server";
             this._cmsi_Server_removeSQLServer.Click += new System.EventHandler(this._cmsi_Server_removeSQLServer_Click);
@@ -293,12 +297,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(216, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(217, 6);
             // 
             // _cmsi_Server_configureDataCollection
             // 
             this._cmsi_Server_configureDataCollection.Name = "_cmsi_Server_configureDataCollection";
-            this._cmsi_Server_configureDataCollection.Size = new System.Drawing.Size(219, 22);
+            this._cmsi_Server_configureDataCollection.Size = new System.Drawing.Size(220, 22);
             this._cmsi_Server_configureDataCollection.Text = "Configure Data Collection...";
             this._cmsi_Server_configureDataCollection.ToolTipText = "Configure data collection schedule, objects collected, etc.";
             this._cmsi_Server_configureDataCollection.Click += new System.EventHandler(this._cmsi_Server_configureDataCollection_Click);
@@ -306,7 +310,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // _cmsi_Server_collectDataSnapshot
             // 
             this._cmsi_Server_collectDataSnapshot.Name = "_cmsi_Server_collectDataSnapshot";
-            this._cmsi_Server_collectDataSnapshot.Size = new System.Drawing.Size(219, 22);
+            this._cmsi_Server_collectDataSnapshot.Size = new System.Drawing.Size(220, 22);
             this._cmsi_Server_collectDataSnapshot.Text = "Take Snapshot Now";
             this._cmsi_Server_collectDataSnapshot.ToolTipText = "Collect SQL Server security data";
             this._cmsi_Server_collectDataSnapshot.Click += new System.EventHandler(this._cmsi_Server_collectDataSnapshot_Click);
@@ -315,19 +319,19 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             this._cmsi_Server_refresh.Name = "_cmsi_Server_refresh";
             this._cmsi_Server_refresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this._cmsi_Server_refresh.Size = new System.Drawing.Size(219, 22);
+            this._cmsi_Server_refresh.Size = new System.Drawing.Size(220, 22);
             this._cmsi_Server_refresh.Text = "Refresh";
             this._cmsi_Server_refresh.Click += new System.EventHandler(this._cmsi_Server_refresh_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(216, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(217, 6);
             // 
             // _cmsi_Server_properties
             // 
             this._cmsi_Server_properties.Name = "_cmsi_Server_properties";
-            this._cmsi_Server_properties.Size = new System.Drawing.Size(219, 22);
+            this._cmsi_Server_properties.Size = new System.Drawing.Size(220, 22);
             this._cmsi_Server_properties.Text = "Properties...";
             this._cmsi_Server_properties.Click += new System.EventHandler(this._cmsi_Server_properties_Click);
             // 
@@ -345,7 +349,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // _smallTask_Collect
             // 
             this._smallTask_Collect.BackColor = System.Drawing.Color.Transparent;
-            this._smallTask_Collect.Location = new System.Drawing.Point(177, 31);
+            this._smallTask_Collect.Location = new System.Drawing.Point(353, 31);
             this._smallTask_Collect.Name = "_smallTask_Collect";
             this._smallTask_Collect.Size = new System.Drawing.Size(160, 34);
             this._smallTask_Collect.TabIndex = 4;
@@ -356,7 +360,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // _smallTask_Configure
             // 
             this._smallTask_Configure.BackColor = System.Drawing.Color.Transparent;
-            this._smallTask_Configure.Location = new System.Drawing.Point(343, 31);
+            this._smallTask_Configure.Location = new System.Drawing.Point(519, 31);
             this._smallTask_Configure.Name = "_smallTask_Configure";
             this._smallTask_Configure.Size = new System.Drawing.Size(160, 34);
             this._smallTask_Configure.TabIndex = 5;
@@ -367,7 +371,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // _toolstrip
             // 
             this._toolstrip.AutoSize = false;
-            this._toolstrip.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this._toolstrip.Font = new System.Drawing.Font("Segoe UI", 9F);
             this._toolstrip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
             this._toolstrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this._toolstrip.HeaderStyle = Idera.SQLsecure.UI.Console.Controls.AreaHeaderStyle.Small;
@@ -376,14 +380,14 @@ namespace Idera.SQLsecure.UI.Console.Views
             this.toolStripLabel_Header});
             this._toolstrip.Location = new System.Drawing.Point(0, 0);
             this._toolstrip.Name = "_toolstrip";
-            this._toolstrip.Size = new System.Drawing.Size(646, 19);
+            this._toolstrip.Size = new System.Drawing.Size(776, 19);
             this._toolstrip.TabIndex = 6;
             this._toolstrip.Text = "headerStrip1";
             // 
             // toolStripLabel_Header
             // 
             this.toolStripLabel_Header.Name = "toolStripLabel_Header";
-            this.toolStripLabel_Header.Size = new System.Drawing.Size(78, 16);
+            this.toolStripLabel_Header.Size = new System.Drawing.Size(86, 16);
             this.toolStripLabel_Header.Text = "toolStripLabel1";
             // 
             // _panel_Status
@@ -392,7 +396,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._panel_Status.Dock = System.Windows.Forms.DockStyle.Top;
             this._panel_Status.Location = new System.Drawing.Point(0, 0);
             this._panel_Status.Name = "_panel_Status";
-            this._panel_Status.Size = new System.Drawing.Size(652, 223);
+            this._panel_Status.Size = new System.Drawing.Size(782, 223);
             this._panel_Status.TabIndex = 5;
             // 
             // _tableLayoutPanel_Status
@@ -409,7 +413,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._tableLayoutPanel_Status.RowCount = 2;
             this._tableLayoutPanel_Status.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this._tableLayoutPanel_Status.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this._tableLayoutPanel_Status.Size = new System.Drawing.Size(652, 223);
+            this._tableLayoutPanel_Status.Size = new System.Drawing.Size(782, 223);
             this._tableLayoutPanel_Status.TabIndex = 0;
             // 
             // _viewSection_LicenseSummary
@@ -420,9 +424,9 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._viewSection_LicenseSummary.HeaderGradientColor = System.Drawing.Color.DarkGray;
             this._viewSection_LicenseSummary.HeaderGradientCornerStyle = Idera.SQLsecure.UI.Console.Controls.GradientPanel.GradientCornerStyle.RoundTop;
             this._viewSection_LicenseSummary.HeaderTextColor = System.Drawing.SystemColors.ControlText;
-            this._viewSection_LicenseSummary.Location = new System.Drawing.Point(329, 3);
+            this._viewSection_LicenseSummary.Location = new System.Drawing.Point(394, 3);
             this._viewSection_LicenseSummary.Name = "_viewSection_LicenseSummary";
-            this._viewSection_LicenseSummary.Size = new System.Drawing.Size(320, 105);
+            this._viewSection_LicenseSummary.Size = new System.Drawing.Size(385, 105);
             this._viewSection_LicenseSummary.TabIndex = 2;
             this._viewSection_LicenseSummary.Title = "License Summary";
             // 
@@ -443,14 +447,14 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._viewSection_LicenseSummary.ViewPanel.Location = new System.Drawing.Point(0, 20);
             this._viewSection_LicenseSummary.ViewPanel.Name = "Panel";
             this._viewSection_LicenseSummary.ViewPanel.Rotation = 270F;
-            this._viewSection_LicenseSummary.ViewPanel.Size = new System.Drawing.Size(320, 85);
+            this._viewSection_LicenseSummary.ViewPanel.Size = new System.Drawing.Size(385, 85);
             this._viewSection_LicenseSummary.ViewPanel.TabIndex = 1;
             // 
             // label_RemainingLicensesCount
             // 
             this.label_RemainingLicensesCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label_RemainingLicensesCount.BackColor = System.Drawing.Color.Transparent;
-            this.label_RemainingLicensesCount.Location = new System.Drawing.Point(321, 62);
+            this.label_RemainingLicensesCount.Location = new System.Drawing.Point(386, 62);
             this.label_RemainingLicensesCount.Name = "label_RemainingLicensesCount";
             this.label_RemainingLicensesCount.Size = new System.Drawing.Size(56, 13);
             this.label_RemainingLicensesCount.TabIndex = 11;
@@ -470,12 +474,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // _label_RemainingLicensesBar
             // 
-            this._label_RemainingLicensesBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._label_RemainingLicensesBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._label_RemainingLicensesBar.BackColor = System.Drawing.Color.Green;
             this._label_RemainingLicensesBar.Location = new System.Drawing.Point(132, 62);
             this._label_RemainingLicensesBar.Name = "_label_RemainingLicensesBar";
-            this._label_RemainingLicensesBar.Size = new System.Drawing.Size(183, 13);
+            this._label_RemainingLicensesBar.Size = new System.Drawing.Size(248, 13);
             this._label_RemainingLicensesBar.TabIndex = 10;
             this._label_RemainingLicensesBar.Paint += new System.Windows.Forms.PaintEventHandler(this.label_RemainingLicensesBar_Paint);
             // 
@@ -503,12 +507,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // _label_LicenseBar
             // 
-            this._label_LicenseBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._label_LicenseBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._label_LicenseBar.BackColor = System.Drawing.Color.SteelBlue;
             this._label_LicenseBar.Location = new System.Drawing.Point(132, 12);
             this._label_LicenseBar.Name = "_label_LicenseBar";
-            this._label_LicenseBar.Size = new System.Drawing.Size(183, 13);
+            this._label_LicenseBar.Size = new System.Drawing.Size(248, 13);
             this._label_LicenseBar.TabIndex = 5;
             this._label_LicenseBar.Paint += new System.Windows.Forms.PaintEventHandler(this.label_LicenseBar_Paint);
             // 
@@ -516,7 +520,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             this.label_AuditedCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label_AuditedCount.BackColor = System.Drawing.Color.Transparent;
-            this.label_AuditedCount.Location = new System.Drawing.Point(321, 37);
+            this.label_AuditedCount.Location = new System.Drawing.Point(386, 37);
             this.label_AuditedCount.Name = "label_AuditedCount";
             this.label_AuditedCount.Size = new System.Drawing.Size(56, 13);
             this.label_AuditedCount.TabIndex = 8;
@@ -527,7 +531,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             this.label_LicensedCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label_LicensedCount.BackColor = System.Drawing.Color.Transparent;
-            this.label_LicensedCount.Location = new System.Drawing.Point(321, 12);
+            this.label_LicensedCount.Location = new System.Drawing.Point(386, 12);
             this.label_LicensedCount.Name = "label_LicensedCount";
             this.label_LicensedCount.Size = new System.Drawing.Size(56, 13);
             this.label_LicensedCount.TabIndex = 6;
@@ -536,12 +540,12 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // _label_AuditedBar
             // 
-            this._label_AuditedBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._label_AuditedBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._label_AuditedBar.BackColor = System.Drawing.Color.Gold;
             this._label_AuditedBar.Location = new System.Drawing.Point(132, 37);
             this._label_AuditedBar.Name = "_label_AuditedBar";
-            this._label_AuditedBar.Size = new System.Drawing.Size(183, 13);
+            this._label_AuditedBar.Size = new System.Drawing.Size(248, 13);
             this._label_AuditedBar.TabIndex = 7;
             this._label_AuditedBar.Paint += new System.Windows.Forms.PaintEventHandler(this.label_AuditedBar_Paint);
             // 
@@ -553,9 +557,9 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._viewSection_AgentStatus.HeaderGradientColor = System.Drawing.Color.DarkGray;
             this._viewSection_AgentStatus.HeaderGradientCornerStyle = Idera.SQLsecure.UI.Console.Controls.GradientPanel.GradientCornerStyle.RoundTop;
             this._viewSection_AgentStatus.HeaderTextColor = System.Drawing.SystemColors.ControlText;
-            this._viewSection_AgentStatus.Location = new System.Drawing.Point(329, 114);
+            this._viewSection_AgentStatus.Location = new System.Drawing.Point(394, 114);
             this._viewSection_AgentStatus.Name = "_viewSection_AgentStatus";
-            this._viewSection_AgentStatus.Size = new System.Drawing.Size(320, 106);
+            this._viewSection_AgentStatus.Size = new System.Drawing.Size(385, 106);
             this._viewSection_AgentStatus.TabIndex = 3;
             this._viewSection_AgentStatus.Title = "SQL Server Agent Status";
             // 
@@ -570,7 +574,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._viewSection_AgentStatus.ViewPanel.Location = new System.Drawing.Point(0, 20);
             this._viewSection_AgentStatus.ViewPanel.Name = "Panel";
             this._viewSection_AgentStatus.ViewPanel.Rotation = 270F;
-            this._viewSection_AgentStatus.ViewPanel.Size = new System.Drawing.Size(320, 86);
+            this._viewSection_AgentStatus.ViewPanel.Size = new System.Drawing.Size(385, 86);
             this._viewSection_AgentStatus.ViewPanel.TabIndex = 1;
             // 
             // label_AgentStatus
@@ -597,17 +601,17 @@ namespace Idera.SQLsecure.UI.Console.Views
             // 
             // _label_AgentStatus
             // 
-            this._label_AgentStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._label_AgentStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._label_AgentStatus.BackColor = System.Drawing.Color.Transparent;
             this._label_AgentStatus.Location = new System.Drawing.Point(81, 8);
             this._label_AgentStatus.Name = "_label_AgentStatus";
-            this._label_AgentStatus.Size = new System.Drawing.Size(227, 73);
+            this._label_AgentStatus.Size = new System.Drawing.Size(292, 73);
             this._label_AgentStatus.TabIndex = 9;
             this._label_AgentStatus.Text = "SQLsecure uses the Repository SQL Server Agent for data collection and grooming. " +
-                " The SQL Server Agent must be started for SQLsecure to collect data or groom the" +
-                " Repository.";
+    " The SQL Server Agent must be started for SQLsecure to collect data or groom the" +
+    " Repository.";
             // 
             // _systemStatus
             // 
@@ -617,7 +621,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._systemStatus.Location = new System.Drawing.Point(3, 3);
             this._systemStatus.Name = "_systemStatus";
             this._tableLayoutPanel_Status.SetRowSpan(this._systemStatus, 2);
-            this._systemStatus.Size = new System.Drawing.Size(320, 217);
+            this._systemStatus.Size = new System.Drawing.Size(385, 217);
             this._systemStatus.TabIndex = 4;
             // 
             // panel4
@@ -627,7 +631,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(646, 273);
+            this.panel4.Size = new System.Drawing.Size(776, 273);
             this.panel4.TabIndex = 6;
             // 
             // _viewSection_Servers
@@ -641,7 +645,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._viewSection_Servers.Location = new System.Drawing.Point(0, 223);
             this._viewSection_Servers.Name = "_viewSection_Servers";
             this._viewSection_Servers.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
-            this._viewSection_Servers.Size = new System.Drawing.Size(652, 293);
+            this._viewSection_Servers.Size = new System.Drawing.Size(782, 293);
             this._viewSection_Servers.TabIndex = 7;
             this._viewSection_Servers.Title = "Audited SQL Servers Status";
             // 
@@ -654,16 +658,28 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._viewSection_Servers.ViewPanel.Location = new System.Drawing.Point(3, 20);
             this._viewSection_Servers.ViewPanel.Name = "Panel";
             this._viewSection_Servers.ViewPanel.Rotation = 270F;
-            this._viewSection_Servers.ViewPanel.Size = new System.Drawing.Size(646, 273);
+            this._viewSection_Servers.ViewPanel.Size = new System.Drawing.Size(776, 273);
             this._viewSection_Servers.ViewPanel.TabIndex = 1;
+            // 
+            // _smallTask_Import
+            // 
+            this._smallTask_Import.BackColor = System.Drawing.Color.Transparent;
+            this._smallTask_Import.Location = new System.Drawing.Point(187, 31);
+            this._smallTask_Import.Name = "_smallTask_Import";
+            this._smallTask_Import.Size = new System.Drawing.Size(160, 34);
+            this._smallTask_Import.TabIndex = 6;
+            this._smallTask_Import.TaskDescription = "";
+            this._smallTask_Import.TaskImage = ((System.Drawing.Image)(resources.GetObject("_smallTask_Import.TaskImage")));
+            this._smallTask_Import.TaskText = "Register";
             // 
             // View_Main_ManageSQLsecure
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Name = "View_Main_ManageSQLsecure";
+            this.Size = new System.Drawing.Size(782, 588);
             this.Load += new System.EventHandler(this.View_Main_ManageSQLsecure_Load);
-            this.Leave += new System.EventHandler(this.View_Main_ManageSQLsecure_Leave);
             this.Enter += new System.EventHandler(this.View_Main_ManageSQLsecure_Enter);
+            this.Leave += new System.EventHandler(this.View_Main_ManageSQLsecure_Leave);
             this.Controls.SetChildIndex(this._vw_TasksPanel, 0);
             this.Controls.SetChildIndex(this._vw_MainPanel, 0);
             this._vw_MainPanel.ResumeLayout(false);
@@ -728,5 +744,6 @@ namespace Idera.SQLsecure.UI.Console.Views
         private Idera.SQLsecure.UI.Console.Controls.ViewSection _viewSection_Servers;
         private System.Windows.Forms.ToolStripLabel toolStripLabel_Header;
         private Idera.SQLsecure.UI.Console.Controls.SystemStatus _systemStatus;
+        private Controls.SmallTask _smallTask_Import;
     }
 }

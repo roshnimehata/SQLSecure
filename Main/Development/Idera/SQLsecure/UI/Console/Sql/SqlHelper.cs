@@ -134,12 +134,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             // Setup data source and application name.
             SqlConnectionStringBuilder bldr = new SqlConnectionStringBuilder();
-
             bldr.DataSource = CreateSafeDatabaseNameForConnectionString(instance);
+            
             bldr.ApplicationName = Constants.SqlAppName;
             if (timeout > 0)
             {
-                bldr.ConnectTimeout = timeout;
+                bldr.ConnectTimeout = timeout; 
             }
 
             // If user is specified then its not integrated security,

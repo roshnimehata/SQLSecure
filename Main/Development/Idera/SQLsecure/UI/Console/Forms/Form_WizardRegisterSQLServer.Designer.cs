@@ -28,29 +28,28 @@ namespace Idera.SQLsecure.UI.Console.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            Infragistics.Win.Appearance appearance2 = new Infragistics.Win.Appearance();
-            Infragistics.Win.Appearance appearance1 = new Infragistics.Win.Appearance();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_WizardRegisterSQLServer));
+            Infragistics.Win.UltraWinListView.UltraListViewSubItemColumn ultraListViewSubItemColumn1 = new Infragistics.Win.UltraWinListView.UltraListViewSubItemColumn("Description");
             this._wizard = new Divelements.WizardFramework.Wizard();
-            this._page_CollectData = new Divelements.WizardFramework.WizardPage();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.checkBox_CollectData = new System.Windows.Forms.CheckBox();
-            this._page_Finish = new Divelements.WizardFramework.FinishPage();
-            this._rtb_Finish = new System.Windows.Forms.RichTextBox();
-            this._page_Policies = new Divelements.WizardFramework.WizardPage();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.ultraListView_DynamicPolicies = new Infragistics.Win.UltraWinListView.UltraListView();
-            this.label11 = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.ultraListView_Policies = new Infragistics.Win.UltraWinListView.UltraListView();
-            this.label3 = new System.Windows.Forms.Label();
-            this._page_ConfigureSMTPEmail = new Divelements.WizardFramework.WizardPage();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.button_Test = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
+            this._page_FilePermissionFolders = new Divelements.WizardFramework.WizardPage();
+            this._PageTags = new Divelements.WizardFramework.WizardPage();
+            this.button3 = new Infragistics.Win.Misc.UltraButton();
+            this.button2 = new Infragistics.Win.Misc.UltraButton();
+            this.btAdd = new Infragistics.Win.Misc.UltraButton();
+            this.ulTags = new Infragistics.Win.UltraWinListView.UltraListView();
+            this._page_DefineFilters = new Divelements.WizardFramework.WizardPage();
+            this._page_JobSchedule = new Divelements.WizardFramework.WizardPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label_AgentStatus = new System.Windows.Forms.Label();
+            this.pictureBox_AgentStatus = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this._txtbx_ScheduleDescription = new System.Windows.Forms.TextBox();
+            this.checkBox_EnableScheduling = new System.Windows.Forms.CheckBox();
+            this._btn_ChangeSchedule = new System.Windows.Forms.Button();
+            this.label_KeepSnapshotDays = new System.Windows.Forms.Label();
+            this.numericUpDown_KeepSnapshotDays = new System.Windows.Forms.NumericUpDown();
+            this.label_KeepSnapshot = new System.Windows.Forms.Label();
             this._page_NotificationOptions = new Divelements.WizardFramework.WizardPage();
             this.label12 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -66,19 +65,25 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.checkBoxEmailForCollectionStatus = new System.Windows.Forms.CheckBox();
             this.radioButton_SendEmailOnError = new System.Windows.Forms.RadioButton();
             this.radioButton_SendEmailWarningOrError = new System.Windows.Forms.RadioButton();
-            this._page_JobSchedule = new Divelements.WizardFramework.WizardPage();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label_AgentStatus = new System.Windows.Forms.Label();
-            this.pictureBox_AgentStatus = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this._txtbx_ScheduleDescription = new System.Windows.Forms.TextBox();
-            this.checkBox_EnableScheduling = new System.Windows.Forms.CheckBox();
-            this._btn_ChangeSchedule = new System.Windows.Forms.Button();
-            this.label_KeepSnapshotDays = new System.Windows.Forms.Label();
-            this.numericUpDown_KeepSnapshotDays = new System.Windows.Forms.NumericUpDown();
-            this.label_KeepSnapshot = new System.Windows.Forms.Label();
-            this._page_DefineFilters = new Divelements.WizardFramework.WizardPage();
+            this._page_ConfigureSMTPEmail = new Divelements.WizardFramework.WizardPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.button_Test = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this._page_Policies = new Divelements.WizardFramework.WizardPage();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.ultraListView_DynamicPolicies = new Infragistics.Win.UltraWinListView.UltraListView();
+            this.label11 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.ultraListView_Policies = new Infragistics.Win.UltraWinListView.UltraListView();
+            this.label3 = new System.Windows.Forms.Label();
+            this._page_CollectData = new Divelements.WizardFramework.WizardPage();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.checkBox_CollectData = new System.Windows.Forms.CheckBox();
+            this._page_Finish = new Divelements.WizardFramework.FinishPage();
+            this._rtb_Finish = new System.Windows.Forms.RichTextBox();
             this._page_Credentials = new Divelements.WizardFramework.WizardPage();
             this._grpbx_SQLServerCredentials = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -104,13 +109,23 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._lbl_Server = new System.Windows.Forms.Label();
             this._page_Introduction = new Divelements.WizardFramework.IntroductionPage();
             this._rtb_Introduction = new System.Windows.Forms.RichTextBox();
-            this._page_FilePermissionFolders = new Divelements.WizardFramework.WizardPage();
-            this.controlSMTPEmailConfig1 = new Idera.SQLsecure.UI.Console.Controls.controlSMTPEmailConfig();
             this.filterSelection1 = new Idera.SQLsecure.UI.Console.Controls.FilterSelection();
+            this.controlSMTPEmailConfig1 = new Idera.SQLsecure.UI.Console.Controls.controlSMTPEmailConfig();
             this.addEditFoldersControl = new Idera.SQLsecure.UI.Console.Controls.AddEditFolders();
             this._wizard.SuspendLayout();
-            this._page_CollectData.SuspendLayout();
-            this._page_Finish.SuspendLayout();
+            this._page_FilePermissionFolders.SuspendLayout();
+            this._PageTags.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ulTags)).BeginInit();
+            this._page_DefineFilters.SuspendLayout();
+            this._page_JobSchedule.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AgentStatus)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_KeepSnapshotDays)).BeginInit();
+            this._page_NotificationOptions.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this._page_ConfigureSMTPEmail.SuspendLayout();
+            this.panel2.SuspendLayout();
             this._page_Policies.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -118,281 +133,288 @@ namespace Idera.SQLsecure.UI.Console.Forms
             ((System.ComponentModel.ISupportInitialize)(this.ultraListView_DynamicPolicies)).BeginInit();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ultraListView_Policies)).BeginInit();
-            this._page_ConfigureSMTPEmail.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this._page_NotificationOptions.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this._page_JobSchedule.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AgentStatus)).BeginInit();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_KeepSnapshotDays)).BeginInit();
-            this._page_DefineFilters.SuspendLayout();
+            this._page_CollectData.SuspendLayout();
+            this._page_Finish.SuspendLayout();
             this._page_Credentials.SuspendLayout();
             this._grpbx_SQLServerCredentials.SuspendLayout();
             this._grpbx_WindowsGMCredentials.SuspendLayout();
             this._page_Servers.SuspendLayout();
             this._page_Introduction.SuspendLayout();
-            this._page_FilePermissionFolders.SuspendLayout();
             this.SuspendLayout();
             // 
             // _wizard
             // 
-            this._wizard.BannerImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.server_add_49;
+            this._wizard.BannerImage = ((System.Drawing.Image)(resources.GetObject("_wizard.BannerImage")));
+            this._wizard.Controls.Add(this._PageTags);
+            this._wizard.Controls.Add(this._page_FilePermissionFolders);
+            this._wizard.Controls.Add(this._page_JobSchedule);
             this._wizard.Controls.Add(this._page_CollectData);
             this._wizard.Controls.Add(this._page_DefineFilters);
             this._wizard.Controls.Add(this._page_Credentials);
-            this._wizard.Controls.Add(this._page_JobSchedule);
             this._wizard.Controls.Add(this._page_Policies);
             this._wizard.Controls.Add(this._page_ConfigureSMTPEmail);
             this._wizard.Controls.Add(this._page_Servers);
             this._wizard.Controls.Add(this._page_Finish);
             this._wizard.Controls.Add(this._page_Introduction);
             this._wizard.Controls.Add(this._page_NotificationOptions);
-            this._wizard.Controls.Add(this._page_FilePermissionFolders);
             this._wizard.HelpVisible = true;
             this._wizard.Location = new System.Drawing.Point(0, 0);
-            this._wizard.MarginImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.SQLServerAudit_Insert;
+            this._wizard.MarginImage = ((System.Drawing.Image)(resources.GetObject("_wizard.MarginImage")));
             this._wizard.Name = "_wizard";
-            this._wizard.SelectedPage = this._page_FilePermissionFolders;
+            this._wizard.SelectedPage = this._PageTags;
             this._wizard.Size = new System.Drawing.Size(514, 536);
             this._wizard.TabIndex = 0;
             this._wizard.HelpRequested += new System.Windows.Forms.HelpEventHandler(this._wizard_HelpRequested);
             // 
-            // _page_CollectData
+            // _page_FilePermissionFolders
             // 
-            this._page_CollectData.Controls.Add(this.label13);
-            this._page_CollectData.Controls.Add(this.label9);
-            this._page_CollectData.Controls.Add(this.checkBox_CollectData);
-            this._page_CollectData.Description = "Specify whether you want to collect audit data after registering this SQL Server." +
-                "";
-            this._page_CollectData.DescriptionColor = System.Drawing.Color.Navy;
-            this._page_CollectData.Location = new System.Drawing.Point(19, 73);
-            this._page_CollectData.Name = "_page_CollectData";
-            this._page_CollectData.NextPage = this._page_Finish;
-            this._page_CollectData.PreviousPage = this._page_Policies;
-            this._page_CollectData.Size = new System.Drawing.Size(476, 403);
-            this._page_CollectData.TabIndex = 1009;
-            this._page_CollectData.Text = "Take Snapshot";
-            this._page_CollectData.TextColor = System.Drawing.Color.Navy;
-            this._page_CollectData.BeforeMoveBack += new Divelements.WizardFramework.WizardPageEventHandler(this._page_CollectData_BeforeMoveBack);
+            this._page_FilePermissionFolders.Controls.Add(this.addEditFoldersControl);
+            this._page_FilePermissionFolders.Description = "Specify folders to be audited for collecting file system permission information";
+            this._page_FilePermissionFolders.Location = new System.Drawing.Point(19, 73);
+            this._page_FilePermissionFolders.Name = "_page_FilePermissionFolders";
+            this._page_FilePermissionFolders.NextPage = this._PageTags;
+            this._page_FilePermissionFolders.PreviousPage = this._page_Credentials;
+            this._page_FilePermissionFolders.Size = new System.Drawing.Size(476, 403);
+            this._page_FilePermissionFolders.TabIndex = 1011;
+            this._page_FilePermissionFolders.Text = "Specify Audit Folders";
             // 
-            // label13
+            // _PageTags
             // 
-            this.label13.Location = new System.Drawing.Point(0, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(476, 24);
-            this.label13.TabIndex = 5;
-            this.label13.Text = "Do you want to collect audit data (take a snapshot) after registering this SQL Se" +
-                "rver?";
+            this._PageTags.Controls.Add(this.button3);
+            this._PageTags.Controls.Add(this.button2);
+            this._PageTags.Controls.Add(this.btAdd);
+            this._PageTags.Controls.Add(this.ulTags);
+            this._PageTags.Description = "Select tag(s) to add new server to.";
+            this._PageTags.Location = new System.Drawing.Point(19, 73);
+            this._PageTags.Name = "_PageTags";
+            this._PageTags.NextPage = this._page_DefineFilters;
+            this._PageTags.PreviousPage = this._page_FilePermissionFolders;
+            this._PageTags.Size = new System.Drawing.Size(476, 403);
+            this._PageTags.TabIndex = 1012;
+            this._PageTags.Text = "Add to Server Group Tag";
+            this._PageTags.BeforeDisplay += new System.EventHandler(this._PageTags_BeforeDisplay);
             // 
-            // label9
+            // button3
             // 
-            this.label9.Location = new System.Drawing.Point(0, 37);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(442, 56);
-            this.label9.TabIndex = 4;
-            this.label9.Text = "SQLsecure must collect data from the Registered Server to assess and audit securi" +
-                "ty risks and access rights. This data collection can be scheduled or run manuall" +
-                "y.";
+            this.button3.Location = new System.Drawing.Point(162, 377);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 8;
+            this.button3.Text = "Remove";
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // checkBox_CollectData
+            // button2
             // 
-            this.checkBox_CollectData.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.checkBox_CollectData.Location = new System.Drawing.Point(3, 97);
-            this.checkBox_CollectData.Name = "checkBox_CollectData";
-            this.checkBox_CollectData.Size = new System.Drawing.Size(421, 18);
-            this.checkBox_CollectData.TabIndex = 3;
-            this.checkBox_CollectData.Text = "Yes, collect data upon completion of the registration process.";
-            this.checkBox_CollectData.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.checkBox_CollectData.UseVisualStyleBackColor = true;
-            this.checkBox_CollectData.CheckedChanged += new System.EventHandler(this.checkBox_CollectData_CheckedChanged);
+            this.button2.Location = new System.Drawing.Point(81, 377);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 7;
+            this.button2.Text = "Edit";
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // _page_Finish
+            // btAdd
             // 
-            this._page_Finish.Controls.Add(this._rtb_Finish);
-            this._page_Finish.FinishText = "";
-            this._page_Finish.Location = new System.Drawing.Point(177, 66);
-            this._page_Finish.Name = "_page_Finish";
-            this._page_Finish.PreviousPage = this._page_CollectData;
-            this._page_Finish.ProceedText = "Click the Finish button to register this SQL Server.";
-            this._page_Finish.Size = new System.Drawing.Size(324, 410);
-            this._page_Finish.TabIndex = 1006;
-            this._page_Finish.Text = "SQL Server Registration Summary";
-            this._page_Finish.BeforeMoveBack += new Divelements.WizardFramework.WizardPageEventHandler(this._page_Finish_BeforeMoveBack);
-            this._page_Finish.BeforeDisplay += new System.EventHandler(this._page_Finish_BeforeDisplay);
+            this.btAdd.Location = new System.Drawing.Point(0, 377);
+            this.btAdd.Name = "btAdd";
+            this.btAdd.Size = new System.Drawing.Size(75, 23);
+            this.btAdd.TabIndex = 6;
+            this.btAdd.Text = "Add";
+            this.btAdd.Click += new System.EventHandler(this.btAdd_Click);
             // 
-            // _rtb_Finish
+            // ulTags
             // 
-            this._rtb_Finish.BackColor = System.Drawing.SystemColors.Window;
-            this._rtb_Finish.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this._rtb_Finish.Cursor = System.Windows.Forms.Cursors.No;
-            this._rtb_Finish.Dock = System.Windows.Forms.DockStyle.Top;
-            this._rtb_Finish.ForeColor = System.Drawing.Color.Navy;
-            this._rtb_Finish.Location = new System.Drawing.Point(0, 0);
-            this._rtb_Finish.Name = "_rtb_Finish";
-            this._rtb_Finish.ReadOnly = true;
-            this._rtb_Finish.Size = new System.Drawing.Size(324, 385);
-            this._rtb_Finish.TabIndex = 1;
-            this._rtb_Finish.Text = "";
+            this.ulTags.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ulTags.ItemSettings.AllowEdit = Infragistics.Win.DefaultableBoolean.False;
+            this.ulTags.ItemSettings.DefaultImage = ((System.Drawing.Image)(resources.GetObject("ulTags.ItemSettings.DefaultImage")));
+            this.ulTags.ItemSettings.SelectionType = Infragistics.Win.UltraWinListView.SelectionType.Single;
+            this.ulTags.Location = new System.Drawing.Point(0, 0);
+            this.ulTags.MainColumn.Text = "Server Group Tag";
+            this.ulTags.MainColumn.VisiblePositionInDetailsView = 0;
+            this.ulTags.MainColumn.Width = 200;
+            this.ulTags.Name = "ulTags";
+            this.ulTags.Size = new System.Drawing.Size(476, 345);
+            ultraListViewSubItemColumn1.Key = "Description";
+            ultraListViewSubItemColumn1.Width = 250;
+            this.ulTags.SubItemColumns.AddRange(new Infragistics.Win.UltraWinListView.UltraListViewSubItemColumn[] {
+            ultraListViewSubItemColumn1});
+            this.ulTags.TabIndex = 4;
+            this.ulTags.Text = "ultraListView1";
+            this.ulTags.View = Infragistics.Win.UltraWinListView.UltraListViewStyle.Details;
+            this.ulTags.ViewSettingsDetails.CheckBoxStyle = Infragistics.Win.UltraWinListView.CheckBoxStyle.CheckBox;
+            this.ulTags.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ulTags_MouseDown);
+            this.ulTags.ItemSettings.HideSelection = false;
             // 
-            // _page_Policies
+            // _page_DefineFilters
             // 
-            this._page_Policies.Controls.Add(this.panel3);
-            this._page_Policies.Description = "Select which policies should run security checks for this SQL Server.";
-            this._page_Policies.DescriptionColor = System.Drawing.Color.Navy;
-            this._page_Policies.Location = new System.Drawing.Point(19, 73);
-            this._page_Policies.Name = "_page_Policies";
-            this._page_Policies.NextPage = this._page_CollectData;
-            this._page_Policies.PreviousPage = this._page_ConfigureSMTPEmail;
-            this._page_Policies.Size = new System.Drawing.Size(476, 403);
-            this._page_Policies.TabIndex = 1008;
-            this._page_Policies.Text = "Add to Policies";
-            this._page_Policies.TextColor = System.Drawing.Color.Navy;
-            this._page_Policies.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_Policies_BeforeMoveNext);
-            this._page_Policies.BeforeMoveBack += new Divelements.WizardFramework.WizardPageEventHandler(this._page_Policies_BeforeMoveBack);
-            this._page_Policies.BeforeDisplay += new System.EventHandler(this.wizardPage1_BeforeDisplay);
+            this._page_DefineFilters.Controls.Add(this.filterSelection1);
+            this._page_DefineFilters.Description = "";
+            this._page_DefineFilters.DescriptionColor = System.Drawing.Color.Navy;
+            this._page_DefineFilters.Location = new System.Drawing.Point(19, 73);
+            this._page_DefineFilters.Name = "_page_DefineFilters";
+            this._page_DefineFilters.NextPage = this._page_JobSchedule;
+            this._page_DefineFilters.PreviousPage = this._PageTags;
+            this._page_DefineFilters.Size = new System.Drawing.Size(476, 403);
+            this._page_DefineFilters.TabIndex = 0;
+            this._page_DefineFilters.Text = "Specify which SQL Server objects to audit";
+            this._page_DefineFilters.TextColor = System.Drawing.Color.Navy;
+            this._page_DefineFilters.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_DefineFilters_BeforeMoveNext);
+            this._page_DefineFilters.BeforeDisplay += new System.EventHandler(this._page_DefineFilters_BeforeDisplay);
             // 
-            // panel3
+            // _page_JobSchedule
             // 
-            this.panel3.Controls.Add(this.panel5);
-            this.panel3.Controls.Add(this.panel4);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(0, 0);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(476, 403);
-            this.panel3.TabIndex = 4;
+            this._page_JobSchedule.Controls.Add(this.groupBox2);
+            this._page_JobSchedule.Controls.Add(this.groupBox1);
+            this._page_JobSchedule.Controls.Add(this.label_KeepSnapshotDays);
+            this._page_JobSchedule.Controls.Add(this.numericUpDown_KeepSnapshotDays);
+            this._page_JobSchedule.Controls.Add(this.label_KeepSnapshot);
+            this._page_JobSchedule.Description = "Select when audit data (snapshots) should be collected.";
+            this._page_JobSchedule.DescriptionColor = System.Drawing.Color.Navy;
+            this._page_JobSchedule.Location = new System.Drawing.Point(19, 73);
+            this._page_JobSchedule.Name = "_page_JobSchedule";
+            this._page_JobSchedule.NextPage = this._page_NotificationOptions;
+            this._page_JobSchedule.PreviousPage = this._page_DefineFilters;
+            this._page_JobSchedule.Size = new System.Drawing.Size(476, 403);
+            this._page_JobSchedule.TabIndex = 0;
+            this._page_JobSchedule.Text = "Schedule Snapshots";
+            this._page_JobSchedule.TextColor = System.Drawing.Color.Navy;
+            this._page_JobSchedule.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_JobSchedule_BeforeMoveNext);
+            this._page_JobSchedule.BeforeMoveBack += new Divelements.WizardFramework.WizardPageEventHandler(this._page_JobSchedule_BeforeMoveBack);
+            this._page_JobSchedule.BeforeDisplay += new System.EventHandler(this._page_JobSchedule_BeforeDisplay);
             // 
-            // panel5
+            // groupBox2
             // 
-            this.panel5.Controls.Add(this.panel6);
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel5.Location = new System.Drawing.Point(0, 185);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(476, 218);
-            this.panel5.TabIndex = 5;
+            this.groupBox2.Controls.Add(this.label_AgentStatus);
+            this.groupBox2.Controls.Add(this.pictureBox_AgentStatus);
+            this.groupBox2.Controls.Add(this.label1);
+            this.groupBox2.Location = new System.Drawing.Point(21, 218);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(435, 113);
+            this.groupBox2.TabIndex = 1021;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "SQL Server Agent Status";
             // 
-            // panel6
+            // label_AgentStatus
             // 
-            this.panel6.Controls.Add(this.ultraListView_DynamicPolicies);
-            this.panel6.Controls.Add(this.label11);
-            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(0, 0);
-            this.panel6.Name = "panel6";
-            this.panel6.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.panel6.Size = new System.Drawing.Size(476, 218);
-            this.panel6.TabIndex = 3;
+            this.label_AgentStatus.AutoSize = true;
+            this.label_AgentStatus.BackColor = System.Drawing.Color.Transparent;
+            this.label_AgentStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_AgentStatus.Location = new System.Drawing.Point(10, 81);
+            this.label_AgentStatus.Name = "label_AgentStatus";
+            this.label_AgentStatus.Size = new System.Drawing.Size(48, 13);
+            this.label_AgentStatus.TabIndex = 14;
+            this.label_AgentStatus.Text = "Started";
             // 
-            // ultraListView_DynamicPolicies
+            // pictureBox_AgentStatus
             // 
-            this.ultraListView_DynamicPolicies.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ultraListView_DynamicPolicies.ItemSettings.AllowEdit = Infragistics.Win.DefaultableBoolean.False;
-            appearance2.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.AuditSQLServer_16;
-            this.ultraListView_DynamicPolicies.ItemSettings.Appearance = appearance2;
-            this.ultraListView_DynamicPolicies.ItemSettings.DefaultImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.AuditSQLServer_16;
-            this.ultraListView_DynamicPolicies.Location = new System.Drawing.Point(0, 26);
-            this.ultraListView_DynamicPolicies.MainColumn.Text = "Automatic Policy Membership";
-            this.ultraListView_DynamicPolicies.MainColumn.VisiblePositionInDetailsView = 0;
-            this.ultraListView_DynamicPolicies.MainColumn.Width = 400;
-            this.ultraListView_DynamicPolicies.Name = "ultraListView_DynamicPolicies";
-            this.ultraListView_DynamicPolicies.Size = new System.Drawing.Size(476, 192);
-            this.ultraListView_DynamicPolicies.TabIndex = 2;
-            this.ultraListView_DynamicPolicies.Text = "ultraListView1";
-            this.ultraListView_DynamicPolicies.View = Infragistics.Win.UltraWinListView.UltraListViewStyle.Details;
+            this.pictureBox_AgentStatus.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox_AgentStatus.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox_AgentStatus.Image")));
+            this.pictureBox_AgentStatus.Location = new System.Drawing.Point(10, 22);
+            this.pictureBox_AgentStatus.Name = "pictureBox_AgentStatus";
+            this.pictureBox_AgentStatus.Size = new System.Drawing.Size(48, 56);
+            this.pictureBox_AgentStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox_AgentStatus.TabIndex = 13;
+            this.pictureBox_AgentStatus.TabStop = false;
             // 
-            // label11
+            // label1
             // 
-            this.label11.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label11.Location = new System.Drawing.Point(0, 10);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(476, 16);
-            this.label11.TabIndex = 3;
-            this.label11.Text = "This registered SQL Server may be added to one or more of the following policies:" +
-                "";
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Location = new System.Drawing.Point(64, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(364, 51);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "SQLsecure uses the SQL Server Agent for data collection and grooming. This agent " +
+    "is located on the SQL server hosting the Repository database.";
             // 
-            // panel4
+            // groupBox1
             // 
-            this.panel4.Controls.Add(this.ultraListView_Policies);
-            this.panel4.Controls.Add(this.label3);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(0, 0);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(476, 185);
-            this.panel4.TabIndex = 3;
+            this.groupBox1.Controls.Add(this._txtbx_ScheduleDescription);
+            this.groupBox1.Controls.Add(this.checkBox_EnableScheduling);
+            this.groupBox1.Controls.Add(this._btn_ChangeSchedule);
+            this.groupBox1.Location = new System.Drawing.Point(21, 44);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(435, 144);
+            this.groupBox1.TabIndex = 1020;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Collection Schedule";
             // 
-            // ultraListView_Policies
+            // _txtbx_ScheduleDescription
             // 
-            this.ultraListView_Policies.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ultraListView_Policies.ItemSettings.AllowEdit = Infragistics.Win.DefaultableBoolean.False;
-            appearance1.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.AuditSQLServer_16;
-            this.ultraListView_Policies.ItemSettings.Appearance = appearance1;
-            this.ultraListView_Policies.ItemSettings.DefaultImage = global::Idera.SQLsecure.UI.Console.Properties.Resources.AuditSQLServer_16;
-            this.ultraListView_Policies.Location = new System.Drawing.Point(0, 23);
-            this.ultraListView_Policies.MainColumn.Text = "User-defined Policy Membership";
-            this.ultraListView_Policies.MainColumn.VisiblePositionInDetailsView = 0;
-            this.ultraListView_Policies.MainColumn.Width = 400;
-            this.ultraListView_Policies.Name = "ultraListView_Policies";
-            this.ultraListView_Policies.Size = new System.Drawing.Size(476, 162);
-            this.ultraListView_Policies.TabIndex = 2;
-            this.ultraListView_Policies.Text = "ultraListView1";
-            this.ultraListView_Policies.View = Infragistics.Win.UltraWinListView.UltraListViewStyle.Details;
-            this.ultraListView_Policies.ViewSettingsDetails.CheckBoxStyle = Infragistics.Win.UltraWinListView.CheckBoxStyle.CheckBox;
+            this._txtbx_ScheduleDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._txtbx_ScheduleDescription.BackColor = System.Drawing.Color.GhostWhite;
+            this._txtbx_ScheduleDescription.ForeColor = System.Drawing.Color.SlateGray;
+            this._txtbx_ScheduleDescription.Location = new System.Drawing.Point(10, 47);
+            this._txtbx_ScheduleDescription.Multiline = true;
+            this._txtbx_ScheduleDescription.Name = "_txtbx_ScheduleDescription";
+            this._txtbx_ScheduleDescription.ReadOnly = true;
+            this._txtbx_ScheduleDescription.Size = new System.Drawing.Size(339, 76);
+            this._txtbx_ScheduleDescription.TabIndex = 1019;
+            this._txtbx_ScheduleDescription.TabStop = false;
             // 
-            // label3
+            // checkBox_EnableScheduling
             // 
-            this.label3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label3.Location = new System.Drawing.Point(0, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(476, 23);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Select which policies should include this SQL Server.";
+            this.checkBox_EnableScheduling.AutoSize = true;
+            this.checkBox_EnableScheduling.Location = new System.Drawing.Point(10, 22);
+            this.checkBox_EnableScheduling.Name = "checkBox_EnableScheduling";
+            this.checkBox_EnableScheduling.Size = new System.Drawing.Size(115, 17);
+            this.checkBox_EnableScheduling.TabIndex = 3;
+            this.checkBox_EnableScheduling.Text = "&Enable Scheduling";
+            this.checkBox_EnableScheduling.UseVisualStyleBackColor = true;
+            this.checkBox_EnableScheduling.CheckedChanged += new System.EventHandler(this.checkBox_EnableScheduling_CheckedChanged);
             // 
-            // _page_ConfigureSMTPEmail
+            // _btn_ChangeSchedule
             // 
-            this._page_ConfigureSMTPEmail.Controls.Add(this.controlSMTPEmailConfig1);
-            this._page_ConfigureSMTPEmail.Controls.Add(this.panel2);
-            this._page_ConfigureSMTPEmail.Controls.Add(this.label10);
-            this._page_ConfigureSMTPEmail.Description = "Configure SQLsecure\'s SMTP Email Provider";
-            this._page_ConfigureSMTPEmail.DescriptionColor = System.Drawing.Color.Navy;
-            this._page_ConfigureSMTPEmail.Location = new System.Drawing.Point(19, 73);
-            this._page_ConfigureSMTPEmail.Name = "_page_ConfigureSMTPEmail";
-            this._page_ConfigureSMTPEmail.NextPage = this._page_Policies;
-            this._page_ConfigureSMTPEmail.PreviousPage = this._page_NotificationOptions;
-            this._page_ConfigureSMTPEmail.Size = new System.Drawing.Size(476, 403);
-            this._page_ConfigureSMTPEmail.TabIndex = 1010;
-            this._page_ConfigureSMTPEmail.Text = "Configure SMTP Provider";
-            this._page_ConfigureSMTPEmail.TextColor = System.Drawing.Color.Navy;
-            this._page_ConfigureSMTPEmail.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_ConfigureSMTPEmail_BeforeMoveNext);
-            this._page_ConfigureSMTPEmail.BeforeDisplay += new System.EventHandler(this._page_ConfigureSMTPEmail_BeforeDisplay);
+            this._btn_ChangeSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._btn_ChangeSchedule.Location = new System.Drawing.Point(353, 100);
+            this._btn_ChangeSchedule.Name = "_btn_ChangeSchedule";
+            this._btn_ChangeSchedule.Size = new System.Drawing.Size(76, 23);
+            this._btn_ChangeSchedule.TabIndex = 4;
+            this._btn_ChangeSchedule.Text = "C&hange...";
+            this._btn_ChangeSchedule.UseVisualStyleBackColor = true;
+            this._btn_ChangeSchedule.Click += new System.EventHandler(this._btn_ChangeSchedule_Click);
             // 
-            // panel2
+            // label_KeepSnapshotDays
             // 
-            this.panel2.Controls.Add(this.button_Test);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 367);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(476, 36);
-            this.panel2.TabIndex = 8;
+            this.label_KeepSnapshotDays.AutoSize = true;
+            this.label_KeepSnapshotDays.Location = new System.Drawing.Point(192, 9);
+            this.label_KeepSnapshotDays.Name = "label_KeepSnapshotDays";
+            this.label_KeepSnapshotDays.Size = new System.Drawing.Size(282, 13);
+            this.label_KeepSnapshotDays.TabIndex = 1018;
+            this.label_KeepSnapshotDays.Text = "days before allowing them to be groomed. (1 - 10000 days)";
             // 
-            // button_Test
+            // numericUpDown_KeepSnapshotDays
             // 
-            this.button_Test.Location = new System.Drawing.Point(3, 6);
-            this.button_Test.Name = "button_Test";
-            this.button_Test.Size = new System.Drawing.Size(75, 23);
-            this.button_Test.TabIndex = 0;
-            this.button_Test.Text = "&Test";
-            this.button_Test.UseVisualStyleBackColor = true;
-            this.button_Test.Click += new System.EventHandler(this.button_Test_Click);
+            this.numericUpDown_KeepSnapshotDays.Location = new System.Drawing.Point(128, 7);
+            this.numericUpDown_KeepSnapshotDays.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numericUpDown_KeepSnapshotDays.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown_KeepSnapshotDays.Name = "numericUpDown_KeepSnapshotDays";
+            this.numericUpDown_KeepSnapshotDays.Size = new System.Drawing.Size(58, 20);
+            this.numericUpDown_KeepSnapshotDays.TabIndex = 1;
+            this.numericUpDown_KeepSnapshotDays.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // label10
+            // label_KeepSnapshot
             // 
-            this.label10.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label10.Location = new System.Drawing.Point(0, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(476, 32);
-            this.label10.TabIndex = 6;
-            this.label10.Text = "Before Email notifications can be sent an Email provider must be configured for S" +
-                "QLsecure.";
+            this.label_KeepSnapshot.AutoSize = true;
+            this.label_KeepSnapshot.Location = new System.Drawing.Point(21, 9);
+            this.label_KeepSnapshot.Name = "label_KeepSnapshot";
+            this.label_KeepSnapshot.Size = new System.Drawing.Size(98, 13);
+            this.label_KeepSnapshot.TabIndex = 1016;
+            this.label_KeepSnapshot.Text = "&Keep snapshots for";
             // 
             // _page_NotificationOptions
             // 
@@ -428,7 +450,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.label12.Size = new System.Drawing.Size(379, 13);
             this.label12.TabIndex = 13;
             this.label12.Text = "( specify multiple email recipients by separating each address with a semicolon )" +
-                "";
+    "";
             // 
             // panel1
             // 
@@ -563,177 +585,236 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.radioButton_SendEmailWarningOrError.Text = "On Warning and Error";
             this.radioButton_SendEmailWarningOrError.UseVisualStyleBackColor = true;
             // 
-            // _page_JobSchedule
+            // _page_ConfigureSMTPEmail
             // 
-            this._page_JobSchedule.Controls.Add(this.groupBox2);
-            this._page_JobSchedule.Controls.Add(this.groupBox1);
-            this._page_JobSchedule.Controls.Add(this.label_KeepSnapshotDays);
-            this._page_JobSchedule.Controls.Add(this.numericUpDown_KeepSnapshotDays);
-            this._page_JobSchedule.Controls.Add(this.label_KeepSnapshot);
-            this._page_JobSchedule.Description = "Select when audit data (snapshots) should be collected.";
-            this._page_JobSchedule.DescriptionColor = System.Drawing.Color.Navy;
-            this._page_JobSchedule.Location = new System.Drawing.Point(19, 73);
-            this._page_JobSchedule.Name = "_page_JobSchedule";
-            this._page_JobSchedule.NextPage = this._page_NotificationOptions;
-            this._page_JobSchedule.PreviousPage = this._page_DefineFilters;
-            this._page_JobSchedule.Size = new System.Drawing.Size(476, 403);
-            this._page_JobSchedule.TabIndex = 0;
-            this._page_JobSchedule.Text = "Schedule Snapshots";
-            this._page_JobSchedule.TextColor = System.Drawing.Color.Navy;
-            this._page_JobSchedule.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_JobSchedule_BeforeMoveNext);
-            this._page_JobSchedule.BeforeMoveBack += new Divelements.WizardFramework.WizardPageEventHandler(this._page_JobSchedule_BeforeMoveBack);
-            this._page_JobSchedule.BeforeDisplay += new System.EventHandler(this._page_JobSchedule_BeforeDisplay);
+            this._page_ConfigureSMTPEmail.Controls.Add(this.controlSMTPEmailConfig1);
+            this._page_ConfigureSMTPEmail.Controls.Add(this.panel2);
+            this._page_ConfigureSMTPEmail.Controls.Add(this.label10);
+            this._page_ConfigureSMTPEmail.Description = "Configure SQLsecure\'s SMTP Email Provider";
+            this._page_ConfigureSMTPEmail.DescriptionColor = System.Drawing.Color.Navy;
+            this._page_ConfigureSMTPEmail.Location = new System.Drawing.Point(19, 73);
+            this._page_ConfigureSMTPEmail.Name = "_page_ConfigureSMTPEmail";
+            this._page_ConfigureSMTPEmail.NextPage = this._page_Policies;
+            this._page_ConfigureSMTPEmail.PreviousPage = this._page_NotificationOptions;
+            this._page_ConfigureSMTPEmail.Size = new System.Drawing.Size(476, 403);
+            this._page_ConfigureSMTPEmail.TabIndex = 1010;
+            this._page_ConfigureSMTPEmail.Text = "Configure SMTP Provider";
+            this._page_ConfigureSMTPEmail.TextColor = System.Drawing.Color.Navy;
+            this._page_ConfigureSMTPEmail.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_ConfigureSMTPEmail_BeforeMoveNext);
+            this._page_ConfigureSMTPEmail.BeforeDisplay += new System.EventHandler(this._page_ConfigureSMTPEmail_BeforeDisplay);
             // 
-            // groupBox2
+            // panel2
             // 
-            this.groupBox2.Controls.Add(this.label_AgentStatus);
-            this.groupBox2.Controls.Add(this.pictureBox_AgentStatus);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(21, 218);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(435, 113);
-            this.groupBox2.TabIndex = 1021;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "SQL Server Agent Status";
+            this.panel2.Controls.Add(this.button_Test);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 367);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(476, 36);
+            this.panel2.TabIndex = 8;
             // 
-            // label_AgentStatus
+            // button_Test
             // 
-            this.label_AgentStatus.AutoSize = true;
-            this.label_AgentStatus.BackColor = System.Drawing.Color.Transparent;
-            this.label_AgentStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_AgentStatus.Location = new System.Drawing.Point(10, 81);
-            this.label_AgentStatus.Name = "label_AgentStatus";
-            this.label_AgentStatus.Size = new System.Drawing.Size(48, 13);
-            this.label_AgentStatus.TabIndex = 14;
-            this.label_AgentStatus.Text = "Started";
+            this.button_Test.Location = new System.Drawing.Point(3, 6);
+            this.button_Test.Name = "button_Test";
+            this.button_Test.Size = new System.Drawing.Size(75, 23);
+            this.button_Test.TabIndex = 0;
+            this.button_Test.Text = "&Test";
+            this.button_Test.UseVisualStyleBackColor = true;
+            this.button_Test.Click += new System.EventHandler(this.button_Test_Click);
             // 
-            // pictureBox_AgentStatus
+            // label10
             // 
-            this.pictureBox_AgentStatus.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox_AgentStatus.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox_AgentStatus.Image")));
-            this.pictureBox_AgentStatus.Location = new System.Drawing.Point(10, 22);
-            this.pictureBox_AgentStatus.Name = "pictureBox_AgentStatus";
-            this.pictureBox_AgentStatus.Size = new System.Drawing.Size(48, 56);
-            this.pictureBox_AgentStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pictureBox_AgentStatus.TabIndex = 13;
-            this.pictureBox_AgentStatus.TabStop = false;
+            this.label10.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label10.Location = new System.Drawing.Point(0, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(476, 32);
+            this.label10.TabIndex = 6;
+            this.label10.Text = "Before Email notifications can be sent an Email provider must be configured for S" +
+    "QLsecure.";
             // 
-            // label1
+            // _page_Policies
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(64, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(364, 51);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "SQLsecure uses the SQL Server Agent for data collection and grooming. This agent " +
-                "is located on the SQL server hosting the Repository database.";
+            this._page_Policies.Controls.Add(this.panel3);
+            this._page_Policies.Description = "Select which policies should run security checks for this SQL Server.";
+            this._page_Policies.DescriptionColor = System.Drawing.Color.Navy;
+            this._page_Policies.Location = new System.Drawing.Point(19, 73);
+            this._page_Policies.Name = "_page_Policies";
+            this._page_Policies.NextPage = this._page_CollectData;
+            this._page_Policies.PreviousPage = this._page_ConfigureSMTPEmail;
+            this._page_Policies.Size = new System.Drawing.Size(476, 403);
+            this._page_Policies.TabIndex = 1008;
+            this._page_Policies.Text = "Add to Policies";
+            this._page_Policies.TextColor = System.Drawing.Color.Navy;
+            this._page_Policies.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_Policies_BeforeMoveNext);
+            this._page_Policies.BeforeMoveBack += new Divelements.WizardFramework.WizardPageEventHandler(this._page_Policies_BeforeMoveBack);
+            this._page_Policies.BeforeDisplay += new System.EventHandler(this.wizardPage1_BeforeDisplay);
             // 
-            // groupBox1
+            // panel3
             // 
-            this.groupBox1.Controls.Add(this._txtbx_ScheduleDescription);
-            this.groupBox1.Controls.Add(this.checkBox_EnableScheduling);
-            this.groupBox1.Controls.Add(this._btn_ChangeSchedule);
-            this.groupBox1.Location = new System.Drawing.Point(21, 44);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(435, 144);
-            this.groupBox1.TabIndex = 1020;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Collection Schedule";
+            this.panel3.Controls.Add(this.panel5);
+            this.panel3.Controls.Add(this.panel4);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(476, 403);
+            this.panel3.TabIndex = 4;
             // 
-            // _txtbx_ScheduleDescription
+            // panel5
             // 
-            this._txtbx_ScheduleDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this._txtbx_ScheduleDescription.BackColor = System.Drawing.Color.GhostWhite;
-            this._txtbx_ScheduleDescription.ForeColor = System.Drawing.Color.SlateGray;
-            this._txtbx_ScheduleDescription.Location = new System.Drawing.Point(10, 47);
-            this._txtbx_ScheduleDescription.Multiline = true;
-            this._txtbx_ScheduleDescription.Name = "_txtbx_ScheduleDescription";
-            this._txtbx_ScheduleDescription.ReadOnly = true;
-            this._txtbx_ScheduleDescription.Size = new System.Drawing.Size(339, 76);
-            this._txtbx_ScheduleDescription.TabIndex = 1019;
-            this._txtbx_ScheduleDescription.TabStop = false;
+            this.panel5.Controls.Add(this.panel6);
+            this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel5.Location = new System.Drawing.Point(0, 185);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(476, 218);
+            this.panel5.TabIndex = 5;
             // 
-            // checkBox_EnableScheduling
+            // panel6
             // 
-            this.checkBox_EnableScheduling.AutoSize = true;
-            this.checkBox_EnableScheduling.Location = new System.Drawing.Point(10, 22);
-            this.checkBox_EnableScheduling.Name = "checkBox_EnableScheduling";
-            this.checkBox_EnableScheduling.Size = new System.Drawing.Size(115, 17);
-            this.checkBox_EnableScheduling.TabIndex = 3;
-            this.checkBox_EnableScheduling.Text = "&Enable Scheduling";
-            this.checkBox_EnableScheduling.UseVisualStyleBackColor = true;
-            this.checkBox_EnableScheduling.CheckedChanged += new System.EventHandler(this.checkBox_EnableScheduling_CheckedChanged);
+            this.panel6.Controls.Add(this.ultraListView_DynamicPolicies);
+            this.panel6.Controls.Add(this.label11);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel6.Location = new System.Drawing.Point(0, 0);
+            this.panel6.Name = "panel6";
+            this.panel6.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.panel6.Size = new System.Drawing.Size(476, 218);
+            this.panel6.TabIndex = 3;
             // 
-            // _btn_ChangeSchedule
+            // ultraListView_DynamicPolicies
             // 
-            this._btn_ChangeSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._btn_ChangeSchedule.Location = new System.Drawing.Point(353, 100);
-            this._btn_ChangeSchedule.Name = "_btn_ChangeSchedule";
-            this._btn_ChangeSchedule.Size = new System.Drawing.Size(76, 23);
-            this._btn_ChangeSchedule.TabIndex = 4;
-            this._btn_ChangeSchedule.Text = "C&hange...";
-            this._btn_ChangeSchedule.UseVisualStyleBackColor = true;
-            this._btn_ChangeSchedule.Click += new System.EventHandler(this._btn_ChangeSchedule_Click);
+            this.ultraListView_DynamicPolicies.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ultraListView_DynamicPolicies.ItemSettings.AllowEdit = Infragistics.Win.DefaultableBoolean.False;
+            this.ultraListView_DynamicPolicies.ItemSettings.DefaultImage = ((System.Drawing.Image)(resources.GetObject("ultraListView_DynamicPolicies.ItemSettings.DefaultImage")));
+            this.ultraListView_DynamicPolicies.Location = new System.Drawing.Point(0, 26);
+            this.ultraListView_DynamicPolicies.MainColumn.Text = "Automatic Policy Membership";
+            this.ultraListView_DynamicPolicies.MainColumn.VisiblePositionInDetailsView = 0;
+            this.ultraListView_DynamicPolicies.MainColumn.Width = 400;
+            this.ultraListView_DynamicPolicies.Name = "ultraListView_DynamicPolicies";
+            this.ultraListView_DynamicPolicies.Size = new System.Drawing.Size(476, 192);
+            this.ultraListView_DynamicPolicies.TabIndex = 2;
+            this.ultraListView_DynamicPolicies.Text = "ultraListView1";
+            this.ultraListView_DynamicPolicies.View = Infragistics.Win.UltraWinListView.UltraListViewStyle.Details;
             // 
-            // label_KeepSnapshotDays
+            // label11
             // 
-            this.label_KeepSnapshotDays.AutoSize = true;
-            this.label_KeepSnapshotDays.Location = new System.Drawing.Point(192, 9);
-            this.label_KeepSnapshotDays.Name = "label_KeepSnapshotDays";
-            this.label_KeepSnapshotDays.Size = new System.Drawing.Size(282, 13);
-            this.label_KeepSnapshotDays.TabIndex = 1018;
-            this.label_KeepSnapshotDays.Text = "days before allowing them to be groomed. (1 - 10000 days)";
+            this.label11.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label11.Location = new System.Drawing.Point(0, 10);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(476, 16);
+            this.label11.TabIndex = 3;
+            this.label11.Text = "This registered SQL Server may be added to one or more of the following policies:" +
+    "";
             // 
-            // numericUpDown_KeepSnapshotDays
+            // panel4
             // 
-            this.numericUpDown_KeepSnapshotDays.Location = new System.Drawing.Point(128, 7);
-            this.numericUpDown_KeepSnapshotDays.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numericUpDown_KeepSnapshotDays.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDown_KeepSnapshotDays.Name = "numericUpDown_KeepSnapshotDays";
-            this.numericUpDown_KeepSnapshotDays.Size = new System.Drawing.Size(58, 20);
-            this.numericUpDown_KeepSnapshotDays.TabIndex = 1;
-            this.numericUpDown_KeepSnapshotDays.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.panel4.Controls.Add(this.ultraListView_Policies);
+            this.panel4.Controls.Add(this.label3);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(0, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(476, 185);
+            this.panel4.TabIndex = 3;
             // 
-            // label_KeepSnapshot
+            // ultraListView_Policies
             // 
-            this.label_KeepSnapshot.AutoSize = true;
-            this.label_KeepSnapshot.Location = new System.Drawing.Point(21, 9);
-            this.label_KeepSnapshot.Name = "label_KeepSnapshot";
-            this.label_KeepSnapshot.Size = new System.Drawing.Size(98, 13);
-            this.label_KeepSnapshot.TabIndex = 1016;
-            this.label_KeepSnapshot.Text = "&Keep snapshots for";
+            this.ultraListView_Policies.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ultraListView_Policies.ItemSettings.AllowEdit = Infragistics.Win.DefaultableBoolean.False;
+            this.ultraListView_Policies.ItemSettings.DefaultImage = ((System.Drawing.Image)(resources.GetObject("ultraListView_Policies.ItemSettings.DefaultImage")));
+            this.ultraListView_Policies.Location = new System.Drawing.Point(0, 23);
+            this.ultraListView_Policies.MainColumn.Text = "User-defined Policy Membership";
+            this.ultraListView_Policies.MainColumn.VisiblePositionInDetailsView = 0;
+            this.ultraListView_Policies.MainColumn.Width = 400;
+            this.ultraListView_Policies.Name = "ultraListView_Policies";
+            this.ultraListView_Policies.Size = new System.Drawing.Size(476, 162);
+            this.ultraListView_Policies.TabIndex = 2;
+            this.ultraListView_Policies.Text = "ultraListView1";
+            this.ultraListView_Policies.View = Infragistics.Win.UltraWinListView.UltraListViewStyle.Details;
+            this.ultraListView_Policies.ViewSettingsDetails.CheckBoxStyle = Infragistics.Win.UltraWinListView.CheckBoxStyle.CheckBox;
             // 
-            // _page_DefineFilters
+            // label3
             // 
-            this._page_DefineFilters.Controls.Add(this.filterSelection1);
-            this._page_DefineFilters.Description = "";
-            this._page_DefineFilters.DescriptionColor = System.Drawing.Color.Navy;
-            this._page_DefineFilters.Location = new System.Drawing.Point(19, 73);
-            this._page_DefineFilters.Name = "_page_DefineFilters";
-            this._page_DefineFilters.NextPage = this._page_JobSchedule;
-            this._page_DefineFilters.PreviousPage = this._page_FilePermissionFolders;
-            this._page_DefineFilters.Size = new System.Drawing.Size(476, 403);
-            this._page_DefineFilters.TabIndex = 0;
-            this._page_DefineFilters.Text = "Specify which SQL Server objects to audit";
-            this._page_DefineFilters.TextColor = System.Drawing.Color.Navy;
-            this._page_DefineFilters.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_DefineFilters_BeforeMoveNext);
-            this._page_DefineFilters.BeforeDisplay += new System.EventHandler(this._page_DefineFilters_BeforeDisplay);
+            this.label3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label3.Location = new System.Drawing.Point(0, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(476, 23);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Select which policies should include this SQL Server.";
+            // 
+            // _page_CollectData
+            // 
+            this._page_CollectData.Controls.Add(this.label13);
+            this._page_CollectData.Controls.Add(this.label9);
+            this._page_CollectData.Controls.Add(this.checkBox_CollectData);
+            this._page_CollectData.Description = "Specify whether you want to collect audit data after registering this SQL Server." +
+    "";
+            this._page_CollectData.DescriptionColor = System.Drawing.Color.Navy;
+            this._page_CollectData.Location = new System.Drawing.Point(19, 73);
+            this._page_CollectData.Name = "_page_CollectData";
+            this._page_CollectData.NextPage = this._page_Finish;
+            this._page_CollectData.PreviousPage = this._page_Policies;
+            this._page_CollectData.Size = new System.Drawing.Size(476, 403);
+            this._page_CollectData.TabIndex = 1009;
+            this._page_CollectData.Text = "Take Snapshot";
+            this._page_CollectData.TextColor = System.Drawing.Color.Navy;
+            this._page_CollectData.BeforeMoveBack += new Divelements.WizardFramework.WizardPageEventHandler(this._page_CollectData_BeforeMoveBack);
+            // 
+            // label13
+            // 
+            this.label13.Location = new System.Drawing.Point(0, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(476, 24);
+            this.label13.TabIndex = 5;
+            this.label13.Text = "Do you want to collect audit data (take a snapshot) after registering this SQL Se" +
+    "rver?";
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(0, 37);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(442, 56);
+            this.label9.TabIndex = 4;
+            this.label9.Text = "SQLsecure must collect data from the Registered Server to assess and audit securi" +
+    "ty risks and access rights. This data collection can be scheduled or run manuall" +
+    "y.";
+            // 
+            // checkBox_CollectData
+            // 
+            this.checkBox_CollectData.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.checkBox_CollectData.Location = new System.Drawing.Point(3, 97);
+            this.checkBox_CollectData.Name = "checkBox_CollectData";
+            this.checkBox_CollectData.Size = new System.Drawing.Size(421, 18);
+            this.checkBox_CollectData.TabIndex = 3;
+            this.checkBox_CollectData.Text = "Yes, collect data upon completion of the registration process.";
+            this.checkBox_CollectData.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.checkBox_CollectData.UseVisualStyleBackColor = true;
+            this.checkBox_CollectData.CheckedChanged += new System.EventHandler(this.checkBox_CollectData_CheckedChanged);
+            // 
+            // _page_Finish
+            // 
+            this._page_Finish.Controls.Add(this._rtb_Finish);
+            this._page_Finish.FinishText = "";
+            this._page_Finish.Location = new System.Drawing.Point(177, 66);
+            this._page_Finish.Name = "_page_Finish";
+            this._page_Finish.PreviousPage = this._page_CollectData;
+            this._page_Finish.ProceedText = "Click the Finish button to register this SQL Server.";
+            this._page_Finish.Size = new System.Drawing.Size(324, 410);
+            this._page_Finish.TabIndex = 1006;
+            this._page_Finish.Text = "SQL Server Registration Summary";
+            this._page_Finish.BeforeMoveBack += new Divelements.WizardFramework.WizardPageEventHandler(this._page_Finish_BeforeMoveBack);
+            this._page_Finish.BeforeDisplay += new System.EventHandler(this._page_Finish_BeforeDisplay);
+            // 
+            // _rtb_Finish
+            // 
+            this._rtb_Finish.BackColor = System.Drawing.SystemColors.Window;
+            this._rtb_Finish.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this._rtb_Finish.Cursor = System.Windows.Forms.Cursors.No;
+            this._rtb_Finish.Dock = System.Windows.Forms.DockStyle.Top;
+            this._rtb_Finish.ForeColor = System.Drawing.Color.Navy;
+            this._rtb_Finish.Location = new System.Drawing.Point(0, 0);
+            this._rtb_Finish.Name = "_rtb_Finish";
+            this._rtb_Finish.ReadOnly = true;
+            this._rtb_Finish.Size = new System.Drawing.Size(324, 385);
+            this._rtb_Finish.TabIndex = 1;
+            this._rtb_Finish.Text = "";
             // 
             // _page_Credentials
             // 
@@ -749,8 +830,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._page_Credentials.TabIndex = 0;
             this._page_Credentials.Text = "Specify Connection Credentials";
             this._page_Credentials.TextColor = System.Drawing.Color.Navy;
-            this._page_Credentials.AfterDisplay += new System.EventHandler(this._page_Credentials_AfterDisplay);
             this._page_Credentials.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_Credentials_BeforeMoveNext);
+            this._page_Credentials.AfterDisplay += new System.EventHandler(this._page_Credentials_AfterDisplay);
             this._page_Credentials.BeforeDisplay += new System.EventHandler(this._page_Credentials_BeforeDisplay);
             // 
             // _grpbx_SQLServerCredentials
@@ -1006,17 +1087,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._rtb_Introduction.TabIndex = 0;
             this._rtb_Introduction.Text = "";
             // 
-            // _page_FilePermissionFolders
+            // filterSelection1
             // 
-            this._page_FilePermissionFolders.Controls.Add(this.addEditFoldersControl);
-            this._page_FilePermissionFolders.Description = "Specify folders to be audited for collecting file system permission information";
-            this._page_FilePermissionFolders.Location = new System.Drawing.Point(19, 73);
-            this._page_FilePermissionFolders.Name = "_page_FilePermissionFolders";
-            this._page_FilePermissionFolders.NextPage = this._page_DefineFilters;
-            this._page_FilePermissionFolders.PreviousPage = this._page_Credentials;
-            this._page_FilePermissionFolders.Size = new System.Drawing.Size(476, 403);
-            this._page_FilePermissionFolders.TabIndex = 1011;
-            this._page_FilePermissionFolders.Text = "Specify Audit Folders";
+            this.filterSelection1.AutoSize = true;
+            this.filterSelection1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.filterSelection1.Location = new System.Drawing.Point(0, 0);
+            this.filterSelection1.Name = "filterSelection1";
+            this.filterSelection1.Size = new System.Drawing.Size(476, 403);
+            this.filterSelection1.TabIndex = 0;
             // 
             // controlSMTPEmailConfig1
             // 
@@ -1027,15 +1105,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.controlSMTPEmailConfig1.Size = new System.Drawing.Size(476, 335);
             this.controlSMTPEmailConfig1.TabIndex = 7;
             // 
-            // filterSelection1
-            // 
-            this.filterSelection1.AutoSize = true;
-            this.filterSelection1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.filterSelection1.Location = new System.Drawing.Point(0, 0);
-            this.filterSelection1.Name = "filterSelection1";
-            this.filterSelection1.Size = new System.Drawing.Size(476, 403);
-            this.filterSelection1.TabIndex = 0;
-            // 
             // addEditFoldersControl
             // 
             this.addEditFoldersControl.AutoSize = true;
@@ -1043,7 +1112,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.addEditFoldersControl.Name = "addEditFoldersControl";
             this.addEditFoldersControl.Size = new System.Drawing.Size(470, 388);
             this.addEditFoldersControl.TabIndex = 0;
-            this.addEditFoldersControl.Text = "addEditFoldersControl";
+            this.addEditFoldersControl.TargetServerName = "";
             // 
             // Form_WizardRegisterSQLServer
             // 
@@ -1061,21 +1130,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Register a SQL Server";
             this._wizard.ResumeLayout(false);
-            this._page_CollectData.ResumeLayout(false);
-            this._page_Finish.ResumeLayout(false);
-            this._page_Policies.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel5.ResumeLayout(false);
-            this.panel6.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ultraListView_DynamicPolicies)).EndInit();
-            this.panel4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.ultraListView_Policies)).EndInit();
-            this._page_ConfigureSMTPEmail.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this._page_NotificationOptions.ResumeLayout(false);
-            this._page_NotificationOptions.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this._page_FilePermissionFolders.ResumeLayout(false);
+            this._page_FilePermissionFolders.PerformLayout();
+            this._PageTags.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ulTags)).EndInit();
+            this._page_DefineFilters.ResumeLayout(false);
+            this._page_DefineFilters.PerformLayout();
             this._page_JobSchedule.ResumeLayout(false);
             this._page_JobSchedule.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -1084,8 +1144,21 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_KeepSnapshotDays)).EndInit();
-            this._page_DefineFilters.ResumeLayout(false);
-            this._page_DefineFilters.PerformLayout();
+            this._page_NotificationOptions.ResumeLayout(false);
+            this._page_NotificationOptions.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this._page_ConfigureSMTPEmail.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this._page_Policies.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
+            this.panel6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ultraListView_DynamicPolicies)).EndInit();
+            this.panel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ultraListView_Policies)).EndInit();
+            this._page_CollectData.ResumeLayout(false);
+            this._page_Finish.ResumeLayout(false);
             this._page_Credentials.ResumeLayout(false);
             this._grpbx_SQLServerCredentials.ResumeLayout(false);
             this._grpbx_SQLServerCredentials.PerformLayout();
@@ -1094,8 +1167,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._page_Servers.ResumeLayout(false);
             this._page_Servers.PerformLayout();
             this._page_Introduction.ResumeLayout(false);
-            this._page_FilePermissionFolders.ResumeLayout(false);
-            this._page_FilePermissionFolders.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1179,5 +1250,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private System.Windows.Forms.Label label13;
         private Divelements.WizardFramework.WizardPage _page_FilePermissionFolders;
         private Idera.SQLsecure.UI.Console.Controls.AddEditFolders addEditFoldersControl;
+        private Divelements.WizardFramework.WizardPage _PageTags;
+        private Infragistics.Win.UltraWinListView.UltraListView ulTags;
+        private Infragistics.Win.Misc.UltraButton button3;
+        private Infragistics.Win.Misc.UltraButton button2;
+        private Infragistics.Win.Misc.UltraButton btAdd;
     }
 }

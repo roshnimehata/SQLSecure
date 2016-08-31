@@ -85,6 +85,12 @@ namespace Idera.SQLsecure.Collector.Sql
                 case SqlObjectType.SequenceObject:
                     strType = "SequenceObject";
                     break;
+                case SqlObjectType.LinkedServer:
+                    strType = "LinkedServer";
+                    break;
+                case SqlObjectType.LinkedServerPrincipals:
+                    strType = "LinkedServerPrincipal";
+                    break;
                 default:
                     strType = "UnKnown";
                     System.Diagnostics.Debug.Assert(false, "Unknown Database Type");
@@ -128,7 +134,10 @@ namespace Idera.SQLsecure.Collector.Sql
         Synonym = 46,
         Column = 47,
         SequenceObject=48,
-        AvailabilityGroup=49
+        AvailabilityGroup=49,
+        LinkedServer = 50,
+        LinkedServerPrincipals=51
+
     }
 
     public enum FilterScope

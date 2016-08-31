@@ -355,5 +355,26 @@ Do you wish to remove SQL Server now?";
 
         public const string ReportAllServersWarning = "You have selected to run this report for all servers which can take significant time to generate and may heavily use your system resources. It is recommended that you run it from Microsoft Reporting Services instead.\n\nContinue running report?";
 
+        //Import Servers
+        public const string ImportServersCaption = @"Import SQL Servers";
+
+        public const string AllowSqlServersUpdate =
+            "There is at least one already registered server found in the import file and it's credentials data will be updated based on those specified in the file.\n Do you want to proceed?";
+
+        public const string InvalidImportFileFormat = @"The file you are trying to import have invalid format";
+        public const string PleaseProvideValidFile = @"File does not exists!\nPlease provide file to import";
+
+        public const string ImportedWithErrors =
+            @"Import operation complete with errors. Some servers cold be not imported.";
+
+        public const string ImportSuccessfull = @"Import operation finished";
+        public const string ImportCancelled = @"Import operation cancelled";
+        public const string RepositoryObjectNull = @"Repository object not specified";
+
+        public const string ManageTags = "Manage Server Group Tags";
+        public const string ConfirmCsvFileRemove = @"Please confirm that you are going to remove source .csv file.";
+
+        public const string EmptyImportFileError =
+            "File provided by you does not contain data to import.\nPlease provide valid file.";
     }
 }

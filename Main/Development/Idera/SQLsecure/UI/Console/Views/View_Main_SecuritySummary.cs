@@ -49,6 +49,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             public const string ExploreRoles = @"_buttonTool_ExploreRoles";
             public const string ExploreObjects = @"_buttonTool_ExploreObjects";
             public const string ViewReports = @"_buttonTool_ViewReports";
+            public const string ImportServers = @"_buttonTool_ImportServers";
         }
 
         private class RibbonAuditData
@@ -336,6 +337,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreUsers].SharedProps.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.UserPermissions);
             _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreRoles].SharedProps.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.UserPermissions);
             _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreObjects].SharedProps.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.ObjectPermissions);
+            _ultraToolbarsManager.Tools[RibbonTaskButton.ImportServers].SharedProps.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.AuditSQLServer);
 
             loadDataSource();
         }
@@ -528,7 +530,8 @@ namespace Idera.SQLsecure.UI.Console.Views
                 _ultraToolbarsManager.Tools[RibbonTaskButton.TakeSnapshot].SharedProps.Enabled =
                 _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreUsers].SharedProps.Enabled =
                 _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreRoles].SharedProps.Enabled =
-                _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreObjects].SharedProps.Enabled = false;
+                _ultraToolbarsManager.Tools[RibbonTaskButton.ExploreObjects].SharedProps.Enabled=
+                _ultraToolbarsManager.Tools[RibbonTaskButton.ImportServers].SharedProps.Enabled = false;
 
             // Dock the controls that are not docked in the designer for visibility
             _policySummary.Dock =
@@ -797,11 +800,19 @@ namespace Idera.SQLsecure.UI.Console.Views
                     case RibbonTaskButton.ViewReports:
                         showReports();
                         break;
+                    case RibbonTaskButton.ImportServers:
+                        ShowImportServers();
+                        break;
                     case RibbonAuditData.Select:
                         selectAuditData();
                         break;
                 }
             }
+        }
+
+        private void ShowImportServers()
+        {
+            Forms.Form_ImportServers.Process();
         }
 
         private void _ultraToolbarsManager_BeforeRibbonTabSelected(object sender, BeforeRibbonTabSelectedEventArgs e)

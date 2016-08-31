@@ -171,7 +171,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         #region Overrides
 
-        protected override void showRefresh()
+        protected override void ShowRefresh()
         {
             Interfaces.ICommandHandler ctl = (Interfaces.ICommandHandler)CurrentlyShownControl;
             if (ctl != null)

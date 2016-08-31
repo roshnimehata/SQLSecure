@@ -220,6 +220,8 @@ begin
 					exec @rc = SQLsecure.dbo.isp_sqlsecure_addrule @ruleheaderid=@fid,@class=29,@scope=N'A',@matchstring=N''
 				if (@rc = 0 and @2000 = 0)
 					exec @rc = SQLsecure.dbo.isp_sqlsecure_addrule @ruleheaderid=@fid,@class=48,@scope=N'A',@matchstring=N''
+				if (@rc = 0 and @2000 = 0)
+					exec @rc = SQLsecure.dbo.isp_sqlsecure_addrule @ruleheaderid=@fid,@class=27,@scope=N'A',@matchstring=N''
 			end
 
 			select @jobname = N'SQLsecure Collector Job - ' + @serverinstance

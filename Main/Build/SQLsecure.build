@@ -69,10 +69,14 @@
 	<!-- Use TStamp to set a proerty to the the current datetime defining the format -->
 	<tstamp property="Build.DateTime" pattern="MM-dd-yyyy.HHmm" verbose="true" />
 
+	<!-- Environment variables -->
+	<property name="Workspace.Path" value="${environment::get-variable('SQLSecureBuild')}" />
+	
 	<!-- Nant Properties -->
 	<property name="Framework.Version" value="v2.0.50727"/>
 	<property name="Framework.Install" value="c:/Windows/Microsoft.NET/Framework/${Framework.Version}"/>
 	<property name="nant.settings.currentframework" value="net-2.0"/>
+	<property name="build.MSBuild" value="C:/WINDOWS/Microsoft.NET/Framework/v4.0.30319/msbuild.exe" />
 
 	<property name="Build.Config" value="Release" unless="${property::exists('Build.Config')}" />
 	<property name="BuildNumberPlaceholder" value="9.88.777.666" />
@@ -117,7 +121,7 @@
 	<!-- Common Assembly Info -->
 	<property name="AssemblyInfo.Company" value="Idera, Inc." />
 	<property name="AssemblyInfo.Product" value="Idera SQLsecure" />
-	<property name="AssemblyInfo.Copyright" value="Copyright (C) 2005 - 2014 Idera, Inc." />
+	<property name="AssemblyInfo.Copyright" value="Copyright (C) 2005 - 2016 Idera, Inc." />
 	
 	<!-- InstallShield Information -->
 	<property name="InstallShield.Builder" value="C:\Program Files\Macrovision\IS 11.5 StandaloneBuild"/>
@@ -199,19 +203,19 @@
 	<target name="Build.Compile">
 
 		<!-- Build the Collector solution -->
-	    	<exec program="msbuild" workingdir="${SQLsecure.Collector}">
+	    	<exec program="${build.MSBuild}" workingdir="${SQLsecure.Collector}">
 	      		<arg value="Idera.SQLsecure.Collector.sln"/>
 	      		<arg value="/p:Configuration=${Build.Config}"/>
 	    	</exec>
 
 	    	<!-- Build the Console solution -->
-	    	<exec program="msbuild" workingdir="${SQLsecure.UI.Console}">
+	    	<exec program="${build.MSBuild}" workingdir="${SQLsecure.UI.Console}">
 	      		<arg value="Idera.SQLsecure.UI.Console.sln"/>
 	      		<arg value="/p:Configuration=${Build.Config}"/>
 	    	</exec>
 
 	    	<!-- Build the Reports Installer solution -->
-	    	<exec program="msbuild" workingdir="${SQLsecure.Reports.Installer}">
+	    	<exec program="${build.MSBuild}" workingdir="${SQLsecure.Reports.Installer}">
 	      		<arg value="Idera.SQLsecure.Reports.Installer.sln"/>
 	      		<arg value="/p:Configuration=${Build.Config}"/>
 	    	</exec>
@@ -266,6 +270,7 @@
 			<fileset>
 				<include name="${SQLsecure.ThirdPartySoftware}/Microsoft.ReportViewer.WinForms.dll"/>
 				<include name="${SQLsecure.ThirdPartySoftware}/Microsoft.ReportViewer.Common.dll"/>
+				<include name="${SQLsecure.ThirdPartySoftware}/Microsoft.SqlServer.Smo.dll"/>
 				<include name="${SQLsecure.ThirdPartySoftware}/TracerX.exe.config"/>
 			</fileset>
 	    	</copy>
@@ -313,7 +318,7 @@
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}.old"/>
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}"/>
 			<arg value="${BuildNumberPlaceholder}"/>
-			<arg value="${SQLsecure.version}"/>
+			<arg value="${SQLsecure.BuildVersion}"/>
 		</exec>
 		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
 
@@ -324,7 +329,7 @@
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.x64}.old"/>
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.x64}"/>
 			<arg value="${BuildNumberPlaceholder}"/>
-			<arg value="${SQLsecure.version}"/>
+			<arg value="${SQLsecure.BuildVersion}"/>
 		</exec>
 		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
 
@@ -335,7 +340,7 @@
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}.old"/>
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}"/>
 			<arg value="${BuildNumberPlaceholder}"/>
-			<arg value="${SQLsecure.version}"/>
+			<arg value="${SQLsecure.BuildVersion}"/>
 		</exec>
 		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
 
@@ -492,7 +497,7 @@
 			<filterchain>
 				<replacestring from="{platform}" to="x86" ignorecase="true" />
 				<replacestring from="{copyright}" to="${AssemblyInfo.Copyright}" ignorecase="true" />
-				<replacestring from="{appversion}" to="${SQLsecure.version}" ignorecase="true" />
+				<replacestring from="{appversion}" to="${SQLsecure.BuildVersion}" ignorecase="true" />
 				<replacestring from="{helpversion}" to="${help.version}" ignorecase="true" />
 				<replacestring from="{helpurl}" to="${help.url}" ignorecase="true" />
 			</filterchain>
@@ -514,7 +519,7 @@
 			<filterchain>
 				<replacestring from="{platform}" to="x64" ignorecase="true" />
 				<replacestring from="{copyright}" to="${AssemblyInfo.Copyright}" ignorecase="true" />
-				<replacestring from="{appversion}" to="${SQLsecure.version}" ignorecase="true" />
+				<replacestring from="{appversion}" to="${SQLsecure.BuildVersion}" ignorecase="true" />
 				<replacestring from="{helpversion}" to="${help.version}" ignorecase="true" />
 				<replacestring from="{helpurl}" to="${help.url}" ignorecase="true" />
 			</filterchain>
@@ -536,7 +541,7 @@
 			<filterchain>
 				<replacestring from="{platform}" to="ia64" ignorecase="true" />
 				<replacestring from="{copyright}" to="${AssemblyInfo.Copyright}" ignorecase="true" />
-				<replacestring from="{appversion}" to="${SQLsecure.version}" ignorecase="true" />
+				<replacestring from="{appversion}" to="${SQLsecure.BuildVersion}" ignorecase="true" />
 				<replacestring from="{helpversion}" to="${help.version}" ignorecase="true" />
 				<replacestring from="{helpurl}" to="${help.url}" ignorecase="true" />
 			</filterchain>
@@ -563,30 +568,30 @@
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
-	      		<arg value="C:\Idera\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure.zip"/>
+	      		<arg value="${Workspace.Path}\Build\BuildCompileOutput\SQLsecure.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\x86\Full\*.*"/>
 	    	</exec>
 		<exec program="${WinZip}\wzzip">
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
-	      		<arg value="C:\Idera\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure-x64.zip"/>
+	      		<arg value="${Workspace.Path}\Build\BuildCompileOutput\SQLsecure-x64.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\x64\Full\*.*"/>
 	    	</exec>
 		<exec program="${WinZip}\wzzip">
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
-	      		<arg value="C:\Idera\SQLsecure\Main\Build\BuildCompileOutput\SQLsecure-ia64.zip"/>
+	      		<arg value="${Workspace.Path}\Build\BuildCompileOutput\SQLsecure-ia64.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\ia64\Full\*.*"/>
 	    	</exec>
 	    	
 		<!-- Build absolute packager -->
-	    <exec program="InstallationKit.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
+	    <exec program="InstallationKit.bat" workingdir="${Workspace.Path}\Build">
 		</exec>
-		<exec program="InstallationKit-x64.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
+		<exec program="InstallationKit-x64.bat" workingdir="${Workspace.Path}\Build">
 		</exec>
-		<exec program="InstallationKit-ia64.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
+		<exec program="InstallationKit-ia64.bat" workingdir="${Workspace.Path}\Build">
 	    	</exec>
 	    	
         <!-- Zip the EXE (used for HTTP downloads where we dont want an EXE) -->
@@ -629,18 +634,16 @@
 		<attrib file="build/build.number" readonly="true"/>
 		
 		<!-- Set the build label used for P4 labeling, output dir & zip file -->
-		<property name="SQLsecure.BuildLabel" value="${SQLsecure.version}_${SQLsecure.Incremental.Label}" />
+		<property name="SQLsecure.BuildVersion" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.buildnumber}.0" />
+		<property name="SQLsecure.BuildLabel" value="${SQLsecure.BuildVersion}_${SQLsecure.Incremental.Label}" />
 	</target>
-	
-	
-	
 
 	<target name="Perforce.Sync">
 	    <!--p4sync force="true"  view="${Perforce.View}" /-->
 	</target>
 	
 	<target name="Build.ApplyVersionInfo">
-		<call target="Build.Version" unless="${property::exists('SQLsecure.version')}"/>
+		<call target="Build.Version" unless="${property::exists('SQLsecure.BuildVersion')}"/>
 		<call target="Build.GenerateCommonAssemblyInfo"/>
 	</target>
 	
@@ -649,12 +652,13 @@
 		<loadtasks assembly="build/bin/BuildUtilities.dll" />
 		<!--p4edit view="${Perforce.Branch}/build/build.number"/-->
 
-		<!-- Generate the build/revision number -->
-		 <version path="build/build.number" startdate="${Build.StartDate}" prefix="SQLsecure" buildtype="MonthDay" revisiontype="Increment" />
+		<!-- Get the build/revision number -->
+		<versionex path="build/build.number" prefix="SQLsecure" buildtype="NoIncrement" revisiontype="NoIncrement" />
 		<!--p4submit changelist="Update build number" view="${Perforce.Branch}/build/build.number"/-->
 		
 		<!-- Set the build label used for P4 labeling, output dir & zip file -->
-		<property name="SQLsecure.BuildLabel" value="${SQLsecure.version}" />
+		<property name="SQLsecure.BuildVersion" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.buildnumber}.0" />
+		<property name="SQLsecure.BuildLabel" value="${SQLsecure.BuildVersion}" />
 	</target>
 	
 	<target name="Build.GenerateCommonAssemblyInfo">
@@ -672,7 +676,7 @@
 				<attribute type="AssemblyCompanyAttribute" value="${AssemblyInfo.Company}" />
 				<attribute type="AssemblyProductAttribute" value="${AssemblyInfo.Product}" />
 				<attribute type="AssemblyCopyrightAttribute" value="${AssemblyInfo.Copyright}" />
-				<attribute type="AssemblyVersionAttribute" value="${SQLsecure.version}" />
+				<attribute type="AssemblyVersionAttribute" value="${SQLsecure.BuildVersion}" />
 			</attributes>
 	    	</asminfo>
 
@@ -680,11 +684,10 @@
 	    	<attrib file="${CommonAssemblyInfo}" readonly="true" />
 	</target>
 
-
 	<target name="Perforce.Label">
 		<!--p4label label="sqlsecure_${SQLsecure.BuildLabel}" view="${Perforce.View}"/-->
 		<!--p4labelsync label="sqlsecure_${SQLsecure.BuildLabel}"  view="${Perforce.View}"/-->
-		<exec program="LockLabel.bat" workingdir="C:\Idera\SQLsecure\Main\Build">
+		<exec program="LockLabel.bat" workingdir="${Workspace.Path}\Build">
 			<arg value="sqlsecure_${SQLsecure.BuildLabel}"/>
 	    	</exec>
 	</target>
@@ -696,7 +699,7 @@
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
 	      		<arg value="C:\Idera\SQLsecure_${SQLsecure.BuildLabel}.zip"/>
-	      		<arg value="C:\Idera\SQLsecure\*.*"/>
+	      		<arg value="${Workspace.Path}\*.*"/>
 	    	</exec>
 	</target>
 	
@@ -711,7 +714,5 @@
 			</fileset>
 		</copy>
 	</target>
-	
-	
 	
 </project>
