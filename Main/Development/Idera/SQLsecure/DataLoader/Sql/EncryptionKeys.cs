@@ -22,7 +22,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                                 algorithm_desc ,
                                                 provider_type,
 	                                            'iSK' as type
-                                        FROM    {0}.sys.symmetric_keys
+                                        FROM    [{0}].sys.symmetric_keys
                                         UNION
                                         SELECT  name ,
                                                 principal_id ,
@@ -32,7 +32,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                                 algorithm_desc ,
                                                 provider_type,
                                                 'iAK' as type
-                                        FROM    {0}.sys.asymmetric_keys;";
+                                        FROM    [{0}].sys.asymmetric_keys;";
 
         public const string GetKeysQuery2005 = @"SELECT  name ,
                                                 principal_id ,
@@ -42,7 +42,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                                 algorithm_desc ,
                                                '' provider_type,
 	                                            'iSK' as type
-                                        FROM    {0}.sys.symmetric_keys
+                                        FROM    [{0}].sys.symmetric_keys
                                         UNION
                                         SELECT  name ,
                                                 principal_id ,
@@ -52,7 +52,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                                 algorithm_desc ,
                                                 '' provider_type,
                                                 'iAK' as type
-                                        FROM    {0}.sys.asymmetric_keys;";
+                                        FROM    [{0}].sys.asymmetric_keys;";
 
 
 
