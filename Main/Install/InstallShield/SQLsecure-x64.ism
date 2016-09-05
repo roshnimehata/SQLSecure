@@ -523,7 +523,7 @@
 		<row><td>ConfigRepository</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>7</td><td>266</td><td>16</td><td>65539</td><td/><td>##NEW_STRING99##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ConfigRepository</td><td>ImageMain</td><td>Bitmap</td><td>0</td><td>1</td><td>139</td><td>324</td><td>1048577</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary7</td></row>
 		<row><td>ConfigRepository</td><td>NextLarge</td><td>PushButton</td><td>297</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING101##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>rbConfigRepo</td><td>RadioButtonGroup</td><td>163</td><td>91</td><td>76</td><td>42</td><td>3</td><td>CONFIG_REPOSITORY</td><td/><td>BackLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>ConfigRepository</td><td>rbConfigRepo</td><td>RadioButtonGroup</td><td>163</td><td>91</td><td>76</td><td>72</td><td>3</td><td>CONFIG_REPOSITORY</td><td/><td>BackLarge</td><td/><td/><td/><td/><td/></row>
 		<row><td>ConfigRepository</td><td>txtQuestion</td><td>Text</td><td>151</td><td>58</td><td>237</td><td>34</td><td>65539</td><td/><td>##NEW_STRING140##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ConsoleNotCompatible</td><td>Bitmap1</td><td>Bitmap</td><td>0</td><td>0</td><td>250</td><td>266</td><td>0</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ConsoleNotCompatible</td><td>BottomLine</td><td>Line</td><td>0</td><td>109</td><td>340</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
@@ -5236,7 +5236,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>RETURN</td><td>0</td><td/></row>
 		<row><td>RebootYesNo</td><td>Yes</td><td/></row>
 		<row><td>ReinstallModeText</td><td>omus</td><td/></row>
-		<row><td>SCHEMA_VERSION</td><td>2700</td><td/></row>
+		<row><td>SCHEMA_VERSION</td><td>3000</td><td/></row>
 		<row><td>SERVICEPASSWORD</td><td/><td/></row>
 		<row><td>SERVICEUSERNAME</td><td/><td/></row>
 		<row><td>SERVICE_SQLAUTHENTICATION</td><td/><td/></row>
