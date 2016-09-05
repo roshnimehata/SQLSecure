@@ -523,7 +523,7 @@
 		<row><td>ConfigRepository</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>7</td><td>266</td><td>16</td><td>65539</td><td/><td>##NEW_STRING99##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ConfigRepository</td><td>ImageMain</td><td>Bitmap</td><td>0</td><td>1</td><td>139</td><td>324</td><td>1048577</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary7</td></row>
 		<row><td>ConfigRepository</td><td>NextLarge</td><td>PushButton</td><td>297</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##NEW_STRING101##</td><td/><td/><td/><td/><td/><td/></row>
-		<row><td>ConfigRepository</td><td>rbConfigRepo</td><td>RadioButtonGroup</td><td>163</td><td>91</td><td>76</td><td>42</td><td>3</td><td>CONFIG_REPOSITORY</td><td/><td>BackLarge</td><td/><td/><td/><td/><td/></row>
+		<row><td>ConfigRepository</td><td>rbConfigRepo</td><td>RadioButtonGroup</td><td>163</td><td>91</td><td>76</td><td>72</td><td>3</td><td>CONFIG_REPOSITORY</td><td/><td>BackLarge</td><td/><td/><td/><td/><td/></row>
 		<row><td>ConfigRepository</td><td>txtQuestion</td><td>Text</td><td>151</td><td>58</td><td>237</td><td>34</td><td>65539</td><td/><td>##NEW_STRING140##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ConsoleNotCompatible</td><td>Bitmap1</td><td>Bitmap</td><td>0</td><td>0</td><td>250</td><td>266</td><td>0</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 		<row><td>ConsoleNotCompatible</td><td>BottomLine</td><td>Line</td><td>0</td><td>109</td><td>340</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
@@ -2184,6 +2184,8 @@ Set oServer = Nothing</td><td/></row>
 		<col key="yes" def="s72">Component_</col>
 		<row><td>Console</td><td>Doc_WebHelp</td></row>
 		<row><td>Console</td><td>EULA</td></row>
+		<row><td>Console</td><td>Idera.SQLsecure.Collector.exe</td></row>
+		<row><td>Console</td><td>Idera.SQLsecure.Collector.exe.config</td></row>
 		<row><td>Console</td><td>Idera.SQLsecure.Core.Accounts.dll</td></row>
 		<row><td>Console</td><td>Idera.SQLsecure.Core.Interop.dll</td></row>
 		<row><td>Console</td><td>Idera.SQLsecure.Core.Logger.dll</td></row>
@@ -2209,6 +2211,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>Console</td><td>Infragistics2.Win.v9.1.dll</td></row>
 		<row><td>Console</td><td>Interop.ActiveDs.dll</td></row>
 		<row><td>Console</td><td>License4Net.dll</td></row>
+		<row><td>Console</td><td>Manage.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.Common.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.WinForms.dll</td></row>
@@ -2255,20 +2258,6 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>Reports</td><td>Reports_SubReport_ServersUsedSummary.rdl</td></row>
 		<row><td>Reports</td><td>Reports_SubReport_UsersPermissions.rdl</td></row>
 		<row><td>Reports</td><td>Reports_rdl.xml</td></row>
-		<row><td>Repository</td><td>Idera.SQLsecure.Collector.exe</td></row>
-		<row><td>Repository</td><td>Idera.SQLsecure.Collector.exe.config</td></row>
-		<row><td>Repository</td><td>Idera.SQLsecure.Core.Accounts.dll</td></row>
-		<row><td>Repository</td><td>Idera.SQLsecure.Core.EventMessages.dll</td></row>
-		<row><td>Repository</td><td>Idera.SQLsecure.Core.Interop.dll</td></row>
-		<row><td>Repository</td><td>Idera.SQLsecure.Core.Logger.dll</td></row>
-		<row><td>Repository</td><td>Interop.ActiveDs.dll</td></row>
-		<row><td>Repository</td><td>License4Net.dll</td></row>
-		<row><td>Repository</td><td>Manage.dll</td></row>
-		<row><td>Repository</td><td>Microsoft.SqlServer.BatchParser.dll</td></row>
-		<row><td>Repository</td><td>Microsoft.SqlServer.Replication.dll</td></row>
-		<row><td>Repository</td><td>Microsoft.SqlServer.Smo.dll</td></row>
-		<row><td>Repository</td><td>PowerCollections.dll</td></row>
-		<row><td>Repository</td><td>Registry</td></row>
 		<row><td>Repository</td><td>SQLScript_merge_fn.sql</td></row>
 		<row><td>Repository</td><td>SQLScript_merge_sp.sq</td></row>
 		<row><td>Repository</td><td>SQLScript_merge_vw.sql</td></row>
@@ -2276,8 +2265,6 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>Repository</td><td>SQLScript_sqlsecure_ddl.sql</td></row>
 		<row><td>Repository</td><td>SQLScript_sqlsecure_ddl_update.sql</td></row>
 		<row><td>Repository</td><td>SQLScript_sqlsecure_version.sql</td></row>
-		<row><td>Repository</td><td>TracerX.exe</td></row>
-		<row><td>Repository</td><td>TracerX.exe.config</td></row>
 	</table>
 
 	<table name="File">
@@ -5236,7 +5223,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>RETURN</td><td>0</td><td/></row>
 		<row><td>RebootYesNo</td><td>Yes</td><td/></row>
 		<row><td>ReinstallModeText</td><td>omus</td><td/></row>
-		<row><td>SCHEMA_VERSION</td><td>2700</td><td/></row>
+		<row><td>SCHEMA_VERSION</td><td>3000</td><td/></row>
 		<row><td>SERVICEPASSWORD</td><td/><td/></row>
 		<row><td>SERVICEUSERNAME</td><td/><td/></row>
 		<row><td>SERVICE_SQLAUTHENTICATION</td><td/><td/></row>
