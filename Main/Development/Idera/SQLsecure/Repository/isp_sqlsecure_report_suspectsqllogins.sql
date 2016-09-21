@@ -52,33 +52,22 @@ AS -- <Idera SQLsecure version and copyright>
                          FROM   serverpermission perm
                          WHERE  perm.grantee = a.principalid
                                 AND perm.isgrant = 'Y'
-                                AND perm.snapshotid IN ( SELECT
-                                                              snapshotid
-                                                         FROM #ids ) )
+                                 AND perm.snapshotid = d.snapshotid  )
             AND NOT EXISTS ( SELECT 1
                              FROM   databaseobjectpermission dbp
                              WHERE  dbp.grantee = a.principalid
                                     AND dbp.isgrant = 'Y'
-                                    AND dbp.snapshotid IN ( SELECT
-                                                              snapshotid
-                                                            FROM
-                                                              #ids ) )
+                                    AND dbp.snapshotid = d.snapshotid  )
             AND NOT EXISTS ( SELECT 1
                              FROM   databaseprincipalpermission dbp
                              WHERE  dbp.grantee = a.principalid
                                     AND dbp.isgrant = 'Y'
-                                    AND dbp.snapshotid IN ( SELECT
-                                                              snapshotid
-                                                            FROM
-                                                              #ids ) )
+                                    AND dbp.snapshotid = d.snapshotid  )
             AND NOT EXISTS ( SELECT 1
                              FROM   databaseschemapermission dbp
                              WHERE  dbp.grantee = a.principalid
                                     AND dbp.isgrant = 'Y'
-                                    AND dbp.snapshotid IN ( SELECT
-                                                              snapshotid
-                                                            FROM
-                                                              #ids ) )
+                                    AND dbp.snapshotid = d.snapshotid  )
     GROUP BY d.connectionname ,
             a.name ,
             a.type
