@@ -90,8 +90,8 @@ namespace Idera.SQLsecure.Collector
         #endregion
 
         #region SQL Server Stuff
-        internal const int DalVersion = 3000;
-        internal const int SchemaVersion = 3000;
+        internal const int DalVersion = 3001;
+        internal const int SchemaVersion = 3001;
 
         internal const string AdminRole = @"Admin";
         internal const string LoaderRole = @"Loader";

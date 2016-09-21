@@ -6,6 +6,10 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 
+ 
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[isp_sqlsecure_report_suspectsqllogins]'))
+drop procedure [dbo].[isp_sqlsecure_report_suspectsqllogins]
+GO
 
 CREATE PROCEDURE [dbo].[isp_sqlsecure_report_suspectsqllogins]
     (

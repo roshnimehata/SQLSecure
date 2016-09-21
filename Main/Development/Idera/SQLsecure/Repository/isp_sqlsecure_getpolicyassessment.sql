@@ -9114,7 +9114,7 @@ AS -- <Idera SQLsecure version and copyright>
 																	#linksrvusr;
 																SET @foundLinkedServerUser = SUBSTRING(@foundLinkedServerUser, 1,
 																							LEN(@foundLinkedServerUser) - 2);
-																SET @metricval = 'There are linked servers that are runnung as a member of sysadmin group: '
+																SET @metricval = 'There are linked servers that are running as a member of sysadmin group: '
 																	+ CHAR(13) + CHAR(10) + @foundLinkedServerUser + '';
 																SET @sevcode = @severity;
 																	

@@ -635,3 +635,4 @@ IF ( ISNULL(@ver, 900) <= 2999 )	-- Check to prevent this from running in future
 GO
 
 insert into filterruleclass (objectclass, objectvalue) values (50, 'LinkedServer')
+

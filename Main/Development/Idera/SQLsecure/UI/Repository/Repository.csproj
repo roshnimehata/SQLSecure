@@ -123,6 +123,9 @@
     <Content Include="..\..\Repository\DDL\update_3000_footer.sql">
       <Link>DDLs\update_3000_footer.sql</Link>
     </Content>
+	<Content Include="..\..\Repository\DDL\update_3001_header.sql">
+      <Link>DDLs\update_3001_header.sql</Link>
+    </Content>
     <Content Include="..\..\Repository\fn_getaccesstype.sql">
       <Link>Functions\fn_getaccesstype.sql</Link>
     </Content>
@@ -866,6 +869,9 @@
     </Content>
     <Content Include="..\..\Repository\vwwindowsgroupmembers.sql">
       <Link>Views\vwwindowsgroupmembers.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_3001_footer.sql" >
+	  <Link>DDLs\update_3001_footer.sql</Link>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
