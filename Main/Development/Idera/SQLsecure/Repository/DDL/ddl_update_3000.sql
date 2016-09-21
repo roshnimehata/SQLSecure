@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------- */
-/* Schema changes for SQLsecure 3.0 schema version 3000                   */
+/* Schema changes for SQLsecure 3.0 schema version 3001                   */
 /* ---------------------------------------------------------------------- */
 
 SET QUOTED_IDENTIFIER ON;
@@ -15,18 +15,8 @@ SELECT
     @ver = schemaversion
 FROM
     currentversion;
-IF (ISNULL(@ver, 900) >= 3000)
+IF (ISNULL(@ver, 900) < 3000)
     BEGIN
-        DECLARE @msg NVARCHAR(500);
-        SET @msg = N'Database schema is not at a level that can be upgraded to version 3000';
-        IF (@ver IS NOT NULL)
-            EXEC isp_sqlsecure_addactivitylog @activitytype = 'Failure Audit',
-                @source = 'Install', @eventcode = 'Upgrade',
-                @category = 'Schema', @description = @msg,
-                @connectionname = NULL;
-        RAISERROR (@msg, 16, 1);
-    END;
-
 ----SQL Jobs and Agent Check
 IF NOT EXISTS ( SELECT
                     1
@@ -215,5 +205,5 @@ IF NOT EXISTS ( SELECT
         ALTER TABLE [dbo].[linkedserverprincipal] WITH CHECK ADD CONSTRAINT[FK_linkedserver] FOREIGN KEY([snapshotid],[serverid]) 
         REFERENCES [dbo].[linkedserver]([snapshotid], [serverid]) ON DELETE CASCADE;
     END;
-
+END;
 GO

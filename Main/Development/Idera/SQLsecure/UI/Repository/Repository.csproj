@@ -72,6 +72,9 @@
     <Content Include="..\..\Repository\DDL\ddl_update_3000.sql">
       <Link>DDLs\ddl_update_3000.sql</Link>
     </Content>
+	<Content Include="..\..\Repository\DDL\ddl_update_3001.sql">
+      <Link>DDLs\ddl_update_3001.sql</Link>
+    </Content>
     <Content Include="..\..\Repository\DDL\footer.sql">
       <Link>DDLs\footer.sql</Link>
     </Content>
