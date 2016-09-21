@@ -58,7 +58,7 @@ tag_unique_name UNIQUE NONCLUSTERED
 name
 );
 
-GO 
+
 
 CREATE TABLE [dbo].[server_tags]
     (
@@ -88,14 +88,14 @@ REFERENCES [dbo].[tags] ([tag_id]);
 ALTER TABLE [dbo].[server_tags] CHECK CONSTRAINT [FK_server_tags_tags];
 
 
-GO	
+
 
 /****** Object:  Table [dbo].[encryptionkey]    Script Date: 7/29/2016 4:46:46 AM ******/
 SET ANSI_NULLS ON
-GO
+
 
 SET QUOTED_IDENTIFIER ON
-GO
+
 
 CREATE TABLE [dbo].[encryptionkey]
     (
@@ -119,21 +119,21 @@ CREATE TABLE [dbo].[encryptionkey]
     )
 ON  [PRIMARY]
 
-GO
+
 
 ALTER TABLE [dbo].[encryptionkey]  WITH NOCHECK ADD  CONSTRAINT [FK_encryptionkey_serversnapshot] FOREIGN KEY([snapshotid])
 REFERENCES [dbo].[serversnapshot] ([snapshotid]) ON DELETE CASCADE;
-GO
+
 
 ALTER TABLE [dbo].[encryptionkey] CHECK CONSTRAINT [FK_encryptionkey_serversnapshot]
-GO
+
 
 ALTER TABLE [dbo].[encryptionkey]  WITH CHECK ADD  CONSTRAINT [FK_encryptionkey_sqldatabase] FOREIGN KEY([snapshotid], [databaseid])
 REFERENCES [dbo].[sqldatabase] ([snapshotid], [dbid]) ON DELETE CASCADE;
-GO
+
 
 ALTER TABLE [dbo].[encryptionkey] CHECK CONSTRAINT [FK_encryptionkey_sqldatabase]
-GO
+
 
 
 

@@ -23,3 +23,4 @@ IF ( ISNULL(@ver, 900) <= 3000 )	-- Check to prevent this from running in future
 
 	END;
 GO
+

@@ -3,7 +3,7 @@ SELECT
     @ver = schemaversion
 FROM
     currentversion;
-IF ( ISNULL(@ver, 900) <= 2999 )	-- Check to prevent this from running in future upgrades, but run for all prior versions at any version level because the version gets updated later
+IF ( ISNULL(@ver, 900) < 3000 )	-- Check to prevent this from running in future upgrades, but run for all prior versions at any version level because the version gets updated later
     BEGIN
         DECLARE
             @metricid INT ,
@@ -629,10 +629,10 @@ IF ( ISNULL(@ver, 900) <= 2999 )	-- Check to prevent this from running in future
                                         st.tag_id = t.tag_id
                                         AND st.server_id = r.registeredserverid );
 
-
+	insert into filterruleclass (objectclass, objectvalue) values (50, 'LinkedServer')
 
     END;
 GO
 
-insert into filterruleclass (objectclass, objectvalue) values (50, 'LinkedServer')
+
 

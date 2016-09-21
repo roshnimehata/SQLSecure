@@ -15,7 +15,7 @@ SELECT
     @ver = schemaversion
 FROM
     currentversion;
-IF (ISNULL(@ver, 900) >= 3000)
+IF (ISNULL(@ver, 900) >= 3001)
     BEGIN
         DECLARE @msg NVARCHAR(500);
         SET @msg = N'Database schema is not at a level that can be upgraded to version 3000';
