@@ -141,11 +141,12 @@ namespace Idera.SQLsecure.UI.Console.Import
                 }
 
 
-                var errorMessage = $"{string.Join("\n", errorList.ToArray())} {errorMsg}".Trim('\n');
+                var errorMessage =
+                    string.Format("{0} \n{1}", string.Join("\n", errorList.ToArray()), errorMsg).Trim().Trim('\n');
                 settings.ChangeStatus(ImportStatusIcon.Imported,
                     string.IsNullOrEmpty(errorMessage)
                         ? "Imported"
-                        : $"Imported with errors: {errorMessage}");
+                        : string.Format("Imported with errors: {0}", errorMessage));
                 return true;
             }
         }
