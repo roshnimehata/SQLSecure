@@ -140,11 +140,13 @@ namespace Idera.SQLsecure.UI.Console.Import
                     errorList.Add(ex.Message);
                 }
 
+
+                var errorMessage = $"{string.Join("\n", errorList.ToArray())} {errorMsg}".Trim('\n');
                 settings.ChangeStatus(ImportStatusIcon.Imported,
-                    errorList.Count > 0
-                        ? string.Format("Imported with errors: {0}", string.Join("\n", errorList.ToArray()))
-                        : "Imported");
-                return isSuccessfulOperation;
+                    string.IsNullOrEmpty(errorMessage)
+                        ? "Imported"
+                        : $"Imported with errors: {errorMessage}");
+                return true;
             }
         }
 
@@ -226,7 +228,11 @@ namespace Idera.SQLsecure.UI.Console.Import
                     var winUserPassword = importItem.UseSameCredentials
                         ? importItem.Password
                         : importItem.WindowsUserPassword;
-
+                    if (string.IsNullOrEmpty(winUser) && string.IsNullOrEmpty(winUserPassword))
+                    {
+                        errorMsg = ErrorMsgs.WindowsUserNotSpecifiedMsg;
+                        return true;
+                    }
                     Server.ServerAccess sa = Server.CheckServerAccess(machine, winUser, winUserPassword,
                         out errorMsg);
                     return sa == Server.ServerAccess.OK;
