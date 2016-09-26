@@ -376,5 +376,8 @@ Do you wish to remove SQL Server now?";
 
         public const string EmptyImportFileError =
             "File provided by you does not contain data to import.\nPlease provide valid file.";
+
+
+        public const string WindowsUserForImportNotSpecifiedMsg = "Windows User for gathering OS and AD Objects was not provided";
     }
 }

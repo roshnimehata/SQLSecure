@@ -73,7 +73,10 @@ namespace Idera.SQLsecure.UI.Console.Import
                     if (repository.RegisteredServers.Find(connectionName) != null)
                     {
                         UpdateCredentials(itemToImport, repository, connectionName);
-                        settings.ChangeStatus(ImportStatusIcon.Imported, "Updated");
+                        if(errorList.Count>0)
+                            settings.ChangeStatus(ImportStatusIcon.Warning, string.Format("Updated with warnings: {0}", string.Join("\n", errorList.ToArray())));
+                        else 
+                            settings.ChangeStatus(ImportStatusIcon.Imported, "Updated");
                         return true;
                     }
                     RegisteredServer.AddServer(repository.ConnectionString,
@@ -240,7 +243,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                     if (string.IsNullOrEmpty(winUser) && string.IsNullOrEmpty(winUserPassword))
                     {
                         result.Value = false;
-                        result.AddErrorEvent(ErrorMsgs.WindowsUserNotSpecifiedMsg);
+                        result.AddErrorEvent(ErrorMsgs.WindowsUserForImportNotSpecifiedMsg);
 
                     }
                     else
