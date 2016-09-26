@@ -47,7 +47,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -56,6 +56,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Idera.SQLsecure.UI.Console.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Infragistics2.Excel.v9.1, Version=9.1.20091.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
@@ -924,7 +927,10 @@
     <Compile Include="Import\Models\SqlServerAuthenticationType.cs" />
     <Compile Include="Import\PropertyOrderAttribute.cs" />
     <Compile Include="Import\PropertyOrderAttributeComparer.cs" />
+    <Compile Include="Import\OperationResult.cs" />
     <Compile Include="Import\ServerImportManager.cs" />
+    <Compile Include="Import\OperationStatusEntry.cs" />
+    <Compile Include="Import\OperationStatusEntryType.cs" />
     <Compile Include="Interfaces\ICommandHandler.cs" />
     <Compile Include="Interfaces\IDataContext.cs" />
     <Compile Include="Interfaces\IRefresh.cs" />
@@ -1305,7 +1311,7 @@
     <EmbeddedResource Include="Reports\Report_ServerLoginsAndUserMappings.rdlc" />
     <EmbeddedResource Include="Reports\Report_ServerRoles.rdlc" />
     <EmbeddedResource Include="Reports\Report_ServersWithDangerousGroups.rdlc" />
-	<EmbeddedResource Include="Reports\Report_SuspectSqlLogins.rdlc" />
+    <EmbeddedResource Include="Reports\Report_SuspectSqlLogins.rdlc" />
     <EmbeddedResource Include="Reports\Report_SuspectWindowsAccounts.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -1740,20 +1746,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\caret5.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\Accounts\Idera.SQLsecure.Core.Accounts.csproj">
-      <Project>{0751253C-883D-4436-BBF4-0C56C553F850}</Project>
-      <Name>Idera.SQLsecure.Core.Accounts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Interop\Idera.SQLsecure.Core.Interop.csproj">
-      <Project>{2DA06952-5061-493B-A2FF-F6C9A3235CCD}</Project>
-      <Name>Idera.SQLsecure.Core.Interop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Logger\Idera.SQLsecure.Core.Logger.csproj">
-      <Project>{459916BD-7353-4738-B6B0-8F29989AE5A6}</Project>
-      <Name>Idera.SQLsecure.Core.Logger</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -2264,6 +2256,20 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Accounts\Idera.SQLsecure.Core.Accounts.csproj">
+      <Project>{0751253c-883d-4436-bbf4-0c56c553f850}</Project>
+      <Name>Idera.SQLsecure.Core.Accounts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Interop\Idera.SQLsecure.Core.Interop.csproj">
+      <Project>{2da06952-5061-493b-a2ff-f6c9a3235ccd}</Project>
+      <Name>Idera.SQLsecure.Core.Interop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Logger\Idera.SQLsecure.Core.Logger.csproj">
+      <Project>{459916bd-7353-4738-b6b0-8f29989ae5a6}</Project>
+      <Name>Idera.SQLsecure.Core.Logger</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
