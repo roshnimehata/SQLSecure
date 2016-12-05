@@ -261,6 +261,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         #region Main Menus
 
+        public const String Menu_Descr_Deploy_Repository = @"Deploy SQLsecure Repository";
         public const String Menu_Descr_File_Connect = @"Connect to another SQLsecure Repository";
         public const String Menu_Descr_File_ConnectionProperties = @"View connection properties for the current Repository";
         public const String Menu_Descr_File_NewSQLServer = @"Register a new SQL Server instance to audit";

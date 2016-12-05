@@ -15,9 +15,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
     {
         #region Ctors
 
-        public Form_ConnectRepository()
+        bool isConnect = true;
+        public Form_ConnectRepository(bool isConnect = true)
         {
-            InitializeComponent();
+            this.isConnect = isConnect;
+            InitializeComponent(isConnect);
         }
 
         #endregion
@@ -108,5 +110,26 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             Program.gController.ShowTopic(Utility.Help.ConnectRepositoryHelpTopic);
         }
+
+
+        private void Action_choice_ValueChanged(object sender, System.EventArgs e)
+        {
+            var selection = sender as Infragistics.Win.UltraWinEditors.UltraOptionSet;
+            if (selection == null)
+            {
+                throw new System.NotImplementedException();
+            }
+            if (selection.CheckedIndex == 0)
+            {
+                this._button_OK.Text = "Connect";
+                this.isConnect = true;
+            }
+            else
+            {
+                this._button_OK.Text = "Deploy";
+                this.isConnect = false;
+            }
+
+          }
     }
 }

@@ -26,7 +26,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private void InitializeComponent(bool isConnect = true)
         {
             this._label1 = new System.Windows.Forms.Label();
             this._textBox_Server = new System.Windows.Forms.TextBox();
@@ -38,6 +38,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._bfd_ButtonPanel.SuspendLayout();
             this._bf_MainPanel.SuspendLayout();
             this.SuspendLayout();
+            this.action_choice = new Infragistics.Win.UltraWinEditors.UltraOptionSet();
             // 
             // _bfd_ButtonPanel
             // 
@@ -52,11 +53,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _bf_MainPanel
             // 
+            this._bf_MainPanel.Controls.Add(this.action_choice);
             this._bf_MainPanel.Controls.Add(this.label1);
             this._bf_MainPanel.Controls.Add(this._label1);
             this._bf_MainPanel.Controls.Add(this._textBox_Server);
             this._bf_MainPanel.Controls.Add(this._button_Lookup);
-            this._bf_MainPanel.Size = new System.Drawing.Size(394, 99);
+            this._bf_MainPanel.Size = new System.Drawing.Size(594,95);
             // 
             // _bf_HeaderPanel
             // 
@@ -66,7 +68,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             this._label1.AutoSize = true;
             this._label1.BackColor = System.Drawing.Color.Transparent;
-            this._label1.Location = new System.Drawing.Point(12, 48);
+            this._label1.Location = new System.Drawing.Point(12, 78);
             this._label1.Name = "_label1";
             this._label1.Size = new System.Drawing.Size(65, 13);
             this._label1.TabIndex = 0;
@@ -74,7 +76,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _textBox_Server
             // 
-            this._textBox_Server.Location = new System.Drawing.Point(83, 46);
+            this._textBox_Server.Location = new System.Drawing.Point(83, 76);
             this._textBox_Server.Name = "_textBox_Server";
             this._textBox_Server.Size = new System.Drawing.Size(269, 20);
             this._textBox_Server.TabIndex = 1;
@@ -82,7 +84,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _button_Lookup
             // 
-            this._button_Lookup.Location = new System.Drawing.Point(358, 43);
+            this._button_Lookup.Location = new System.Drawing.Point(358, 73);
             this._button_Lookup.Name = "_button_Lookup";
             this._button_Lookup.Size = new System.Drawing.Size(24, 23);
             this._button_Lookup.TabIndex = 2;
@@ -106,14 +108,21 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._button_OK.Name = "_button_OK";
             this._button_OK.Size = new System.Drawing.Size(75, 23);
             this._button_OK.TabIndex = 3;
-            this._button_OK.Text = "C&onnect";
+            if(isConnect == true)
+            {
+                this._button_OK.Text = "C&onnect";
+            }else
+            {
+                this._button_OK.Text = "Deploy";
+            }
+            
             this._button_OK.Click += new System.EventHandler(this._button_OK_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(12, 21);
+            this.label1.Location = new System.Drawing.Point(12, 51);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(346, 13);
             this.label1.TabIndex = 6;
@@ -142,9 +151,28 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._bf_MainPanel.ResumeLayout(false);
             this._bf_MainPanel.PerformLayout();
             this.ResumeLayout(false);
-
+            //
+            // Radio button for choice of action(Connect to Repository/Deploy Repository)
+            //
+            this.action_choice.Items.Clear();
+            this.action_choice.Width = 500;
+            this.action_choice.Height = 50;
+            this.action_choice.Margin = new System.Windows.Forms.Padding(20);
+            this.action_choice.ItemSpacingVertical += 10;
+            this.action_choice.Items.Add(1, "Connect to Repository");
+            this.action_choice.Items.Add(2, "Deploy Repository");
+            this.action_choice.ItemOrigin = new System.Drawing.Point(10,10);
+            this.action_choice.ValueChanged += Action_choice_ValueChanged;
+            if(isConnect == true)
+            {
+                this.action_choice.CheckedIndex = 0;
+            }else
+            {
+                this.action_choice.CheckedIndex = 1;
+            }
+            
         }
-
+        
         #endregion
 
         private System.Windows.Forms.Label _label1;
@@ -154,5 +182,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private Infragistics.Win.Misc.UltraButton _button_OK;
         private System.Windows.Forms.Label label1;
         private Infragistics.Win.Misc.UltraButton ultraButton_Help;
+        private Infragistics.Win.UltraWinEditors.UltraOptionSet action_choice;
+
     }
 }

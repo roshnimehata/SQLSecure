@@ -109,6 +109,7 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip = new System.Windows.Forms.MenuStrip();
             this._menuStrip_File = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_Connect = new System.Windows.Forms.ToolStripMenuItem();
+            this._menuStrip_Deploy_Repository = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_Sep0 = new System.Windows.Forms.ToolStripSeparator();
             this._menuStrip_File_NewSQLServer = new System.Windows.Forms.ToolStripMenuItem();
             this._menuStrip_File_ImportSqlServers = new System.Windows.Forms.ToolStripMenuItem();
@@ -1004,12 +1005,41 @@ namespace Idera.SQLsecure.UI.Console
             this._menuStrip_File.DropDownClosed += new System.EventHandler(this.menu_DropDownClosed);
             this._menuStrip_File.DropDownOpening += new System.EventHandler(this._menuStrip_File_DropDownOpening);
             // 
+            // _menuStrip_Deploy_repository
+            // 
+            this._menuStrip_File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._menuStrip_Deploy_Repository,
+            this._menuStrip_File_Sep0,
+            this._menuStrip_File_NewSQLServer,
+            this._menuStrip_File_ImportSqlServers,
+            this._menuStrip_File_NewLogin,
+            this._menuStrip_File_Sep1,
+            this._menuStrip_File_ManageLicense,
+            this._menuStrip_File_Sep2,
+            this._menuStrip_File_Exit});
+            this._menuStrip_File.ForeColor = System.Drawing.Color.White;
+            this._menuStrip_File.Name = "_menuStrip_File";
+            this._menuStrip_File.Size = new System.Drawing.Size(37, 20);
+            this._menuStrip_File.Text = "&File";
+            this._menuStrip_File.DropDownClosed += new System.EventHandler(this.menu_DropDownClosed);
+            this._menuStrip_File.DropDownOpening += new System.EventHandler(this._menuStrip_File_DropDownOpening);
+
+
+            // 
             // _menuStrip_File_Connect
             // 
             this._menuStrip_File_Connect.Name = "_menuStrip_File_Connect";
             this._menuStrip_File_Connect.Size = new System.Drawing.Size(231, 22);
             this._menuStrip_File_Connect.Text = "&Connect to Repository...";
             this._menuStrip_File_Connect.Click += new System.EventHandler(this._menuStrip_File_Connect_Click);
+            //SQLSecure (Mitul Kapoor) - Add new dropdown for Deploy Repository
+            // 
+            // _menuStrip_Deploy_Repository
+            // 
+            this._menuStrip_Deploy_Repository.Name = "_menuStrip_Deploy_Repository";
+            this._menuStrip_Deploy_Repository.Size = new System.Drawing.Size(500,250);//231,22
+            this._menuStrip_Deploy_Repository.Text = "&Deploy Repository...";
+            this._menuStrip_Deploy_Repository.Click += new System.EventHandler(this._menuStrip_File_Connect_Click);
             // 
             // _menuStrip_File_Sep0
             // 
@@ -1717,6 +1747,9 @@ namespace Idera.SQLsecure.UI.Console
         private System.Windows.Forms.ToolStripLabel _resultTitleLabel;
         private System.Windows.Forms.ToolStripButton _resultShowHideButton;
         private System.Windows.Forms.ToolStripMenuItem _menuStrip_File_Connect;
+
+        private System.Windows.Forms.ToolStripMenuItem _menuStrip_Deploy_Repository;
+
         private System.Windows.Forms.ToolStripMenuItem _menuStrip_File_NewSQLServer;
         private System.Windows.Forms.ToolStripMenuItem _menuStrip_File_NewLogin;
         private System.Windows.Forms.ToolStripMenuItem _menuStrip_File_ManageLicense;
