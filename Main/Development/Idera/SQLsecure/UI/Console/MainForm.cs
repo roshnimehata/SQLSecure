@@ -1203,14 +1203,13 @@ namespace Idera.SQLsecure.UI.Console
                 Form_ConnectRepository dlg = new Form_ConnectRepository(isConnect);
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-                    // If connect to server fails, then prompt for the
-                    // server name again.
+                    // If connect to server fails, then prompt for the server name again.
                     this.Cursor = Cursors.WaitCursor;
                     if (connectToServer(dlg.Server))
                     {
                         bConnected = true;
                         bConnecting = false;
-
+                        #region SQLSecure3.1 - (Mitul Kapoor)Perform action based ono user select of Create Repository/Deploy Repository
                         if (isConnect)
                         {
                             // If the server has changed reset the views
@@ -1231,7 +1230,7 @@ namespace Idera.SQLsecure.UI.Console
                           //Add functionality to perform action to be performed when "Deploy Repository" is selected.
                         }
                     }
-                    
+                    #endregion
                     this.Cursor = Cursors.Default;
                 }
                 else

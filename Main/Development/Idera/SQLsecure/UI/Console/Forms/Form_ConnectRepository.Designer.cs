@@ -26,7 +26,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent(bool isConnect = true)
+        private void InitializeComponent()
         {
             this._label1 = new System.Windows.Forms.Label();
             this._textBox_Server = new System.Windows.Forms.TextBox();
@@ -108,14 +108,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._button_OK.Name = "_button_OK";
             this._button_OK.Size = new System.Drawing.Size(75, 23);
             this._button_OK.TabIndex = 3;
-            if(isConnect == true)
-            {
-                this._button_OK.Text = "C&onnect";
-            }else
-            {
-                this._button_OK.Text = "Deploy";
-            }
-            
+            this._button_OK.Text = button_value;
             this._button_OK.Click += new System.EventHandler(this._button_OK_Click);
             // 
             // label1
