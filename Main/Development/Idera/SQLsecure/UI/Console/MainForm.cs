@@ -1227,7 +1227,7 @@ namespace Idera.SQLsecure.UI.Console
                         //SQLSecure 3.1 (Mitul Kapoor) - functionality for "Deploy Repository". 
                         else
                         {
-                          //Add functionality to perform action to be performed when "Deploy Repository" is selected.
+                            //Add functionality to perform action to be performed when "Deploy Repository" is selected.
                         }
                     }
                     #endregion
@@ -1523,7 +1523,7 @@ namespace Idera.SQLsecure.UI.Console
 
         private void _menuStrip_File_Connect_Click(object sender, EventArgs e)
         {
-
+            //Check for user option to connect/deploy repository.
             Cursor = Cursors.WaitCursor;
             if (sender == _menuStrip_Deploy_Repository)
             {

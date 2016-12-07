@@ -152,18 +152,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.action_choice.Height = 50;
             this.action_choice.Margin = new System.Windows.Forms.Padding(20);
             this.action_choice.ItemSpacingVertical += 10;
-            this.action_choice.Items.Add(1, "Connect to Repository");
-            this.action_choice.Items.Add(2, "Deploy Repository");
+            this.action_choice.Items.Add("Connect", "Connect to Repository");
+            this.action_choice.Items.Add("Deploy", "Deploy Repository");
             this.action_choice.ItemOrigin = new System.Drawing.Point(10,10);
             this.action_choice.ValueChanged += Action_choice_ValueChanged;
-            if(isConnect == true)
-            {
-                this.action_choice.CheckedIndex = 0;
-            }else
-            {
-                this.action_choice.CheckedIndex = 1;
-            }
-            
+            this.action_choice.CheckedIndex = button_index;
         }
         
         #endregion

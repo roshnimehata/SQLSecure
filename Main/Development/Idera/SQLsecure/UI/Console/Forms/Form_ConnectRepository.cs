@@ -17,6 +17,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         bool isConnect = true;
         string button_value = "Connect";
+        int button_index = 0;
         public Form_ConnectRepository(bool isConnect = true)
         {
             this.isConnect = isConnect;
@@ -24,6 +25,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             if(isConnect == false)
             {
                 button_value = "Deploy";
+                button_index = 1;
             }
             InitializeComponent();
         }
@@ -121,11 +123,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void Action_choice_ValueChanged(object sender, System.EventArgs e)
         {
             var selection = sender as Infragistics.Win.UltraWinEditors.UltraOptionSet;
-            if (selection == null)
-            {
-                throw new System.NotImplementedException();
-            }
-            if (selection.CheckedIndex == 0)
+            if (selection.CheckedItem.DataValue.Equals("Connect"))
             {
                 this._button_OK.Text = "Connect";
                 this.isConnect = true;
@@ -135,7 +133,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 this._button_OK.Text = "Deploy";
                 this.isConnect = false;
             }
-
           }
     }
 }
