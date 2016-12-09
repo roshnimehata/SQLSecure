@@ -15,8 +15,18 @@ namespace Idera.SQLsecure.UI.Console.Forms
     {
         #region Ctors
 
-        public Form_ConnectRepository()
+        bool isConnect = true;
+        string button_value = "Connect";
+        int button_index = 0;
+        public Form_ConnectRepository(bool isConnect = true)
         {
+            this.isConnect = isConnect;
+            //Show button text as per Connect/Deploy Repository
+            if(isConnect == false)
+            {
+                button_value = "Deploy";
+                button_index = 1;
+            }
             InitializeComponent();
         }
 
@@ -108,5 +118,21 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             Program.gController.ShowTopic(Utility.Help.ConnectRepositoryHelpTopic);
         }
+
+        //SQLSecure3.1 (Mitul Kapoor) - update button based on user selection of radio buttons
+        private void Action_choice_ValueChanged(object sender, System.EventArgs e)
+        {
+            var selection = sender as Infragistics.Win.UltraWinEditors.UltraOptionSet;
+            if (selection.CheckedItem.DataValue.Equals("Connect"))
+            {
+                this._button_OK.Text = "Connect";
+                this.isConnect = true;
+            }
+            else
+            {
+                this._button_OK.Text = "Deploy";
+                this.isConnect = false;
+            }
+          }
     }
 }

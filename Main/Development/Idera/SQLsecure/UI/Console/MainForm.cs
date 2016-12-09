@@ -17,6 +17,9 @@ using Idera.SQLsecure.UI.Console.Controls;
 using Idera.SQLsecure.UI.Console.Sql;
 using Idera.SQLsecure.UI.Console.Utility;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
+using System.IO;
+using System.Data.SqlClient;
+using Microsoft.SqlServer.Management.Common;
 
 namespace Idera.SQLsecure.UI.Console
 {
@@ -396,6 +399,7 @@ namespace Idera.SQLsecure.UI.Console
 
             // File Menu
             _menuStrip_File_Connect.Image = AppIcons.AppImage16(AppIcons.Enum.Connect);
+            _menuStrip_Deploy_Repository.Image = AppIcons.AppImage16(AppIcons.Enum.Connect);
             // deleted - _menuStrip_File_ConnectionProperties.Image = AppIcons.AppImage16(AppIcons.Enum.Properties);
             _menuStrip_File_NewSQLServer.Image = AppIcons.AppImage16(AppIcons.Enum.AuditSQLServer);
             _menuStrip_File_NewLogin.Image = AppIcons.AppImage16(AppIcons.Enum.NewSQLsecureLogin);
@@ -1181,8 +1185,9 @@ namespace Idera.SQLsecure.UI.Console
 
         #region Repository Connection
 
+
         //Show a pop up dialog to get the server name
-        private bool promptForConnection()
+        private bool promptForConnection(bool isConnect = true)
         {
             bool bConnected = false;
             bool bConnecting = true;
@@ -1195,29 +1200,37 @@ namespace Idera.SQLsecure.UI.Console
                 // Create and show the select server dialog 
                 // If the user has clicked OK, then attempt to connect to the new server.
                 // Else go back to the current server if it exists.
-                Form_ConnectRepository dlg = new Form_ConnectRepository();
+                Form_ConnectRepository dlg = new Form_ConnectRepository(isConnect);
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-                    // If connect to server fails, then prompt for the
-                    // server name again.
+                    // If connect to server fails, then prompt for the server name again.
                     this.Cursor = Cursors.WaitCursor;
                     if (connectToServer(dlg.Server))
                     {
                         bConnected = true;
                         bConnecting = false;
-
-                        // If the server has changed reset the views
-                        bool isServerChanged = false;
-                        if (string.Compare(dlg.Server, currentServer, true) != 0)
+                        #region SQLSecure3.1 - (Mitul Kapoor)Perform action based ono user select of Create Repository/Deploy Repository
+                        if (isConnect)
                         {
-                            Program.gController.ResetViews();
-                            isServerChanged = true;
-                        }
+                            // If the server has changed reset the views
+                            bool isServerChanged = false;
+                            if (string.Compare(dlg.Server, currentServer, true) != 0)
+                            {
+                                Program.gController.ResetViews();
+                                isServerChanged = true;
+                            }
 
-                        // Refresh explorer bar.
-                        refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
-                                                             // else it will stay on the current view if valid.
+                            // Refresh explorer bar.
+                            refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
+                                                                 // else it will stay on the current view if valid.
+                        }
+                        //SQLSecure 3.1 (Mitul Kapoor) - functionality for "Deploy Repository". 
+                        else
+                        {
+                            //Add functionality to perform action to be performed when "Deploy Repository" is selected.
+                        }
                     }
+                    #endregion
                     this.Cursor = Cursors.Default;
                 }
                 else
@@ -1454,7 +1467,10 @@ namespace Idera.SQLsecure.UI.Console
 
         private void initMenus()
         {
+
             this._menuStrip_File_Connect.ToolTipText = Utility.Constants.Menu_Descr_File_Connect;
+            this._menuStrip_Deploy_Repository.ToolTipText = Utility.Constants.Menu_Descr_Deploy_Repository;
+
             // deleted - this._menuStrip_File_ConnectionProperties.ToolTipText = Utility.Constants.Menu_Descr_File_ConnectionProperties;
             this._menuStrip_File_NewSQLServer.ToolTipText = Utility.Constants.Menu_Descr_File_NewSQLServer;
             this._menuStrip_File_NewLogin.ToolTipText = Utility.Constants.Menu_Descr_File_NewLogin;
@@ -1507,10 +1523,16 @@ namespace Idera.SQLsecure.UI.Console
 
         private void _menuStrip_File_Connect_Click(object sender, EventArgs e)
         {
+            //Check for user option to connect/deploy repository.
             Cursor = Cursors.WaitCursor;
-
-            promptForConnection();
-
+            if (sender == _menuStrip_Deploy_Repository)
+            {
+                promptForConnection(false);
+            }
+            else
+            {
+                promptForConnection(true);
+            }
             Cursor = Cursors.Default;
         }
 
@@ -2397,7 +2419,7 @@ namespace Idera.SQLsecure.UI.Console
             node = new TreeNode(Utility.Constants.TManagementNode_TagsNode);
             node.Tag = new Utility.NodeTag(new Data.SQLsecureActivity(node.Name), Utility.View.ServerGroupTags);
 
-            node.ImageIndex = node.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.ServerTags );
+            node.ImageIndex = node.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.ServerTags);
             _explorerBar_ManageSQLsecureTreeView.Nodes.Add(node);
 
 
