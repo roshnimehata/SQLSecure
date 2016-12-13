@@ -323,6 +323,9 @@ CREATE TABLE [registeredserver] (
     [lastcollectionsnapshotid] INTEGER,
     [currentcollectiontm] DATETIME,
     [currentcollectionstatus] NCHAR(1),
+	--SQL Secure 3.1 (Barkha Khatri) Register azure server
+	[servertype] NVARCHAR(3) DEFAULT 'OP',
+	[portnumber] INT NULL,
     CONSTRAINT [PK__registeredserver__20C1E124] PRIMARY KEY ([connectionname])
 )
 GO
