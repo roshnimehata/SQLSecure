@@ -92,17 +92,17 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static String COMPANY_STR = @"Idera";
         public static String PRODUCT_STR = @"SQLsecure";
-        public static String PRODUCT_VER_STR = @"2.9";
+        public static String PRODUCT_VER_STR = @"3.1";
         // Previous version strings (newest first) to find previous option files
-        public static String[] PRODUCT_VER_STR_PREV = { @"2.8",@"2.7",@"2.6", @"2.5", @"2.0", @"1.2", @"1.1" };
+        public static String[] PRODUCT_VER_STR_PREV = { @"3.0",@"2.9",@"2.8",@"2.7",@"2.6", @"2.5", @"2.0", @"1.2", @"1.1" };
         public static String COMPONENT_STR = @"Console";
 
         public static String APP_TITLE_STR = COMPANY_STR + @" " + PRODUCT_STR + @" - {0}";
 
         public static String OPTIONS_FILE_EXTENSION_STR = @".options.xml";
 
-        public const int DalVersion = 3002;
-        public const int SchemaVersion = 3002;
+        public const int DalVersion = 3100;
+        public const int SchemaVersion = 3100;
 
         public const string COPYRIGHT_MSG = @"© Copyright 2005-2016 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
 
