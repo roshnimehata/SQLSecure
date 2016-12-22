@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idera.SQLsecure.Core.Intero
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "..\Repository\Repository.csproj", "{5F13A047-5F47-40BD-A4D0-85B4FC130C97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExecuteSQLScript", "..\ExecuteSQLScript\ExecuteSQLScript.csproj", "{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,31 +89,20 @@ Global
 		{5F13A047-5F47-40BD-A4D0-85B4FC130C97}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5F13A047-5F47-40BD-A4D0-85B4FC130C97}.Release|Win32.ActiveCfg = Release|Any CPU
 		{5F13A047-5F47-40BD-A4D0-85B4FC130C97}.Release|Win32.Build.0 = Release|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Debug|Win32.Build.0 = Debug|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Release|Win32.ActiveCfg = Release|Any CPU
+		{0C841D3C-B7C2-4BF7-992B-E7EC520C4656}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.242.72:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Idera.SQLsecure.UI.Console.csproj
-		SccLocalPath1 = .
-		SccProjectUniqueName2 = ..\\..\\Core\\Logger\\Idera.SQLsecure.Core.Logger.csproj
-		SccProjectName2 = ../../Core
-		SccLocalPath2 = ..\\..\\Core
-		SccProjectFilePathRelativizedFromConnection2 = Logger\\
-		SccProjectUniqueName3 = ..\\..\\Core\\Accounts\\Idera.SQLsecure.Core.Accounts.csproj
-		SccProjectName3 = ../../Core
-		SccLocalPath3 = ..\\..\\Core
-		SccProjectFilePathRelativizedFromConnection3 = Accounts\\
-		SccProjectUniqueName4 = ..\\..\\Core\\Interop\\Idera.SQLsecure.Core.Interop.csproj
-		SccProjectName4 = ../../Core
-		SccLocalPath4 = ..\\..\\Core
-		SccProjectFilePathRelativizedFromConnection4 = Interop\\
-		SccProjectUniqueName5 = ..\\Repository\\Repository.csproj
-		SccProjectName5 = ../Repository
-		SccLocalPath5 = ..\\Repository
 	EndGlobalSection
 EndGlobal
