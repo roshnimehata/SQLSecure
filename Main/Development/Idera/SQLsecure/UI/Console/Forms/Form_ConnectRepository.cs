@@ -100,6 +100,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void _button_OK_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
+            MainForm.server_name = this._textBox_Server.Text;
         }
 
         #endregion
@@ -127,11 +128,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
             {
                 this._button_OK.Text = "Connect";
                 this.isConnect = true;
+                this.Text = "Connect to Repository";
+                this.Description = "Connect to SQLsecure Repository";
             }
             else
             {
                 this._button_OK.Text = "Deploy";
                 this.isConnect = false;
+                this.Text = "Deploy Repository";
+                this.Description = "Designate a database instance that will host the SQLsecure Repository. Select SQL Server and then select the appropriate options to install the Repository.";
             }
           }
     }

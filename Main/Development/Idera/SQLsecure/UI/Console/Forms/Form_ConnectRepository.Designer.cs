@@ -135,10 +135,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.AcceptButton = this._button_OK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(394, 192);
-            this.Description = "Connect to SQLsecure Repository";
             this.Name = "Form_ConnectRepository";
             this.Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.connect_49;
-            this.Text = "Connect to Repository";
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.Form_ConnectRepository_HelpRequested);
             this._bfd_ButtonPanel.ResumeLayout(false);
             this._bf_MainPanel.ResumeLayout(false);
