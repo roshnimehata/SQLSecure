@@ -12,7 +12,7 @@ SET ANSI_NULLS ON
 
 declare @ver int
 SELECT @ver=schemaversion FROM currentversion
-if (isnull(@ver,900) < 2900)
+if (isnull(@ver,900) < 2900) 
 Begin
 	ALTER TABLE dbo.[windowsaccount]
 	ADD [enabled] [bit] NOT NULL CONSTRAINT [DF_windowsaccount_enabled]  DEFAULT ((1))

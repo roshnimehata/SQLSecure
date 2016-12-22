@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------- */
-/* Schema changes for SQLsecure 3.0 schema version 3000                   */
+/* Schema changes for SQLsecure 3.0 schema version 3001                   */
 /* ---------------------------------------------------------------------- */
 
 SET QUOTED_IDENTIFIER ON;
@@ -15,18 +15,8 @@ SELECT
     @ver = schemaversion
 FROM
     currentversion;
-IF (ISNULL(@ver, 900) >= 3000)
+IF (ISNULL(@ver, 900) < 3000)
     BEGIN
-        DECLARE @msg NVARCHAR(500);
-        SET @msg = N'Database schema is not at a level that can be upgraded to version 3000';
-        IF (@ver IS NOT NULL)
-            EXEC isp_sqlsecure_addactivitylog @activitytype = 'Failure Audit',
-                @source = 'Install', @eventcode = 'Upgrade',
-                @category = 'Schema', @description = @msg,
-                @connectionname = NULL;
-        RAISERROR (@msg, 16, 1);
-    END;
-
 ----SQL Jobs and Agent Check
 IF NOT EXISTS ( SELECT
                     1
@@ -68,7 +58,7 @@ tag_unique_name UNIQUE NONCLUSTERED
 name
 );
 
-GO 
+
 
 CREATE TABLE [dbo].[server_tags]
     (
@@ -98,14 +88,14 @@ REFERENCES [dbo].[tags] ([tag_id]);
 ALTER TABLE [dbo].[server_tags] CHECK CONSTRAINT [FK_server_tags_tags];
 
 
-GO	
+
 
 /****** Object:  Table [dbo].[encryptionkey]    Script Date: 7/29/2016 4:46:46 AM ******/
 SET ANSI_NULLS ON
-GO
+
 
 SET QUOTED_IDENTIFIER ON
-GO
+
 
 CREATE TABLE [dbo].[encryptionkey]
     (
@@ -129,21 +119,21 @@ CREATE TABLE [dbo].[encryptionkey]
     )
 ON  [PRIMARY]
 
-GO
+
 
 ALTER TABLE [dbo].[encryptionkey]  WITH NOCHECK ADD  CONSTRAINT [FK_encryptionkey_serversnapshot] FOREIGN KEY([snapshotid])
 REFERENCES [dbo].[serversnapshot] ([snapshotid]) ON DELETE CASCADE;
-GO
+
 
 ALTER TABLE [dbo].[encryptionkey] CHECK CONSTRAINT [FK_encryptionkey_serversnapshot]
-GO
+
 
 ALTER TABLE [dbo].[encryptionkey]  WITH CHECK ADD  CONSTRAINT [FK_encryptionkey_sqldatabase] FOREIGN KEY([snapshotid], [databaseid])
 REFERENCES [dbo].[sqldatabase] ([snapshotid], [dbid]) ON DELETE CASCADE;
-GO
+
 
 ALTER TABLE [dbo].[encryptionkey] CHECK CONSTRAINT [FK_encryptionkey_sqldatabase]
-GO
+
 
 
 
@@ -215,5 +205,5 @@ IF NOT EXISTS ( SELECT
         ALTER TABLE [dbo].[linkedserverprincipal] WITH CHECK ADD CONSTRAINT[FK_linkedserver] FOREIGN KEY([snapshotid],[serverid]) 
         REFERENCES [dbo].[linkedserver]([snapshotid], [serverid]) ON DELETE CASCADE;
     END;
-
+END;
 GO
