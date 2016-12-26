@@ -101,8 +101,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static String OPTIONS_FILE_EXTENSION_STR = @".options.xml";
 
-        public const int DalVersion = 3100;
-        public const int SchemaVersion = 3100;
+        public const int DalVersion = 3000;
+        public const int SchemaVersion = 3000;
 
         public const string COPYRIGHT_MSG = @"© Copyright 2005-2016 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
 
@@ -112,6 +112,13 @@ namespace Idera.SQLsecure.UI.Console.Utility
         internal const string SQLsecureLicenseProductVersionStr = "1.1";
 
         public const string ProductsPageText = "Idera SQLsecure helps you detect and verify security holes in your SQL Server security model. SQLsecure does this by performing rights analysis across SQL Server, Active Directory and Windows and calculating the effective access rights for any user, object or access control.";
+
+        internal enum ExitCode
+        {
+            Success = 0,
+            ScriptNotExist = -999,
+            ScriptFailure = -1000
+        }
 
         #endregion
 

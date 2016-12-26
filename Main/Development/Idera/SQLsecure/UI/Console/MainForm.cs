@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Configuration;
 using System.Threading;
 
 using Wintellect.PowerCollections;
@@ -1185,7 +1186,7 @@ namespace Idera.SQLsecure.UI.Console
 
         #region Repository Connection
 
-        public static string server_name;
+        public static string Server_Name;
         //Show a pop up dialog to get the server name
         private bool promptForConnection(bool isConnect = true)
         {
@@ -1211,23 +1212,28 @@ namespace Idera.SQLsecure.UI.Console
                     {
                         if (connectToServer(dlg.Server))
                         {
-                            bConnected = true;
-                            bConnecting = false;
-                            #region SQLSecure3.1 - (Mitul Kapoor)Perform action based ono user select of Create Repository/Deploy Repository
-
-                            // If the server has changed reset the views
-                            bool isServerChanged = false;
-                            if (string.Compare(dlg.Server, currentServer, true) != 0)
+                            if (!isRepositoryUpdated())
                             {
-                                Program.gController.ResetViews();
-                                isServerChanged = true;
+                                ExecuteUpdateQuery();
+                                bConnected = true;
+                                bConnecting = false;
+                                #region SQLSecure3.1 - (Mitul Kapoor)Perform action based on user select of Create Repository/Deploy Repository
+
+                                // If the server has changed reset the views
+                                bool isServerChanged = false;
+                                if (string.Compare(dlg.Server, currentServer, true) != 0)
+                                {
+                                    Program.gController.ResetViews();
+                                    isServerChanged = true;
+                                }
+
+                                // Refresh explorer bar.
+                                refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
+                                                                     // else it will stay on the current view if valid.
                             }
 
-                            // Refresh explorer bar.
-                            refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
-                                                                 // else it will stay on the current view if valid.
+                            #endregion
                         }
-                        #endregion
                     }
                     //SQLSecure 3.1 (Mitul Kapoor) - functionality for "Deploy Repository". 
                     else
@@ -1235,13 +1241,13 @@ namespace Idera.SQLsecure.UI.Console
                         //Add functionality to perform action to be performed when "Deploy Repository" is selected.
                         if (!isRepositoryUpdated())
                         {
-                            ExecuteSqlQuery();
+                            ExecuteInitializationQuery();
                         }
                         if (connectToServer(dlg.Server))
                         {
                             bConnected = true;
                             bConnecting = false;
-                            #region SQLSecure3.1 - (Mitul Kapoor)Perform action based ono user select of Create Repository/Deploy Repository
+                            #region SQLSecure3.1 - (Mitul Kapoor)Perform action based on user select of Create Repository/Deploy Repository
 
                             // If the server has changed reset the views
                             bool isServerChanged = false;
@@ -1304,69 +1310,99 @@ namespace Idera.SQLsecure.UI.Console
             return bConnected;
         }
 
-
         private enum VersionColumn
         {
             dalversion = 0,
-            schemaversion
+            schemaversion = 0
         }
 
         bool isRepositoryUpdated()
         {
-            const string QueryGetDALSchemaVersion =
-                    @"SELECT * FROM SQLsecure.dbo.vwcurrentversion";
-            int m_SchemaVersion = 0;
-            int m_DALVersion = 0;
-
-            //retrieve information from the database to check for repository version.
             try
             {
-                SqlConnectionStringBuilder m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(server_name, null, null);
-                using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
-                 {
-                    connection.Open();
-                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
-                                                        String.Format(QueryGetDALSchemaVersion), null))
-                    {
-                        // This table has only one column and row with a Y or N in it.
-                        if (rdr.Read())
-                        {
-                            // Get DAL & schema versions.
-                            m_SchemaVersion = Convert.ToInt32(rdr[(int)VersionColumn.schemaversion]);
-                            m_DALVersion = Convert.ToInt32(rdr[(int)VersionColumn.dalversion]);
-                        }
-                    }
-                    if(m_SchemaVersion < 3000)
-                    {
-                        MsgBox.ShowInfo("Upgrade your Schema", "Please upgrade your Repository.");
-                        return false;
-                    }else if(m_SchemaVersion == 3000)
-                    {
-                        MsgBox.ShowInfo("Repository Already Exists", "Repository already exists");
-                    }
+                int m_SchemaVersion = 0;
+               
+                //retrieve information from the database to check for repository version.
+
+                m_SchemaVersion = Program.gController.Repository.getRepositoryVersion(Server_Name);
+                if (m_SchemaVersion < Utility.Constants.SchemaVersion)
+                {
+                    ExecuteUpdateQuery();
+                    return false;
                 }
             }catch(Exception e)
             {
                 return false;
             }
             return true;
+
+            //try
+            //{
+            //    SqlConnectionStringBuilder m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null);
+            //    using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
+            //     {
+            //        connection.Open();
+            //        using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+            //                                            String.Format(QueryGetDALSchemaVersion), null))
+            //        {
+            //            // This table has only one column and row with a Y or N in it.
+            //            if (rdr.Read())
+            //            {
+            //                // Get DAL & schema versions.
+            //                m_SchemaVersion = Convert.ToInt32(rdr[(int)VersionColumn.schemaversion]);
+            //                m_DALVersion = Convert.ToInt32(rdr[(int)VersionColumn.dalversion]);
+            //            }
+            //        }
+            //        if(m_SchemaVersion < Utility.Constants.SchemaVersion)
+            //        {
+            //            MsgBox.ShowInfo(Utility.ErrorMsgs.UpgradeSchemaTag, Utility.ErrorMsgs.UpgradeRepository);
+            //            ExecuteUpdateQuery();
+            //            return false;
+            //        }else if(m_SchemaVersion == Utility.Constants.SchemaVersion)
+            //        {
+            //            MsgBox.ShowInfo(Utility.ErrorMsgs.RepositoryExistTag, Utility.ErrorMsgs.RepositoryExists);
+            //        }
+            //    }
+            //}catch(Exception e)
+            //{
+            //    return false;
+            //}
+            //return true;
+        }
+
+        void ExecuteUpdateQuery()
+        {
+            try
+            {
+                string executingExe = "ExecuteUpdate.exe";
+                Process p = new Process();
+                p.StartInfo = new ProcessStartInfo();
+                p.StartInfo.FileName = string.Format("{0}\\{1}", GetAssemblyPath, executingExe);
+                p.StartInfo.Arguments = Server_Name;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                p.Start();
+                p.WaitForExit();
+                switch (p.ExitCode)
+                {
+                    case (int)Utility.Constants.ExitCode.Success: MsgBox.ShowInfo(Utility.ErrorMsgs.SuccessTag, Utility.ErrorMsgs.RepositorySuccessfullyUpdated); break;
+                    case (int)Utility.Constants.ExitCode.ScriptNotExist: MsgBox.ShowInfo(Utility.ErrorMsgs.FailTag, Utility.ErrorMsgs.ScriptNotExist); break;
+                    case (int)Utility.Constants.ExitCode.ScriptFailure: MsgBox.ShowInfo(Utility.ErrorMsgs.FailTag, Utility.ErrorMsgs.ScriptExecutionFailed); break;
+                }
+            }catch(Exception e)
+            {
+            }
         }
 
 
-        public enum ExitCode
+        void ExecuteInitializationQuery()
         {
-            Success = 0,
-            Script_not_present = -999,
-            Script_failure = -1000
-        }
-
-        void ExecuteSqlQuery()
-        {
-            string executingExe = "ExecuteSQLScript.exe";
+            string executingExe = "DeployRepository.exe";
             Process p = new Process();
             p.StartInfo = new ProcessStartInfo();
             p.StartInfo.FileName = string.Format("{0}\\{1}", GetAssemblyPath, executingExe);
-            p.StartInfo.Arguments = server_name;
+            p.StartInfo.Arguments = Server_Name;
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
@@ -1374,9 +1410,9 @@ namespace Idera.SQLsecure.UI.Console
             p.WaitForExit();
             switch (p.ExitCode)
             {
-                case (int)ExitCode.Success: MsgBox.ShowInfo("Success", "Repository Deployed Successfully.");break;
-                case (int)ExitCode.Script_not_present: MsgBox.ShowInfo("Failed", "Some of the script(s) required to deploy repository do not exist. Please contact Idera support team."); break;
-                case (int)ExitCode.Script_failure: MsgBox.ShowInfo("Failed", "Some of the script(s) required to deploy repository failed to execute. Please check log file for more information or contact Idera support team."); break;
+                case (int)Utility.Constants.ExitCode.Success: MsgBox.ShowInfo(Utility.ErrorMsgs.SuccessTag, Utility.ErrorMsgs.RepositorySuccessfullyDeployed);break;
+                case (int)Utility.Constants.ExitCode.ScriptNotExist: MsgBox.ShowInfo(Utility.ErrorMsgs.FailTag, Utility.ErrorMsgs.ScriptNotExist); break;
+                case (int)Utility.Constants.ExitCode.ScriptFailure: MsgBox.ShowInfo(Utility.ErrorMsgs.FailTag,Utility.ErrorMsgs.ScriptExecutionFailed); break;
             }
         }
 
@@ -5211,18 +5247,18 @@ namespace Idera.SQLsecure.UI.Console
             refreshManageSQLsecureGroup();
         }
 
-        void Log(string logQuery)
-        {
-            try
-            {
-                System.IO.File.AppendAllText(string.Format("{0}\\{1}", GetAssemblyPath, "ExecuteSQLScriptLog.txt")
-                    , string.Format("{0} Logged at {1} {2} {3}", Environment.NewLine, DateTime.Now.ToString(),
-                    Environment.NewLine, logQuery));
-            }catch(Exception e)
-            {
+        //void Log(string logQuery)
+        //{
+        //    try
+        //    {
+        //        System.IO.File.AppendAllText(string.Format("{0}\\{1}", GetAssemblyPath,ConfigurationManager.AppSettings["ExecuteSQLScriptLog.txt"])
+        //            , string.Format("{0} Logged at {1} {2} {3}", Environment.NewLine, DateTime.Now.ToString(),
+        //            Environment.NewLine, logQuery));
+        //    }catch(Exception e)
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         private void importSQLServersToolStripMenuItem_Click(object sender, EventArgs e)
         {

@@ -100,7 +100,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void _button_OK_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            MainForm.server_name = this._textBox_Server.Text;
+            MainForm.Server_Name = this._textBox_Server.Text;
         }
 
         #endregion
