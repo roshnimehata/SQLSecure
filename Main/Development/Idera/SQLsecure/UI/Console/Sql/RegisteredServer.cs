@@ -285,6 +285,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private const string ParamRegisterServerVersion = "@version";
         private const string ParamRegisterServerRetentionPeriod = "@retentionperiod";
         private const string ParamAuditFoldersString = "@auditfoldersstring";
+        private const string ParamServerType = "@servertype";
 
         // Remove server.
         private const string NonQueryRemoveServer = @"SQLsecure.dbo.isp_sqlsecure_removeregisteredserver";
@@ -742,7 +743,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 string windowsPassword,
                 string version,
                 int retentionPeriod,
-                string[] auditFolders
+                string[] auditFolders,
+                string servertype
             )
         {
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
@@ -773,9 +775,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 SqlParameter paramVersion = new SqlParameter(ParamRegisterServerVersion, version);
                 SqlParameter paramRetentionPeriod = new SqlParameter(ParamRegisterServerRetentionPeriod, retentionPeriod);
                 SqlParameter paramAuditFoldersString = new SqlParameter(ParamAuditFoldersString, auditFoldersString);
+                SqlParameter paramServertype = new SqlParameter(ParamServerType, servertype);
 
                 SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                NonQueryRegisterServer, paramConnectionname, paramConnectionport, paramServername, paramInstancename, paramAuthmode, paramLoginname, paramLoginpassword, paramServerlogin, paramServerpassword, paramVersion, paramRetentionPeriod, paramAuditFoldersString);
+                                NonQueryRegisterServer, paramConnectionname, paramConnectionport, paramServername, paramInstancename, paramAuthmode, paramLoginname, paramLoginpassword, paramServerlogin, paramServerpassword, paramVersion, paramRetentionPeriod, paramAuditFoldersString,paramServertype);
             }
         }
 

@@ -664,6 +664,10 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const String ToolTipCode = @"The event code for the Activity";
         public const String ToolTipCategory = @"The category of the Activity";
         public const String ToolTipDescription = @"The description of the Activity";
+
+        public const string TypeServerOnPremise = @"On-Premise SQL Server";
+        public const string TypeServerAzureVM = @"SQL Server on Azure Virtual Machine";
+        public const string TypeServerAzureDB = @"Azure SQL Database";
     }
 
     #endregion
