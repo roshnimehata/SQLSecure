@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System.Configuration;
 using System.Threading;
 
 using Wintellect.PowerCollections;
@@ -1212,8 +1211,7 @@ namespace Idera.SQLsecure.UI.Console
                     {
                         if (connectToServer(dlg.Server))
                         {
-                            if (!isRepositoryUpdated())
-                            {
+                            
                                 ExecuteUpdateQuery();
                                 bConnected = true;
                                 bConnecting = false;
@@ -1229,9 +1227,7 @@ namespace Idera.SQLsecure.UI.Console
 
                                 // Refresh explorer bar.
                                 refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
-                                                                     // else it will stay on the current view if valid.
-                            }
-
+                                                                     // else it will stay on the current view if valid
                             #endregion
                         }
                     }
@@ -1241,7 +1237,7 @@ namespace Idera.SQLsecure.UI.Console
                         //Add functionality to perform action to be performed when "Deploy Repository" is selected.
                         if (!isRepositoryUpdated())
                         {
-                            ExecuteInitializationQuery();
+                            DeployRepositoryScripts();
                         }
                         if (connectToServer(dlg.Server))
                         {
@@ -1306,24 +1302,15 @@ namespace Idera.SQLsecure.UI.Console
                     Form_GetMissingCredentials.Process();
                 }
             }
-
             return bConnected;
         }
-
-        private enum VersionColumn
-        {
-            dalversion = 0,
-            schemaversion = 0
-        }
-
+        
         bool isRepositoryUpdated()
         {
             try
             {
-                int m_SchemaVersion = 0;
-               
+                int m_SchemaVersion = 0;  
                 //retrieve information from the database to check for repository version.
-
                 m_SchemaVersion = Program.gController.Repository.getRepositoryVersion(Server_Name);
                 if (m_SchemaVersion < Utility.Constants.SchemaVersion)
                 {
@@ -1335,39 +1322,6 @@ namespace Idera.SQLsecure.UI.Console
                 return false;
             }
             return true;
-
-            //try
-            //{
-            //    SqlConnectionStringBuilder m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null);
-            //    using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
-            //     {
-            //        connection.Open();
-            //        using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
-            //                                            String.Format(QueryGetDALSchemaVersion), null))
-            //        {
-            //            // This table has only one column and row with a Y or N in it.
-            //            if (rdr.Read())
-            //            {
-            //                // Get DAL & schema versions.
-            //                m_SchemaVersion = Convert.ToInt32(rdr[(int)VersionColumn.schemaversion]);
-            //                m_DALVersion = Convert.ToInt32(rdr[(int)VersionColumn.dalversion]);
-            //            }
-            //        }
-            //        if(m_SchemaVersion < Utility.Constants.SchemaVersion)
-            //        {
-            //            MsgBox.ShowInfo(Utility.ErrorMsgs.UpgradeSchemaTag, Utility.ErrorMsgs.UpgradeRepository);
-            //            ExecuteUpdateQuery();
-            //            return false;
-            //        }else if(m_SchemaVersion == Utility.Constants.SchemaVersion)
-            //        {
-            //            MsgBox.ShowInfo(Utility.ErrorMsgs.RepositoryExistTag, Utility.ErrorMsgs.RepositoryExists);
-            //        }
-            //    }
-            //}catch(Exception e)
-            //{
-            //    return false;
-            //}
-            //return true;
         }
 
         void ExecuteUpdateQuery()
@@ -1396,7 +1350,7 @@ namespace Idera.SQLsecure.UI.Console
         }
 
 
-        void ExecuteInitializationQuery()
+        void DeployRepositoryScripts()
         {
             string executingExe = "DeployRepository.exe";
             Process p = new Process();

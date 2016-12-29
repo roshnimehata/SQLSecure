@@ -31,44 +31,42 @@ namespace DeployRepository
             const string SaveCollectorInfo = @"SQLsecure.dbo.isp_sqlsecure_addcollectorinfo";
             string[] sql_script_list = { "sqlsecure_ddl.sql", "merge_fn.sql", "merge_vw.sql", "merge_sp.sql", "sql_postscript.sql", "Sqlsecure_version.sql" };
             string server_name = args[0];
-            System.IO.File.AppendAllText(@"D:\path.txt", "SERVER NAME : " + args[0] + "\n\n");
-            bool areScriptsPresent = true;
-            foreach(string file in sql_script_list)
+            System.IO.File.AppendAllText(GetFilePath + "\\" + "path.txt", "SERVER NAME : " + args[0] + "\n\n");
+            bool DoScriptsExist = true;
+            foreach (string file in sql_script_list)
             {
-                if(!File.Exists(@"D:\idera-SQLSecure\SQLSecure\Main\Development\Idera\SQLsecure\bin\Debug" + "\\" + file))
+                if (!File.Exists(GetFilePath + "\\" + file))
                 {
-                    areScriptsPresent = false;
+                    DoScriptsExist = false;
                     return (int)ExitCode.ScriptNotExist;
                 }
             }
-            if (areScriptsPresent)
+            if (DoScriptsExist)
             {
                 try
                 {
                     foreach (string sql_script in sql_script_list) {
                         string sqlConnectionString = @"Data Source=" + server_name + ";Initial Catalog=master ;Integrated Security=True";
-                        System.IO.File.AppendAllText(@"D:\path.txt", "Connection String : " + sqlConnectionString + "\n\n");
-                        FileInfo file = new FileInfo(@"D:\idera-SQLSecure\SQLSecure\Main\Development\Idera\SQLsecure\bin\Debug" + "\\" + sql_script);
+                        System.IO.File.AppendAllText(GetFilePath + "\\" + "path.txt", "Connection String : " + sqlConnectionString + "\n\n");
+                        FileInfo file = new FileInfo(GetFilePath + "\\" + sql_script);
                         string script = file.OpenText().ReadToEnd();
                         System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection(@"Data Source=" + server_name + ";Initial Catalog=master ;Integrated Security=True");
                         Microsoft.SqlServer.Management.Smo.Server server = new Microsoft.SqlServer.Management.Smo.Server(new ServerConnection(conn));
-                        System.IO.File.AppendAllText(@"D:\path.txt", "Before executing non query");
+                        System.IO.File.AppendAllText(GetFilePath + "\\" + "path.txt", "Before executing non query");
                         int success = server.ConnectionContext.ExecuteNonQuery(script);
-                         System.IO.File.AppendAllText(@"D:\path.txt", "After executing query");
-                        ////                       
-                        ////
+                         System.IO.File.AppendAllText(GetFilePath + "\\" + "path.txt", "After executing query");
                         if (success == 0)
                         {
                             //script did not execute successfully
                             Console.WriteLine("Script could not be executed.");
-                                System.IO.File.AppendAllText(@"D:\path.txt", "Script could not be executed.");
+                                System.IO.File.AppendAllText(GetFilePath + "\\" + "path.txt", "Script could not be executed.");
                             return (int)ExitCode.ScriptFailure;
                         }
                         else
                         {
                             //script executed successfully
                             Console.WriteLine("Script executed successfully. Total queries executed : " + success);
-                                  System.IO.File.AppendAllText(@"D:\path.txt", "Script executed successfully. Total queries executed : " + success);
+                                  System.IO.File.AppendAllText(GetFilePath + "\\" + "path.txt", "Script executed successfully. Total queries executed : " + success);
                         }
 
                     }
@@ -84,7 +82,7 @@ namespace DeployRepository
                 catch(Exception e)
                 {
                     Console.WriteLine("Error occured! " + e);
-                    System.IO.File.AppendAllText(@"D:\path.txt", "Exception " + e);
+                    System.IO.File.AppendAllText(GetFilePath + "\\" + "path.txt", "Exception " + e);
                 }
 
             }

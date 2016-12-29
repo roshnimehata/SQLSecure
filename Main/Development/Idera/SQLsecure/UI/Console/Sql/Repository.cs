@@ -458,23 +458,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             return m_IsValid;
         }
-
-        private void UpdateCollectorInfo()
-        {
-            using(SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
-            {
-                try
-                {
-                    connection.Open();
-
-
-                }catch(Exception e)
-                {
-                    
-                }
-            }
-        }
-
+        
         private bool OpenRepository()
         {
             using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
@@ -877,7 +861,6 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 }
                 isOK = (m_BBSProductLicense.CombinedLicense.licState == BBSProductLicense.LicenseState.Valid);
             }
-            //return isOK;
             return true;
         }
 
@@ -911,50 +894,6 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
             return m_SchemaVersion;
         }
-
-        //public bool isRepositoryUpdated(string Server_Name)
-        //{
-        //    const string QueryGetDALSchemaVersion =
-        //            @"SELECT * FROM SQLsecure.dbo.vwcurrentversion";
-        //    int m_SchemaVersion = 0;
-        //    int m_DALVersion = 0;
-
-        //    //retrieve information from the database to check for repository version.
-        //    try
-        //    {
-        //        SqlConnectionStringBuilder m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null);
-        //        using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
-        //        {
-        //            connection.Open();
-        //            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
-        //                                                String.Format(QueryGetDALSchemaVersion), null))
-        //            {
-        //                // This table has only one column and row with a Y or N in it.
-        //                if (rdr.Read())
-        //                {
-        //                    // Get DAL & schema versions.
-        //                    m_SchemaVersion = Convert.ToInt32(rdr[(int)VersionColumn.schemaversion]);
-        //                    m_DALVersion = Convert.ToInt32(rdr[(int)VersionColumn.dalversion]);
-        //                }
-        //            }
-        //            if (m_SchemaVersion < Utility.Constants.SchemaVersion)
-        //            {
-        //                MsgBox.ShowInfo(Utility.ErrorMsgs.UpgradeSchemaTag, Utility.ErrorMsgs.UpgradeRepository);
-        //                return false;
-        //            }
-        //            else if (m_SchemaVersion == Utility.Constants.SchemaVersion)
-        //            {
-        //                MsgBox.ShowInfo(Utility.ErrorMsgs.RepositoryExistTag, Utility.ErrorMsgs.RepositoryExists);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return false;
-        //    }
-        //    return true;
-        //}
-
 
         public static bool checkAllCredentialsEntered(string connectionString)
         {
