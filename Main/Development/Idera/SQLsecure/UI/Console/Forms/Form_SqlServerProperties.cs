@@ -1098,7 +1098,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                         string.Format("Connecting to SQL Server {0}...", m_RegisteredServer.ServerName.ToUpper()));
                                     Sql.SqlServer.GetSqlServerProperties(m_RegisteredServer.FullConnectionName, login, password,
                                                                          out version, out machine, out instance,
-                                                                         out connection);
+                                                                         out connection, Utility.Activity.TypeServerOnPremise);
                                     if (targetImpersonationContext != null)
                                     {
                                         targetImpersonationContext.Undo();

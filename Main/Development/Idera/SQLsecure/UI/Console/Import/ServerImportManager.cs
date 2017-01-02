@@ -87,7 +87,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                         itemToImport.UseSameCredentials
                             ? itemToImport.Password
                             : itemToImport.WindowsUserPassword,
-                        sqlServerVersion, 0, new string[0]);
+                        sqlServerVersion, 0, new string[0], "OP");
                     repository.RefreshRegisteredServers();
                 }
                 catch (Exception ex)
@@ -319,7 +319,7 @@ namespace Idera.SQLsecure.UI.Console.Import
 
 
                     SqlServer.GetSqlServerProperties(importItem.ServerName, login, password,
-                        out sqlServerVersion, out machine, out instance, out fullName);
+                        out sqlServerVersion, out machine, out instance, out fullName, Utility.Activity.TypeServerOnPremise);
                 }
                 catch (Exception ex)
                 {

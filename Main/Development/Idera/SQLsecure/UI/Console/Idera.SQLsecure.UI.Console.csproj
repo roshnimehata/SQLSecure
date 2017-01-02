@@ -17,7 +17,7 @@
     <ApplicationIcon>SQLsecure_product.ico</ApplicationIcon>
     <Win32Resource>
     </Win32Resource>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -190,6 +190,7 @@
       <HintPath>..\..\..\..\ThirdPartySoftware\PowerCollections.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Design" />
