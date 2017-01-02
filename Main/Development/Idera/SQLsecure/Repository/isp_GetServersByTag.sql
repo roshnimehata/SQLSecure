@@ -2,6 +2,11 @@ SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[isp_GetServersByTag]'))
+drop procedure [dbo].[isp_GetServersByTag]
+go
+
 CREATE PROCEDURE [dbo].[isp_GetServersByTag]
     @tag_name NVARCHAR(250) = NULL ,
     @tag_id INT = NULL

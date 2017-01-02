@@ -3,6 +3,11 @@ SET ANSI_NULLS ON;
 GO
 SET QUOTED_IDENTIFIER ON;
 GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[isp_GetTags]'))
+drop procedure [dbo].[isp_GetTags]
+go
+
 CREATE PROCEDURE [dbo].[isp_GetTags]
     @tag_name NVARCHAR(250) = NULL ,
     @tag_id INT = NULL

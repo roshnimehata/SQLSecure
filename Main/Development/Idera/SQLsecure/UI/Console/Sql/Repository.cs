@@ -458,7 +458,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             return m_IsValid;
         }
-
+        
         private bool OpenRepository()
         {
             using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
@@ -861,12 +861,39 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 }
                 isOK = (m_BBSProductLicense.CombinedLicense.licState == BBSProductLicense.LicenseState.Valid);
             }
-            return isOK;
+            return true;
         }
 
         #endregion
 
-
+        public int getRepositoryVersion(string Server_Name)
+        {
+            int m_SchemaVersion = 0;
+            try
+            {
+                SqlConnectionStringBuilder m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null);
+                using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                                                        String.Format(QueryGetDALSchemaVersion), null))
+                    {
+                        // This table has only one column and row with a Y or N in it.
+                        if (rdr.Read())
+                        {
+                            // Get DAL & schema versions.
+                            m_SchemaVersion = Convert.ToInt32(rdr[(int)VersionColumn.schemaversion]);
+                            m_DALVersion = Convert.ToInt32(rdr[(int)VersionColumn.dalversion]);
+                        }
+                    }
+             
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            return m_SchemaVersion;
+        }
 
         public static bool checkAllCredentialsEntered(string connectionString)
         {

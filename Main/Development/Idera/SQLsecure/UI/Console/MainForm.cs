@@ -17,6 +17,9 @@ using Idera.SQLsecure.UI.Console.Controls;
 using Idera.SQLsecure.UI.Console.Sql;
 using Idera.SQLsecure.UI.Console.Utility;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
+using System.IO;
+using System.Data.SqlClient;
+using Microsoft.SqlServer.Management.Common;
 
 namespace Idera.SQLsecure.UI.Console
 {
@@ -396,6 +399,7 @@ namespace Idera.SQLsecure.UI.Console
 
             // File Menu
             _menuStrip_File_Connect.Image = AppIcons.AppImage16(AppIcons.Enum.Connect);
+            _menuStrip_Deploy_Repository.Image = AppIcons.AppImage16(AppIcons.Enum.Connect);
             // deleted - _menuStrip_File_ConnectionProperties.Image = AppIcons.AppImage16(AppIcons.Enum.Properties);
             _menuStrip_File_NewSQLServer.Image = AppIcons.AppImage16(AppIcons.Enum.AuditSQLServer);
             _menuStrip_File_NewLogin.Image = AppIcons.AppImage16(AppIcons.Enum.NewSQLsecureLogin);
@@ -1181,8 +1185,9 @@ namespace Idera.SQLsecure.UI.Console
 
         #region Repository Connection
 
+        public static string Server_Name;
         //Show a pop up dialog to get the server name
-        private bool promptForConnection()
+        private bool promptForConnection(bool isConnect = true)
         {
             bool bConnected = false;
             bool bConnecting = true;
@@ -1195,29 +1200,70 @@ namespace Idera.SQLsecure.UI.Console
                 // Create and show the select server dialog 
                 // If the user has clicked OK, then attempt to connect to the new server.
                 // Else go back to the current server if it exists.
-                Form_ConnectRepository dlg = new Form_ConnectRepository();
+                Form_ConnectRepository dlg = new Form_ConnectRepository(isConnect);
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-                    // If connect to server fails, then prompt for the
-                    // server name again.
+                 
+                    // If connect to server fails, then prompt for the server name again.
                     this.Cursor = Cursors.WaitCursor;
-                    if (connectToServer(dlg.Server))
+
+                    if (isConnect)
                     {
-                        bConnected = true;
-                        bConnecting = false;
-
-                        // If the server has changed reset the views
-                        bool isServerChanged = false;
-                        if (string.Compare(dlg.Server, currentServer, true) != 0)
+                        if (connectToServer(dlg.Server))
                         {
-                            Program.gController.ResetViews();
-                            isServerChanged = true;
-                        }
+                            
+                                ExecuteUpdateQuery();
+                                bConnected = true;
+                                bConnecting = false;
+                                #region SQLSecure3.1 - (Mitul Kapoor)Perform action based on user select of Create Repository/Deploy Repository
 
-                        // Refresh explorer bar.
-                        refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
-                                                             // else it will stay on the current view if valid.
+                                // If the server has changed reset the views
+                                bool isServerChanged = false;
+                                if (string.Compare(dlg.Server, currentServer, true) != 0)
+                                {
+                                    Program.gController.ResetViews();
+                                    isServerChanged = true;
+                                }
+
+                                // Refresh explorer bar.
+                                refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
+                                                                     // else it will stay on the current view if valid
+                            #endregion
+                        }
                     }
+                    //SQLSecure 3.1 (Mitul Kapoor) - functionality for "Deploy Repository". 
+                    else
+                    {
+                        //Add functionality to perform action to be performed when "Deploy Repository" is selected.
+                        if (!isRepositoryUpdated())
+                        {
+                            DeployRepositoryScripts();
+                        }
+                        if (connectToServer(dlg.Server))
+                        {
+                            bConnected = true;
+                            bConnecting = false;
+                            #region SQLSecure3.1 - (Mitul Kapoor)Perform action based on user select of Create Repository/Deploy Repository
+
+                            // If the server has changed reset the views
+                            bool isServerChanged = false;
+                            if (string.Compare(dlg.Server, currentServer, true) != 0)
+                            {
+                                Program.gController.ResetViews();
+                                isServerChanged = true;
+                            }
+
+                            // Refresh explorer bar.
+                            refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
+                                                                 // else it will stay on the current view if valid.
+                        }
+                        else
+                        {
+                            MsgBox.ShowError(Utility.ErrorMsgs.CantConnectRepository, Utility.ErrorMsgs.FailedToConnectMsg);
+                            return false;
+                        }                       
+                    }
+                    #endregion
                     this.Cursor = Cursors.Default;
                 }
                 else
@@ -1230,7 +1276,6 @@ namespace Idera.SQLsecure.UI.Console
                         refreshExplorerBar(false); // keep the existing view current
                         this.Cursor = Cursors.Default;
                     }
-
                     bConnecting = false;
                 }
             }
@@ -1257,8 +1302,83 @@ namespace Idera.SQLsecure.UI.Console
                     Form_GetMissingCredentials.Process();
                 }
             }
-
             return bConnected;
+        }
+        
+        bool isRepositoryUpdated()
+        {
+            try
+            {
+                int m_SchemaVersion = 0;  
+                //retrieve information from the database to check for repository version.
+                m_SchemaVersion = Program.gController.Repository.getRepositoryVersion(Server_Name);
+                if (m_SchemaVersion < Utility.Constants.SchemaVersion)
+                {
+                    ExecuteUpdateQuery();
+                    return false;
+                }
+            }catch(Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        void ExecuteUpdateQuery()
+        {
+            try
+            {
+                string executingExe = "ExecuteUpdate.exe";
+                Process p = new Process();
+                p.StartInfo = new ProcessStartInfo();
+                p.StartInfo.FileName = string.Format("{0}\\{1}", GetAssemblyPath, executingExe);
+                p.StartInfo.Arguments = Server_Name;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                p.Start();
+                p.WaitForExit();
+                switch (p.ExitCode)
+                {
+                    case (int)Utility.Constants.ExitCode.Success: MsgBox.ShowInfo(Utility.ErrorMsgs.SuccessTag, Utility.ErrorMsgs.RepositorySuccessfullyUpdated); break;
+                    case (int)Utility.Constants.ExitCode.ScriptNotExist: MsgBox.ShowInfo(Utility.ErrorMsgs.FailTag, Utility.ErrorMsgs.ScriptNotExist); break;
+                    case (int)Utility.Constants.ExitCode.ScriptFailure: MsgBox.ShowInfo(Utility.ErrorMsgs.FailTag, Utility.ErrorMsgs.ScriptExecutionFailed); break;
+                }
+            }catch(Exception e)
+            {
+            }
+        }
+
+
+        void DeployRepositoryScripts()
+        {
+            string executingExe = "DeployRepository.exe";
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo();
+            p.StartInfo.FileName = string.Format("{0}\\{1}", GetAssemblyPath, executingExe);
+            p.StartInfo.Arguments = Server_Name;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            p.Start();
+            p.WaitForExit();
+            switch (p.ExitCode)
+            {
+                case (int)Utility.Constants.ExitCode.Success: MsgBox.ShowInfo(Utility.ErrorMsgs.SuccessTag, Utility.ErrorMsgs.RepositorySuccessfullyDeployed);break;
+                case (int)Utility.Constants.ExitCode.ScriptNotExist: MsgBox.ShowInfo(Utility.ErrorMsgs.FailTag, Utility.ErrorMsgs.ScriptNotExist); break;
+                case (int)Utility.Constants.ExitCode.ScriptFailure: MsgBox.ShowInfo(Utility.ErrorMsgs.FailTag,Utility.ErrorMsgs.ScriptExecutionFailed); break;
+            }
+        }
+
+        private string GetAssemblyPath
+        {
+            get
+            {
+                string codeBase = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return System.IO.Path.GetDirectoryName(path);
+            }
         }
 
         private bool connectToServer(string server)
@@ -1454,7 +1574,10 @@ namespace Idera.SQLsecure.UI.Console
 
         private void initMenus()
         {
+
             this._menuStrip_File_Connect.ToolTipText = Utility.Constants.Menu_Descr_File_Connect;
+            this._menuStrip_Deploy_Repository.ToolTipText = Utility.Constants.Menu_Descr_Deploy_Repository;
+
             // deleted - this._menuStrip_File_ConnectionProperties.ToolTipText = Utility.Constants.Menu_Descr_File_ConnectionProperties;
             this._menuStrip_File_NewSQLServer.ToolTipText = Utility.Constants.Menu_Descr_File_NewSQLServer;
             this._menuStrip_File_NewLogin.ToolTipText = Utility.Constants.Menu_Descr_File_NewLogin;
@@ -1507,10 +1630,16 @@ namespace Idera.SQLsecure.UI.Console
 
         private void _menuStrip_File_Connect_Click(object sender, EventArgs e)
         {
+            //Check for user option to connect/deploy repository.
             Cursor = Cursors.WaitCursor;
-
-            promptForConnection();
-
+            if (sender == _menuStrip_Deploy_Repository)
+            {
+                promptForConnection(false);
+            }
+            else
+            {
+                promptForConnection(true);
+            }
             Cursor = Cursors.Default;
         }
 
@@ -2397,7 +2526,7 @@ namespace Idera.SQLsecure.UI.Console
             node = new TreeNode(Utility.Constants.TManagementNode_TagsNode);
             node.Tag = new Utility.NodeTag(new Data.SQLsecureActivity(node.Name), Utility.View.ServerGroupTags);
 
-            node.ImageIndex = node.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.ServerTags );
+            node.ImageIndex = node.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.ServerTags);
             _explorerBar_ManageSQLsecureTreeView.Nodes.Add(node);
 
 
@@ -5071,6 +5200,19 @@ namespace Idera.SQLsecure.UI.Console
             Form_ImportServers.Process();
             refreshManageSQLsecureGroup();
         }
+
+        //void Log(string logQuery)
+        //{
+        //    try
+        //    {
+        //        System.IO.File.AppendAllText(string.Format("{0}\\{1}", GetAssemblyPath,ConfigurationManager.AppSettings["ExecuteSQLScriptLog.txt"])
+        //            , string.Format("{0} Logged at {1} {2} {3}", Environment.NewLine, DateTime.Now.ToString(),
+        //            Environment.NewLine, logQuery));
+        //    }catch(Exception e)
+        //    {
+
+        //    }
+        //}
 
         private void importSQLServersToolStripMenuItem_Click(object sender, EventArgs e)
         {

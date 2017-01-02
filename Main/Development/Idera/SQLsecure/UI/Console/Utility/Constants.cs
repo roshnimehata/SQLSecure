@@ -92,9 +92,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static String COMPANY_STR = @"Idera";
         public static String PRODUCT_STR = @"SQLsecure";
-        public static String PRODUCT_VER_STR = @"2.9";
+        public static String PRODUCT_VER_STR = @"3.1";
         // Previous version strings (newest first) to find previous option files
-        public static String[] PRODUCT_VER_STR_PREV = { @"2.8",@"2.7",@"2.6", @"2.5", @"2.0", @"1.2", @"1.1" };
+        public static String[] PRODUCT_VER_STR_PREV = { @"3.0",@"2.9",@"2.8",@"2.7",@"2.6", @"2.5", @"2.0", @"1.2", @"1.1" };
         public static String COMPONENT_STR = @"Console";
 
         public static String APP_TITLE_STR = COMPANY_STR + @" " + PRODUCT_STR + @" - {0}";
@@ -112,6 +112,13 @@ namespace Idera.SQLsecure.UI.Console.Utility
         internal const string SQLsecureLicenseProductVersionStr = "1.1";
 
         public const string ProductsPageText = "Idera SQLsecure helps you detect and verify security holes in your SQL Server security model. SQLsecure does this by performing rights analysis across SQL Server, Active Directory and Windows and calculating the effective access rights for any user, object or access control.";
+
+        internal enum ExitCode
+        {
+            Success = 0,
+            ScriptNotExist = -999,
+            ScriptFailure = -1000
+        }
 
         #endregion
 
@@ -261,6 +268,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         #region Main Menus
 
+        public const String Menu_Descr_Deploy_Repository = @"Deploy SQLsecure Repository";
         public const String Menu_Descr_File_Connect = @"Connect to another SQLsecure Repository";
         public const String Menu_Descr_File_ConnectionProperties = @"View connection properties for the current Repository";
         public const String Menu_Descr_File_NewSQLServer = @"Register a new SQL Server instance to audit";

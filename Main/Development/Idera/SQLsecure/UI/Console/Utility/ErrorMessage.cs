@@ -376,5 +376,23 @@ Do you wish to remove SQL Server now?";
 
         public const string EmptyImportFileError =
             "File provided by you does not contain data to import.\nPlease provide valid file.";
+
+
+        public const string WindowsUserForImportNotSpecifiedMsg = "Windows User for gathering OS and AD Objects was not provided";
+
+        //Deploy Repository
+        public const String SuccessTag = "Success";
+        public const String FailTag = "Failed";
+        public const String RepositorySuccessfullyUpdated = "Repository updated successfully.";
+        public const String RepositorySuccessfullyDeployed = "Repository Deployed successfully.";
+        public const String ScriptNotExist = "Some of the script(s) required to update repository do not exist. Please contact Idera support team.";
+        public const String ScriptExecutionFailed = "Some of the script(s) required to update repository failed to execute. Please check log file for more information or contact Idera support team.";
+
+
+        //Update Repository
+        public const String UpgradeSchemaTag = "Upgrade your Schema";
+        public const String UpgradeRepository = "Please upgrade your Repository.";
+        public const String RepositoryExistTag = "Repository Already Exists.";
+        public const string RepositoryExists = "Repository already exists";
     }
 }

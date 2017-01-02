@@ -33,9 +33,9 @@ namespace Idera.SQLsecure.UI.Console.Import.Models
         private const string UserCannotBeEmptyString = "User name cannot be empty";
         private const string PasswordCannotBeEmptyString = "Password cannot be empty";
         private const string SpecifyUserString = "Please specify Windows User Name and Password";
-        private readonly List<string> _validationErrors  = new List<string>();
+        private readonly List<string> _validationErrors = new List<string>();
         private bool _validated = false;
-        
+
 
         public bool HasErrors()
         {
@@ -43,7 +43,7 @@ namespace Idera.SQLsecure.UI.Console.Import.Models
             return _validationErrors.Count > 0;
         }
 
-       
+
 
         public string GetErrors()
         {
@@ -52,11 +52,11 @@ namespace Idera.SQLsecure.UI.Console.Import.Models
 
         private void Validate()
         {
-            if(!Enum.IsDefined(typeof(SqlServerAuthenticationType), AuthType)) _validationErrors.Add(UnsupportedAuthTypeString);
+            if (!Enum.IsDefined(typeof(SqlServerAuthenticationType), AuthType)) _validationErrors.Add(UnsupportedAuthTypeString);
             if (string.IsNullOrEmpty(ServerName)) _validationErrors.Add(ServerCannotBeEmptyString);
 
             ValidateCredentials();
-            
+
 
             _validated = true;
         }
@@ -69,10 +69,6 @@ namespace Idera.SQLsecure.UI.Console.Import.Models
             if (string.IsNullOrEmpty(UserName)) _validationErrors.Add(UserCannotBeEmptyString);
             if (string.IsNullOrEmpty(Password)) _validationErrors.Add(PasswordCannotBeEmptyString);
 
-            if (!UseSameCredentials && (string.IsNullOrEmpty(WindowsUserName) || string.IsNullOrEmpty(WindowsUserPassword)))
-                _validationErrors.Add(SpecifyUserString);
-
-
             var isPasswordLengthValid = PasswordValidator.ValidatePasswordLength(Password);
             if (!isPasswordLengthValid)
             {
@@ -84,7 +80,7 @@ namespace Idera.SQLsecure.UI.Console.Import.Models
         private bool IsWindowsCredentialsFormatValid()
         {
             string domain, user;
-            
+
             Path.SplitSamPath(UserName, out domain, out user);
             if (AuthType == SqlServerAuthenticationType.WindowsAuthentication &&
                 (string.IsNullOrEmpty(domain) || string.IsNullOrEmpty(user))) return false;
