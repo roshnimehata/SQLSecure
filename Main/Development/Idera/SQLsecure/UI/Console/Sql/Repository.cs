@@ -411,7 +411,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     m_ServerName = instance.ToUpper();
                 }
 
-                m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, user, password);
+                m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, user, password, Utility.Activity.TypeServerOnPremise);
                 if (Connect())
                 {
                     m_User = user;

@@ -13,6 +13,8 @@ using Idera.SQLsecure.UI.Console.Utility;
 using Infragistics.Win.UltraWinListView;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 using Idera.SQLsecure.UI.Console.SQL;
+using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace Idera.SQLsecure.UI.Console.Forms
 {
@@ -55,6 +57,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private string m_Connection = string.Empty;
         private int? m_ConnectionPort = null;
         private string m_Version = string.Empty;
+        private string m_ServerType = string.Empty;
         private Sql.DataCollectionFilter m_Filter;
         private List<Console.Sql.Policy> m_Polices = new List<Console.Sql.Policy>();
         private NextAction m_nextAction;
@@ -96,6 +99,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             textbox_WindowsUser.Enabled = false;
             textbox_WindowsPassword.Enabled = false;
 
+
+            _comboBox_ServerType.Items.Clear();
+            _comboBox_ServerType.Items.Add(Utility.Activity.TypeServerOnPremise);
+            _comboBox_ServerType.Items.Add(Utility.Activity.TypeServerAzureVM);
+            _comboBox_ServerType.Items.Add(Utility.Activity.TypeServerAzureDB);
+            _comboBox_ServerType.SelectedItem = Utility.Activity.TypeServerOnPremise;
+            _comboBox_ServerType.SelectedIndexChanged +=
+            new System.EventHandler(_comboBox_ServerType_SelectedIndexChanged);
             // Load up the Polices
             foreach (Policy p in Program.gController.Repository.Policies)
             {
@@ -229,7 +240,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                         form.radioButton_WindowsAuth.Checked ? "W" : "S",
                                         sqlLogin, sqlPassword,
                                         form.textbox_WindowsUser.Text, form.textbox_WindowsPassword.Text,
-                                        form.m_Version, (int)form.numericUpDown_KeepSnapshotDays.Value, auditFolders);
+                                        form.m_Version, (int)form.numericUpDown_KeepSnapshotDays.Value, auditFolders,form.m_ServerType);
 
                     // Notify controller that a new server was added.
                     Program.gController.SignalRefreshServersEvent(true, form._txtbx_Server.Text.ToUpper());
@@ -414,6 +425,30 @@ namespace Idera.SQLsecure.UI.Console.Forms
             Program.gController.ShowTopic(helpTopic);
         }
 
+        private void _comboBox_ServerType_SelectedIndexChanged(object sender,
+        System.EventArgs e)
+        {
+            
+            ComboBox comboBox = (ComboBox)sender;
+            if (comboBox.SelectedItem == Utility.Activity.TypeServerOnPremise)
+            {
+                _lbl_Server.Text = "&Server:";
+                _btn_BrowseServers.Visible = true;
+                _lbl_PortNumber.Visible = false;
+                _txtbx_PortNumber.Visible = false;
+            }
+            else 
+            {
+                _lbl_Server.Text = "&FQDN:";
+                _btn_BrowseServers.Visible = false;
+                _lbl_PortNumber.Visible = true;
+                _txtbx_PortNumber.Visible = true;
+            }
+            if(comboBox.SelectedItem == Utility.Activity.TypeServerAzureDB)
+            {
+                this._page_Credentials.NextPage = this._PageTags;
+            }
+        }
         #region Select Server Page
 
         private void _page_Servers_BeforeDisplay(object sender, EventArgs e)
@@ -450,7 +485,34 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void _txtbx_Server_TextChanged(object sender, EventArgs e)
         {
             // Enable next button, if text length is not null.
-            _page_Servers.AllowMoveNext = !string.IsNullOrEmpty(_txtbx_Server.Text);
+            if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerOnPremise)
+            {
+                _page_Servers.AllowMoveNext = !string.IsNullOrEmpty(_txtbx_Server.Text);
+            }
+            else
+            {
+
+                try
+                {
+                    
+                    if (!Regex.IsMatch(_txtbx_PortNumber.Text, @"^\d+$"))
+                    {   
+                        _txtbx_PortNumber.ForeColor = System.Drawing.Color.Red;
+                        _page_Servers.AllowMoveNext = false;
+                    }
+                    else
+                    {
+                        _txtbx_PortNumber.ForeColor = System.Drawing.Color.Black;
+                        _page_Servers.AllowMoveNext = !string.IsNullOrEmpty(_txtbx_Server.Text) && !string.IsNullOrEmpty(_txtbx_PortNumber.Text);
+                    }
+                }
+                catch
+                {
+                    // If there is an error, display the text using the system colors.
+                    _txtbx_PortNumber.ForeColor = SystemColors.ControlText;
+                }
+                
+            }
         }
 
         private void _page_Servers_BeforeMoveNext(object sender, CancelEventArgs e)
@@ -479,7 +541,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     m_ConnectionPort = null;
                 }
             }
-
+            if(_comboBox_ServerType.SelectedItem== Utility.Activity.TypeServerAzureDB || _comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)
+            {
+                radioButton_WindowsAuth.Text = "Azure Active Directory";
+                label4.Text = "&Azure AD Account:";
+                _lbl_WindowsUser.Text = "&Azure AD Account:";
+                radioButton_SQLServerAuth.Checked = true;
+            }
             // We have to get the server properties (machine & instance) from the
             // specified SQL Server.   If agent service credentials are being used
             // for data collection, connect to the registered SQL Server and get
@@ -764,7 +832,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             }
 
             // Check if the account format is correct.
-            if (allowRegisterAnyway && isWindowsCredentails)
+            if (allowRegisterAnyway && isWindowsCredentails && _comboBox_ServerType.SelectedItem==Utility.Activity.TypeServerOnPremise)
             {
                 string domain = string.Empty;
                 string user = string.Empty;
@@ -812,14 +880,20 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             allowRegisterAnyway = false;
                         }
                     }
+                    string serverName = _txtbx_Server.Text;
                     if (allowRegisterAnyway)
                     {
                         // Try connecting to SQLserver...
                         try
                         {
                             showWorking.UpdateText(string.Format("Connecting to SQL Server {0}...", _txtbx_Server.Text.ToUpper()));
-                            Sql.SqlServer.GetSqlServerProperties(_txtbx_Server.Text, login, password,
-                                                                    out version, out machine, out instance, out connection);
+                            
+                            if (_comboBox_ServerType.SelectedItem!= Utility.Activity.TypeServerOnPremise)
+                            {
+                                serverName = _txtbx_Server.Text + "," + _txtbx_PortNumber.Text;
+                            }
+                            Sql.SqlServer.GetSqlServerProperties(serverName, login, password,
+                                                                    out version, out machine, out instance, out connection,(string) _comboBox_ServerType.SelectedItem);
                             if (targetImpersonationContext != null)
                             {
                                 targetImpersonationContext.Undo();
@@ -880,8 +954,16 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         {
                             showWorking.UpdateText(string.Format("Connecting to Server {0}...", machine));
                             string errorMsg;
-                            Server.ServerAccess sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text,
-                                                     out errorMsg);
+                            Server.ServerAccess sa;
+                            if (_comboBox_ServerType.SelectedItem== Utility.Activity.TypeServerOnPremise)
+                            {
+                                sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+                            }
+                            else
+                            {
+                                sa = Server.CheckAzureServerAccess(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+                            }
+                            
                             //                            Server s = new Server(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, null);
                             if (sa != Server.ServerAccess.OK)
                             {
@@ -961,6 +1043,20 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 m_Instance = instance;
                 m_Connection = connection;
                 m_Version = version;
+                if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerOnPremise)
+                {
+                    m_ServerType = "OP";
+                }
+                else if(_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureDB)
+                {
+                    m_ServerType = "ADB";
+                    m_ConnectionPort =Int32.Parse( _txtbx_PortNumber.Text);
+                }
+                else
+                {
+                    m_ServerType = "AVM";
+                    m_ConnectionPort = Int32.Parse(_txtbx_PortNumber.Text);
+                }
                 addEditFoldersControl.TargetServerName = m_Machine;
             }
             else
@@ -1404,9 +1500,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             button2.Enabled = button3.Enabled = ulTags.SelectedItems.Count != 0;        
         }
 
-       
+        private void _page_FilePermissionFolders_BeforeDisplay(object sender, EventArgs e)
+        {
 
+        }
 
-     
+        private void _page_CollectData_BeforeDisplay(object sender, EventArgs e)
+        {
+
+        }
     }
 }

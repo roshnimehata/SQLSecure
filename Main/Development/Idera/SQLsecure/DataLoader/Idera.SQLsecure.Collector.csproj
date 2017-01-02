@@ -15,7 +15,7 @@
     <SccLocalPath>.</SccLocalPath>
     <SccAuxPath>http://192.168.242.72:8080/tfs/defaultcollection</SccAuxPath>
     <ApplicationIcon>Collector.ico</ApplicationIcon>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
