@@ -28,6 +28,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            Infragistics.Win.ValueListItem valueListItem1 = new Infragistics.Win.ValueListItem();
+            Infragistics.Win.ValueListItem valueListItem2 = new Infragistics.Win.ValueListItem();
             this._label1 = new System.Windows.Forms.Label();
             this._textBox_Server = new System.Windows.Forms.TextBox();
             this._button_Lookup = new Infragistics.Win.Misc.UltraButton();
@@ -35,34 +37,45 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._button_OK = new Infragistics.Win.Misc.UltraButton();
             this.label1 = new System.Windows.Forms.Label();
             this.ultraButton_Help = new Infragistics.Win.Misc.UltraButton();
+            this.action_choice = new Infragistics.Win.UltraWinEditors.UltraOptionSet();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this._username_label = new System.Windows.Forms.Label();
+            this._password_label = new System.Windows.Forms.Label();
+            this.username = new System.Windows.Forms.TextBox();
+            this.password = new System.Windows.Forms.TextBox();
             this._bfd_ButtonPanel.SuspendLayout();
             this._bf_MainPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.action_choice)).BeginInit();
             this.SuspendLayout();
-            this.action_choice = new Infragistics.Win.UltraWinEditors.UltraOptionSet();
             // 
             // _bfd_ButtonPanel
             // 
             this._bfd_ButtonPanel.Controls.Add(this.ultraButton_Help);
             this._bfd_ButtonPanel.Controls.Add(this._button_Cancel);
             this._bfd_ButtonPanel.Controls.Add(this._button_OK);
-            this._bfd_ButtonPanel.Location = new System.Drawing.Point(0, 152);
-            this._bfd_ButtonPanel.Size = new System.Drawing.Size(394, 40);
+            this._bfd_ButtonPanel.Location = new System.Drawing.Point(0, 279);
+            this._bfd_ButtonPanel.Size = new System.Drawing.Size(409, 40);
             this._bfd_ButtonPanel.Controls.SetChildIndex(this._button_OK, 0);
             this._bfd_ButtonPanel.Controls.SetChildIndex(this._button_Cancel, 0);
             this._bfd_ButtonPanel.Controls.SetChildIndex(this.ultraButton_Help, 0);
             // 
             // _bf_MainPanel
             // 
+            this._bf_MainPanel.Controls.Add(this.password);
+            this._bf_MainPanel.Controls.Add(this.username);
+            this._bf_MainPanel.Controls.Add(this._password_label);
+            this._bf_MainPanel.Controls.Add(this._username_label);
+            this._bf_MainPanel.Controls.Add(this.checkBox1);
             this._bf_MainPanel.Controls.Add(this.action_choice);
             this._bf_MainPanel.Controls.Add(this.label1);
             this._bf_MainPanel.Controls.Add(this._label1);
             this._bf_MainPanel.Controls.Add(this._textBox_Server);
             this._bf_MainPanel.Controls.Add(this._button_Lookup);
-            this._bf_MainPanel.Size = new System.Drawing.Size(594,95);
+            this._bf_MainPanel.Size = new System.Drawing.Size(409, 226);
             // 
             // _bf_HeaderPanel
             // 
-            this._bf_HeaderPanel.Size = new System.Drawing.Size(394, 53);
+            this._bf_HeaderPanel.Size = new System.Drawing.Size(409, 53);
             // 
             // _label1
             // 
@@ -130,17 +143,83 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraButton_Help.Text = "&Help";
             this.ultraButton_Help.Click += new System.EventHandler(this.ultraButton_Help_Click);
             // 
+            // action_choice
+            // 
+            this.action_choice.ItemOrigin = new System.Drawing.Point(10, 10);
+            valueListItem1.DataValue = "Connect";
+            valueListItem1.DisplayText = "Connect to Repository";
+            valueListItem2.DataValue = "Deploy";
+            valueListItem2.DisplayText = "Deploy Repository";
+            this.action_choice.Items.AddRange(new Infragistics.Win.ValueListItem[] {
+            valueListItem1,
+            valueListItem2});
+            this.action_choice.Location = new System.Drawing.Point(0, 0);
+            this.action_choice.Margin = new System.Windows.Forms.Padding(20);
+            this.action_choice.Name = "action_choice";
+            this.action_choice.Size = new System.Drawing.Size(500, 50);
+            this.action_choice.TabIndex = 0;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(20, 113);
+            this.checkBox1.Name = "credentials_required";
+            this.checkBox1.Size = new System.Drawing.Size(175, 17);
+            this.checkBox1.TabIndex = 7;
+            this.checkBox1.Text = "SQL Authentication / Azure VM";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // _username_label
+            // 
+            this._username_label.AutoSize = true;
+            this._username_label.Location = new System.Drawing.Point(15, 150);
+            this._username_label.Name = "_username_label";
+            this._username_label.Size = new System.Drawing.Size(60, 13);
+            this._username_label.TabIndex = 8;
+            this._username_label.Text = "User Name";
+            // 
+            // _password_label
+            // 
+            this._password_label.AutoSize = true;
+            this._password_label.Location = new System.Drawing.Point(20, 184);
+            this._password_label.Name = "_password_label";
+            this._password_label.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this._password_label.Size = new System.Drawing.Size(53, 13);
+            this._password_label.TabIndex = 9;
+            this._password_label.Text = "Password";
+            this._password_label.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // username
+            // 
+            this.username.Location = new System.Drawing.Point(83, 147);
+            this.username.Name = "username";
+            this.username.Enabled = false;
+            this.username.Size = new System.Drawing.Size(269, 20);
+            this.username.TabIndex = 10;
+            // 
+            // password
+            // 
+            this.password.Location = new System.Drawing.Point(83, 179);
+            this.password.Name = "password";
+            this.password.Enabled = false;
+            this.password.Size = new System.Drawing.Size(268, 20);
+            this.password.TabIndex = 11;
+            // 
             // Form_ConnectRepository
             // 
             this.AcceptButton = this._button_OK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(394, 192);
+            this.ClientSize = new System.Drawing.Size(409, 319);
+            this.Description = "Connect to SQLsecure Repository";
             this.Name = "Form_ConnectRepository";
+            this.Text = "Connect to Repository";
             this.Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.connect_49;
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.Form_ConnectRepository_HelpRequested);
             this._bfd_ButtonPanel.ResumeLayout(false);
             this._bf_MainPanel.ResumeLayout(false);
             this._bf_MainPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.action_choice)).EndInit();
             this.ResumeLayout(false);
             //
             // Radio button for choice of action(Connect to Repository/Deploy Repository)
@@ -152,9 +231,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.action_choice.ItemSpacingVertical += 10;
             this.action_choice.Items.Add("Connect", "Connect to Repository");
             this.action_choice.Items.Add("Deploy", "Deploy Repository");
-            this.action_choice.ItemOrigin = new System.Drawing.Point(10,10);
-            this.action_choice.ValueChanged += Action_choice_ValueChanged;
+            this.action_choice.ItemOrigin = new System.Drawing.Point(10, 10);
             this.action_choice.CheckedIndex = button_index;
+            this.action_choice.ValueChanged += Action_choice_ValueChanged;
+            
+
         }
         
         #endregion
@@ -167,6 +248,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private System.Windows.Forms.Label label1;
         private Infragistics.Win.Misc.UltraButton ultraButton_Help;
         private Infragistics.Win.UltraWinEditors.UltraOptionSet action_choice;
-
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label _password_label;
+        private System.Windows.Forms.Label _username_label;
+        private System.Windows.Forms.TextBox password;
+        private System.Windows.Forms.TextBox username;
     }
 }

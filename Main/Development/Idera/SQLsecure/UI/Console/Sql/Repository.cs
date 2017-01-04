@@ -390,6 +390,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             return Connect(instance, null, null);
         }
 
+
         public bool Connect(string instance, string user, string password)
         {
             try

@@ -18,6 +18,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         bool isConnect = true;
         string button_value = "Connect";
         int button_index = 0;
+        bool areCredentialsRequired = false;
         public Form_ConnectRepository(bool isConnect = true)
         {
             this.isConnect = isConnect;
@@ -101,6 +102,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             this.Cursor = Cursors.WaitCursor;
             MainForm.Server_Name = this._textBox_Server.Text;
+            if (areCredentialsRequired)
+            {
+                MainForm.UserName = this.username.Text;
+                MainForm.Password = this.password.Text;
+            }
         }
 
         #endregion
@@ -127,17 +133,39 @@ namespace Idera.SQLsecure.UI.Console.Forms
             if (selection.CheckedItem.DataValue.Equals("Connect"))
             {
                 this._button_OK.Text = "Connect";
-                this.isConnect = true;
+                MainForm.isConnect = true;
                 this.Text = "Connect to Repository";
                 this.Description = "Connect to SQLsecure Repository";
             }
             else
             {
                 this._button_OK.Text = "Deploy";
-                this.isConnect = false;
+                MainForm.isConnect = false;
                 this.Text = "Deploy Repository";
                 this.Description = "Designate a database instance that will host the SQLsecure Repository. Select SQL Server and then select the appropriate options to install the Repository.";
             }
           }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if(areCredentialsRequired == false)
+            {
+                this.username.Enabled = true;
+                this.password.Enabled = true;
+                areCredentialsRequired = true;
+            }
+            else
+            {
+                this.username.Enabled = false;
+                this.password.Enabled = false;
+                areCredentialsRequired = false;
+            }
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
