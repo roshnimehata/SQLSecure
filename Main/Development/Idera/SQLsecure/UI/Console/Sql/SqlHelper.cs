@@ -70,11 +70,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
         /// <param name="commandText">The stored procedure name or T-SQL command</param>
         /// <param name="commandParameters">An array of SqlParameters to be associated with the command or 'null' if no parameters are required</param>
         private static void prepareCommand(
-                SqlCommand command, 
-                SqlConnection connection, 
-                SqlTransaction transaction, 
-                CommandType commandType, 
-                string commandText, 
+                SqlCommand command,
+                SqlConnection connection,
+                SqlTransaction transaction,
+                CommandType commandType,
+                string commandText,
                 SqlParameter[] commandParameters
             )
         {
@@ -117,17 +117,19 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public static SqlConnectionStringBuilder ConstructConnectionString(
                 string instance,
                 string user,
-                string password
+                string password,
+                string serverType
             )
         {
-            return ConstructConnectionString(instance, user, password, 0);
+            return ConstructConnectionString(instance, user, password, 0, serverType);
         }
 
         public static SqlConnectionStringBuilder ConstructConnectionString(
                 string instance,
                 string user,
                 string password,
-                int timeout
+                int timeout,
+                string serverType
             )
         {
             Debug.Assert(instance != null && instance.Length != 0);
@@ -135,11 +137,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
             // Setup data source and application name.
             SqlConnectionStringBuilder bldr = new SqlConnectionStringBuilder();
             bldr.DataSource = CreateSafeDatabaseNameForConnectionString(instance);
-            
+
             bldr.ApplicationName = Constants.SqlAppName;
             if (timeout > 0)
             {
-                bldr.ConnectTimeout = timeout; 
+                bldr.ConnectTimeout = timeout;
             }
 
             // If user is specified then its not integrated security,
@@ -150,10 +152,26 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 bldr.UserID = user;
                 bldr.Password = password;
             }
-
+            //string serverType = Utility.Activity.TypeServerOnPremise;
+            if (serverType == Utility.Activity.TypeServerAzureDB)
+            {
+                ConstructConnectionString(bldr, instance, user, password, timeout, serverType);
+                //bldr.ConnectionString = @"Server=tcp:sqlsecureacc.database.windows.net,1433;Initial Catalog=SSAccolite;Persist Security Info=False;User ID=Administartro;Password=ACCO@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            }
             return bldr;
         }
 
+        public static void ConstructConnectionString(
+               SqlConnectionStringBuilder bldr,
+               string instance,
+               string user,
+               string password,
+               int timeout,
+               string serverType
+           )
+        {
+            bldr.ConnectionString = "Server="+ instance+";Persist Security Info=False;User ID="+user+";Password="+password+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout="+timeout+";";
+        }
         /// <summary>
         /// Parses the connection version and returns an enum value.
         /// </summary>

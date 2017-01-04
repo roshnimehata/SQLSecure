@@ -12,16 +12,18 @@ namespace Idera.SQLsecure.UI.Console.Data
         private string m_password;
         private string m_connectionName;
         private bool m_windowsAuth;
+        private string m_serverType;
 
         #endregion
 
-        public ServerInfo(ServerVersion version, bool windowsAuth, string login, string password, string connectionName)
+        public ServerInfo(ServerVersion version, bool windowsAuth, string login, string password, string connectionName,string serverType)
         {
             this.m_connectionName = connectionName;
             this.m_login = login;
             this.m_password = password;
             this.m_version = version;
             this.m_windowsAuth = windowsAuth;
+            this.m_serverType = serverType;
         }
 
         public ServerVersion version
@@ -47,6 +49,11 @@ namespace Idera.SQLsecure.UI.Console.Data
         public bool windowsAuth
         {
             get { return m_windowsAuth; }
+        }
+
+        public string serverType
+        {
+            get { return m_serverType; }
         }
     }
 }

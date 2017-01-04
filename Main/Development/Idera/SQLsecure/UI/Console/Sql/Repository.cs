@@ -871,7 +871,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             int m_SchemaVersion = 0;
             try
             {
-                SqlConnectionStringBuilder m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null);
+                SqlConnectionStringBuilder m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null, Utility.Activity.TypeServerOnPremise);
                 using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
                 {
                     connection.Open();

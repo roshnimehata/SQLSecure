@@ -428,7 +428,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void _comboBox_ServerType_SelectedIndexChanged(object sender,
         System.EventArgs e)
         {
-            
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_WizardRegisterSQLServer));
             ComboBox comboBox = (ComboBox)sender;
             if (comboBox.SelectedItem == Utility.Activity.TypeServerOnPremise)
             {
@@ -436,6 +436,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 _btn_BrowseServers.Visible = true;
                 _lbl_PortNumber.Visible = false;
                 _txtbx_PortNumber.Visible = false;
+                radioButton_WindowsAuth.Text = "Windows Authentication";
+                label4.Text = "&Windows User:";
+                _lbl_WindowsUser.Text = "&Windows User:";
+                radioButton_SQLServerAuth.Checked = false;
+                _grpbx_WindowsGMCredentials.Text = "Windows Credentials to gather Operating System and Active Directory objects";
+                label2.Text = resources.GetString("label2.Text");
             }
             else 
             {
@@ -443,11 +449,24 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 _btn_BrowseServers.Visible = false;
                 _lbl_PortNumber.Visible = true;
                 _txtbx_PortNumber.Visible = true;
+                radioButton_WindowsAuth.Text = "Azure Active Directory";
+                label4.Text = "&Azure AD Account:";
+                _lbl_WindowsUser.Text = "&Azure AD Account:";
+                radioButton_SQLServerAuth.Checked = true;
+                _grpbx_WindowsGMCredentials.Text = "Azure Active Directory to gather Operating System and Active Directory objects";
+                label2.Text = resources.GetString("AzureVMLabel2.Text");
+                
             }
             if(comboBox.SelectedItem == Utility.Activity.TypeServerAzureDB)
             {
+                _grpbx_WindowsGMCredentials.Text = "Azure Active Directory Credentials to gather Active Directory objects";
+                label2.Text = resources.GetString("AzureDbLabel2.Text");
                 this._page_Credentials.NextPage = this._PageTags;
             }
+            //if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureDB || _comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)
+            //{
+               
+            //}
         }
         #region Select Server Page
 
@@ -541,13 +560,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     m_ConnectionPort = null;
                 }
             }
-            if(_comboBox_ServerType.SelectedItem== Utility.Activity.TypeServerAzureDB || _comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)
-            {
-                radioButton_WindowsAuth.Text = "Azure Active Directory";
-                label4.Text = "&Azure AD Account:";
-                _lbl_WindowsUser.Text = "&Azure AD Account:";
-                radioButton_SQLServerAuth.Checked = true;
-            }
+           
             // We have to get the server properties (machine & instance) from the
             // specified SQL Server.   If agent service credentials are being used
             // for data collection, connect to the registered SQL Server and get
@@ -824,7 +837,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     {
                         msgBldr.Append("\n\n");
                     }
-                    msgBldr.Append(Utility.ErrorMsgs.WindowsUserNotSpecifiedMsg);
+                    if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerOnPremise)
+                    {
+                        msgBldr.Append(Utility.ErrorMsgs.WindowsUserNotSpecifiedMsg);
+                    }
+                    else
+                    {
+                        msgBldr.Append(Utility.ErrorMsgs.AzureADAccountNotSpecifiedMsg);
+
+                    }
                     isOk = false;
                     allowRegisterAnyway = true;
                     isWindowsCredentails = false;
@@ -955,7 +976,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             showWorking.UpdateText(string.Format("Connecting to Server {0}...", machine));
                             string errorMsg;
                             Server.ServerAccess sa;
-                            if (_comboBox_ServerType.SelectedItem== Utility.Activity.TypeServerOnPremise)
+                            if (_comboBox_ServerType.SelectedItem!= Utility.Activity.TypeServerAzureDB)
                             {
                                 sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
                             }
@@ -1076,8 +1097,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
             m_Filter = new Sql.DataCollectionFilter(m_Connection, "Default rule", "Rule created when the server was registered");
 
             ServerVersion parsedVersion = Sql.SqlHelper.ParseVersion(m_Version);
+            
             Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedVersion, radioButton_WindowsAuth.Checked,
-                textBox_SQLWindowsUser.Text, textBox_SQLWindowsPassword.Text, m_Connection);
+                textBox_SQLWindowsUser.Text, textBox_SQLWindowsPassword.Text, m_Connection,(string)_comboBox_ServerType.SelectedItem);
             filterSelection1.Initialize(m_Filter, serverInfo);
         }
 
