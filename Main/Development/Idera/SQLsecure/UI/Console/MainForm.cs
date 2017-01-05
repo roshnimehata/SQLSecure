@@ -1212,10 +1212,14 @@ namespace Idera.SQLsecure.UI.Console
 
                     if (isConnect)
                     {
+                        if (!isRepositoryUpdated())
+                        {
+                            DeployRepositoryScripts(UserName, Password, true);
+                        }
+
                         if (connectToServer(dlg.Server))
                         {
-
-                          //  DeployRepositoryScripts(null,null,true);
+                              //  DeployRepositoryScripts(null,null,true);
                                 //ExecuteUpdateQuery();
                                 bConnected = true;
                                 bConnecting = false;
@@ -1232,7 +1236,8 @@ namespace Idera.SQLsecure.UI.Console
                                 // Refresh explorer bar.
                                 refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
                                                                      // else it will stay on the current view if valid
-                            #endregion
+                                #endregion
+                            
                         }
                     }
                     //SQLSecure 3.1 (Mitul Kapoor) - functionality for "Deploy Repository". 
@@ -1318,8 +1323,21 @@ namespace Idera.SQLsecure.UI.Console
                 m_SchemaVersion = Program.gController.Repository.getRepositoryVersion(Server_Name);
                 if (m_SchemaVersion < Utility.Constants.SchemaVersion)
                 {
-                    DeployRepositoryScripts(UserName,Password,true);
-                    //ExecuteUpdateQuery();
+                    ////////////////////////////
+                    string message = "Do you want to upgrade your repository?";
+                    string title = "UPGRADE YOUR REPOSITORY";
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+
+                    DialogResult result = MessageBox.Show(message, title, buttons);
+                    if (result == DialogResult.Yes)
+                    {
+                        DeployRepositoryScripts(UserName, Password, true);                        
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
+                    ///////////////////////////////
                     return false;
                 }
             }catch(Exception e)
@@ -1348,7 +1366,14 @@ namespace Idera.SQLsecure.UI.Console
                     MsgBox.ShowError("Incorrect Credentials","User name or password incorrect.");
                     return;
                 }
-                p.StartInfo.Arguments = Server_Name + " " + isUpgradeRequested + " " + Username + " " + Password;
+                if(Username == null || Password == null)
+                {
+                    p.StartInfo.Arguments = Server_Name + " " + isUpgradeRequested;
+                }else
+                {
+                    p.StartInfo.Arguments = Server_Name + " " + isUpgradeRequested + " " + Username + " " + Password;
+                }
+                
             }
                 
            // }else
