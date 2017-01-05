@@ -153,6 +153,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 this.username.Enabled = true;
                 this.password.Enabled = true;
                 areCredentialsRequired = true;
+                if(this.username.Text == null || this.username.Text == "")
+                {
+                    this._button_OK.Enabled = false;
+                }else
+                {
+                    this._button_OK.Enabled = true;
+                }
             }
             else
             {
@@ -166,6 +173,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void label3_Click(object sender, EventArgs e)
         {
 
+        }
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            //
+            // This changes the main window text when you type into the TextBox.
+            //
+            if (this.username.Text != null || this.username.Text != "")
+                this._button_OK.Enabled = true;
         }
     }
 }

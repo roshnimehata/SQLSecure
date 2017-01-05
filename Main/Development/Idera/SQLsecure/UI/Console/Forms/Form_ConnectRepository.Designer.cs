@@ -85,7 +85,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._label1.Name = "_label1";
             this._label1.Size = new System.Drawing.Size(65, 13);
             this._label1.TabIndex = 0;
-            this._label1.Text = "&SQL Server:";
+            this._label1.Text = "SQL Server:";
             // 
             // _textBox_Server
             // 
@@ -166,7 +166,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.checkBox1.Name = "credentials_required";
             this.checkBox1.Size = new System.Drawing.Size(175, 17);
             this.checkBox1.TabIndex = 7;
-            this.checkBox1.Text = "SQL Authentication / Azure VM";
+            this.checkBox1.Text = "SQL Authentication";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
@@ -177,7 +177,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._username_label.Name = "_username_label";
             this._username_label.Size = new System.Drawing.Size(60, 13);
             this._username_label.TabIndex = 8;
-            this._username_label.Text = "User Name";
+            this._username_label.Text = "User Name : ";
             // 
             // _password_label
             // 
@@ -187,7 +187,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._password_label.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this._password_label.Size = new System.Drawing.Size(53, 13);
             this._password_label.TabIndex = 9;
-            this._password_label.Text = "Password";
+            this._password_label.Text = "Password : ";
             this._password_label.Click += new System.EventHandler(this.label3_Click);
             // 
             // username
@@ -197,6 +197,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.username.Enabled = false;
             this.username.Size = new System.Drawing.Size(269, 20);
             this.username.TabIndex = 10;
+            this.username.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // password
             // 
