@@ -179,7 +179,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             //
             // This changes the main window text when you type into the TextBox.
             //
-            if (this.username.Text != null || this.username.Text != "")
+            if(!String.IsNullOrEmpty(this.username.Text))
                 this._button_OK.Enabled = true;
         }
     }

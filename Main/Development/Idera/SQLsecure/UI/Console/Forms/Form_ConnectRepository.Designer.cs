@@ -28,8 +28,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            Infragistics.Win.ValueListItem valueListItem1 = new Infragistics.Win.ValueListItem();
-            Infragistics.Win.ValueListItem valueListItem2 = new Infragistics.Win.ValueListItem();
+            Infragistics.Win.ValueListItem connect_repository = new Infragistics.Win.ValueListItem();
+            Infragistics.Win.ValueListItem deploy_repository = new Infragistics.Win.ValueListItem();
             this._label1 = new System.Windows.Forms.Label();
             this._textBox_Server = new System.Windows.Forms.TextBox();
             this._button_Lookup = new Infragistics.Win.Misc.UltraButton();
@@ -38,11 +38,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.label1 = new System.Windows.Forms.Label();
             this.ultraButton_Help = new Infragistics.Win.Misc.UltraButton();
             this.action_choice = new Infragistics.Win.UltraWinEditors.UltraOptionSet();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            //SQLSecure - (Mitul Kapoor) - label and textbox for usernsame and password.
+            this.is_sql_auth_required = new System.Windows.Forms.CheckBox();
             this._username_label = new System.Windows.Forms.Label();
             this._password_label = new System.Windows.Forms.Label();
             this.username = new System.Windows.Forms.TextBox();
             this.password = new System.Windows.Forms.TextBox();
+            //
             this._bfd_ButtonPanel.SuspendLayout();
             this._bf_MainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.action_choice)).BeginInit();
@@ -65,7 +67,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._bf_MainPanel.Controls.Add(this.username);
             this._bf_MainPanel.Controls.Add(this._password_label);
             this._bf_MainPanel.Controls.Add(this._username_label);
-            this._bf_MainPanel.Controls.Add(this.checkBox1);
+            this._bf_MainPanel.Controls.Add(this.is_sql_auth_required);
             this._bf_MainPanel.Controls.Add(this.action_choice);
             this._bf_MainPanel.Controls.Add(this.label1);
             this._bf_MainPanel.Controls.Add(this._label1);
@@ -146,13 +148,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // action_choice
             // 
             this.action_choice.ItemOrigin = new System.Drawing.Point(10, 10);
-            valueListItem1.DataValue = "Connect";
-            valueListItem1.DisplayText = "Connect to Repository";
-            valueListItem2.DataValue = "Deploy";
-            valueListItem2.DisplayText = "Deploy Repository";
+            connect_repository.DataValue = "Connect";
+            connect_repository.DisplayText = "Connect to Repository";
+            deploy_repository.DataValue = "Deploy";
+            deploy_repository.DisplayText = "Deploy Repository";
             this.action_choice.Items.AddRange(new Infragistics.Win.ValueListItem[] {
-            valueListItem1,
-            valueListItem2});
+            connect_repository,
+            deploy_repository});
             this.action_choice.Location = new System.Drawing.Point(0, 0);
             this.action_choice.Margin = new System.Windows.Forms.Padding(20);
             this.action_choice.Name = "action_choice";
@@ -161,14 +163,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // checkBox1
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(20, 113);
-            this.checkBox1.Name = "credentials_required";
-            this.checkBox1.Size = new System.Drawing.Size(175, 17);
-            this.checkBox1.TabIndex = 7;
-            this.checkBox1.Text = "SQL Authentication";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.is_sql_auth_required.AutoSize = true;
+            this.is_sql_auth_required.Location = new System.Drawing.Point(20, 113);
+            this.is_sql_auth_required.Name = "credentials_required";
+            this.is_sql_auth_required.Size = new System.Drawing.Size(175, 17);
+            this.is_sql_auth_required.TabIndex = 7;
+            this.is_sql_auth_required.Text = "SQL Authentication";
+            this.is_sql_auth_required.UseVisualStyleBackColor = true;
+            this.is_sql_auth_required.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // _username_label
             // 
@@ -249,7 +251,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private System.Windows.Forms.Label label1;
         private Infragistics.Win.Misc.UltraButton ultraButton_Help;
         private Infragistics.Win.UltraWinEditors.UltraOptionSet action_choice;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox is_sql_auth_required;
         private System.Windows.Forms.Label _password_label;
         private System.Windows.Forms.Label _username_label;
         private System.Windows.Forms.TextBox password;

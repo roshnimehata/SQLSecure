@@ -388,10 +388,14 @@ Do you wish to remove SQL Server now?";
         public const String ScriptNotExist = "Some of the script(s) required to update repository do not exist. Please contact Idera support team.";
         public const String ScriptExecutionFailed = "Some of the script(s) required to update repository failed to execute. Please check log file for more information or contact Idera support team.";
 
+        //incorrect credentials
+        public const String IncorrectCredentialsTag = "Incorrect credentials";
+        public const String IncorrectCredentials = "Username or password incorrect";
 
         //Update Repository
         public const String UpgradeSchemaTag = "Upgrade your Schema";
-        public const String UpgradeRepository = "Please upgrade your Repository.";
+        public const String UpgradeRepositoryTag = "Upgrade your Repository";
+        public const String UpgradeRepository = "Do you wish to upgrade your repository?";
         public const String RepositoryExistTag = "Repository Already Exists.";
         public const string RepositoryExists = "Repository already exists";
     }
