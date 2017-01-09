@@ -47,7 +47,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         #endregion
 
         #region Fields
-
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_SqlServerProperties));
         private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Forms.Form_WizardRegisterSQLServer");
 
         private RequestedOperation m_RequestedOperation;
@@ -143,11 +143,29 @@ namespace Idera.SQLsecure.UI.Console.Forms
             _lbl_SQLServerVersionVal.Text = m_RegisteredServer.VersionFriendlyLong;
             _lbl_SQLServerEditionVal.Text = m_RegisteredServer.Edition;
             _lbl_ReplicationVal.Text = m_RegisteredServer.ReplicationEnabled;
-            _lbl_SaVal.Text = m_RegisteredServer.SaPasswordEmpty;
+            if(type_of_server == "On-Premise SQL Server")
+            {
+                _lbl_SaVal.Text = m_RegisteredServer.SaPasswordEmpty;
+                _lbl_DcVal.Text = m_RegisteredServer.ServerIsDomainController;
+            }
+            else
+            {
+                _grpbx_WindowsGMCredentials.Text = "Azure AD Credentials to gather Operating System and Active Directory objects";
+                label10.Text = resources.GetString("label10.TextAzure");
+                ultraTabControl_ServerProperties.Tabs.RemoveAt(2);
+                label2.Text = "Azure AD Account";
+                radioButton_WindowsAuth.Text = "“Azure Active Directory";
+                _lbl_Replication.Text = "Geo-Replication Enabled";
+                _lbl_SaVal.Hide();
+                _lbl_Sa.Hide();
+                _lbl_DcVal.Hide();
+                _lbl_Dc.Hide();
+            }
+            
 
             _lbl_OsServerVal.Text = m_RegisteredServer.ServerName;
             _lbl_WindowsOSVal.Text = m_RegisteredServer.OS;
-            _lbl_DcVal.Text = m_RegisteredServer.ServerIsDomainController;
+            
 
             _lbl_CurrentSnapshotTimeVal.Text = m_RegisteredServer.CurrentCollectionTime;
             _lbl_CurrentSnapshotStatusVal.Text = m_RegisteredServer.CurrentCollectionStatus;
@@ -1561,5 +1579,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
         }
 
         #endregion
+
+        private void _grpbx_WindowsGMCredentials_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

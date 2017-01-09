@@ -110,8 +110,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _txtbx_Name
             // 
-            this._txtbx_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._txtbx_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._txtbx_Name.Location = new System.Drawing.Point(83, 5);
             this._txtbx_Name.Name = "_txtbx_Name";
             this._txtbx_Name.Size = new System.Drawing.Size(452, 20);
@@ -120,8 +120,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _grpbx_FilterModificationInfo
             // 
-            this._grpbx_FilterModificationInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._grpbx_FilterModificationInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._grpbx_FilterModificationInfo.BackColor = System.Drawing.Color.Transparent;
             this._grpbx_FilterModificationInfo.Controls.Add(this._lbl_LastModifiedByLbl);
             this._grpbx_FilterModificationInfo.Controls.Add(this._lbl_LastModifiedBy);
@@ -160,8 +160,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_CreatedOn
             // 
-            this._lbl_CreatedOn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_CreatedOn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_CreatedOn.AutoEllipsis = true;
             this._lbl_CreatedOn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_CreatedOn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -174,8 +174,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_LastModifiedOnLbl
             // 
-            this._lbl_LastModifiedOnLbl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_LastModifiedOnLbl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_LastModifiedOnLbl.AutoSize = true;
             this._lbl_LastModifiedOnLbl.Location = new System.Drawing.Point(294, 16);
             this._lbl_LastModifiedOnLbl.Name = "_lbl_LastModifiedOnLbl";
@@ -185,8 +185,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_CreatedOnLbl
             // 
-            this._lbl_CreatedOnLbl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_CreatedOnLbl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_CreatedOnLbl.AutoSize = true;
             this._lbl_CreatedOnLbl.Location = new System.Drawing.Point(294, 39);
             this._lbl_CreatedOnLbl.Name = "_lbl_CreatedOnLbl";
@@ -196,8 +196,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_LastModifiedOn
             // 
-            this._lbl_LastModifiedOn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_LastModifiedOn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_LastModifiedOn.AutoEllipsis = true;
             this._lbl_LastModifiedOn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_LastModifiedOn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -231,8 +231,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _txtbx_Description
             // 
-            this._txtbx_Description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._txtbx_Description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._txtbx_Description.Location = new System.Drawing.Point(83, 30);
             this._txtbx_Description.Name = "_txtbx_Description";
             this._txtbx_Description.Size = new System.Drawing.Size(452, 20);
@@ -261,9 +261,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.filterSelection1);
             this.panel1.Location = new System.Drawing.Point(10, 136);
             this.panel1.Name = "panel1";
@@ -278,6 +278,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.filterSelection1.Name = "filterSelection1";
             this.filterSelection1.Size = new System.Drawing.Size(525, 392);
             this.filterSelection1.TabIndex = 0;
+            this.filterSelection1.Load += new System.EventHandler(this.filterSelection1_Load);
             // 
             // Form_FilterProperties
             // 
@@ -289,8 +290,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.Name = "Form_FilterProperties";
             this.Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.Report_DataCollectionFilters_48;
             this.Text = "Filter Rule Properties - ";
-            this.Load += new System.EventHandler(this.Form_FilterProperties_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_FilterProperties_FormClosing);
+            this.Load += new System.EventHandler(this.Form_FilterProperties_Load);
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.Form_FilterProperties_HelpRequested);
             this._bfd_ButtonPanel.ResumeLayout(false);
             this._bf_MainPanel.ResumeLayout(false);

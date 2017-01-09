@@ -29,6 +29,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private void InitializeComponent()
         {
             this.groupBoxMainServerSelection = new System.Windows.Forms.GroupBox();
+            this.radioButton2016 = new System.Windows.Forms.RadioButton();
             this.radioButton2014 = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.radioButton2012 = new System.Windows.Forms.RadioButton();
@@ -38,13 +39,14 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.radioButton2000 = new System.Windows.Forms.RadioButton();
             this.radioButtonAll = new System.Windows.Forms.RadioButton();
             this.radioButtonManual = new System.Windows.Forms.RadioButton();
-            this.radioButton2016 = new System.Windows.Forms.RadioButton();
+            this.radioButtonAzure = new System.Windows.Forms.RadioButton();
             this.groupBoxMainServerSelection.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ultraListViewServers)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxMainServerSelection
             // 
+            this.groupBoxMainServerSelection.Controls.Add(this.radioButtonAzure);
             this.groupBoxMainServerSelection.Controls.Add(this.radioButton2016);
             this.groupBoxMainServerSelection.Controls.Add(this.radioButton2014);
             this.groupBoxMainServerSelection.Controls.Add(this.panel1);
@@ -62,6 +64,18 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.groupBoxMainServerSelection.TabIndex = 0;
             this.groupBoxMainServerSelection.TabStop = false;
             this.groupBoxMainServerSelection.Text = "Select SQL Servers to include in this Policy";
+            // 
+            // radioButton2016
+            // 
+            this.radioButton2016.AutoSize = true;
+            this.radioButton2016.ForeColor = System.Drawing.Color.Navy;
+            this.radioButton2016.Location = new System.Drawing.Point(449, 33);
+            this.radioButton2016.Name = "radioButton2016";
+            this.radioButton2016.Size = new System.Drawing.Size(170, 17);
+            this.radioButton2016.TabIndex = 10;
+            this.radioButton2016.TabStop = true;
+            this.radioButton2016.Text = "All SQL Server 2016 Instances";
+            this.radioButton2016.UseVisualStyleBackColor = true;
             // 
             // radioButton2014
             // 
@@ -179,17 +193,17 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.radioButtonManual.UseVisualStyleBackColor = true;
             this.radioButtonManual.CheckedChanged += new System.EventHandler(this.radioButtonManual_CheckedChanged);
             // 
-            // radioButton2016
+            // radioButtonAzure
             // 
-            this.radioButton2016.AutoSize = true;
-            this.radioButton2016.ForeColor = System.Drawing.Color.Navy;
-            this.radioButton2016.Location = new System.Drawing.Point(449, 33);
-            this.radioButton2016.Name = "radioButton2016";
-            this.radioButton2016.Size = new System.Drawing.Size(170, 17);
-            this.radioButton2016.TabIndex = 10;
-            this.radioButton2016.TabStop = true;
-            this.radioButton2016.Text = "All SQL Server 2016 Instances";
-            this.radioButton2016.UseVisualStyleBackColor = true;
+            this.radioButtonAzure.AutoSize = true;
+            this.radioButtonAzure.ForeColor = System.Drawing.Color.Navy;
+            this.radioButtonAzure.Location = new System.Drawing.Point(449, 56);
+            this.radioButtonAzure.Name = "radioButtonAzure";
+            this.radioButtonAzure.Size = new System.Drawing.Size(139, 17);
+            this.radioButtonAzure.TabIndex = 11;
+            this.radioButtonAzure.TabStop = true;
+            this.radioButtonAzure.Text = "All Azure SQL Database";
+            this.radioButtonAzure.UseVisualStyleBackColor = true;
             // 
             // ControlPolicyAddServers
             // 
@@ -220,5 +234,6 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioButton2014;
         private System.Windows.Forms.RadioButton radioButton2016;
+        private System.Windows.Forms.RadioButton radioButtonAzure;
     }
 }

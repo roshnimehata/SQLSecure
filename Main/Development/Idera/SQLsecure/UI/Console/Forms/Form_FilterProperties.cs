@@ -25,7 +25,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
         #endregion
 
         #region Helpers
-
+       // public static string type_of_server = "On-Premise SQL Server";
+        public static string type_of_server = "";
         private void showHelpTopic()
         {
             Program.gController.ShowTopic(Utility.Help.FilterPropertiesHelpTopic);
@@ -237,5 +238,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
         }
 
         #endregion
+
+        private void filterSelection1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
