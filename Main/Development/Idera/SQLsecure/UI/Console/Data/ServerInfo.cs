@@ -1,4 +1,5 @@
-﻿using Idera.SQLsecure.UI.Console.Sql;
+﻿using Idera.SQLsecure.UI.Console.Import.Models;
+using Idera.SQLsecure.UI.Console.Sql;
 using System;
 
 namespace Idera.SQLsecure.UI.Console.Data
@@ -13,6 +14,7 @@ namespace Idera.SQLsecure.UI.Console.Data
         private string m_connectionName;
         private bool m_windowsAuth;
         private string m_serverType;
+        private SqlServerAuthenticationType m_authType;
 
         #endregion
 
@@ -24,6 +26,21 @@ namespace Idera.SQLsecure.UI.Console.Data
             this.m_version = version;
             this.m_windowsAuth = windowsAuth;
             this.m_serverType = serverType;
+        }
+
+        public ServerInfo(ServerVersion version, bool windowsAuth, string login, string password, string connectionName, string serverType, SqlServerAuthenticationType authType)
+        {
+            this.m_connectionName = connectionName;
+            this.m_login = login;
+            this.m_password = password;
+            this.m_version = version;
+            this.m_windowsAuth = windowsAuth;
+            if(String.IsNullOrEmpty(serverType))
+            {
+                throw new Exception("server type should not be null or empty");
+            }
+            this.m_serverType = serverType;
+            this.m_authType = authType;
         }
 
         public ServerVersion version

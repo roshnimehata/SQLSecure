@@ -432,10 +432,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             ComboBox comboBox = (ComboBox)sender;
             if (comboBox.SelectedItem == Utility.Activity.TypeServerOnPremise)
             {
-                _lbl_Server.Text = "&Server:";
                 _btn_BrowseServers.Visible = true;
-                _lbl_PortNumber.Visible = false;
-                _txtbx_PortNumber.Visible = false;
+                checkBox_UseSameAuth.Text = "Use same Windows Authentication as above";
                 radioButton_WindowsAuth.Text = "Windows Authentication";
                 label4.Text = "&Windows User:";
                 _lbl_WindowsUser.Text = "&Windows User:";
@@ -445,10 +443,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
             }
             else 
             {
-                _lbl_Server.Text = "&FQDN:";
+              
                 _btn_BrowseServers.Visible = false;
-                _lbl_PortNumber.Visible = true;
-                _txtbx_PortNumber.Visible = true;
+                checkBox_UseSameAuth.Text = "Use same Azure AD Authentication as above";
                 radioButton_WindowsAuth.Text = "Azure Active Directory";
                 label4.Text = "&Azure AD Account:";
                 _lbl_WindowsUser.Text = "&Azure AD Account:";
@@ -462,11 +459,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 _grpbx_WindowsGMCredentials.Text = "Azure Active Directory Credentials to gather Active Directory objects";
                 label2.Text = resources.GetString("AzureDbLabel2.Text");
                 this._page_Credentials.NextPage = this._PageTags;
+                this._PageTags.PreviousPage = this._page_Credentials;
             }
-            //if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureDB || _comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)
-            //{
-               
-            //}
+            
         }
         #region Select Server Page
 
@@ -802,7 +797,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 }
 
                 // Check if the account format is correct.
-                if (isOk)
+                if (isOk && _comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerOnPremise)
                 {
                     string domain = string.Empty;
                     string user = string.Empty;
@@ -880,7 +875,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         login = textbox_SqlLogin.Text;
                         password = textbox_SqlLoginPassword.Text;
                     }
-                    else
+                    else if(radioButton_WindowsAuth.Checked &&_comboBox_ServerType.SelectedItem==Utility.Activity.TypeServerOnPremise)
                     {
                         // Impersonate ...
                         try
@@ -913,8 +908,17 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             {
                                 serverName = _txtbx_Server.Text + "," + _txtbx_PortNumber.Text;
                             }
-                            Sql.SqlServer.GetSqlServerProperties(serverName, login, password,
-                                                                    out version, out machine, out instance, out connection,(string) _comboBox_ServerType.SelectedItem);
+                            bool azureADAuth = (radioButton_WindowsAuth.Checked && _comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerOnPremise) ? true : false;
+                            if (azureADAuth)
+                            {
+                                Sql.SqlServer.GetSqlServerProperties(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text,
+                                                                        out version, out machine, out instance, out connection, (string)_comboBox_ServerType.SelectedItem, azureADAuth);
+                            }
+                            else
+                            {
+                                Sql.SqlServer.GetSqlServerProperties(serverName, login, password,
+                                                                        out version, out machine, out instance, out connection, (string)_comboBox_ServerType.SelectedItem, azureADAuth);
+                            }
                             if (targetImpersonationContext != null)
                             {
                                 targetImpersonationContext.Undo();
@@ -985,7 +989,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                 sa = Server.CheckAzureServerAccess(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
                             }
                             
-                            //                            Server s = new Server(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, null);
+                            
                             if (sa != Server.ServerAccess.OK)
                             {
                                 isOk = false;

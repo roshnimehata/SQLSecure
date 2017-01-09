@@ -289,6 +289,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 m_FilterObjects.Add(RuleObjectType.XMLSchemaCollection, filterObj);
 
                 // Full Text Catalogs
+                //Removing full text catalogs while registering azure DB
                 if(m_ServerInfo.serverType != Utility.Activity.TypeServerAzureDB)
                 {
                     filterObj = new FilterObject(RuleObjectType.FullTextCatalog, RuleScope.All, matchAll);
@@ -374,6 +375,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             StringBuilder rtfDisplay = new StringBuilder();
             rtfDisplay.Append(RuleHeader);
+            //Removing extended stored procedure statement from Register flow
             if (m_ServerInfo.serverType != Utility.Activity.TypeServerAzureDB)
             {
                 rtfDisplay.Append(AlwaysCollected);

@@ -118,10 +118,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 string instance,
                 string user,
                 string password,
-                string serverType
+                string serverType,
+                bool azureADAuth=false
             )
         {
-            return ConstructConnectionString(instance, user, password, 0, serverType);
+            return ConstructConnectionString(instance, user, password, 0, serverType, azureADAuth);
         }
 
         public static SqlConnectionStringBuilder ConstructConnectionString(
@@ -129,7 +130,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 string user,
                 string password,
                 int timeout,
-                string serverType
+                string serverType,
+                bool azureADAuth
             )
         {
             Debug.Assert(instance != null && instance.Length != 0);
@@ -153,24 +155,38 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 bldr.Password = password;
             }
             //string serverType = Utility.Activity.TypeServerOnPremise;
-            if (serverType == Utility.Activity.TypeServerAzureDB)
+            if (serverType == Utility.Activity.TypeServerAzureDB ||(serverType==Utility.Activity.TypeServerAzureVM && azureADAuth))
             {
-                ConstructConnectionString(bldr, instance, user, password, timeout, serverType);
-                //bldr.ConnectionString = @"Server=tcp:sqlsecureacc.database.windows.net,1433;Initial Catalog=SSAccolite;Persist Security Info=False;User ID=Administartro;Password=ACCO@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+                ConstructConnectionString(bldr, instance, user, password, timeout, serverType,azureADAuth);
+                
             }
+            
             return bldr;
         }
 
+        /// <summary>
+        /// Constructs connection strings for azure DB connection and for Azure AD
+        /// </summary>
+        /// <param name="serverType">server type : on premise,azure DB, SQL server on Azure VM</param>
+        /// <param name="azureADAuth">bool value : true when it is for azure Ad</param>
         public static void ConstructConnectionString(
                SqlConnectionStringBuilder bldr,
                string instance,
                string user,
                string password,
                int timeout,
-               string serverType
+               string serverType,
+               bool azureADAuth
            )
         {
-            bldr.ConnectionString = "Server="+ instance+";Persist Security Info=False;User ID="+user+";Password="+password+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout="+timeout+";";
+            if (!azureADAuth)
+            {
+                bldr.ConnectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=" + timeout + ";";
+            }
+            else
+            {
+                bldr.ConnectionString = @"Data Source=" + instance + "; Authentication=Active Directory Password; UID=" + user + "; PWD=" + password;
+            }
         }
         /// <summary>
         /// Parses the connection version and returns an enum value.

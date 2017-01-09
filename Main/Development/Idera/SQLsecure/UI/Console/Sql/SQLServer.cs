@@ -32,7 +32,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 out string machineName,
                 out string instanceName,
                 out string fullName,
-                string serverType
+                string serverType,
+                bool azureADAuth=false
             )
         {
             // Init return.
@@ -41,7 +42,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             instanceName = string.Empty;
             fullName = string.Empty;
 
-            var serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword,serverType);
+            var serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword,serverType,azureADAuth);
 
             if (serverProperties.IsServerInAoag)
             {
@@ -51,7 +52,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 var isLocalhost = string.IsNullOrEmpty(serverProperties.LocalNetAddress);
                 var isWeOnWantedNode = serverProperties.ClientNetAddress == serverProperties.LocalNetAddress;
                 var isConnectionDirectlyToTheNode = isLocalhost || isWeOnWantedNode ||
-                                                    TryGetSqlServerProperties(tcpServerName, sqlLogin, sqlPassword, out nodeProperties,serverType) &&
+                                                    TryGetSqlServerProperties(tcpServerName, sqlLogin, sqlPassword, out nodeProperties,serverType,azureADAuth) &&
                                                     nodeProperties.LocalNetAddress == serverProperties.LocalNetAddress;
 
                 if (!isConnectionDirectlyToTheNode)
@@ -78,11 +79,23 @@ namespace Idera.SQLsecure.UI.Console.Sql
             
         }
 
-        public static bool TryGetSqlServerProperties(string instance, string sqlLogin, string sqlPassword, out SQLServerProperties serverProperties,string serverType)
+        public static string GetValueByName(string name)
+        {
+            switch (name)
+            {
+                case "OP": return Utility.Activity.TypeServerOnPremise;
+                case "ADB": return Utility.Activity.TypeServerAzureDB;
+                case "AVM": return Utility.Activity.TypeServerAzureVM;
+                default: return Utility.Activity.TypeServerOnPremise;
+
+            }
+        }
+
+        public static bool TryGetSqlServerProperties(string instance, string sqlLogin, string sqlPassword, out SQLServerProperties serverProperties,string serverType,bool azureADAuth)
         {
             try
             {
-                serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword,serverType);
+                serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword,serverType, azureADAuth);
                 return true;
             }
             catch
@@ -93,7 +106,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
-        public static SQLServerProperties GetSqlServerProperties(string instance, string sqlLogin, string sqlPassword,string serverType)
+        public static SQLServerProperties GetSqlServerProperties(string instance, string sqlLogin, string sqlPassword,string serverType, bool azureADAuth)
         {
             Debug.Assert(!string.IsNullOrEmpty(instance));
 
@@ -106,7 +119,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             instance = instance.Trim();
             var result = new SQLServerProperties();
-            var bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword,serverType);
+            var bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword,serverType,azureADAuth);
 
             using (var connection = new SqlConnection(bldr.ConnectionString))
             {
