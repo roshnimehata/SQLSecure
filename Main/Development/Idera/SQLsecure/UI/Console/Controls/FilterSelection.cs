@@ -29,6 +29,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string RuleHeader = @"{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss\fprq2\fcharset0 Arial;}{\f1\froman\fprq2\fcharset2 Symbol;}{\f2\fmodern\fprq1\fcharset0 Courier New;}{\f3\fswiss\fcharset0 Arial;}}
 {\*\generator Msftedit 5.41.15.1507;}\viewkind4\uc1\pard\f0\fs16 Collect SQL Server permissions for: \par";
         private const string AlwaysCollected = @"\pard\fi-360\li720\tx720\f1\'b7\    \f0  All Server objects, Database Security objects, Stored Procedures and Extended Stored Procedures \par";
+        private const string AlwaysCollectedForAzureDB = @"\pard\fi-360\li720\tx720\f1\'b7\    \f0  All Server objects, Database Security objects and Stored Procedures \par";
         private const string DatabasePrefix = @"\pard\fi-360\li720\tx720\f1\'b7\    \f0 ";
         private const string RuleFooter = @"\pard\f3\par}";
 
@@ -288,9 +289,12 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 m_FilterObjects.Add(RuleObjectType.XMLSchemaCollection, filterObj);
 
                 // Full Text Catalogs
-                filterObj = new FilterObject(RuleObjectType.FullTextCatalog, RuleScope.All, matchAll);
-                m_FilterObjects.Add(RuleObjectType.FullTextCatalog, filterObj);
-
+                //Removing full text catalogs while registering azure DB
+                if(m_ServerInfo.serverType != Utility.Activity.TypeServerAzureDB)
+                {
+                    filterObj = new FilterObject(RuleObjectType.FullTextCatalog, RuleScope.All, matchAll);
+                    m_FilterObjects.Add(RuleObjectType.FullTextCatalog, filterObj);
+                }
                 //Keys
                 filterObj = new FilterObject(RuleObjectType.Key, RuleScope.All, matchAll);
                 m_FilterObjects.Add(RuleObjectType.Key, filterObj);
@@ -371,7 +375,15 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             StringBuilder rtfDisplay = new StringBuilder();
             rtfDisplay.Append(RuleHeader);
-            rtfDisplay.Append(AlwaysCollected);
+            //Removing extended stored procedure statement from Register flow
+            if (m_ServerInfo.serverType != Utility.Activity.TypeServerAzureDB)
+            {
+                rtfDisplay.Append(AlwaysCollected);
+            }
+            else
+            {
+                rtfDisplay.Append(AlwaysCollectedForAzureDB);
+            }
 
             foreach (KeyValuePair<RuleObjectType, FilterObject> kvp in m_FilterObjects)
             {

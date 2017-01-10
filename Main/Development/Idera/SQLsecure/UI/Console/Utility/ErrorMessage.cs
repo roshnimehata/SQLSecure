@@ -90,7 +90,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string NameMatchInvalidCharsMsg = @"Name match string contains invalid characters.";
         public const string WarningEmailNoConfiguredTitle = @"Email Configuration";
         public const string WarningEmailNoConfiguredMsg = @"To successfully receive email notifications, you must also specify which email provider SQLsecure should use. Click Configure SMTP Email on the Tools menu.";
-
+        public const string AzureADAccountNotSpecifiedMsg = @"Azure AD account, for gathering AD objects, has been entered incorrectly. Make sure that the user is specified in Azure AD format and a password has been entered";
         // Policy
         public const string PolicyCaption = "Policy";
         public const string PolicyPropertiesCaption = "Policy Properties";

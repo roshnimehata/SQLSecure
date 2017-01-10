@@ -67,7 +67,7 @@ namespace Idera.SQLsecure.UI.Console.Import
 
                 var parsedSqlServerVersion = SqlHelper.ParseVersion(sqlServerVersion);
                 ServerInfo serverInfo = new ServerInfo(parsedSqlServerVersion, itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication,
-                itemToImport.UserName, itemToImport.Password, connectionName);
+                itemToImport.UserName, itemToImport.Password, connectionName,Utility.Activity.TypeServerOnPremise);
                 try
                 {
                     if (repository.RegisteredServers.Find(connectionName) != null)

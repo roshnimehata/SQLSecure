@@ -145,7 +145,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.label_Step2.Name = "label_Step2";
             this.label_Step2.Size = new System.Drawing.Size(294, 13);
             this.label_Step2.TabIndex = 9;
-            this.label_Step2.Text = "Collecting SQL Server environment details from the target OS";
+            this.label_Step2.Text = "Collecting SQL Server environment details from the target server";
             // 
             // pictureBox_Step3
             // 

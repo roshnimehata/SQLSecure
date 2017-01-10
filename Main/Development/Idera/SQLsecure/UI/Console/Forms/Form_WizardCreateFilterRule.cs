@@ -159,7 +159,7 @@ Description : ";
 
             Idera.SQLsecure.UI.Console.Sql.ServerVersion parsedVersion = Sql.SqlHelper.ParseVersion(m_RegisteredServer.Version);
             ServerInfo serverInfo = new ServerInfo(parsedVersion, m_RegisteredServer.SQLServerAuthType == "W", 
-                m_RegisteredServer.SqlLogin, m_RegisteredServer.SqlPassword, m_RegisteredServer.FullConnectionName);
+                m_RegisteredServer.SqlLogin, m_RegisteredServer.SqlPassword, m_RegisteredServer.FullConnectionName,Utility.Activity.TypeServerOnPremise);
             filterSelection1.Initialize(null, serverInfo);
 
             // Others page.

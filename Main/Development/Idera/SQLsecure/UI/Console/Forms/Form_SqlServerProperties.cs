@@ -506,7 +506,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             Debug.Assert(filter != null);
             ServerVersion parsedVersion = Sql.SqlHelper.ParseVersion(m_RegisteredServer.Version);
             Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedVersion, m_RegisteredServer.SQLServerAuthType == "W", 
-                m_RegisteredServer.SqlLogin, m_RegisteredServer.SqlPassword, m_RegisteredServer.FullConnectionName);
+                m_RegisteredServer.SqlLogin, m_RegisteredServer.SqlPassword, m_RegisteredServer.FullConnectionName, Utility.Activity.TypeServerOnPremise);
             if (Form_FilterProperties.Process(filter, serverInfo, FiltersInListView, m_IsEdit)
                         == DialogResult.OK)
             {
