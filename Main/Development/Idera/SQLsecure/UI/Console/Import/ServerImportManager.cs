@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Authentication;
 using System.Security.Principal;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
@@ -11,7 +10,7 @@ using Idera.SQLsecure.UI.Console.Import.Models;
 using Idera.SQLsecure.UI.Console.Sql;
 using Idera.SQLsecure.UI.Console.SQL;
 using Idera.SQLsecure.UI.Console.Utility;
-using Server = Idera.SQLsecure.Core.Accounts.Server;
+
 
 namespace Idera.SQLsecure.UI.Console.Import
 {
@@ -31,7 +30,7 @@ namespace Idera.SQLsecure.UI.Console.Import
             {
 
 
-                string sqlServerVersion, machine, instance, connectionName, errorMsg;
+                string sqlServerVersion, machine, instance, connectionName;
                 var errorList = new List<string>();
 
                 if (itemToImport.HasErrors())
@@ -44,21 +43,27 @@ namespace Idera.SQLsecure.UI.Console.Import
 
 
                 var serverNameParts = itemToImport.ServerName.Split(',');
-
-                var serverName = serverNameParts[0];
                 var serverPort = serverNameParts.Length > 1 ? Convert.ToInt32(serverNameParts[1]) : (int?)null;
                 ScheduleJob.ScheduleData scheduleData = new ScheduleJob.ScheduleData();
 
-                var isSuccessfulOperation =
+                //Validation of instance connection credentials
+                OperationResult<bool> operationResult =
                     ValidateCredentials(itemToImport, out sqlServerVersion, out machine, out instance,
-                        out connectionName, out errorMsg) &&
-                    CheckServerAccess(itemToImport, machine, out errorMsg);
+                        out connectionName);
 
-                if (!isSuccessfulOperation)
+                if (!operationResult.Value)
                 {
-                    settings.ChangeStatus(ImportStatusIcon.Error, string.Format("Not imported. {0}", errorMsg));
+                    settings.ChangeStatus(ImportStatusIcon.Error, string.Format("Not imported. {0}", operationResult.GetEventAllMessagesString()));
                     return false; //Skip importing of server
                 }
+
+                //Validation of server acces credentials (using WindowsCredentials)
+                //Add operation error if not successful but continue import operation
+                operationResult = CheckServerAccess(itemToImport, machine);
+                if (!operationResult.Value)
+                {
+                    errorList.AddRange(operationResult.GetEventMessagesStringList());
+                };
 
                 var parsedSqlServerVersion = SqlHelper.ParseVersion(sqlServerVersion);
                 ServerInfo serverInfo = new ServerInfo(parsedSqlServerVersion, itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication,
@@ -68,7 +73,10 @@ namespace Idera.SQLsecure.UI.Console.Import
                     if (repository.RegisteredServers.Find(connectionName) != null)
                     {
                         UpdateCredentials(itemToImport, repository, connectionName);
-                        settings.ChangeStatus(ImportStatusIcon.Imported, "Updated");
+                        if(errorList.Count>0)
+                            settings.ChangeStatus(ImportStatusIcon.Warning, string.Format("Updated with warnings: {0}", string.Join("\n", errorList.ToArray())));
+                        else 
+                            settings.ChangeStatus(ImportStatusIcon.Imported, "Updated");
                         return true;
                     }
                     RegisteredServer.AddServer(repository.ConnectionString,
@@ -90,7 +98,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                     return false;
                 }
                 var server = repository.RegisteredServers.Find(connectionName);
-               
+
                 //Add email notification
                 try
                 {
@@ -132,19 +140,23 @@ namespace Idera.SQLsecure.UI.Console.Import
 
                 try
                 {
-                   
-                     AddServerToTags(server.RegisteredServerId);
+
+                    AddServerToTags(server.RegisteredServerId);
                 }
                 catch (Exception ex)
                 {
                     errorList.Add(ex.Message);
                 }
 
-                settings.ChangeStatus(ImportStatusIcon.Imported,
-                    errorList.Count > 0
-                        ? string.Format("Imported with errors: {0}", string.Join("\n", errorList.ToArray()))
-                        : "Imported");
-                return isSuccessfulOperation;
+
+                var errorMessage = string.Join("\n", errorList.ToArray());
+                if (string.IsNullOrEmpty(errorMessage))
+                    settings.ChangeStatus(ImportStatusIcon.Imported, "Imported");
+                else
+                    settings.ChangeStatus(ImportStatusIcon.Warning, string.Format("Imported with warnings: {0}", errorMessage));
+                
+                
+                return true;
             }
         }
 
@@ -216,8 +228,10 @@ namespace Idera.SQLsecure.UI.Console.Import
         }
 
 
-        private static bool CheckServerAccess(ImportItem importItem, string machine, out string errorMsg)
+        private static OperationResult<bool> CheckServerAccess(ImportItem importItem, string machine)
         {
+            var result = new OperationResult<bool> { Value = true };
+            string errorMsg;
             using (logX.loggerX.InfoCall())
             {
                 try
@@ -226,17 +240,29 @@ namespace Idera.SQLsecure.UI.Console.Import
                     var winUserPassword = importItem.UseSameCredentials
                         ? importItem.Password
                         : importItem.WindowsUserPassword;
+                    if (string.IsNullOrEmpty(winUser) && string.IsNullOrEmpty(winUserPassword))
+                    {
+                        result.Value = false;
+                        result.AddErrorEvent(ErrorMsgs.WindowsUserForImportNotSpecifiedMsg);
 
-                    Server.ServerAccess sa = Server.CheckServerAccess(machine, winUser, winUserPassword,
-                        out errorMsg);
-                    return sa == Server.ServerAccess.OK;
+                    }
+                    else
+                    {
+                        Core.Accounts.Server.ServerAccess sa = Core.Accounts.Server.CheckServerAccess(machine, winUser,
+                            winUserPassword,
+                            out errorMsg);
+                        if(!string.IsNullOrEmpty(errorMsg)) result.AddWarningEvent(errorMsg);
+                        result.Value = (sa == Core.Accounts.Server.ServerAccess.OK);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    errorMsg = ex.Message;
+                    result.Value = false;
+                    result.AddErrorEvent(ex.Message);
                     logX.loggerX.Error(ex.Message);
-                    return false;
+
                 }
+                return result;
             }
         }
         private static WindowsImpersonationContext Impersonate(string userName, string password)
@@ -270,17 +296,17 @@ namespace Idera.SQLsecure.UI.Console.Import
             }
         }
 
-      
 
-        private static bool ValidateCredentials(ImportItem importItem, out string sqlServerVersion, out string machine,
-            out string instance, out string fullName, out string errorMsg)
+
+        private static OperationResult<bool> ValidateCredentials(ImportItem importItem, out string sqlServerVersion, out string machine,
+            out string instance, out string fullName)
         {
+            var result = new OperationResult<bool> { Value = true };
             using (logX.loggerX.InfoCall())
             {
                 WindowsImpersonationContext impersonationContext = null;
                 string login = string.Empty;
                 string password = string.Empty;
-                errorMsg = string.Empty;
                 try
                 {
                     if (importItem.AuthType == SqlServerAuthenticationType.SqlServerAuthentication)
@@ -298,12 +324,14 @@ namespace Idera.SQLsecure.UI.Console.Import
                 catch (Exception ex)
                 {
                     logX.loggerX.Error(ex.Message);
-                    errorMsg = ex.Message;
+                    result.Value = false;
+                    result.AddErrorEvent(ex.Message);
+
                     sqlServerVersion = string.Empty;
                     machine = Path.GetComputerFromSQLServerInstance(importItem.ServerName);
                     instance = Path.GetInstanceFromSQLServerInstance(importItem.ServerName);
                     fullName = importItem.ServerName.Trim().ToUpperInvariant();
-                    return false;
+                    return result;
                 }
                 finally
                 {
@@ -312,7 +340,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                         UndoImpersonation(impersonationContext);
                     }
                 }
-                return true;
+                return result;
             }
         }
     }

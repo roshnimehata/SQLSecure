@@ -72,6 +72,12 @@
     <Content Include="..\..\Repository\DDL\ddl_update_3000.sql">
       <Link>DDLs\ddl_update_3000.sql</Link>
     </Content>
+	<Content Include="..\..\Repository\DDL\ddl_update_3001.sql">
+      <Link>DDLs\ddl_update_3001.sql</Link>
+    </Content>
+	<Content Include="..\..\Repository\DDL\update_3002_indexses.sql">
+      <Link>DDLs\update_3002_indexses.sql</Link>
+    </Content>
     <Content Include="..\..\Repository\DDL\footer.sql">
       <Link>DDLs\footer.sql</Link>
     </Content>
@@ -122,6 +128,9 @@
     </Content>
     <Content Include="..\..\Repository\DDL\update_3000_footer.sql">
       <Link>DDLs\update_3000_footer.sql</Link>
+    </Content>
+	<Content Include="..\..\Repository\DDL\update_3001_header.sql">
+      <Link>DDLs\update_3001_header.sql</Link>
     </Content>
     <Content Include="..\..\Repository\fn_getaccesstype.sql">
       <Link>Functions\fn_getaccesstype.sql</Link>
@@ -866,6 +875,9 @@
     </Content>
     <Content Include="..\..\Repository\vwwindowsgroupmembers.sql">
       <Link>Views\vwwindowsgroupmembers.sql</Link>
+    </Content>
+    <Content Include="..\..\Repository\DDL\update_3001_footer.sql" >
+	  <Link>DDLs\update_3001_footer.sql</Link>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -5211,7 +5211,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAGkAYQA2ADQA
 		<row><td>PROGMSG_IIS_ROLLBACKVROOTS</td><td>##IDS_PROGMSG_IIS_ROLLBACKVROOTS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>Password_Result</td><td>0</td><td/></row>
-		<row><td>ProductCode</td><td>{12761787-2333-4BF5-96F1-3DC8176D26B3}</td><td/></row>
+		<row><td>ProductCode</td><td>{D3465589-D9E6-40D2-BDDE-69B7022F8172}</td><td/></row>
 		<row><td>ProductID</td><td>none</td><td/></row>
 		<row><td>ProductLanguage</td><td>1033</td><td/></row>
 		<row><td>ProductName</td><td>Idera SQLsecure ia64</td><td/></row>
@@ -5224,7 +5224,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAGkAYQA2ADQA
 		<row><td>RETURN</td><td>0</td><td/></row>
 		<row><td>RebootYesNo</td><td>Yes</td><td/></row>
 		<row><td>ReinstallModeText</td><td>omus</td><td/></row>
-		<row><td>SCHEMA_VERSION</td><td>3000</td><td/></row>
+		<row><td>SCHEMA_VERSION</td><td>3002</td><td/></row>
 		<row><td>SERVICEPASSWORD</td><td/><td/></row>
 		<row><td>SERVICEUSERNAME</td><td/><td/></row>
 		<row><td>SERVICE_SQLAUTHENTICATION</td><td/><td/></row>
