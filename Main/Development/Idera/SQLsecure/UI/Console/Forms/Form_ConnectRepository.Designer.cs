@@ -203,6 +203,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.password.Name = "password";
             this.password.Size = new System.Drawing.Size(268, 20);
             this.password.TabIndex = 11;
+            this.password.PasswordChar = '*';
             // 
             // azure_authentication
             // 

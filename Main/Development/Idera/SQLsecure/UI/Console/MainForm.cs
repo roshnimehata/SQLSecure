@@ -1264,6 +1264,7 @@ namespace Idera.SQLsecure.UI.Console
                         }                       
                     }
                     #endregion
+                            
                     this.Cursor = Cursors.Default;
                 }
                 else
@@ -1313,6 +1314,11 @@ namespace Idera.SQLsecure.UI.Console
                 int m_SchemaVersion = 0;  
                 //retrieve information from the database to check for repository version.
                 m_SchemaVersion = Program.gController.Repository.getRepositoryVersion(Server_Name);
+                if(m_SchemaVersion == 0)
+                {
+                    DeployRepositoryScripts(UserName, Password, false);
+                    return true;
+                }
                 if (m_SchemaVersion < Utility.Constants.SchemaVersion)
                 {
                     MessageBoxButtons buttons = MessageBoxButtons.YesNo;
