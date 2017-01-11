@@ -15,6 +15,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
     {
         #region Ctors
 
+        enum type_of_authentication
+        {
+            azure_authentication,
+            sql_authentication,
+            windows_authentication,
+            on_premise
+        };
+        int selected_authentication_type = (int)type_of_authentication.on_premise;
         bool isConnect = true;
         string button_value = "Connect";
         int button_index = 0;
@@ -146,30 +154,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             }
           }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            if(areCredentialsRequired == false)
-            {
-                this.username.Enabled = true;
-                this.password.Enabled = true;
-                areCredentialsRequired = true;
-                if(this.username.Text == null || this.username.Text == "")
-                {
-                    this._button_OK.Enabled = false;
-                }else
-                {
-                    this._button_OK.Enabled = true;
-                }
-            }
-            else
-            {
-                this.username.Enabled = false;
-                this.password.Enabled = false;
-                areCredentialsRequired = false;
-            }
-
-        }
-
         private void label3_Click(object sender, EventArgs e)
         {
 
@@ -181,6 +165,69 @@ namespace Idera.SQLsecure.UI.Console.Forms
             //
             if(!String.IsNullOrEmpty(this.username.Text))
                 this._button_OK.Enabled = true;
+        }
+
+        //SQLSecure3.1 (Mitul Kapoor) - functionality for sql authentication
+        private void sql_authentication_CheckedChanged(object sender, EventArgs e)
+        {
+            selected_authentication_type = (int)type_of_authentication.sql_authentication;
+            this.username.Enabled = true;
+            this.password.Enabled = true;
+            areCredentialsRequired = true;
+            if (this.username.Text == null || this.username.Text == "")
+            {
+                this._button_OK.Enabled = false;
+            }
+            else
+            {
+                this._button_OK.Enabled = true;
+            }
+
+        }
+
+        //SQLSecure3.1 (Mitul Kapoor) - functionality for windows authentication
+        private void windows_authentication_CheckedChanged(object sender, EventArgs e)
+        {
+            selected_authentication_type = (int)type_of_authentication.windows_authentication;
+            this.username.Enabled = true;
+            this.password.Enabled = true;
+            areCredentialsRequired = true;
+            if (this.username.Text == null || this.username.Text == "")
+            {
+                this._button_OK.Enabled = false;
+            }
+            else
+            {
+                this._button_OK.Enabled = true;
+            }
+
+        }
+
+        //SQLSecure3.1 (Mitul Kapoor) - functionality for azure AD authentication
+        private void azure_authentication_CheckedChanged(object sender, EventArgs e)
+        {
+            selected_authentication_type = (int)type_of_authentication.azure_authentication;
+            this.username.Enabled = true;
+            this.password.Enabled = true;
+            areCredentialsRequired = true;
+            if (this.username.Text == null || this.username.Text == "")
+            {
+                this._button_OK.Enabled = false;
+            }
+            else
+            {
+                this._button_OK.Enabled = true;
+            }
+
+        }
+
+        //SQLSecure3.1 (Mitul Kapoor) - functionality for on premise
+        private void on_premise_authentication_CheckedChanged(object sender, EventArgs e)
+        {
+            selected_authentication_type = (int)type_of_authentication.on_premise;
+            this.username.Enabled = false;
+            this.password.Enabled = false;
+            areCredentialsRequired = false;
         }
     }
 }

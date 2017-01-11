@@ -38,13 +38,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.label1 = new System.Windows.Forms.Label();
             this.ultraButton_Help = new Infragistics.Win.Misc.UltraButton();
             this.action_choice = new Infragistics.Win.UltraWinEditors.UltraOptionSet();
-            //SQLSecure - (Mitul Kapoor) - label and textbox for usernsame and password.
-            this.is_sql_auth_required = new System.Windows.Forms.CheckBox();
             this._username_label = new System.Windows.Forms.Label();
             this._password_label = new System.Windows.Forms.Label();
             this.username = new System.Windows.Forms.TextBox();
             this.password = new System.Windows.Forms.TextBox();
-            //
+            this.azure_authentication = new System.Windows.Forms.RadioButton();
+            this.sql_authentication = new System.Windows.Forms.RadioButton();
+            this.windows_authentication = new System.Windows.Forms.RadioButton();
+            this.on_premise_authentication = new System.Windows.Forms.RadioButton();
             this._bfd_ButtonPanel.SuspendLayout();
             this._bf_MainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.action_choice)).BeginInit();
@@ -55,29 +56,32 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._bfd_ButtonPanel.Controls.Add(this.ultraButton_Help);
             this._bfd_ButtonPanel.Controls.Add(this._button_Cancel);
             this._bfd_ButtonPanel.Controls.Add(this._button_OK);
-            this._bfd_ButtonPanel.Location = new System.Drawing.Point(0, 279);
-            this._bfd_ButtonPanel.Size = new System.Drawing.Size(409, 40);
+            this._bfd_ButtonPanel.Location = new System.Drawing.Point(0, 285);
+            this._bfd_ButtonPanel.Size = new System.Drawing.Size(431, 40);
             this._bfd_ButtonPanel.Controls.SetChildIndex(this._button_OK, 0);
             this._bfd_ButtonPanel.Controls.SetChildIndex(this._button_Cancel, 0);
             this._bfd_ButtonPanel.Controls.SetChildIndex(this.ultraButton_Help, 0);
             // 
             // _bf_MainPanel
             // 
+            this._bf_MainPanel.Controls.Add(this.on_premise_authentication);
+            this._bf_MainPanel.Controls.Add(this.windows_authentication);
+            this._bf_MainPanel.Controls.Add(this.sql_authentication);
+            this._bf_MainPanel.Controls.Add(this.azure_authentication);
             this._bf_MainPanel.Controls.Add(this.password);
             this._bf_MainPanel.Controls.Add(this.username);
             this._bf_MainPanel.Controls.Add(this._password_label);
             this._bf_MainPanel.Controls.Add(this._username_label);
-            this._bf_MainPanel.Controls.Add(this.is_sql_auth_required);
             this._bf_MainPanel.Controls.Add(this.action_choice);
             this._bf_MainPanel.Controls.Add(this.label1);
             this._bf_MainPanel.Controls.Add(this._label1);
             this._bf_MainPanel.Controls.Add(this._textBox_Server);
             this._bf_MainPanel.Controls.Add(this._button_Lookup);
-            this._bf_MainPanel.Size = new System.Drawing.Size(409, 226);
+            this._bf_MainPanel.Size = new System.Drawing.Size(431, 232);
             // 
             // _bf_HeaderPanel
             // 
-            this._bf_HeaderPanel.Size = new System.Drawing.Size(409, 53);
+            this._bf_HeaderPanel.Size = new System.Drawing.Size(431, 53);
             // 
             // _label1
             // 
@@ -160,24 +164,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.action_choice.Name = "action_choice";
             this.action_choice.Size = new System.Drawing.Size(500, 50);
             this.action_choice.TabIndex = 0;
-            // 
-            // checkBox1
-            // 
-            this.is_sql_auth_required.AutoSize = true;
-            this.is_sql_auth_required.Location = new System.Drawing.Point(20, 113);
-            this.is_sql_auth_required.Name = "credentials_required";
-            this.is_sql_auth_required.Size = new System.Drawing.Size(175, 17);
-            this.is_sql_auth_required.TabIndex = 7;
-            this.is_sql_auth_required.Text = "SQL Authentication";
-            this.is_sql_auth_required.UseVisualStyleBackColor = true;
-            this.is_sql_auth_required.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.action_choice.CheckedIndex = button_index;
+            this.action_choice.ValueChanged += new System.EventHandler(this.Action_choice_ValueChanged);
             // 
             // _username_label
             // 
             this._username_label.AutoSize = true;
             this._username_label.Location = new System.Drawing.Point(15, 150);
             this._username_label.Name = "_username_label";
-            this._username_label.Size = new System.Drawing.Size(60, 13);
+            this._username_label.Size = new System.Drawing.Size(69, 13);
             this._username_label.TabIndex = 8;
             this._username_label.Text = "User Name : ";
             // 
@@ -186,58 +181,93 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._password_label.AutoSize = true;
             this._password_label.Location = new System.Drawing.Point(20, 184);
             this._password_label.Name = "_password_label";
-            this._password_label.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this._password_label.Size = new System.Drawing.Size(53, 13);
+            this._password_label.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this._password_label.Size = new System.Drawing.Size(62, 13);
             this._password_label.TabIndex = 9;
             this._password_label.Text = "Password : ";
             this._password_label.Click += new System.EventHandler(this.label3_Click);
             // 
             // username
             // 
+            this.username.Enabled = false;
             this.username.Location = new System.Drawing.Point(83, 147);
             this.username.Name = "username";
-            this.username.Enabled = false;
             this.username.Size = new System.Drawing.Size(269, 20);
             this.username.TabIndex = 10;
             this.username.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // password
             // 
+            this.password.Enabled = false;
             this.password.Location = new System.Drawing.Point(83, 179);
             this.password.Name = "password";
-            this.password.Enabled = false;
             this.password.Size = new System.Drawing.Size(268, 20);
             this.password.TabIndex = 11;
+            // 
+            // azure_authentication
+            // 
+            this.azure_authentication.AutoSize = true;
+            this.azure_authentication.Location = new System.Drawing.Point(9, 113);
+            this.azure_authentication.Name = "azure_authentication";
+            this.azure_authentication.Size = new System.Drawing.Size(70, 17);
+            this.azure_authentication.TabIndex = 12;
+            this.azure_authentication.TabStop = true;
+            this.azure_authentication.Text = "Azure AD";
+            this.azure_authentication.UseVisualStyleBackColor = true;
+            this.azure_authentication.CheckedChanged += new System.EventHandler(this.azure_authentication_CheckedChanged);
+            // 
+            // sql_authentication
+            // 
+            this.sql_authentication.AutoSize = true;
+            this.sql_authentication.Location = new System.Drawing.Point(82, 113);
+            this.sql_authentication.Name = "sql_authentication";
+            this.sql_authentication.Size = new System.Drawing.Size(117, 17);
+            this.sql_authentication.TabIndex = 13;
+            this.sql_authentication.TabStop = true;
+            this.sql_authentication.Text = "SQL Authentication";
+            this.sql_authentication.UseVisualStyleBackColor = true;
+            this.sql_authentication.CheckedChanged += new System.EventHandler(this.sql_authentication_CheckedChanged);
+            // 
+            // windows_authentication
+            // 
+            this.windows_authentication.AutoSize = true;
+            this.windows_authentication.Location = new System.Drawing.Point(199, 113);
+            this.windows_authentication.Name = "windows_authentication";
+            this.windows_authentication.Size = new System.Drawing.Size(140, 17);
+            this.windows_authentication.TabIndex = 14;
+            this.windows_authentication.TabStop = true;
+            this.windows_authentication.Text = "Windows Authentication";
+            this.windows_authentication.UseVisualStyleBackColor = true;
+            this.windows_authentication.CheckedChanged += new System.EventHandler(this.windows_authentication_CheckedChanged);
+            // 
+            // on_premise_authentication
+            // 
+            this.on_premise_authentication.AutoSize = true;
+            this.on_premise_authentication.Location = new System.Drawing.Point(345, 113);
+            this.on_premise_authentication.Name = "on_premise_authentication";
+            this.on_premise_authentication.Size = new System.Drawing.Size(51, 17);
+            this.on_premise_authentication.TabIndex = 15;
+            this.on_premise_authentication.TabStop = true;
+            this.on_premise_authentication.Text = "None";
+            this.on_premise_authentication.UseVisualStyleBackColor = true;
+            this.on_premise_authentication.CheckedChanged += new System.EventHandler(this.on_premise_authentication_CheckedChanged);
+            this.on_premise_authentication.Checked = true;
             // 
             // Form_ConnectRepository
             // 
             this.AcceptButton = this._button_OK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(409, 319);
+            this.ClientSize = new System.Drawing.Size(431, 325);
             this.Description = "Connect to SQLsecure Repository";
             this.Name = "Form_ConnectRepository";
-            this.Text = "Connect to Repository";
             this.Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.connect_49;
+            this.Text = "Connect to Repository";
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.Form_ConnectRepository_HelpRequested);
             this._bfd_ButtonPanel.ResumeLayout(false);
             this._bf_MainPanel.ResumeLayout(false);
             this._bf_MainPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.action_choice)).EndInit();
             this.ResumeLayout(false);
-            //
-            // Radio button for choice of action(Connect to Repository/Deploy Repository)
-            //
-            this.action_choice.Items.Clear();
-            this.action_choice.Width = 500;
-            this.action_choice.Height = 50;
-            this.action_choice.Margin = new System.Windows.Forms.Padding(20);
-            this.action_choice.ItemSpacingVertical += 10;
-            this.action_choice.Items.Add("Connect", "Connect to Repository");
-            this.action_choice.Items.Add("Deploy", "Deploy Repository");
-            this.action_choice.ItemOrigin = new System.Drawing.Point(10, 10);
-            this.action_choice.CheckedIndex = button_index;
-            this.action_choice.ValueChanged += Action_choice_ValueChanged;
-            
 
         }
         
@@ -251,10 +281,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private System.Windows.Forms.Label label1;
         private Infragistics.Win.Misc.UltraButton ultraButton_Help;
         private Infragistics.Win.UltraWinEditors.UltraOptionSet action_choice;
-        private System.Windows.Forms.CheckBox is_sql_auth_required;
         private System.Windows.Forms.Label _password_label;
         private System.Windows.Forms.Label _username_label;
         private System.Windows.Forms.TextBox password;
         private System.Windows.Forms.TextBox username;
+        private System.Windows.Forms.RadioButton sql_authentication;
+        private System.Windows.Forms.RadioButton azure_authentication;
+        private System.Windows.Forms.RadioButton windows_authentication;
+        private System.Windows.Forms.RadioButton on_premise_authentication;
     }
 }
