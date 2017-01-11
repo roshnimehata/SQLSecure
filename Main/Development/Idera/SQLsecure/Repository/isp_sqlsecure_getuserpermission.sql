@@ -16,7 +16,7 @@ CREATE procedure [dbo].[isp_sqlsecure_getuserpermission]
 	@databasename nvarchar(256),
 	@permissiontype nchar(1)=null
 )
-WITH ENCRYPTION
+--WITH ENCRYPTION
 as
    -- <Idera SQLsecure version and copyright>
    --
