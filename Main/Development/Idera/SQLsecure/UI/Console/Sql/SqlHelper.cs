@@ -70,11 +70,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
         /// <param name="commandText">The stored procedure name or T-SQL command</param>
         /// <param name="commandParameters">An array of SqlParameters to be associated with the command or 'null' if no parameters are required</param>
         private static void prepareCommand(
-                SqlCommand command, 
-                SqlConnection connection, 
-                SqlTransaction transaction, 
-                CommandType commandType, 
-                string commandText, 
+                SqlCommand command,
+                SqlConnection connection,
+                SqlTransaction transaction,
+                CommandType commandType,
+                string commandText,
                 SqlParameter[] commandParameters
             )
         {
@@ -117,17 +117,21 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public static SqlConnectionStringBuilder ConstructConnectionString(
                 string instance,
                 string user,
-                string password
+                string password,
+                string serverType,
+                bool azureADAuth=false
             )
         {
-            return ConstructConnectionString(instance, user, password, 0);
+            return ConstructConnectionString(instance, user, password, 0, serverType, azureADAuth);
         }
 
         public static SqlConnectionStringBuilder ConstructConnectionString(
                 string instance,
                 string user,
                 string password,
-                int timeout
+                int timeout,
+                string serverType,
+                bool azureADAuth
             )
         {
             Debug.Assert(instance != null && instance.Length != 0);
@@ -135,11 +139,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
             // Setup data source and application name.
             SqlConnectionStringBuilder bldr = new SqlConnectionStringBuilder();
             bldr.DataSource = CreateSafeDatabaseNameForConnectionString(instance);
-            
+
             bldr.ApplicationName = Constants.SqlAppName;
             if (timeout > 0)
             {
-                bldr.ConnectTimeout = timeout; 
+                bldr.ConnectTimeout = timeout;
             }
 
             // If user is specified then its not integrated security,
@@ -150,10 +154,40 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 bldr.UserID = user;
                 bldr.Password = password;
             }
-
+            //string serverType = Utility.Activity.TypeServerOnPremise;
+            if (serverType == Utility.Activity.TypeServerAzureDB ||(serverType==Utility.Activity.TypeServerAzureVM && azureADAuth))
+            {
+                ConstructConnectionString(bldr, instance, user, password, timeout, serverType,azureADAuth);
+                
+            }
+            
             return bldr;
         }
 
+        /// <summary>
+        /// Constructs connection strings for azure DB connection and for Azure AD
+        /// </summary>
+        /// <param name="serverType">server type : on premise,azure DB, SQL server on Azure VM</param>
+        /// <param name="azureADAuth">bool value : true when it is for azure Ad</param>
+        public static void ConstructConnectionString(
+               SqlConnectionStringBuilder bldr,
+               string instance,
+               string user,
+               string password,
+               int timeout,
+               string serverType,
+               bool azureADAuth
+           )
+        {
+            if (!azureADAuth)
+            {
+                bldr.ConnectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=" + timeout + ";";
+            }
+            else
+            {
+                bldr.ConnectionString = @"Data Source=" + instance + "; Authentication=Active Directory Password; UID=" + user + "; PWD=" + password;
+            }
+        }
         /// <summary>
         /// Parses the connection version and returns an enum value.
         /// </summary>

@@ -524,7 +524,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             Debug.Assert(filter != null);
             ServerVersion parsedVersion = Sql.SqlHelper.ParseVersion(m_RegisteredServer.Version);
             Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedVersion, m_RegisteredServer.SQLServerAuthType == "W", 
-                m_RegisteredServer.SqlLogin, m_RegisteredServer.SqlPassword, m_RegisteredServer.FullConnectionName);
+                m_RegisteredServer.SqlLogin, m_RegisteredServer.SqlPassword, m_RegisteredServer.FullConnectionName, Utility.Activity.TypeServerOnPremise);
             if (Form_FilterProperties.Process(filter, serverInfo, FiltersInListView, m_IsEdit)
                         == DialogResult.OK)
             {
@@ -1116,7 +1116,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                         string.Format("Connecting to SQL Server {0}...", m_RegisteredServer.ServerName.ToUpper()));
                                     Sql.SqlServer.GetSqlServerProperties(m_RegisteredServer.FullConnectionName, login, password,
                                                                          out version, out machine, out instance,
-                                                                         out connection);
+                                                                         out connection, Utility.Activity.TypeServerOnPremise);
                                     if (targetImpersonationContext != null)
                                     {
                                         targetImpersonationContext.Undo();

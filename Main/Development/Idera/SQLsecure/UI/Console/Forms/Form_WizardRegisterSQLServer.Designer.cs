@@ -31,13 +31,34 @@ namespace Idera.SQLsecure.UI.Console.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_WizardRegisterSQLServer));
             Infragistics.Win.UltraWinListView.UltraListViewSubItemColumn ultraListViewSubItemColumn1 = new Infragistics.Win.UltraWinListView.UltraListViewSubItemColumn("Description");
             this._wizard = new Divelements.WizardFramework.Wizard();
+            this._page_Credentials = new Divelements.WizardFramework.WizardPage();
+            this._grpbx_SQLServerCredentials = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox_SQLWindowsUser = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox_SQLWindowsPassword = new System.Windows.Forms.TextBox();
+            this.radioButton_WindowsAuth = new System.Windows.Forms.RadioButton();
+            this.radioButton_SQLServerAuth = new System.Windows.Forms.RadioButton();
+            this._lbl_SqlLogin = new System.Windows.Forms.Label();
+            this.textbox_SqlLogin = new System.Windows.Forms.TextBox();
+            this._lbl_SqlLoginPassword = new System.Windows.Forms.Label();
+            this.textbox_SqlLoginPassword = new System.Windows.Forms.TextBox();
+            this._grpbx_WindowsGMCredentials = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.checkBox_UseSameAuth = new System.Windows.Forms.CheckBox();
+            this._lbl_WindowsUser = new System.Windows.Forms.Label();
+            this.textbox_WindowsUser = new System.Windows.Forms.TextBox();
+            this._lbl_WindowsPassword = new System.Windows.Forms.Label();
+            this.textbox_WindowsPassword = new System.Windows.Forms.TextBox();
             this._page_FilePermissionFolders = new Divelements.WizardFramework.WizardPage();
+            this.addEditFoldersControl = new Idera.SQLsecure.UI.Console.Controls.AddEditFolders();
             this._PageTags = new Divelements.WizardFramework.WizardPage();
             this.button3 = new Infragistics.Win.Misc.UltraButton();
             this.button2 = new Infragistics.Win.Misc.UltraButton();
             this.btAdd = new Infragistics.Win.Misc.UltraButton();
             this.ulTags = new Infragistics.Win.UltraWinListView.UltraListView();
             this._page_DefineFilters = new Divelements.WizardFramework.WizardPage();
+            this.filterSelection1 = new Idera.SQLsecure.UI.Console.Controls.FilterSelection();
             this._page_JobSchedule = new Divelements.WizardFramework.WizardPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label_AgentStatus = new System.Windows.Forms.Label();
@@ -66,6 +87,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.radioButton_SendEmailOnError = new System.Windows.Forms.RadioButton();
             this.radioButton_SendEmailWarningOrError = new System.Windows.Forms.RadioButton();
             this._page_ConfigureSMTPEmail = new Divelements.WizardFramework.WizardPage();
+            this.controlSMTPEmailConfig1 = new Idera.SQLsecure.UI.Console.Controls.controlSMTPEmailConfig();
             this.panel2 = new System.Windows.Forms.Panel();
             this.button_Test = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
@@ -84,35 +106,20 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.checkBox_CollectData = new System.Windows.Forms.CheckBox();
             this._page_Finish = new Divelements.WizardFramework.FinishPage();
             this._rtb_Finish = new System.Windows.Forms.RichTextBox();
-            this._page_Credentials = new Divelements.WizardFramework.WizardPage();
-            this._grpbx_SQLServerCredentials = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox_SQLWindowsUser = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox_SQLWindowsPassword = new System.Windows.Forms.TextBox();
-            this.radioButton_WindowsAuth = new System.Windows.Forms.RadioButton();
-            this.radioButton_SQLServerAuth = new System.Windows.Forms.RadioButton();
-            this._lbl_SqlLogin = new System.Windows.Forms.Label();
-            this.textbox_SqlLogin = new System.Windows.Forms.TextBox();
-            this._lbl_SqlLoginPassword = new System.Windows.Forms.Label();
-            this.textbox_SqlLoginPassword = new System.Windows.Forms.TextBox();
-            this._grpbx_WindowsGMCredentials = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.checkBox_UseSameAuth = new System.Windows.Forms.CheckBox();
-            this._lbl_WindowsUser = new System.Windows.Forms.Label();
-            this.textbox_WindowsUser = new System.Windows.Forms.TextBox();
-            this._lbl_WindowsPassword = new System.Windows.Forms.Label();
-            this.textbox_WindowsPassword = new System.Windows.Forms.TextBox();
             this._page_Servers = new Divelements.WizardFramework.WizardPage();
             this._btn_BrowseServers = new System.Windows.Forms.Button();
             this._txtbx_Server = new System.Windows.Forms.TextBox();
             this._lbl_Server = new System.Windows.Forms.Label();
+            this._txtbx_PortNumber = new System.Windows.Forms.TextBox();
+            this._lbl_PortNumber = new System.Windows.Forms.Label();
+            this._lbl_ServerType = new System.Windows.Forms.Label();
+            this._comboBox_ServerType = new System.Windows.Forms.ComboBox();
             this._page_Introduction = new Divelements.WizardFramework.IntroductionPage();
             this._rtb_Introduction = new System.Windows.Forms.RichTextBox();
-            this.filterSelection1 = new Idera.SQLsecure.UI.Console.Controls.FilterSelection();
-            this.controlSMTPEmailConfig1 = new Idera.SQLsecure.UI.Console.Controls.controlSMTPEmailConfig();
-            this.addEditFoldersControl = new Idera.SQLsecure.UI.Console.Controls.AddEditFolders();
             this._wizard.SuspendLayout();
+            this._page_Credentials.SuspendLayout();
+            this._grpbx_SQLServerCredentials.SuspendLayout();
+            this._grpbx_WindowsGMCredentials.SuspendLayout();
             this._page_FilePermissionFolders.SuspendLayout();
             this._PageTags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ulTags)).BeginInit();
@@ -135,9 +142,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             ((System.ComponentModel.ISupportInitialize)(this.ultraListView_Policies)).BeginInit();
             this._page_CollectData.SuspendLayout();
             this._page_Finish.SuspendLayout();
-            this._page_Credentials.SuspendLayout();
-            this._grpbx_SQLServerCredentials.SuspendLayout();
-            this._grpbx_WindowsGMCredentials.SuspendLayout();
             this._page_Servers.SuspendLayout();
             this._page_Introduction.SuspendLayout();
             this.SuspendLayout();
@@ -145,15 +149,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // _wizard
             // 
             this._wizard.BannerImage = ((System.Drawing.Image)(resources.GetObject("_wizard.BannerImage")));
+            this._wizard.Controls.Add(this._page_Credentials);
+            this._wizard.Controls.Add(this._page_Servers);
             this._wizard.Controls.Add(this._PageTags);
             this._wizard.Controls.Add(this._page_FilePermissionFolders);
             this._wizard.Controls.Add(this._page_JobSchedule);
             this._wizard.Controls.Add(this._page_CollectData);
             this._wizard.Controls.Add(this._page_DefineFilters);
-            this._wizard.Controls.Add(this._page_Credentials);
             this._wizard.Controls.Add(this._page_Policies);
             this._wizard.Controls.Add(this._page_ConfigureSMTPEmail);
-            this._wizard.Controls.Add(this._page_Servers);
             this._wizard.Controls.Add(this._page_Finish);
             this._wizard.Controls.Add(this._page_Introduction);
             this._wizard.Controls.Add(this._page_NotificationOptions);
@@ -161,10 +165,211 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._wizard.Location = new System.Drawing.Point(0, 0);
             this._wizard.MarginImage = ((System.Drawing.Image)(resources.GetObject("_wizard.MarginImage")));
             this._wizard.Name = "_wizard";
-            this._wizard.SelectedPage = this._PageTags;
+            this._wizard.SelectedPage = this._page_CollectData;
             this._wizard.Size = new System.Drawing.Size(514, 536);
             this._wizard.TabIndex = 0;
             this._wizard.HelpRequested += new System.Windows.Forms.HelpEventHandler(this._wizard_HelpRequested);
+            // 
+            // _page_Credentials
+            // 
+            this._page_Credentials.Controls.Add(this._grpbx_SQLServerCredentials);
+            this._page_Credentials.Controls.Add(this._grpbx_WindowsGMCredentials);
+            this._page_Credentials.Description = "Specify which credentials SQLsecure should use to collect audit data.";
+            this._page_Credentials.DescriptionColor = System.Drawing.Color.Navy;
+            this._page_Credentials.Location = new System.Drawing.Point(19, 73);
+            this._page_Credentials.Name = "_page_Credentials";
+            this._page_Credentials.NextPage = this._page_FilePermissionFolders;
+            this._page_Credentials.PreviousPage = this._page_Servers;
+            this._page_Credentials.Size = new System.Drawing.Size(476, 403);
+            this._page_Credentials.TabIndex = 0;
+            this._page_Credentials.Text = "Specify Connection Credentials";
+            this._page_Credentials.TextColor = System.Drawing.Color.Navy;
+            this._page_Credentials.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_Credentials_BeforeMoveNext);
+            this._page_Credentials.AfterDisplay += new System.EventHandler(this._page_Credentials_AfterDisplay);
+            this._page_Credentials.BeforeDisplay += new System.EventHandler(this._page_Credentials_BeforeDisplay);
+            // 
+            // _grpbx_SQLServerCredentials
+            // 
+            this._grpbx_SQLServerCredentials.Controls.Add(this.label4);
+            this._grpbx_SQLServerCredentials.Controls.Add(this.textBox_SQLWindowsUser);
+            this._grpbx_SQLServerCredentials.Controls.Add(this.label5);
+            this._grpbx_SQLServerCredentials.Controls.Add(this.textBox_SQLWindowsPassword);
+            this._grpbx_SQLServerCredentials.Controls.Add(this.radioButton_WindowsAuth);
+            this._grpbx_SQLServerCredentials.Controls.Add(this.radioButton_SQLServerAuth);
+            this._grpbx_SQLServerCredentials.Controls.Add(this._lbl_SqlLogin);
+            this._grpbx_SQLServerCredentials.Controls.Add(this.textbox_SqlLogin);
+            this._grpbx_SQLServerCredentials.Controls.Add(this._lbl_SqlLoginPassword);
+            this._grpbx_SQLServerCredentials.Controls.Add(this.textbox_SqlLoginPassword);
+            this._grpbx_SQLServerCredentials.Location = new System.Drawing.Point(3, 14);
+            this._grpbx_SQLServerCredentials.Name = "_grpbx_SQLServerCredentials";
+            this._grpbx_SQLServerCredentials.Size = new System.Drawing.Size(470, 192);
+            this._grpbx_SQLServerCredentials.TabIndex = 0;
+            this._grpbx_SQLServerCredentials.TabStop = false;
+            this._grpbx_SQLServerCredentials.Text = "SQL Server credentials to connect to audited SQL Server";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(31, 46);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(79, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "&Windows User:";
+            // 
+            // textBox_SQLWindowsUser
+            // 
+            this.textBox_SQLWindowsUser.Location = new System.Drawing.Point(130, 43);
+            this.textBox_SQLWindowsUser.Name = "textBox_SQLWindowsUser";
+            this.textBox_SQLWindowsUser.Size = new System.Drawing.Size(334, 20);
+            this.textBox_SQLWindowsUser.TabIndex = 2;
+            this.textBox_SQLWindowsUser.TextChanged += new System.EventHandler(this.textBox_SQLWindowsUser_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(31, 72);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(56, 13);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "&Password:";
+            // 
+            // textBox_SQLWindowsPassword
+            // 
+            this.textBox_SQLWindowsPassword.Location = new System.Drawing.Point(130, 69);
+            this.textBox_SQLWindowsPassword.Name = "textBox_SQLWindowsPassword";
+            this.textBox_SQLWindowsPassword.PasswordChar = '*';
+            this.textBox_SQLWindowsPassword.Size = new System.Drawing.Size(334, 20);
+            this.textBox_SQLWindowsPassword.TabIndex = 3;
+            this.textBox_SQLWindowsPassword.TextChanged += new System.EventHandler(this.textBox_SQLWindowsPassword_TextChanged);
+            // 
+            // radioButton_WindowsAuth
+            // 
+            this.radioButton_WindowsAuth.AutoSize = true;
+            this.radioButton_WindowsAuth.Checked = true;
+            this.radioButton_WindowsAuth.Location = new System.Drawing.Point(10, 20);
+            this.radioButton_WindowsAuth.Name = "radioButton_WindowsAuth";
+            this.radioButton_WindowsAuth.Size = new System.Drawing.Size(140, 17);
+            this.radioButton_WindowsAuth.TabIndex = 1;
+            this.radioButton_WindowsAuth.TabStop = true;
+            this.radioButton_WindowsAuth.Text = "Windows Authentication";
+            this.radioButton_WindowsAuth.UseVisualStyleBackColor = true;
+            this.radioButton_WindowsAuth.CheckedChanged += new System.EventHandler(this.radioButton_WindowsAuth_CheckedChanged);
+            // 
+            // radioButton_SQLServerAuth
+            // 
+            this.radioButton_SQLServerAuth.AutoSize = true;
+            this.radioButton_SQLServerAuth.Location = new System.Drawing.Point(10, 109);
+            this.radioButton_SQLServerAuth.Name = "radioButton_SQLServerAuth";
+            this.radioButton_SQLServerAuth.Size = new System.Drawing.Size(151, 17);
+            this.radioButton_SQLServerAuth.TabIndex = 4;
+            this.radioButton_SQLServerAuth.TabStop = true;
+            this.radioButton_SQLServerAuth.Text = "SQL Server Authentication";
+            this.radioButton_SQLServerAuth.UseVisualStyleBackColor = true;
+            this.radioButton_SQLServerAuth.CheckedChanged += new System.EventHandler(this.radioButton_SQLServerAuth_CheckedChanged);
+            // 
+            // _lbl_SqlLogin
+            // 
+            this._lbl_SqlLogin.AutoSize = true;
+            this._lbl_SqlLogin.Location = new System.Drawing.Point(31, 137);
+            this._lbl_SqlLogin.Name = "_lbl_SqlLogin";
+            this._lbl_SqlLogin.Size = new System.Drawing.Size(67, 13);
+            this._lbl_SqlLogin.TabIndex = 0;
+            this._lbl_SqlLogin.Text = "&Login Name:";
+            // 
+            // textbox_SqlLogin
+            // 
+            this.textbox_SqlLogin.Location = new System.Drawing.Point(130, 134);
+            this.textbox_SqlLogin.Name = "textbox_SqlLogin";
+            this.textbox_SqlLogin.Size = new System.Drawing.Size(334, 20);
+            this.textbox_SqlLogin.TabIndex = 5;
+            this.textbox_SqlLogin.TextChanged += new System.EventHandler(this._txtbx_SqlLogin_TextChanged);
+            // 
+            // _lbl_SqlLoginPassword
+            // 
+            this._lbl_SqlLoginPassword.AutoSize = true;
+            this._lbl_SqlLoginPassword.Location = new System.Drawing.Point(31, 163);
+            this._lbl_SqlLoginPassword.Name = "_lbl_SqlLoginPassword";
+            this._lbl_SqlLoginPassword.Size = new System.Drawing.Size(56, 13);
+            this._lbl_SqlLoginPassword.TabIndex = 0;
+            this._lbl_SqlLoginPassword.Text = "&Password:";
+            // 
+            // textbox_SqlLoginPassword
+            // 
+            this.textbox_SqlLoginPassword.Location = new System.Drawing.Point(130, 160);
+            this.textbox_SqlLoginPassword.Name = "textbox_SqlLoginPassword";
+            this.textbox_SqlLoginPassword.PasswordChar = '*';
+            this.textbox_SqlLoginPassword.Size = new System.Drawing.Size(334, 20);
+            this.textbox_SqlLoginPassword.TabIndex = 6;
+            this.textbox_SqlLoginPassword.TextChanged += new System.EventHandler(this._txtbx_SqlLoginPassword_TextChanged);
+            // 
+            // _grpbx_WindowsGMCredentials
+            // 
+            this._grpbx_WindowsGMCredentials.Controls.Add(this.label2);
+            this._grpbx_WindowsGMCredentials.Controls.Add(this.checkBox_UseSameAuth);
+            this._grpbx_WindowsGMCredentials.Controls.Add(this._lbl_WindowsUser);
+            this._grpbx_WindowsGMCredentials.Controls.Add(this.textbox_WindowsUser);
+            this._grpbx_WindowsGMCredentials.Controls.Add(this._lbl_WindowsPassword);
+            this._grpbx_WindowsGMCredentials.Controls.Add(this.textbox_WindowsPassword);
+            this._grpbx_WindowsGMCredentials.Location = new System.Drawing.Point(3, 224);
+            this._grpbx_WindowsGMCredentials.Name = "_grpbx_WindowsGMCredentials";
+            this._grpbx_WindowsGMCredentials.Size = new System.Drawing.Size(470, 173);
+            this._grpbx_WindowsGMCredentials.TabIndex = 1;
+            this._grpbx_WindowsGMCredentials.TabStop = false;
+            this._grpbx_WindowsGMCredentials.Text = "Windows Credentials to gather Operating System and Active Directory objects";
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(10, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(454, 66);
+            this.label2.TabIndex = 6;
+            this.label2.Text = resources.GetString("label2.Text");
+            // 
+            // checkBox_UseSameAuth
+            // 
+            this.checkBox_UseSameAuth.AutoSize = true;
+            this.checkBox_UseSameAuth.Location = new System.Drawing.Point(10, 89);
+            this.checkBox_UseSameAuth.Name = "checkBox_UseSameAuth";
+            this.checkBox_UseSameAuth.Size = new System.Drawing.Size(238, 17);
+            this.checkBox_UseSameAuth.TabIndex = 0;
+            this.checkBox_UseSameAuth.Text = "Use same Windows Authentication as above";
+            this.checkBox_UseSameAuth.UseVisualStyleBackColor = true;
+            this.checkBox_UseSameAuth.CheckedChanged += new System.EventHandler(this.checkBox_UseSameAuth_CheckedChanged);
+            // 
+            // _lbl_WindowsUser
+            // 
+            this._lbl_WindowsUser.AutoSize = true;
+            this._lbl_WindowsUser.Location = new System.Drawing.Point(10, 117);
+            this._lbl_WindowsUser.Name = "_lbl_WindowsUser";
+            this._lbl_WindowsUser.Size = new System.Drawing.Size(79, 13);
+            this._lbl_WindowsUser.TabIndex = 3;
+            this._lbl_WindowsUser.Text = "Windows &User:";
+            // 
+            // textbox_WindowsUser
+            // 
+            this.textbox_WindowsUser.Location = new System.Drawing.Point(130, 114);
+            this.textbox_WindowsUser.Name = "textbox_WindowsUser";
+            this.textbox_WindowsUser.Size = new System.Drawing.Size(334, 20);
+            this.textbox_WindowsUser.TabIndex = 1;
+            this.textbox_WindowsUser.TextChanged += new System.EventHandler(this._txtbx_WindowsUser_TextChanged);
+            // 
+            // _lbl_WindowsPassword
+            // 
+            this._lbl_WindowsPassword.AutoSize = true;
+            this._lbl_WindowsPassword.Location = new System.Drawing.Point(10, 143);
+            this._lbl_WindowsPassword.Name = "_lbl_WindowsPassword";
+            this._lbl_WindowsPassword.Size = new System.Drawing.Size(56, 13);
+            this._lbl_WindowsPassword.TabIndex = 4;
+            this._lbl_WindowsPassword.Text = "P&assword:";
+            // 
+            // textbox_WindowsPassword
+            // 
+            this.textbox_WindowsPassword.Location = new System.Drawing.Point(130, 140);
+            this.textbox_WindowsPassword.Name = "textbox_WindowsPassword";
+            this.textbox_WindowsPassword.PasswordChar = '*';
+            this.textbox_WindowsPassword.Size = new System.Drawing.Size(334, 20);
+            this.textbox_WindowsPassword.TabIndex = 2;
+            this.textbox_WindowsPassword.TextChanged += new System.EventHandler(this._txtbx_WindowsPassword_TextChanged);
             // 
             // _page_FilePermissionFolders
             // 
@@ -177,6 +382,16 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._page_FilePermissionFolders.Size = new System.Drawing.Size(476, 403);
             this._page_FilePermissionFolders.TabIndex = 1011;
             this._page_FilePermissionFolders.Text = "Specify Audit Folders";
+            this._page_FilePermissionFolders.BeforeDisplay += new System.EventHandler(this._page_FilePermissionFolders_BeforeDisplay);
+            // 
+            // addEditFoldersControl
+            // 
+            this.addEditFoldersControl.AutoSize = true;
+            this.addEditFoldersControl.Location = new System.Drawing.Point(3, 3);
+            this.addEditFoldersControl.Name = "addEditFoldersControl";
+            this.addEditFoldersControl.Size = new System.Drawing.Size(470, 388);
+            this.addEditFoldersControl.TabIndex = 0;
+            this.addEditFoldersControl.TargetServerName = "";
             // 
             // _PageTags
             // 
@@ -226,6 +441,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ulTags.Dock = System.Windows.Forms.DockStyle.Top;
             this.ulTags.ItemSettings.AllowEdit = Infragistics.Win.DefaultableBoolean.False;
             this.ulTags.ItemSettings.DefaultImage = ((System.Drawing.Image)(resources.GetObject("ulTags.ItemSettings.DefaultImage")));
+            this.ulTags.ItemSettings.HideSelection = false;
             this.ulTags.ItemSettings.SelectionType = Infragistics.Win.UltraWinListView.SelectionType.Single;
             this.ulTags.Location = new System.Drawing.Point(0, 0);
             this.ulTags.MainColumn.Text = "Server Group Tag";
@@ -242,7 +458,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ulTags.View = Infragistics.Win.UltraWinListView.UltraListViewStyle.Details;
             this.ulTags.ViewSettingsDetails.CheckBoxStyle = Infragistics.Win.UltraWinListView.CheckBoxStyle.CheckBox;
             this.ulTags.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ulTags_MouseDown);
-            this.ulTags.ItemSettings.HideSelection = false;
             // 
             // _page_DefineFilters
             // 
@@ -259,6 +474,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._page_DefineFilters.TextColor = System.Drawing.Color.Navy;
             this._page_DefineFilters.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_DefineFilters_BeforeMoveNext);
             this._page_DefineFilters.BeforeDisplay += new System.EventHandler(this._page_DefineFilters_BeforeDisplay);
+            // 
+            // filterSelection1
+            // 
+            this.filterSelection1.AutoSize = true;
+            this.filterSelection1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.filterSelection1.Location = new System.Drawing.Point(0, 0);
+            this.filterSelection1.Name = "filterSelection1";
+            this.filterSelection1.Size = new System.Drawing.Size(476, 403);
+            this.filterSelection1.TabIndex = 0;
             // 
             // _page_JobSchedule
             // 
@@ -317,8 +541,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Location = new System.Drawing.Point(64, 22);
@@ -342,7 +566,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _txtbx_ScheduleDescription
             // 
-            this._txtbx_ScheduleDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this._txtbx_ScheduleDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this._txtbx_ScheduleDescription.BackColor = System.Drawing.Color.GhostWhite;
             this._txtbx_ScheduleDescription.ForeColor = System.Drawing.Color.SlateGray;
@@ -603,6 +827,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._page_ConfigureSMTPEmail.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_ConfigureSMTPEmail_BeforeMoveNext);
             this._page_ConfigureSMTPEmail.BeforeDisplay += new System.EventHandler(this._page_ConfigureSMTPEmail_BeforeDisplay);
             // 
+            // controlSMTPEmailConfig1
+            // 
+            this.controlSMTPEmailConfig1.BackColor = System.Drawing.Color.Transparent;
+            this.controlSMTPEmailConfig1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.controlSMTPEmailConfig1.Location = new System.Drawing.Point(0, 32);
+            this.controlSMTPEmailConfig1.Name = "controlSMTPEmailConfig1";
+            this.controlSMTPEmailConfig1.Size = new System.Drawing.Size(476, 335);
+            this.controlSMTPEmailConfig1.TabIndex = 7;
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.button_Test);
@@ -756,6 +989,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._page_CollectData.Text = "Take Snapshot";
             this._page_CollectData.TextColor = System.Drawing.Color.Navy;
             this._page_CollectData.BeforeMoveBack += new Divelements.WizardFramework.WizardPageEventHandler(this._page_CollectData_BeforeMoveBack);
+            this._page_CollectData.BeforeDisplay += new System.EventHandler(this._page_CollectData_BeforeDisplay);
             // 
             // label13
             // 
@@ -816,212 +1050,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._rtb_Finish.TabIndex = 1;
             this._rtb_Finish.Text = "";
             // 
-            // _page_Credentials
-            // 
-            this._page_Credentials.Controls.Add(this._grpbx_SQLServerCredentials);
-            this._page_Credentials.Controls.Add(this._grpbx_WindowsGMCredentials);
-            this._page_Credentials.Description = "Specify which credentials SQLsecure should use to collect audit data.";
-            this._page_Credentials.DescriptionColor = System.Drawing.Color.Navy;
-            this._page_Credentials.Location = new System.Drawing.Point(19, 73);
-            this._page_Credentials.Name = "_page_Credentials";
-            this._page_Credentials.NextPage = this._page_FilePermissionFolders;
-            this._page_Credentials.PreviousPage = this._page_Servers;
-            this._page_Credentials.Size = new System.Drawing.Size(476, 403);
-            this._page_Credentials.TabIndex = 0;
-            this._page_Credentials.Text = "Specify Connection Credentials";
-            this._page_Credentials.TextColor = System.Drawing.Color.Navy;
-            this._page_Credentials.BeforeMoveNext += new Divelements.WizardFramework.WizardPageEventHandler(this._page_Credentials_BeforeMoveNext);
-            this._page_Credentials.AfterDisplay += new System.EventHandler(this._page_Credentials_AfterDisplay);
-            this._page_Credentials.BeforeDisplay += new System.EventHandler(this._page_Credentials_BeforeDisplay);
-            // 
-            // _grpbx_SQLServerCredentials
-            // 
-            this._grpbx_SQLServerCredentials.Controls.Add(this.label4);
-            this._grpbx_SQLServerCredentials.Controls.Add(this.textBox_SQLWindowsUser);
-            this._grpbx_SQLServerCredentials.Controls.Add(this.label5);
-            this._grpbx_SQLServerCredentials.Controls.Add(this.textBox_SQLWindowsPassword);
-            this._grpbx_SQLServerCredentials.Controls.Add(this.radioButton_WindowsAuth);
-            this._grpbx_SQLServerCredentials.Controls.Add(this.radioButton_SQLServerAuth);
-            this._grpbx_SQLServerCredentials.Controls.Add(this._lbl_SqlLogin);
-            this._grpbx_SQLServerCredentials.Controls.Add(this.textbox_SqlLogin);
-            this._grpbx_SQLServerCredentials.Controls.Add(this._lbl_SqlLoginPassword);
-            this._grpbx_SQLServerCredentials.Controls.Add(this.textbox_SqlLoginPassword);
-            this._grpbx_SQLServerCredentials.Location = new System.Drawing.Point(3, 14);
-            this._grpbx_SQLServerCredentials.Name = "_grpbx_SQLServerCredentials";
-            this._grpbx_SQLServerCredentials.Size = new System.Drawing.Size(470, 192);
-            this._grpbx_SQLServerCredentials.TabIndex = 0;
-            this._grpbx_SQLServerCredentials.TabStop = false;
-            this._grpbx_SQLServerCredentials.Text = "SQL Server credentials to connect to audited SQL Server";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(31, 46);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(79, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "&Windows User:";
-            // 
-            // textBox_SQLWindowsUser
-            // 
-            this.textBox_SQLWindowsUser.Location = new System.Drawing.Point(117, 43);
-            this.textBox_SQLWindowsUser.Name = "textBox_SQLWindowsUser";
-            this.textBox_SQLWindowsUser.Size = new System.Drawing.Size(334, 20);
-            this.textBox_SQLWindowsUser.TabIndex = 2;
-            this.textBox_SQLWindowsUser.TextChanged += new System.EventHandler(this.textBox_SQLWindowsUser_TextChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(31, 72);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(56, 13);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "&Password:";
-            // 
-            // textBox_SQLWindowsPassword
-            // 
-            this.textBox_SQLWindowsPassword.Location = new System.Drawing.Point(117, 69);
-            this.textBox_SQLWindowsPassword.Name = "textBox_SQLWindowsPassword";
-            this.textBox_SQLWindowsPassword.PasswordChar = '*';
-            this.textBox_SQLWindowsPassword.Size = new System.Drawing.Size(334, 20);
-            this.textBox_SQLWindowsPassword.TabIndex = 3;
-            this.textBox_SQLWindowsPassword.TextChanged += new System.EventHandler(this.textBox_SQLWindowsPassword_TextChanged);
-            // 
-            // radioButton_WindowsAuth
-            // 
-            this.radioButton_WindowsAuth.AutoSize = true;
-            this.radioButton_WindowsAuth.Checked = true;
-            this.radioButton_WindowsAuth.Location = new System.Drawing.Point(10, 20);
-            this.radioButton_WindowsAuth.Name = "radioButton_WindowsAuth";
-            this.radioButton_WindowsAuth.Size = new System.Drawing.Size(140, 17);
-            this.radioButton_WindowsAuth.TabIndex = 1;
-            this.radioButton_WindowsAuth.TabStop = true;
-            this.radioButton_WindowsAuth.Text = "Windows Authentication";
-            this.radioButton_WindowsAuth.UseVisualStyleBackColor = true;
-            this.radioButton_WindowsAuth.CheckedChanged += new System.EventHandler(this.radioButton_WindowsAuth_CheckedChanged);
-            // 
-            // radioButton_SQLServerAuth
-            // 
-            this.radioButton_SQLServerAuth.AutoSize = true;
-            this.radioButton_SQLServerAuth.Location = new System.Drawing.Point(10, 109);
-            this.radioButton_SQLServerAuth.Name = "radioButton_SQLServerAuth";
-            this.radioButton_SQLServerAuth.Size = new System.Drawing.Size(151, 17);
-            this.radioButton_SQLServerAuth.TabIndex = 4;
-            this.radioButton_SQLServerAuth.TabStop = true;
-            this.radioButton_SQLServerAuth.Text = "SQL Server Authentication";
-            this.radioButton_SQLServerAuth.UseVisualStyleBackColor = true;
-            this.radioButton_SQLServerAuth.CheckedChanged += new System.EventHandler(this.radioButton_SQLServerAuth_CheckedChanged);
-            // 
-            // _lbl_SqlLogin
-            // 
-            this._lbl_SqlLogin.AutoSize = true;
-            this._lbl_SqlLogin.Location = new System.Drawing.Point(31, 137);
-            this._lbl_SqlLogin.Name = "_lbl_SqlLogin";
-            this._lbl_SqlLogin.Size = new System.Drawing.Size(67, 13);
-            this._lbl_SqlLogin.TabIndex = 0;
-            this._lbl_SqlLogin.Text = "&Login Name:";
-            // 
-            // textbox_SqlLogin
-            // 
-            this.textbox_SqlLogin.Location = new System.Drawing.Point(117, 134);
-            this.textbox_SqlLogin.Name = "textbox_SqlLogin";
-            this.textbox_SqlLogin.Size = new System.Drawing.Size(334, 20);
-            this.textbox_SqlLogin.TabIndex = 5;
-            this.textbox_SqlLogin.TextChanged += new System.EventHandler(this._txtbx_SqlLogin_TextChanged);
-            // 
-            // _lbl_SqlLoginPassword
-            // 
-            this._lbl_SqlLoginPassword.AutoSize = true;
-            this._lbl_SqlLoginPassword.Location = new System.Drawing.Point(31, 163);
-            this._lbl_SqlLoginPassword.Name = "_lbl_SqlLoginPassword";
-            this._lbl_SqlLoginPassword.Size = new System.Drawing.Size(56, 13);
-            this._lbl_SqlLoginPassword.TabIndex = 0;
-            this._lbl_SqlLoginPassword.Text = "&Password:";
-            // 
-            // textbox_SqlLoginPassword
-            // 
-            this.textbox_SqlLoginPassword.Location = new System.Drawing.Point(117, 160);
-            this.textbox_SqlLoginPassword.Name = "textbox_SqlLoginPassword";
-            this.textbox_SqlLoginPassword.PasswordChar = '*';
-            this.textbox_SqlLoginPassword.Size = new System.Drawing.Size(334, 20);
-            this.textbox_SqlLoginPassword.TabIndex = 6;
-            this.textbox_SqlLoginPassword.TextChanged += new System.EventHandler(this._txtbx_SqlLoginPassword_TextChanged);
-            // 
-            // _grpbx_WindowsGMCredentials
-            // 
-            this._grpbx_WindowsGMCredentials.Controls.Add(this.label2);
-            this._grpbx_WindowsGMCredentials.Controls.Add(this.checkBox_UseSameAuth);
-            this._grpbx_WindowsGMCredentials.Controls.Add(this._lbl_WindowsUser);
-            this._grpbx_WindowsGMCredentials.Controls.Add(this.textbox_WindowsUser);
-            this._grpbx_WindowsGMCredentials.Controls.Add(this._lbl_WindowsPassword);
-            this._grpbx_WindowsGMCredentials.Controls.Add(this.textbox_WindowsPassword);
-            this._grpbx_WindowsGMCredentials.Location = new System.Drawing.Point(3, 224);
-            this._grpbx_WindowsGMCredentials.Name = "_grpbx_WindowsGMCredentials";
-            this._grpbx_WindowsGMCredentials.Size = new System.Drawing.Size(470, 173);
-            this._grpbx_WindowsGMCredentials.TabIndex = 1;
-            this._grpbx_WindowsGMCredentials.TabStop = false;
-            this._grpbx_WindowsGMCredentials.Text = "Windows Credentials to gather Operating System and Active Directory objects";
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(10, 20);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(454, 66);
-            this.label2.TabIndex = 6;
-            this.label2.Text = resources.GetString("label2.Text");
-            // 
-            // checkBox_UseSameAuth
-            // 
-            this.checkBox_UseSameAuth.AutoSize = true;
-            this.checkBox_UseSameAuth.Location = new System.Drawing.Point(10, 89);
-            this.checkBox_UseSameAuth.Name = "checkBox_UseSameAuth";
-            this.checkBox_UseSameAuth.Size = new System.Drawing.Size(238, 17);
-            this.checkBox_UseSameAuth.TabIndex = 0;
-            this.checkBox_UseSameAuth.Text = "Use same Windows Authentication as above";
-            this.checkBox_UseSameAuth.UseVisualStyleBackColor = true;
-            this.checkBox_UseSameAuth.CheckedChanged += new System.EventHandler(this.checkBox_UseSameAuth_CheckedChanged);
-            // 
-            // _lbl_WindowsUser
-            // 
-            this._lbl_WindowsUser.AutoSize = true;
-            this._lbl_WindowsUser.Location = new System.Drawing.Point(10, 117);
-            this._lbl_WindowsUser.Name = "_lbl_WindowsUser";
-            this._lbl_WindowsUser.Size = new System.Drawing.Size(79, 13);
-            this._lbl_WindowsUser.TabIndex = 3;
-            this._lbl_WindowsUser.Text = "Windows &User:";
-            // 
-            // textbox_WindowsUser
-            // 
-            this.textbox_WindowsUser.Location = new System.Drawing.Point(117, 114);
-            this.textbox_WindowsUser.Name = "textbox_WindowsUser";
-            this.textbox_WindowsUser.Size = new System.Drawing.Size(334, 20);
-            this.textbox_WindowsUser.TabIndex = 1;
-            this.textbox_WindowsUser.TextChanged += new System.EventHandler(this._txtbx_WindowsUser_TextChanged);
-            // 
-            // _lbl_WindowsPassword
-            // 
-            this._lbl_WindowsPassword.AutoSize = true;
-            this._lbl_WindowsPassword.Location = new System.Drawing.Point(10, 143);
-            this._lbl_WindowsPassword.Name = "_lbl_WindowsPassword";
-            this._lbl_WindowsPassword.Size = new System.Drawing.Size(56, 13);
-            this._lbl_WindowsPassword.TabIndex = 4;
-            this._lbl_WindowsPassword.Text = "P&assword:";
-            // 
-            // textbox_WindowsPassword
-            // 
-            this.textbox_WindowsPassword.Location = new System.Drawing.Point(117, 140);
-            this.textbox_WindowsPassword.Name = "textbox_WindowsPassword";
-            this.textbox_WindowsPassword.PasswordChar = '*';
-            this.textbox_WindowsPassword.Size = new System.Drawing.Size(334, 20);
-            this.textbox_WindowsPassword.TabIndex = 2;
-            this.textbox_WindowsPassword.TextChanged += new System.EventHandler(this._txtbx_WindowsPassword_TextChanged);
-            // 
             // _page_Servers
             // 
             this._page_Servers.Controls.Add(this._btn_BrowseServers);
             this._page_Servers.Controls.Add(this._txtbx_Server);
             this._page_Servers.Controls.Add(this._lbl_Server);
+            this._page_Servers.Controls.Add(this._txtbx_PortNumber);
+            this._page_Servers.Controls.Add(this._lbl_PortNumber);
+            this._page_Servers.Controls.Add(this._lbl_ServerType);
+            this._page_Servers.Controls.Add(this._comboBox_ServerType);
             this._page_Servers.Description = "Type or browse for the SQL Server you want to audit.";
             this._page_Servers.DescriptionColor = System.Drawing.Color.Navy;
             this._page_Servers.Location = new System.Drawing.Point(19, 73);
@@ -1037,9 +1074,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _btn_BrowseServers
             // 
-            this._btn_BrowseServers.Location = new System.Drawing.Point(436, 14);
+            this._btn_BrowseServers.Location = new System.Drawing.Point(436, 46);
             this._btn_BrowseServers.Name = "_btn_BrowseServers";
-            this._btn_BrowseServers.Size = new System.Drawing.Size(24, 23);
+            this._btn_BrowseServers.Size = new System.Drawing.Size(24, 20);
             this._btn_BrowseServers.TabIndex = 2;
             this._btn_BrowseServers.Text = ".&..";
             this._btn_BrowseServers.UseVisualStyleBackColor = true;
@@ -1047,20 +1084,57 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _txtbx_Server
             // 
-            this._txtbx_Server.Location = new System.Drawing.Point(64, 16);
+            this._txtbx_Server.Location = new System.Drawing.Point(90, 46);
             this._txtbx_Server.Name = "_txtbx_Server";
-            this._txtbx_Server.Size = new System.Drawing.Size(366, 20);
+            this._txtbx_Server.Size = new System.Drawing.Size(340, 20);
             this._txtbx_Server.TabIndex = 1;
             this._txtbx_Server.TextChanged += new System.EventHandler(this._txtbx_Server_TextChanged);
             // 
             // _lbl_Server
             // 
             this._lbl_Server.AutoSize = true;
-            this._lbl_Server.Location = new System.Drawing.Point(17, 19);
+            this._lbl_Server.Location = new System.Drawing.Point(17, 49);
             this._lbl_Server.Name = "_lbl_Server";
             this._lbl_Server.Size = new System.Drawing.Size(41, 13);
-            this._lbl_Server.TabIndex = 0;
+            this._lbl_Server.TabIndex = 1;
             this._lbl_Server.Text = "&Server:";
+            // 
+            // _txtbx_PortNumber
+            // 
+            this._txtbx_PortNumber.Location = new System.Drawing.Point(90, 72);
+            this._txtbx_PortNumber.Name = "_txtbx_PortNumber";
+            this._txtbx_PortNumber.Size = new System.Drawing.Size(340, 20);
+            this._txtbx_PortNumber.TabIndex = 2;
+            this._txtbx_PortNumber.Visible = true;
+            this._txtbx_PortNumber.Text = "1433";
+            this._txtbx_PortNumber.TextChanged += new System.EventHandler(this._txtbx_Server_TextChanged);
+            // 
+            // _lbl_PortNumber
+            // 
+            this._lbl_PortNumber.AutoSize = true;
+            this._lbl_PortNumber.Location = new System.Drawing.Point(17, 75);
+            this._lbl_PortNumber.Name = "_lbl_PortNumber";
+            this._lbl_PortNumber.Size = new System.Drawing.Size(69, 13);
+            this._lbl_PortNumber.TabIndex = 2;
+            this._lbl_PortNumber.Text = "&Port Number:";
+            this._lbl_PortNumber.Visible = true;
+            // 
+            // _lbl_ServerType
+            // 
+            this._lbl_ServerType.AutoSize = true;
+            this._lbl_ServerType.Location = new System.Drawing.Point(17, 19);
+            this._lbl_ServerType.Name = "_lbl_ServerType";
+            this._lbl_ServerType.Size = new System.Drawing.Size(68, 13);
+            this._lbl_ServerType.TabIndex = 0;
+            this._lbl_ServerType.Text = "&Server Type:";
+            // 
+            // _comboBox_ServerType
+            // 
+            this._comboBox_ServerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._comboBox_ServerType.Location = new System.Drawing.Point(90, 16);
+            this._comboBox_ServerType.Name = "_comboBox_ServerType";
+            this._comboBox_ServerType.Size = new System.Drawing.Size(340, 21);
+            this._comboBox_ServerType.TabIndex = 0;
             // 
             // _page_Introduction
             // 
@@ -1087,33 +1161,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._rtb_Introduction.TabIndex = 0;
             this._rtb_Introduction.Text = "";
             // 
-            // filterSelection1
-            // 
-            this.filterSelection1.AutoSize = true;
-            this.filterSelection1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.filterSelection1.Location = new System.Drawing.Point(0, 0);
-            this.filterSelection1.Name = "filterSelection1";
-            this.filterSelection1.Size = new System.Drawing.Size(476, 403);
-            this.filterSelection1.TabIndex = 0;
-            // 
-            // controlSMTPEmailConfig1
-            // 
-            this.controlSMTPEmailConfig1.BackColor = System.Drawing.Color.Transparent;
-            this.controlSMTPEmailConfig1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.controlSMTPEmailConfig1.Location = new System.Drawing.Point(0, 32);
-            this.controlSMTPEmailConfig1.Name = "controlSMTPEmailConfig1";
-            this.controlSMTPEmailConfig1.Size = new System.Drawing.Size(476, 335);
-            this.controlSMTPEmailConfig1.TabIndex = 7;
-            // 
-            // addEditFoldersControl
-            // 
-            this.addEditFoldersControl.AutoSize = true;
-            this.addEditFoldersControl.Location = new System.Drawing.Point(3, 3);
-            this.addEditFoldersControl.Name = "addEditFoldersControl";
-            this.addEditFoldersControl.Size = new System.Drawing.Size(470, 388);
-            this.addEditFoldersControl.TabIndex = 0;
-            this.addEditFoldersControl.TargetServerName = "";
-            // 
             // Form_WizardRegisterSQLServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1130,6 +1177,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Register a SQL Server";
             this._wizard.ResumeLayout(false);
+            this._page_Credentials.ResumeLayout(false);
+            this._grpbx_SQLServerCredentials.ResumeLayout(false);
+            this._grpbx_SQLServerCredentials.PerformLayout();
+            this._grpbx_WindowsGMCredentials.ResumeLayout(false);
+            this._grpbx_WindowsGMCredentials.PerformLayout();
             this._page_FilePermissionFolders.ResumeLayout(false);
             this._page_FilePermissionFolders.PerformLayout();
             this._PageTags.ResumeLayout(false);
@@ -1159,11 +1211,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             ((System.ComponentModel.ISupportInitialize)(this.ultraListView_Policies)).EndInit();
             this._page_CollectData.ResumeLayout(false);
             this._page_Finish.ResumeLayout(false);
-            this._page_Credentials.ResumeLayout(false);
-            this._grpbx_SQLServerCredentials.ResumeLayout(false);
-            this._grpbx_SQLServerCredentials.PerformLayout();
-            this._grpbx_WindowsGMCredentials.ResumeLayout(false);
-            this._grpbx_WindowsGMCredentials.PerformLayout();
             this._page_Servers.ResumeLayout(false);
             this._page_Servers.PerformLayout();
             this._page_Introduction.ResumeLayout(false);
@@ -1194,6 +1241,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private System.Windows.Forms.RichTextBox _rtb_Finish;
         private System.Windows.Forms.Button _btn_BrowseServers;
         private System.Windows.Forms.Label _lbl_Server;
+        private System.Windows.Forms.Label _lbl_ServerType;
+        private System.Windows.Forms.ComboBox _comboBox_ServerType;
+        private System.Windows.Forms.TextBox _txtbx_PortNumber;
+        private System.Windows.Forms.Label _lbl_PortNumber;
         private Divelements.WizardFramework.WizardPage _page_JobSchedule;
         private System.Windows.Forms.Label label_KeepSnapshotDays;
         private System.Windows.Forms.NumericUpDown numericUpDown_KeepSnapshotDays;
