@@ -17,7 +17,7 @@ CREATE PROCEDURE [dbo].[isp_sqlsecure_getpolicyassessment] (@policyid int,
 @usebaseline bit = 0,
 @rundate datetime = NULL,
 @fullRefresh int = 1
-) WITH ENCRYPTION
+)
 AS -- <Idera SQLsecure version and copyright>
         --
         -- Description :
