@@ -1679,13 +1679,29 @@ namespace Idera.SQLsecure.Core.Accounts
         /// <param name="password">password</param>
         /// <param name="errorMessage"></param>
         /// <returns></returns>
-        public static ServerAccess CheckAzureServerAccess(string serverName, string account, string password, out string errorMessage)
+        
+        public static string ConstructConnectionString(
+              string instance,
+              string user,
+              string password,
+              bool azureADAuth
+          )
         {
-            return CheckAzureServerAccess(serverName, account, password, out errorMessage, false);
+            string connectionString;
+            if (!azureADAuth)
+            {
+                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;";
+            }
+            else
+            {
+                connectionString = @"Data Source=" + instance + "; Authentication=Active Directory Password; UID=" + user + "; PWD=" + password;
+            }
+            return connectionString;
         }
-        public static ServerAccess CheckAzureServerAccess(string serverName, string account, string password, out string errorMessage, bool forceLocal)
+        public static ServerAccess CheckAzureServerAccess(string serverName, string account, string password, out string errorMessage, bool azureADAuth)
         {
-            string connectionString =@"Data Source="+serverName+"; Authentication=Active Directory Password; UID="+account+"; PWD="+password;
+            //string connectionString =@"Data Source="+serverName+"; Authentication=Active Directory Password; UID="+account+"; PWD="+password;
+            string connectionString = ConstructConnectionString(serverName, account, password, azureADAuth);
             ServerAccess retCode = ServerAccess.OK;
             errorMessage = string.Empty;
             using (SqlConnection conn = new SqlConnection(connectionString))

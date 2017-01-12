@@ -14,6 +14,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.UI.Console.SQL;
+using Idera.SQLsecure.UI.Console.Import.Models;
 
 namespace Idera.SQLsecure.UI.Console.Sql
 {
@@ -79,13 +80,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
             
         }
 
-        public static string GetValueByName(string name)
+        public static string GetValueByName(ServerType serverType)
         {
-            switch (name)
+            switch (serverType)
             {
-                case "OP": return Utility.Activity.TypeServerOnPremise;
-                case "ADB": return Utility.Activity.TypeServerAzureDB;
-                case "AVM": return Utility.Activity.TypeServerAzureVM;
+                case ServerType.OnPremise: return Utility.Activity.TypeServerOnPremise;
+                case ServerType.SQLServerOnAzureVM: return Utility.Activity.TypeServerAzureVM;
+                case ServerType.AzureDB: return Utility.Activity.TypeServerAzureDB;
+                
                 default: return Utility.Activity.TypeServerOnPremise;
 
             }
