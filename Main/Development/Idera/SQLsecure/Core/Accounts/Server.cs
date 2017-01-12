@@ -26,6 +26,7 @@ using Microsoft.Win32;
 using Idera.SQLsecure.Core.Interop;
 using Idera.SQLsecure.Core.Logger;
 using System.Runtime.InteropServices;
+using System.Data.SqlClient;
 
 namespace Idera.SQLsecure.Core.Accounts
 {
@@ -1566,7 +1567,7 @@ namespace Idera.SQLsecure.Core.Accounts
 
         public static ServerAccess CheckServerAccess(string computer, string account, string password, out string errorMessage)
         {
-            return CheckServerAccess(computer, account, password, out errorMessage, false);
+                return CheckServerAccess(computer, account, password, out errorMessage, false);
         }
 
         public static ServerAccess CheckServerAccess(string computer, string account, string password, out string errorMessage, bool forceLocal)
@@ -1668,6 +1669,39 @@ namespace Idera.SQLsecure.Core.Accounts
             }            
 
             return retCode;
+        }
+
+        /// <summary>
+        /// Check whether Azure DB is accessible or not 
+        /// </summary>
+        /// <param name="serverName">FQDN concatenated with Port number</param>
+        /// <param name="account">username</param>
+        /// <param name="password">password</param>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        public static ServerAccess CheckAzureServerAccess(string serverName, string account, string password, out string errorMessage)
+        {
+            return CheckAzureServerAccess(serverName, account, password, out errorMessage, false);
+        }
+        public static ServerAccess CheckAzureServerAccess(string serverName, string account, string password, out string errorMessage, bool forceLocal)
+        {
+            string connectionString =@"Data Source="+serverName+"; Authentication=Active Directory Password; UID="+account+"; PWD="+password;
+            ServerAccess retCode = ServerAccess.OK;
+            errorMessage = string.Empty;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open(); // throws if invalid
+                }
+                catch(Exception ex)
+                {
+                    retCode = ServerAccess.ERROR_CONNECT;
+                    errorMessage = ex.Message;
+                }
+            }
+            return retCode;
+            
         }
 
         #endregion

@@ -412,7 +412,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     m_ServerName = instance.ToUpper();
                 }
 
-                m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, user, password);
+                m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, user, password, Utility.Activity.TypeServerOnPremise);
                 if (Connect())
                 {
                     m_User = user;
@@ -872,7 +872,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             int m_SchemaVersion = 0;
             try
             {
-                SqlConnectionStringBuilder m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null);
+                SqlConnectionStringBuilder m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null, Utility.Activity.TypeServerOnPremise);
                 using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
                 {
                     connection.Open();

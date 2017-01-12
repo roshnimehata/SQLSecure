@@ -95,11 +95,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     Idera.SQLsecure.Core.Logger.LogX logX = new Idera.SQLsecure.Core.Logger.LogX("Idera.SQLsecure.UI.Console.Sql.Database");
                     logX.loggerX.Error("Error Processing Impersonation for retrieving Database objects list (" + m_serverInfo.login + ")", ex);
                 }
-                bldr = Sql.SqlHelper.ConstructConnectionString(m_serverInfo.connectionName, null, null);
+                bldr = Sql.SqlHelper.ConstructConnectionString(m_serverInfo.connectionName, null, null,Utility.Activity.TypeServerOnPremise);
             }
             else
             {
-                bldr = Sql.SqlHelper.ConstructConnectionString(m_serverInfo.connectionName, m_serverInfo.login, m_serverInfo.password);
+                bldr = Sql.SqlHelper.ConstructConnectionString(m_serverInfo.connectionName, m_serverInfo.login, m_serverInfo.password, Utility.Activity.TypeServerOnPremise);
         }
 
             switch (m_filterObject.ObjectType)
