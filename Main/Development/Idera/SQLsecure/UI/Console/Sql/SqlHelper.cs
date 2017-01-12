@@ -157,7 +157,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             //string serverType = Utility.Activity.TypeServerOnPremise;
             if (serverType == Utility.Activity.TypeServerAzureDB ||(serverType==Utility.Activity.TypeServerAzureVM && azureADAuth))
             {
-                ConstructConnectionString(bldr, instance, user, password, timeout, serverType,azureADAuth);
+                bldr.ConnectionString=ConstructConnectionString( instance, user, password,azureADAuth);
                 
             }
             
@@ -169,24 +169,23 @@ namespace Idera.SQLsecure.UI.Console.Sql
         /// </summary>
         /// <param name="serverType">server type : on premise,azure DB, SQL server on Azure VM</param>
         /// <param name="azureADAuth">bool value : true when it is for azure Ad</param>
-        public static void ConstructConnectionString(
-               SqlConnectionStringBuilder bldr,
+        public static string ConstructConnectionString(
                string instance,
                string user,
                string password,
-               int timeout,
-               string serverType,
                bool azureADAuth
            )
         {
+            string connectionString;
             if (!azureADAuth)
             {
-                bldr.ConnectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=" + timeout + ";";
+                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;";
             }
             else
             {
-                bldr.ConnectionString = @"Data Source=" + instance + "; Authentication=Active Directory Password; UID=" + user + "; PWD=" + password;
+                connectionString = @"Data Source=" + instance + "; Authentication=Active Directory Password; UID=" + user + "; PWD=" + password;
             }
+            return connectionString;
         }
         /// <summary>
         /// Parses the connection version and returns an enum value.

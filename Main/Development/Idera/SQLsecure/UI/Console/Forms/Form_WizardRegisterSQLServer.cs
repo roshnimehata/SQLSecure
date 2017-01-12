@@ -980,13 +980,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             showWorking.UpdateText(string.Format("Connecting to Server {0}...", machine));
                             string errorMsg;
                             Server.ServerAccess sa;
-                            if (_comboBox_ServerType.SelectedItem!= Utility.Activity.TypeServerAzureDB)
+                            if (_comboBox_ServerType.SelectedItem== Utility.Activity.TypeServerOnPremise)
                             {
                                 sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
                             }
                             else
                             {
-                                sa = Server.CheckAzureServerAccess(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+                                sa = Server.CheckAzureServerAccess(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg,true);
                             }
                             
                             
