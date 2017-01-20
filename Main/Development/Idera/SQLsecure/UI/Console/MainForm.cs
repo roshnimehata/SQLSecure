@@ -502,6 +502,7 @@ namespace Idera.SQLsecure.UI.Console
                                                             DateTime.Now.Day,
                                                             23, 59, 59);
             _dateTimePicker_Report_Time.Enabled = false;
+            //isRepositoryUpdated();
         }
 
         #endregion
@@ -1186,12 +1187,15 @@ namespace Idera.SQLsecure.UI.Console
         #region Repository Connection
 
         public static string Server_Name;
+        public static string UserName = null;
+        public static string Password = null;
+        public static bool isConnect = true;
         //Show a pop up dialog to get the server name
-        private bool promptForConnection(bool isConnect = true)
+        private bool promptForConnection(bool isConnect1 = true)
         {
             bool bConnected = false;
             bool bConnecting = true;
-
+            isConnect = isConnect1;
             // Remember the currently connected server, and prompt
             // user for new server.
             string currentServer = Program.gController.Repository.Instance;
@@ -1203,16 +1207,14 @@ namespace Idera.SQLsecure.UI.Console
                 Form_ConnectRepository dlg = new Form_ConnectRepository(isConnect);
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-                 
                     // If connect to server fails, then prompt for the server name again.
                     this.Cursor = Cursors.WaitCursor;
 
                     if (isConnect)
                     {
+                        isRepositoryUpdated();
                         if (connectToServer(dlg.Server))
                         {
-                            
-                                ExecuteUpdateQuery();
                                 bConnected = true;
                                 bConnecting = false;
                                 #region SQLSecure3.1 - (Mitul Kapoor)Perform action based on user select of Create Repository/Deploy Repository
@@ -1228,17 +1230,15 @@ namespace Idera.SQLsecure.UI.Console
                                 // Refresh explorer bar.
                                 refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
                                                                      // else it will stay on the current view if valid
-                            #endregion
+                                #endregion
+                            
                         }
                     }
                     //SQLSecure 3.1 (Mitul Kapoor) - functionality for "Deploy Repository". 
                     else
                     {
+                        isRepositoryUpdated();
                         //Add functionality to perform action to be performed when "Deploy Repository" is selected.
-                        if (!isRepositoryUpdated())
-                        {
-                            DeployRepositoryScripts();
-                        }
                         if (connectToServer(dlg.Server))
                         {
                             bConnected = true;
@@ -1264,6 +1264,7 @@ namespace Idera.SQLsecure.UI.Console
                         }                       
                     }
                     #endregion
+                            
                     this.Cursor = Cursors.Default;
                 }
                 else
@@ -1305,6 +1306,7 @@ namespace Idera.SQLsecure.UI.Console
             return bConnected;
         }
         
+        //SQLSecure3.1 - (Mitul Kapoor) - check if the repository is in latest version. if not ask user and upgrade.
         bool isRepositoryUpdated()
         {
             try
@@ -1312,9 +1314,23 @@ namespace Idera.SQLsecure.UI.Console
                 int m_SchemaVersion = 0;  
                 //retrieve information from the database to check for repository version.
                 m_SchemaVersion = Program.gController.Repository.getRepositoryVersion(Server_Name);
+                if(m_SchemaVersion == 0)
+                {
+                    DeployRepositoryScripts(UserName, Password, false);
+                    return true;
+                }
                 if (m_SchemaVersion < Utility.Constants.SchemaVersion)
                 {
-                    ExecuteUpdateQuery();
+                    MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                    DialogResult result = MessageBox.Show(Utility.ErrorMsgs.UpgradeRepositoryTag, Utility.ErrorMsgs.UpgradeRepository, buttons);
+                    if (result == DialogResult.Yes)
+                    {
+                        DeployRepositoryScripts(UserName, Password, true);                        
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
                     return false;
                 }
             }catch(Exception e)
@@ -1324,39 +1340,33 @@ namespace Idera.SQLsecure.UI.Console
             return true;
         }
 
-        void ExecuteUpdateQuery()
-        {
-            try
-            {
-                string executingExe = "ExecuteUpdate.exe";
-                Process p = new Process();
-                p.StartInfo = new ProcessStartInfo();
-                p.StartInfo.FileName = string.Format("{0}\\{1}", GetAssemblyPath, executingExe);
-                p.StartInfo.Arguments = Server_Name;
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                p.Start();
-                p.WaitForExit();
-                switch (p.ExitCode)
-                {
-                    case (int)Utility.Constants.ExitCode.Success: MsgBox.ShowInfo(Utility.ErrorMsgs.SuccessTag, Utility.ErrorMsgs.RepositorySuccessfullyUpdated); break;
-                    case (int)Utility.Constants.ExitCode.ScriptNotExist: MsgBox.ShowInfo(Utility.ErrorMsgs.FailTag, Utility.ErrorMsgs.ScriptNotExist); break;
-                    case (int)Utility.Constants.ExitCode.ScriptFailure: MsgBox.ShowInfo(Utility.ErrorMsgs.FailTag, Utility.ErrorMsgs.ScriptExecutionFailed); break;
-                }
-            }catch(Exception e)
-            {
-            }
-        }
-
-
-        void DeployRepositoryScripts()
+        //SQLSecure3.1 - (Mitul Kapoor) - execute the deploy repository EXE.
+        void DeployRepositoryScripts(string Username,string Password, bool isUpgradeRequested = false)
         {
             string executingExe = "DeployRepository.exe";
             Process p = new Process();
             p.StartInfo = new ProcessStartInfo();
             p.StartInfo.FileName = string.Format("{0}\\{1}", GetAssemblyPath, executingExe);
-            p.StartInfo.Arguments = Server_Name;
+            if(String.IsNullOrEmpty(UserName) || String.IsNullOrEmpty(Password))
+            {
+                p.StartInfo.Arguments = Server_Name + " " + isUpgradeRequested;
+            }else
+            {
+                //verify credentials here for remote machine.if incorrect return an error
+                if(!VerifyCredentials(Server_Name, Username, Password))
+                {
+                    MsgBox.ShowError(Utility.ErrorMsgs.IncorrectCredentialsTag,Utility.ErrorMsgs.IncorrectCredentials);
+                    return;
+                }
+                if(String.IsNullOrEmpty(Username) || String.IsNullOrEmpty(Password))
+                {
+                    p.StartInfo.Arguments = string.Format("{0} {1}",Server_Name,isUpgradeRequested);
+                }else
+                {
+                    p.StartInfo.Arguments = string.Format("{0} {1} {2} {3}",Server_Name,isUpgradeRequested,Username,Password);
+                }
+                
+            }
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
@@ -1370,6 +1380,25 @@ namespace Idera.SQLsecure.UI.Console
             }
         }
 
+        //SQLSecure3.1 - (Mitul Kapoor) - verify the credentials for SQL authentication / azure VM 
+        public static bool VerifyCredentials(string ServerName,string UserName,string Password)
+        {
+            string connectionString = @"Data Source=" + ServerName + ";Initial Catalog=master ;User ID= " + UserName + ";Password=" + Password + ";";
+            bool retCode = true;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                }
+            }catch(Exception e)
+            {
+                retCode = false;
+            }
+            return retCode;
+        }
+
+        //SQLSecure3.1 - (Mitul Kapoor) - get the assembly path of the application
         private string GetAssemblyPath
         {
             get
@@ -1383,7 +1412,7 @@ namespace Idera.SQLsecure.UI.Console
 
         private bool connectToServer(string server)
         {
-            bool isConnected = Program.gController.Repository.Connect(server);
+            bool isConnected = Program.gController.Repository.Connect(server,UserName,Password);
             setTitle();
             return isConnected;
         }

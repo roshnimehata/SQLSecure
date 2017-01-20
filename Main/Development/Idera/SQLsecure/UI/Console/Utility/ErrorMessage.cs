@@ -90,7 +90,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string NameMatchInvalidCharsMsg = @"Name match string contains invalid characters.";
         public const string WarningEmailNoConfiguredTitle = @"Email Configuration";
         public const string WarningEmailNoConfiguredMsg = @"To successfully receive email notifications, you must also specify which email provider SQLsecure should use. Click Configure SMTP Email on the Tools menu.";
-
+        public const string AzureADAccountNotSpecifiedMsg = @"Azure AD account, for gathering AD objects, has been entered incorrectly. Make sure that the user is specified in Azure AD format and a password has been entered";
         // Policy
         public const string PolicyCaption = "Policy";
         public const string PolicyPropertiesCaption = "Policy Properties";
@@ -388,10 +388,14 @@ Do you wish to remove SQL Server now?";
         public const String ScriptNotExist = "Some of the script(s) required to update repository do not exist. Please contact Idera support team.";
         public const String ScriptExecutionFailed = "Some of the script(s) required to update repository failed to execute. Please check log file for more information or contact Idera support team.";
 
+        //incorrect credentials
+        public const String IncorrectCredentialsTag = "Incorrect credentials";
+        public const String IncorrectCredentials = "Username or password incorrect";
 
         //Update Repository
         public const String UpgradeSchemaTag = "Upgrade your Schema";
-        public const String UpgradeRepository = "Please upgrade your Repository.";
+        public const String UpgradeRepositoryTag = "Upgrade your Repository";
+        public const String UpgradeRepository = "Do you wish to upgrade your repository?";
         public const String RepositoryExistTag = "Repository Already Exists.";
         public const string RepositoryExists = "Repository already exists";
     }

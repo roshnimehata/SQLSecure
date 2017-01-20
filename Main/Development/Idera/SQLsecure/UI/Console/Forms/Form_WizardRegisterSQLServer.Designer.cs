@@ -1074,9 +1074,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _btn_BrowseServers
             // 
-            this._btn_BrowseServers.Location = new System.Drawing.Point(436, 38);
+            this._btn_BrowseServers.Location = new System.Drawing.Point(436, 46);
             this._btn_BrowseServers.Name = "_btn_BrowseServers";
-            this._btn_BrowseServers.Size = new System.Drawing.Size(24, 23);
+            this._btn_BrowseServers.Size = new System.Drawing.Size(24, 20);
             this._btn_BrowseServers.TabIndex = 2;
             this._btn_BrowseServers.Text = ".&..";
             this._btn_BrowseServers.UseVisualStyleBackColor = true;
@@ -1084,7 +1084,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _txtbx_Server
             // 
-            this._txtbx_Server.Location = new System.Drawing.Point(90, 40);
+            this._txtbx_Server.Location = new System.Drawing.Point(90, 46);
             this._txtbx_Server.Name = "_txtbx_Server";
             this._txtbx_Server.Size = new System.Drawing.Size(340, 20);
             this._txtbx_Server.TabIndex = 1;
@@ -1093,7 +1093,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // _lbl_Server
             // 
             this._lbl_Server.AutoSize = true;
-            this._lbl_Server.Location = new System.Drawing.Point(17, 43);
+            this._lbl_Server.Location = new System.Drawing.Point(17, 49);
             this._lbl_Server.Name = "_lbl_Server";
             this._lbl_Server.Size = new System.Drawing.Size(41, 13);
             this._lbl_Server.TabIndex = 1;
@@ -1101,22 +1101,23 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _txtbx_PortNumber
             // 
-            this._txtbx_PortNumber.Location = new System.Drawing.Point(90, 66);
+            this._txtbx_PortNumber.Location = new System.Drawing.Point(90, 72);
             this._txtbx_PortNumber.Name = "_txtbx_PortNumber";
             this._txtbx_PortNumber.Size = new System.Drawing.Size(340, 20);
             this._txtbx_PortNumber.TabIndex = 2;
-            this._txtbx_PortNumber.Visible = false;
+            this._txtbx_PortNumber.Visible = true;
+            this._txtbx_PortNumber.Text = "1433";
             this._txtbx_PortNumber.TextChanged += new System.EventHandler(this._txtbx_Server_TextChanged);
             // 
             // _lbl_PortNumber
             // 
             this._lbl_PortNumber.AutoSize = true;
-            this._lbl_PortNumber.Location = new System.Drawing.Point(17, 67);
+            this._lbl_PortNumber.Location = new System.Drawing.Point(17, 75);
             this._lbl_PortNumber.Name = "_lbl_PortNumber";
             this._lbl_PortNumber.Size = new System.Drawing.Size(69, 13);
             this._lbl_PortNumber.TabIndex = 2;
             this._lbl_PortNumber.Text = "&Port Number:";
-            this._lbl_PortNumber.Visible = false;
+            this._lbl_PortNumber.Visible = true;
             // 
             // _lbl_ServerType
             // 

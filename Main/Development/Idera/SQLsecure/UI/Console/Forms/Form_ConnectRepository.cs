@@ -15,9 +15,18 @@ namespace Idera.SQLsecure.UI.Console.Forms
     {
         #region Ctors
 
+        enum type_of_authentication
+        {
+            azure_authentication,
+            sql_authentication,
+            windows_authentication,
+            on_premise
+        };
+        int selected_authentication_type = (int)type_of_authentication.on_premise;
         bool isConnect = true;
         string button_value = "Connect";
         int button_index = 0;
+        bool areCredentialsRequired = false;
         public Form_ConnectRepository(bool isConnect = true)
         {
             this.isConnect = isConnect;
@@ -101,6 +110,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             this.Cursor = Cursors.WaitCursor;
             MainForm.Server_Name = this._textBox_Server.Text;
+            if (areCredentialsRequired)
+            {
+                MainForm.UserName = this.username.Text;
+                MainForm.Password = this.password.Text;
+            }
         }
 
         #endregion
@@ -127,17 +141,93 @@ namespace Idera.SQLsecure.UI.Console.Forms
             if (selection.CheckedItem.DataValue.Equals("Connect"))
             {
                 this._button_OK.Text = "Connect";
-                this.isConnect = true;
+                MainForm.isConnect = true;
                 this.Text = "Connect to Repository";
                 this.Description = "Connect to SQLsecure Repository";
             }
             else
             {
                 this._button_OK.Text = "Deploy";
-                this.isConnect = false;
+                MainForm.isConnect = false;
                 this.Text = "Deploy Repository";
                 this.Description = "Designate a database instance that will host the SQLsecure Repository. Select SQL Server and then select the appropriate options to install the Repository.";
             }
           }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            //
+            // This changes the main window text when you type into the TextBox.
+            //
+            if(!String.IsNullOrEmpty(this.username.Text))
+                this._button_OK.Enabled = true;
+        }
+
+        //SQLSecure3.1 (Mitul Kapoor) - functionality for sql authentication
+        private void sql_authentication_CheckedChanged(object sender, EventArgs e)
+        {
+            selected_authentication_type = (int)type_of_authentication.sql_authentication;
+            this.username.Enabled = true;
+            this.password.Enabled = true;
+            areCredentialsRequired = true;
+            if (this.username.Text == null || this.username.Text == "")
+            {
+                this._button_OK.Enabled = false;
+            }
+            else
+            {
+                this._button_OK.Enabled = true;
+            }
+
+        }
+
+        //SQLSecure3.1 (Mitul Kapoor) - functionality for windows authentication
+        private void windows_authentication_CheckedChanged(object sender, EventArgs e)
+        {
+            selected_authentication_type = (int)type_of_authentication.windows_authentication;
+            this.username.Enabled = true;
+            this.password.Enabled = true;
+            areCredentialsRequired = true;
+            if (this.username.Text == null || this.username.Text == "")
+            {
+                this._button_OK.Enabled = false;
+            }
+            else
+            {
+                this._button_OK.Enabled = true;
+            }
+
+        }
+
+        //SQLSecure3.1 (Mitul Kapoor) - functionality for azure AD authentication
+        private void azure_authentication_CheckedChanged(object sender, EventArgs e)
+        {
+            selected_authentication_type = (int)type_of_authentication.azure_authentication;
+            this.username.Enabled = true;
+            this.password.Enabled = true;
+            areCredentialsRequired = true;
+            if (this.username.Text == null || this.username.Text == "")
+            {
+                this._button_OK.Enabled = false;
+            }
+            else
+            {
+                this._button_OK.Enabled = true;
+            }
+
+        }
+
+        //SQLSecure3.1 (Mitul Kapoor) - functionality for on premise
+        private void on_premise_authentication_CheckedChanged(object sender, EventArgs e)
+        {
+            selected_authentication_type = (int)type_of_authentication.on_premise;
+            this.username.Enabled = false;
+            this.password.Enabled = false;
+            areCredentialsRequired = false;
+        }
     }
 }
