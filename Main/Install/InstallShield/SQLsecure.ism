@@ -4682,7 +4682,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>NewShortcut1_4C6A9ACB080A4424BAF97E7D730892C1.exe</td><td/><td>&lt;PATH_RELEASE&gt;\Idera.SQLdm.ExportUtility.exe</td><td>0</td></row>
 		<row><td>NewShortcut1_F5F326438B69434A87BF18463B401FAA.exe</td><td/><td>&lt;PATH_RELEASE&gt;\dssmanager.exe</td><td>0</td></row>
 		<row><td>NewShortcut1_F5F326438B69434A87BF18463B401FAA_1.exe</td><td/><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Idera.SQLsecure.UI.Console.exe</td><td>0</td></row>
-		<row><td>NewShortcut1_F79AC890669D4D9085D3A4071EE36532.exe</td><td/><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Idera.SQLsecure.UI.Console.exe</td><td>0</td></row>
+		<row><td>NewShortcut1_F79AC890669D4D9085D3A4071EE36532.exe</td><td/><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Idera.SQLsecure.UI.Console.exe</td><td>2</td></row>
 		<row><td>NewShortcut2_4C6A9ACB080A4424BAF97E7D730892C1.exe</td><td/><td>&lt;PATH_RELEASE&gt;\Idera.SQLdm.Web.ConfigurationConsole.exe</td><td>0</td></row>
 		<row><td>NewShortcut2_F5F326438B69434A87BF18463B401FAA.chm</td><td/><td>&lt;WindowsFolder&gt;\hh.exe</td><td>0</td></row>
 		<row><td>NewShortcut3_4CC395CAECEF4E9FB772FB8BE5975901.exe</td><td/><td>&lt;PATH_IMAGES&gt;\help16.ico</td><td>0</td></row>
