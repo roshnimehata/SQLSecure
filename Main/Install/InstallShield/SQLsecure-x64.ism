@@ -409,8 +409,6 @@
 		<row><td>Microsoft.ReportViewer.Common.dll</td><td>{9DD639CD-B9C0-4505-A84E-3A3A95196EC4}</td><td>BIN</td><td>256</td><td/><td>microsoft.reportviewer.commo</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>{C1BD5CC7-8EB0-4932-8A9C-D37732D83CB1}</td><td>BIN</td><td>256</td><td/><td>microsoft.reportviewer.proce</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Microsoft.ReportViewer.WinForms.dll</td><td>{3736D8DF-2D90-4CAC-A35D-2BE897FD95FB}</td><td>BIN</td><td>256</td><td/><td>microsoft.reportviewer.winfo</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Microsoft.SqlServer.BatchParser.dll</td><td>{D1DF4E43-0172-4E13-836E-FCB562196E7A}</td><td>BIN</td><td>256</td><td/><td>microsoft.sqlserver.batchpar</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Microsoft.SqlServer.Replication.dll</td><td>{3C524D80-7DB5-4A29-B20B-3CCDAC842ADA}</td><td>BIN</td><td>256</td><td/><td>microsoft.sqlserver.replicat</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Microsoft.SqlServer.Smo.dll</td><td>{8DABE291-BEB4-4D09-BA19-A89C524DF02E}</td><td>BIN</td><td>256</td><td/><td>microsoft.sqlserver.smo.dll</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>PolicyTemplates</td><td>{D64D70D8-8ECC-4814-9C75-085D8E691BB3}</td><td>POLICIES</td><td>256</td><td/><td/><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>PowerCollections.dll</td><td>{D119EB6E-9491-4BEA-A356-76945854EBFE}</td><td>BIN</td><td>256</td><td/><td>powercollections.dll</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -1393,8 +1391,6 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>INSTALLDIR</td><td>Idera.SQLsecure.Core.Logger.dll</td></row>
 		<row><td>INSTALLDIR</td><td>Idera.SQLsecure.UI.Console.exe</td></row>
 		<row><td>INSTALLDIR</td><td>Interop.ActiveDs.dll</td></row>
-		<row><td>INSTALLDIR</td><td>Microsoft.SqlServer.BatchParser.dll</td></row>
-		<row><td>INSTALLDIR</td><td>Microsoft.SqlServer.Replication.dll</td></row>
 		<row><td>INSTALLDIR</td><td>Microsoft.SqlServer.Smo.dll</td></row>
 		<row><td>INSTALLDIR</td><td>NewComponent3</td></row>
 		<row><td>INSTALLDIR</td><td>NewComponent5</td></row>
@@ -2215,8 +2211,6 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.Common.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.WinForms.dll</td></row>
-		<row><td>Console</td><td>Microsoft.SqlServer.BatchParser.dll</td></row>
-		<row><td>Console</td><td>Microsoft.SqlServer.Replication.dll</td></row>
 		<row><td>Console</td><td>Microsoft.SqlServer.Smo.dll</td></row>
 		<row><td>Console</td><td>NewComponent3</td></row>
 		<row><td>Console</td><td>PolicyTemplates</td></row>
@@ -2316,8 +2310,6 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>microsoft.reportviewer.commo</td><td>Microsoft.ReportViewer.Common.dll</td><td>MICROS~1.DLL|Microsoft.ReportViewer.Common.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.ReportViewer.Common.dll</td><td>1</td><td/></row>
 		<row><td>microsoft.reportviewer.proce</td><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>MICROS~1.DLL|Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>1</td><td/></row>
 		<row><td>microsoft.reportviewer.winfo</td><td>Microsoft.ReportViewer.WinForms.dll</td><td>MICROS~1.DLL|Microsoft.ReportViewer.WinForms.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.ReportViewer.WinForms.dll</td><td>1</td><td/></row>
-		<row><td>microsoft.sqlserver.batchpar</td><td>Microsoft.SqlServer.BatchParser.dll</td><td>MICROS~1.DLL|Microsoft.SqlServer.BatchParser.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.SqlServer.BatchParser.dll</td><td>1</td><td/></row>
-		<row><td>microsoft.sqlserver.replicat</td><td>Microsoft.SqlServer.Replication.dll</td><td>MICROS~1.DLL|Microsoft.SqlServer.Replication.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.SqlServer.Replication.dll</td><td>1</td><td/></row>
 		<row><td>microsoft.sqlserver.smo.dll</td><td>Microsoft.SqlServer.Smo.dll</td><td>MICROS~1.DLL|Microsoft.SqlServer.Smo.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.SqlServer.Smo.dll</td><td>1</td><td/></row>
 		<row><td>powercollections.dll</td><td>PowerCollections.dll</td><td>POWERC~1.DLL|PowerCollections.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\PowerCollections.dll</td><td>1</td><td/></row>
 		<row><td>rdl.xml</td><td>Reports_rdl.xml</td><td>rdl.xml</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\reports\rdl.xml</td><td>1</td><td/></row>
@@ -2557,8 +2549,6 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>Microsoft.ReportViewer.Common.dll</td><td/><td/><td>_292473A9_FAEC_48C9_BE96_70BB60B294E3_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td/><td/><td>_BA49DE63_E7B4_4C25_8DD8_4304178B43EA_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Microsoft.ReportViewer.WinForms.dll</td><td/><td/><td>_963093A0_B656_4E2E_9868_0216559F3ACD_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Microsoft.SqlServer.BatchParser.dll</td><td/><td/><td>_8A4FB65E_D017_4EDF_BD44_3206AB7A7AF9_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Microsoft.SqlServer.Replication.dll</td><td/><td/><td>_E3E0B785_D4B4_4A4B_8622_234799B125E2_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Microsoft.SqlServer.Smo.dll</td><td/><td/><td>_21312AEB_C77B_4DD9_BC46_8ECE7D3FADB3_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NewComponent3</td><td/><td/><td>_D782ECA3_546B_4B9F_BECD_03E0473CA37C_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NewComponent5</td><td/><td/><td>_B8D94BD4_BFBB_492B_AFBD_584D3F1FF3E7_FILTER</td><td/><td/><td/><td/></row>
