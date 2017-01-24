@@ -140,10 +140,10 @@
 	<property name="Redist" value="C:\Redist"/>
 	
 	<!-- Winzip dir -->
-	<property name="WinZip" value="C:\Program Files\WinZip"/>
+	<property name="WinZip" value="C:\Program Files (x86)\WinZip"/>
 	
 	<!-- Absolute Packager dir -->
-	<property name="AbsolutePackager" value="C:\Program Files\Absolute Packager"/>
+	<property name="AbsolutePackager" value="C:\Program Files (x86)\Absolute Packager"/>
 	
 
 	<!-- Code-signing information -->
