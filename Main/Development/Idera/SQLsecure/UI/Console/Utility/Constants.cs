@@ -101,8 +101,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static String OPTIONS_FILE_EXTENSION_STR = @".options.xml";
 
-        public const int DalVersion = 3000;
-        public const int SchemaVersion = 3000;
+        //SQLsecure 3.1 (Tushar)--Changing DAL and Schema version for 3.1 release.
+        public const int DalVersion = 3100;
+        public const int SchemaVersion = 3100;
 
         public const string COPYRIGHT_MSG = @"© Copyright 2005-2016 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
 
@@ -119,6 +120,21 @@ namespace Idera.SQLsecure.UI.Console.Utility
             ScriptNotExist = -999,
             ScriptFailure = -1000
         }
+
+        //SQLsecure 3.1 (Tushar)--Enums for type of server and authentication.
+        public enum typeOfServer
+        {
+            azureVM,
+            azureDB,
+            remoteVM,
+            onPremise
+        };
+
+        public enum type_of_authentication
+        {
+            windows,
+            sa
+        };
 
         #endregion
 
