@@ -15,6 +15,7 @@ using Idera.SQLsecure.UI.Console.Utility;
 using Infragistics.Win.UltraWinListView;
 using Help = Idera.SQLsecure.UI.Console.Utility.Help;
 using Resources = Idera.SQLsecure.UI.Console.Properties.Resources;
+using System.Text;
 
 namespace Idera.SQLsecure.UI.Console.Forms
 {
@@ -161,20 +162,27 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     //converting old csv format to new one by adding 2 new columns and the default values for those
                     if (totalcols == 7)
                     {
-                        lines[0] += ",PortNumber, ServerType";
-                        int index = 1;
-                        //add new column value for each row.
-                        lines.Skip(1).ToList().ForEach(line =>
+                        StringBuilder msgBldr = new StringBuilder();
+                        msgBldr.Append("You are trying to import an old csv. By default all servers will be considered as on-premise\n\n");
+                        msgBldr.Append("Import Anyway?");
+                        System.Windows.Forms.DialogResult dr = MsgBox.ShowWarning(ErrorMsgs.ImportServersCaption, msgBldr.ToString());
+                        if (dr == DialogResult.OK)
                         {
-                        //-1 for header
-                        lines[index] += ",1433, 0";
-                            index++;
-                        });
-                        //write the new content
-                        filename = string.Format("{0}\\{1}", GetAssemblyPath, "test.csv");
-                        File.WriteAllLines(filename , lines);
-                        
-                       
+                            lines[0] += ",PortNumber, ServerType";
+                            int index = 1;
+                            //add new column value for each row.
+                            lines.Skip(1).ToList().ForEach(line =>
+                            {
+                                //-1 for header
+                                lines[index] += ",1433, 0";
+                                index++;
+                            });
+                            //write the new content
+                            filename = string.Format("{0}\\{1}", GetAssemblyPath, "test.csv");
+                            File.WriteAllLines(filename, lines);
+
+                        }
+
                     }
                     return
                         dataProvider.ParseStream(new FileStream(filename, FileMode.Open));
