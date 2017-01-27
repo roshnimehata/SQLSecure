@@ -395,8 +395,8 @@ Do you wish to remove SQL Server now?";
         //Update Repository
         public const String UpgradeSchemaTag = "Upgrade your Schema";
         public const String UpgradeRepositoryTag = "Upgrade your Repository";
-        public const String UpgradeRepository = "Do you wish to upgrade your repository?";
+        public const String UpgradeRepository = "The version of the selected SQLsecure repository is {0}.Do you wish to upgrade your repository to version {1}?\nNote:For best performance it is advised to upgrade your repository.";
         public const String RepositoryExistTag = "Repository Already Exists.";
-        public const string RepositoryExists = "Repository already exists";
+        public const string RepositoryExists = "SQLsecure latest repository already exists on the selected SQL Server instance.";
     }
 }

@@ -14,15 +14,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
     public partial class Form_ConnectRepository : Idera.SQLsecure.UI.Console.Controls.BaseDialogForm
     {
         #region Ctors
+        //SQLsecure 3.1 (Tushar)--Added integer variable to identify the type of server and authentiction selected.
+        int selected_authentication_type;
+        int typeOfServer;
 
-        enum type_of_authentication
-        {
-            azure_authentication,
-            sql_authentication,
-            windows_authentication,
-            on_premise
-        };
-        int selected_authentication_type = (int)type_of_authentication.on_premise;
         bool isConnect = true;
         string button_value = "Connect";
         int button_index = 0;
@@ -109,11 +104,32 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void _button_OK_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            MainForm.Server_Name = this._textBox_Server.Text;
-            if (areCredentialsRequired)
+            if (!string.IsNullOrEmpty(this._textBox_Server.Text))
             {
-                MainForm.UserName = this.username.Text;
-                MainForm.Password = this.password.Text;
+                MainForm.Server_Name = this._textBox_Server.Text;
+                //SQLsecure 3.1 (Tushar)--Saving values for type of authentication and server.
+                MainForm.typeOfAuthentication = (int)selected_authentication_type;
+                MainForm.typeOfServer = typeOfServer;
+                if (areCredentialsRequired)
+                {
+                    if ((!string.IsNullOrEmpty(this.username.Text)) && (!string.IsNullOrEmpty(this.password.Text)))
+                    {
+                        MainForm.UserName = this.username.Text;
+                        MainForm.Password = this.password.Text;
+                    }
+                    else
+                    {
+                        DialogResult = DialogResult.None;
+                        MessageBox.Show("Please enter username and password to access selected SQL server instance.", "Repository", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+
+
+            }
+            else
+            {
+                DialogResult = DialogResult.None;
+                MessageBox.Show("Please enter SQL server instance name.", "Repository", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -170,7 +186,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
         //SQLSecure3.1 (Mitul Kapoor) - functionality for sql authentication
         private void sql_authentication_CheckedChanged(object sender, EventArgs e)
         {
-            selected_authentication_type = (int)type_of_authentication.sql_authentication;
+            //SQLsecure 3.1 (Tushar)--Saving values for type of authentication and server.
+            typeOfServer = (int)Constants.typeOfServer.remoteVM;
+            selected_authentication_type = (int)Constants.type_of_authentication.sa;
             this.username.Enabled = true;
             this.password.Enabled = true;
             areCredentialsRequired = true;
@@ -188,25 +206,22 @@ namespace Idera.SQLsecure.UI.Console.Forms
         //SQLSecure3.1 (Mitul Kapoor) - functionality for windows authentication
         private void windows_authentication_CheckedChanged(object sender, EventArgs e)
         {
-            selected_authentication_type = (int)type_of_authentication.windows_authentication;
-            this.username.Enabled = true;
-            this.password.Enabled = true;
-            areCredentialsRequired = true;
-            if (this.username.Text == null || this.username.Text == "")
-            {
-                this._button_OK.Enabled = false;
-            }
-            else
-            {
-                this._button_OK.Enabled = true;
-            }
+            //SQLsecure 3.1 (Tushar)--Saving values for type of authentication and server.
+            typeOfServer = (int)Constants.typeOfServer.onPremise;
+            selected_authentication_type = (int)Constants.type_of_authentication.windows;
 
+            this.username.Enabled = false;
+            this.password.Enabled = false;
+            areCredentialsRequired = false;
         }
 
         //SQLSecure3.1 (Mitul Kapoor) - functionality for azure AD authentication
         private void azure_authentication_CheckedChanged(object sender, EventArgs e)
         {
-            selected_authentication_type = (int)type_of_authentication.azure_authentication;
+            //SQLsecure 3.1 (Tushar)--Saving values for type of authentication and server.
+            typeOfServer = (int)Constants.typeOfServer.azureVM;
+            selected_authentication_type = (int)Constants.type_of_authentication.sa;
+
             this.username.Enabled = true;
             this.password.Enabled = true;
             areCredentialsRequired = true;
@@ -221,13 +236,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         }
 
-        //SQLSecure3.1 (Mitul Kapoor) - functionality for on premise
-        private void on_premise_authentication_CheckedChanged(object sender, EventArgs e)
+        private void Form_Load(object sender, EventArgs e)
         {
-            selected_authentication_type = (int)type_of_authentication.on_premise;
-            this.username.Enabled = false;
-            this.password.Enabled = false;
-            areCredentialsRequired = false;
+            //throw new NotImplementedException();
         }
+
     }
 }

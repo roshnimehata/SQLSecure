@@ -1,3 +1,5 @@
+using System;
+
 namespace Idera.SQLsecure.UI.Console.Forms
 {
     partial class Form_ConnectRepository
@@ -45,7 +47,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.azure_authentication = new System.Windows.Forms.RadioButton();
             this.sql_authentication = new System.Windows.Forms.RadioButton();
             this.windows_authentication = new System.Windows.Forms.RadioButton();
-            this.on_premise_authentication = new System.Windows.Forms.RadioButton();
             this._bfd_ButtonPanel.SuspendLayout();
             this._bf_MainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.action_choice)).BeginInit();
@@ -64,7 +65,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _bf_MainPanel
             // 
-            this._bf_MainPanel.Controls.Add(this.on_premise_authentication);
             this._bf_MainPanel.Controls.Add(this.windows_authentication);
             this._bf_MainPanel.Controls.Add(this.sql_authentication);
             this._bf_MainPanel.Controls.Add(this.azure_authentication);
@@ -156,13 +156,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             connect_repository.DisplayText = "Connect to Repository";
             deploy_repository.DataValue = "Deploy";
             deploy_repository.DisplayText = "Deploy Repository";
+            
             this.action_choice.Items.AddRange(new Infragistics.Win.ValueListItem[] {
             connect_repository,
             deploy_repository});
             this.action_choice.Location = new System.Drawing.Point(0, 0);
             this.action_choice.Margin = new System.Windows.Forms.Padding(20);
             this.action_choice.Name = "action_choice";
-            this.action_choice.Size = new System.Drawing.Size(500, 50);
+            this.action_choice.Size = new System.Drawing.Size(500, 30);//SQLsecure (3.1)--Changing y-coordinates to make radio buttons appear horizontally
             this.action_choice.TabIndex = 0;
             this.action_choice.ValueChanged += new System.EventHandler(this.Action_choice_ValueChanged);
             this.action_choice.CheckedIndex = button_index;
@@ -241,19 +242,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.windows_authentication.UseVisualStyleBackColor = true;
             this.windows_authentication.CheckedChanged += new System.EventHandler(this.windows_authentication_CheckedChanged);
             // 
-            // on_premise_authentication
-            // 
-            this.on_premise_authentication.AutoSize = true;
-            this.on_premise_authentication.Checked = true;
-            this.on_premise_authentication.Location = new System.Drawing.Point(335, 113);
-            this.on_premise_authentication.Name = "on_premise_authentication";
-            this.on_premise_authentication.Size = new System.Drawing.Size(113, 17);
-            this.on_premise_authentication.TabIndex = 15;
-            this.on_premise_authentication.TabStop = true;
-            this.on_premise_authentication.Text = "On Premise Server";
-            this.on_premise_authentication.UseVisualStyleBackColor = true;
-            this.on_premise_authentication.CheckedChanged += new System.EventHandler(this.on_premise_authentication_CheckedChanged);
-            // 
             // Form_ConnectRepository
             // 
             this.AcceptButton = this._button_OK;
@@ -264,6 +252,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.connect_49;
             this.Text = "Connect to Repository";
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.Form_ConnectRepository_HelpRequested);
+            this.Load += new System.EventHandler(this.Form_Load);
             this._bfd_ButtonPanel.ResumeLayout(false);
             this._bf_MainPanel.ResumeLayout(false);
             this._bf_MainPanel.PerformLayout();
@@ -271,6 +260,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ResumeLayout(false);
 
         }
+
         
         #endregion
 
@@ -289,6 +279,5 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private System.Windows.Forms.RadioButton sql_authentication;
         private System.Windows.Forms.RadioButton azure_authentication;
         private System.Windows.Forms.RadioButton windows_authentication;
-        private System.Windows.Forms.RadioButton on_premise_authentication;
     }
 }

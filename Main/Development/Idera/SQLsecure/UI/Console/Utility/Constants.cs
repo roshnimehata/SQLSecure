@@ -120,6 +120,21 @@ namespace Idera.SQLsecure.UI.Console.Utility
             ScriptFailure = -1000
         }
 
+        //SQLsecure 3.1 (Tushar)--Enums for type of server and authentication.
+        public enum typeOfServer
+        {
+            azureVM,
+            azureDB,
+            remoteVM,
+            onPremise
+        };
+
+        public enum type_of_authentication
+        {
+            windows,
+            sa
+        };
+
         #endregion
 
         #region Date & Time

@@ -30,6 +30,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
             {
                 #region Fields
                 String m_ServerName;
+            string userName;
+            string password;
                 #endregion
 
                 #region Ctors
@@ -54,6 +56,16 @@ namespace Idera.SQLsecure.UI.Console.Utility
                     get { return m_ServerName; }
                     set { m_ServerName = value; }
                 }
+            public string UserName
+            {
+                get { return userName; }
+                set { userName = value; }
+            }
+            public string Password
+            {
+                get { return password; }
+                set { password = value; }
+            }
                 #endregion
             }
             #endregion
@@ -362,6 +374,10 @@ namespace Idera.SQLsecure.UI.Console.Utility
                 retObj = readfile(optionsPath);
             }
 
+            //Decrypting password.
+            if(!string.IsNullOrEmpty(retObj.RepositoryInfo.Password))
+                retObj.RepositoryInfo.Password = Idera.SQLsecure.Core.Accounts.Encryptor.Decrypt(retObj.RepositoryInfo.Password);
+
             return retObj;
         }
         /// <summary>
@@ -423,6 +439,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
         /// </summary>
         public void Save()
         {
+            //Encrypting password before saving settings to config.
+            this.RepositoryInfo.Password = Idera.SQLsecure.Core.Accounts.Encryptor.Encrypt(this.RepositoryInfo.Password);
+
             XmlSerializer serializer = new XmlSerializer(typeof(UserData));
             using (StreamWriter writer = new StreamWriter(optionsPath))
             {
