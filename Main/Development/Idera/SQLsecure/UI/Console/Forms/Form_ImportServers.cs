@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.UI.Console.Controls;
@@ -14,6 +15,7 @@ using Idera.SQLsecure.UI.Console.Utility;
 using Infragistics.Win.UltraWinListView;
 using Help = Idera.SQLsecure.UI.Console.Utility.Help;
 using Resources = Idera.SQLsecure.UI.Console.Properties.Resources;
+using System.Text;
 
 namespace Idera.SQLsecure.UI.Console.Forms
 {
@@ -43,6 +45,17 @@ namespace Idera.SQLsecure.UI.Console.Forms
         delegate void SetImportItemState(UltraListViewItem lvImport, ImportStatusIcon statusIcon, string statusMessage);
         private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Forms.Form_ImportServers");
         private bool _imported;
+
+        public string GetAssemblyPath
+        {
+            get
+            {
+                string codeBase = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return System.IO.Path.GetDirectoryName(path);
+            }
+        }
 
         public static void Process()
         {
@@ -74,7 +87,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 UnLockControls();
             }
         }
-
 
         private void button_Browse_Click(object sender, EventArgs e)
         {
@@ -144,8 +156,36 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 try
                 {
                     var dataProvider = new CsvDataProvider();
+                    List<string> lines = File.ReadAllLines(textBox_ServersImportFile.Text).ToList();
+                    var totalcols = lines[0].Split(',').Length;
+                    string filename = textBox_ServersImportFile.Text;
+                    //converting old csv format to new one by adding 2 new columns and the default values for those
+                    if (totalcols == 7)
+                    {
+                        StringBuilder msgBldr = new StringBuilder();
+                        msgBldr.Append("You are trying to import an old csv. By default all servers will be considered as on-premise\n\n");
+                        msgBldr.Append("Import Anyway?");
+                        System.Windows.Forms.DialogResult dr = MsgBox.ShowWarning(ErrorMsgs.ImportServersCaption, msgBldr.ToString());
+                        if (dr == DialogResult.OK)
+                        {
+                            lines[0] += ",PortNumber, ServerType";
+                            int index = 1;
+                            //add new column value for each row.
+                            lines.Skip(1).ToList().ForEach(line =>
+                            {
+                                //-1 for header
+                                lines[index] += ",1433, 0";
+                                index++;
+                            });
+                            //write the new content
+                            filename = string.Format("{0}\\{1}", GetAssemblyPath, "test.csv");
+                            File.WriteAllLines(filename, lines);
+
+                        }
+
+                    }
                     return
-                        dataProvider.ParseStream(new FileStream(textBox_ServersImportFile.Text, FileMode.Open));
+                        dataProvider.ParseStream(new FileStream(filename, FileMode.Open));
                 }
                 catch (Exception ex)
                 {
@@ -290,8 +330,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                 if (ServerImportManager.ImportItem(importItem, repository, importSettings) && worker != null)
                                     worker.ReportProgress(0,
                                         importItem.ServerName.Trim().ToUpper(CultureInfo.InvariantCulture));
+                                //checking if temporary file was created 
+                                // if it was , then deleting that file
+                                string tempFilename= string.Format("{0}\\{1}", GetAssemblyPath, "test.csv");
+                                if (File.Exists(tempFilename))
+                                    File.Delete(tempFilename);
 
                             }
+                            
                             catch (Exception ex)
                             {
                                 logX.loggerX.Error(ex.Message);

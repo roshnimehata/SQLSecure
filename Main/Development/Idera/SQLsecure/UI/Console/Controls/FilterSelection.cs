@@ -17,7 +17,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
     public partial class FilterSelection : UserControl
     {
         #region Fields
-
+        //public const string type_of_server = "On-Premise SQL Server";
+        public const string type_of_server = "";
         private bool m_isDirty = false;
         private bool m_isInitialized = false;
         private bool m_isListViewUpdating = false;
@@ -30,6 +31,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
 {\*\generator Msftedit 5.41.15.1507;}\viewkind4\uc1\pard\f0\fs16 Collect SQL Server permissions for: \par";
         private const string AlwaysCollected = @"\pard\fi-360\li720\tx720\f1\'b7\    \f0  All Server objects, Database Security objects, Stored Procedures and Extended Stored Procedures \par";
         private const string AlwaysCollectedForAzureDB = @"\pard\fi-360\li720\tx720\f1\'b7\    \f0  All Server objects, Database Security objects and Stored Procedures \par";
+
         private const string DatabasePrefix = @"\pard\fi-360\li720\tx720\f1\'b7\    \f0 ";
         private const string RuleFooter = @"\pard\f3\par}";
 
@@ -242,9 +244,12 @@ namespace Idera.SQLsecure.UI.Console.Controls
             FilterObject filterObj = new FilterObject(RuleObjectType.Database, RuleScope.All, matchAll);
             m_FilterObjects.Add(RuleObjectType.Database, filterObj);
 
-            // Extended Stored Procedures
-            filterObj = new FilterObject(RuleObjectType.ExtendedStoredProcedure, RuleScope.System, matchAll);
-            m_FilterObjects.Add(RuleObjectType.ExtendedStoredProcedure, filterObj);
+            if(type_of_server == "On-Premise SQL Server")
+            {
+                // Extended Stored Procedures
+                filterObj = new FilterObject(RuleObjectType.ExtendedStoredProcedure, RuleScope.System, matchAll);
+                m_FilterObjects.Add(RuleObjectType.ExtendedStoredProcedure, filterObj);
+            }
 
             // Tables
             filterObj = new FilterObject(RuleObjectType.Table, RuleScope.All, matchAll);
@@ -288,6 +293,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 filterObj = new FilterObject(RuleObjectType.XMLSchemaCollection, RuleScope.All, matchAll);
                 m_FilterObjects.Add(RuleObjectType.XMLSchemaCollection, filterObj);
 
+
                 // Full Text Catalogs
                 //Removing full text catalogs while registering azure DB
                 if(m_ServerInfo.serverType != Utility.Activity.TypeServerAzureDB)
@@ -295,6 +301,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     filterObj = new FilterObject(RuleObjectType.FullTextCatalog, RuleScope.All, matchAll);
                     m_FilterObjects.Add(RuleObjectType.FullTextCatalog, filterObj);
                 }
+
                 //Keys
                 filterObj = new FilterObject(RuleObjectType.Key, RuleScope.All, matchAll);
                 m_FilterObjects.Add(RuleObjectType.Key, filterObj);
@@ -375,6 +382,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             StringBuilder rtfDisplay = new StringBuilder();
             rtfDisplay.Append(RuleHeader);
+
             //Removing extended stored procedure statement from Register flow
             if (m_ServerInfo.serverType != Utility.Activity.TypeServerAzureDB)
             {
@@ -384,6 +392,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             {
                 rtfDisplay.Append(AlwaysCollectedForAzureDB);
             }
+
 
             foreach (KeyValuePair<RuleObjectType, FilterObject> kvp in m_FilterObjects)
             {
