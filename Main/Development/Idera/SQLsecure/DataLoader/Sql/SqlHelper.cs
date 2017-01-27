@@ -126,17 +126,19 @@ namespace Idera.SQLsecure.Collector.Sql
                 string instance,
                 int? port,
                 string user,
-                string password
+                string password,
+                string serverType,
+                bool azureADAuth
             )
         {
             SqlConnectionStringBuilder bldr;
             if (port.HasValue)
             {
-                bldr = ConstructConnectionString(string.Format("{0},{1}", instance, port.Value), user, password);
+                bldr = ConstructConnectionString(string.Format("{0},{1}", instance, port.Value), user, password,serverType,azureADAuth);
             }
             else
             {
-                bldr = ConstructConnectionString(instance, user, password);
+                bldr = ConstructConnectionString(instance, user, password,serverType,azureADAuth);
             }
 
             return bldr;
@@ -152,7 +154,9 @@ namespace Idera.SQLsecure.Collector.Sql
         public static SqlConnectionStringBuilder ConstructConnectionString(
                 string instance,
                 string user,
-                string password
+                string password,
+                string serverType="OP",
+                bool azureADAuth=false
             )
         {
 //            using (logX.loggerX.DebugCall())
@@ -173,11 +177,39 @@ namespace Idera.SQLsecure.Collector.Sql
                     bldr.UserID = user;
                     bldr.Password = password;
                 }
+                if (serverType == "ADB" || (serverType == "AVM" && azureADAuth))
+                {
+                    bldr.ConnectionString = ConstructConnectionString(instance, user, password, azureADAuth);
 
+                }
                 return bldr;
             }
         }
 
+
+        /// <summary>
+        /// Constructs connection strings for azure DB connection and for Azure AD
+        /// </summary>
+        /// <param name="serverType">server type : on premise,azure DB, SQL server on Azure VM</param>
+        /// <param name="azureADAuth">bool value : true when it is for azure Ad</param>
+        public static string ConstructConnectionString(
+               string instance,
+               string user,
+               string password,
+               bool azureADAuth
+           )
+        {
+            string connectionString;
+            if (!azureADAuth)
+            {
+                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;";
+            }
+            else
+            {
+                connectionString = @"Data Source=" + instance + "; Authentication=Active Directory Password; UID=" + user + "; PWD=" + password;
+            }
+            return connectionString;
+        }
         /// <summary>
         /// Appends database to a connection string, and returns the new connection string.
         /// </summary>

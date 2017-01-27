@@ -46,7 +46,7 @@ namespace Idera.SQLsecure.Collector
         private const string QueryIsTargetRegistered = 
                     @"SELECT 1 FROM SQLsecure.dbo.registeredserver WHERE connectionname = @connectionname";
         private const string QueryGetTargetServerInfo =
-                    @"SELECT registeredserverid, servername, sqlserverlogin, sqlserverpassword, sqlserverauthtype, serverlogin, serverpassword, connectionport, auditfoldersstring FROM SQLsecure.dbo.registeredserver WHERE connectionname = @connectionname";
+                    @"SELECT registeredserverid, servername, sqlserverlogin, sqlserverpassword, sqlserverauthtype, serverlogin, serverpassword, connectionport, auditfoldersstring,servertype FROM SQLsecure.dbo.registeredserver WHERE connectionname = @connectionname";
 
         private const string QueryGetAuditFoldersString =
                     @"SELECT auditfoldersstring FROM SQLsecure.dbo.registeredserver WHERE connectionname = @connectionname";
@@ -289,7 +289,8 @@ namespace Idera.SQLsecure.Collector
                 out string sqlPassword,
                 out string sqlAuthType,
                 out string srvrLogin,
-                out string srvrPassword
+                out string srvrPassword,
+                out string serverType
             )
         {
             using (logX.loggerX.DebugCall())
@@ -304,7 +305,7 @@ namespace Idera.SQLsecure.Collector
                 sqlAuthType = null;
                 srvrLogin = null;
                 srvrPassword = null;
-
+                serverType = null;
                 using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
                 {
                     // Open connection to the repository SQL Server.
@@ -330,6 +331,7 @@ namespace Idera.SQLsecure.Collector
                                 srvrLogin = (string)rdr[5];
                                 srvrPassword = Encryptor.Decrypt((string)rdr[6]);
                                 port = rdr[7] == DBNull.Value ? null : (int?)rdr[7];
+                                serverType = (string)rdr[9];
                             }
                             else
                             {

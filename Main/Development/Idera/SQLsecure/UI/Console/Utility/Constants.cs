@@ -101,7 +101,6 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static String OPTIONS_FILE_EXTENSION_STR = @".options.xml";
 
-        //SQLsecure 3.1 (Tushar)--Changing DAL and Schema version for 3.1 release.
         public const int DalVersion = 3100;
         public const int SchemaVersion = 3100;
 

@@ -73,7 +73,7 @@
 	<property name="Workspace.Path" value="${environment::get-variable('SQLSecureBuild')}" />
 	
 	<!-- Nant Properties -->
-	<property name="Framework.Version" value="v2.0.50727"/>
+	<property name="Framework.Version" value="v4.0.30319"/>
 	<property name="Framework.Install" value="c:/Windows/Microsoft.NET/Framework/${Framework.Version}"/>
 	<property name="nant.settings.currentframework" value="net-2.0"/>
 	<property name="build.MSBuild" value="C:/WINDOWS/Microsoft.NET/Framework/v4.0.30319/msbuild.exe" />
@@ -124,7 +124,7 @@
 	<property name="AssemblyInfo.Copyright" value="Copyright (C) 2005 - 2016 Idera, Inc." />
 	
 	<!-- InstallShield Information -->
-	<property name="InstallShield.Builder" value="C:\Program Files\Macrovision\IS 11.5 StandaloneBuild"/>
+	<property name="InstallShield.Builder" value="C:\Program Files (x86)\Macrovision\IS 11.5 StandaloneBuild"/>
 	<property name="InstallShield.Full.Project" value="SQLsecure.ism"/>
 	<property name="InstallShield.Full.Project.x64" value="SQLsecure-x64.ism"/>
 	<property name="InstallShield.Full.Project.ia64" value="SQLsecure-ia64.ism"/>
@@ -140,10 +140,10 @@
 	<property name="Redist" value="C:\Redist"/>
 	
 	<!-- Winzip dir -->
-	<property name="WinZip" value="C:\Program Files\WinZip"/>
+	<property name="WinZip" value="C:\Program Files (x86)\WinZip"/>
 	
 	<!-- Absolute Packager dir -->
-	<property name="AbsolutePackager" value="C:\Program Files\Absolute Packager"/>
+	<property name="AbsolutePackager" value="C:\Program Files (x86)\Absolute Packager"/>
 	
 
 	<!-- Code-signing information -->
