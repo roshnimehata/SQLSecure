@@ -47,7 +47,7 @@ namespace Idera.SQLsecure.Collector
         private bool m_IsValid;
         private int m_snapshotId;
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Target");
-        private string sqlLogin, sqlPassword, sqlAuthType, serverLogin, serverPassword;
+        private string sqlLogin, sqlPassword, sqlAuthType, serverLogin, serverPassword,serverType;
         private FilePermissions filePermissions = null;
         private RegistryPermissions registryPermissions = null;
         private SQLServices sqlServices = null;
@@ -84,6 +84,8 @@ namespace Idera.SQLsecure.Collector
                     @"SELECT SERVERPROPERTY('MachineName')";
         private const string QueryInstancename =
                     @"select instancename = CAST(ServerProperty('InstanceName') AS nvarchar)";
+        private const string QueryInstanceNameAzureDB =
+                    @"select @@SERVERNAME";
         private const string QueryCollation =
                     @"SELECT SERVERPROPERTY('Collation')";
         //private const string QueryLoginAuditMode =
@@ -283,6 +285,93 @@ namespace Idera.SQLsecure.Collector
                 return true;
             }
         }
+
+        private bool isValidAzureDB()
+        {
+            // Validate the server object.
+            //if (!m_Server.IsValid)
+            //{
+            //    logX.loggerX.Error("ERROR - Invalid member server object");
+
+            //    return false;
+            //}
+            // Connect to the target instance and validate.                                 
+            using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
+            {
+                // Open connection to the target SQL Server.  
+                try
+                {
+                    // Open the connection.
+                    connection.Open();
+
+                    // Check the SQL Server version.
+                    m_VersionEnum = Sql.SqlHelper.ParseVersion(connection.ServerVersion);
+                    if (m_VersionEnum == Sql.ServerVersion.Unsupported)
+                    {
+                        string message = "Target SQL Server version: " + connection.ServerVersion
+                                                + " is not supported.";
+                        logX.loggerX.Error("ERROR - ", message);
+                        AppLog.WriteAppEventError(SQLsecureEvent.DlErrInvalidTargetVersionMsg,
+                                                    SQLsecureCat.DlValidationCat, m_ConnectionStringBuilder.DataSource,
+                                                        connection.ServerVersion);
+                        Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString,
+                                    m_ConnectionStringBuilder.DataSource,
+                                    0,
+                                    Collector.Constants.ActivityType_Error,
+                                    Collector.Constants.ActivityEvent_Error,
+                                    message);
+
+                        return false;
+                    }
+
+                    // Check for permissions to read data from SQL Server instance.
+                    //logX.loggerX.Info("Checking for permissions to read data from target SQL Server instance");
+                    //using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                    //                                QueryIsSysadmin, null))
+                    //{
+                    //    int havePermissions = 0;
+                    //    if (rdr.Read()) // Only one row expected.
+                    //    {
+                    //        havePermissions = (int)rdr[0];
+                    //    }
+                    //    if (havePermissions != 1)
+                    //    {
+                    //        string message = "SQLsecure doesn't have permissions to load security data from target instance.";
+                    //        logX.loggerX.Error("ERROR - ", message);
+                    //        AppLog.WriteAppEventError(SQLsecureEvent.DlErrNoTargetPermissions,
+                    //                                    SQLsecureCat.DlValidationCat,
+                    //                                        m_ConnectionStringBuilder.DataSource);
+                    //        Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString,
+                    //                    m_ConnectionStringBuilder.DataSource,
+                    //                    0,
+                    //                    Collector.Constants.ActivityType_Error,
+                    //                    Collector.Constants.ActivityEvent_Error,
+                    //                    message);
+
+                    //        return false;
+                    //    }
+                    //}
+                }
+                catch (SqlException ex)
+                {
+                    string message = "Exception raised when checking if target is valid. " + ex.Message;
+                    logX.loggerX.Error("ERROR - ", message);
+                    AppLog.WriteAppEventError(SQLsecureEvent.ExErrExceptionRaised, SQLsecureCat.DlValidationCat,
+                        " SQL Server = " + m_ConnectionStringBuilder.DataSource +
+                        "Target validation", ex.Message);
+                    Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString,
+                                m_ConnectionStringBuilder.DataSource,
+                                0,
+                                Collector.Constants.ActivityType_Error,
+                                Collector.Constants.ActivityEvent_Error,
+                                message);
+
+                    return false;
+                }
+                connection.Close();
+                return true;
+            }
+        }
         #endregion
 
         #region Ctors
@@ -308,7 +397,7 @@ namespace Idera.SQLsecure.Collector
             int? port;
             if (m_Repository.GetTargetCredentials(targetInstance, out server, out port, out sqlLogin, out sqlPassword,
                                                     out sqlAuthType, out serverLogin,
-                                                        out serverPassword))
+                                                        out serverPassword, out serverType))
             {
                 try
                 {
@@ -319,15 +408,117 @@ namespace Idera.SQLsecure.Collector
                         login = sqlLogin;
                         password = sqlPassword;
                     }
+                    bool azureADAuth = (sqlAuthType == "W" && serverType != "OP") ? true : false;
                     m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(targetInstance, port, login,
-                                                                                            password);
+                                                                                            password, serverType, azureADAuth);
                     TargetInstance = targetInstance;
+                    if (serverType == "OP")
+                    {
+                        SettingsForOnPremiseTargets(server);
+                    }
+                    else if (serverType == "ADB")
+                    {
+                        SettingsForAzureDBTargets();
+                    }
 
-                    Program.ImpersonationContext wi2 = Program.SetTargetImpersonationContext();
-                    m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword,
-                                                                        WriteAppActivityToRepository);
-                    Program.RestoreImpersonationContext(wi2);
+                }
+                catch (Exception ex)
+                {
+                    logX.loggerX.Error("ERROR - exception raised when creating Target object", ex.Message);
+                    m_ConnectionStringBuilder = null;
+                    m_VersionEnum = Sql.ServerVersion.Unsupported;
+                    m_Server = null;
+                    m_IsValid = false;
+                }
+            }
+            else
+            {
+                logX.loggerX.Error("ERROR - failed to retrieve target credentials.");
+                m_IsValid = false;
+            }
 
+            //Retrieve audit folders 
+           
+
+            if (serverType == "OP")
+            {
+                m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
+            }
+            else if (serverType == "ADB")
+            {
+                m_auditFolders = null;
+            }
+            // Retrieve the filter rules.
+            if (m_IsValid)
+            {
+                if (!m_Repository.GetCollectionFilters(targetInstance, out m_FilterList))
+                {
+                    logX.loggerX.Error("ERROR - failed to retrieve collection filter rules");
+                    m_IsValid = false;
+                }
+            }
+        }
+
+        private void SettingsForOnPremiseTargets(string server)
+        {
+            Program.ImpersonationContext wi2 = Program.SetTargetImpersonationContext();
+            m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword,
+                                                                WriteAppActivityToRepository);
+            Program.RestoreImpersonationContext(wi2);
+
+
+            m_IsValid = isValid();
+        }
+
+        private void SettingsForAzureDBTargets()
+        {
+            m_Server = null;
+
+            m_IsValid = isValidAzureDB();
+        }
+
+        public Target(
+                string targetInstance,
+                Repository repository,
+                bool azure
+            )
+        {
+            // Set the repository
+            m_Repository = repository;
+            RepositoryConnectionString = repository.ConnectionString;
+            m_IsValid = true;
+            m_snapshotId = 0;
+            WriteAppActivityToRepository = new Server.WriteActivityToRepositoryDelegate(CreateApplicationActivityEventInRepository);
+
+            // Retrieve target instance credentials from the repository.
+            string server;
+            int? port;
+            if (m_Repository.GetTargetCredentials(targetInstance, out server, out port, out sqlLogin, out sqlPassword,
+                                                    out sqlAuthType, out serverLogin,
+                                                        out serverPassword, out serverType))
+            {
+                try
+                {
+                    string login = string.Empty;
+                    string password = string.Empty;
+                    if (sqlAuthType.ToUpper() == "S")
+                    {
+                        login = sqlLogin;
+                        password = sqlPassword;
+                    }
+                    bool azureADAuth = (sqlAuthType == "W" && serverType != "OP") ? true : false;
+                    m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(targetInstance, port, login,
+                                                                                            password, serverType, azureADAuth);
+                    TargetInstance = targetInstance;
+                    //this should not be there for azure DB
+                    if (serverType == "OP")
+                    {
+                        Program.ImpersonationContext wi2 = Program.SetTargetImpersonationContext();
+                        m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword,
+                                                                            WriteAppActivityToRepository);
+                        Program.RestoreImpersonationContext(wi2);
+                    }
+                    //need to modify isvalid for AzureDB
                     m_IsValid = isValid();
 
                 }
@@ -347,9 +538,11 @@ namespace Idera.SQLsecure.Collector
             }
 
             //Retrieve audit folders 
+            //is not required for azure DB
             m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
 
             // Retrieve the filter rules.
+            //can be used as it is
             if (m_IsValid)
             {
                 if (!m_Repository.GetCollectionFilters(targetInstance, out m_FilterList))
@@ -359,7 +552,6 @@ namespace Idera.SQLsecure.Collector
                 }
             }
         }
-
         #endregion
 
         #region Properties
@@ -418,6 +610,160 @@ namespace Idera.SQLsecure.Collector
             Constants.CollectionStatus enumStatus = Constants.CollectionStatus.StatusSuccess;
             bool isOk = true;
             snapshotid = 0;
+            string serverType = "OP";
+            // Connect to the target and retrieve instance properties.
+            char authenticationMode = Constants.MixedAuthentication;
+            string version = string.Empty;
+            string edition = string.Empty;
+            char crossDbOwnership = Constants.Unknown;
+            char enableC2AuditTrace = Constants.Unknown;
+            char enableProxyAcct = Constants.No;
+            string servername = string.Empty;
+            string instancename = string.Empty;
+            string casesensitivemode = string.Empty;
+            char enabledRemoteAccess = Constants.Unknown;
+            char enabledDAC = Constants.Unknown;
+            char enabledAllowUpdates = Constants.Unknown;
+            char enabledScanForStartupSP = Constants.Unknown;
+            char isDefaultTraceEnabled = Constants.Unknown;
+            char isCommonCriteriaComplianceEnabled = Constants.Unknown;
+            char enabledSQLmailXPs = Constants.Unknown;
+            char enabledDatabaseMailXPs = Constants.Unknown;
+            char enabledOLEAutomationXPs = Constants.Unknown;
+            char enabledWebAsstXPs = Constants.Unknown;
+            char enabledXP_CMDshell = Constants.Unknown;
+            char enabledAdHocDistributedQueries = Constants.Unknown;
+            char isDomainControler = Constants.Unknown;
+            char issaPasswordNull = Constants.Unknown;
+            char isSysAdminOnlyCmdExec = Constants.Unknown;
+            char isReplicationEnabled = Constants.Unknown;
+            char isDistributor = Constants.Unknown;
+            char isPublisher = Constants.Unknown;
+            char hasRemotePublisher = Constants.Unknown;
+            char isWeakPasswordDetectionEnabled = Constants.Unknown;
+            char isClrEnabled = Constants.Unknown;
+            string systemDrive = Constants.Unknown.ToString();
+
+            using (logX.loggerX.DebugCall())
+            {
+                Program.ImpersonationContext wi = Program.SetTargetSQLServerImpersonationContext();
+                using (SqlConnection target = new SqlConnection(ConnectionString))
+                {
+                    try
+                    {
+                        // Open the connection.
+                        target.Open();
+
+                        // authentication mode.
+                        // should we check for integrated security in case of azure DB?
+                        // as integrated security does not include Azure AD auth
+                        getAuthenticationMode(ref enumStatus, ref isOk, ref authenticationMode, target);
+
+                        // version
+                        //is supported by azure DB
+                        getProductVersion(ref enumStatus, isOk, ref version, target);
+
+                        // edition
+                        //supported by azure DB
+                        getEdition(ref enumStatus, isOk, ref edition, target);
+
+                        // Servername
+                        //not applicable on azure DB
+                        getserverName(ref enumStatus, isOk, ref servername, target);
+
+                        // Instance name
+                        //retrurning null for azure db
+                        getInstanceName(ref enumStatus, isOk, ref instancename, target,serverType);
+
+                        // Case sensitive
+                        //applies to azure DB
+                        getCollationProperty(ref enumStatus, isOk, ref casesensitivemode, target);
+
+                        // enableproxyaccount
+                        //not supported for azure DB
+                        checkProxyAccount(ref enumStatus, isOk, ref enableProxyAcct, target);
+
+                        // Is sa account password NULL
+                        //sa account is not there in azure DB
+                        checkSaAccountPasswordForNull(ref enumStatus, isOk, ref issaPasswordNull, target);
+
+
+                        // Is SysAdmin only allowed to execute cmdExec SQL Server Agent Jobs
+                        //SQL server agent is not there in azure DB
+                        checkSQLAgentJobPermissions(ref enumStatus, isOk, ref enableProxyAcct, ref isSysAdminOnlyCmdExec, target);
+
+                        //there might be some different way to do this in azure db
+                        if (isOk)
+                        {
+                            // Replication Enabled
+                            checkReplication(ref enumStatus, ref isReplicationEnabled, target);
+
+                            //Is Server Distributor, isPublisher, HasRemotePublisher
+                            checkDistributorPublisher(ref enumStatus, ref isDistributor, ref isPublisher, ref hasRemotePublisher, target);
+
+                        }
+
+                        // Read Security configuration information
+                        //supported for azure DB
+                        getSecurityConfigurationInformation(isOk, ref crossDbOwnership, ref enableC2AuditTrace, ref enabledRemoteAccess, ref enabledDAC, ref enabledAllowUpdates, ref enabledScanForStartupSP, ref isDefaultTraceEnabled, ref isCommonCriteriaComplianceEnabled, ref enabledSQLmailXPs, ref enabledDatabaseMailXPs, ref enabledOLEAutomationXPs, ref enabledWebAsstXPs, ref enabledXP_CMDshell, ref enabledAdHocDistributedQueries, ref isClrEnabled, target);
+                    }
+                    catch (SqlException ex)
+                    {
+                        logX.loggerX.Warn("WARN - exception raised when getting instance properties", ex);
+                        enumStatus = Constants.CollectionStatus.StatusWarning;
+                    }
+                    Program.RestoreImpersonationContext(wi);
+                }
+
+                // Is Server Domain Controller
+                //not supported by azure DB
+                if (isOk)
+                {
+                    systemDrive = m_Server.SystemDrive;
+                }
+
+                // Is Server Domain Controller
+                if (isOk)
+                {
+                    isDomainControler = m_Server.IsDomainController == true
+                                                           ? Constants.Yes
+                                                           : Constants.No;
+                }
+
+                // Connect to the repository, create snapshot entry and get
+                // the snapshotid.
+                saveSnapshotDataInRepository(ref snapshotid, ref enumStatus, ref isOk, authenticationMode,
+                    version, edition, crossDbOwnership, enableC2AuditTrace, enableProxyAcct, servername,
+                    instancename, casesensitivemode, enabledRemoteAccess, enabledDAC, enabledAllowUpdates,
+                    enabledScanForStartupSP, isDefaultTraceEnabled, isCommonCriteriaComplianceEnabled,
+                    enabledSQLmailXPs, enabledDatabaseMailXPs, enabledOLEAutomationXPs, enabledWebAsstXPs,
+                    enabledXP_CMDshell, enabledAdHocDistributedQueries, isDomainControler, issaPasswordNull,
+                    isSysAdminOnlyCmdExec, isReplicationEnabled, isDistributor, isPublisher, hasRemotePublisher,
+                    ref isWeakPasswordDetectionEnabled, isClrEnabled, systemDrive,serverType);
+
+                //get info about sql server jobs proxies
+                getSQLServerJobProxiesInfo(snapshotid, ref enumStatus, ref isOk, servername);
+                getSQLServerJobInfo(snapshotid, ref enumStatus, ref isOk, servername);
+                //get info sql server availability groups
+                getSQLServerAvailabilityGroupsInfo(snapshotid, ref enumStatus, ref isOk, servername);
+
+            }
+
+            if (!isOk)
+            {
+                enumStatus = Constants.CollectionStatus.StatusError;
+            }
+
+            return enumStatus;
+        }
+
+        private Constants.CollectionStatus createSnapshotAzureDB(out int snapshotid)
+        {
+            // Init returns.
+            string servertype = "ADB";
+            Constants.CollectionStatus enumStatus = Constants.CollectionStatus.StatusSuccess;
+            bool isOk = true;
+            snapshotid = 0;
 
             // Connect to the target and retrieve instance properties.
             char authenticationMode = Constants.MixedAuthentication;
@@ -463,375 +809,62 @@ namespace Idera.SQLsecure.Collector
                         target.Open();
 
                         // authentication mode.
-                        using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                               QueryAuthenticationMode, null))
-                        {
-                            try
-                            {
-                                if (rdr.Read())
-                                {
-                                    authenticationMode = ((int)rdr[0]) == 1
-                                                             ?
-                                                                 Constants.WindowsAuthentication
-                                                             : Constants.MixedAuthentication;
-                                }
-                                else
-                                {
-                                    logX.loggerX.Warn("WARN - failed to read auhtentication mode");
-                                }
-                            }
-                            catch (SqlException ex)
-                            {
-                                logX.loggerX.Error("ERROR - reading authentication mode raised an exception", ex);
-                                isOk = false;
-                                enumStatus = Constants.CollectionStatus.StatusError;
-                            }
-                        }
+                        // should we check for integrated security in case of azure DB?
+                        // as integrated security does not include Azure AD auth
+                        getAuthenticationMode(ref enumStatus, ref isOk, ref authenticationMode, target);
 
                         // version
-                        if (isOk)
-                        {
-                            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                   QueryVersion, null))
-                            {
-                                if (rdr.Read())
-                                {
-                                    version = (string)rdr[0];
-                                }
-                                else
-                                {
-                                    logX.loggerX.Warn("WARN - failed to read version");
-                                    enumStatus = Constants.CollectionStatus.StatusWarning;
-                                }
-                            }
-                        }
+                        //is supported by azure DB
+                        getProductVersion(ref enumStatus, isOk, ref version, target);
 
                         // edition
-                        if (isOk)
-                        {
-                            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                   QueryEdition, null))
-                            {
-                                if (rdr.Read())
-                                {
-                                    edition = (string)rdr[0];
-                                }
-                                else
-                                {
-                                    logX.loggerX.Warn("WARN - failed to read edition");
-                                    enumStatus = Constants.CollectionStatus.StatusWarning;
-                                }
-                            }
-                        }
+                        //supported by azure DB
+                        getEdition(ref enumStatus, isOk, ref edition, target);
 
-                        // Servername
-                        if (isOk)
-                        {
-                            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                   QueryServername, null))
-                            {
-                                if (rdr.Read())
-                                {
-                                    servername = (string)rdr[0];
-                                }
-                                else
-                                {
-                                    logX.loggerX.Warn("WARN - failed to read server name");
-                                    enumStatus = Constants.CollectionStatus.StatusWarning;
-                                }
-                            }
-                        }
+                        // Servername--machine name
+                        //not applicable on azure DB
+                        //select @@SERVERNAME
+                        //getserverName(ref enumStatus, isOk, ref servername, target);
 
                         // Instance name
-                        if (isOk)
-                        {
-                            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                   QueryInstancename, null))
-                            {
-                                if (rdr.HasRows && rdr.Read())
-                                {
-                                    System.Data.SqlTypes.SqlString insname = rdr.GetSqlString(0);
-                                    instancename = insname.IsNull ? string.Empty : insname.Value;
-                                }
-                                else
-                                {
-                                    logX.loggerX.Warn("WARN - failed to read instance name");
-                                    enumStatus = Constants.CollectionStatus.StatusWarning;
-                                }
-                            }
-                        }
+                        //returning null for azure db
+                        getInstanceName(ref enumStatus, isOk, ref instancename, target,serverType);
 
                         // Case sensitive
-                        if (isOk)
-                        {
-                            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                   QueryCollation, null))
-                            {
-                                if (rdr.Read())
-                                {
-                                    casesensitivemode = (string)rdr[0];
-                                    casesensitivemode = casesensitivemode.Contains("_CS_") ? "Y" : "N";
-                                }
-                                else
-                                {
-                                    logX.loggerX.Warn("WARN - failed to read collation");
-                                    enumStatus = Constants.CollectionStatus.StatusWarning;
-                                }
-                            }
-                        }
+                        //applies to azure DB
+                        getCollationProperty(ref enumStatus, isOk, ref casesensitivemode, target);
 
                         // enableproxyaccount
-                        if (m_VersionEnum != Sql.ServerVersion.SQL2000)
-                        {
-                            if (isOk)
-                            {
-                                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                       QueryProxyEnabled, null))
-                                {
-                                    if (rdr.HasRows && rdr.Read())
-                                    {
-                                        System.Data.SqlTypes.SqlString insname = rdr.GetSqlString(0);
-                                        if (!insname.IsNull)
-                                        {
-                                            enableProxyAcct = Constants.Yes;
-                                        }
-                                        else
-                                        {
-                                            logX.loggerX.Warn("WARN - failed to read enable proxy account");
-                                            enumStatus = Constants.CollectionStatus.StatusWarning;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        //not supported for azure DB
+                        //checkProxyAccount(ref enumStatus, isOk, ref enableProxyAcct, target);
 
                         // Is sa account password NULL
-                        if (isOk)
-                        {
-                            string query = string.Empty;
-                            if (m_VersionEnum == Sql.ServerVersion.SQL2000)
-                            {
-                                query = QueryIssaPasswordNull2K;
-                            }
-                            else
-                            {
-                                query = QueryIssaPasswordNull2K5;
-                            }
-                            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                       query, null))
-                            {
-                                if (rdr.Read())
-                                {
-                                    issaPasswordNull = (int)rdr[0] == 1 ? Constants.Yes : Constants.No;
-                                }
-                                else
-                                {
-                                    logX.loggerX.Warn("WARN - failed to read is sa account password NULL");
-                                    enumStatus = Constants.CollectionStatus.StatusWarning;
-                                }
-                            }
-                        }
+                        //sa account is not there in azure DB
+                        //checkSaAccountPasswordForNull(ref enumStatus, isOk, ref issaPasswordNull, target);
 
 
                         // Is SysAdmin only allowed to execute cmdExec SQL Server Agent Jobs
-                        if (isOk)
-                        {
-                            string query = string.Empty;
-                            if (m_VersionEnum == Sql.ServerVersion.SQL2000)
-                            {
-                                query = QuerySysAdminOnlyForSQLAgentCmdExecJobs2k;
-                            }
-                            else
-                            {
-                                query = QuerySysAdminOnlyForSQLAgentCmdExecJobs2k5;
-                            }
-                            try
-                            {
-                                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                    query, null))
-                                {
-                                    if (rdr.HasRows && rdr.Read())
-                                    {
-                                        isSysAdminOnlyCmdExec = Constants.No;
-                                        if (m_VersionEnum == Sql.ServerVersion.SQL2000)
-                                        {
-                                            enableProxyAcct = Constants.Yes;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        isSysAdminOnlyCmdExec = Constants.Yes;
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                logX.loggerX.Warn(string.Format("WARN - failed to read SysAdmin only allowed to execute cmdExec SQL Server Agent Jobs\n{0}", ex.Message));
-                                enumStatus = Constants.CollectionStatus.StatusWarning;
-                            }
-                        }
+                        //SQL server agent is not there in azure DB
+                        //checkSQLAgentJobPermissions(ref enumStatus, isOk, ref enableProxyAcct, ref isSysAdminOnlyCmdExec, target);
 
-
+                        //there might be some different way to do this in azure db
                         if (isOk)
                         {
                             // Replication Enabled
-                            string query = QueryReplicationEnabled;
-                            try
-                            {
-                                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                    query, null))
-                                {
-                                    isReplicationEnabled = Constants.No;
-                                    while (rdr.Read())
-                                    {
-                                        // name | id | transpublish | mergepublish | dbowner | dbreadonly
-                                        if (Convert.ToInt32(rdr[2]) == 1 || Convert.ToInt32(rdr[3]) == 1)
-                                        {
-                                            isReplicationEnabled = Constants.Yes;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                logX.loggerX.Warn(string.Format("WARN - failed to read SysAdmin only allowed to execute cmdExec SQL Server Agent Jobs\n{0}", ex.Message));
-                                enumStatus = Constants.CollectionStatus.StatusWarning;
-                            }
+                            //checkReplication(ref enumStatus, ref isReplicationEnabled, target);
 
                             //Is Server Distributor, isPublisher, HasRemotePublisher
-                            try
-                            {
-                                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text, QueryDistributorEnabled, null))
-                                {
-                                    if (rdr.Read())
-                                    {
-
-                                        // installed  | distribution server | distribution db installed  | is distribution publisher  | has remote distribution publisher
-                                        isDistributor = Convert.ToInt32(rdr[2]) == 1 ? Constants.Yes : Constants.No;
-                                        isPublisher = Convert.ToInt32(rdr[3]) == 1 ? Constants.Yes : Constants.No;
-                                        hasRemotePublisher = Convert.ToInt32(rdr[4]) == 1 ? Constants.Yes : Constants.No;
-
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                logX.loggerX.Warn(string.Format("WARN - failed to read if server is distributor/publisher or has remote publisher.\n{0}", ex.Message));
-                                enumStatus = Constants.CollectionStatus.StatusWarning;
-                            }
+                            //checkDistributorPublisher(ref enumStatus, ref isDistributor, ref isPublisher, ref hasRemotePublisher, target);
 
                         }
 
                         // Read Security configuration information
-                        if (m_VersionEnum == Sql.ServerVersion.SQL2000)
-                        {
-                            if (isOk)
-                            {
-                                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                       QueryConfigurations2K, null))
-                                {
-                                    while (rdr.Read())
-                                    {
-                                        int id = Convert.ToInt32(rdr[0]);
-                                        char value = ((int)rdr[1] == 1) ? Constants.Yes : Constants.No;
-                                        switch (id)
-                                        {
-                                            case 102:
-                                                enabledAllowUpdates = value;
-                                                break;
-                                            case 117:
-                                                enabledRemoteAccess = value;
-                                                break;
-                                            case 400:
-                                                crossDbOwnership = value;
-                                                break;
-                                            case 544:
-                                                enableC2AuditTrace = value;
-                                                break;
-                                            case 1547:
-                                                enabledScanForStartupSP = value;
-                                                break;
-                                            case 1568:
-                                                isDefaultTraceEnabled = value;
-                                                break;
-                                            case 1577:
-                                                isCommonCriteriaComplianceEnabled = value;
-                                                break;
-                                            default:
-                                                logX.loggerX.Warn("WARN - Read unknown configuration id: ", id);
-                                                break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (isOk)
-                            {
-                                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
-                                                                                       QueryConfigurations2K5, null))
-                                {
-                                    while (rdr.Read())
-                                    {
-                                        int id = (int)rdr[0];
-                                        char value = ((int)rdr[1] == 1) ? Constants.Yes : Constants.No;
-                                        switch (id)
-                                        {
-                                            case 102:
-                                                enabledAllowUpdates = value;
-                                                break;
-                                            case 117:
-                                                enabledRemoteAccess = value;
-                                                break;
-                                            case 400:
-                                                crossDbOwnership = value;
-                                                break;
-                                            case 544:
-                                                enableC2AuditTrace = value;
-                                                break;
-                                            case 1568:
-                                                isDefaultTraceEnabled = value;
-                                                break;
-                                            case 1547:
-                                                enabledScanForStartupSP = value;
-                                                break;
-                                            case 1576:
-                                                enabledDAC = value;
-                                                break;
-                                            case 16385:
-                                                enabledSQLmailXPs = value;
-                                                break;
-                                            case 16386:
-                                                enabledDatabaseMailXPs = value;
-                                                break;
-                                            case 16388:
-                                                enabledOLEAutomationXPs = value;
-                                                break;
-                                            case 16389:
-                                                enabledWebAsstXPs = value;
-                                                break;
-                                            case 16390:
-                                                enabledXP_CMDshell = value;
-                                                break;
-                                            case 16391:
-                                                enabledAdHocDistributedQueries = value;
-                                                break;
-                                            case 1562:
-                                                isClrEnabled = value;
-                                                break;
-                                            case 1577:
-                                                isCommonCriteriaComplianceEnabled = value;
-                                                break;
-                                            default:
-                                                logX.loggerX.Warn("WARN - Read unknown configuration id: ", id);
-                                                break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        //supported for azure DB
+                        getSecurityConfigurationInformation(isOk, ref crossDbOwnership, ref enableC2AuditTrace, 
+                            ref enabledRemoteAccess, ref enabledDAC, ref enabledAllowUpdates, ref enabledScanForStartupSP, 
+                            ref isDefaultTraceEnabled, ref isCommonCriteriaComplianceEnabled, ref enabledSQLmailXPs, 
+                            ref enabledDatabaseMailXPs, ref enabledOLEAutomationXPs, ref enabledWebAsstXPs, 
+                            ref enabledXP_CMDshell, ref enabledAdHocDistributedQueries, ref isClrEnabled, target);
                     }
                     catch (SqlException ex)
                     {
@@ -842,188 +875,36 @@ namespace Idera.SQLsecure.Collector
                 }
 
                 // Is Server Domain Controller
-                if (isOk)
-                {
-                    systemDrive = m_Server.SystemDrive;
-                }
+                //not supported by azure DB
 
-                // Is Server Domain Controller
-                if (isOk)
-                {
-                    isDomainControler = m_Server.IsDomainController == true
-                                                           ? Constants.Yes
-                                                           : Constants.No;
-                }
+                //if (isOk)
+                //{
+                //    systemDrive = m_Server.SystemDrive;
+                //}
+
+                //// Is Server Domain Controller
+                //if (isOk)
+                //{
+                //    isDomainControler = m_Server.IsDomainController == true
+                //                                           ? Constants.Yes
+                //                                           : Constants.No;
+                //}
 
                 // Connect to the repository, create snapshot entry and get
                 // the snapshotid.
-                if (isOk)
-                {
-                    Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
-                    using (SqlConnection repository = new SqlConnection(m_Repository.ConnectionString))
-                    {
-                        try
-                        {
-                            // Open the connection.
-                            repository.Open();
+                saveSnapshotDataInRepository(ref snapshotid, ref enumStatus, ref isOk, authenticationMode, version, edition, 
+                                crossDbOwnership, enableC2AuditTrace, enableProxyAcct, servername, instancename, casesensitivemode,
+                                enabledRemoteAccess, enabledDAC, enabledAllowUpdates, enabledScanForStartupSP, isDefaultTraceEnabled,
+                                isCommonCriteriaComplianceEnabled, enabledSQLmailXPs, enabledDatabaseMailXPs, enabledOLEAutomationXPs,
+                                enabledWebAsstXPs, enabledXP_CMDshell, enabledAdHocDistributedQueries, isDomainControler, 
+                                issaPasswordNull, isSysAdminOnlyCmdExec, isReplicationEnabled, isDistributor, isPublisher, 
+                                hasRemotePublisher, ref isWeakPasswordDetectionEnabled, isClrEnabled, systemDrive,serverType);
 
-                            List<WeakPasswordSetting> settings = WeakPasswordSetting.GetWeakPasswordSettings(repository);
-
-                            if (settings.Count > 0)
-                            {
-                                isWeakPasswordDetectionEnabled = settings[0].PasswordCheckingEnabled ? Constants.Yes : Constants.No;
-                            }
-
-                            // Create a snapshot instance.
-                            string instance = m_ConnectionStringBuilder.DataSource.Split(',')[0];
-                            SqlParameter paramConnectionname =
-                                new SqlParameter(ParamConnectionname, instance);
-                            SqlParameter paramStarttime =
-                                new SqlParameter(ParamStarttime, DateTime.Now.ToUniversalTime());
-                            string os = m_Server.Product;
-                            if (!string.IsNullOrEmpty(m_Server.ServicePack))
-                            {
-                                os += (", " + m_Server.ServicePack);
-                            }
-                            SqlParameter paramStatus = new SqlParameter(ParamStatus, Constants.StatusInProgress);
-                            String collectorVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                            if (collectorVersion != null && collectorVersion.Equals("0.0.0.0"))
-                            {
-                                collectorVersion = Constants.SQLsecureCollectorVersion;
-                            }
-                            System.Globalization.CultureInfo culture =
-                                new System.Globalization.CultureInfo("en-US", false);
-                            string startTime = DateTime.Now.ToUniversalTime().ToString(culture);
-                            string query = string.Format(NonQueryCreateSnapshot,
-                                                    instance,
-                                                    servername,
-                                                    instancename,
-                                                    startTime,
-                                                    authenticationMode,
-                                                    os,
-                                                    version,
-                                                    edition,
-                                                    Constants.StatusInProgress,
-                                                    // loginAuditMode,
-                                                    crossDbOwnership,
-                                                    enableC2AuditTrace,
-                                                    enableProxyAcct,
-                                                    casesensitivemode,
-                                                    collectorVersion,
-                                                    enabledAllowUpdates,
-                                                    enabledDAC,
-                                                    enabledRemoteAccess,
-                                                    enabledScanForStartupSP,
-                                                    enabledSQLmailXPs,
-                                                    enabledDatabaseMailXPs,
-                                                    enabledOLEAutomationXPs,
-                                                    enabledWebAsstXPs,
-                                                    enabledXP_CMDshell,
-                                                    isDomainControler,
-                                                    issaPasswordNull,
-                                                    isSysAdminOnlyCmdExec,
-                                                    isReplicationEnabled,
-                                                    systemDrive,
-                                                    enabledAdHocDistributedQueries,
-                                                    isWeakPasswordDetectionEnabled,
-                                                    isDistributor,
-                                                    isPublisher,
-                                                    hasRemotePublisher,
-                                                    isClrEnabled,
-                                                    isDefaultTraceEnabled,
-                                                    isCommonCriteriaComplianceEnabled);
-
-                            Sql.SqlHelper.ExecuteNonQuery(repository, CommandType.Text, query);
-
-                            // Query to get the snapshotid.
-                            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(repository, null,
-                                                                                   CommandType.Text, QuerySnapshotId,
-                                                                                   new SqlParameter[] { paramConnectionname }))
-                            {
-                                if (rdr.Read())
-                                {
-                                    snapshotid = (int)rdr[0];
-                                }
-                            }
-
-                            // Now Create the snapshot histroy
-                            // ------------------------------
-                            SqlParameter paramSnapshotID = new SqlParameter(ParamSnapshotID, snapshotid);
-                            SqlParameter paramStartTime =
-                                new SqlParameter(ParamStartTime, DateTime.Now.ToUniversalTime());
-                            SqlParameter paramNumErrors = new SqlParameter(ParamNumberofErrors, Convert.ToInt32(0));
-                            Sql.SqlHelper.ExecuteNonQuery(repository, CommandType.Text,
-                                                          NonQueryCreateSnapshotHistory,
-                                                          new SqlParameter[]
-                                                              {
-                                                                  paramSnapshotID, paramStartTime,
-                                                                  paramNumErrors, paramStatus
-                                                              });
-                        }
-                        catch (SqlException ex)
-                        {
-                            logX.loggerX.Error("ERROR - exception raised when creating a snapshot entry", ex);
-                            isOk = false;
-                            enumStatus = Constants.CollectionStatus.StatusError;
-                        }
-                    }
-                    Program.RestoreImpersonationContext(ic);
-                }
-
-                //get info about sql server jobs
-                if (isOk)
-                {
-                    Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
-
-                    try
-                    {
-
-                        isOk = SqlJob.ProcessProxies(m_VersionEnum, ConnectionString,
-                            m_Repository.ConnectionString, snapshotid, servername);
-
-                    }
-                    catch (SqlException ex)
-                    {
-                        logX.loggerX.Error("ERROR - exception raised when getting info about sql server jobs proxies", ex);
-                        isOk = false;
-                        enumStatus = Constants.CollectionStatus.StatusError;
-                    }
-                    Program.RestoreImpersonationContext(ic);
-                }
-                if (isOk)
-                {
-                    Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
-
-                    try
-                    {
-                        isOk = SqlJob.Process(m_VersionEnum, ConnectionString,
-                            m_Repository.ConnectionString, snapshotid, servername);
-                    }
-                    catch (SqlException ex)
-                    {
-                        logX.loggerX.Error("ERROR - exception raised when getting info about sql server jobs", ex);
-                        isOk = false;
-                        enumStatus = Constants.CollectionStatus.StatusError;
-                    }
-                    Program.RestoreImpersonationContext(ic);
-                }
-                if (isOk && m_VersionEnum != ServerVersion.Unsupported && m_VersionEnum >= ServerVersion.SQL2012)
-                {
-                    Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
-
-                    try
-                    {
-                        isOk = AvailabilityGroup.ProcessGroups(m_VersionEnum, ConnectionString,
-                            m_Repository.ConnectionString, snapshotid, servername);
-                    }
-                    catch (SqlException ex)
-                    {
-                        logX.loggerX.Error("ERROR - exception raised when getting info about sql server availability groups", ex);
-                        isOk = false;
-                        enumStatus = Constants.CollectionStatus.StatusError;
-                    }
-                    Program.RestoreImpersonationContext(ic);
-                }
+                //get info about sql server jobs proxies
+                //getSQLServerJobProxiesInfo(snapshotid, ref enumStatus, ref isOk, servername);
+                //getSQLServerJobInfo(snapshotid, ref enumStatus, ref isOk, servername);
+                //get info sql server availability groups
+                //getSQLServerAvailabilityGroupsInfo(snapshotid, ref enumStatus, ref isOk, servername);
 
             }
 
@@ -1035,7 +916,607 @@ namespace Idera.SQLsecure.Collector
             return enumStatus;
         }
 
+        private void getSQLServerAvailabilityGroupsInfo(int snapshotid, ref Constants.CollectionStatus enumStatus, ref bool isOk, string servername)
+        {
+            if (isOk && m_VersionEnum != ServerVersion.Unsupported && m_VersionEnum >= ServerVersion.SQL2012)
+            {
+                Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
 
+                try
+                {
+                    isOk = AvailabilityGroup.ProcessGroups(m_VersionEnum, ConnectionString,
+                        m_Repository.ConnectionString, snapshotid, servername);
+                }
+                catch (SqlException ex)
+                {
+                    logX.loggerX.Error("ERROR - exception raised when getting info about sql server availability groups", ex);
+                    isOk = false;
+                    enumStatus = Constants.CollectionStatus.StatusError;
+                }
+                Program.RestoreImpersonationContext(ic);
+            }
+        }
+
+        private void getSQLServerJobInfo(int snapshotid, ref Constants.CollectionStatus enumStatus, ref bool isOk, string servername)
+        {
+            if (isOk)
+            {
+                Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
+
+                try
+                {
+                    isOk = SqlJob.Process(m_VersionEnum, ConnectionString,
+                        m_Repository.ConnectionString, snapshotid, servername);
+                }
+                catch (SqlException ex)
+                {
+                    logX.loggerX.Error("ERROR - exception raised when getting info about sql server jobs", ex);
+                    isOk = false;
+                    enumStatus = Constants.CollectionStatus.StatusError;
+                }
+                Program.RestoreImpersonationContext(ic);
+            }
+        }
+
+        private void getSQLServerJobProxiesInfo(int snapshotid, ref Constants.CollectionStatus enumStatus, ref bool isOk, string servername)
+        {
+            if (isOk)
+            {
+                Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
+
+                try
+                {
+
+                    isOk = SqlJob.ProcessProxies(m_VersionEnum, ConnectionString,
+                        m_Repository.ConnectionString, snapshotid, servername);
+
+                }
+                catch (SqlException ex)
+                {
+                    logX.loggerX.Error("ERROR - exception raised when getting info about sql server jobs proxies", ex);
+                    isOk = false;
+                    enumStatus = Constants.CollectionStatus.StatusError;
+                }
+                Program.RestoreImpersonationContext(ic);
+            }
+        }
+
+        private void saveSnapshotDataInRepository(ref int snapshotid, ref Constants.CollectionStatus enumStatus,
+                                        ref bool isOk, char authenticationMode, string version, string edition, 
+                                        char crossDbOwnership, char enableC2AuditTrace, char enableProxyAcct, 
+                                        string servername, string instancename, string casesensitivemode, 
+                                        char enabledRemoteAccess, char enabledDAC, char enabledAllowUpdates, 
+                                        char enabledScanForStartupSP, char isDefaultTraceEnabled, 
+                                        char isCommonCriteriaComplianceEnabled, char enabledSQLmailXPs, 
+                                        char enabledDatabaseMailXPs, char enabledOLEAutomationXPs, 
+                                        char enabledWebAsstXPs, char enabledXP_CMDshell, 
+                                        char enabledAdHocDistributedQueries, char isDomainControler, 
+                                        char issaPasswordNull, char isSysAdminOnlyCmdExec, 
+                                        char isReplicationEnabled, char isDistributor, char isPublisher, 
+                                        char hasRemotePublisher, ref char isWeakPasswordDetectionEnabled, 
+                                        char isClrEnabled, string systemDrive,string serverType)
+        {
+            if (isOk)
+            {
+                Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
+                using (SqlConnection repository = new SqlConnection(m_Repository.ConnectionString))
+                {
+                    try
+                    {
+                        // Open the connection.
+                        repository.Open();
+
+                        List<WeakPasswordSetting> settings = WeakPasswordSetting.GetWeakPasswordSettings(repository);
+
+                        if (settings.Count > 0)
+                        {
+                            isWeakPasswordDetectionEnabled = settings[0].PasswordCheckingEnabled ? Constants.Yes : Constants.No;
+                        }
+
+                        // Create a snapshot instance.
+                        string instance = m_ConnectionStringBuilder.DataSource.Split(',')[0];
+                        SqlParameter paramConnectionname =
+                            new SqlParameter(ParamConnectionname, instance);
+                        SqlParameter paramStarttime =
+                            new SqlParameter(ParamStarttime, DateTime.Now.ToUniversalTime());
+                        string os;
+                        if (serverType == "OP")
+                        {
+                            os = m_Server.Product;
+                            if (!string.IsNullOrEmpty(m_Server.ServicePack))
+                            {
+                                os += (", " + m_Server.ServicePack);
+                            }
+                        }
+                        else
+                        {
+                            os = null;
+                        }
+                        
+                        SqlParameter paramStatus = new SqlParameter(ParamStatus, Constants.StatusInProgress);
+                        String collectorVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                        if (collectorVersion != null && collectorVersion.Equals("0.0.0.0"))
+                        {
+                            collectorVersion = Constants.SQLsecureCollectorVersion;
+                        }
+                        System.Globalization.CultureInfo culture =
+                            new System.Globalization.CultureInfo("en-US", false);
+                        string startTime = DateTime.Now.ToUniversalTime().ToString(culture);
+                        string query = string.Format(NonQueryCreateSnapshot,
+                                                instance,
+                                                servername,
+                                                instancename,
+                                                startTime,
+                                                authenticationMode,
+                                                os,
+                                                version,
+                                                edition,
+                                                Constants.StatusInProgress,
+                                                // loginAuditMode,
+                                                crossDbOwnership,
+                                                enableC2AuditTrace,
+                                                enableProxyAcct,
+                                                casesensitivemode,
+                                                collectorVersion,
+                                                enabledAllowUpdates,
+                                                enabledDAC,
+                                                enabledRemoteAccess,
+                                                enabledScanForStartupSP,
+                                                enabledSQLmailXPs,
+                                                enabledDatabaseMailXPs,
+                                                enabledOLEAutomationXPs,
+                                                enabledWebAsstXPs,
+                                                enabledXP_CMDshell,
+                                                isDomainControler,
+                                                issaPasswordNull,
+                                                isSysAdminOnlyCmdExec,
+                                                isReplicationEnabled,
+                                                systemDrive,
+                                                enabledAdHocDistributedQueries,
+                                                isWeakPasswordDetectionEnabled,
+                                                isDistributor,
+                                                isPublisher,
+                                                hasRemotePublisher,
+                                                isClrEnabled,
+                                                isDefaultTraceEnabled,
+                                                isCommonCriteriaComplianceEnabled);
+
+                        Sql.SqlHelper.ExecuteNonQuery(repository, CommandType.Text, query);
+
+                        // Query to get the snapshotid.
+                        using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(repository, null,
+                                                                               CommandType.Text, QuerySnapshotId,
+                                                                               new SqlParameter[] { paramConnectionname }))
+                        {
+                            if (rdr.Read())
+                            {
+                                snapshotid = (int)rdr[0];
+                            }
+                        }
+
+                        // Now Create the snapshot histroy
+                        // ------------------------------
+                        SqlParameter paramSnapshotID = new SqlParameter(ParamSnapshotID, snapshotid);
+                        SqlParameter paramStartTime =
+                            new SqlParameter(ParamStartTime, DateTime.Now.ToUniversalTime());
+                        SqlParameter paramNumErrors = new SqlParameter(ParamNumberofErrors, Convert.ToInt32(0));
+                        Sql.SqlHelper.ExecuteNonQuery(repository, CommandType.Text,
+                                                      NonQueryCreateSnapshotHistory,
+                                                      new SqlParameter[]
+                                                          {
+                                                                  paramSnapshotID, paramStartTime,
+                                                                  paramNumErrors, paramStatus
+                                                          });
+                    }
+                    catch (SqlException ex)
+                    {
+                        logX.loggerX.Error("ERROR - exception raised when creating a snapshot entry", ex);
+                        isOk = false;
+                        enumStatus = Constants.CollectionStatus.StatusError;
+                    }
+                }
+                Program.RestoreImpersonationContext(ic);
+            }
+        }
+
+        private void getSecurityConfigurationInformation(bool isOk, ref char crossDbOwnership, ref char enableC2AuditTrace, ref char enabledRemoteAccess, ref char enabledDAC, ref char enabledAllowUpdates, ref char enabledScanForStartupSP, ref char isDefaultTraceEnabled, ref char isCommonCriteriaComplianceEnabled, ref char enabledSQLmailXPs, ref char enabledDatabaseMailXPs, ref char enabledOLEAutomationXPs, ref char enabledWebAsstXPs, ref char enabledXP_CMDshell, ref char enabledAdHocDistributedQueries, ref char isClrEnabled, SqlConnection target)
+        {
+            if (m_VersionEnum == Sql.ServerVersion.SQL2000)
+            {
+                if (isOk)
+                {
+                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                           QueryConfigurations2K, null))
+                    {
+                        while (rdr.Read())
+                        {
+                            int id = Convert.ToInt32(rdr[0]);
+                            char value = ((int)rdr[1] == 1) ? Constants.Yes : Constants.No;
+                            switch (id)
+                            {
+                                case 102:
+                                    enabledAllowUpdates = value;
+                                    break;
+                                case 117:
+                                    enabledRemoteAccess = value;
+                                    break;
+                                case 400:
+                                    crossDbOwnership = value;
+                                    break;
+                                case 544:
+                                    enableC2AuditTrace = value;
+                                    break;
+                                case 1547:
+                                    enabledScanForStartupSP = value;
+                                    break;
+                                case 1568:
+                                    isDefaultTraceEnabled = value;
+                                    break;
+                                case 1577:
+                                    isCommonCriteriaComplianceEnabled = value;
+                                    break;
+                                default:
+                                    logX.loggerX.Warn("WARN - Read unknown configuration id: ", id);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (isOk)
+                {
+                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                           QueryConfigurations2K5, null))
+                    {
+                        while (rdr.Read())
+                        {
+                            int id = (int)rdr[0];
+                            char value = ((int)rdr[1] == 1) ? Constants.Yes : Constants.No;
+                            switch (id)
+                            {
+                                case 102:
+                                    enabledAllowUpdates = value;
+                                    break;
+                                case 117:
+                                    enabledRemoteAccess = value;
+                                    break;
+                                case 400:
+                                    crossDbOwnership = value;
+                                    break;
+                                case 544:
+                                    enableC2AuditTrace = value;
+                                    break;
+                                case 1568:
+                                    isDefaultTraceEnabled = value;
+                                    break;
+                                case 1547:
+                                    enabledScanForStartupSP = value;
+                                    break;
+                                case 1576:
+                                    enabledDAC = value;
+                                    break;
+                                case 16385:
+                                    enabledSQLmailXPs = value;
+                                    break;
+                                case 16386:
+                                    enabledDatabaseMailXPs = value;
+                                    break;
+                                case 16388:
+                                    enabledOLEAutomationXPs = value;
+                                    break;
+                                case 16389:
+                                    enabledWebAsstXPs = value;
+                                    break;
+                                case 16390:
+                                    enabledXP_CMDshell = value;
+                                    break;
+                                case 16391:
+                                    enabledAdHocDistributedQueries = value;
+                                    break;
+                                case 1562:
+                                    isClrEnabled = value;
+                                    break;
+                                case 1577:
+                                    isCommonCriteriaComplianceEnabled = value;
+                                    break;
+                                default:
+                                    logX.loggerX.Warn("WARN - Read unknown configuration id: ", id);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void checkDistributorPublisher(ref Constants.CollectionStatus enumStatus, ref char isDistributor, ref char isPublisher, ref char hasRemotePublisher, SqlConnection target)
+        {
+            try
+            {
+                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text, QueryDistributorEnabled, null))
+                {
+                    if (rdr.Read())
+                    {
+
+                        // installed  | distribution server | distribution db installed  | is distribution publisher  | has remote distribution publisher
+                        isDistributor = Convert.ToInt32(rdr[2]) == 1 ? Constants.Yes : Constants.No;
+                        isPublisher = Convert.ToInt32(rdr[3]) == 1 ? Constants.Yes : Constants.No;
+                        hasRemotePublisher = Convert.ToInt32(rdr[4]) == 1 ? Constants.Yes : Constants.No;
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logX.loggerX.Warn(string.Format("WARN - failed to read if server is distributor/publisher or has remote publisher.\n{0}", ex.Message));
+                enumStatus = Constants.CollectionStatus.StatusWarning;
+            }
+        }
+
+        private static void checkReplication(ref Constants.CollectionStatus enumStatus, ref char isReplicationEnabled, SqlConnection target)
+        {
+            string query = QueryReplicationEnabled;
+            try
+            {
+                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                    query, null))
+                {
+                    isReplicationEnabled = Constants.No;
+                    while (rdr.Read())
+                    {
+                        // name | id | transpublish | mergepublish | dbowner | dbreadonly
+                        if (Convert.ToInt32(rdr[2]) == 1 || Convert.ToInt32(rdr[3]) == 1)
+                        {
+                            isReplicationEnabled = Constants.Yes;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logX.loggerX.Warn(string.Format("WARN - failed to read SysAdmin only allowed to execute cmdExec SQL Server Agent Jobs\n{0}", ex.Message));
+                enumStatus = Constants.CollectionStatus.StatusWarning;
+            }
+        }
+
+        private void checkSQLAgentJobPermissions(ref Constants.CollectionStatus enumStatus, bool isOk, ref char enableProxyAcct, ref char isSysAdminOnlyCmdExec, SqlConnection target)
+        {
+            if (isOk)
+            {
+                string query = string.Empty;
+                if (m_VersionEnum == Sql.ServerVersion.SQL2000)
+                {
+                    query = QuerySysAdminOnlyForSQLAgentCmdExecJobs2k;
+                }
+                else
+                {
+                    query = QuerySysAdminOnlyForSQLAgentCmdExecJobs2k5;
+                }
+                try
+                {
+                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                        query, null))
+                    {
+                        if (rdr.HasRows && rdr.Read())
+                        {
+                            isSysAdminOnlyCmdExec = Constants.No;
+                            if (m_VersionEnum == Sql.ServerVersion.SQL2000)
+                            {
+                                enableProxyAcct = Constants.Yes;
+                            }
+                        }
+                        else
+                        {
+                            isSysAdminOnlyCmdExec = Constants.Yes;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logX.loggerX.Warn(string.Format("WARN - failed to read SysAdmin only allowed to execute cmdExec SQL Server Agent Jobs\n{0}", ex.Message));
+                    enumStatus = Constants.CollectionStatus.StatusWarning;
+                }
+            }
+        }
+
+        private void checkSaAccountPasswordForNull(ref Constants.CollectionStatus enumStatus, bool isOk, ref char issaPasswordNull, SqlConnection target)
+        {
+            if (isOk)
+            {
+                string query = string.Empty;
+                if (m_VersionEnum == Sql.ServerVersion.SQL2000)
+                {
+                    query = QueryIssaPasswordNull2K;
+                }
+                else
+                {
+                    query = QueryIssaPasswordNull2K5;
+                }
+                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                           query, null))
+                {
+                    if (rdr.Read())
+                    {
+                        issaPasswordNull = (int)rdr[0] == 1 ? Constants.Yes : Constants.No;
+                    }
+                    else
+                    {
+                        logX.loggerX.Warn("WARN - failed to read is sa account password NULL");
+                        enumStatus = Constants.CollectionStatus.StatusWarning;
+                    }
+                }
+            }
+        }
+
+        private void checkProxyAccount(ref Constants.CollectionStatus enumStatus, bool isOk, ref char enableProxyAcct, SqlConnection target)
+        {
+            if (m_VersionEnum != Sql.ServerVersion.SQL2000)
+            {
+                if (isOk)
+                {
+                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                           QueryProxyEnabled, null))
+                    {
+                        if (rdr.HasRows && rdr.Read())
+                        {
+                            System.Data.SqlTypes.SqlString insname = rdr.GetSqlString(0);
+                            if (!insname.IsNull)
+                            {
+                                enableProxyAcct = Constants.Yes;
+                            }
+                            else
+                            {
+                                logX.loggerX.Warn("WARN - failed to read enable proxy account");
+                                enumStatus = Constants.CollectionStatus.StatusWarning;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void getCollationProperty(ref Constants.CollectionStatus enumStatus, bool isOk, ref string casesensitivemode, SqlConnection target)
+        {
+            if (isOk)
+            {
+                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                       QueryCollation, null))
+                {
+                    if (rdr.Read())
+                    {
+                        casesensitivemode = (string)rdr[0];
+                        casesensitivemode = casesensitivemode.Contains("_CS_") ? "Y" : "N";
+                    }
+                    else
+                    {
+                        logX.loggerX.Warn("WARN - failed to read collation");
+                        enumStatus = Constants.CollectionStatus.StatusWarning;
+                    }
+                }
+            }
+        }
+
+        private static void getInstanceName(ref Constants.CollectionStatus enumStatus, bool isOk, ref string instancename, SqlConnection target,string serverType)
+        {
+            if (isOk)
+            {
+                string query=string.Empty;
+                if (serverType == "ADB")
+                {
+                    query = QueryInstanceNameAzureDB;
+                }
+                else if (serverType == "OP")
+                {
+                    query = QueryInstancename;
+                }
+
+                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                       query, null))
+                {
+                    if (rdr.HasRows && rdr.Read())
+                    {
+                        System.Data.SqlTypes.SqlString insname = rdr.GetSqlString(0);
+                        instancename = insname.IsNull ? string.Empty : insname.Value;
+                    }
+                    else
+                    {
+                        logX.loggerX.Warn("WARN - failed to read instance name");
+                        enumStatus = Constants.CollectionStatus.StatusWarning;
+                    }
+                }
+            }
+        }
+
+        private static void getserverName(ref Constants.CollectionStatus enumStatus, bool isOk, ref string servername, SqlConnection target)
+        {
+            if (isOk)
+            {
+                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                       QueryServername, null))
+                {
+                    if (rdr.Read())
+                    {
+                        servername = (string)rdr[0];
+                    }
+                    else
+                    {
+                        logX.loggerX.Warn("WARN - failed to read server name");
+                        enumStatus = Constants.CollectionStatus.StatusWarning;
+                    }
+                }
+            }
+        }
+
+        private static void getEdition(ref Constants.CollectionStatus enumStatus, bool isOk, ref string edition, SqlConnection target)
+        {
+            if (isOk)
+            {
+                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                       QueryEdition, null))
+                {
+                    if (rdr.Read())
+                    {
+                        edition = (string)rdr[0];
+                    }
+                    else
+                    {
+                        logX.loggerX.Warn("WARN - failed to read edition");
+                        enumStatus = Constants.CollectionStatus.StatusWarning;
+                    }
+                }
+            }
+        }
+
+        private static void getProductVersion(ref Constants.CollectionStatus enumStatus, bool isOk, ref string version, SqlConnection target)
+        {
+            if (isOk)
+            {
+                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                       QueryVersion, null))
+                {
+                    if (rdr.Read())
+                    {
+                        version = (string)rdr[0];
+                    }
+                    else
+                    {
+                        logX.loggerX.Warn("WARN - failed to read version");
+                        enumStatus = Constants.CollectionStatus.StatusWarning;
+                    }
+                }
+            }
+        }
+
+        private static void getAuthenticationMode(ref Constants.CollectionStatus enumStatus, ref bool isOk, ref char authenticationMode, SqlConnection target)
+        {
+            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null, CommandType.Text,
+                                                                                           QueryAuthenticationMode, null))
+            {
+                try
+                {
+                    if (rdr.Read())
+                    {
+                        authenticationMode = ((int)rdr[0]) == 1
+                                                 ?
+                                                     Constants.WindowsAuthentication
+                                                 : Constants.MixedAuthentication;
+                    }
+                    else
+                    {
+                        logX.loggerX.Warn("WARN - failed to read auhtentication mode");
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    logX.loggerX.Error("ERROR - reading authentication mode raised an exception", ex);
+                    isOk = false;
+                    enumStatus = Constants.CollectionStatus.StatusError;
+                }
+            }
+        }
 
         private bool processServerObjects(
                 int snapshotId,
@@ -1874,6 +2355,442 @@ namespace Idera.SQLsecure.Collector
             return isOk;
         }
 
+
+        public bool LoadDataAzureDB(bool bAutomatedRun)
+        {
+            char snapshotStatus = Constants.StatusSuccess;
+            string strErrorMessage = string.Empty;
+            string strWarnMessage = string.Empty;
+            string strNewMessage = string.Empty;
+            string strProgressFmt = "In Progress - completed steps {0} of {1}";
+            int nStep = 0;
+            const int nTotalSteps = 7;
+            bool isOk = true;
+            using (logX.loggerX.DebugCall())
+            {
+                // If any existing snapshot are left in "in progress" state set them to error.
+                //cab be used for azure db
+                UpdateOldSnapshotStatus();
+
+                // metricsData is a dictionary of database objects
+                // containing a dictionary of MetricMeasureType (count, time) for the object
+                // -------------------------------------------------------------------------
+                Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData =
+                    new Dictionary<Idera.SQLsecure.Collector.Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>>();
+
+
+                // If not valid target object return false.
+                if (!IsValid)
+                {
+                    logX.loggerX.Error("ERROR - target object is invalid, data will not be loaded");
+                    return false;
+                }
+
+                // Get instance level properties, and create a snapshot.
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
+                Constants.CollectionStatus status = createSnapshotAzureDB(out m_snapshotId);
+                if (status == Constants.CollectionStatus.StatusError)
+                {
+                    strErrorMessage = "Failed to create snapshot entry in the repository";
+                    logX.loggerX.Error(strErrorMessage);
+                    isOk = false;
+                    snapshotStatus = Constants.StatusError;
+                }
+                else if (status == Constants.CollectionStatus.StatusWarning)
+                {
+                    strNewMessage = "Failed to load some configuration options for target SQL Server";
+                    PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                    snapshotStatus = Constants.StatusWarning;
+                }
+
+                // Check if we read OS information successfull, & issue warning if we didn't
+                // -------------------------------------------------------------------------
+                //if (m_Server.NumWarnings > 0)
+                //{
+                //    strNewMessage = "Failed to load some OS settings";
+                //    PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //    snapshotStatus = Constants.StatusWarning;
+                //}
+
+
+                // Update Application and Event Log with start status
+                // -------------------------------------------------
+                string strBeginMessage = " SQL Server = " +
+                                         m_ConnectionStringBuilder.DataSource + "; Snapshot ID = " + m_snapshotId;
+                AppLog.WriteAppEventInfo(SQLsecureEvent.DlInfoStartMsg, SQLsecureCat.DlStartCat, DateTime.Now.ToString(),
+                                         strBeginMessage);
+                Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString,
+                                                                        m_snapshotId,
+                                                                        Collector.Constants.ActivityType_Info,
+                                                                        Collector.Constants.ActivityEvent_Start,
+                                                                        "Collecting snapshot ID " +
+                                                                        m_snapshotId.ToString());
+
+                sw.Stop();
+                if (isOk)
+                {
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to create snapshot = " + sw.ElapsedMilliseconds.ToString() +
+                                         " msec");
+                }
+
+                //if (isOk)-Registry is not there for Azure DB
+                //{
+                //    // Load SQLServer Settings from Registry of Target Server
+                //    if (registryPermissions == null)
+                //    {
+                //        registryPermissions =
+                //            new RegistryPermissions(m_snapshotId, m_Server.Name,
+                //                                    Idera.SQLsecure.Core.Accounts.Path.GetInstanceFromSQLServerInstance(TargetInstance),
+                //                                    m_VersionEnum);
+                //        int numWarnings = registryPermissions.LoadRegistrySettings();
+                //        if (numWarnings > 0)
+                //        {
+                //            //isOk = false;
+                //            strNewMessage = "Failed to load some registry configuration options for target SQL Server";
+                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //            snapshotStatus = Constants.StatusWarning;
+                //        }
+                //        //else
+                //        {
+                //            registryPermissions.WriteRegistrySettingsToRepository(m_Repository.ConnectionString);
+                //        }
+                //    }
+                //}
+
+                // Get SQLServer Services from Target-SQL Azure DB services are not there in Azure DB
+                //if (isOk)
+                //{
+                //    string instanceName = Path.GetInstanceFromSQLServerInstance(TargetInstance);
+                //    string computerName = Path.WhackPrefixComputer(m_Server.Name);
+                //    sqlServices = new SQLServices(computerName, instanceName, m_VersionEnum);
+                //    if (sqlServices.GetSQLServices(m_Repository.ConnectionString, m_snapshotId) != 0)
+                //    {
+                //        // Don't abort if GetSQLServices Fails
+                //        strNewMessage = "Failed to load properties for some SQL Services on target SQL Server";
+                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //        snapshotStatus = Constants.StatusWarning;
+                //    }
+                //}
+
+                // Load Registry Permissions- does not apply to Azure DB
+                //if (isOk)
+                //{
+                //    if (registryPermissions != null)
+                //    {
+                //        if (registryPermissions.ProcessRegistryPermissions(sqlServices.Services) != 0)
+                //        {
+                //            strNewMessage = "Failed to load registry permissions for target SQL Server";
+                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //            snapshotStatus = Constants.StatusWarning;
+                //        }
+                //        registryPermissions.WriteRegistryPermissionToRepository(m_Repository.ConnectionString, 0);
+                //    }
+                //}
+
+                // Load File Permissions-not applicable to azure DB
+                //if (isOk)
+                //{
+                //    if (filePermissions == null)
+                //    {
+                //        filePermissions = new FilePermissions(m_snapshotId, m_Server.Name, m_VersionEnum);
+                //    }
+                //    if (filePermissions.LoadFilePermissionsForInstallationDirectory(registryPermissions.InstallPath) != 0)
+                //    {
+                //        strNewMessage = "Failed to load file permissions for target SQL Server";
+                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //        snapshotStatus = Constants.StatusWarning;
+                //    }
+
+                //    //for audit folders--they are not applicable to azure DB
+                //    foreach (string auditFolder in m_auditFolders)
+                //    {
+                //        if (filePermissions.LoadFilePermissionsForAuditDirectory(auditFolder) != 0)
+                //        {
+                //            strNewMessage = string.Format("Failed to load file permissions for '{0}' audit folder", auditFolder);
+                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //            snapshotStatus = Constants.StatusWarning;
+                //        }
+                //    }
+
+                //    if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
+                //    {
+                //        strNewMessage = "Failed to load file permissions for SQL Services on target SQL Server";
+                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //        snapshotStatus = Constants.StatusWarning;
+                //    }
+                //}
+
+
+
+                //Done
+                // Get a list of databases, from the target SQL Server.
+                //sw.Reset();
+                //sw.Start();
+                //List<Sql.Database> databases = null;
+                //if (isOk)
+                //{
+                //    if (
+                //        !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
+                //                                         m_ConnectionStringBuilder.ConnectionString,
+                //                                         m_Repository.ConnectionString, m_snapshotId,
+                //                                         m_ConnectionStringBuilder.UserID, out databases,
+                //                                         ref metricsData))
+                //    {
+                //        strNewMessage = "Failed to get a list of databases from the target SQL Server";
+                //        isOk = false;
+                //        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                //        snapshotStatus = Constants.StatusError;
+                //    }
+                //}
+
+                //sw.Stop();
+                //if (isOk)
+                //{
+                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                //    logX.loggerX.Verbose("TIMING - Time to Get all databases = " + sw.ElapsedMilliseconds.ToString() +
+                //                         " msec");
+                //}
+
+                // Process Database File Permissions-not applicable on azure
+                //if (isOk)
+                //{
+                //    if (filePermissions.GetDatabaseFilePermissions(databases) != 0)
+                //    {
+                //        strNewMessage = "Failed to load some Database File permissions for target SQL Server";
+                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //        snapshotStatus = Constants.StatusWarning;
+                //    }
+
+                //    filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
+                //                                                        registryPermissions.NumOSObjectsWrittenToRepository);
+                //}
+                //if (isOk) todo
+                //{
+                //    List<Account> users = new List<Account>();
+                //    List<Account> groups = new List<Account>();
+                //    List<string> wellKnownAccounts = null;
+                //    int numWarn = filePermissions.GetUsersAndGroups(ref users, ref groups);
+                //    numWarn += registryPermissions.GetUsersAndGroups(ref users, ref groups);
+                //    if (loadDomainInformation(m_snapshotId, true, users, groups, out wellKnownAccounts) != 0 || numWarn != 0)
+                //    {
+                //        //don't run this function because next code overwrites some snapshot results
+                //        //UpdateSuspectAccounts(true);
+                //        strNewMessage = "Suspect Windows accounts encountered processing OS objects";
+                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //        snapshotStatus = Constants.StatusWarning;
+                //    }
+                //    // Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
+
+                //}
+
+                // Optimize the filters.-todo (start from here)
+                //sw.Reset();
+                //sw.Start();
+                //List<Sql.Filter.Rule> serverObjectRules = null;
+                //Dictionary<string, Dictionary<int, List<Sql.Filter.Rule>>> databaseRules = null;
+                //if (isOk)
+                //{
+                //    if (
+                //        !Sql.CollectionFilter.OptimizeRules(databases, m_FilterList, out serverObjectRules,
+                //                                            out databaseRules))
+                //    {
+                //        strNewMessage = "Unable to optimize the filter rules";
+                //        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                //        isOk = false;
+                //        snapshotStatus = Constants.StatusError;
+                //    }
+                //}
+                //sw.Stop();
+                //if (isOk)
+                //{
+                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                //    logX.loggerX.Verbose("TIMING - Time to optimize filters = " + sw.ElapsedMilliseconds.ToString() +
+                //                         " msec");
+                //}
+                // Start loading the data.
+                //if (isOk)
+                //{
+                //    // Process server level objects.
+                //    List<Account> users = null;
+                //    List<Account> windowsGroupLogins = null;
+                //    List<string> wellKnownAccounts = null;
+                //    sw.Reset();
+                //    sw.Start();
+                //    isOk =
+                //        processServerObjects(m_snapshotId, serverObjectRules, out users, out windowsGroupLogins,
+                //                             ref metricsData);
+                //    if (!isOk)
+                //    {
+                //        strNewMessage = "Failed to process server objects";
+                //        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                //        snapshotStatus = Constants.StatusError;
+                //    }
+                //    sw.Stop();
+                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                //    logX.loggerX.Verbose("TIMING - Time to Process Server Objects = " +
+                //                         sw.ElapsedMilliseconds.ToString() + " msec");
+
+                //    // Load group memberships.
+                //    sw.Reset();
+
+                //    //Process LinkedServer permissions
+                //    sw.Start();
+                //    if (isOk)
+                //    {
+
+                //        if (!LinkedServer.Process(ConnectionString, m_Repository.ConnectionString, m_snapshotId, ref metricsData))
+                //        {
+                //            strNewMessage = "Failed to process server objects";
+                //            PostActivityMessage(ref strErrorMessage, strNewMessage, Constants.ActivityType_Error);
+                //            snapshotStatus = Constants.StatusError;
+                //            isOk = false;
+                //        }
+                //    }
+                //    sw.Reset();
+
+
+                //    sw.Start();
+                //    if (isOk)
+                //    {
+                //        if (loadDomainInformation(m_snapshotId, false, users, windowsGroupLogins, out wellKnownAccounts) != 0)
+                //        {
+                //            //don't run this function because next code overwrites some snapshot results
+                //            //UpdateSuspectAccounts(false);
+                //            strNewMessage = "Suspect Windows accounts encountered processing SQL Server logins";
+                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //            snapshotStatus = Constants.StatusWarning;
+                //        }
+                //        Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
+                //    }
+                //    sw.Stop();
+                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                //    logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
+                //                         sw.ElapsedMilliseconds.ToString() + " msec");
+
+                //    // Process database level objects.
+                //    sw.Reset();
+                //    sw.Start();
+                //    if (isOk)
+                //    {
+                //        List<Sql.Database> badDbs = new List<Sql.Database>();
+                //        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs, ref metricsData);
+                //        if (badDbs.Count > 0)
+                //        {
+                //            // Note: the warn message is appended if it has account warn message.
+                //            strNewMessage = "Some databases were unavailable for auditing";
+                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //            snapshotStatus = Constants.StatusWarning;
+                //        }
+                //    }
+                //    sw.Stop();
+                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                //    logX.loggerX.Verbose("TIMING - Time to Process Database Objects = " +
+                //                         sw.ElapsedMilliseconds.ToString() + " msec");
+
+                //    // Save the snapshot filters being used to the repository.
+                //    sw.Reset();
+                //    sw.Start();
+                //    if (isOk)
+                //    {
+                //        isOk = processFilters(m_snapshotId);
+                //        if (!isOk)
+                //        {
+                //            strNewMessage = "Failed to save filters to repository";
+                //            PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                //            snapshotStatus = Constants.StatusError;
+                //        }
+                //    }
+                //    sw.Stop();
+                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                //    logX.loggerX.Verbose("TIMING - Time to Save Filters = " + sw.ElapsedMilliseconds.ToString() +
+                //                         " msec");
+                //}
+
+                int numErrorsAndWarnings = 0;
+                string strDoneStatus = null;
+                if (isOk)
+                {
+                    strDoneStatus = BuildMetricsString(metricsData);
+                }
+                else
+                {
+                    numErrorsAndWarnings = 1;
+                    strDoneStatus = "Error collecting snapshot";
+                }
+
+                // Update Application and Event Log with done status
+                // -------------------------------------------------
+                string msg = string.Empty;
+                if (snapshotStatus == Constants.StatusSuccess)
+                {
+                    msg = "OK";
+                }
+                else if (snapshotStatus == Constants.StatusWarning)
+                {
+                    msg = strWarnMessage;
+                }
+                else if (snapshotStatus == Constants.StatusError)
+                {
+                    msg = string.IsNullOrEmpty(strErrorMessage) ? lastErrorMsg : strErrorMessage;
+                }
+                Sql.Database.UpdateRepositorySnapshotHistory(m_Repository.ConnectionString, m_snapshotId, bAutomatedRun,
+                                                             snapshotStatus, numErrorsAndWarnings, msg);
+                string strActivityType = Constants.ActivityType_Info;
+                if (snapshotStatus == Constants.StatusError)
+                {
+                    strActivityType = Constants.ActivityType_Error;
+                }
+
+                // Write to System Application Event Log
+                AppLog.WriteAppEventInfo(SQLsecureEvent.DlInfoEndMsg, SQLsecureCat.DlEndCat,
+                                         DateTime.Now.ToString() +
+                                         " SQL Server = " + m_ConnectionStringBuilder.DataSource +
+                                         " Snapshot ID = " + m_snapshotId.ToString() + "; " +
+                                         strDoneStatus);
+
+                // Write to SQLSecure Activity Log
+                Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString, m_snapshotId,
+                                                                        strActivityType,
+                                                                        Collector.Constants.ActivityEvent_Metrics,
+                                                                        "Snapshot ID = " + m_snapshotId.ToString() +
+                                                                        "; " + strDoneStatus);
+
+                // Update the RegisteredServer Table if snapshot was created successfully
+                // ----------------------------------------------------------------------
+                Sql.Database.UpdateRepositoryRegisteredServerTable(m_Repository.ConnectionString, m_snapshotId,
+                                                                   snapshotStatus);
+
+                // Process Notifications
+                // ---------------------
+                Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
+
+                Notification notification = new Notification(WriteAppActivityToRepository,
+                                                       m_ConnectionStringBuilder.DataSource.Split(',')[0],
+                                                       m_Repository.ConnectionString,
+                                                       SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry(),
+                                                       m_Repository.RegisteredServerId);
+                notification.ProcessStatusNotification(snapshotStatus,
+                                                       msg,
+                                                       strDoneStatus);
+                if (snapshotStatus != Constants.StatusError)
+                {
+                    notification.ProcessFindingNotification();
+                }
+                Program.RestoreImpersonationContext(ic);
+            }
+
+            return isOk;
+        }
 
 
         private void UpdateOldSnapshotStatus()
