@@ -73,7 +73,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="Encryptor.cs" />
-    <Compile Include="AzureDatabase.cs" />
     <Compile Include="Impersonation.cs" />
     <Compile Include="License.cs" />
     <Compile Include="Path.cs" />
