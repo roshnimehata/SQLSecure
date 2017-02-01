@@ -48,6 +48,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\ThirdPartySoftware\BBSLicense\x64\License4Net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
+      <HintPath>..\..\..\..\ThirdPartySoftware\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform">
+      <HintPath>..\..\..\..\ThirdPartySoftware\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
@@ -67,6 +73,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="Encryptor.cs" />
+    <Compile Include="AzureDatabase.cs" />
     <Compile Include="Impersonation.cs" />
     <Compile Include="License.cs" />
     <Compile Include="Path.cs" />
@@ -102,6 +109,10 @@
     <EmbeddedResource Include="PasswordList\PasswordList.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
