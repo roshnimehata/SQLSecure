@@ -515,6 +515,8 @@ namespace Idera.SQLsecure.UI.Console
         private bool m_Init;
         private bool m_Initialized = false;         // used to stop multiple refreshes while launching
         private bool m_Refresh = false;
+        private string m_UserName;
+        private string m_Password;
 
         private TreeNode m_ClickedNode;             // Used by Context menus to trick node clicks
         private TreeNode m_NodeToProcess;           // Used by Context menus to process the correct node after clicking
@@ -1190,6 +1192,8 @@ namespace Idera.SQLsecure.UI.Console
         public static string UserName = null;
         public static string Password = null;
         public static bool isConnect = true;
+        public static int typeOfAuthentication;
+        public static int typeOfServer;
         //Show a pop up dialog to get the server name
         private bool promptForConnection(bool isConnect1 = true)
         {
@@ -1212,7 +1216,7 @@ namespace Idera.SQLsecure.UI.Console
 
                     if (isConnect)
                     {
-                        isRepositoryUpdated();
+                        //isRepositoryUpdated();
                         if (connectToServer(dlg.Server))
                         {
                                 bConnected = true;
@@ -1313,7 +1317,7 @@ namespace Idera.SQLsecure.UI.Console
             {
                 int m_SchemaVersion = 0;  
                 //retrieve information from the database to check for repository version.
-                m_SchemaVersion = Program.gController.Repository.getRepositoryVersion(Server_Name);
+                m_SchemaVersion = Program.gController.Repository.getRepositoryVersion(Server_Name,UserName,Password,typeOfServer,typeOfAuthentication);
                 if(m_SchemaVersion == 0)
                 {
                     DeployRepositoryScripts(UserName, Password, false);
@@ -1322,7 +1326,7 @@ namespace Idera.SQLsecure.UI.Console
                 if (m_SchemaVersion < Utility.Constants.SchemaVersion)
                 {
                     MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                    DialogResult result = MessageBox.Show(Utility.ErrorMsgs.UpgradeRepositoryTag, Utility.ErrorMsgs.UpgradeRepository, buttons);
+                    DialogResult result = MessageBox.Show(string.Format(Utility.ErrorMsgs.UpgradeRepository,m_SchemaVersion, Utility.Constants.SchemaVersion), Utility.ErrorMsgs.UpgradeRepositoryTag,buttons,MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)
                     {
                         DeployRepositoryScripts(UserName, Password, true);                        
@@ -1332,6 +1336,11 @@ namespace Idera.SQLsecure.UI.Console
                         this.Close();
                     }
                     return false;
+                }
+                if (m_SchemaVersion == Utility.Constants.SchemaVersion)
+                {
+                    MessageBox.Show(Utility.ErrorMsgs.RepositoryExists,Utility.ErrorMsgs.RepositoryExistTag,MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                    return true;
                 }
             }catch(Exception e)
             {
@@ -1477,6 +1486,8 @@ namespace Idera.SQLsecure.UI.Console
                     // Get the repository name to start with based on last use
                     // then the default from the registry (done in UserData)
                     m_RepositoryName = Utility.UserData.Current.RepositoryInfo.ServerName;
+                    m_UserName = Utility.UserData.Current.RepositoryInfo.UserName;
+                    m_Password = Utility.UserData.Current.RepositoryInfo.Password;
                     bool isRepositoryValid = m_RepositoryName.Length != 0;
 
                     // If repository is specified, make sure its valid.
@@ -1485,7 +1496,7 @@ namespace Idera.SQLsecure.UI.Console
                     {
                         // Initialize and validate the repository.
                         logX.loggerX.Debug("Create repository object");
-                        Program.gController.Repository = new Sql.Repository(m_RepositoryName, null, null);
+                        Program.gController.Repository = new Sql.Repository(m_RepositoryName, m_UserName, m_Password);
                         isRepositoryValid = Program.gController.Repository.IsConnectionValid;
                     }
 
