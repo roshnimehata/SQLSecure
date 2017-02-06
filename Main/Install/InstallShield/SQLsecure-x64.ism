@@ -406,6 +406,8 @@
 		<row><td>Interop.ActiveDs.dll</td><td>{5A7CC216-F127-45D7-9669-5248CEAFE63F}</td><td>BIN</td><td>256</td><td/><td>interop.activeds.dll</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>License4Net.dll</td><td>{C526939C-2FA7-43C2-9B04-3183332552BB}</td><td>BIN</td><td>256</td><td/><td>license4net.dll</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Manage.dll</td><td>{D2C5E711-01AE-4054-B76F-65619AEF6D67}</td><td>BIN</td><td>8</td><td/><td>manage.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td><td>{DFA0E75A-C515-4EC0-B3B8-D253A369E653}</td><td>BIN</td><td>8</td><td/><td>microsoft.identitymodel.clie1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td><td>{90B7CCD7-8659-461C-9B8B-6A5B33106B14}</td><td>BIN</td><td>8</td><td/><td>microsoft.identitymodel.clie</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Microsoft.ReportViewer.Common.dll</td><td>{9DD639CD-B9C0-4505-A84E-3A3A95196EC4}</td><td>BIN</td><td>256</td><td/><td>microsoft.reportviewer.commo</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>{C1BD5CC7-8EB0-4932-8A9C-D37732D83CB1}</td><td>BIN</td><td>256</td><td/><td>microsoft.reportviewer.proce</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Microsoft.ReportViewer.WinForms.dll</td><td>{3736D8DF-2D90-4CAC-A35D-2BE897FD95FB}</td><td>BIN</td><td>256</td><td/><td>microsoft.reportviewer.winfo</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -2208,6 +2210,8 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>Console</td><td>Interop.ActiveDs.dll</td></row>
 		<row><td>Console</td><td>License4Net.dll</td></row>
 		<row><td>Console</td><td>Manage.dll</td></row>
+		<row><td>Console</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td></row>
+		<row><td>Console</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.Common.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.WinForms.dll</td></row>
@@ -2307,6 +2311,8 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>introsplash.png</td><td>Reports_Graphics</td><td>INTROS~1.PNG|introSplash.png</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\introSplash.png</td><td>1</td><td/></row>
 		<row><td>license4net.dll</td><td>License4Net.dll</td><td>LICENS~1.DLL|License4Net.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_THIRDPARTY&gt;\BBSLicense\x64\License4Net.dll</td><td>1</td><td/></row>
 		<row><td>manage.dll</td><td>Manage.dll</td><td>Manage.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_THIRDPARTY&gt;\Manage_x64.dll</td><td>1</td><td/></row>
+		<row><td>microsoft.identitymodel.clie</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td><td>MICROS~1.DLL|Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td><td>1</td><td/></row>
+		<row><td>microsoft.identitymodel.clie1</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td><td>MICROS~1.DLL|Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</td><td>1</td><td/></row>
 		<row><td>microsoft.reportviewer.commo</td><td>Microsoft.ReportViewer.Common.dll</td><td>MICROS~1.DLL|Microsoft.ReportViewer.Common.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.ReportViewer.Common.dll</td><td>1</td><td/></row>
 		<row><td>microsoft.reportviewer.proce</td><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>MICROS~1.DLL|Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>1</td><td/></row>
 		<row><td>microsoft.reportviewer.winfo</td><td>Microsoft.ReportViewer.WinForms.dll</td><td>MICROS~1.DLL|Microsoft.ReportViewer.WinForms.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.ReportViewer.WinForms.dll</td><td>1</td><td/></row>
@@ -2546,6 +2552,8 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>Interop.ActiveDs.dll</td><td/><td/><td>_6B07C248_6A38_45A6_A907_47801F4F8754_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>License4Net.dll</td><td/><td/><td>_ACF3CAC6_D987_4AFA_84F0_E0691AA75446_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Manage.dll</td><td/><td/><td>_4F4DEF5A_DB37_405C_8491_B50995C58C6A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td><td/><td/><td>_76F22856_CDE8_401B_BCD1_971772B92AAA_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td><td/><td/><td>_529ECB80_A1BC_4A6C_8FBD_A089F9861248_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Microsoft.ReportViewer.Common.dll</td><td/><td/><td>_292473A9_FAEC_48C9_BE96_70BB60B294E3_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td/><td/><td>_BA49DE63_E7B4_4C25_8DD8_4304178B43EA_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Microsoft.ReportViewer.WinForms.dll</td><td/><td/><td>_963093A0_B656_4E2E_9868_0216559F3ACD_FILTER</td><td/><td/><td/><td/></row>
