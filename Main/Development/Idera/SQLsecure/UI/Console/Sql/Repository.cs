@@ -415,8 +415,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, user, password, Utility.Activity.TypeServerOnPremise);
                 if (Connect())
                 {
-                    m_User = user;
-                    m_Password = password;
+                    //SQLsecure 3.1 (Tushar)--Saving UserName and Password in UserData object which will be saved in config file on closure of UI.
+                    //m_User = user;
+                    //m_Password = password;
+                    UserData.Current.RepositoryInfo.UserName = m_User = user;
+                    UserData.Current.RepositoryInfo.Password = m_Password = password;
                 }
 
             }
@@ -867,12 +870,29 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         #endregion
 
-        public int getRepositoryVersion(string Server_Name)
+        //SQLsecure 3.1 (Tushar)--Added parameter for type of server and authentication.
+        public int getRepositoryVersion(string Server_Name,string userName,string password,int typeOfServer,int typeOfAuthentication)
         {
             int m_SchemaVersion = 0;
             try
             {
-                SqlConnectionStringBuilder m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null, Utility.Activity.TypeServerOnPremise);
+                //SQLsecure 3.1 (Tushar)--On Basis of type of server and authentication constructing the connectionStringBuilder.
+                SqlConnectionStringBuilder m_ConnectionStringBuilder = null;
+                switch (typeOfServer)
+                {
+                    case 3://on-premise local sql server.
+                        m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null, Utility.Activity.TypeServerOnPremise);
+                        break;
+                    case 2://remote sql server.
+                        m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, userName, password, Utility.Activity.TypeServerOnPremise);
+                        break;
+                    case 1://Azure DB
+                        m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, userName, password, Utility.Activity.TypeServerAzureDB);
+                        break;
+                    case 0://Azure VM
+                        m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, userName, password, Utility.Activity.TypeServerAzureVM);
+                        break;
+                }
                 using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
                 {
                     connection.Open();
