@@ -201,12 +201,16 @@ namespace Idera.SQLsecure.Collector
         #region Helpers
         private bool isValid()
         {
-            // Validate the server object.
-            if (!m_Server.IsValid)
+            //SQLsecure 3.1 (Tushar)--For Azure DB server object is not created and for Azure VM as of now Server object is not created.
+            //Validate the server object.
+            if (serverType != "ADB" || serverType != "AVM")
             {
-                logX.loggerX.Error("ERROR - Invalid member server object");
+                if (!m_Server.IsValid)
+                {
+                    logX.loggerX.Error("ERROR - Invalid member server object");
 
-                return false;
+                    return false;
+                }
             }
             // Connect to the target instance and validate.                                 
             using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
@@ -403,13 +407,13 @@ namespace Idera.SQLsecure.Collector
                 {
                     string login = string.Empty;
                     string password = string.Empty;
-                    if (sqlAuthType.ToUpper() == "S")
+                    if (sqlAuthType.ToUpper() == "S" || sqlAuthType.ToUpper() == "W")
                     {
                         login = sqlLogin;
                         password = sqlPassword;
                     }
                     bool azureADAuth = (sqlAuthType == "W" && serverType != "OP") ? true : false;
-                    m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(targetInstance, port, login,
+                    m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString("52.172.42.105"/*targetInstance*/, port, login,
                                                                                             password, serverType, azureADAuth);
                     TargetInstance = targetInstance;
                     if (serverType == "OP")
@@ -420,7 +424,9 @@ namespace Idera.SQLsecure.Collector
                     {
                         SettingsForAzureDBTargets();
                     }
-
+                    //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
+                    else if (serverType == "AVM")
+                        SettingsForAzureVM(server);
                 }
                 catch (Exception ex)
                 {
@@ -447,6 +453,11 @@ namespace Idera.SQLsecure.Collector
             else if (serverType == "ADB")
             {
                 m_auditFolders = null;
+            }
+            //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
+            else if (serverType == "AVM")
+            {
+                m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
             }
             // Retrieve the filter rules.
             if (m_IsValid)
@@ -475,6 +486,18 @@ namespace Idera.SQLsecure.Collector
             m_Server = null;
 
             m_IsValid = isValidAzureDB();
+        }
+
+        //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
+        private void SettingsForAzureVM( string server)
+        {
+            Program.ImpersonationContext wi2 = Program.SetTargetImpersonationContext();
+            m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword,
+                                                                WriteAppActivityToRepository);
+            Program.RestoreImpersonationContext(wi2);
+
+
+            m_IsValid = isValid();
         }
 
         public Target(
@@ -604,13 +627,13 @@ namespace Idera.SQLsecure.Collector
 
 
         // 
-        private Constants.CollectionStatus createSnapshot(out int snapshotid)
+        private Constants.CollectionStatus createSnapshot(string TypeOfServer,out int snapshotid)
         {
             // Init returns.
             Constants.CollectionStatus enumStatus = Constants.CollectionStatus.StatusSuccess;
             bool isOk = true;
             snapshotid = 0;
-            string serverType = "OP";
+            string serverType = TypeOfServer;
             // Connect to the target and retrieve instance properties.
             char authenticationMode = Constants.MixedAuthentication;
             string version = string.Empty;
@@ -716,20 +739,22 @@ namespace Idera.SQLsecure.Collector
                 }
 
                 // Is Server Domain Controller
-                //not supported by azure DB
-                if (isOk)
+                //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
+                if (serverType != "AVM")
                 {
-                    systemDrive = m_Server.SystemDrive;
-                }
+                    if (isOk)
+                    {
+                        systemDrive = m_Server.SystemDrive;
+                    }
 
-                // Is Server Domain Controller
-                if (isOk)
-                {
-                    isDomainControler = m_Server.IsDomainController == true
-                                                           ? Constants.Yes
-                                                           : Constants.No;
+                    //Is Server Domain Controller
+                    if (isOk)
+                    {
+                        isDomainControler = m_Server.IsDomainController == true
+                                                               ? Constants.Yes
+                                                               : Constants.No;
+                    }
                 }
-
                 // Connect to the repository, create snapshot entry and get
                 // the snapshotid.
                 saveSnapshotDataInRepository(ref snapshotid, ref enumStatus, ref isOk, authenticationMode,
@@ -1014,7 +1039,12 @@ namespace Idera.SQLsecure.Collector
                         }
 
                         // Create a snapshot instance.
-                        string instance = m_ConnectionStringBuilder.DataSource.Split(',')[0];
+                        //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
+                        string instance = string.Empty;
+                        if (serverType == "AVM")
+                            instance = servername;
+                        else
+                            instance = m_ConnectionStringBuilder.DataSource.Split(',')[0];
                         SqlParameter paramConnectionname =
                             new SqlParameter(ParamConnectionname, instance);
                         SqlParameter paramStarttime =
@@ -1408,7 +1438,8 @@ namespace Idera.SQLsecure.Collector
                 {
                     query = QueryInstanceNameAzureDB;
                 }
-                else if (serverType == "OP")
+				//SQLsecure 3.1 (Tushar)--Added support for Azure VM.
+                else if (serverType == "OP" || serverType=="AVM")
                 {
                     query = QueryInstancename;
                 }
@@ -1585,6 +1616,7 @@ namespace Idera.SQLsecure.Collector
                 List<Sql.Database> databases,
                 Dictionary<string, Dictionary<int, List<Sql.Filter.Rule>>> databaseRules,
                 List<Sql.Database> badDbs,
+                string serverType,
                 ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
             )
         {
@@ -1606,6 +1638,9 @@ namespace Idera.SQLsecure.Collector
                     bool isOk = true;
                     Dictionary<int, List<Sql.Filter.Rule>> dbObjRules = null;
                     processDatabaseObjects = true;
+                    //SQlsecure 3.1 (Tushar)--Support for Azure DB.
+                    if (serverType == "ADB")
+                        m_ConnectionStringBuilder.InitialCatalog = db.Name;
                     if (!databaseRules.TryGetValue(db.Name, out dbObjRules))
                     {
                         logX.loggerX.Info(db.Name, " not selected for a snapshot");
@@ -1703,7 +1738,7 @@ namespace Idera.SQLsecure.Collector
                         rules.Add(rule);
                         if (!Sql.DatabaseObject.Process(m_VersionEnum, ConnectionString,
                                                         m_Repository.ConnectionString,
-                                                        SqlObjectType.StoredProcedure, rules, snapshotId, db, ref metricsData))
+                                                        SqlObjectType.StoredProcedure, rules, snapshotId, db,serverType, ref metricsData))
                         {
                             logX.loggerX.Error("ERROR - failed to load db: ", db.Name, " ", SqlObjectType.StoredProcedure.ToString());
                             isOk = false;
@@ -1712,7 +1747,7 @@ namespace Idera.SQLsecure.Collector
                         rules.Add(rule);
                         if (!Sql.DatabaseObject.Process(m_VersionEnum, ConnectionString,
                                                         m_Repository.ConnectionString,
-                                                        SqlObjectType.ExtendedStoredProcedure, rules, snapshotId, db, ref metricsData))
+                                                        SqlObjectType.ExtendedStoredProcedure, rules, snapshotId, db,serverType, ref metricsData))
                         {
                             logX.loggerX.Error("ERROR - failed to load db: ", db.Name, " ", SqlObjectType.ExtendedStoredProcedure.ToString());
                             isOk = false;
@@ -1734,7 +1769,7 @@ namespace Idera.SQLsecure.Collector
                             List<Sql.Filter.Rule> rules = kvp.Value;
                             if (!Sql.DatabaseObject.Process(m_VersionEnum, ConnectionString,
                                                             m_Repository.ConnectionString,
-                                                            oType, rules, snapshotId, db, ref metricsData))
+                                                            oType, rules, snapshotId, db,serverType, ref metricsData))
                             {
                                 logX.loggerX.Error("ERROR - failed to load db: ", db.Name, " ", oType.ToString());
                                 isOk = false;
@@ -1749,8 +1784,10 @@ namespace Idera.SQLsecure.Collector
                     {
                         // Get status and update db object.
                         string status = string.Empty;
+                        if (serverType == "ADB")
+                            m_ConnectionStringBuilder.InitialCatalog = "master";
                         Sql.Database.GetDabaseStatus(m_VersionEnum, ConnectionString, m_Repository.ConnectionString,
-                                                     snapshotId, db.DbId, out status);
+                                                     snapshotId, db.DbId,serverType, out status);
                         db.IsAvailable = false;
                         db.Status = status;
 
@@ -1769,6 +1806,7 @@ namespace Idera.SQLsecure.Collector
                         Sql.Database.RemoveDatabaseData(m_Repository.ConnectionString, snapshotId, db.DbId);
                     }
                 }
+                m_ConnectionStringBuilder.InitialCatalog = string.Empty;
             }
             return true;
         }
@@ -1956,7 +1994,7 @@ namespace Idera.SQLsecure.Collector
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
-                Constants.CollectionStatus status = createSnapshot(out m_snapshotId);
+                Constants.CollectionStatus status = createSnapshot(serverType,out m_snapshotId);
                 if (status == Constants.CollectionStatus.StatusError)
                 {
                     strErrorMessage = "Failed to create snapshot entry in the repository";
@@ -2100,7 +2138,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID, out databases,
+                                                         m_ConnectionStringBuilder.UserID,"","",m_ConnectionStringBuilder ,out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";
@@ -2244,7 +2282,7 @@ namespace Idera.SQLsecure.Collector
                     if (isOk)
                     {
                         List<Sql.Database> badDbs = new List<Sql.Database>();
-                        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs, ref metricsData);
+                        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs,serverType, ref metricsData);
                         if (badDbs.Count > 0)
                         {
                             // Note: the warn message is appended if it has account warn message.
@@ -2356,7 +2394,7 @@ namespace Idera.SQLsecure.Collector
         }
 
 
-        public bool LoadDataAzureDB(bool bAutomatedRun)
+        public bool LoadDataAzureDB(bool bAutomatedRun, string targerServerName)
         {
             char snapshotStatus = Constants.StatusSuccess;
             string strErrorMessage = string.Empty;
@@ -2527,25 +2565,25 @@ namespace Idera.SQLsecure.Collector
 
 
                 //Done
-                // Get a list of databases, from the target SQL Server.
-                //sw.Reset();
-                //sw.Start();
-                //List<Sql.Database> databases = null;
-                //if (isOk)
-                //{
-                //    if (
-                //        !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
-                //                                         m_ConnectionStringBuilder.ConnectionString,
-                //                                         m_Repository.ConnectionString, m_snapshotId,
-                //                                         m_ConnectionStringBuilder.UserID, out databases,
-                //                                         ref metricsData))
-                //    {
-                //        strNewMessage = "Failed to get a list of databases from the target SQL Server";
-                //        isOk = false;
-                //        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
-                //        snapshotStatus = Constants.StatusError;
-                //    }
-                //}
+                //Get a list of databases, from the target SQL Server.
+               sw.Reset();
+                sw.Start();
+                List<Sql.Database> databases = null;
+                if (isOk)
+                {
+                    if (
+                        !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
+                                                         m_ConnectionStringBuilder.ConnectionString,
+                                                         m_Repository.ConnectionString, m_snapshotId,
+                                                         m_ConnectionStringBuilder.UserID,serverType,targerServerName,m_ConnectionStringBuilder, out databases,
+                                                         ref metricsData))
+                    {
+                        strNewMessage = "Failed to get a list of databases from the target SQL Server";
+                        isOk = false;
+                        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                        snapshotStatus = Constants.StatusError;
+                    }
+                }
 
                 //sw.Stop();
                 //if (isOk)
@@ -2589,23 +2627,23 @@ namespace Idera.SQLsecure.Collector
                 //}
 
                 // Optimize the filters.-todo (start from here)
-                //sw.Reset();
-                //sw.Start();
-                //List<Sql.Filter.Rule> serverObjectRules = null;
-                //Dictionary<string, Dictionary<int, List<Sql.Filter.Rule>>> databaseRules = null;
-                //if (isOk)
-                //{
-                //    if (
-                //        !Sql.CollectionFilter.OptimizeRules(databases, m_FilterList, out serverObjectRules,
-                //                                            out databaseRules))
-                //    {
-                //        strNewMessage = "Unable to optimize the filter rules";
-                //        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
-                //        isOk = false;
-                //        snapshotStatus = Constants.StatusError;
-                //    }
-                //}
-                //sw.Stop();
+                sw.Reset();
+                sw.Start();
+                List<Sql.Filter.Rule> serverObjectRules = null;
+                Dictionary<string, Dictionary<int, List<Sql.Filter.Rule>>> databaseRules = null;
+                if (isOk)
+                {
+                    if (
+                        !Sql.CollectionFilter.OptimizeRules(databases, m_FilterList, out serverObjectRules,
+                                                            out databaseRules))
+                    {
+                        strNewMessage = "Unable to optimize the filter rules";
+                        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                        isOk = false;
+                        snapshotStatus = Constants.StatusError;
+                    }
+                }
+                sw.Stop();
                 //if (isOk)
                 //{
                 //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
@@ -2675,26 +2713,26 @@ namespace Idera.SQLsecure.Collector
                 //    logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
                 //                         sw.ElapsedMilliseconds.ToString() + " msec");
 
-                //    // Process database level objects.
-                //    sw.Reset();
-                //    sw.Start();
-                //    if (isOk)
-                //    {
-                //        List<Sql.Database> badDbs = new List<Sql.Database>();
-                //        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs, ref metricsData);
-                //        if (badDbs.Count > 0)
-                //        {
-                //            // Note: the warn message is appended if it has account warn message.
-                //            strNewMessage = "Some databases were unavailable for auditing";
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //    }
-                //    sw.Stop();
-                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                //    logX.loggerX.Verbose("TIMING - Time to Process Database Objects = " +
-                //                         sw.ElapsedMilliseconds.ToString() + " msec");
+                // Process database level objects.
+                sw.Reset();
+                sw.Start();
+                if (isOk)
+                {
+                    List<Sql.Database> badDbs = new List<Sql.Database>();
+                    processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs,serverType, ref metricsData);
+                    if (badDbs.Count > 0)
+                    {
+                        // Note: the warn message is appended if it has account warn message.
+                        strNewMessage = "Some databases were unavailable for auditing";
+                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                        snapshotStatus = Constants.StatusWarning;
+                    }
+                }
+                sw.Stop();
+                Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                              string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                logX.loggerX.Verbose("TIMING - Time to Process Database Objects = " +
+                                     sw.ElapsedMilliseconds.ToString() + " msec");
 
                 //    // Save the snapshot filters being used to the repository.
                 //    sw.Reset();
@@ -2792,6 +2830,437 @@ namespace Idera.SQLsecure.Collector
             return isOk;
         }
 
+        public bool LoadDataForAzureVM(bool bAutomatedRun)
+        {
+            char snapshotStatus = Constants.StatusSuccess;
+            string strErrorMessage = string.Empty;
+            string strWarnMessage = string.Empty;
+            string strNewMessage = string.Empty;
+            string strProgressFmt = "In Progress - completed steps {0} of {1}";
+            int nStep = 0;
+            const int nTotalSteps = 7;
+            bool isOk = true;
+            using (logX.loggerX.DebugCall())
+            {
+                // If any existing snapshot are left in "in progress" state set them to error.
+                UpdateOldSnapshotStatus();
+
+                // metricsData is a dictionary of database objects
+                // containing a dictionary of MetricMeasureType (count, time) for the object
+                // -------------------------------------------------------------------------
+                Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData =
+                    new Dictionary<Idera.SQLsecure.Collector.Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>>();
+
+
+                // If not valid target object return false.
+                if (!IsValid)
+                {
+                    logX.loggerX.Error("ERROR - target object is invalid, data will not be loaded");
+                    return false;
+                }
+
+                // Get instance level properties, and create a snapshot.
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
+                Constants.CollectionStatus status = createSnapshot(serverType,out m_snapshotId);
+                if (status == Constants.CollectionStatus.StatusError)
+                {
+                    strErrorMessage = "Failed to create snapshot entry in the repository";
+                    logX.loggerX.Error(strErrorMessage);
+                    isOk = false;
+                    snapshotStatus = Constants.StatusError;
+                }
+                else if (status == Constants.CollectionStatus.StatusWarning)
+                {
+                    strNewMessage = "Failed to load some configuration options for target SQL Server";
+                    PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                    snapshotStatus = Constants.StatusWarning;
+                }
+                //Tushar--Commenting it, since server object is not created
+                // Check if we read OS information successfull, & issue warning if we didn't
+                // -------------------------------------------------------------------------
+                //if (m_Server.NumWarnings > 0)
+                //{
+                //    strNewMessage = "Failed to load some OS settings";
+                //    PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //    snapshotStatus = Constants.StatusWarning;
+                //}
+
+
+                // Update Application and Event Log with start status
+                // -------------------------------------------------
+                string strBeginMessage = " SQL Server = " +
+                                         m_ConnectionStringBuilder.DataSource + "; Snapshot ID = " + m_snapshotId;
+                AppLog.WriteAppEventInfo(SQLsecureEvent.DlInfoStartMsg, SQLsecureCat.DlStartCat, DateTime.Now.ToString(),
+                                         strBeginMessage);
+                Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString,
+                                                                        m_snapshotId,
+                                                                        Collector.Constants.ActivityType_Info,
+                                                                        Collector.Constants.ActivityEvent_Start,
+                                                                        "Collecting snapshot ID " +
+                                                                        m_snapshotId.ToString());
+
+                sw.Stop();
+                if (isOk)
+                {
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to create snapshot = " + sw.ElapsedMilliseconds.ToString() +
+                                         " msec");
+                }
+
+                if (isOk)
+                //{
+                //    // Load SQLServer Settings from Registry of Target Server
+                //    if (registryPermissions == null)
+                //    {
+                //        registryPermissions =
+                //            new RegistryPermissions(m_snapshotId, /*m_Server.Name*/"52.172.42.105",
+                //                                    Idera.SQLsecure.Core.Accounts.Path.GetInstanceFromSQLServerInstance(TargetInstance),
+                //                                    m_VersionEnum);
+                //        int numWarnings = registryPermissions.LoadRegistrySettings();
+                //        if (numWarnings > 0)
+                //        {
+                //            //isOk = false;
+                //            strNewMessage = "Failed to load some registry configuration options for target SQL Server";
+                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //            snapshotStatus = Constants.StatusWarning;
+                //        }
+                //        //else
+                //        {
+                //            registryPermissions.WriteRegistrySettingsToRepository(m_Repository.ConnectionString);
+                //        }
+                //    }
+                //}
+
+                // Get SQLServer Services from Target
+                //if (isOk)
+                //{
+                //    string instanceName = Path.GetInstanceFromSQLServerInstance(TargetInstance);
+                //    string computerName = Path.WhackPrefixComputer(m_Server.Name);
+                //    sqlServices = new SQLServices(computerName, instanceName, m_VersionEnum);
+                //    if (sqlServices.GetSQLServices(m_Repository.ConnectionString, m_snapshotId) != 0)
+                //    {
+                //        // Don't abort if GetSQLServices Fails
+                //        strNewMessage = "Failed to load properties for some SQL Services on target SQL Server";
+                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //        snapshotStatus = Constants.StatusWarning;
+                //    }
+                //}
+
+                // Load Registry Permissions
+                //if (isOk)
+                //{
+                //    if (registryPermissions != null)
+                //    {
+                //        if (registryPermissions.ProcessRegistryPermissions(sqlServices.Services) != 0)
+                //        {
+                //            strNewMessage = "Failed to load registry permissions for target SQL Server";
+                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //            snapshotStatus = Constants.StatusWarning;
+                //        }
+                //        registryPermissions.WriteRegistryPermissionToRepository(m_Repository.ConnectionString, 0);
+                //    }
+                //}
+
+                // Load File Permissions
+                //if (isOk)
+                //{
+                //    if (filePermissions == null)
+                //    {
+                //        filePermissions = new FilePermissions(m_snapshotId, m_Server.Name, m_VersionEnum);
+                //    }
+                //    if (filePermissions.LoadFilePermissionsForInstallationDirectory(registryPermissions.InstallPath) != 0)
+                //    {
+                //        strNewMessage = "Failed to load file permissions for target SQL Server";
+                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //        snapshotStatus = Constants.StatusWarning;
+                //    }
+
+                //    //for audit folders
+                //    foreach (string auditFolder in m_auditFolders)
+                //    {
+                //        if (filePermissions.LoadFilePermissionsForAuditDirectory(auditFolder) != 0)
+                //        {
+                //            strNewMessage = string.Format("Failed to load file permissions for '{0}' audit folder", auditFolder);
+                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //            snapshotStatus = Constants.StatusWarning;
+                //        }
+                //    }
+
+                //    if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
+                //    {
+                //        strNewMessage = "Failed to load file permissions for SQL Services on target SQL Server";
+                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //        snapshotStatus = Constants.StatusWarning;
+                //    }
+                //}
+
+                // Get a list of databases, from the target SQL Server.
+                sw.Reset();
+                sw.Start();
+                List<Sql.Database> databases = null;
+                if (isOk)
+                {
+                    if (
+                        !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
+                                                         m_ConnectionStringBuilder.ConnectionString,
+                                                         m_Repository.ConnectionString, m_snapshotId,
+                                                         m_ConnectionStringBuilder.UserID, "", "", m_ConnectionStringBuilder, out databases,
+                                                         ref metricsData))
+                    {
+                        strNewMessage = "Failed to get a list of databases from the target SQL Server";
+                        isOk = false;
+                        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                        snapshotStatus = Constants.StatusError;
+                    }
+                }
+
+                sw.Stop();
+                if (isOk)
+                {
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to Get all databases = " + sw.ElapsedMilliseconds.ToString() +
+                                         " msec");
+                }
+
+                // Process Database File Permissions
+                //if (isOk)
+                //{
+                //    if (filePermissions.GetDatabaseFilePermissions(databases) != 0)
+                //    {
+                //        strNewMessage = "Failed to load some Database File permissions for target SQL Server";
+                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //        snapshotStatus = Constants.StatusWarning;
+                //    }
+
+                //    filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
+                //                                                        registryPermissions.NumOSObjectsWrittenToRepository);
+                //}
+                //if (isOk)
+                //{
+                //    List<Account> users = new List<Account>();
+                //    List<Account> groups = new List<Account>();
+                //    List<string> wellKnownAccounts = null;
+                //    int numWarn = filePermissions.GetUsersAndGroups(ref users, ref groups);
+                //    numWarn += registryPermissions.GetUsersAndGroups(ref users, ref groups);
+                //    if (loadDomainInformation(m_snapshotId, true, users, groups, out wellKnownAccounts) != 0 || numWarn != 0)
+                //    {
+                //        //don't run this function because next code overwrites some snapshot results
+                //        //UpdateSuspectAccounts(true);
+                //        strNewMessage = "Suspect Windows accounts encountered processing OS objects";
+                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                //        snapshotStatus = Constants.StatusWarning;
+                //    }
+                //    // Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
+
+                //}
+
+                // Optimize the filters.
+                sw.Reset();
+                sw.Start();
+                List<Sql.Filter.Rule> serverObjectRules = null;
+                Dictionary<string, Dictionary<int, List<Sql.Filter.Rule>>> databaseRules = null;
+                if (isOk)
+                {
+                    if (
+                        !Sql.CollectionFilter.OptimizeRules(databases, m_FilterList, out serverObjectRules,
+                                                            out databaseRules))
+                    {
+                        strNewMessage = "Unable to optimize the filter rules";
+                        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                        isOk = false;
+                        snapshotStatus = Constants.StatusError;
+                    }
+                }
+                sw.Stop();
+                if (isOk)
+                {
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to optimize filters = " + sw.ElapsedMilliseconds.ToString() +
+                                         " msec");
+                }
+                // Start loading the data.
+                if (isOk)
+                {
+                    // Process server level objects.
+                    List<Account> users = null;
+                    List<Account> windowsGroupLogins = null;
+                    List<string> wellKnownAccounts = null;
+                    sw.Reset();
+                    sw.Start();
+                    isOk =
+                        processServerObjects(m_snapshotId, serverObjectRules, out users, out windowsGroupLogins,
+                                             ref metricsData);
+                    if (!isOk)
+                    {
+                        strNewMessage = "Failed to process server objects";
+                        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                        snapshotStatus = Constants.StatusError;
+                    }
+                    sw.Stop();
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to Process Server Objects = " +
+                                         sw.ElapsedMilliseconds.ToString() + " msec");
+
+                    // Load group memberships.
+                    sw.Reset();
+
+                    //Process LinkedServer permissions
+                    sw.Start();
+                    if (isOk)
+                    {
+
+                        if (!LinkedServer.Process(ConnectionString, m_Repository.ConnectionString, m_snapshotId, ref metricsData))
+                        {
+                            strNewMessage = "Failed to process server objects";
+                            PostActivityMessage(ref strErrorMessage, strNewMessage, Constants.ActivityType_Error);
+                            snapshotStatus = Constants.StatusError;
+                            isOk = false;
+                        }
+                    }
+                    sw.Reset();
+
+
+                    sw.Start();
+                    if (isOk)
+                    {
+                        if (loadDomainInformation(m_snapshotId, false, users, windowsGroupLogins, out wellKnownAccounts) != 0)
+                        {
+                            //don't run this function because next code overwrites some snapshot results
+                            //UpdateSuspectAccounts(false);
+                            strNewMessage = "Suspect Windows accounts encountered processing SQL Server logins";
+                            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                            snapshotStatus = Constants.StatusWarning;
+                        }
+                        Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
+                    }
+                    sw.Stop();
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
+                                         sw.ElapsedMilliseconds.ToString() + " msec");
+                    //Tushar
+                    // Process database level objects.
+                    sw.Reset();
+                    sw.Start();
+                    if (isOk)
+                    {
+                        List<Sql.Database> badDbs = new List<Sql.Database>();
+                        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs, serverType, ref metricsData);
+                        if (badDbs.Count > 0)
+                        {
+                            // Note: the warn message is appended if it has account warn message.
+                            strNewMessage = "Some databases were unavailable for auditing";
+                            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                            snapshotStatus = Constants.StatusWarning;
+                        }
+                    }
+                    sw.Stop();
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to Process Database Objects = " +
+                                         sw.ElapsedMilliseconds.ToString() + " msec");
+
+                    // Save the snapshot filters being used to the repository.
+                    sw.Reset();
+                    sw.Start();
+                    if (isOk)
+                    {
+                        isOk = processFilters(m_snapshotId);
+                        if (!isOk)
+                        {
+                            strNewMessage = "Failed to save filters to repository";
+                            PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                            snapshotStatus = Constants.StatusError;
+                        }
+                    }
+                    sw.Stop();
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to Save Filters = " + sw.ElapsedMilliseconds.ToString() +
+                                         " msec");
+                }
+
+                int numErrorsAndWarnings = 0;
+                string strDoneStatus = null;
+                if (isOk)
+                {
+                    strDoneStatus = BuildMetricsString(metricsData);
+                }
+                else
+                {
+                    numErrorsAndWarnings = 1;
+                    strDoneStatus = "Error collecting snapshot";
+                }
+
+                // Update Application and Event Log with done status
+                // -------------------------------------------------
+                string msg = string.Empty;
+                if (snapshotStatus == Constants.StatusSuccess)
+                {
+                    msg = "OK";
+                }
+                else if (snapshotStatus == Constants.StatusWarning)
+                {
+                    msg = strWarnMessage;
+                }
+                else if (snapshotStatus == Constants.StatusError)
+                {
+                    msg = string.IsNullOrEmpty(strErrorMessage) ? lastErrorMsg : strErrorMessage;
+                }
+                Sql.Database.UpdateRepositorySnapshotHistory(m_Repository.ConnectionString, m_snapshotId, bAutomatedRun,
+                                                             snapshotStatus, numErrorsAndWarnings, msg);
+                string strActivityType = Constants.ActivityType_Info;
+                if (snapshotStatus == Constants.StatusError)
+                {
+                    strActivityType = Constants.ActivityType_Error;
+                }
+
+                // Write to System Application Event Log
+                AppLog.WriteAppEventInfo(SQLsecureEvent.DlInfoEndMsg, SQLsecureCat.DlEndCat,
+                                         DateTime.Now.ToString() +
+                                         " SQL Server = " + m_ConnectionStringBuilder.DataSource +
+                                         " Snapshot ID = " + m_snapshotId.ToString() + "; " +
+                                         strDoneStatus);
+
+                // Write to SQLSecure Activity Log
+                Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString, m_snapshotId,
+                                                                        strActivityType,
+                                                                        Collector.Constants.ActivityEvent_Metrics,
+                                                                        "Snapshot ID = " + m_snapshotId.ToString() +
+                                                                        "; " + strDoneStatus);
+
+                // Update the RegisteredServer Table if snapshot was created successfully
+                // ----------------------------------------------------------------------
+                Sql.Database.UpdateRepositoryRegisteredServerTable(m_Repository.ConnectionString, m_snapshotId,
+                                                                   snapshotStatus);
+
+                // Process Notifications
+                // ---------------------
+                Program.ImpersonationContext ic = Program.SetLocalImpersonationContext();
+
+                Notification notification = new Notification(WriteAppActivityToRepository,
+                                                       m_ConnectionStringBuilder.DataSource.Split(',')[0],
+                                                       m_Repository.ConnectionString,
+                                                       SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry(),
+                                                       m_Repository.RegisteredServerId);
+                notification.ProcessStatusNotification(snapshotStatus,
+                                                       msg,
+                                                       strDoneStatus);
+                if (snapshotStatus != Constants.StatusError)
+                {
+                    notification.ProcessFindingNotification();
+                }
+                Program.RestoreImpersonationContext(ic);
+            }
+
+            return isOk;
+        }
 
         private void UpdateOldSnapshotStatus()
         {

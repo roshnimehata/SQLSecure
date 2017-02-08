@@ -88,7 +88,9 @@ namespace Idera.SQLsecure.Collector.Sql
 
         #endregion
 
-
+        //SQLsecure 3.1 (Tushar)--Added serverType,targerServerName and targetConnectionBuilder as parameters to support
+        //Azure DB since as of now Account.Server class object is not created and also while querying Azure DB, we need 
+        //have database name in the connection string for Azure DB. 
         #region Load From Target
         public static bool GetTargetDatabases(
                 Core.Accounts.Server server,
@@ -97,11 +99,16 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnectionString,
                 int snapshotid,
                 string serverlogin,
+                string serverType,
+                string targetServerName,
+                SqlConnectionStringBuilder targerConnectionBuilder,
                 out List<Sql.Database> databaseList,
                 ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData                
             )
         {
-            Debug.Assert(server != null);
+            //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
+            if (serverType != "ADB")
+                Debug.Assert(server != null);
             Debug.Assert(!string.IsNullOrEmpty(targetConnectionString));
             Debug.Assert(sqlServerVersion != ServerVersion.Unsupported);
             uint numDatabasesProcessed = 0;
@@ -136,7 +143,10 @@ namespace Idera.SQLsecure.Collector.Sql
             {
                 // Bind to the remote target, because we have to resolve db owner sid,
                 // if needed (ignore errors).
-                bool isBind = server.Bind();
+                //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
+                bool isBind = false;
+                if (serverType != "ADB" || serverType != "AVM")
+                    isBind = server.Bind();
 
                 // Connect and load the databases.
                 using (SqlConnection connection = new SqlConnection(targetConnectionString))
@@ -152,6 +162,9 @@ namespace Idera.SQLsecure.Collector.Sql
                             query = QueryDb2K12;
                         if (sqlServerVersion < ServerVersion.SQL2012 && sqlServerVersion > ServerVersion.SQL2000)
                             query = QueryDb2K5;
+                        //SQLsecure 3.1 (Tushar)--Query Change for Azure DB.
+                        if (serverType == "ADB")
+                            query = QueryDbAzureDatabase;
                         // Get a list of databases from the target instance.
                         using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
                             CommandType.Text, query, null))
@@ -184,9 +197,18 @@ namespace Idera.SQLsecure.Collector.Sql
                                 }
 
                                 // Create the database object.
-                                Database db = new Database(name.Value, dbid.Value, osid, owner, server.Name, trustworthy.Value,isContained.Value);
-
-                                db.GetDatabaseFiles(targetConnectionString);
+                                //SQLsecure 3.1 (Tushar)--Adding support for Azure DB.
+                                Database db;
+                                if (serverType == "ADB")
+                                {
+                                    db = new Database(name.Value, dbid.Value, osid, owner, targetServerName, trustworthy.Value, isContained.Value);
+                                    targerConnectionBuilder.InitialCatalog = db.Name;
+                                }
+                                else
+                                {
+                                    db = new Database(name.Value, dbid.Value, osid, owner, server.Name, trustworthy.Value, isContained.Value);
+                                }
+                                db.GetDatabaseFiles(targerConnectionBuilder.ConnectionString);
                                 // Add filter to the list.
                                 databaseList.Add(db);
 
@@ -212,6 +234,10 @@ namespace Idera.SQLsecure.Collector.Sql
                         isOk = false;
                     }
                 }
+
+                //SQLsecure 3.1 (Tushar)--Added support for Azure SQLDb.
+                //once we are done with processing individual databases, setting it back to empty.
+                targerConnectionBuilder.InitialCatalog = string.Empty;
 
                 // Now unbind from the target, if we have bound to the target.
                 if (isBind) { server.Unbind(); }
@@ -273,12 +299,14 @@ namespace Idera.SQLsecure.Collector.Sql
             }
         }
 
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
         public static bool GetDabaseStatus(
                 ServerVersion sqlServerVersion,
                 string targetConnectionString,
                 string repositoryConnectionString,
                 int snapshotid,
                 int dbid,
+                string serverType,
                 out string status
             )
         {
@@ -320,7 +348,12 @@ namespace Idera.SQLsecure.Collector.Sql
                         connection.Open();
 
                         // Create the query.
-                        string query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2;
+                        string query = string.Empty;
+                        //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
+                        if (serverType=="ADB")
+                            query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2ForAzureDb;
+                        else
+                            query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2;
 
                         // Get the status.
                         using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
@@ -371,6 +404,11 @@ namespace Idera.SQLsecure.Collector.Sql
                             @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( db.containment as bit)
                               FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
+        private const string QueryDbAzureDatabase = @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast(db.containment as bit)
+                              FROM sys.databases AS db LEFT OUTER JOIN sys.database_principals AS l
+                                            ON (db.owner_sid = l.sid)";
+
         private const int FieldName = 0;
         private const int FieldDbid = 1;
         private const int FieldOwnersid = 2;
@@ -397,6 +435,98 @@ namespace Idera.SQLsecure.Collector.Sql
 	                            @status2 = status2
                             FROM 
 	                            master..sysdatabases d (nolock)
+                            WHERE 
+	                            dbid = @dbid
+
+                            -- Determine if database is suspect, and if so, goto Single User DB (below)
+                            -- Note that databasepropertyex is SQL 2000+ and databaseproperty is provided for backwards compatibility
+                            IF databasepropertyex(@dbname,'status') = 'Suspect' 
+	                            GOTO single_user_db 
+
+                            -- If database status is Single User and the current user does not have access to it, go to Single User DB (below)
+
+                            IF @status & 4096 = 4096 
+                            BEGIN
+                                IF(has_dbaccess(@dbname) = 0) 
+	                              GOTO single_user_db 
+                            END
+
+                            -- If the user has access to the database and:
+                            IF (has_dbaccess(@dbname) = 1) 
+	                            -- The database is not locked
+	                            AND @mode = 0 
+	                            -- The database is not in a load state
+	                            AND databaseproperty(@dbname, 'isinload') = 0 
+	                            -- The database is not suspect
+	                            AND databaseproperty(@dbname, 'issuspect') = 0 
+	                            -- The database is not in recovery
+	                            AND isnull(databaseproperty(@dbname, 'isinrecovery'),0) = 0 
+	                            -- The database is not in state - not recovered
+	                            AND isnull(databaseproperty(@dbname, 'isnotrecovered'),0) = 0 
+	                            -- The database is not offline
+	                            AND databaseproperty(@dbname, 'isoffline') = 0 
+	                            -- The database is not shut down
+	                            AND isnull(databaseproperty(@dbname, 'isshutdown'),0) = 0 
+	                            -- The database is not in a load state (according to status bits)
+	                            AND @status & 32 <> 32 
+	                            -- The database is not in pre-recovery (according to status bits)
+	                            AND @status & 64 <> 64 
+	                            -- The database is not in recovery (according to status bits)
+	                            AND @status & 128 <> 128 
+	                            -- The database is not in state - not recovered (according to status bits)
+	                            AND @status & 256 <> 256 
+	                            -- The database is not offline (according to status bits)
+	                            AND @status & 512 <> 512 
+                            	
+	                            BEGIN
+		                            --This section of code will run if the database is accessible
+		                            SELECT
+			                            'Available database', 
+			                            @dbname, 
+			                            @status, 
+			                            @mode  
+
+	                            END
+                            ELSE
+	                            BEGIN single_user_db:  
+		                            -- If not suspect and not inaccessible
+		                            IF @mode = 0 and databasepropertyex(@dbname,'status') <> 'suspect' 
+			                            -- Return - loading/exlock db along with DB name, status, and mode
+			                            SELECT
+				                            'Database is loading or exclusively locked', 
+				                            @dbname, 
+				                            @status, 
+				                            @mode  
+		                            ELSE
+			                            BEGIN
+				                            -- If suspect
+				                            IF databasepropertyex(@dbname,'status') = 'suspect'  
+					                            -- Return - not accessible along with DB name, 256, and mode
+					                            SELECT
+						                            'Suspect', 
+						                            @dbname, 
+						                            @status, 
+						                            @mode  
+				                            -- If inaccessible for another reason
+				                            ELSE
+					                            -- Return - not accessible along with DB name, status, and mode
+					                            SELECT
+						                            'Not accessible', 
+						                            @dbname, 
+						                            @status, 
+						                            @mode  
+			                            END 
+	                            END";
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
+        private const string QueryDbStatus2ForAzureDb = @"
+                            --Get mode, status & status2 for the dabase.
+                            SELECT 
+	                            @dbname = name,
+	                            @mode = mode,
+	                            @status = isnull(convert(integer,status),-999),
+	                            @status2 = status2
+                            FROM 
+	                            sys.sysdatabases d (nolock)
                             WHERE 
 	                            dbid = @dbid
 

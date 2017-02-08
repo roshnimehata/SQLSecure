@@ -182,6 +182,9 @@ namespace Idera.SQLsecure.Collector.Sql
                     bldr.ConnectionString = ConstructConnectionString(instance, user, password, azureADAuth);
 
                 }
+                //SQLsecure (Tushar)--Added support for Azure VM
+                if(serverType == "AVM")
+                    bldr.ConnectionString =     @"Data Source=" + instance + ";Initial Catalog=master ;User ID= " + user + ";Password=" + password + ";";
                 return bldr;
             }
         }

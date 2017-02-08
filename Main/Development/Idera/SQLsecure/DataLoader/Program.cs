@@ -441,6 +441,11 @@ namespace Idera.SQLsecure.Collector
                                             {
                                                 //AuthenticationResult authenticationResult= AzureDatabase.GetConnectionToken(serverLogin, serverPassword);
                                             }
+                                            //SQLsecure 3.1 (Tushar)--Support for Azure VM.
+                                            else if (serverType == "AVM")
+                                            {
+                                                GetIdentitiesForImpersonation(sqlLogin, sqlPassword, sqlAuthType, serverLogin, serverPassword);
+                                            }
                                         }
                                         Program.ImpersonationContext wi;
                                         // Initialize and validate the target.
@@ -457,6 +462,13 @@ namespace Idera.SQLsecure.Collector
                                         else if(serverType=="ADB")
                                         {
                                             m_Target = new Target(programArgs.TargetInstance, m_Repository);
+                                        }
+                                        //SQLsecure 3.1 (Tushar)--Support for Azure VM.
+                                        else if (serverType == "AVM")
+                                        {
+                                            wi = SetTargetSQLServerImpersonationContext();
+                                            m_Target = new Target(programArgs.TargetInstance, m_Repository);
+                                            RestoreImpersonationContext(wi);
                                         }
                                         sw.Stop();
                                         logX.loggerX.Verbose("TIMING - Time to initialize and validate target = " +
@@ -475,6 +487,11 @@ namespace Idera.SQLsecure.Collector
                                             else if(serverType=="ADB")
                                             {
                                                 m_Target.LoadDataAzureDB(programArgs.AutomatedRun);
+                                            }
+                                            //SQLsecure 3.1 (Tushar)--Support for Azure VM.
+                                            else if (serverType == "AVM")
+                                            {
+                                                m_Target.LoadDataForAzureVM(programArgs.AutomatedRun);
                                             }
                                         }
                                         else
