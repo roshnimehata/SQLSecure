@@ -47,11 +47,13 @@ namespace Idera.SQLsecure.Collector
         private bool m_IsValid;
         private int m_snapshotId;
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Target");
-        private string sqlLogin, sqlPassword, sqlAuthType, serverLogin, serverPassword,serverType;
+        private string sqlLogin, sqlPassword, sqlAuthTypeString, serverLogin, serverPassword,serverTypeString;
         private FilePermissions filePermissions = null;
         private RegistryPermissions registryPermissions = null;
         private SQLServices sqlServices = null;
         private string[] m_auditFolders = null;
+        private ServerType serverType = ServerType.Null;
+        private AuthType authType = AuthType.Null;
 
         #endregion
 
@@ -203,7 +205,7 @@ namespace Idera.SQLsecure.Collector
         {
             //SQLsecure 3.1 (Tushar)--For Azure DB server object is not created and for Azure VM as of now Server object is not created.
             //Validate the server object.
-            if (serverType != "ADB" || serverType != "AVM")
+            if (serverType == ServerType.ADB || serverType == ServerType.AVM)
             {
                 if (!m_Server.IsValid)
                 {
@@ -400,32 +402,34 @@ namespace Idera.SQLsecure.Collector
             string server;
             int? port;
             if (m_Repository.GetTargetCredentials(targetInstance, out server, out port, out sqlLogin, out sqlPassword,
-                                                    out sqlAuthType, out serverLogin,
-                                                        out serverPassword, out serverType))
+                                                    out sqlAuthTypeString, out serverLogin,
+                                                        out serverPassword, out serverTypeString))
             {
                 try
                 {
+                    serverType = (ServerType)Enum.Parse(typeof(ServerType), serverTypeString);
+                    authType = (AuthType)Enum.Parse(typeof(AuthType), sqlAuthTypeString);
                     string login = string.Empty;
                     string password = string.Empty;
-                    if (sqlAuthType.ToUpper() == "S" || sqlAuthType.ToUpper() == "W")
+                    if (authType == AuthType.S || authType == AuthType.W)
                     {
                         login = sqlLogin;
                         password = sqlPassword;
                     }
-                    bool azureADAuth = (sqlAuthType == "W" && serverType != "OP") ? true : false;
+                    bool azureADAuth = (authType == AuthType.W && serverType != ServerType.OP) ? true : false;
                     m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(targetInstance, port, login,
                                                                                             password, serverType, azureADAuth);
                     TargetInstance = targetInstance;
-                    if (serverType == "OP")
+                    if (serverType == ServerType.OP)
                     {
                         SettingsForOnPremiseTargets(server);
                     }
-                    else if (serverType == "ADB")
+                    else if (serverType == ServerType.ADB)
                     {
                         SettingsForAzureDBTargets();
                     }
                     //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
-                    else if (serverType == "AVM")
+                    else if (serverType == ServerType.AVM)
                         SettingsForAzureVM(server);
                 }
                 catch (Exception ex)
@@ -446,16 +450,16 @@ namespace Idera.SQLsecure.Collector
             //Retrieve audit folders 
            
 
-            if (serverType == "OP")
+            if (serverType == ServerType.OP)
             {
                 m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
             }
-            else if (serverType == "ADB")
+            else if (serverType == ServerType.ADB)
             {
                 m_auditFolders = null;
             }
             //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
-            else if (serverType == "AVM")
+            else if (serverType == ServerType.AVM)
             {
                 m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
             }
@@ -516,25 +520,28 @@ namespace Idera.SQLsecure.Collector
             // Retrieve target instance credentials from the repository.
             string server;
             int? port;
+            
             if (m_Repository.GetTargetCredentials(targetInstance, out server, out port, out sqlLogin, out sqlPassword,
-                                                    out sqlAuthType, out serverLogin,
-                                                        out serverPassword, out serverType))
+                                                    out sqlAuthTypeString, out serverLogin,
+                                                        out serverPassword, out serverTypeString))
             {
                 try
                 {
+                    serverType = (ServerType)Enum.Parse(typeof(ServerType), serverTypeString);
+                    authType = (AuthType)Enum.Parse(typeof(AuthType), sqlAuthTypeString);
                     string login = string.Empty;
                     string password = string.Empty;
-                    if (sqlAuthType.ToUpper() == "S")
+                    if (authType == AuthType.S)
                     {
                         login = sqlLogin;
                         password = sqlPassword;
                     }
-                    bool azureADAuth = (sqlAuthType == "W" && serverType != "OP") ? true : false;
+                    bool azureADAuth = (authType == AuthType.W && serverType != ServerType.OP) ? true : false;
                     m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(targetInstance, port, login,
                                                                                             password, serverType, azureADAuth);
                     TargetInstance = targetInstance;
                     //this should not be there for azure DB
-                    if (serverType == "OP")
+                    if (serverType == ServerType.OP)
                     {
                         Program.ImpersonationContext wi2 = Program.SetTargetImpersonationContext();
                         m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword,
@@ -604,7 +611,7 @@ namespace Idera.SQLsecure.Collector
         }
         public bool IsSQLLoginType
         {
-            get { return (sqlAuthType == "SQL" ? true : false); }
+            get { return (authType == AuthType.S ? true : false); }
         }
         public string ServerLogin
         {
@@ -627,13 +634,13 @@ namespace Idera.SQLsecure.Collector
 
 
         // 
-        private Constants.CollectionStatus createSnapshot(string TypeOfServer,out int snapshotid)
+        private Constants.CollectionStatus createSnapshot(ServerType TypeOfServer,out int snapshotid)
         {
             // Init returns.
             Constants.CollectionStatus enumStatus = Constants.CollectionStatus.StatusSuccess;
             bool isOk = true;
             snapshotid = 0;
-            string serverType = TypeOfServer;
+            string serverType = Convert.ToString(TypeOfServer);
             // Connect to the target and retrieve instance properties.
             char authenticationMode = Constants.MixedAuthentication;
             string version = string.Empty;
@@ -696,7 +703,7 @@ namespace Idera.SQLsecure.Collector
 
                         // Instance name
                         //retrurning null for azure db
-                        getInstanceName(ref enumStatus, isOk, ref instancename, target,serverType);
+                        getInstanceName(ref enumStatus, isOk, ref instancename, target,TypeOfServer);
 
                         // Case sensitive
                         //applies to azure DB
@@ -740,7 +747,7 @@ namespace Idera.SQLsecure.Collector
 
                 // Is Server Domain Controller
                 //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
-                if (serverType != "AVM")
+                if (TypeOfServer != ServerType.AVM)
                 {
                     if (isOk)
                     {
@@ -764,7 +771,7 @@ namespace Idera.SQLsecure.Collector
                     enabledSQLmailXPs, enabledDatabaseMailXPs, enabledOLEAutomationXPs, enabledWebAsstXPs,
                     enabledXP_CMDshell, enabledAdHocDistributedQueries, isDomainControler, issaPasswordNull,
                     isSysAdminOnlyCmdExec, isReplicationEnabled, isDistributor, isPublisher, hasRemotePublisher,
-                    ref isWeakPasswordDetectionEnabled, isClrEnabled, systemDrive,serverType);
+                    ref isWeakPasswordDetectionEnabled, isClrEnabled, systemDrive,TypeOfServer);
 
                 //get info about sql server jobs proxies
                 getSQLServerJobProxiesInfo(snapshotid, ref enumStatus, ref isOk, servername);
@@ -785,7 +792,7 @@ namespace Idera.SQLsecure.Collector
         private Constants.CollectionStatus createSnapshotAzureDB(out int snapshotid)
         {
             // Init returns.
-            string servertype = "ADB";
+            string servertype = Convert.ToString(ServerType.ADB);
             Constants.CollectionStatus enumStatus = Constants.CollectionStatus.StatusSuccess;
             bool isOk = true;
             snapshotid = 0;
@@ -1019,7 +1026,7 @@ namespace Idera.SQLsecure.Collector
                                         char issaPasswordNull, char isSysAdminOnlyCmdExec, 
                                         char isReplicationEnabled, char isDistributor, char isPublisher, 
                                         char hasRemotePublisher, ref char isWeakPasswordDetectionEnabled, 
-                                        char isClrEnabled, string systemDrive,string serverType)
+                                        char isClrEnabled, string systemDrive,ServerType serverType)
         {
             if (isOk)
             {
@@ -1041,7 +1048,7 @@ namespace Idera.SQLsecure.Collector
                         // Create a snapshot instance.
                         //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
                         string instance = string.Empty;
-                        if (serverType == "AVM")
+                        if (serverType == ServerType.AVM)
                             instance = servername;
                         else
                             instance = m_ConnectionStringBuilder.DataSource.Split(',')[0];
@@ -1050,7 +1057,7 @@ namespace Idera.SQLsecure.Collector
                         SqlParameter paramStarttime =
                             new SqlParameter(ParamStarttime, DateTime.Now.ToUniversalTime());
                         string os;
-                        if (serverType == "OP")
+                        if (serverType == ServerType.OP)
                         {
                             os = m_Server.Product;
                             if (!string.IsNullOrEmpty(m_Server.ServicePack))
@@ -1429,17 +1436,17 @@ namespace Idera.SQLsecure.Collector
             }
         }
 
-        private static void getInstanceName(ref Constants.CollectionStatus enumStatus, bool isOk, ref string instancename, SqlConnection target,string serverType)
+        private static void getInstanceName(ref Constants.CollectionStatus enumStatus, bool isOk, ref string instancename, SqlConnection target,ServerType serverType)
         {
             if (isOk)
             {
                 string query=string.Empty;
-                if (serverType == "ADB")
+                if (serverType == ServerType.ADB)
                 {
                     query = QueryInstanceNameAzureDB;
                 }
 				//SQLsecure 3.1 (Tushar)--Added support for Azure VM.
-                else if (serverType == "OP" || serverType=="AVM")
+                else if (serverType == ServerType.OP || serverType== ServerType.AVM)
                 {
                     query = QueryInstancename;
                 }
@@ -1616,7 +1623,7 @@ namespace Idera.SQLsecure.Collector
                 List<Sql.Database> databases,
                 Dictionary<string, Dictionary<int, List<Sql.Filter.Rule>>> databaseRules,
                 List<Sql.Database> badDbs,
-                string serverType,
+                ServerType serverType,
                 ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
             )
         {
@@ -1639,7 +1646,7 @@ namespace Idera.SQLsecure.Collector
                     Dictionary<int, List<Sql.Filter.Rule>> dbObjRules = null;
                     processDatabaseObjects = true;
                     //SQlsecure 3.1 (Tushar)--Support for Azure DB.
-                    if (serverType == "ADB")
+                    if (serverType == ServerType.ADB)
                         m_ConnectionStringBuilder.InitialCatalog = db.Name;
                     if (!databaseRules.TryGetValue(db.Name, out dbObjRules))
                     {
@@ -1784,7 +1791,7 @@ namespace Idera.SQLsecure.Collector
                     {
                         // Get status and update db object.
                         string status = string.Empty;
-                        if (serverType == "ADB")
+                        if (serverType == ServerType.ADB)
                             m_ConnectionStringBuilder.InitialCatalog = "master";
                         Sql.Database.GetDabaseStatus(m_VersionEnum, ConnectionString, m_Repository.ConnectionString,
                                                      snapshotId, db.DbId,serverType, out status);
@@ -2138,7 +2145,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID,"","",m_ConnectionStringBuilder ,out databases,
+                                                         m_ConnectionStringBuilder.UserID,serverType,"",m_ConnectionStringBuilder ,out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";
@@ -3007,7 +3014,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID, "", "", m_ConnectionStringBuilder, out databases,
+                                                         m_ConnectionStringBuilder.UserID, serverType, "", m_ConnectionStringBuilder, out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";

@@ -42,14 +42,15 @@ namespace Idera.SQLsecure.Collector.Sql
         private static string createPrincipalQuery(
                 ServerVersion version,
                 Database database,
-                string serverType
+                ServerType serverType
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
             Debug.Assert(database != null);
 
             string query = null;
-            if (serverType != "ADB")
+            //SQLsecure 3.1 (Tsuahr)--On basis of server type creating queries.
+            if (serverType != ServerType.ADB)
             {
                 // Create query based on the SQL Server version.
                 if (version == ServerVersion.SQL2000)
@@ -159,6 +160,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 }
 
             }
+            //SQLsecure 3.1 (Tushar)--Query for Azure DB.
             else
                 query = @"SELECT
                             dp.name, 
@@ -422,7 +424,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnection,
                 int snapshotid,
                 Database database,
-                string serverType,
+                ServerType serverType,
                 out bool isGuestEnabled,
                 ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
             )

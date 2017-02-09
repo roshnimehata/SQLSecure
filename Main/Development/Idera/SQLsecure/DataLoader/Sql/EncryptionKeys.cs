@@ -81,14 +81,14 @@ namespace Idera.SQLsecure.Collector.Sql
             string targetConnection,
             string repositoryConnection,
             int snapshotid,
-            int databaseId, string databaseName,string serverType)
+            int databaseId, string databaseName,ServerType serverType)
         {
             Debug.Assert(version != ServerVersion.Unsupported);
             Debug.Assert(!string.IsNullOrEmpty(targetConnection));
             Debug.Assert(!string.IsNullOrEmpty(repositoryConnection));
 
             bool isOk = true;
-            if(serverType != "ADB")
+            if(serverType != ServerType.ADB)
                 targetConnection = Sql.SqlHelper.AppendDatabaseToConnectionString(targetConnection, "master");
             Program.ImpersonationContext wi = Program.SetLocalImpersonationContext();
             if (version == ServerVersion.SQL2000) return true;

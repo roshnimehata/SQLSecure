@@ -19,6 +19,7 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
+using Idera.SQLsecure.Collector.Sql;
 
 namespace Idera.SQLsecure.Collector.Sql
 {
@@ -99,7 +100,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnectionString,
                 int snapshotid,
                 string serverlogin,
-                string serverType,
+                ServerType serverType,
                 string targetServerName,
                 SqlConnectionStringBuilder targerConnectionBuilder,
                 out List<Sql.Database> databaseList,
@@ -107,7 +108,7 @@ namespace Idera.SQLsecure.Collector.Sql
             )
         {
             //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
-            if (serverType != "ADB")
+            if (serverType != ServerType.ADB)
                 Debug.Assert(server != null);
             Debug.Assert(!string.IsNullOrEmpty(targetConnectionString));
             Debug.Assert(sqlServerVersion != ServerVersion.Unsupported);
@@ -145,7 +146,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // if needed (ignore errors).
                 //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
                 bool isBind = false;
-                if (serverType != "ADB" || serverType != "AVM")
+                if (serverType != ServerType.ADB || serverType != ServerType.AVM)
                     isBind = server.Bind();
 
                 // Connect and load the databases.
@@ -163,7 +164,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         if (sqlServerVersion < ServerVersion.SQL2012 && sqlServerVersion > ServerVersion.SQL2000)
                             query = QueryDb2K5;
                         //SQLsecure 3.1 (Tushar)--Query Change for Azure DB.
-                        if (serverType == "ADB")
+                        if (serverType == ServerType.ADB)
                             query = QueryDbAzureDatabase;
                         // Get a list of databases from the target instance.
                         using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
@@ -182,7 +183,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                 // Create the sid object.
                                 Debug.Assert(!ownersid.IsNull);
                                 Sid osid = new Sid(ownersid.Value);
-                                Debug.Assert(osid.IsValid);
+                                if(serverType != ServerType.ADB)
+                                    Debug.Assert(osid.IsValid);
 
                                 // If the owner name is null, then we have to resolve the SID to 
                                 // get the owner name.
@@ -199,7 +201,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                 // Create the database object.
                                 //SQLsecure 3.1 (Tushar)--Adding support for Azure DB.
                                 Database db;
-                                if (serverType == "ADB")
+                                if (serverType == ServerType.ADB)
                                 {
                                     db = new Database(name.Value, dbid.Value, osid, owner, targetServerName, trustworthy.Value, isContained.Value);
                                     targerConnectionBuilder.InitialCatalog = db.Name;
@@ -306,7 +308,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnectionString,
                 int snapshotid,
                 int dbid,
-                string serverType,
+                ServerType serverType,
                 out string status
             )
         {
@@ -350,7 +352,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         // Create the query.
                         string query = string.Empty;
                         //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
-                        if (serverType=="ADB")
+                        if (serverType== ServerType.ADB)
                             query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2ForAzureDb;
                         else
                             query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2;

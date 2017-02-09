@@ -368,7 +368,7 @@ namespace Idera.SQLsecure.Collector.Sql
 				Database database,
 				SqlObjectType type,
 				Filter.Rule rule,
-            string serverType
+            ServerType serverType
 			)
 		{
 
@@ -637,7 +637,7 @@ namespace Idera.SQLsecure.Collector.Sql
 					}
 					else
 					{
-                        if (serverType == "ADB")
+                        if (serverType == ServerType.ADB)
                         {
                             query = @" SELECT 
 									a.type, 
@@ -888,7 +888,7 @@ namespace Idera.SQLsecure.Collector.Sql
 				List<Filter.Rule> rules,
 				int snapshotid,
 				Database database,
-                string serverType,
+                ServerType serverType,
 				ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
 			)
 		{
