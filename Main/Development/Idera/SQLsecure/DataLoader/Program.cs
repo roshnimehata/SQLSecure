@@ -486,7 +486,7 @@ namespace Idera.SQLsecure.Collector
                                             }
                                             else if(serverType=="ADB")
                                             {
-                                                m_Target.LoadDataAzureDB(programArgs.AutomatedRun);
+                                                m_Target.LoadDataAzureDB(programArgs.AutomatedRun,serverType);
                                             }
                                             //SQLsecure 3.1 (Tushar)--Support for Azure VM.
                                             else if (serverType == "AVM")

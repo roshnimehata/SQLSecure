@@ -1671,7 +1671,7 @@ namespace Idera.SQLsecure.Collector
                         bool isGuestEnabled = false;
                         if (!Sql.DatabasePrincipal.Process(m_VersionEnum, ConnectionString,
                                                            m_Repository.ConnectionString, snapshotId,
-                                                           db, out isGuestEnabled, ref metricsData))
+                                                           db,serverType ,out isGuestEnabled, ref metricsData))
                         {
                             logX.loggerX.Error("ERROR - failed to process database principals and role members for ",
                                                db.Name);
