@@ -413,7 +413,7 @@ namespace Idera.SQLsecure.Collector
                         password = sqlPassword;
                     }
                     bool azureADAuth = (sqlAuthType == "W" && serverType != "OP") ? true : false;
-                    m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString("52.172.42.105"/*targetInstance*/, port, login,
+                    m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(targetInstance, port, login,
                                                                                             password, serverType, azureADAuth);
                     TargetInstance = targetInstance;
                     if (serverType == "OP")
