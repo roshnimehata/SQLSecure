@@ -18,6 +18,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.Collector;
+using Idera.SQLsecure.Collector.Sql;
 
 namespace Idera.SQLsecure.Collector.Sql
 {
@@ -127,7 +128,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 int? port,
                 string user,
                 string password,
-                string serverType,
+                ServerType serverType,
                 bool azureADAuth
             )
         {
@@ -155,7 +156,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 string instance,
                 string user,
                 string password,
-                string serverType="OP",
+                ServerType serverType = ServerType.Null,
                 bool azureADAuth=false
             )
         {
@@ -177,11 +178,14 @@ namespace Idera.SQLsecure.Collector.Sql
                     bldr.UserID = user;
                     bldr.Password = password;
                 }
-                if (serverType == "ADB" || (serverType == "AVM" && azureADAuth))
+                if (serverType == ServerType.ADB || (serverType == ServerType.AVM && azureADAuth))
                 {
                     bldr.ConnectionString = ConstructConnectionString(instance, user, password, azureADAuth);
 
                 }
+                //SQLsecure (Tushar)--Added support for Azure VM
+                if(serverType == ServerType.AVM)
+                    bldr.ConnectionString =     @"Data Source=" + instance + ";Initial Catalog=master ;User ID= " + user + ";Password=" + password + ";";
                 return bldr;
             }
         }
