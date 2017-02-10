@@ -367,7 +367,8 @@ namespace Idera.SQLsecure.Collector.Sql
 				ServerVersion version,
 				Database database,
 				SqlObjectType type,
-				Filter.Rule rule
+				Filter.Rule rule,
+            ServerType serverType
 			)
 		{
 
@@ -636,8 +637,9 @@ namespace Idera.SQLsecure.Collector.Sql
 					}
 					else
 					{
-						query = @" USE " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name)
-								+ @" SELECT 
+                        if (serverType == ServerType.ADB)
+                        {
+                            query = @" SELECT 
 									a.type, 
 									owner = b.principal_id,         
 									schemaid = a.schema_id, 
@@ -666,9 +668,47 @@ namespace Idera.SQLsecure.Collector.Sql
 								createdate=null, 
 								modifydate=null 
 									FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
-									+ "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
-									+ "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.syscomments c ON (a.object_id = c.id and c.colid=1)"
-									+ "WHERE " + strScopeText + LIKEClause;
+                                      + "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
+                                      + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.syscomments c ON (a.object_id = c.id and c.colid=1)"
+                                      + "WHERE " + strScopeText + LIKEClause;
+                        }
+                        else
+                        {
+                            query = @" USE " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name)
+                            + @" SELECT 
+									a.type, 
+									owner = b.principal_id,         
+									schemaid = a.schema_id, 
+									classid = 1, 
+									parentobjectid = a.parent_object_id, 
+									objectid = a.object_id,                                     
+									a.name,
+									runatstartup = CASE WHEN ObjectProperty(a.object_id, 'ExecIsStartup') = 1 THEN 'Y' ELSE 'N' END,
+									isencypted = CASE WHEN isnull(c.encrypted,0) = 0 THEN 'N' ELSE 'Y' END,
+									userdefined = case 
+													when is_ms_shipped = 1 then 'N'
+													when (
+														select 
+														  major_id 
+														from 
+															sys.extended_properties 
+														where 
+														   major_id = object_id and 
+															minor_id = 0 and 
+															class = 1 and 
+														   name = N'microsoft_database_tools_support') 
+														is not null then 'N'
+													else 'Y'
+												  end ,
+								permission_set=null, 
+								createdate=null, 
+								modifydate=null 
+									FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
+                                + "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
+                                + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.syscomments c ON (a.object_id = c.id and c.colid=1)"
+                                + "WHERE " + strScopeText + LIKEClause;
+                        }
+
 					}
 					break;
 
@@ -848,6 +888,7 @@ namespace Idera.SQLsecure.Collector.Sql
 				List<Filter.Rule> rules,
 				int snapshotid,
 				Database database,
+                ServerType serverType,
 				ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
 			)
 		{
@@ -894,7 +935,7 @@ namespace Idera.SQLsecure.Collector.Sql
 							foreach (Filter.Rule rule in rules)
 							{
 								// Create the query based on the rule.
-								string query = createQuery(version, database, objType, rule);
+								string query = createQuery(version, database, objType, rule,serverType);
 								if (query != null)
 								{
 									Debug.Assert(!string.IsNullOrEmpty(query));
@@ -1003,7 +1044,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         try
                         {
                             EncryptionKeys.Process(version, targetConnection, repositoryConnection, snapshotid,
-                                              database.DbId, database.Name);
+                                              database.DbId, database.Name,serverType);
                         }
                         catch (SqlException ex)
                         {

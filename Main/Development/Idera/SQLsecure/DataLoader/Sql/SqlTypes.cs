@@ -154,6 +154,21 @@ namespace Idera.SQLsecure.Collector.Sql
         Unknown
     }
 
+    public enum AuthType
+    {
+        Null,
+        W,//Windows Auth
+        S//Sql Server Auth
+    }
+
+    public enum ServerType
+    {
+        Null,
+        OP,//On-Premise
+        ADB,//Azure SqlDatabase
+        AVM//Azure VM
+    }
+
     public static class Constants
     {
         #region General
