@@ -146,7 +146,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // if needed (ignore errors).
                 //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
                 bool isBind = false;
-                if (serverType != ServerType.ADB || serverType != ServerType.AVM)
+                if (serverType != ServerType.ADB && serverType != ServerType.AVM)
                     isBind = server.Bind();
 
                 // Connect and load the databases.
