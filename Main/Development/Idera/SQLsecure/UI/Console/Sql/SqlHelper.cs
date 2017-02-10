@@ -160,7 +160,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 bldr.ConnectionString=ConstructConnectionString( instance, user, password,azureADAuth);
                 
             }
-            
+            logX.loggerX.Info("Connection String :"+bldr.ConnectionString);
             return bldr;
         }
 

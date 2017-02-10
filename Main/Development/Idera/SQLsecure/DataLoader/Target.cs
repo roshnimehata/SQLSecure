@@ -466,6 +466,8 @@ namespace Idera.SQLsecure.Collector
             // Retrieve the filter rules.
             if (m_IsValid)
             {
+                //Tushar-Now
+                m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
                 if (!m_Repository.GetCollectionFilters(targetInstance, out m_FilterList))
                 {
                     logX.loggerX.Error("ERROR - failed to retrieve collection filter rules");
@@ -487,7 +489,8 @@ namespace Idera.SQLsecure.Collector
 
         private void SettingsForAzureDBTargets()
         {
-            m_Server = null;
+            m_Server = null;//new Idera.SQLsecure.Core.Accounts.Server(serverName, serverLogin, serverPassword,
+                                                                //WriteAppActivityToRepository);
 
             m_IsValid = isValidAzureDB();
         }
@@ -789,6 +792,11 @@ namespace Idera.SQLsecure.Collector
             return enumStatus;
         }
 
+        /// <summary>
+        /// SQLSecure 3.1 (Barkha) getting information of Azure DB
+        /// </summary>
+        /// <param name="snapshotid"></param>
+        /// <returns></returns>
         private Constants.CollectionStatus createSnapshotAzureDB(out int snapshotid)
         {
             // Init returns.
@@ -957,7 +965,7 @@ namespace Idera.SQLsecure.Collector
                 try
                 {
                     isOk = AvailabilityGroup.ProcessGroups(m_VersionEnum, ConnectionString,
-                        m_Repository.ConnectionString, snapshotid, servername);
+                        m_Repository.ConnectionString, snapshotid, servername,serverType);
                 }
                 catch (SqlException ex)
                 {
@@ -1561,7 +1569,8 @@ namespace Idera.SQLsecure.Collector
                 List<Sql.Filter.Rule> rules,
                 out List<Account> users,
                 out List<Account> windowsGroupLogins,
-                ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
+                ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData,
+                ServerType serverType
             )
         {
             Debug.Assert(rules != null);
@@ -1576,9 +1585,10 @@ namespace Idera.SQLsecure.Collector
                 {
                     List<int> serveridlist = new List<int>();
                     serveridlist.Add(0);
+                    
                     if (!Sql.ServerPermission.Process(ConnectionString, m_Repository.ConnectionString,
-                                                      snapshotId, Sql.SqlObjectType.Server,
-                                                      serveridlist))
+                                                      snapshotId,serverType!=ServerType.ADB? Sql.SqlObjectType.Server:Sql.SqlObjectType.Database,
+                                                      serveridlist,serverType))
                     {
                         logX.loggerX.Error(
                             "ERROR - error encountered when processing server level statement permissions");
@@ -1593,7 +1603,7 @@ namespace Idera.SQLsecure.Collector
                     if (
                         !Sql.ServerPrincipal.Process(m_VersionEnum, ConnectionString, m_Repository.ConnectionString,
                                                      snapshotId,
-                                                     out users, out windowsGroupLogins))
+                                                     out users, out windowsGroupLogins,serverType))
                     {
                         logX.loggerX.Error("ERROR - error encountered when processing server principals");
                         isOk = false;
@@ -1601,13 +1611,12 @@ namespace Idera.SQLsecure.Collector
                 }
 
                 // Process endpoints only if the server version is 2005.
-                if (isOk)
                 {
-                    if (m_VersionEnum != Sql.ServerVersion.SQL2000)
+                    if (m_VersionEnum != Sql.ServerVersion.SQL2000 && serverType!=ServerType.ADB)
                     {
                         if (
                             !Sql.Endpoint.Process(ConnectionString, m_Repository.ConnectionString, snapshotId,
-                                                  ref metricsData))
+                                                  ref metricsData,serverType))
                         {
                             logX.loggerX.Error("ERROR - error encountered when processing endpoints");
                             isOk = false;
@@ -1674,6 +1683,7 @@ namespace Idera.SQLsecure.Collector
                     // NOTE : principal & role permissions are only loaded for 2005.
                     if (isOk)
                     {
+                        //Tushar--To be modified for azure database
                         // Process database principals and role memberships.
                         bool isGuestEnabled = false;
                         if (!Sql.DatabasePrincipal.Process(m_VersionEnum, ConnectionString,
@@ -1722,7 +1732,6 @@ namespace Idera.SQLsecure.Collector
                             }
                         }
                     }
-
                     // Process database permissions.
                     if (isOk && processDatabaseObjects)
                     {
@@ -1736,7 +1745,6 @@ namespace Idera.SQLsecure.Collector
                             isOk = false;
                         }
                     }
-
                     // Force processing of Stored Procedures and Extended Stored Procedures
                     if (isOk)
                     {
@@ -2232,7 +2240,7 @@ namespace Idera.SQLsecure.Collector
                     sw.Start();
                     isOk =
                         processServerObjects(m_snapshotId, serverObjectRules, out users, out windowsGroupLogins,
-                                             ref metricsData);
+                                             ref metricsData,serverType);
                     if (!isOk)
                     {
                         strNewMessage = "Failed to process server objects";
@@ -2282,7 +2290,6 @@ namespace Idera.SQLsecure.Collector
                                                                   string.Format(strProgressFmt, ++nStep, nTotalSteps));
                     logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
                                          sw.ElapsedMilliseconds.ToString() + " msec");
-
                     // Process database level objects.
                     sw.Reset();
                     sw.Start();
@@ -2573,7 +2580,7 @@ namespace Idera.SQLsecure.Collector
 
                 //Done
                 //Get a list of databases, from the target SQL Server.
-               sw.Reset();
+                sw.Reset();
                 sw.Start();
                 List<Sql.Database> databases = null;
                 if (isOk)
@@ -2633,7 +2640,7 @@ namespace Idera.SQLsecure.Collector
 
                 //}
 
-                // Optimize the filters.-todo (start from here)
+                // Optimize the filters
                 sw.Reset();
                 sw.Start();
                 List<Sql.Filter.Rule> serverObjectRules = null;
@@ -2659,108 +2666,141 @@ namespace Idera.SQLsecure.Collector
                 //                         " msec");
                 //}
                 // Start loading the data.
-                //if (isOk)
-                //{
-                //    // Process server level objects.
-                //    List<Account> users = null;
-                //    List<Account> windowsGroupLogins = null;
-                //    List<string> wellKnownAccounts = null;
-                //    sw.Reset();
-                //    sw.Start();
-                //    isOk =
-                //        processServerObjects(m_snapshotId, serverObjectRules, out users, out windowsGroupLogins,
-                //                             ref metricsData);
-                //    if (!isOk)
-                //    {
-                //        strNewMessage = "Failed to process server objects";
-                //        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
-                //        snapshotStatus = Constants.StatusError;
-                //    }
-                //    sw.Stop();
-                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                //    logX.loggerX.Verbose("TIMING - Time to Process Server Objects = " +
-                //                         sw.ElapsedMilliseconds.ToString() + " msec");
-
-                //    // Load group memberships.
-                //    sw.Reset();
-
-                //    //Process LinkedServer permissions
-                //    sw.Start();
-                //    if (isOk)
-                //    {
-
-                //        if (!LinkedServer.Process(ConnectionString, m_Repository.ConnectionString, m_snapshotId, ref metricsData))
-                //        {
-                //            strNewMessage = "Failed to process server objects";
-                //            PostActivityMessage(ref strErrorMessage, strNewMessage, Constants.ActivityType_Error);
-                //            snapshotStatus = Constants.StatusError;
-                //            isOk = false;
-                //        }
-                //    }
-                //    sw.Reset();
-
-
-                //    sw.Start();
-                //    if (isOk)
-                //    {
-                //        if (loadDomainInformation(m_snapshotId, false, users, windowsGroupLogins, out wellKnownAccounts) != 0)
-                //        {
-                //            //don't run this function because next code overwrites some snapshot results
-                //            //UpdateSuspectAccounts(false);
-                //            strNewMessage = "Suspect Windows accounts encountered processing SQL Server logins";
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //        Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
-                //    }
-                //    sw.Stop();
-                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                //    logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
-                //                         sw.ElapsedMilliseconds.ToString() + " msec");
-
-                // Process database level objects.
-                sw.Reset();
-                sw.Start();
                 if (isOk)
                 {
-                    List<Sql.Database> badDbs = new List<Sql.Database>();
-                    processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs,serverType, ref metricsData);
-                    if (badDbs.Count > 0)
+                    // Process server level objects.
+                    List<Account> users = null;
+                    List<Account> windowsGroupLogins = null;
+                    List<string> wellKnownAccounts = null;
+                    sw.Reset();
+                    sw.Start();
+                    isOk =
+                        processServerObjects(m_snapshotId, serverObjectRules, out users, out windowsGroupLogins,
+                                             ref metricsData,serverType);
+                    if (!isOk)
                     {
-                        // Note: the warn message is appended if it has account warn message.
-                        strNewMessage = "Some databases were unavailable for auditing";
-                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                        snapshotStatus = Constants.StatusWarning;
+                        strNewMessage = "Failed to process server objects";
+                        PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                        snapshotStatus = Constants.StatusError;
                     }
+                    sw.Stop();
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to Process Server Objects = " +
+                                         sw.ElapsedMilliseconds.ToString() + " msec");
+
+                    // Load group memberships.
+                    sw.Reset();
+
+                    //    //Process LinkedServer permissions
+                    //    sw.Start();
+                    //    if (isOk)
+                    //    {
+
+                    //        if (!LinkedServer.Process(ConnectionString, m_Repository.ConnectionString, m_snapshotId, ref metricsData))
+                    //        {
+                    //            strNewMessage = "Failed to process server objects";
+                    //            PostActivityMessage(ref strErrorMessage, strNewMessage, Constants.ActivityType_Error);
+                    //            snapshotStatus = Constants.StatusError;
+                    //            isOk = false;
+                    //        }
+                    //    }
+                    //    sw.Reset();
+
+
+                    //    sw.Start();
+                    //    if (isOk)
+                    //    {
+                    //        if (loadDomainInformation(m_snapshotId, false, users, windowsGroupLogins, out wellKnownAccounts) != 0)
+                    //        {
+                    //            //don't run this function because next code overwrites some snapshot results
+                    //            //UpdateSuspectAccounts(false);
+                    //            strNewMessage = "Suspect Windows accounts encountered processing SQL Server logins";
+                    //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                    //            snapshotStatus = Constants.StatusWarning;
+                    //        }
+                    //        Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
+                    //    }
+                    //    sw.Stop();
+                    //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                    //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    //    logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
+                    //                         sw.ElapsedMilliseconds.ToString() + " msec");
+
+                    // Process database level objects.
+                    sw.Reset();
+                    sw.Start();
+                    if (isOk)
+                    {
+                        List<Sql.Database> badDbs = new List<Sql.Database>();
+                        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs, serverType, ref metricsData);
+                        if (badDbs.Count > 0)
+                        {
+                            // Note: the warn message is appended if it has account warn message.
+                            strNewMessage = "Some databases were unavailable for auditing";
+                            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                            snapshotStatus = Constants.StatusWarning;
+                        }
+                    }
+                    sw.Stop();
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to Process Database Objects = " +
+                                         sw.ElapsedMilliseconds.ToString() + " msec");
+
+                    //        if (!LinkedServer.Process(ConnectionString, m_Repository.ConnectionString, m_snapshotId, ref metricsData))
+                    //        {
+                    //            strNewMessage = "Failed to process server objects";
+                    //            PostActivityMessage(ref strErrorMessage, strNewMessage, Constants.ActivityType_Error);
+                    //            snapshotStatus = Constants.StatusError;
+                    //            isOk = false;
+                    //        }
+                    //    }
+                    //    sw.Reset();
+
+
+                    //    sw.Start();
+                    //    if (isOk)
+                    //    {
+                    //        if (loadDomainInformation(m_snapshotId, false, users, windowsGroupLogins, out wellKnownAccounts) != 0)
+                    //        {
+                    //            //don't run this function because next code overwrites some snapshot results
+                    //            //UpdateSuspectAccounts(false);
+                    //            strNewMessage = "Suspect Windows accounts encountered processing SQL Server logins";
+                    //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                    //            snapshotStatus = Constants.StatusWarning;
+                    //        }
+                    //        Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
+                    //    }
+                    //    sw.Stop();
+                    //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                    //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    //    logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
+                    //                         sw.ElapsedMilliseconds.ToString() + " msec");
+
+                    // Process database level objects.
+
+
+                    //    // Save the snapshot filters being used to the repository.
+                    //    sw.Reset();
+                    //    sw.Start();
+                    //    if (isOk)
+                    //    {
+                    //        isOk = processFilters(m_snapshotId);
+                    //        if (!isOk)
+                    //        {
+                    //            strNewMessage = "Failed to save filters to repository";
+                    //            PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                    //            snapshotStatus = Constants.StatusError;
+                    //        }
+                    //    }
+                    //    sw.Stop();
+                    //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                    //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    //    logX.loggerX.Verbose("TIMING - Time to Save Filters = " + sw.ElapsedMilliseconds.ToString() +
+                    //                         " msec");
+                    //}
                 }
-                sw.Stop();
-                Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                                                              string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                logX.loggerX.Verbose("TIMING - Time to Process Database Objects = " +
-                                     sw.ElapsedMilliseconds.ToString() + " msec");
-
-                //    // Save the snapshot filters being used to the repository.
-                //    sw.Reset();
-                //    sw.Start();
-                //    if (isOk)
-                //    {
-                //        isOk = processFilters(m_snapshotId);
-                //        if (!isOk)
-                //        {
-                //            strNewMessage = "Failed to save filters to repository";
-                //            PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
-                //            snapshotStatus = Constants.StatusError;
-                //        }
-                //    }
-                //    sw.Stop();
-                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                //    logX.loggerX.Verbose("TIMING - Time to Save Filters = " + sw.ElapsedMilliseconds.ToString() +
-                //                         " msec");
-                //}
-
                 int numErrorsAndWarnings = 0;
                 string strDoneStatus = null;
                 if (isOk)
@@ -2836,6 +2876,7 @@ namespace Idera.SQLsecure.Collector
 
             return isOk;
         }
+
 
         public bool LoadDataForAzureVM(bool bAutomatedRun)
         {
@@ -3101,7 +3142,7 @@ namespace Idera.SQLsecure.Collector
                     sw.Start();
                     isOk =
                         processServerObjects(m_snapshotId, serverObjectRules, out users, out windowsGroupLogins,
-                                             ref metricsData);
+                                             ref metricsData,ServerType.AVM);
                     if (!isOk)
                     {
                         strNewMessage = "Failed to process server objects";

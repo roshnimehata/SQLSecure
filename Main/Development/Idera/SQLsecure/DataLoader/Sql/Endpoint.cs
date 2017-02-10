@@ -52,7 +52,8 @@ namespace Idera.SQLsecure.Collector.Sql
                 string targetConnection,
                 string repositoryConnection,
                 int snapshotid,
-                ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
+                ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData,
+                ServerType serverType
             )
         {
             Debug.Assert(!string.IsNullOrEmpty(targetConnection));
@@ -164,7 +165,7 @@ namespace Idera.SQLsecure.Collector.Sql
             // Load endpoint permissions.
             if (isOk)
             {
-                if (!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid, SqlObjectType.Endpoint, epList))
+                if (!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid, SqlObjectType.Endpoint, epList,serverType))
                 {
                     logX.loggerX.Error("ERROR - error encountered in processing  end point permissions");
                     isOk = false;

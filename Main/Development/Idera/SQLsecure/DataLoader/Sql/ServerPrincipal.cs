@@ -93,7 +93,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                         };
 
         private static string createPrincipalQuery(
-                ServerVersion version
+                ServerVersion version,
+                ServerType serverType
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
@@ -101,9 +102,11 @@ namespace Idera.SQLsecure.Collector.Sql
             string query = null;
 
             // Create query based on the SQL Server version.
-            if (version == ServerVersion.SQL2000)
+            if (serverType !=ServerType.ADB)
             {
-                query = @"SELECT DISTINCT 
+                if (version == ServerVersion.SQL2000)
+                {
+                    query = @"SELECT DISTINCT 
                             name, 
                             principalid = 0, 
                             type = CASE 
@@ -140,10 +143,10 @@ namespace Idera.SQLsecure.Collector.Sql
                             cast([password] as varbinary)
                           FROM master.dbo.syslogins";
 
-            }
-            else
-            {
-                query = @"SELECT DISTINCT 
+                }
+                else
+                {
+                    query = @"SELECT DISTINCT 
                             Principals.name, 
                             principalid = Principals.principal_id, 
                             Principals.type, 
@@ -183,29 +186,75 @@ namespace Idera.SQLsecure.Collector.Sql
                                     Principals.principal_id = SqlLogins.principal_id 
                                 LEFT OUTER JOIN sys.server_permissions Permissions 
                                     ON Permissions.grantee_principal_id = Principals.principal_id AND Permissions.type = N'COSQ'";
+                }
             }
-
+            else
+            {
+                query = @" SELECT DISTINCT 
+                            Principals.name, 
+                            principalid = Principals.principal_id, 
+                            Principals.type, 
+                            Principals.sid, 
+                            serveraccess = CASE Permissions.state
+                                              WHEN 'G' THEN 'Y'
+                                              ELSE 'N'
+                                           END,
+                            serverdeny = CASE Permissions.state
+                                            WHEN 'D' THEN 'Y'
+                                            ELSE 'N'
+                                         END, 
+                            isdisabled = NULL,
+                            ispolicychecked = CASE SqlLogins.is_policy_checked
+                                                 WHEN 1 THEN 'Y'
+                                                 ELSE 'N'
+                                              END, 
+                            isexpirationchecked = CASE SqlLogins.is_expiration_checked
+                                                     WHEN 1 THEN 'Y'
+                                                     ELSE 'N'
+                                                  END, 
+                            ispasswordblank = CASE WHEN Principals.type = 'S'
+                                                    THEN
+                                                        CASE WHEN pwdcompare('', SqlLogins.password_hash) = 1
+                                                             THEN 'Y'
+                                                             ELSE 'N'
+                                                        END
+                                                    ELSE null
+                                              END,
+                            defaultdatabase =NULL,
+                            defaultlanguage = Principals.default_language_name,
+                            SqlLogins.password_hash
+                          FROM sys.database_principals Principals LEFT OUTER JOIN sys.sql_logins SqlLogins ON
+                                    Principals.principal_id = SqlLogins.principal_id
+                                LEFT OUTER JOIN sys.database_permissions Permissions
+                                    ON Permissions.grantee_principal_id = Principals.principal_id AND Permissions.type = N'COSQ'
+                            WHERE Principals.sid IS NOT NULL and Principals.is_fixed_role<>1; ";
+            }
             return query;
         }
 
         private static string createRoleMemberQuery(
-                ServerVersion version
+                ServerVersion version,ServerType serverType
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
 
             string query = null;
-
-            // Create query based on the SQL Server version.
-            if (version == ServerVersion.SQL2000)
+            if (serverType !=ServerType.ADB)
             {
-                query = "EXEC sp_helpsrvrolemember";
+                // Create query based on the SQL Server version.
+                if (version == ServerVersion.SQL2000)
+                {
+                    query = "EXEC sp_helpsrvrolemember";
+                }
+                else
+                {
+                    query = @"SELECT * FROM sys.server_role_members";
+                }
             }
-            else
+            else 
             {
-                query = @"SELECT * FROM sys.server_role_members";
+                query = @"SELECT * FROM sys.database_role_members INNER JOIN sys.database_principals ON role_principal_id= principal_id WHERE is_fixed_role=0";
             }
-
             return query;
         }
 
@@ -214,7 +263,8 @@ namespace Idera.SQLsecure.Collector.Sql
                 string targetConnection,
                 string repositoryConnection,
                 int snapshotid,
-                Dictionary<string, int> nameDictionary
+                Dictionary<string, int> nameDictionary,
+                ServerType serverType
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
@@ -244,7 +294,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         using (DataTable dataTable = ServerRoleMemberDataTable.Create())
                         {
                             // Create the query.
-                            string query = createRoleMemberQuery(version);
+                            string query = createRoleMemberQuery(version,serverType);
                             Debug.Assert(!string.IsNullOrEmpty(query));
 
                             // Query to get the table objects.
@@ -331,7 +381,8 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnection,
                 int snapshotid,
                 out List<Account> users,
-                out List<Account> windowsGroupLogins
+                out List<Account> windowsGroupLogins,
+                ServerType serverType
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
@@ -365,12 +416,12 @@ namespace Idera.SQLsecure.Collector.Sql
                     {
                         // Set the destination table.
                         bcp.DestinationTableName = ServerPrincipalDataTable.RepositoryTable;
-                        bcp.BulkCopyTimeout = SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry();
+                        bcp.BulkCopyTimeout = 0;//SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry();
                         // Create the datatable to write to the repository.
                         using (DataTable dataTable = ServerPrincipalDataTable.Create())
                         {
                             // Create the query.
-                            string query = createPrincipalQuery(version);
+                            string query = createPrincipalQuery(version,serverType);
                             Debug.Assert(!string.IsNullOrEmpty(query));
 
                             // Query to get the table objects.
@@ -387,12 +438,32 @@ namespace Idera.SQLsecure.Collector.Sql
                                     SqlInt32 principalid = rdr.GetSqlInt32(FieldPrincipalPid);
                                     SqlString serveraccess = rdr.GetSqlString(FieldPrincipalServeraccess);
                                     SqlString serverdeny = rdr.GetSqlString(FieldPrincipalServerdeny);
-                                    SqlString isdisabled = rdr.GetSqlString(FieldPrincipalIsdisabled);
+                                    SqlString isdisabled;
+                                    if (!rdr.IsDBNull(FieldPrincipalIsdisabled))
+                                    {
+                                        isdisabled = rdr.GetSqlString(FieldPrincipalIsdisabled);
+                                    }
+                                    else
+                                    {
+                                        isdisabled = null;
+                                    }
                                     SqlString isexpirationchecked = rdr.GetSqlString(FieldPrincipalIsexpirationchecked);
                                     SqlString ispolicychecked = rdr.GetSqlString(FieldPrincipalIspolicychecked);
                                     SqlString ispasswordnull = rdr.GetSqlString(FieldPrincipalIsPasswordNull);
-                                    SqlString defaultdatabase = rdr.GetSqlString(FieldPrincipalDefautDatabase);
-                                    SqlString defaultlanguage = rdr.GetSqlString(FieldPrincipalDefautLanguage);
+                                    SqlString defaultdatabase;
+                                    if (!rdr.IsDBNull(FieldPrincipalDefautDatabase))
+                                    {
+                                        defaultdatabase = rdr.GetSqlString(FieldPrincipalDefautDatabase);
+                                    }
+                                    else
+                                    {
+                                        defaultdatabase = null;
+                                    }
+
+                                SqlString defaultlanguage = rdr.GetSqlString(FieldPrincipalDefautLanguage);
+
+                                  
+                                   
                                     SqlInt32 passwordStatus = SqlInt32.Null; 
 
                                     //only calculate the password status for SQL Logins
@@ -526,7 +597,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         }
                     }
                 }
-                catch (SqlException ex)
+                catch (Exception ex)
                 {
                     string strMessage = "Processing server principals";
                     logX.loggerX.Error("ERROR - " + strMessage, ex);
@@ -549,8 +620,8 @@ namespace Idera.SQLsecure.Collector.Sql
 
             // Process role memberships.
             if (isOk)
-            {
-                if (!processMembers(version, targetConnection, repositoryConnection, snapshotid, nameDictionary))
+            {//change for azure--tushar
+                if (!processMembers(version, targetConnection, repositoryConnection, snapshotid, nameDictionary,serverType))
                 {
                     logX.loggerX.Error("ERROR - error encountered in processing server role members");
                     isOk = false;
@@ -560,14 +631,22 @@ namespace Idera.SQLsecure.Collector.Sql
             // Load principal permissions, if its 2005.
             if (isOk)
             {
-                if (version != ServerVersion.SQL2000)
-                {
-                    if (!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid, SqlObjectType.Login, pidList))
+                if (version != ServerVersion.SQL2000)// && serverType!="OP")
+                {//check for azure--tushar
+                    if (!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid,serverType!=ServerType.ADB? SqlObjectType.Login: SqlObjectType.DatabasePrincipal, pidList,serverType))
                     {
                         logX.loggerX.Error("ERROR - error encountered in processing server principal permissions");
                         isOk = false;
                     }
                 }
+                //else if(serverType=="ADB")
+                //{
+                //    if(!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid, SqlObjectType.DatabasePrincipal, pidList, serverType))
+                //    {
+                //        logX.loggerX.Error("ERROR - error encountered in processing server principal permissions for Azure DB");
+                //        isOk = false;
+                //    }
+                //}
             }
 
             return isOk;

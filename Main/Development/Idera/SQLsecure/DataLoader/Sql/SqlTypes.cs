@@ -136,7 +136,8 @@ namespace Idera.SQLsecure.Collector.Sql
         SequenceObject=48,
         AvailabilityGroup=49,
         LinkedServer = 50,
-        LinkedServerPrincipals=51
+        LinkedServerPrincipals=51,
+        DatabasePrincipal=52
 
     }
 

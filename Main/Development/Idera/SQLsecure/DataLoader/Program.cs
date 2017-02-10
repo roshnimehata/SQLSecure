@@ -9,14 +9,10 @@
  * (C) 2006 - Idera, a division of BBS Technologies, Inc.
  *******************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Security.Principal;
 
 using Idera.SQLsecure.Core.Logger;
-using Idera.SQLsecure.Collector.Utility;
 using Idera.SQLsecure.Core.Accounts;
-using System.Management;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Security;
 using Idera.SQLsecure.Collector.Sql;

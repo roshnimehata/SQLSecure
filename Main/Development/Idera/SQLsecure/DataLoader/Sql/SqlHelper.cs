@@ -169,7 +169,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 SqlConnectionStringBuilder bldr = new SqlConnectionStringBuilder();
                 bldr.DataSource = instance;
                 bldr.ApplicationName = Constants.SqlAppName;
-
+                bldr.ConnectTimeout = 0;
                 // If user is specified then its not integrated security,
                 // so set the user & password.
                 bldr.IntegratedSecurity = (user == null || user.Length == 0);
@@ -520,7 +520,8 @@ namespace Idera.SQLsecure.Collector.Sql
                     if (hkSQLsecure != null) hkSQLsecure.Close();
                 }
             }
-            return timeout;
+            //return timeout;
+            return 0;
         }
 
         private static void WriteDefaultSQLCommandTimeout(int defaultTimeout)

@@ -59,7 +59,8 @@ namespace Idera.SQLsecure.Collector.Sql
            string targetConnection,
            string repositoryConnection,
            int snapshotid,
-           string server)
+           string server,
+           ServerType serverType)
         {
             Debug.Assert(version != ServerVersion.Unsupported);
             Debug.Assert(version >= ServerVersion.SQL2012);
@@ -174,7 +175,7 @@ namespace Idera.SQLsecure.Collector.Sql
             }
 
             if (isOk)
-                return ProcessReplicas(version, targetConnection, repositoryConnection, snapshotid, server);
+                return ProcessReplicas(version, targetConnection, repositoryConnection, snapshotid, server,serverType);
 
 
             return isOk;
@@ -185,7 +186,8 @@ namespace Idera.SQLsecure.Collector.Sql
          string targetConnection,
          string repositoryConnection,
          int snapshotid,
-         string server)
+         string server,
+         ServerType serverType)
         {
             Debug.Assert(version != ServerVersion.Unsupported);
             Debug.Assert(version >= ServerVersion.SQL2012);
@@ -284,7 +286,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     }
                     if (epList.Count != 0)
                     {
-                        if (!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid, SqlObjectType.AvailabilityGroup, epList))
+                        if (!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid, SqlObjectType.AvailabilityGroup, epList,serverType))
                         {
                             logX.loggerX.Error("ERROR - error encountered in processing  availability group  permissions");
                             isOk = false;
