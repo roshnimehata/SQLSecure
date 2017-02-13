@@ -176,6 +176,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string Sql2012VerPrefix = @"11";
         internal const string Sql2014VerPrefix = @"12";
         internal const string Sql2016VerPrefix = @"13";
+        internal const string MASTER_DB_NAME = @"master";
 
         #endregion
 

@@ -47,6 +47,7 @@ namespace Idera.SQLsecure.Collector
         private bool m_IsValid;
         private int m_snapshotId;
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Target");
+        private string sqlLogin, sqlPassword, sqlAuthTypeString, serverLogin, serverPassword, serverTypeString;
         private FilePermissions filePermissions = null;
         private RegistryPermissions registryPermissions = null;
         private SQLServices sqlServices = null;
@@ -402,8 +403,8 @@ namespace Idera.SQLsecure.Collector
             string server;
             int? port;
             if (m_Repository.GetTargetCredentials(targetInstance, out server, out port, out sqlLogin, out sqlPassword,
-                                                    out sqlAuthType, out serverLogin,
-                                                        out serverPassword, out serverType))
+                                                    out sqlAuthTypeString, out serverLogin,
+                                                        out serverPassword, out serverTypeString))
             {
                 try
                 {
@@ -529,8 +530,8 @@ namespace Idera.SQLsecure.Collector
             int? port;
             
             if (m_Repository.GetTargetCredentials(targetInstance, out server, out port, out sqlLogin, out sqlPassword,
-                                                    out sqlAuthType, out serverLogin,
-                                                        out serverPassword, out serverType))
+                                                    out sqlAuthTypeString, out serverLogin,
+                                                        out serverPassword, out serverTypeString))
             {
                 try
                 {
@@ -2158,7 +2159,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID,serverType,"",m_ConnectionStringBuilder ,out databases,
+                                                         m_ConnectionStringBuilder.UserID,serverType,"",m_ConnectionStringBuilder , m_lastCollectionEndTime, out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";
@@ -3079,7 +3080,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID, serverType, "", m_ConnectionStringBuilder, out databases,
+                                                         m_ConnectionStringBuilder.UserID, serverType, "", m_ConnectionStringBuilder, m_lastCollectionEndTime, out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";

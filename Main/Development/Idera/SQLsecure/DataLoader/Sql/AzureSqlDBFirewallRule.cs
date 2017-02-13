@@ -16,16 +16,16 @@ namespace Idera.SQLsecure.Collector.Sql
         private string m_name;
         private string m_startIPAddress;
         private string m_endIPAddress;
-        private AzureSqlDBFirewallRuleType m_type;
+        private bool m_isServerLevel;
         private int m_dbid;
         #endregion
 
         #region CTOR
 
-        public AzureSqlDBFirewallRule(string name, int dbid, AzureSqlDBFirewallRuleType type, string startIPAddress, string endIPAddress)
+        public AzureSqlDBFirewallRule(string name, int dbid, bool isServerLevel, string startIPAddress, string endIPAddress)
         {
             m_name = name;
-            m_type = type;
+            m_isServerLevel = isServerLevel;
             m_startIPAddress = startIPAddress;
             m_endIPAddress = endIPAddress;
             m_dbid = dbid;
@@ -49,11 +49,11 @@ namespace Idera.SQLsecure.Collector.Sql
             }
         }
 
-        public AzureSqlDBFirewallRuleType Type
+        public bool IsServerLevel
         {
             get
             {
-                return m_type;
+                return m_isServerLevel;
             }
         }
 

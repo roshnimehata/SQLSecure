@@ -70,7 +70,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                 }
 
                                 // Fetch server level firewall rules
-                                if (db.Name == Constants.MasterDatabaseName)
+                                if (db.Name == Constants.MASTER_DB_NAME)
                                 {
                                     // Query to get the table objects.
                                     using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null,
@@ -83,7 +83,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                             SqlString endIPAddress = rdr.GetSqlString(FieldEndIPAddress);
                                             AzureSqlDBFirewallRule rule = new AzureSqlDBFirewallRule(
                                                 name.Value,
-                                                db.DbId, AzureSqlDBFirewallRuleType.Server,
+                                                db.DbId, true,
                                                 startIPAddress.Value,
                                                 endIPAddress.Value);
                                             firewallRules.Add(rule);
@@ -108,7 +108,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                         }
                                         AzureSqlDBFirewallRule rule = new AzureSqlDBFirewallRule(
                                             name.Value,
-                                            db.DbId, AzureSqlDBFirewallRuleType.DB,
+                                            db.DbId, false,
                                             startIPAddress.Value,
                                             endIPAddress.Value);
                                         firewallRules.Add(rule);
@@ -163,7 +163,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     // Update the datatable.
                                     DataRow dr = dataTableObject.NewRow();
                                     dr[AzureSqlDBFirewallRulesObjectTable.ParamSnapshotid] = m_snapshotId;
-                                    dr[AzureSqlDBFirewallRulesObjectTable.ParamIsServerLevel] = fp.Type == AzureSqlDBFirewallRuleType.Server ? true : false;
+                                    dr[AzureSqlDBFirewallRulesObjectTable.ParamIsServerLevel] = fp.IsServerLevel;
                                     dr[AzureSqlDBFirewallRulesObjectTable.ParamName] = fp.Name;
                                     dr[AzureSqlDBFirewallRulesObjectTable.ParamDBId] = fp.DBId;
                                     dr[AzureSqlDBFirewallRulesObjectTable.ParamStartIPAddress] = fp.StartIPAddress;
