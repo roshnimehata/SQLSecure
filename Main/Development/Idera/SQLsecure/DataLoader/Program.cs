@@ -407,7 +407,7 @@ namespace Idera.SQLsecure.Collector
                                         // Retrieve target instance credentials from the repository.
                                         string server, sqlLogin, sqlPassword, sqlAuthTypeString, serverLogin, serverPassword, serverTypeString;
                                         int? port;
-                                        ServerType serverType = ServerType.Null;
+                                        ServerType serverType = ServerType.OnPremise;
                                         AuthType authType = AuthType.Null;
                                         if (m_Repository.GetTargetCredentials(programArgs.TargetInstance, 
                                                                               out server, out port,

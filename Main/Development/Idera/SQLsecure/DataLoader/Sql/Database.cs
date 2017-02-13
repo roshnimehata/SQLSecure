@@ -167,63 +167,59 @@ namespace Idera.SQLsecure.Collector.Sql
                         if (serverType == ServerType.AzureSQLDatabase)
                             query = QueryDbAzureDatabase;
                         // Get a list of databases from the target instance.
-                        try
+                       
+                        using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
+                            CommandType.Text, query, null))
                         {
-                            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
-                                CommandType.Text, query, null))
+                            while (rdr.Read())
                             {
-                                while (rdr.Read())
+                                // Retrieve the fields.
+                                SqlString name = rdr.GetSqlString(FieldName);
+                                SqlInt32 dbid = rdr.GetSqlInt32(FieldDbid);
+                                SqlBinary ownersid = rdr.GetSqlBinary(FieldOwnersid);
+                                SqlString ownername = rdr.GetSqlString(FieldOwnername);
+                                SqlBoolean trustworthy = rdr.GetBoolean(FieldTrustworthy);
+                                SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);
+
+                                // Create the sid object.
+                                Debug.Assert(!ownersid.IsNull);
+                                Sid osid = new Sid(ownersid.Value);
+                                if (serverType != ServerType.AzureSQLDatabase)
+                                    Debug.Assert(osid.IsValid);
+
+                                // If the owner name is null, then we have to resolve the SID to 
+                                // get the owner name.
+                                string owner = string.Empty;
+                                if (ownername.IsNull)
                                 {
-                                    // Retrieve the fields.
-                                    SqlString name = rdr.GetSqlString(FieldName);
-                                    SqlInt32 dbid = rdr.GetSqlInt32(FieldDbid);
-                                    SqlBinary ownersid = rdr.GetSqlBinary(FieldOwnersid);
-                                    SqlString ownername = rdr.GetSqlString(FieldOwnername);
-                                    SqlBoolean trustworthy = rdr.GetBoolean(FieldTrustworthy);
-                                    SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);
-
-                                    // Create the sid object.
-                                    Debug.Assert(!ownersid.IsNull);
-                                    Sid osid = new Sid(ownersid.Value);
-                                    if (serverType != ServerType.AzureSQLDatabase)
-                                        Debug.Assert(osid.IsValid);
-
-                                    // If the owner name is null, then we have to resolve the SID to 
-                                    // get the owner name.
-                                    string owner = string.Empty;
-                                    if (ownername.IsNull)
-                                    {
-                                        owner = osid.AccountName(server.Name);
-                                    }
-                                    else
-                                    {
-                                        owner = ownername.Value;
-                                    }
-
-                                    // Create the database object.
-                                    //SQLsecure 3.1 (Tushar)--Adding support for Azure DB.
-                                    Database db;
-                                    if (serverType == ServerType.AzureSQLDatabase)
-                                    {
-                                        db = new Database(name.Value, dbid.Value, osid, owner, targetServerName, trustworthy.Value, isContained.Value);
-                                        targerConnectionBuilder.InitialCatalog = db.Name;
-                                    }
-                                    else
-                                    {
-                                        db = new Database(name.Value, dbid.Value, osid, owner, server.Name, trustworthy.Value, isContained.Value);
-                                    }
-                                    db.GetDatabaseFiles(targerConnectionBuilder.ConnectionString);
-                                    // Add filter to the list.
-                                    databaseList.Add(db);
-
-                                    numDatabasesProcessed++;
+                                    owner = osid.AccountName(server.Name);
                                 }
+                                else
+                                {
+                                    owner = ownername.Value;
+                                }
+
+                                // Create the database object.
+                                //SQLsecure 3.1 (Tushar)--Adding support for Azure DB.
+                                Database db;
+                                if (serverType == ServerType.AzureSQLDatabase)
+                                {
+                                    db = new Database(name.Value, dbid.Value, osid, owner, targetServerName, trustworthy.Value, isContained.Value);
+                                    targerConnectionBuilder.InitialCatalog = db.Name;
+                                }
+                                else
+                                {
+                                    db = new Database(name.Value, dbid.Value, osid, owner, server.Name, trustworthy.Value, isContained.Value);
+                                }
+                                db.GetDatabaseFiles(targerConnectionBuilder.ConnectionString);
+                                // Add filter to the list.
+                                databaseList.Add(db);
+
+                                numDatabasesProcessed++;
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            logX.loggerX.Error("ERROR -GetTargetDatabases ", ex.Message);
-                        }
+                        
+                        
                     }
                     catch (SqlException ex)
                     {

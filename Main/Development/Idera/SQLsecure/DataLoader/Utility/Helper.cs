@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 
 namespace Idera.SQLsecure.Collector.Utility
 {
+    /// <summary>
+    /// Helper class is having utility methods 
+    /// </summary>
     internal static class Helper
     {
+        /// <summary>
+        /// Converting server type string to server type Enum
+        /// Default value is on Premise
+        /// </summary>
+        /// <param name="stype"></param>
+        /// <returns></returns>
         public static ServerType ConvertSQLTypeStringToEnum(string stype)
         {
-            return stype == "OP" ? ServerType.OnPremise : (stype == "ADB" ? ServerType.AzureSQLDatabase : (stype == "AVM" ? ServerType.SQLServerOnAzureVM : ServerType.Null));
+            return (stype == "ADB" ? ServerType.AzureSQLDatabase : (stype == "AVM" ? ServerType.SQLServerOnAzureVM : ServerType.OnPremise));
         }
     }
     public enum ServerType
     {
-        Null,
         OnPremise,//On-Premise
         AzureSQLDatabase,//Azure SqlDatabase
         SQLServerOnAzureVM//Azure VM

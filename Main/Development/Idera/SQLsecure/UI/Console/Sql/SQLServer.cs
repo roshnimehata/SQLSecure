@@ -122,9 +122,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             instance = instance.Trim();
             var result = new SQLServerProperties();
             var bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword,serverType,azureADAuth);
-            try
-            {
-                using (var connection = new SqlConnection(bldr.ConnectionString))
+            using (var connection = new SqlConnection(bldr.ConnectionString))
                 {
                     connection.Open();
                     var isSQL2012OrHigher = IsSQL2012OrHigher(connection.ServerVersion);
@@ -165,12 +163,6 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
                     SqlConnection.ClearPool(connection);
                 }
-            }
-            catch(Exception ex)
-            {
-                logX.loggerX.Error("Error while getting information from registered server :" + ex.Message);
-
-            }
 
             return result;
         }

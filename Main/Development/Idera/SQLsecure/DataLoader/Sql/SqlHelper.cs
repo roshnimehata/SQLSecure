@@ -156,7 +156,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 string instance,
                 string user,
                 string password,
-                ServerType serverType = ServerType.Null,
+                ServerType serverType = ServerType.OnPremise,
                 bool azureADAuth=false
             )
         {

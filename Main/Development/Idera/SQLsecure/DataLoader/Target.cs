@@ -52,7 +52,7 @@ namespace Idera.SQLsecure.Collector
         private RegistryPermissions registryPermissions = null;
         private SQLServices sqlServices = null;
         private string[] m_auditFolders = null;
-        private ServerType serverType = ServerType.Null;
+        private ServerType serverType = ServerType.OnPremise;
         private AuthType authType = AuthType.Null;
 
         #endregion
