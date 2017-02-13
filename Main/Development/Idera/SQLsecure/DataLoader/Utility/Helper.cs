@@ -19,6 +19,7 @@ namespace Idera.SQLsecure.Collector.Utility
         /// <returns></returns>
         public static ServerType ConvertSQLTypeStringToEnum(string stype)
         {
+            stype = stype.ToUpper();
             return (stype == "ADB" ? ServerType.AzureSQLDatabase : (stype == "AVM" ? ServerType.SQLServerOnAzureVM : ServerType.OnPremise));
         }
     }
