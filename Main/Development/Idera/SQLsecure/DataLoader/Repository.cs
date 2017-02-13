@@ -54,6 +54,12 @@ namespace Idera.SQLsecure.Collector
         private const string QueryGetTargetServerInfoParam = "connectionname";
 
         private const string QueryGetCountTargetServers = @"SELECT COUNT(*) from SQLsecure.dbo.registeredserver";
+
+        // SQLSecure 3.1 (Anshul Aggarwal) - Need to find last snapshot time for given server for new metric "Backup Encryption"
+        public const string QueryGetLastCollectionEndTime =
+                    @"SELECT TOP 1 MAX(endtime) FROM SQLsecure.dbo.serversnapshot 
+                        WHERE connectionname = @connectionname";
+
         #endregion
 
         #region Helpers
@@ -406,6 +412,51 @@ namespace Idera.SQLsecure.Collector
                 }
 
                 return new string[0];
+            }
+        }
+
+        /// <summary>
+        /// SQLSecure 3.1 (Anshul Aggarwal) - Need to find last snapshot time for given server for new metric "Backup Encryption"
+        /// </summary>
+        public DateTime? GetLastCollectionEndTime(string targetInstance)
+        {
+            using (logX.loggerX.DebugCall())
+            {
+                Debug.Assert(IsValid);
+                Program.ImpersonationContext wi = Program.SetLocalImpersonationContext();
+                using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
+                {
+                    // Open connection to the repository SQL Server.
+                    try
+                    {
+                        // Open the connection.
+                        connection.Open();
+                        
+                        logX.loggerX.Info(string.Format("Retrieve last collection endtime for instance - {0}."), targetInstance);
+                        SqlParameter param = new SqlParameter(QueryGetTargetServerInfoParam, targetInstance);
+                        using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                                                        QueryGetLastCollectionEndTime, new SqlParameter[] { param }))
+                        {
+                            // Read only 1 row.
+                            if (rdr.Read())
+                            {
+                                return rdr[0] == DBNull.Value ? (DateTime?)null : rdr.GetDateTime(0);
+                            }
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        logX.loggerX.Error("ERROR - exception raised when retrieving last collection endtime.", ex);
+                        AppLog.WriteAppEventError(SQLsecureEvent.ExErrExceptionRaised, SQLsecureCat.DlValidationCat,
+                                                   "Retrieve last collection endtime", ex.Message);
+                    }
+                    finally
+                    {
+                        Program.RestoreImpersonationContext(wi);
+                    }
+                }
+
+                return null;
             }
         }
 

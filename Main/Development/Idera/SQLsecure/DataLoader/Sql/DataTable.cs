@@ -608,8 +608,11 @@ namespace Idera.SQLsecure.Collector.Sql
                     colUserDefined = new DataColumn(ParamUserDefined, typeof(SqlString)),
                     colPermissionSet = new DataColumn(ParamPermissionSet, typeof(SqlInt32)),
                     colCreateDate = new DataColumn(ParamCreateDate, typeof(SqlDateTime)),
-                    colModifyDate = new DataColumn(ParamModifyDate, typeof(SqlDateTime))
-
+                    colModifyDate = new DataColumn(ParamModifyDate, typeof(SqlDateTime)),
+                    colAlwaysEncryptionType = new DataColumn(ParamAlwaysEncryptionType, typeof(SqlInt32)),  // SQLSecure 3.1(Anshul Aggarwal) - New columns for new risk assessments.
+                    colSignedCryptType = new DataColumn(ParamSignedCryptType, typeof(SqlString)),
+                    colIsDataMasked = new DataColumn(ParamIsDataMasked, typeof(SqlBoolean)),
+                    colIsRowSecurityEnabled = new DataColumn(ParamIsRowSecurityEnabled, typeof(SqlBoolean))
                     )
             {
                 // Create the data table object & define its columns.
@@ -631,7 +634,11 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colUserDefined,
                                                                 colPermissionSet,
                                                                 colCreateDate,
-                                                                colModifyDate
+                                                                colModifyDate,
+                                                                colAlwaysEncryptionType,    // SQLSecure 3.1(Anshul Aggarwal) - New columns for new risk assessments.
+                                                                colSignedCryptType,
+                                                                colIsDataMasked,
+                                                                colIsRowSecurityEnabled
                                                             });
             }
 
@@ -654,6 +661,12 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamPermissionSet = "permission_set";
         internal const string ParamCreateDate = "createdate";
         internal const string ParamModifyDate = "modifydate";
+
+        // SQLSecure 3.1(Anshul Aggarwal) - New columns for new risk assessments.
+        internal const string ParamAlwaysEncryptionType = "alwaysencryptiontype";
+        internal const string ParamIsDataMasked = "isdatamasked";
+        internal const string ParamSignedCryptType = "signedcrypttype";
+        internal const string ParamIsRowSecurityEnabled = "isrowsecurityenabled";
 
         internal const string RepositoryTable = "SQLsecure.dbo.databaseobject";
     }
@@ -1533,6 +1546,49 @@ namespace Idera.SQLsecure.Collector.Sql
             return dataTable;
 
         }
+    }
+
+    /// <summary>
+    /// SQLSecure 3.1(Anshul Aggarwal) - DataTable for Azure Sql DM Firewall rules collectes for new risk assessment "Server-level 
+    /// Firewall Rules" and "Database-level Firewall Rules".
+    /// </summary>
+    internal static class AzureSqlDBFirewallRulesObjectTable
+    {
+        public static DataTable Create()
+        {
+            DataTable dataTable = null;
+            using (DataColumn
+                    colSnapshotId = new DataColumn(ParamSnapshotid, typeof(SqlInt32)),
+                    colName = new DataColumn(ParamName, typeof(SqlString)),
+                    colDBId = new DataColumn(ParamDBId, typeof(SqlInt32)),
+                    colIsServerLevel = new DataColumn(ParamIsServerLevel, typeof(SqlBoolean)),
+                    colStartIPAddress = new DataColumn(ParamStartIPAddress, typeof(SqlString)),
+                    colEndIPAddress = new DataColumn(ParamEndIPAddress, typeof(SqlString)))
+            {
+                // Create the data table object & define its columns.
+                // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
+                dataTable = new DataTable("azuresqldbfirewallrules");
+                dataTable.Columns.AddRange(new DataColumn[] {
+                                                            colSnapshotId,
+                                                            colDBId,
+                                                            colIsServerLevel,
+                                                            colName,
+                                                            colStartIPAddress,
+                                                            colEndIPAddress
+                                                        });
+            }
+
+            return dataTable;
+        }
+
+        internal const string ParamSnapshotid = "snapshotid";
+        internal const string ParamDBId = "dbid";
+        internal const string ParamIsServerLevel = "isserverlevel";
+        internal const string ParamName = "name";
+        internal const string ParamStartIPAddress = "startipaddress";
+        internal const string ParamEndIPAddress = "endipaddress";
+
+        internal const string RepositoryTable = "SQLsecure.dbo.azuresqldbfirewallrules";
     }
 
 

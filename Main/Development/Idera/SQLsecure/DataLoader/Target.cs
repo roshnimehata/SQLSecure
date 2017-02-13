@@ -52,6 +52,7 @@ namespace Idera.SQLsecure.Collector
         private RegistryPermissions registryPermissions = null;
         private SQLServices sqlServices = null;
         private string[] m_auditFolders = null;
+        private DateTime? m_lastCollectionEndTime = null;   // SQLsecure 3.1 (Anshul Aggarwal) - Need last collection time for new backup encrytion risk assessment.
 
         #endregion
 
@@ -407,12 +408,13 @@ namespace Idera.SQLsecure.Collector
                 {
                     string login = string.Empty;
                     string password = string.Empty;
-                    if (sqlAuthType.ToUpper() == "S" || sqlAuthType.ToUpper() == "W")
+                   
+                    bool azureADAuth = (sqlAuthType == "W" && serverType != "OP") ? true : false;
+                    if (sqlAuthType.ToUpper() == "S" || azureADAuth)
                     {
                         login = sqlLogin;
                         password = sqlPassword;
                     }
-                    bool azureADAuth = (sqlAuthType == "W" && serverType != "OP") ? true : false;
                     m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(targetInstance, port, login,
                                                                                             password, serverType, azureADAuth);
                     TargetInstance = targetInstance;
@@ -449,6 +451,12 @@ namespace Idera.SQLsecure.Collector
             if (serverType == "OP")
             {
                 m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
+
+                // SQLsecure 3.1 (Anshul Aggarwal) - Backup encryption is only supported SQL Server 2014 onwards.
+                if (m_VersionEnum == ServerVersion.SQL2014 || m_VersionEnum == ServerVersion.SQL2016)
+                {
+                    m_lastCollectionEndTime = m_Repository.GetLastCollectionEndTime(targetInstance);
+                }
             }
             else if (serverType == "ADB")
             {
@@ -2138,7 +2146,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID,"","",m_ConnectionStringBuilder ,out databases,
+                                                         m_ConnectionStringBuilder.UserID,"","",m_ConnectionStringBuilder, m_lastCollectionEndTime, out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";
@@ -2575,7 +2583,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID,serverType,targerServerName,m_ConnectionStringBuilder, out databases,
+                                                         m_ConnectionStringBuilder.UserID,serverType,targerServerName,m_ConnectionStringBuilder, m_lastCollectionEndTime, out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";
@@ -2644,6 +2652,25 @@ namespace Idera.SQLsecure.Collector
                     }
                 }
                 sw.Stop();
+
+                // SQLsecure 3.1 (Anshul Aggarwal) - Load firewall rules of Target Server
+                sw.Reset();
+                sw.Start();
+                if (isOk)
+                {
+                    var firewallRules = new AzureSqlDBFirewallRules(m_snapshotId);
+                    if (!firewallRules.ProcessFirewallRules(m_Repository.ConnectionString, m_ConnectionStringBuilder.ConnectionString, databases))
+                    {
+                        isOk = false;
+                        strNewMessage = "Failed to load firewall rules for target SQL Server";
+                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                        snapshotStatus = Constants.StatusError;
+                    }
+                }
+                logX.loggerX.Verbose("TIMING - Time to Process Firewall Rules = " +
+                                    sw.ElapsedMilliseconds.ToString() + " msec");
+                sw.Stop();
+
                 //if (isOk)
                 //{
                 //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
@@ -3007,7 +3034,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID, "", "", m_ConnectionStringBuilder, out databases,
+                                                         m_ConnectionStringBuilder.UserID, "", "", m_ConnectionStringBuilder, m_lastCollectionEndTime, out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";

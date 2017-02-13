@@ -164,11 +164,18 @@ namespace Idera.SQLsecure.Collector.Sql
 		private const int FieldPermissionSet = 10;
 		private const int FieldCreateDate = 11;
 		private const int FieldModifyDate = 12;
+        private const int FieldSignedCryptType = 13;    // SQLsecure 3.1 (Anshul Aggarwal) - New columns for new risk assessments
+        private const int FieldIsRowSecurityEnabled = 14;
 
-		// ------------- Database Objects -------------
-		#region Database Objects
+        private const int FieldAlwaysEncryptionType = 7;     // SQLsecure 3.1 (Anshul Aggarwal) - New columns for new risk assessments
+        private const int FieldIsDataMasked = 8;
 
-		private static bool isSupportedType(
+       
+
+        // ------------- Database Objects -------------
+        #region Database Objects
+
+        private static bool isSupportedType(
 				ServerVersion version,
 				SqlObjectType type
 			)
@@ -418,8 +425,8 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = 'N' ,
 									permission_set=CAST(a.permission_set AS INT) 
 									, createdate=a.create_date,
-									modifydate=a.modify_date "
-									+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.assemblies a ";
+									modifydate=a.modify_date, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                    + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.assemblies a ";
 						}
 						else
 						{
@@ -436,8 +443,10 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = CASE a.is_user_defined WHEN 0 THEN 'N' WHEN 1 THEN 'Y' END,
 									permission_set=CAST(a.permission_set AS INT) 
 									, createdate=a.create_date,
-									modifydate=a.modify_date "
-									+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.assemblies a ";
+									modifydate=a.modify_date,
+                                    signedcrypttype = c.crypt_type, isrowsecurityenabled = cast(0 as bit) "
+                                    + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.assemblies a " +
+                                    "LEFT JOIN sys.crypt_properties c ON a.assembly_id = c.major_id AND c.class_desc = 'ASSEMBLY' ";
 						}
 					}
 					break;
@@ -462,8 +471,8 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = null ,
 									permission_set=null 
 									, createdate=null,
-									modifydate=null "
-								+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.certificates a ";
+									modifydate=null, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.certificates a ";
 					}
 					break;
 
@@ -487,8 +496,8 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = null ,
 									 permission_set=null 
 									, createdate=null,
-									modifydate=null "
-								+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.fulltext_catalogs a";
+									modifydate=null, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.fulltext_catalogs a";
 					}
 					break;
 
@@ -512,11 +521,11 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = null,
 									permission_set=null ,
 									createdate=null,
-									modifydate=null "
-								+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.asymmetric_keys a "
+									modifydate=null, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.asymmetric_keys a "
 								+ @"UNION ALL "
 								+
-								@"SELECT
+                                @"SELECT
 									type = 'iSK', 
 									owner = c.principal_id,
 									schemaid = NULL,  
@@ -529,8 +538,8 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = null,
 									permission_set=null ,
 									createdate=c.create_date,
-									modifydate=c.modify_date  "
-								+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.symmetric_keys c ";
+									modifydate=c.modify_date, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.symmetric_keys c ";
 
 					}
 					break;
@@ -555,8 +564,8 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = null ,
 									permission_set=null,
 									createdate=null,
-									modifydate=null "
-								+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.types a, "
+									modifydate=null, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.types a, "
 								+ Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
 								+ "WHERE a.schema_id = b.schema_id";
 					}
@@ -582,8 +591,8 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = null,
 									permission_set=null ,
 									createdate=null,
-									modifydate=null "
-								+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.xml_schema_collections a, "
+									modifydate=null, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.xml_schema_collections a, "
 								+ Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
 								+ "WHERE a.schema_id = b.schema_id";
 					}
@@ -614,7 +623,7 @@ namespace Idera.SQLsecure.Collector.Sql
 					}
 					string strScopeText = createScopeQueryText(version, type, rule);
 
-					if (version == ServerVersion.SQL2000)
+					if (version == ServerVersion.SQL2000) // 2000
 					{
 						query = @" USE " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name)
 								+ @" SELECT 
@@ -630,12 +639,91 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = CASE WHEN (OBJECTPROPERTY(a.id, N'IsMSShipped')=1) THEN 'N' WHEN (OBJECTPROPERTY(a.id, N'IsSystemTable')=1) THEN 'N' ELSE 'Y' END ,"
 								+ "permission_set=null, "
 								+ "createdate=null, "
-								+ "modifydate=null "
-								+ "FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects a "
+								+ "modifydate=null, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                + "FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects a "
 								+ "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.syscomments b ON (a.id = b.id and b.colid=1)"
 								+ "WHERE " + strScopeText + LIKEClause;
 					}
-					else
+
+                    else if (version == ServerVersion.SQL2016) // 2016
+                    {
+                        query = @" USE " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name)
+                                + @" SELECT 
+									a.type, 
+									owner = b.principal_id,         
+									schemaid = a.schema_id, 
+									classid = 1, 
+									parentobjectid = a.parent_object_id, 
+									objectid = a.object_id,                                     
+									a.name,
+									runatstartup = CASE WHEN ObjectProperty(a.object_id, 'ExecIsStartup') = 1 THEN 'Y' ELSE 'N' END,
+									isencypted = CASE WHEN isnull(c.encrypted,0) = 0 THEN 'N' ELSE 'Y' END,
+									userdefined = case 
+													when a.is_ms_shipped = 1 then 'N'
+													when (
+														select 
+														  major_id 
+														from 
+															sys.extended_properties 
+														where 
+														   major_id = a.object_id and 
+															minor_id = 0 and 
+															class = 1 and 
+														   name = N'microsoft_database_tools_support') 
+														is not null then 'N'
+													else 'Y'
+												  end ,
+								permission_set=null, 
+								createdate=null, 
+								modifydate=null, signedcrypttype = d.crypt_type, isrowsecurityenabled = cast(isnull(spo.is_enabled, 0) as bit)
+									FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
+                                    + "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
+                                    + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.syscomments c ON (a.object_id = c.id and c.colid=1) "
+                                    + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.crypt_properties AS d ON (a.object_id = d.major_id) " +
+                                    "AND d.class_desc = 'OBJECT_OR_COLUMN' "
+                                    + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.security_predicates AS spd ON (a.object_id = spd.target_object_id) "
+                                    + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.security_policies spo ON (spd.object_id = spo.object_id) "
+                                    + "WHERE " + strScopeText.Replace("type", "a.type") + LIKEClause;
+                    }
+                    else if(version >= ServerVersion.SQL2008) // 2008 2012
+                    {
+                        query = @" USE " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name)
+                                + @" SELECT 
+									a.type, 
+									owner = b.principal_id,         
+									schemaid = a.schema_id, 
+									classid = 1, 
+									parentobjectid = a.parent_object_id, 
+									objectid = a.object_id,                                     
+									a.name,
+									runatstartup = CASE WHEN ObjectProperty(a.object_id, 'ExecIsStartup') = 1 THEN 'Y' ELSE 'N' END,
+									isencypted = CASE WHEN isnull(c.encrypted,0) = 0 THEN 'N' ELSE 'Y' END,
+									userdefined = case 
+													when is_ms_shipped = 1 then 'N'
+													when (
+														select 
+														  major_id 
+														from 
+															sys.extended_properties 
+														where 
+														   major_id = object_id and 
+															minor_id = 0 and 
+															class = 1 and 
+														   name = N'microsoft_database_tools_support') 
+														is not null then 'N'
+													else 'Y'
+												  end ,
+								permission_set=null, 
+								createdate=null, 
+								modifydate=null, signedcrypttype = d.crypt_type, isrowsecurityenabled = cast(0 as bit)  
+									FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
+                                    + "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
+                                    + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.syscomments c ON (a.object_id = c.id and c.colid=1) "
+                                    + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.crypt_properties AS d ON a.object_id = d.major_id " +
+                                    "AND d.class_desc = 'OBJECT_OR_COLUMN' "
+                                    + "WHERE " + strScopeText + LIKEClause;
+                    }
+					else // 2005
 					{
                         if (serverType == "ADB")
                         {
@@ -666,7 +754,7 @@ namespace Idera.SQLsecure.Collector.Sql
 												  end ,
 								permission_set=null, 
 								createdate=null, 
-								modifydate=null 
+								modifydate=null, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit)  
 									FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
                                       + "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
                                       + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.syscomments c ON (a.object_id = c.id and c.colid=1)"
@@ -731,8 +819,8 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = CASE WHEN c.category = 0 THEN 'Y' ELSE 'N' END ,"
 							   + "permission_set=null, "
 								+ "createdate=a.crdate, "
-								+ "modifydate=a.refdate "
-									+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects a, "
+								+ "modifydate=a.refdate, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                    + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects a, "
 									+ Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".dbo.sysobjects c "
 									+ @"WHERE a.xtype = 'X' and a.id = c.id";
 						}
@@ -751,8 +839,8 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = CASE WHEN c.category = 0 THEN 'Y' ELSE 'N' END ,"
 								+ "permission_set=null, "
 								+ "createdate=a.create_date, "
-								+ "modifydate=a.modify_date "
-									+ "FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
+								+ "modifydate=a.modify_date, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                    + "FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
 									+ Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b, "
 									+ Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.sysobjects c "
 									+ "WHERE a.type = 'X' and a.schema_id = b.schema_id and a.object_id = c.id";
@@ -839,8 +927,8 @@ namespace Idera.SQLsecure.Collector.Sql
 									userdefined = null ,"
 							+ "permission_set=null, "
 								+ "createdate=a.create_date, "
-								+ "modifydate=a.modify_date "
-								+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
+								+ "modifydate=a.modify_date, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a, "
 								+ Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b "
 								+ @"WHERE a.type = 'SN' and a.schema_id = b.schema_id";
 					}
@@ -865,8 +953,8 @@ namespace Idera.SQLsecure.Collector.Sql
 								 userdefined = null,
 								 permission_set = null,
 								 createdate = ob.create_date,
-								 modifydate = ob.modify_date "    
-								+ @" FROM  {0}.sys.sequences ob "
+								 modifydate = ob.modify_date, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit) "
+                                + @" FROM  {0}.sys.sequences ob "
 								+ @" WHERE ob.type = 'SO' ", Sql.SqlHelper.CreateSafeDatabaseName(database.Name));
 					}
 					break;
@@ -970,6 +1058,10 @@ namespace Idera.SQLsecure.Collector.Sql
 																   : rdr.GetDateTime(FieldCreateDate);
 											SqlDateTime modifyDate = rdr.IsDBNull(FieldModifyDate) ? SqlDateTime.Null
 																   : rdr.GetDateTime(FieldModifyDate);
+                                            SqlString signedCryptType = rdr.IsDBNull(FieldSignedCryptType)  // SQLsecure 3.1 (Anshul Aggarwal) - New columns for new risk assessments.
+                                                                        ? null
+                                                                        : rdr.GetSqlString(FieldSignedCryptType);
+                                            SqlBoolean isRowSecurityEnabled = rdr.GetBoolean(FieldIsRowSecurityEnabled);
 
 											// If symmetric_keysthe object was not processed, then add to the
 											// list of objects seen and process it.
@@ -998,8 +1090,11 @@ namespace Idera.SQLsecure.Collector.Sql
 												dr[DatabaseObjectDataTable.ParamPermissionSet] = permissionSet;
 												dr[DatabaseObjectDataTable.ParamCreateDate] = createDate;
 												dr[DatabaseObjectDataTable.ParamModifyDate] = modifyDate;
+                                                dr[DatabaseObjectDataTable.ParamSignedCryptType] = signedCryptType; // SQLsecure 3.1 (Anshul Aggarwal) - New columns for new risk assessments.
+                                                dr[DatabaseObjectDataTable.ParamIsRowSecurityEnabled] = isRowSecurityEnabled;
+                                                dr[DatabaseObjectDataTable.ParamIsDataMasked] = false; // SQLsecure 3.1 (Anshul Aggarwal) - Only columns support data masking.
 
-												dataTable.Rows.Add(dr);
+                                                dataTable.Rows.Add(dr);
 
 												// Write to repository if exceeds threshold.
 												if (dataTable.Rows.Count > Constants.RowBatchSize)
@@ -1162,10 +1257,24 @@ namespace Idera.SQLsecure.Collector.Sql
 							classid = 1, 
 							parentobjectid = " + objid.ObjectId.ToString() + @", "
 							+ @"objectid = CAST(colid AS int), 
-							name "
-						+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".dbo.syscolumns "
+							name, alwaysencryptiontype = null, isdatamasked = 0 "
+                        + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".dbo.syscolumns "
 						+ @"WHERE SUBSTRING(name,1,1) != '@' AND id=" + objid.ObjectId.ToString();
 			}
+            else if (version == ServerVersion.SQL2016)
+            {
+                query = @"SELECT 
+							type = 'iCO', 
+							owner = null, 
+							schemaid = null, 
+							classid = 1,
+							parentobjectid = " + objid.ObjectId.ToString() + @", "
+                            + @"objectid = column_id, 
+							name, alwaysencryptiontype = encryption_type, isdatamasked = isnull(is_masked,0) "
+                        + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.columns "
+                        + @"WHERE object_id = " + objid.ObjectId.ToString();
+
+            }
 			else
 			{
 				query = @"SELECT 
@@ -1175,8 +1284,8 @@ namespace Idera.SQLsecure.Collector.Sql
 							classid = 1,
 							parentobjectid = " + objid.ObjectId.ToString() + @", "
 							+ @"objectid = column_id, 
-							name "
-						+ @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.columns "
+							name, alwaysencryptiontype = null, isdatamasked = 0 "
+                        + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.columns "
 						+ @"WHERE object_id = " + objid.ObjectId.ToString();
 			}
 
@@ -1244,6 +1353,8 @@ namespace Idera.SQLsecure.Collector.Sql
 										SqlInt32 parentobjectid = rdr.GetSqlInt32(FieldParentobjectid);
 										SqlInt32 objectid = rdr.GetSqlInt32(FieldObjectid);
 										SqlString name = rdr.GetSqlString(FieldName);
+                                        SqlInt32 alwaysEncryptionType = rdr.GetSqlInt32(FieldAlwaysEncryptionType);  // SQLsecure 3.1 (Anshul Aggarwal) - New columns for new risk assessments.
+                                        bool isDataMasked = rdr.IsDBNull(FieldIsDataMasked) ? false : rdr.GetBoolean(FieldIsDataMasked);
 
 										// Update the datatable.
 										DataRow dr = dataTable.NewRow();
@@ -1257,7 +1368,11 @@ namespace Idera.SQLsecure.Collector.Sql
 										dr[DatabaseObjectDataTable.ParamObjectid] = objectid;
 										dr[DatabaseObjectDataTable.ParamName] = name;
 										dr[DatabaseObjectDataTable.ParamHashkey] = "";
-										dataTable.Rows.Add(dr);
+                                        dr[DatabaseObjectDataTable.ParamAlwaysEncryptionType] = alwaysEncryptionType;
+                                        dr[DatabaseObjectDataTable.ParamIsDataMasked] = isDataMasked;
+                                        dr[DatabaseObjectDataTable.ParamIsRowSecurityEnabled] = false;  // SQLSecure 3.1 (Anshul Aggarwal) - Columns don't have row level security feature.
+
+                                       dataTable.Rows.Add(dr);
 
 										numColumnsProcessed++;
 
