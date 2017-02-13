@@ -41,18 +41,21 @@ namespace Idera.SQLsecure.Collector.Sql
 
         private static string createPrincipalQuery(
                 ServerVersion version,
-                Database database
+                Database database,
+                ServerType serverType
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
             Debug.Assert(database != null);
 
             string query = null;
-
-            // Create query based on the SQL Server version.
-            if (version == ServerVersion.SQL2000)
+            //SQLsecure 3.1 (Tsuahr)--On basis of server type creating queries.
+            if (serverType != ServerType.ADB)
             {
-                query = @"SELECT 
+                // Create query based on the SQL Server version.
+                if (version == ServerVersion.SQL2000)
+                {
+                    query = @"SELECT 
                             name, 
                             uid = CAST(uid AS int), 
                             type = CASE 
@@ -70,13 +73,13 @@ namespace Idera.SQLsecure.Collector.Sql
                             defaultschemaname = CAST (NULL AS NVARCHAR),
                             isContainedUser = CAST (0 as bit),
                             authenticationtype = 'NOT SUPPORTED' "
-                      + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".dbo.sysusers";
-            }
-            else if (version < ServerVersion.SQL2012)
-            {
+                          + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".dbo.sysusers";
+                }
+                else if (version < ServerVersion.SQL2012)
+                {
 
 
-                query = @"SELECT
+                    query = @"SELECT
                             dp.name, 
                             uid = dp.principal_id, 
                             dp.type, 
@@ -87,10 +90,10 @@ namespace Idera.SQLsecure.Collector.Sql
                             owner = dp.owning_principal_id, 
                             defaultschemaname = dp.default_schema_name, 
                             isContainedUser = cast(0 as bit) ,"
-                    + "authenticationtype= 'NOT SUPPORTED' "
-                      + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals AS dp JOIN "
-                            + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers AS su ON (dp.principal_id = su.uid) "
-                      + @"UNION ALL SELECT
+                        + "authenticationtype= 'NOT SUPPORTED' "
+                          + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals AS dp JOIN "
+                                + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers AS su ON (dp.principal_id = su.uid) "
+                          + @"UNION ALL SELECT
                             name, 
                             uid = CAST(uid AS int), 
                             type = CASE 
@@ -106,14 +109,14 @@ namespace Idera.SQLsecure.Collector.Sql
                             hasaccess = CASE WHEN hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
                             owner = CAST (NULL AS int),
                             defaultschemaname = CAST (NULL AS NVARCHAR), "
-                      + "isContainedUser = cast(0 as bit),"
-                      + "authenticationtype= 'NOT SUPPORTED' "
-                      + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers "
-                      + @"WHERE isaliased = 1";
-            }
-            else if (version >= ServerVersion.SQL2012)
-            {
-                query = @"SELECT
+                          + "isContainedUser = cast(0 as bit),"
+                          + "authenticationtype= 'NOT SUPPORTED' "
+                          + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers "
+                          + @"WHERE isaliased = 1";
+                }
+                else if (version >= ServerVersion.SQL2012)
+                {
+                    query = @"SELECT
                             dp.name, 
                             uid = dp.principal_id, 
                             dp.type, 
@@ -131,10 +134,10 @@ namespace Idera.SQLsecure.Collector.Sql
 								), 1)
 								else 0
                              end ) as bit), " +
-                       " authenticationtype = authentication_type_desc "
-                      + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals AS dp JOIN "
-                            + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers AS su ON (dp.principal_id = su.uid) "
-                      + @"UNION ALL SELECT
+                           " authenticationtype = authentication_type_desc "
+                          + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals AS dp JOIN "
+                                + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers AS su ON (dp.principal_id = su.uid) "
+                          + @"UNION ALL SELECT
                             name, 
                             uid = CAST(uid AS int), 
                             type = CASE 
@@ -150,11 +153,56 @@ namespace Idera.SQLsecure.Collector.Sql
                             hasaccess = CASE WHEN hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
                             owner = CAST (NULL AS int),
                             defaultschemaname = CAST (NULL AS NVARCHAR), "
-                      + "isContainedUser = cast(0 as bit) ,"
-                      + "authenticationtype= 'NOT SUPPORTED' "
-                      + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers "
-                      + @"WHERE isaliased = 1";
+                          + "isContainedUser = cast(0 as bit) ,"
+                          + "authenticationtype= 'NOT SUPPORTED' "
+                          + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers "
+                          + @"WHERE isaliased = 1";
+                }
+
             }
+            //SQLsecure 3.1 (Tushar)--Query for Azure DB.
+            else
+                query = @"SELECT
+                            dp.name, 
+                            uid = dp.principal_id, 
+                            dp.type, 
+                            usersid = dp.sid, 
+                            isalias = 'N', 
+                            altuid = CAST(su.altuid AS int),
+                            hasaccess = CASE WHEN su.hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
+                            owner = dp.owning_principal_id, 
+                            defaultschemaname = dp.default_schema_name, 
+                            isContainedUser = cast(( case authentication_type
+                               when 2 then 1
+                               when 3 then  isnull((select top 1 0 from " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals cdp
+							    where cdp.principal_id=dp.principal_id 
+								and    type in ( 'U', 'S', 'G' )    
+								), 1)
+								else 0
+                             end ) as bit), " +
+                           " authenticationtype = authentication_type_desc "
+                          + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals AS dp JOIN "
+                                + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers AS su ON (dp.principal_id = su.uid) "
+                          + @"UNION ALL SELECT
+                            name, 
+                            uid = CAST(uid AS int), 
+                            type = CASE 
+	                                    WHEN islogin = 1 AND isntname = 0 AND issqluser = 1 THEN 'S'
+	                                    WHEN islogin = 1 AND isntname = 1 AND isntgroup = 1 THEN 'G'
+                                        WHEN islogin = 1 AND isntname = 1 AND isntuser = 1 THEN 'U'
+                                        WHEN isapprole = 1 THEN 'A'
+                                        ELSE 'R'
+                                   END, 
+                            usersid = sid, 
+                            isalias = CASE WHEN isaliased = 1 THEN 'Y' ELSE 'N' END, 
+                            altuid = CAST(altuid AS int), 
+                            hasaccess = CASE WHEN hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
+                            owner = CAST (NULL AS int),
+                            defaultschemaname = CAST (NULL AS NVARCHAR), "
+                          + "isContainedUser = cast(0 as bit) ,"
+                          + "authenticationtype= 'NOT SUPPORTED' "
+                          + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers "
+                          + @"WHERE isaliased = 1";
 
 
 
@@ -376,6 +424,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnection,
                 int snapshotid,
                 Database database,
+                ServerType serverType,
                 out bool isGuestEnabled,
                 ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
             )
@@ -416,7 +465,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         using (DataTable dataTable = DatabasePrincipalDataTable.Create())
                         {
                             // Create the query.
-                            string query = createPrincipalQuery(version, database);
+                            string query = createPrincipalQuery(version, database,serverType);
                             Debug.Assert(!string.IsNullOrEmpty(query));
 
                             // Query to get the table objects.
