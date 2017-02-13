@@ -122,5 +122,6 @@ namespace Idera.SQLsecure.Collector
         public const string AUDIT_FOLDER_DELIMITER = "|";
    
         #endregion
+
     }
 }
