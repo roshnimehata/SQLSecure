@@ -22,7 +22,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
-
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
     /// <summary>
@@ -102,7 +102,7 @@ namespace Idera.SQLsecure.Collector.Sql
             string query = null;
 
             // Create query based on the SQL Server version.
-            if (serverType !=ServerType.ADB)
+            if ((serverType == ServerType.OnPremise) || (serverType == ServerType.SQLServerOnAzureVM))
             {
                 if (version == ServerVersion.SQL2000)
                 {
@@ -239,7 +239,7 @@ namespace Idera.SQLsecure.Collector.Sql
             Debug.Assert(version != ServerVersion.Unsupported);
 
             string query = null;
-            if (serverType !=ServerType.ADB)
+            if ((serverType ==ServerType.OnPremise)|| (serverType == ServerType.SQLServerOnAzureVM))
             {
                 // Create query based on the SQL Server version.
                 if (version == ServerVersion.SQL2000)
@@ -633,7 +633,7 @@ namespace Idera.SQLsecure.Collector.Sql
             {
                 if (version != ServerVersion.SQL2000)// && serverType!="OP")
                 {//check for azure--tushar
-                    if (!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid,serverType!=ServerType.ADB? SqlObjectType.Login: SqlObjectType.DatabasePrincipal, pidList,serverType))
+                    if (!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid,serverType!=ServerType.AzureSQLDatabase? SqlObjectType.Login: SqlObjectType.DatabasePrincipal, pidList,serverType))
                     {
                         logX.loggerX.Error("ERROR - error encountered in processing server principal permissions");
                         isOk = false;

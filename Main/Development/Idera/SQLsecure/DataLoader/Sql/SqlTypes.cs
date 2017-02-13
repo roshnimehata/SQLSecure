@@ -162,13 +162,7 @@ namespace Idera.SQLsecure.Collector.Sql
         S//Sql Server Auth
     }
 
-    public enum ServerType
-    {
-        Null,
-        OP,//On-Premise
-        ADB,//Azure SqlDatabase
-        AVM//Azure VM
-    }
+    
 
     public static class Constants
     {

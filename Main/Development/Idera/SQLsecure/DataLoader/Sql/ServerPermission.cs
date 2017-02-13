@@ -18,7 +18,7 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Logger;
-
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
     internal static class ServerPermission
@@ -200,13 +200,13 @@ namespace Idera.SQLsecure.Collector.Sql
                                     {
                                         // Create the query based on the object.
                                         string query;
-                                        if(serverType!=ServerType.ADB)
+                                        if(serverType==ServerType.AzureSQLDatabase)
                                         {
-                                            query = createPermissionQuery(oType, oidbatch);
+                                            query = createPermissionQueryAzureDB(oType, oidbatch);
                                         }
                                         else
                                         {
-                                            query = createPermissionQueryAzureDB(oType, oidbatch);
+                                            query = createPermissionQuery(oType, oidbatch);
                                         }
                                         Debug.Assert(!string.IsNullOrEmpty(query));
 

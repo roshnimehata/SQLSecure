@@ -16,7 +16,7 @@ using Idera.SQLsecure.Core.Accounts;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Security;
 using Idera.SQLsecure.Collector.Sql;
-
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector
 {
 
@@ -415,7 +415,7 @@ namespace Idera.SQLsecure.Collector
                                                                               out sqlAuthTypeString,
                                                                               out serverLogin, out serverPassword,out serverTypeString))
                                         {
-                                            serverType = (ServerType)Enum.Parse(typeof(ServerType), serverTypeString);
+                                            serverType = Helper.ConvertSQLTypeStringToEnum(serverTypeString);
                                             authType = (AuthType)Enum.Parse(typeof(AuthType),sqlAuthTypeString);
                                             m_targetUserName = serverLogin;
                                             m_targetUserPassword = serverPassword;
@@ -434,16 +434,16 @@ namespace Idera.SQLsecure.Collector
                                             {
                                                 throw new Exception("No credentials specified for collecting SQL Server security.");
                                             }
-                                            if (serverType == ServerType.OP)
+                                            if (serverType == ServerType.OnPremise)
                                             {
                                                 GetIdentitiesForImpersonation(sqlLogin, sqlPassword, authType, serverLogin, serverPassword);
                                             }
-                                            else if(serverType== ServerType.ADB && authType == AuthType.W)
+                                            else if(serverType== ServerType.AzureSQLDatabase && authType == AuthType.W)
                                             {
                                                 //AuthenticationResult authenticationResult= AzureDatabase.GetConnectionToken(serverLogin, serverPassword);
                                             }
                                             //SQLsecure 3.1 (Tushar)--Support for Azure VM.
-                                            else if (serverType == ServerType.AVM)
+                                            else if (serverType == ServerType.SQLServerOnAzureVM)
                                             {
                                                 GetIdentitiesForImpersonation(sqlLogin, sqlPassword, authType, serverLogin, serverPassword);
                                             }
@@ -452,7 +452,7 @@ namespace Idera.SQLsecure.Collector
                                         // Initialize and validate the target.
                                         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                                         sw.Start();
-                                        if (serverType == ServerType.OP)
+                                        if (serverType == ServerType.OnPremise)
                                         {
                                             
                                             wi = SetTargetSQLServerImpersonationContext();
@@ -460,12 +460,12 @@ namespace Idera.SQLsecure.Collector
                                             RestoreImpersonationContext(wi);
                                             
                                         }
-                                        else if(serverType== ServerType.ADB)
+                                        else if(serverType== ServerType.AzureSQLDatabase)
                                         {
                                             m_Target = new Target(programArgs.TargetInstance, m_Repository);
                                         }
                                         //SQLsecure 3.1 (Tushar)--Support for Azure VM.
-                                        else if (serverType == ServerType.AVM)
+                                        else if (serverType == ServerType.SQLServerOnAzureVM)
                                         {
                                             wi = SetTargetSQLServerImpersonationContext();
                                             m_Target = new Target(programArgs.TargetInstance, m_Repository);
@@ -476,7 +476,7 @@ namespace Idera.SQLsecure.Collector
                                                         sw.ElapsedMilliseconds.ToString() + " msec");
                                         if (m_Target.IsValid )
                                         {
-                                            if (serverType == ServerType.OP)
+                                            if (serverType == ServerType.OnPremise)
                                             {
                                                 wi = SetTargetImpersonationContext();
 
@@ -485,13 +485,13 @@ namespace Idera.SQLsecure.Collector
 
                                                 RestoreImpersonationContext(wi);
                                             }
-                                            else if(serverType== ServerType.ADB)
+                                            else if(serverType== ServerType.AzureSQLDatabase)
                                             {
                                                 //SQLsecure 3.1 (Tushar)--Passing the server name becasue we are not creating server object for azure DB.
                                                 m_Target.LoadDataAzureDB(programArgs.AutomatedRun, server);
                                             }
                                             //SQLsecure 3.1 (Tushar)--Support for Azure VM.
-                                            else if (serverType == ServerType.AVM)
+                                            else if (serverType == ServerType.SQLServerOnAzureVM)
                                             {
                                                 m_Target.LoadDataForAzureVM(programArgs.AutomatedRun);
                                             }

@@ -18,7 +18,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
-
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
     /// <summary>
@@ -50,7 +50,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
             string query = null;
             //SQLsecure 3.1 (Tsuahr)--On basis of server type creating queries.
-            if (serverType != ServerType.ADB)
+            if (serverType != ServerType.AzureSQLDatabase)
             {
                 // Create query based on the SQL Server version.
                 if (version == ServerVersion.SQL2000)
