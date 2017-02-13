@@ -21,7 +21,8 @@ namespace Idera.SQLsecure.Collector
         internal const int SQLsecureProductID = 1000;
         internal const string SQLsecureLicenseProductVersionStr = "1.1";
         internal const string SQLsecureCollectorVersion = "2.0.0.0";
-       
+        internal const string SpecialMasterDatabase = "SpecialMasterDB987654321";
+
         #region Logging
 
         public enum CollectionStatus
@@ -121,6 +122,5 @@ namespace Idera.SQLsecure.Collector
         public const string AUDIT_FOLDER_DELIMITER = "|";
    
         #endregion
-
     }
 }
