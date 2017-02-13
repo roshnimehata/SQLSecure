@@ -18,7 +18,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
-
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
 	internal class ObjIdCollection
@@ -375,7 +375,7 @@ namespace Idera.SQLsecure.Collector.Sql
 				Database database,
 				SqlObjectType type,
 				Filter.Rule rule,
-            string serverType
+            ServerType serverType
 			)
 		{
 
@@ -725,7 +725,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     }
 					else // 2005
 					{
-                        if (serverType == "ADB")
+                        if (serverType == ServerType.AzureSQLDatabase)
                         {
                             query = @" SELECT 
 									a.type, 
@@ -976,7 +976,7 @@ namespace Idera.SQLsecure.Collector.Sql
 				List<Filter.Rule> rules,
 				int snapshotid,
 				Database database,
-                string serverType,
+                ServerType serverType,
 				ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
 			)
 		{

@@ -19,7 +19,8 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
-
+using Idera.SQLsecure.Collector.Sql;
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
     /// <summary>
@@ -99,7 +100,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnectionString,
                 int snapshotid,
                 string serverlogin,
-                string serverType,
+                ServerType serverType,
                 string targetServerName,
                 SqlConnectionStringBuilder targerConnectionBuilder,
                 DateTime? lastCollectionEndTime,    // SQLSecure 3.1 (Anshul Aggarwal) - Need last collection time for "Backup Encryption".
@@ -108,7 +109,7 @@ namespace Idera.SQLsecure.Collector.Sql
             )
         {
             //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
-            if (serverType != "ADB")
+            if (serverType != ServerType.AzureSQLDatabase)
                 Debug.Assert(server != null);
             Debug.Assert(!string.IsNullOrEmpty(targetConnectionString));
             Debug.Assert(sqlServerVersion != ServerVersion.Unsupported);
@@ -146,7 +147,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // if needed (ignore errors).
                 //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
                 bool isBind = false;
-                if (serverType != "ADB" || serverType != "AVM")
+                if (serverType == ServerType.OnPremise)
                     isBind = server.Bind();
 
                 // Connect and load the databases.
@@ -160,7 +161,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         // Create the query based on server version.
                         string query = QueryDb2K;    
                         //SQLsecure 3.1 (Tushar)--Query Change for Azure DB.
-                        if (serverType == "ADB")
+                        if (serverType == ServerType.AzureSQLDatabase)
                             query = QueryDbAzureDatabase;
                         else if (sqlServerVersion >= ServerVersion.SQL2014) // 2014, 2016
                             query = string.Format(QueryDb2K14, lastCollectionEndTime.HasValue ? string.Format(QueryDb2K14_LastCollection, lastCollectionEndTime.Value) :
@@ -184,14 +185,15 @@ namespace Idera.SQLsecure.Collector.Sql
                                 SqlBinary ownersid = rdr.GetSqlBinary(FieldOwnersid);
                                 SqlString ownername = rdr.GetSqlString(FieldOwnername);
                                 SqlBoolean trustworthy = rdr.GetBoolean(FieldTrustworthy);
-                                SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);   
+                                SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);
                                 SqlBoolean isTDEEncrypted = rdr.GetBoolean(FieldIsTDEEncrypted);    // SQLSecure 3.1 (Anshul Aggarwal) - New columns for new risk assessments.
                                 SqlBoolean wasBackupNotEncrypted = rdr.GetBoolean(FieldWasBackupEncrypted);
 
                                 // Create the sid object.
                                 Debug.Assert(!ownersid.IsNull);
                                 Sid osid = new Sid(ownersid.Value);
-                                Debug.Assert(osid.IsValid);
+                                if (serverType != ServerType.AzureSQLDatabase)
+                                    Debug.Assert(osid.IsValid);
 
                                 // If the owner name is null, then we have to resolve the SID to 
                                 // get the owner name.
@@ -208,7 +210,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                 // Create the database object.
                                 //SQLsecure 3.1 (Tushar)--Adding support for Azure DB.
                                 Database db;
-                                if (serverType == "ADB")
+                                if (serverType == ServerType.AzureSQLDatabase)
                                 {
                                     //SQLsecure 3.1 (Anshul Aggarwal) - Backup encryption not supported for ADB or AVM.
                                     db = new Database(name.Value, dbid.Value, osid, owner, targetServerName, trustworthy.Value, isContained.Value, isTDEEncrypted.Value,
@@ -318,7 +320,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnectionString,
                 int snapshotid,
                 int dbid,
-                string serverType,
+                ServerType serverType,
                 out string status
             )
         {
@@ -362,7 +364,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         // Create the query.
                         string query = string.Empty;
                         //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
-                        if (serverType=="ADB")
+                        if (serverType== ServerType.AzureSQLDatabase)
                             query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2ForAzureDb;
                         else
                             query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2;
@@ -1348,7 +1350,6 @@ namespace Idera.SQLsecure.Collector.Sql
         #endregion
 
         #region Ctors
-
         public Database(string name, int dbId, Sid ownerSid, string ownerName, string serverName, bool trustworthy, bool isContained, bool isTDEEncrypted
             , bool wasBackupNotEncrypted)
         {

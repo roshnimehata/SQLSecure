@@ -66,7 +66,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
 
             version = serverProperties.Version;
-            if (serverType != Utility.Activity.TypeServerAzureDB)
+            if (serverType == Utility.Activity.TypeServerOnPremise)
             {
                 machineName = serverProperties.MachineName;
                 instanceName = serverProperties.InstanceName;
@@ -122,48 +122,47 @@ namespace Idera.SQLsecure.UI.Console.Sql
             instance = instance.Trim();
             var result = new SQLServerProperties();
             var bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword,serverType,azureADAuth);
-
             using (var connection = new SqlConnection(bldr.ConnectionString))
-            {
-                connection.Open();
-                var isSQL2012OrHigher = IsSQL2012OrHigher(connection.ServerVersion);
-                var confQuery = @"select  isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
+                {
+                    connection.Open();
+                    var isSQL2012OrHigher = IsSQL2012OrHigher(connection.ServerVersion);
+                    var confQuery = @"select  isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
                                           isnull(SERVERPROPERTY('MachineName'),'')  as MachineName,
                                           isnull(SERVERPROPERTY('ServerName'),'') as ServerName,
                                           isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName;";
-                if (isSQL2012OrHigher)
-                {
-                    confQuery += @"SELECT top 1 cluster_name as HadrClusterName,
+                    if (isSQL2012OrHigher)
+                    {
+                        confQuery += @"SELECT top 1 cluster_name as HadrClusterName,
                                           isnull(CONNECTIONPROPERTY('local_net_address'),'') as LocalNetAddress,
                                           isnull(CONNECTIONPROPERTY('client_net_address'),'') as ClientNetAddress
                                    FROM  sys.dm_hadr_cluster;";
-                }
+                    }
 
-                using (var rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text, confQuery, null))
-                {
-                    if (rdr.HasRows && rdr.Read())
+                    using (var rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text, confQuery, null))
                     {
-                        result.Version = connection.ServerVersion;
-                        result.InstanceName = rdr["InstanceName"].ToString();
-                        result.MachineName = rdr["MachineName"].ToString();
-                        result.ServerName = rdr["ServerName"].ToString();
-                        result.HadrManagerStatus = GetHadrManagerStatus(rdr["HadrManagerStatus"].ToString());
-
-                        if (isSQL2012OrHigher &&
-                            result.HadrManagerStatus == HadrManagerStatus.StartedAndRunning &&
-                            rdr.NextResult() &&
-                            rdr.HasRows &&
-                            rdr.Read())
+                        if (rdr.HasRows && rdr.Read())
                         {
-                            result.HadrClusterName = rdr["HadrClusterName"].ToString();
-                            result.LocalNetAddress = rdr["LocalNetAddress"].ToString();
-                            result.ClientNetAddress = rdr["ClientNetAddress"].ToString();
+                            result.Version = connection.ServerVersion;
+                            result.InstanceName = rdr["InstanceName"].ToString();
+                            result.MachineName = rdr["MachineName"].ToString();
+                            result.ServerName = rdr["ServerName"].ToString();
+                            result.HadrManagerStatus = GetHadrManagerStatus(rdr["HadrManagerStatus"].ToString());
+
+                            if (isSQL2012OrHigher &&
+                                result.HadrManagerStatus == HadrManagerStatus.StartedAndRunning &&
+                                rdr.NextResult() &&
+                                rdr.HasRows &&
+                                rdr.Read())
+                            {
+                                result.HadrClusterName = rdr["HadrClusterName"].ToString();
+                                result.LocalNetAddress = rdr["LocalNetAddress"].ToString();
+                                result.ClientNetAddress = rdr["ClientNetAddress"].ToString();
+                            }
                         }
                     }
-                }
 
-                SqlConnection.ClearPool(connection);
-            }
+                    SqlConnection.ClearPool(connection);
+                }
 
             return result;
         }

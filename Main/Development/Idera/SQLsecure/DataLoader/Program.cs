@@ -9,17 +9,14 @@
  * (C) 2006 - Idera, a division of BBS Technologies, Inc.
  *******************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Security.Principal;
 
 using Idera.SQLsecure.Core.Logger;
-using Idera.SQLsecure.Collector.Utility;
 using Idera.SQLsecure.Core.Accounts;
-using System.Management;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Security;
-
+using Idera.SQLsecure.Collector.Sql;
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector
 {
 
@@ -408,14 +405,18 @@ namespace Idera.SQLsecure.Collector
                                     if (m_Repository.IsTargetRegistered(programArgs.TargetInstance))
                                     {
                                         // Retrieve target instance credentials from the repository.
-                                        string server, sqlLogin, sqlPassword, sqlAuthType, serverLogin, serverPassword,serverType;
+                                        string server, sqlLogin, sqlPassword, sqlAuthTypeString, serverLogin, serverPassword, serverTypeString;
                                         int? port;
+                                        ServerType serverType = ServerType.OnPremise;
+                                        AuthType authType = AuthType.Null;
                                         if (m_Repository.GetTargetCredentials(programArgs.TargetInstance, 
                                                                               out server, out port,
                                                                               out sqlLogin, out sqlPassword,
-                                                                              out sqlAuthType,
-                                                                              out serverLogin, out serverPassword,out serverType))
+                                                                              out sqlAuthTypeString,
+                                                                              out serverLogin, out serverPassword,out serverTypeString))
                                         {
+                                            serverType = Helper.ConvertSQLTypeStringToEnum(serverTypeString);
+                                            authType = (AuthType)Enum.Parse(typeof(AuthType),sqlAuthTypeString);
                                             m_targetUserName = serverLogin;
                                             m_targetUserPassword = serverPassword;
                                             if (string.IsNullOrEmpty(serverLogin))
@@ -433,25 +434,25 @@ namespace Idera.SQLsecure.Collector
                                             {
                                                 throw new Exception("No credentials specified for collecting SQL Server security.");
                                             }
-                                            if (serverType == "OP")
+                                            if (serverType == ServerType.OnPremise)
                                             {
-                                                GetIdentitiesForImpersonation(sqlLogin, sqlPassword, sqlAuthType, serverLogin, serverPassword);
+                                                GetIdentitiesForImpersonation(sqlLogin, sqlPassword, authType, serverLogin, serverPassword);
                                             }
-                                            else if(serverType=="ADB" && sqlAuthType=="W")
+                                            else if(serverType== ServerType.AzureSQLDatabase && authType == AuthType.W)
                                             {
                                                 //AuthenticationResult authenticationResult= AzureDatabase.GetConnectionToken(serverLogin, serverPassword);
                                             }
                                             //SQLsecure 3.1 (Tushar)--Support for Azure VM.
-                                            else if (serverType == "AVM")
+                                            else if (serverType == ServerType.SQLServerOnAzureVM)
                                             {
-                                                GetIdentitiesForImpersonation(sqlLogin, sqlPassword, sqlAuthType, serverLogin, serverPassword);
+                                                GetIdentitiesForImpersonation(sqlLogin, sqlPassword, authType, serverLogin, serverPassword);
                                             }
                                         }
                                         Program.ImpersonationContext wi;
                                         // Initialize and validate the target.
                                         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                                         sw.Start();
-                                        if (serverType == "OP")
+                                        if (serverType == ServerType.OnPremise)
                                         {
                                             
                                             wi = SetTargetSQLServerImpersonationContext();
@@ -459,12 +460,12 @@ namespace Idera.SQLsecure.Collector
                                             RestoreImpersonationContext(wi);
                                             
                                         }
-                                        else if(serverType=="ADB")
+                                        else if(serverType== ServerType.AzureSQLDatabase)
                                         {
                                             m_Target = new Target(programArgs.TargetInstance, m_Repository);
                                         }
                                         //SQLsecure 3.1 (Tushar)--Support for Azure VM.
-                                        else if (serverType == "AVM")
+                                        else if (serverType == ServerType.SQLServerOnAzureVM)
                                         {
                                             wi = SetTargetSQLServerImpersonationContext();
                                             m_Target = new Target(programArgs.TargetInstance, m_Repository);
@@ -475,7 +476,7 @@ namespace Idera.SQLsecure.Collector
                                                         sw.ElapsedMilliseconds.ToString() + " msec");
                                         if (m_Target.IsValid )
                                         {
-                                            if (serverType == "OP")
+                                            if (serverType == ServerType.OnPremise)
                                             {
                                                 wi = SetTargetImpersonationContext();
 
@@ -484,12 +485,13 @@ namespace Idera.SQLsecure.Collector
 
                                                 RestoreImpersonationContext(wi);
                                             }
-                                            else if(serverType=="ADB")
+                                            else if(serverType== ServerType.AzureSQLDatabase)
                                             {
-                                                m_Target.LoadDataAzureDB(programArgs.AutomatedRun,serverType);
+                                                //SQLsecure 3.1 (Tushar)--Passing the server name becasue we are not creating server object for azure DB.
+                                                m_Target.LoadDataAzureDB(programArgs.AutomatedRun, server);
                                             }
                                             //SQLsecure 3.1 (Tushar)--Support for Azure VM.
-                                            else if (serverType == "AVM")
+                                            else if (serverType == ServerType.SQLServerOnAzureVM)
                                             {
                                                 m_Target.LoadDataForAzureVM(programArgs.AutomatedRun);
                                             }
@@ -631,7 +633,7 @@ namespace Idera.SQLsecure.Collector
         
         }
 
-        private static void GetIdentitiesForImpersonation(string sqlLogin, string sqlPassword, string sqlAuthType, string serverLogin, string serverPassword)
+        private static void GetIdentitiesForImpersonation(string sqlLogin, string sqlPassword, AuthType sqlAuthType, string serverLogin, string serverPassword)
         {
             if (!string.IsNullOrEmpty(serverLogin))
             {
@@ -652,7 +654,7 @@ namespace Idera.SQLsecure.Collector
                     //                                                        string.Format("Failed to Impersonate Operating System and Active Directory credentials for {0}, using SQLsecure Collector user {1}", serverLogin, WindowsIdentity.GetCurrent().Name));
                 }
             }
-            if (sqlAuthType != "S")
+            if (sqlAuthType !=  AuthType.S)
             {
                 try
                 {

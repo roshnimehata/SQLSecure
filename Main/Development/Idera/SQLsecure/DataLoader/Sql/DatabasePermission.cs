@@ -434,6 +434,10 @@ namespace Idera.SQLsecure.Collector.Sql
 
                     isOk = false;
                 }
+                catch (Exception ex)
+                {
+                    isOk = false;
+                }
                 finally
                 {
                     Program.RestoreImpersonationContext(wi);

@@ -136,7 +136,8 @@ namespace Idera.SQLsecure.Collector.Sql
         SequenceObject=48,
         AvailabilityGroup=49,
         LinkedServer = 50,
-        LinkedServerPrincipals=51
+        LinkedServerPrincipals=51,
+        DatabasePrincipal=52
 
     }
 
@@ -153,6 +154,15 @@ namespace Idera.SQLsecure.Collector.Sql
         DatabaseLevel,
         Unknown
     }
+
+    public enum AuthType
+    {
+        Null,
+        W,//Windows Auth
+        S//Sql Server Auth
+    }
+
+    
 
     public static class Constants
     {
