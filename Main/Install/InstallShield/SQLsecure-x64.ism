@@ -2172,6 +2172,7 @@ Set oServer = Nothing</td><td/></row>
 		<col def="S255">ISComments</col>
 		<col def="S255">ISFeatureCabName</col>
 		<col def="S255">ISProFeatureName</col>
+		<row><td>Collector</td><td/><td>##ID_STRING441##</td><td/><td>8</td><td>1</td><td>INSTALLDIR</td><td>0</td><td/><td/><td/><td/></row>
 		<row><td>Console</td><td/><td>##ID_STRING14##</td><td>##ID_STRING15##</td><td>2</td><td>1</td><td>INSTALLDIR</td><td>8</td><td/><td/><td/><td/></row>
 		<row><td>Reports</td><td/><td>##ID_STRING54##</td><td>##ID_STRING55##</td><td>6</td><td>1</td><td>INSTALLDIR</td><td>8</td><td/><td/><td/><td/></row>
 		<row><td>Repository</td><td/><td>##ID_STRING13##</td><td>##ID_STRING52##</td><td>4</td><td>1</td><td>INSTALLDIR</td><td>8</td><td/><td/><td/><td/></row>
@@ -2180,6 +2181,23 @@ Set oServer = Nothing</td><td/></row>
 	<table name="FeatureComponents">
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
+		<row><td>Collector</td><td>Idera.SQLsecure.Collector.exe</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Collector.exe.config</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.Accounts.dll</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.EventMessages.dll</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.Interop.dll</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.Logger.dll</td></row>
+		<row><td>Collector</td><td>Interop.ActiveDs.dll</td></row>
+		<row><td>Collector</td><td>License4Net.dll</td></row>
+		<row><td>Collector</td><td>Manage.dll</td></row>
+		<row><td>Collector</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td></row>
+		<row><td>Collector</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td></row>
+		<row><td>Collector</td><td>Microsoft.SqlServer.Smo.dll</td></row>
+		<row><td>Collector</td><td>PowerCollections.dll</td></row>
+		<row><td>Collector</td><td>SQLsecure_Help.chm</td></row>
+		<row><td>Collector</td><td>TracerX.exe</td></row>
+		<row><td>Collector</td><td>TracerX.exe.config</td></row>
+		<row><td>Collector</td><td>WebHelp.exe</td></row>
 		<row><td>Console</td><td>Doc_WebHelp</td></row>
 		<row><td>Console</td><td>EULA</td></row>
 		<row><td>Console</td><td>Idera.SQLsecure.Collector.exe</td></row>
@@ -4367,6 +4385,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ID_STRING439</td><td>1033</td><td>INSTAL~1|Install Guide</td><td>0</td><td/><td>-1306602991</td></row>
 		<row><td>ID_STRING44</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>-48667223</td></row>
 		<row><td>ID_STRING440</td><td>1033</td><td>RELEAS~1|Release Notes</td><td>0</td><td/><td>-1306609103</td></row>
+		<row><td>ID_STRING441</td><td>1033</td><td>NewFeature1</td><td>0</td><td/><td>1898279235</td></row>
 		<row><td>ID_STRING45</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>228144489</td></row>
 		<row><td>ID_STRING46</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>228144489</td></row>
 		<row><td>ID_STRING47</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>496621705</td></row>
