@@ -170,7 +170,7 @@ namespace Idera.SQLsecure.Collector.Sql
                             query = string.Format(QueryDb2K12, targetServerName);
                         else if (sqlServerVersion >= ServerVersion.SQL2008) // 2008
                             query = string.Format(QueryDb2K8, targetServerName);
-                        else if (sqlServerVersion < ServerVersion.SQL2012 && sqlServerVersion > ServerVersion.SQL2000) // 2005
+                        else if (sqlServerVersion > ServerVersion.SQL2000) // 2005
                             query = QueryDb2K5;
                        
                         // Get a list of databases from the target instance.
