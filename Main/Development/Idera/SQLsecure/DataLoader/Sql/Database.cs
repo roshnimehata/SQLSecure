@@ -20,7 +20,7 @@ using System.Diagnostics;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.Collector.Sql;
-
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
     /// <summary>
@@ -108,7 +108,7 @@ namespace Idera.SQLsecure.Collector.Sql
             )
         {
             //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
-            if (serverType != ServerType.ADB)
+            if (serverType != ServerType.AzureSQLDatabase)
                 Debug.Assert(server != null);
             Debug.Assert(!string.IsNullOrEmpty(targetConnectionString));
             Debug.Assert(sqlServerVersion != ServerVersion.Unsupported);
@@ -146,7 +146,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 // if needed (ignore errors).
                 //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
                 bool isBind = false;
-                if (serverType != ServerType.ADB && serverType != ServerType.AVM)
+                if (serverType == ServerType.OnPremise)
                     isBind = server.Bind();
 
                 // Connect and load the databases.
@@ -164,9 +164,10 @@ namespace Idera.SQLsecure.Collector.Sql
                         if (sqlServerVersion < ServerVersion.SQL2012 && sqlServerVersion > ServerVersion.SQL2000)
                             query = QueryDb2K5;
                         //SQLsecure 3.1 (Tushar)--Query Change for Azure DB.
-                        if (serverType == ServerType.ADB)
+                        if (serverType == ServerType.AzureSQLDatabase)
                             query = QueryDbAzureDatabase;
                         // Get a list of databases from the target instance.
+                       
                         using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
                             CommandType.Text, query, null))
                         {
@@ -178,12 +179,12 @@ namespace Idera.SQLsecure.Collector.Sql
                                 SqlBinary ownersid = rdr.GetSqlBinary(FieldOwnersid);
                                 SqlString ownername = rdr.GetSqlString(FieldOwnername);
                                 SqlBoolean trustworthy = rdr.GetBoolean(FieldTrustworthy);
-                                SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);   
+                                SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);
 
                                 // Create the sid object.
                                 Debug.Assert(!ownersid.IsNull);
                                 Sid osid = new Sid(ownersid.Value);
-                                if(serverType != ServerType.ADB)
+                                if (serverType != ServerType.AzureSQLDatabase)
                                     Debug.Assert(osid.IsValid);
 
                                 // If the owner name is null, then we have to resolve the SID to 
@@ -201,7 +202,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                 // Create the database object.
                                 //SQLsecure 3.1 (Tushar)--Adding support for Azure DB.
                                 Database db;
-                                if (serverType == ServerType.ADB)
+                                if (serverType == ServerType.AzureSQLDatabase)
                                 {
                                     db = new Database(name.Value, dbid.Value, osid, owner, targetServerName, trustworthy.Value, isContained.Value);
                                     targerConnectionBuilder.InitialCatalog = db.Name;
@@ -217,6 +218,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                 numDatabasesProcessed++;
                             }
                         }
+                        
+                        
                     }
                     catch (SqlException ex)
                     {
@@ -243,6 +246,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
                 // Now unbind from the target, if we have bound to the target.
                 if (isBind) { server.Unbind(); }
+                //if (isBind) { server.Unbind(); }
                 Program.RestoreImpersonationContext(wi);
             }
             // See if Object is already in Metrics Dictionary
@@ -352,7 +356,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         // Create the query.
                         string query = string.Empty;
                         //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
-                        if (serverType== ServerType.ADB)
+                        if (serverType== ServerType.AzureSQLDatabase)
                             query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2ForAzureDb;
                         else
                             query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2;

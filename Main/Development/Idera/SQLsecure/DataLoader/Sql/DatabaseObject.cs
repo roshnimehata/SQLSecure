@@ -18,7 +18,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
-
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
 	internal class ObjIdCollection
@@ -637,7 +637,7 @@ namespace Idera.SQLsecure.Collector.Sql
 					}
 					else
 					{
-                        if (serverType == ServerType.ADB)
+                        if (serverType == ServerType.AzureSQLDatabase)
                         {
                             query = @" SELECT 
 									a.type, 

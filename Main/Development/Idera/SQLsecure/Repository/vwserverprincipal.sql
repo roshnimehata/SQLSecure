@@ -25,7 +25,9 @@ select distinct
 				defaultlanguage,
 				passwordstatus
 	from serverprincipal
-	where type IN ('U', 'G', 'S')
+	--START(Barkha Khatri) adding 2 types (E,X) to support external users and groups
+	where type IN ('U', 'G', 'S','E','X')
+	--END(Barkha Khatri) adding 2 types (E,X) to support external users and groups
 
 GO
 

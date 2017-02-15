@@ -31,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+ 
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -96,6 +97,7 @@
     <Compile Include="Sql\WindowsAccount.cs" />
     <Compile Include="Target.cs" />
     <Compile Include="Utility\Exception.cs" />
+    <Compile Include="Utility\Helper.cs" />
     <Compile Include="Utility\Logging.cs" />
     <Compile Include="Utility\MemberEnumeration.cs" />
     <Compile Include="Utility\ProgramArgs.cs" />
