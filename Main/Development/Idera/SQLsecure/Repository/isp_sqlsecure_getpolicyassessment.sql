@@ -472,7 +472,7 @@ AS -- <Idera SQLsecure version and copyright>
 										WHERE policyid = @policyid
 										AND assessmentid = @assessmentid
 										AND isenabled = 1
-										AND ((@serverType=@onpremiseservertype and applicableonpremise=1)OR (@serverType=azuresqldatabaseservertype and applicableonazuredb=1)OR(@serverType=@sqlserveronazurevmservertype and applicableonazurevm=1)) ;
+										AND ((@serverType=@onpremiseservertype and applicableonpremise=1)OR (@serverType=@azuresqldatabaseservertype and applicableonazuredb=1)OR(@serverType=@sqlserveronazurevmservertype and applicableonazurevm=1)) ;
 										--END(Barkha Khatri) Changing metric cursor to get the metrics applicable on a particular server type
 										OPEN metriccursor;
                                         IF (@debug = 1)
