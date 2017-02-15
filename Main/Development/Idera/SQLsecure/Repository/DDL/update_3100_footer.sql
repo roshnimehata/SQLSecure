@@ -3,8 +3,8 @@ SELECT
     @ver = schemaversion
 FROM
     currentversion;
-IF ( ISNULL(@ver, 900) >= 3100 )	
-    BEGIN
+--IF ( ISNULL(@ver, 900) >= 3100 )	
+    --BEGIN
 		--START(Barkha Khatri) updating applicableonazuredb value for supported metrics
 		UPDATE metric
 		set applicableonazuredb=1
@@ -617,7 +617,7 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                     WHERE
                         metricid BETWEEN @startmetricid AND @metricid )
 
-    END;
+    --END;
 GO
 
 
