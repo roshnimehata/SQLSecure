@@ -5,6 +5,23 @@ FROM
     currentversion;
 IF ( ISNULL(@ver, 900) >= 3100 )	
     BEGIN
+		--START(Barkha Khatri) updating applicableonazuredb value for supported metrics
+		UPDATE metric
+		set applicableonazuredb=1
+		WHERE metricid in (
+		58,
+		76,
+		86,
+		87,
+		88,
+		89,
+		92,
+		93,
+		102,
+		103,
+		114
+		)
+		--END(Barkha Khatri) updating applicableonazuredb value for supported metrics
         DECLARE
             @metricid INT ,
             @strval NVARCHAR(512)
@@ -33,7 +50,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           isuserentered ,
                           ismultiselect ,
                           validvalues ,
-                          valuedescription
+                          valuedescription,
+						  applicableonazuredb,
+						  applicableonazurevm,
+						  applicableonpremise
 		                )
                 VALUES
                         (
@@ -44,7 +64,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX.'  -- valuedescription - nvarchar(1024)									        
+                          N'When enabled, this check will identify a risk if XXXXXXXX (Please specify in server_name.database_name.schema_name.table_name.column_name format).',  -- valuedescription - nvarchar(1024),
+						  1, -- applicableonazuredb bit
+						  1, -- applicableonazurevm bit
+						  1	-- applicableonpremise bit								        
                         );
 		
                 INSERT  INTO dbo.policymetric
@@ -90,7 +113,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           isuserentered ,
                           ismultiselect ,
                           validvalues ,
-                          valuedescription
+                          valuedescription,
+						  applicableonazuredb,
+						  applicableonazurevm,
+						  applicableonpremise
 		                )
                 VALUES
                         (
@@ -101,7 +127,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           0 , -- isuserentered - bit
                           0 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX.'  -- valuedescription - nvarchar(1024)									        
+                          N'When enabled, this check will identify a risk if XXXXXXXX.',  -- valuedescription - nvarchar(1024)
+						  1, -- applicableonazuredb bit
+						  1, -- applicableonazurevm bit
+						  1	-- applicableonpremise bit											        
                         );
 		
                 INSERT  INTO dbo.policymetric
@@ -147,7 +176,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           isuserentered ,
                           ismultiselect ,
                           validvalues ,
-                          valuedescription
+                          valuedescription,
+						  applicableonazuredb,
+						  applicableonazurevm,
+						  applicableonpremise
 		                )
                 VALUES
                         (
@@ -158,7 +190,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           0 , -- isuserentered - bit
                           0 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX.'  -- valuedescription - nvarchar(1024)									        
+                          N'When enabled, this check will identify a risk if XXXXXXXX.' , -- valuedescription - nvarchar(1024)	
+						  0, -- applicableonazuredb bit
+						  0, -- applicableonazurevm bit
+						  1	-- applicableonpremise bit									        
                         );
 		
                 INSERT  INTO dbo.policymetric
@@ -205,7 +240,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           isuserentered ,
                           ismultiselect ,
                           validvalues ,
-                          valuedescription
+                          valuedescription,
+						  applicableonazuredb,
+						  applicableonazurevm,
+						  applicableonpremise
 		                )
                 VALUES
                         (
@@ -213,10 +251,13 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           N'Access' , -- metrictype - nvarchar(32)
                           N'Row-Level Security' , -- metricname - nvarchar(256)
                           N'Determine whether row-level security is configured for any databases.' , -- metricdescription - nvarchar(1024)
-                          0 , -- isuserentered - bit
-                          0 , -- ismultiselect - bit
+                          1 , -- isuserentered - bit
+                          1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX.'  -- valuedescription - nvarchar(1024)									        
+                          N'When enabled, this check will identify a risk if XXXXXXXX (Please specify in server_name.database_name.schema_name.table_name format).',  -- valuedescription - nvarchar(1024)	
+						  1, -- applicableonazuredb bit
+						  1, -- applicableonazurevm bit
+						  1	-- applicableonpremise bit									        
                         );
 		
                 INSERT  INTO dbo.policymetric
@@ -234,7 +275,7 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                         (
                           0 , -- policyid - int
                           @metricid , -- metricid - int
-                          1 , -- isenabled - bit
+                          0 , -- isenabled - bit
                           N'' , -- reportkey - nvarchar(32)
                           N'Are any databases using row-level security?' , -- reporttext - nvarchar(4000)
                           3 , -- severity - int
@@ -263,7 +304,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           isuserentered ,
                           ismultiselect ,
                           validvalues ,
-                          valuedescription
+                          valuedescription,
+						  applicableonazuredb,
+						  applicableonazurevm,
+						  applicableonpremise
 		                )
                 VALUES
                         (
@@ -271,10 +315,13 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           N'Access' , -- metrictype - nvarchar(32)
                           N'Dynamic Data Masking' , -- metricname - nvarchar(256)
                           N'Determine whether dynamic database masking is configured for any databases.' , -- metricdescription - nvarchar(1024)
-                          0 , -- isuserentered - bit
-                          0 , -- ismultiselect - bit
+                          1 , -- isuserentered - bit
+                          1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX.'  -- valuedescription - nvarchar(1024)									        
+                          N'When enabled, this check will identify a risk if XXXXXXXX (Please specify in server_name.database_name.schema_name.table_name.column_name format).',  -- valuedescription - nvarchar(1024)
+						  1, -- applicableonazuredb bit
+						  1, -- applicableonazurevm bit
+						  1	-- applicableonpremise bit										        
                         );
 		
                 INSERT  INTO dbo.policymetric
@@ -321,7 +368,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           isuserentered ,
                           ismultiselect ,
                           validvalues ,
-                          valuedescription
+                          valuedescription,
+						  applicableonazuredb,
+						  applicableonazurevm,
+						  applicableonpremise
 		                )
                 VALUES
                         (
@@ -332,7 +382,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX.'  -- valuedescription - nvarchar(1024)									        
+                          N'When enabled, this check will identify a risk if XXXXXXXX (Please specify in server_name.database_name.schema_name.object_name format for stored procedure, function, trigger or server_name.database_name.assembly_name for assembly).',  -- valuedescription - nvarchar(1024)		
+						  0, -- applicableonazuredb bit
+						  1, -- applicableonazurevm bit
+						  1	-- applicableonpremise bit								        
                         );
 		
                 INSERT  INTO dbo.policymetric
@@ -378,7 +431,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           isuserentered ,
                           ismultiselect ,
                           validvalues ,
-                          valuedescription
+                          valuedescription,
+						  applicableonazuredb,
+						  applicableonazurevm,
+						  applicableonpremise
 		                )
                 VALUES
                         (
@@ -389,7 +445,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX.'  -- valuedescription - nvarchar(1024)									        
+                          N'When enabled, this check will identify a risk if XXXXXXXX (Please specify in X.X.X.X-Y.Y.Y.Y format).',  -- valuedescription - nvarchar(1024)		
+						  1, -- applicableonazuredb bit
+						  0, -- applicableonazurevm bit
+						  0	-- applicableonpremise bit								        
                         );
 		
                 INSERT  INTO dbo.policymetric
@@ -436,7 +495,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           isuserentered ,
                           ismultiselect ,
                           validvalues ,
-                          valuedescription
+                          valuedescription,
+						  applicableonazuredb,
+						  applicableonazurevm,
+						  applicableonpremise
 		                )
                 VALUES
                         (
@@ -447,7 +509,10 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX.'  -- valuedescription - nvarchar(1024)									        
+                          N'When enabled, this check will identify a risk if XXXXXXXX (Please specify in X.X.X.X-Y.Y.Y.Y format)',  -- valuedescription - nvarchar(1024)	
+						  1, -- applicableonazuredb bit
+						  0, -- applicableonazurevm bit
+						  0	-- applicableonpremise bit									        
                         );
 		
                 INSERT  INTO dbo.policymetric

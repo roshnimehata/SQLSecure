@@ -413,7 +413,7 @@ namespace Idera.SQLsecure.Collector
                     authType = (AuthType)Enum.Parse(typeof(AuthType), sqlAuthTypeString);
                     string login = string.Empty;
                     string password = string.Empty;
-                    if (authType == AuthType.S || authType == AuthType.W)
+                    if (authType == AuthType.S || serverType==ServerType.AzureSQLDatabase)
                     {
                         login = sqlLogin;
                         password = sqlPassword;

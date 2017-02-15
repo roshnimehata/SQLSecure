@@ -109,4 +109,4 @@ IF COL_LENGTH('metric','applicableonazuredb') IS NULL
  END
 END
 /* END SQL Secure 3.1 (Barkha Khatri) Risk assessments */
-
+GO
