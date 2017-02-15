@@ -64,7 +64,7 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX. \nPlease specify in [Server].[Database].[Schema].Table].[Column] format.',  -- valuedescription - nvarchar(1024),
+                          N'When enabled, this check will identify a risk if XXXXXXXX. Please specify in [Server].[Database].[Schema].Table].[Column] format.',  -- valuedescription - nvarchar(1024),
 						  1, -- applicableonazuredb bit
 						  1, -- applicableonazurevm bit
 						  1	-- applicableonpremise bit								        
@@ -127,7 +127,7 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX.\n Please specify in format [SERVER].[DATABASE] for DBs to be excluded.',  -- valuedescription - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if XXXXXXXX. Please specify in format [SERVER].[DATABASE] for DBs to be excluded.',  -- valuedescription - nvarchar(1024)
 						  1, -- applicableonazuredb bit
 						  1, -- applicableonazurevm bit
 						  1	-- applicableonpremise bit											        
@@ -254,7 +254,7 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX. \nPlease specify in [Server].[Database].[Schema].[Table] format.',  -- valuedescription - nvarchar(1024)	
+                          N'When enabled, this check will identify a risk if XXXXXXXX. Please specify in [Server].[Database].[Schema].[Table] format.',  -- valuedescription - nvarchar(1024)	
 						  1, -- applicableonazuredb bit
 						  1, -- applicableonazurevm bit
 						  1	-- applicableonpremise bit									        
@@ -318,7 +318,7 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX. \nPlease specify in [Server].[Database].[Schema].[Table].[Column] format.',  -- valuedescription - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if XXXXXXXX. Please specify in [Server].[Database].[Schema].[Table].[Column] format.',  -- valuedescription - nvarchar(1024)
 						  1, -- applicableonazuredb bit
 						  1, -- applicableonazurevm bit
 						  1	-- applicableonpremise bit										        
@@ -382,7 +382,7 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX. \nPlease specify in [Server].[Database].[Schema].[Object] format for stored procedure, function, trigger or [Server].[Database].[Assembly] for assembly.',  -- valuedescription - nvarchar(1024)		
+                          N'When enabled, this check will identify a risk if XXXXXXXX. Please specify in [Server].[Database].[Schema].[Object] format for stored procedure, function, trigger or [Server].[Database].[Assembly] for assembly.',  -- valuedescription - nvarchar(1024)		
 						  0, -- applicableonazuredb bit
 						  1, -- applicableonazurevm bit
 						  1	-- applicableonpremise bit								        
@@ -445,7 +445,7 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX. \nPlease specify authorized firewall rules in START_IP-END_IP format.',  -- valuedescription - nvarchar(1024)		
+                          N'When enabled, this check will identify a risk if XXXXXXXX. Please specify authorized firewall rules in START_IP-END_IP format.',  -- valuedescription - nvarchar(1024)		
 						  1, -- applicableonazuredb bit
 						  0, -- applicableonazurevm bit
 						  0	-- applicableonpremise bit								        
@@ -509,7 +509,7 @@ IF ( ISNULL(@ver, 900) >= 3100 )
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX. \nPlease specify authorized firewall rules in START_IP-END_IP format.',  -- valuedescription - nvarchar(1024)	
+                          N'When enabled, this check will identify a risk if XXXXXXXX. Please specify authorized firewall rules in START_IP-END_IP format.',  -- valuedescription - nvarchar(1024)	
 						  1, -- applicableonazuredb bit
 						  0, -- applicableonazurevm bit
 						  0	-- applicableonpremise bit									        
