@@ -1,4 +1,5 @@
-﻿using Idera.SQLsecure.Core.Logger;
+﻿using Idera.SQLsecure.Collector.Utility;
+using Idera.SQLsecure.Core.Logger;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -37,14 +38,14 @@ namespace Idera.SQLsecure.Collector.Sql
         /// <summary>
         /// SQLSecure 3.1 (Anshul Aggarwal) - Fetches firewall rules for target server and stores then in repository.
         /// </summary>
-        public bool ProcessFirewallRules(string repositoryConnectionString, string targetConnectionString, List<Database> databases)
+        public bool ProcessFirewallRules(string repositoryConnectionString, SqlConnectionStringBuilder targetConnection, List<Database> databases)
         {
             using (logX.loggerX.DebugCall())
             {
-                Debug.Assert(!string.IsNullOrEmpty(targetConnectionString));
+                Debug.Assert(targetConnection != null);
                 bool isOk = true;
                 // Check inputs.
-                if (string.IsNullOrEmpty(targetConnectionString))
+                if (targetConnection == null)
                 {
                     string strMessage = "Invalid connection string";
                     logX.loggerX.Error("ERROR - " + strMessage);
@@ -56,12 +57,12 @@ namespace Idera.SQLsecure.Collector.Sql
                     Program.ImpersonationContext wi = Program.SetTargetImpersonationContext();
                     try
                     {
-                        using (SqlConnection target = new SqlConnection(targetConnectionString))
+                        foreach (Database db in databases)
                         {
-                            target.Open();
-                            foreach (Database db in databases)
+                            targetConnection.InitialCatalog = db.Name;
+                            using (SqlConnection target = new SqlConnection(targetConnection.ConnectionString))
                             {
-                                
+                                target.Open();
                                 if (db.DbId == int.MinValue)
                                 {
                                     logX.loggerX.Warn(
@@ -81,7 +82,17 @@ namespace Idera.SQLsecure.Collector.Sql
                                             SqlString name = rdr.GetSqlString(FieldName);
                                             SqlString startIPAddress = rdr.GetSqlString(FieldStartIPAddress);
                                             SqlString endIPAddress = rdr.GetSqlString(FieldEndIPAddress);
-                                            AzureSqlDBFirewallRule rule = new AzureSqlDBFirewallRule(
+
+                                            // SQLsecure 3.1 (Anshul Aggarwal) - Skip if rule contains invalid values.
+                                            if (name == null || string.IsNullOrWhiteSpace(name.Value) ||
+                                            startIPAddress == null || string.IsNullOrWhiteSpace(startIPAddress.Value) ||
+                                            endIPAddress == null || string.IsNullOrWhiteSpace(endIPAddress.Value))
+                                            {
+                                                logX.loggerX.Warn(
+                                                    string.Format("Incorrect server firewall rules for db: {0} name: {1} startip: {2} endip: {3}", db, name, startIPAddress, endIPAddress));
+                                                continue;
+                                            }
+                                                AzureSqlDBFirewallRule rule = new AzureSqlDBFirewallRule(
                                                 name.Value,
                                                 db.DbId, true,
                                                 startIPAddress.Value,
@@ -100,10 +111,14 @@ namespace Idera.SQLsecure.Collector.Sql
                                         SqlString name = rdr.GetSqlString(FieldName);
                                         SqlString startIPAddress = rdr.GetSqlString(FieldStartIPAddress);
                                         SqlString endIPAddress = rdr.GetSqlString(FieldEndIPAddress);
-                                        if(name == null || startIPAddress == null || endIPAddress == null)
+
+                                        // SQLsecure 3.1 (Anshul Aggarwal) - Skip if rule contains invalid values.
+                                        if (name == null || string.IsNullOrWhiteSpace(name.Value) || 
+                                            startIPAddress == null || string.IsNullOrWhiteSpace(startIPAddress.Value) || 
+                                            endIPAddress == null || string.IsNullOrWhiteSpace(endIPAddress.Value))
                                         {
                                             logX.loggerX.Warn(
-                                                    string.Format("Incorrect firewall rules for db: {0} name: {1} startip: {2} endip: {3}", db, name, startIPAddress, endIPAddress));
+                                                    string.Format("Incorrect database firewall rules for db: {0} name: {1} startip: {2} endip: {3}", db, name, startIPAddress, endIPAddress));
                                             continue;
                                         }
                                         AzureSqlDBFirewallRule rule = new AzureSqlDBFirewallRule(
@@ -127,6 +142,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     }
                     finally
                     {
+                        targetConnection.InitialCatalog = string.Empty;
                         Program.RestoreImpersonationContext(wi);
                     }
                 }

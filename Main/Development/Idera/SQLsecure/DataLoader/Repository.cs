@@ -432,7 +432,7 @@ namespace Idera.SQLsecure.Collector
                         // Open the connection.
                         connection.Open();
                         
-                        logX.loggerX.Info(string.Format("Retrieve last collection endtime for instance - {0}."), targetInstance);
+                        logX.loggerX.Info(string.Format("Retrieve last collection endtime for instance - {0}.", targetInstance));
                         SqlParameter param = new SqlParameter(QueryGetTargetServerInfoParam, targetInstance);
                         using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
                                                         QueryGetLastCollectionEndTime, new SqlParameter[] { param }))

@@ -609,10 +609,11 @@ namespace Idera.SQLsecure.Collector.Sql
                     colPermissionSet = new DataColumn(ParamPermissionSet, typeof(SqlInt32)),
                     colCreateDate = new DataColumn(ParamCreateDate, typeof(SqlDateTime)),
                     colModifyDate = new DataColumn(ParamModifyDate, typeof(SqlDateTime)),
+                    colIsDataMasked = new DataColumn(ParamIsDataMasked, typeof(SqlBoolean)),
                     colAlwaysEncryptionType = new DataColumn(ParamAlwaysEncryptionType, typeof(SqlInt32)),  // SQLSecure 3.1(Anshul Aggarwal) - New columns for new risk assessments.
                     colSignedCryptType = new DataColumn(ParamSignedCryptType, typeof(SqlString)),
-                    colIsDataMasked = new DataColumn(ParamIsDataMasked, typeof(SqlBoolean)),
-                    colIsRowSecurityEnabled = new DataColumn(ParamIsRowSecurityEnabled, typeof(SqlBoolean))
+                    colIsRowSecurityEnabled = new DataColumn(ParamIsRowSecurityEnabled, typeof(SqlBoolean)),
+                    colFQN = new DataColumn(ParamFQN, typeof(SqlString))
                     )
             {
                 // Create the data table object & define its columns.
@@ -635,10 +636,11 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colPermissionSet,
                                                                 colCreateDate,
                                                                 colModifyDate,
+                                                                colIsDataMasked,
                                                                 colAlwaysEncryptionType,    // SQLSecure 3.1(Anshul Aggarwal) - New columns for new risk assessments.
                                                                 colSignedCryptType,
-                                                                colIsDataMasked,
-                                                                colIsRowSecurityEnabled
+                                                                colIsRowSecurityEnabled,
+                                                                colFQN
                                                             });
             }
 
@@ -667,6 +669,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamIsDataMasked = "isdatamasked";
         internal const string ParamSignedCryptType = "signedcrypttype";
         internal const string ParamIsRowSecurityEnabled = "isrowsecurityenabled";
+        internal const string ParamFQN = "FQN";
 
         internal const string RepositoryTable = "SQLsecure.dbo.databaseobject";
     }

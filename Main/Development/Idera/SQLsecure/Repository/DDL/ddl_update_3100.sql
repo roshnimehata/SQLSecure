@@ -29,6 +29,11 @@ BEGIN
 		ALTER TABLE sqldatabase
 		ADD wasbackupnotencrypted BIT NOT NULL DEFAULT(0)
 	END
+	IF COL_LENGTH('sqldatabase','FQN') IS NULL
+	 BEGIN
+		ALTER TABLE sqldatabase
+		ADD FQN nvarchar(1000)
+	END
 END
 
 IF OBJECT_ID('databaseobject', 'U') IS NOT NULL 
@@ -53,6 +58,11 @@ IF OBJECT_ID('databaseobject', 'U') IS NOT NULL
 		ALTER TABLE databaseobject
 		ADD isrowsecurityenabled bit NOT NULL DEFAULT(0)
 	 END
+	 IF COL_LENGTH('databaseobject','FQN') IS NULL
+	 BEGIN
+		ALTER TABLE databaseobject
+		ADD FQN nvarchar(1000)
+	END
 END
 GO
 
