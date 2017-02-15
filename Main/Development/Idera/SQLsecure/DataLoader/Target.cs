@@ -1751,7 +1751,7 @@ namespace Idera.SQLsecure.Collector
                             isOk = false;
                         }
                     }
-                    // Force processing of Stored Procedures and Extended Stored Procedures
+                    // Force processing of Stored Procedures and Extended Stored Procedures, Triggers
                     if (isOk)
                     {
                         List<Filter.Rule> rules = new List<Filter.Rule>();
@@ -1774,6 +1774,18 @@ namespace Idera.SQLsecure.Collector
                             logX.loggerX.Error("ERROR - failed to load db: ", db.Name, " ", SqlObjectType.ExtendedStoredProcedure.ToString());
                             isOk = false;
                         }
+
+                        // SQLsecure 3.1 (Anshul Aggarwal) - Collect Trigger objects for new risk assessment "Signed Objects"
+                        rule = new Filter.Rule(-1, (int)SqlObjectType.Trigger, "A", "");
+                        rules.Add(rule);
+                        if (!Sql.DatabaseObject.Process(m_VersionEnum, ConnectionString,
+                                                        m_Repository.ConnectionString,
+                                                        SqlObjectType.Trigger, rules, snapshotId, db, serverType,
+                                                        targetServerName, ref metricsData))
+                        {
+                            logX.loggerX.Error("ERROR - failed to load db: ", db.Name, " ", SqlObjectType.Trigger.ToString());
+                            isOk = false;
+                        }
                     }
 
                     // Process the various database objects, based on the selections in the filter
@@ -1783,7 +1795,8 @@ namespace Idera.SQLsecure.Collector
                         foreach (KeyValuePair<int, List<Sql.Filter.Rule>> kvp in dbObjRules)
                         {
                             Sql.SqlObjectType oType = (Sql.SqlObjectType)kvp.Key;//
-                            if (oType == SqlObjectType.StoredProcedure || oType == SqlObjectType.ExtendedStoredProcedure)
+                            if (oType == SqlObjectType.StoredProcedure || oType == SqlObjectType.ExtendedStoredProcedure
+                                || oType == SqlObjectType.Trigger)
                             {
                                 // Processed above for all Databases.
                                 continue;

@@ -418,7 +418,7 @@ namespace Idera.SQLsecure.Collector.Sql
         // SQLsecure 3.1 (Anshul Aggarwal) - New query as 2k8 onwards supports TDE encryption but 2k5 does not.
         private const string QueryDb2K8 =
                                    @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( 0 as bit)
-                              ,istdeencrypted = db.is_encrypted, wasbackupnotencrypted = cast(0 as bit), FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name)) 
+                              ,istdeencrypted = db.is_encrypted, wasbackupnotencrypted = cast(0 as bit), FQN = QUOTENAME('{0}') + '.' + QUOTENAME(db.name) 
                                FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
         

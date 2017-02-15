@@ -172,13 +172,20 @@ namespace Idera.SQLsecure.Collector.Sql
         private const int FieldIsDataMasked = 8;
         private const int FieldColumnFQN = 9;
 
+        // SQLsecure 3.1 (Anshul Aggarwal) - Queries to construct Fully-Qualified names for various objects for new risk assessments
+        private const string FQN_OBJECT_QUERY_2K8 = @"QUOTENAME('{0}') + '.' + QUOTENAME('{1}') + '.' + QUOTENAME(OBJECT_SCHEMA_NAME({2}, {3})) + '.' + QUOTENAME({4})";
+        private const string FQN_ASSEMBLY_QUERY_2K8 = @"QUOTENAME('{0}') + '.' + QUOTENAME('{1}') + '.' + QUOTENAME({2})";
+        private const string FQN_COLUMN_QUERY_2K8 = @"QUOTENAME('{0}') + '.' + QUOTENAME('{1}') + '.' + QUOTENAME(OBJECT_SCHEMA_NAME({2}, {3})) + '.'" +
+     @" + QUOTENAME(OBJECT_NAME({2}, {3})) + '.' + QUOTENAME(name)";
+
         private const string FQN_OBJECT_QUERY = @"CONCAT(QUOTENAME('{0}'), '.', QUOTENAME('{1}'), '.', QUOTENAME(OBJECT_SCHEMA_NAME({2}, {3})),'.',QUOTENAME({4}))";
         private const string FQN_ASSEMBLY_QUERY = @"CONCAT(QUOTENAME('{0}'), '.', QUOTENAME('{1}'),'.',QUOTENAME({2}))";
+        private const string FQN_COLUMN_QUERY = @"CONCAT(QUOTENAME('{0}'), '.', QUOTENAME('{1}'), '.', QUOTENAME(OBJECT_SCHEMA_NAME({2}, {3})),'.'" +
+     @",QUOTENAME(OBJECT_NAME({2}, {3})),'.', QUOTENAME(name))";
+
         private const string FQN_ADB_OBJECT_QUERY = @"CONCAT(QUOTENAME('{0}'), '.', QUOTENAME('{1}'), '.', QUOTENAME({2}),'.',QUOTENAME({3}))";
         private const string FQN_ADB_COLUMN_QUERY = @"CONCAT(QUOTENAME('{0}'), '.', QUOTENAME('{1}'), '.', QUOTENAME(OBJECT_SCHEMA_NAME({2})),'.'" +
        @",QUOTENAME(OBJECT_NAME({2})),'.', QUOTENAME(name))";
-        private const string FQN_COLUMN_QUERY = @"CONCAT(QUOTENAME('{0}'), '.', QUOTENAME('{1}'), '.', QUOTENAME(OBJECT_SCHEMA_NAME({2}, {3})),'.'" + 
-        @",QUOTENAME(OBJECT_NAME({2}, {3})),'.', QUOTENAME(name))";
 
         // ------------- Database Objects -------------
         #region Database Objects
@@ -193,8 +200,9 @@ namespace Idera.SQLsecure.Collector.Sql
 				|| type == SqlObjectType.StoredProcedure
 				|| type == SqlObjectType.ExtendedStoredProcedure
 				|| type == SqlObjectType.View
-				|| type == SqlObjectType.Function)
-			{
+				|| type == SqlObjectType.Function
+                || type == SqlObjectType.Trigger)    // SQLsecure 3.1 (Anshul Aggarwal) - Collect Trigger objects for new risk assessment "Signed Objects"
+            {
 				return true;
 			}
 
@@ -307,8 +315,10 @@ namespace Idera.SQLsecure.Collector.Sql
 						strTypes = @" a.schema_id = b.schema_id and (type IN ('AF', 'FN', 'FS', 'FT', 'IF', 'TF'))";
 					}
 					break;
-
-				default:
+                case SqlObjectType.Trigger:   // SQLsecure 3.1 (Anshul Aggarwal) - Collect Trigger objects for new risk assessment "Signed Objects"
+                    strTypes = @" a.schema_id = b.schema_id and (type IN ('TR'))";
+                    break;
+                default:
 					strTypes = null;
 					break;
 			}
@@ -403,8 +413,9 @@ namespace Idera.SQLsecure.Collector.Sql
 						 || type == SqlObjectType.Key
 						 || type == SqlObjectType.UserDefinedDataType
 						 || type == SqlObjectType.XMLSchemaCollection
-						 ||type==SqlObjectType.SequenceObject);
-			Debug.Assert(rule != null);
+						 || type == SqlObjectType.SequenceObject
+                         || type == SqlObjectType.Trigger);   // SQLsecure 3.1 (Anshul Aggarwal) - Collect Trigger objects for new risk assessment "Signed Objects"
+            Debug.Assert(rule != null);
 
 			string query = null;
 			string ruleFilterMatchString = null;
@@ -455,7 +466,7 @@ namespace Idera.SQLsecure.Collector.Sql
 									, createdate=a.create_date,
 									modifydate=a.modify_date,
                                     signedcrypttype = c.crypt_type, isrowsecurityenabled = cast(0 as bit), " +
-                                    @"FQN = " + GetFullyQualifidAssemblyQuery(database, targetServerName, "a.name") + @" "
+                                    @"FQN = " + GetFullyQualifidAssemblyQuery(version, database, targetServerName, "a.name") + @" "
                                     + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.assemblies a " +
                                     "LEFT JOIN sys.crypt_properties c ON a.assembly_id = c.major_id AND c.class_desc = 'ASSEMBLY' ";
 						}
@@ -613,11 +624,13 @@ namespace Idera.SQLsecure.Collector.Sql
 				case SqlObjectType.StoredProcedure:
 				case SqlObjectType.Function:
 				case SqlObjectType.View:
-					// Table and Stored Procedures are filtered, by scope and name
-					// If the name match string is empty or null then the LIKE clause
-					// is not needed.
-					// -----------------------------------------------------------                    
-					ruleFilterMatchString = (string)rule.MatchString;
+                case SqlObjectType.Trigger:   // SQLsecure 3.1 (Anshul Aggarwal) - Collect Trigger objects for new risk assessment "Signed Objects"
+
+                    // Table and Stored Procedures are filtered, by scope and name
+                    // If the name match string is empty or null then the LIKE clause
+                    // is not needed.
+                    // -----------------------------------------------------------                    
+                    ruleFilterMatchString = (string)rule.MatchString;
 					if (!string.IsNullOrEmpty(ruleFilterMatchString))
 					{
 						if (CleanseQueryString(ref ruleFilterMatchString))
@@ -722,7 +735,7 @@ namespace Idera.SQLsecure.Collector.Sql
 								permission_set=null, 
 								createdate=null, 
 								modifydate=null, signedcrypttype = d.crypt_type, isrowsecurityenabled = cast(isnull(spo.is_enabled, 0) as bit), " +
-                                    @"FQN = " + GetFullyQualifidObjectQuery(database, targetServerName, "a.object_id", "a.name") + @" " +
+                                    @"FQN = " + GetFullyQualifidObjectQuery(version, database, targetServerName, "a.object_id", "a.name") + @" " +
 									@"FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) +  @".sys.all_objects a INNER JOIN " + 
                                     Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.schemas b ON a.schema_id = b.schema_id LEFT JOIN  " + 
                                     Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.syscomments c ON (a.object_id = c.id and c.colid=1) LEFT JOIN  " + 
@@ -762,7 +775,7 @@ namespace Idera.SQLsecure.Collector.Sql
 								permission_set=null, 
 								createdate=null, 
 								modifydate=null, signedcrypttype = d.crypt_type, isrowsecurityenabled = cast(0 as bit), " +  
-                                    @"FQN = " + GetFullyQualifidObjectQuery(database, targetServerName, "a.object_id", "a.name") +  @" " +
+                                    @"FQN = " + GetFullyQualifidObjectQuery(version, database, targetServerName, "a.object_id", "a.name") +  @" " +
 									@"FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + 
                                     @".sys.all_objects a INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + 
                                     @".sys.schemas b ON a.schema_id = b.schema_id LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) +
@@ -1286,7 +1299,7 @@ namespace Idera.SQLsecure.Collector.Sql
 							parentobjectid = " + objid.ObjectId.ToString() + @", "
                             + @"objectid = column_id, 
 							name, alwaysencryptiontype = encryption_type, isdatamasked = cast(isnull(is_masked,0) as bit), "
-                         + @"FQN = " + GetFullyQualifidColumnQuery(serverType, database, targetServerName, objid.ObjectId.ToString()) + @" "
+                         + @"FQN = " + GetFullyQualifidColumnQuery(version, serverType, database, targetServerName, objid.ObjectId.ToString()) + @" "
                         + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.columns "
                         + @"WHERE object_id = " + objid.ObjectId.ToString();
 
@@ -1301,7 +1314,7 @@ namespace Idera.SQLsecure.Collector.Sql
 							parentobjectid = " + objid.ObjectId.ToString() + @", "
                             + @"objectid = column_id, 
 							name, alwaysencryptiontype = null, isdatamasked = cast(0 as bit), "
-                            + @"FQN = " + GetFullyQualifidColumnQuery(serverType, database, targetServerName, objid.ObjectId.ToString()) + @" "
+                            + @"FQN = " + GetFullyQualifidColumnQuery(version, serverType, database, targetServerName, objid.ObjectId.ToString()) + @" "
                         + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.columns "
                         + @"WHERE object_id = " + objid.ObjectId.ToString();
             }
@@ -1502,27 +1515,27 @@ namespace Idera.SQLsecure.Collector.Sql
         /// <summary>
         /// SQLsecure 3.1 (Anshul Aggarwal) - Returns query to fetch full qualified object name.
         /// </summary>
-        private static string GetFullyQualifidObjectQuery(Database database, string serverName, string objectIdParam, string objectNameParam)
+        private static string GetFullyQualifidObjectQuery(ServerVersion version, Database database, string serverName, string objectIdParam, string objectNameParam)
         {
-            return string.Format(FQN_OBJECT_QUERY, serverName, database.Name, objectIdParam, database.DbId, objectNameParam);
+            return string.Format(version >= ServerVersion.SQL2012 ? FQN_OBJECT_QUERY : FQN_OBJECT_QUERY_2K8, serverName, database.Name, objectIdParam, database.DbId, objectNameParam);
         }
 
         /// <summary>
         /// SQLsecure 3.1 (Anshul Aggarwal) - Returns query to fetch full qualified object name.
         /// </summary>
-        private static string GetFullyQualifidAssemblyQuery(Database database, string serverName, string objectNameParam)
+        private static string GetFullyQualifidAssemblyQuery(ServerVersion version, Database database, string serverName, string objectNameParam)
         {
-            return string.Format(FQN_ASSEMBLY_QUERY, serverName, database.Name, objectNameParam);
+            return string.Format(version >= ServerVersion.SQL2012 ? FQN_ASSEMBLY_QUERY : FQN_ASSEMBLY_QUERY_2K8, serverName, database.Name, objectNameParam);
         }
 
         /// <summary>
         /// SQLsecure 3.1 (Anshul Aggarwal) - Returns query to fetch full qualified column name.
         /// </summary>
-        private static string GetFullyQualifidColumnQuery(ServerType serverType, Database database, string serverName, string objectId)
+        private static string GetFullyQualifidColumnQuery(ServerVersion version, ServerType serverType, Database database, string serverName, string objectId)
         {
             return serverType == ServerType.AzureSQLDatabase ?
                 string.Format(FQN_ADB_COLUMN_QUERY, serverName, database.Name, objectId) :
-                string.Format(FQN_COLUMN_QUERY, serverName, database.Name, objectId, database.DbId);
+                string.Format(version >= ServerVersion.SQL2012 ? FQN_COLUMN_QUERY : FQN_COLUMN_QUERY_2K8, serverName, database.Name, objectId, database.DbId);
         }
 
         #endregion
