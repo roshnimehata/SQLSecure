@@ -336,7 +336,9 @@ AS -- <Idera SQLsecure version and copyright>
                                         @severity int,
                                         @severityvalues nvarchar(4000),
                                         @configuredvalues nvarchar(4000);
-
+								--START (Barkha Khatri) Declaring constants for comparisons
+								--moving metric cursor inside snapcursor 
+								--as now we are having different types of server in one policy
 								DECLARE @onpremiseservertype nvarchar(3),
 										@azuresqldatabaseservertype nvarchar(3),
 										@sqlserveronazurevmservertype nvarchar(3);
@@ -344,6 +346,7 @@ AS -- <Idera SQLsecure version and copyright>
 								SELECT @onpremiseservertype = 'OP',
 									   @azuresqldatabaseservertype = 'ADB',
 									   @sqlserveronazurevmservertype = 'AVM';
+								--START (Barkha Khatri) Declaring constants for comparisons
                                 -- process the snapshots for each metric
                                 DECLARE @snapshotid int,
                                         @connection nvarchar(400),
@@ -480,8 +483,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                 + ': @connection=' + @connection;
                                                 PRINT '@snapshotid='
                                                 + CONVERT(nvarchar, @snapshotid);
-												PRINT '@servertype='
-                                                + CONVERT(nvarchar, @servertype);
+												
                                         END;
 
                                         -- save a list of sysadmin members in this snapshot for use by multiple metrics
@@ -503,7 +505,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                 AND a.memberprincipalid = c.principalid;
 										END
 										--START(Barkha Khatri) For azure SQL DB -considering users having loginmanager and dbmanager role as admins
-										ELSE
+										ELSE IF(@serverType=@azuresqldatabaseservertype)
 										BEGIN
 										INSERT INTO #sysadminstbl
 											SELECT DISTINCT principalid,name
