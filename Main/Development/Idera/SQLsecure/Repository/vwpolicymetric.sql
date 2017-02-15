@@ -28,7 +28,12 @@ CREATE VIEW [dbo].[vwpolicymetric]
 	reporttext,
 	severity,
 	severityname,
-	severityvalues)
+	severityvalues,
+	--START(Barkha Khatri) adding 3 columns to check for supported metrics
+	applicableonazuredb,
+	applicableonazurevm,
+	applicableonpremise)
+	--END(Barkha Khatri) adding 3 columns to check for supported metrics
 AS
 SELECT
 	a.policyid,
@@ -50,7 +55,10 @@ SELECT
 	a.reporttext,
 	a.severity,
 	dbo.getpolicyseverityname(a.severity),
-	a.severityvalues
+	a.severityvalues,
+	c.applicableonazuredb,
+	c.applicableonazurevm,
+	c.applicableonpremise
 FROM 
 	[policymetric] a,
 	[policy] b,

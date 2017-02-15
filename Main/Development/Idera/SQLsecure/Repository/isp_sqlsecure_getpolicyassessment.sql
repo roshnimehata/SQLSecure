@@ -336,23 +336,17 @@ AS -- <Idera SQLsecure version and copyright>
                                         @severity int,
                                         @severityvalues nvarchar(4000),
                                         @configuredvalues nvarchar(4000);
+								--START (Barkha Khatri) Declaring constants for comparisons
+								--moving metric cursor inside snapcursor 
+								--as now we are having different types of server in one policy
+								DECLARE @onpremiseservertype nvarchar(3),
+										@azuresqldatabaseservertype nvarchar(3),
+										@sqlserveronazurevmservertype nvarchar(3);
 
-                                DECLARE metriccursor CURSOR STATIC FOR
-                                SELECT
-                                        metricid,
-                                        metricname,
-                                        metrictype,
-                                        metricdescription,
-                                        reportkey,
-                                        reporttext,
-                                        severity,
-                                        severityvalues
-                                FROM vwpolicymetric
-                                WHERE policyid = @policyid
-                                AND assessmentid = @assessmentid
-                                AND isenabled = 1;
-                                OPEN metriccursor;
-
+								SELECT @onpremiseservertype = 'OP',
+									   @azuresqldatabaseservertype = 'ADB',
+									   @sqlserveronazurevmservertype = 'AVM';
+								--START (Barkha Khatri) Declaring constants for comparisons
                                 -- process the snapshots for each metric
                                 DECLARE @snapshotid int,
                                         @connection nvarchar(400),
@@ -447,7 +441,7 @@ AS -- <Idera SQLsecure version and copyright>
                                         id int,
                                         name nvarchar(256) COLLATE DATABASE_DEFAULT
                                 );
-
+								DECLARE @serverType nvarchar(5)
                                 FETCH NEXT FROM snapcursor INTO @snapshotid,
                                 @registeredserverid, @connection, @snapshottime,
                                 @status, @baseline, @collectorversion, @version, @os,
@@ -461,6 +455,26 @@ AS -- <Idera SQLsecure version and copyright>
 
                                 WHILE @@fetch_status = 0
                                 BEGIN
+										
+										--START(Barkha Khatri) Changing metric cursor to get the metrics applicable on a particular server type
+										select @serverType=servertype from dbo.registeredserver where registeredserverid=@registeredserverid
+										DECLARE metriccursor CURSOR STATIC FOR
+										SELECT
+												metricid,
+												metricname,
+												metrictype,
+												metricdescription,
+												reportkey,
+												reporttext,
+												severity,
+												severityvalues
+										FROM vwpolicymetric
+										WHERE policyid = @policyid
+										AND assessmentid = @assessmentid
+										AND isenabled = 1
+										AND ((@serverType=@onpremiseservertype and applicableonpremise=1)OR (@serverType=azuresqldatabaseservertype and applicableonazuredb=1)OR(@serverType=@sqlserveronazurevmservertype and applicableonazurevm=1)) ;
+										--END(Barkha Khatri) Changing metric cursor to get the metrics applicable on a particular server type
+										OPEN metriccursor;
                                         IF (@debug = 1)
                                         BEGIN
                                                 SELECT
@@ -469,10 +483,13 @@ AS -- <Idera SQLsecure version and copyright>
                                                 + ': @connection=' + @connection;
                                                 PRINT '@snapshotid='
                                                 + CONVERT(nvarchar, @snapshotid);
+												
                                         END;
 
                                         -- save a list of sysadmin members in this snapshot for use by multiple metrics
                                         DELETE FROM #sysadminstbl;
+										IF(@serverType=@onpremiseservertype or @serverType=@sqlserveronazurevmservertype)
+										BEGIN
                                         INSERT INTO #sysadminstbl
                                                 SELECT DISTINCT
                                                         a.memberprincipalid,
@@ -486,7 +503,26 @@ AS -- <Idera SQLsecure version and copyright>
                                                 AND b.sid = @sysadminsid
                                                 AND a.snapshotid = c.snapshotid
                                                 AND a.memberprincipalid = c.principalid;
-
+										END
+										--START(Barkha Khatri) For azure SQL DB -considering users having loginmanager and dbmanager role as admins
+										ELSE IF(@serverType=@azuresqldatabaseservertype)
+										BEGIN
+										INSERT INTO #sysadminstbl
+											SELECT DISTINCT principalid,name
+											FROM serverprincipal
+											WHERE snapshotid=@snapshotid AND 
+											principalid IN 
+													(SELECT memberprincipalid
+													 FROM serverrolemember	
+													 WHERE snapshotid=@snapshotid
+													 AND principalid IN 
+																	(SELECT principalid
+																	FROM serverprincipal WHERE snapshotid=@snapshotid
+																	AND( name='loginmanager' or name='dbmanager'))
+													GROUP BY memberprincipalid
+													HAVING COUNT(memberprincipalid)>=2)	
+										END
+										--END(Barkha Khatri) For azure SQL DB -considering users having loginmanager and dbmanager role as admins
                                         FETCH FIRST FROM metriccursor INTO @metricid,
                                         @metricname, @metrictype, @metricdescription,
                                         @metricreportkey, @metricreporttext, @severity,
@@ -7720,6 +7756,10 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                 WHEN DPU.type = 'U' THEN 'Windows User'
                                                                                 WHEN DPU.type = 'G' THEN 'Windows Group'
                                                                                 WHEN DPU.type = 'S' THEN 'SQL login'
+																				--START(Barkha Khatri) For azure SQL DB -adding 2 new types
+																				WHEN DPU.type = 'E' THEN 'External User'
+																				WHEN DPU.type = 'X' THEN 'External Group'
+																				--END(Barkha Khatri) For azure SQL DB -adding 2 new types
                                                                         END AS usertype,
                                                                         WG.name AS groupname,
                                                                         RP.rolepermission
@@ -7951,6 +7991,10 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                 WHEN SPU.type = 'U' THEN 'Windows User'
                                                                                 WHEN SPU.type = 'G' THEN 'Windows Group'
                                                                                 WHEN SPU.type = 'S' THEN 'SQL login'
+																				--START(Barkha Khatri) For azure SQL DB -adding 2 new types
+																				WHEN SPU.type = 'E' THEN 'External User'
+																				WHEN SPU.type = 'X' THEN 'External Group'
+																				--END(Barkha Khatri) For azure SQL DB -adding 2 new types
                                                                         END AS usertype,
                                                                         WG.name AS groupname,
                                                                         CASE
@@ -9302,7 +9346,9 @@ AS -- <Idera SQLsecure version and copyright>
                                                 @serverruntime,
                                                 GETDATE()))
                                                 + ' seconds';
-
+										CLOSE metriccursor;
+										DEALLOCATE metriccursor;
+												
                                         FETCH NEXT FROM snapcursor INTO @snapshotid,
                                         @registeredserverid, @connection,
                                         @snapshottime, @status, @baseline,
@@ -9543,8 +9589,7 @@ AS -- <Idera SQLsecure version and copyright>
                                 --													@severity, @severityvalues
                                 --			end
 
-                                CLOSE metriccursor;
-                                DEALLOCATE metriccursor;
+                                
 
                                 -- if any servers are left in the server table, there was no audit data and this is a finding
                                 IF EXISTS (SELECT

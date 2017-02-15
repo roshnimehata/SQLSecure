@@ -21,7 +21,9 @@ disabled=a.disabled,
 rolename=c.name 
 from serverprincipal a left outer join serverrolemember b on a.snapshotid = b.snapshotid and a.principalid = b.memberprincipalid left outer join serverprincipal c on b.snapshotid = c.snapshotid and a.snapshotid = c.snapshotid and b.principalid = c.principalid and c.type = 'R'
 where
-a.type IN ('U', 'G', 'S')
+--START(Barkha Khatri) adding 2 types (E,X) to support external users and groups
+a.type IN ('U', 'G', 'S','E','X')
+--END(Barkha Khatri) adding 2 types (E,X) to support external users and groups
 
 GO
 
