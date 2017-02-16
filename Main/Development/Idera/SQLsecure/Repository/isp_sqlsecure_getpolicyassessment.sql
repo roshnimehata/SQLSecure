@@ -9214,7 +9214,10 @@ AS -- <Idera SQLsecure version and copyright>
 																		@sql = N'declare dbcursor cursor static for 
 																select Value 
 																from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','')
-																where Value not in (
+																where Value NOT LIKE ''%\[%\]%''  ESCAPE ''\'' or  
+																(UPPER(SUBSTRING(Value, CHARINDEX(''['', Value) + 1, 
+																CHARINDEX('']'', Value) - CHARINDEX(''['', Value) - 1)) = ''' + @connection + ''' and  
+																Value not in (
 																	select distinct d.FQN 
 																	from databaseobject d 
 																	where d.snapshotid = '
@@ -9224,7 +9227,7 @@ AS -- <Idera SQLsecure version and copyright>
 																	and d.alwaysencryptiontype is not null  
 																	and d.FQN in ('
 																			+ @severityvalues
-																			+ N')) 
+																			+ N'))) 
 																order by Value';
 																EXEC (@sql);
 																OPEN dbcursor;
@@ -9285,10 +9288,14 @@ AS -- <Idera SQLsecure version and copyright>
 																			@sevcode = @severity,
 																			@metricval = N'Following columns don''t use always encryption: '
 																			+ @metricval;
-
-															SELECT
-																	@metricthreshold = N'Server is vulnerable if any SQL Server 2016 or later databases, Azure SQL DB have not used always encrypted.';
 														END
+														ELSE
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2016 or later databases, Azure SQL DB have not used always encrypted.';
 													END 
 													ELSE
 													--Transparent Data Encryption
@@ -9308,7 +9315,7 @@ AS -- <Idera SQLsecure version and copyright>
 															SELECT
 																	@sql = N'declare dbcursor cursor static for 
 															select FQN 
-															from sqldatabase
+															from sqldatabase 
 															where snapshotid = '
 																	+ CONVERT(nvarchar, @snapshotid)
 																	+ N'
@@ -9383,10 +9390,15 @@ AS -- <Idera SQLsecure version and copyright>
 																			@sevcode = @severity,
 																			@metricval = N'Following databases don''t use Transparent Data Encryption: '
 																			+ @metricval;
-
-															SELECT
-																	@metricthreshold = N'Server is vulnerable if any SQL Server 2008 or later databases, Azure SQL DB have TDE disabled (other than ' + @severityvalues + ').';
-														END   
+														END
+														ELSE  
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END 
+														SELECT
+																@metricthreshold = N'Server is vulnerable if any SQL Server 2008 or later databases, Azure SQL DB have TDE disabled (other than ' + @severityvalues + ').';
 													END
 													ELSE
 													--Backup Encryption
@@ -9475,11 +9487,15 @@ AS -- <Idera SQLsecure version and copyright>
 																			@sevcode = @severity,
 																			@metricval = N'Following databases did not use Backup Encryption: '
 																			+ @metricval;
-
-															SELECT
-																	@metricthreshold = N'Server is vulnerable if any SQL Server 2014 or later databases have backup encryption disabled (other than: '
-																	+ @severityvalues + ').';
-														END      
+														END
+														ELSE 
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END     
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2014 or later databases have backup encryption disabled (other than: '
+																+ @severityvalues + ').';
 													END
 													ELSE
 													--Row-Level Security
@@ -9500,8 +9516,11 @@ AS -- <Idera SQLsecure version and copyright>
 																SELECT
 																		@sql = N'declare dbcursor cursor static for 
 																		select Value 
-																from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','')
-																where Value not in (
+																from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','') 
+																where Value NOT LIKE ''%\[%\]%''  ESCAPE ''\'' or  
+																(UPPER(SUBSTRING(Value, CHARINDEX(''['', Value) + 1, 
+																CHARINDEX('']'', Value) - CHARINDEX(''['', Value) - 1)) = ''' + @connection + ''' and  
+																	Value not in (
 																	select distinct d.FQN 
 																	from databaseobject d 
 																	where d.snapshotid = '
@@ -9511,7 +9530,7 @@ AS -- <Idera SQLsecure version and copyright>
 																	and d.isrowsecurityenabled = 1 
 																	and d.FQN in ('
 																			+ @severityvalues
-																			+ N')) 
+																			+ N'))) 
 																order by Value';
 																EXEC (@sql);
 																OPEN dbcursor;
@@ -9573,10 +9592,14 @@ AS -- <Idera SQLsecure version and copyright>
 																			@sevcode = @severity,
 																			@metricval = N'Following tables don''t use Row-Level Security: '
 																			+ @metricval;
-
-															SELECT
-																	@metricthreshold = N'Server is vulnerable if any SQL Server 2016 or later databases, Azure SQL DB have not used row-level security.';
+														END
+														ELSE  
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
 														END  
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2016 or later databases, Azure SQL DB have not used row-level security.';
 													END
 													ELSE
 													--Dynamic Data Masking
@@ -9597,8 +9620,11 @@ AS -- <Idera SQLsecure version and copyright>
 																SELECT
 																		@sql = N'declare dbcursor cursor static for 
 																		select Value 
-																from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','')
-																where Value not in (
+																from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','') 
+															    where Value NOT LIKE ''%\[%\]%''  ESCAPE ''\'' or  
+																(UPPER(SUBSTRING(Value, CHARINDEX(''['', Value) + 1, 
+																CHARINDEX('']'', Value) - CHARINDEX(''['', Value) - 1)) = ''' + @connection + ''' and  
+																Value not in (
 																select distinct d.FQN 
 																from databaseobject d 
 																where d.snapshotid = '
@@ -9608,7 +9634,7 @@ AS -- <Idera SQLsecure version and copyright>
 																and d.isdatamasked = 1 
 																and d.FQN in ('
 																		+ @severityvalues
-																		+ N')) 
+																		+ N'))) 
 																order by Value';
 																EXEC (@sql);
 																OPEN dbcursor;
@@ -9669,10 +9695,14 @@ AS -- <Idera SQLsecure version and copyright>
 																			@sevcode = @severity,
 																			@metricval = N'Following columns don''t use Dynamic Data Masking: '
 																			+ @metricval;
-
-															SELECT
-																	@metricthreshold = N'Server is vulnerable if any SQL Server 2016 or later databases, Azure SQL DB have not used dynamic data masking.';
+														END
+														ELSE  
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
 														END  
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2016 or later databases, Azure SQL DB have not used dynamic data masking.';
 													END
 													ELSE
 													--Signed Objects [stored procedure, function, assembly or trigger]
@@ -9695,7 +9725,10 @@ AS -- <Idera SQLsecure version and copyright>
 																		@sql = N'declare dbcursor cursor static for 
 																		select Value 
 																from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','') 
-																where Value not in (
+																where Value NOT LIKE ''%\[%\]%''  ESCAPE ''\'' or  
+																(UPPER(SUBSTRING(Value, CHARINDEX(''['', Value) + 1, 
+																CHARINDEX('']'', Value) - CHARINDEX(''['', Value) - 1)) = ''' + @connection + ''' and  
+																Value not in (
 																select distinct d.FQN  
 																from databaseobject d 
 																where d.snapshotid = '
@@ -9716,7 +9749,7 @@ AS -- <Idera SQLsecure version and copyright>
 																and d.signedcrypttype is not null  
 																and d.FQN in ('
 																		+ @severityvalues
-																		+ N')) 
+																		+ N'))) 
 																order by Value';
 																EXEC (@sql);
 																OPEN dbcursor;
@@ -9776,10 +9809,15 @@ AS -- <Idera SQLsecure version and copyright>
 																	SELECT
 																			@sevcode = @severity,
 																			@metricval = N'Following objects are not signed: ' + @metricval;
-
-															SELECT
-																	@metricthreshold = N'Server is vulnerable if any SQL Server 2008 or later databases do not use signed objects.';
-														END  
+															
+														END
+														ELSE  
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END 
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2008 or later databases do not use signed objects.';
 													END
 													ELSE
 												
@@ -9875,12 +9913,17 @@ AS -- <Idera SQLsecure version and copyright>
 																			@metricval = N'Following Server-Level Firewall rules are unauthorized: '
 																			+ @metricval;
 
-															SELECT
-																	@metricthreshold = N'Server is vulnerable if Azure SQL DB has unauthorized Server-Level Firewall rules.';
-
 															CLOSE illegalrulescursor;
 															DEALLOCATE illegalrulescursor;
-														END      
+														END
+														ELSE 
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END 
+														SELECT @metricthreshold = N'Server is vulnerable if Azure SQL DB has unauthorized Server-Level Firewall rules.';
+
 													END
 													ELSE
 													--Database-level Firewall Rules
@@ -9974,13 +10017,17 @@ AS -- <Idera SQLsecure version and copyright>
 																			@sevcode = @severity,
 																			@metricval = N'Following Database-Level Firewall rules are unauthorized: '
 																			+ @metricval;
-
-															SELECT
-																	@metricthreshold = N'Server is vulnerable if Azure SQL DB has unauthorized Server-Level Firewall rules.';
-
 															CLOSE illegaldbrulescursor;
 															DEALLOCATE illegaldbrulescursor;
 													END
+													ELSE
+													BEGIN
+															SELECT
+                                                                    @sevcode = @sevcodeok,
+                                                                    @metricval = N'N/A';
+													END 
+													SELECT @metricthreshold = N'Server is vulnerable if Azure SQL DB has unauthorized Server-Level Firewall rules.';
+
 												END
                                                 
                                                 --**************************** code added to handle user defined security checks, but never used (first added in version 2.5)
