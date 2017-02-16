@@ -91,6 +91,9 @@ namespace Idera.SQLsecure.Collector.Sql
                 case SqlObjectType.LinkedServerPrincipals:
                     strType = "LinkedServerPrincipal";
                     break;
+                case SqlObjectType.Trigger:
+                    strType = "Trigger";
+                    break;
                 default:
                     strType = "UnKnown";
                     System.Diagnostics.Debug.Assert(false, "Unknown Database Type");
@@ -137,8 +140,8 @@ namespace Idera.SQLsecure.Collector.Sql
         AvailabilityGroup=49,
         LinkedServer = 50,
         LinkedServerPrincipals=51,
-        DatabasePrincipal=52
-
+        DatabasePrincipal=52,
+        Trigger = 53
     }
 
     public enum FilterScope
@@ -176,6 +179,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string Sql2012VerPrefix = @"11";
         internal const string Sql2014VerPrefix = @"12";
         internal const string Sql2016VerPrefix = @"13";
+        internal const string MASTER_DB_NAME = @"master";
 
         #endregion
 
