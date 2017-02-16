@@ -47,11 +47,12 @@ namespace Idera.SQLsecure.Collector
         private bool m_IsValid;
         private int m_snapshotId;
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Target");
-        private string sqlLogin, sqlPassword, sqlAuthTypeString, serverLogin, serverPassword,serverTypeString;
+        private string sqlLogin, sqlPassword, sqlAuthTypeString, serverLogin, serverPassword, serverTypeString;
         private FilePermissions filePermissions = null;
         private RegistryPermissions registryPermissions = null;
         private SQLServices sqlServices = null;
         private string[] m_auditFolders = null;
+        private DateTime? m_lastCollectionEndTime = null;   // SQLsecure 3.1 (Anshul Aggarwal) - Need last collection time for new backup encrytion risk assessment.
         private ServerType serverType = ServerType.OnPremise;
         private AuthType authType = AuthType.Null;
 
@@ -454,6 +455,12 @@ namespace Idera.SQLsecure.Collector
             if (serverType == ServerType.OnPremise)
             {
                 m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
+
+                // SQLsecure 3.1 (Anshul Aggarwal) - Backup encryption is only supported SQL Server 2014 onwards.
+                if (m_VersionEnum >= ServerVersion.SQL2014)
+                {
+                    m_lastCollectionEndTime = m_Repository.GetLastCollectionEndTime(targetInstance);
+                }
             }
             else if (serverType == ServerType.AzureSQLDatabase)
             {
@@ -467,8 +474,6 @@ namespace Idera.SQLsecure.Collector
             // Retrieve the filter rules.
             if (m_IsValid)
             {
-                //Tushar-Now
-                m_auditFolders = m_Repository.GetAuditFolders(targetInstance);
                 if (!m_Repository.GetCollectionFilters(targetInstance, out m_FilterList))
                 {
                     logX.loggerX.Error("ERROR - failed to retrieve collection filter rules");
@@ -490,8 +495,7 @@ namespace Idera.SQLsecure.Collector
 
         private void SettingsForAzureDBTargets()
         {
-            m_Server = null;//new Idera.SQLsecure.Core.Accounts.Server(serverName, serverLogin, serverPassword,
-                                                                //WriteAppActivityToRepository);
+            m_Server = null;
 
             m_IsValid = isValidAzureDB();
         }
@@ -1634,7 +1638,7 @@ namespace Idera.SQLsecure.Collector
                 List<Sql.Database> databases,
                 Dictionary<string, Dictionary<int, List<Sql.Filter.Rule>>> databaseRules,
                 List<Sql.Database> badDbs,
-                ServerType serverType,
+                ServerType serverType, string targetServerName,
                 ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData
             )
         {
@@ -1747,7 +1751,7 @@ namespace Idera.SQLsecure.Collector
                             isOk = false;
                         }
                     }
-                    // Force processing of Stored Procedures and Extended Stored Procedures
+                    // Force processing of Stored Procedures and Extended Stored Procedures, Triggers
                     if (isOk)
                     {
                         List<Filter.Rule> rules = new List<Filter.Rule>();
@@ -1755,7 +1759,7 @@ namespace Idera.SQLsecure.Collector
                         rules.Add(rule);
                         if (!Sql.DatabaseObject.Process(m_VersionEnum, ConnectionString,
                                                         m_Repository.ConnectionString,
-                                                        SqlObjectType.StoredProcedure, rules, snapshotId, db,serverType, ref metricsData))
+                                                        SqlObjectType.StoredProcedure, rules, snapshotId, db,serverType, targetServerName, ref metricsData))
                         {
                             logX.loggerX.Error("ERROR - failed to load db: ", db.Name, " ", SqlObjectType.StoredProcedure.ToString());
                             isOk = false;
@@ -1764,9 +1768,22 @@ namespace Idera.SQLsecure.Collector
                         rules.Add(rule);
                         if (!Sql.DatabaseObject.Process(m_VersionEnum, ConnectionString,
                                                         m_Repository.ConnectionString,
-                                                        SqlObjectType.ExtendedStoredProcedure, rules, snapshotId, db,serverType, ref metricsData))
+                                                        SqlObjectType.ExtendedStoredProcedure, rules, snapshotId, db,serverType,
+                                                        targetServerName, ref metricsData))
                         {
                             logX.loggerX.Error("ERROR - failed to load db: ", db.Name, " ", SqlObjectType.ExtendedStoredProcedure.ToString());
+                            isOk = false;
+                        }
+
+                        // SQLsecure 3.1 (Anshul Aggarwal) - Collect Trigger objects for new risk assessment "Signed Objects"
+                        rule = new Filter.Rule(-1, (int)SqlObjectType.Trigger, "A", "");
+                        rules.Add(rule);
+                        if (!Sql.DatabaseObject.Process(m_VersionEnum, ConnectionString,
+                                                        m_Repository.ConnectionString,
+                                                        SqlObjectType.Trigger, rules, snapshotId, db, serverType,
+                                                        targetServerName, ref metricsData))
+                        {
+                            logX.loggerX.Error("ERROR - failed to load db: ", db.Name, " ", SqlObjectType.Trigger.ToString());
                             isOk = false;
                         }
                     }
@@ -1778,7 +1795,8 @@ namespace Idera.SQLsecure.Collector
                         foreach (KeyValuePair<int, List<Sql.Filter.Rule>> kvp in dbObjRules)
                         {
                             Sql.SqlObjectType oType = (Sql.SqlObjectType)kvp.Key;//
-                            if (oType == SqlObjectType.StoredProcedure || oType == SqlObjectType.ExtendedStoredProcedure)
+                            if (oType == SqlObjectType.StoredProcedure || oType == SqlObjectType.ExtendedStoredProcedure
+                                || oType == SqlObjectType.Trigger)
                             {
                                 // Processed above for all Databases.
                                 continue;
@@ -1786,7 +1804,7 @@ namespace Idera.SQLsecure.Collector
                             List<Sql.Filter.Rule> rules = kvp.Value;
                             if (!Sql.DatabaseObject.Process(m_VersionEnum, ConnectionString,
                                                             m_Repository.ConnectionString,
-                                                            oType, rules, snapshotId, db,serverType, ref metricsData))
+                                                            oType, rules, snapshotId, db,serverType, targetServerName, ref metricsData))
                             {
                                 logX.loggerX.Error("ERROR - failed to load db: ", db.Name, " ", oType.ToString());
                                 isOk = false;
@@ -2155,7 +2173,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID,serverType,"",m_ConnectionStringBuilder ,out databases,
+                                                         m_ConnectionStringBuilder.UserID,serverType, TargetInstance,m_ConnectionStringBuilder , m_lastCollectionEndTime, out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";
@@ -2298,7 +2316,7 @@ namespace Idera.SQLsecure.Collector
                     if (isOk)
                     {
                         List<Sql.Database> badDbs = new List<Sql.Database>();
-                        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs,serverType, ref metricsData);
+                        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs,serverType, TargetInstance, ref metricsData);
                         if (badDbs.Count > 0)
                         {
                             // Note: the warn message is appended if it has account warn message.
@@ -2582,7 +2600,7 @@ namespace Idera.SQLsecure.Collector
 
                 //Done
                 //Get a list of databases, from the target SQL Server.
-                sw.Reset();
+               sw.Reset();
                 sw.Start();
                 List<Sql.Database> databases = null;
                 if (isOk)
@@ -2591,7 +2609,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID,serverType,targerServerName,m_ConnectionStringBuilder, out databases,
+                                                         m_ConnectionStringBuilder.UserID,serverType,targerServerName,m_ConnectionStringBuilder, m_lastCollectionEndTime, out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";
@@ -2660,6 +2678,25 @@ namespace Idera.SQLsecure.Collector
                     }
                 }
                 sw.Stop();
+
+                // SQLsecure 3.1 (Anshul Aggarwal) - Load firewall rules of Target Server
+                sw.Reset();
+                sw.Start();
+                if (isOk)
+                {
+                    var firewallRules = new AzureSqlDBFirewallRules(m_snapshotId);
+                    if (!firewallRules.ProcessFirewallRules(m_Repository.ConnectionString, m_ConnectionStringBuilder, databases))
+                    {
+                        isOk = false;
+                        strNewMessage = "Failed to load firewall rules for target SQL Server";
+                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                        snapshotStatus = Constants.StatusError;
+                    }
+                }
+                logX.loggerX.Verbose("TIMING - Time to Process Firewall Rules = " +
+                                    sw.ElapsedMilliseconds.ToString() + " msec");
+                sw.Stop();
+
                 //if (isOk)
                 //{
                 //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
@@ -2735,7 +2772,7 @@ namespace Idera.SQLsecure.Collector
                     if (isOk)
                     {
                         List<Sql.Database> badDbs = new List<Sql.Database>();
-                        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs, serverType, ref metricsData);
+                        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs, serverType, targerServerName, ref metricsData);
                         if (badDbs.Count > 0)
                         {
                             // Note: the warn message is appended if it has account warn message.
@@ -3057,7 +3094,7 @@ namespace Idera.SQLsecure.Collector
                         !Sql.Database.GetTargetDatabases(m_Server, m_VersionEnum,
                                                          m_ConnectionStringBuilder.ConnectionString,
                                                          m_Repository.ConnectionString, m_snapshotId,
-                                                         m_ConnectionStringBuilder.UserID, serverType, "", m_ConnectionStringBuilder, out databases,
+                                                         m_ConnectionStringBuilder.UserID, serverType, TargetInstance, m_ConnectionStringBuilder, m_lastCollectionEndTime, out databases,
                                                          ref metricsData))
                     {
                         strNewMessage = "Failed to get a list of databases from the target SQL Server";
@@ -3201,7 +3238,7 @@ namespace Idera.SQLsecure.Collector
                     if (isOk)
                     {
                         List<Sql.Database> badDbs = new List<Sql.Database>();
-                        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs, serverType, ref metricsData);
+                        processDatabaseObjects(m_snapshotId, databases, databaseRules, badDbs, serverType, TargetInstance, ref metricsData);
                         if (badDbs.Count > 0)
                         {
                             // Note: the warn message is appended if it has account warn message.
