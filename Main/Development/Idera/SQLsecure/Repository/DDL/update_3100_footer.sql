@@ -9,6 +9,9 @@ FROM
 		UPDATE metric
 		set applicableonazuredb=1
 		WHERE metricid in (
+		1,
+		15,
+		54,
 		58,
 		76,
 		86,
