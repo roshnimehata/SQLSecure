@@ -9205,6 +9205,11 @@ AS -- <Idera SQLsecure version and copyright>
                                                         BEGIN
 															IF(ISNULL(@severityvalues, '') <> '')
 															BEGIN
+																IF CURSOR_STATUS('global','dbcursor')>= 0
+																BEGIN
+																	 CLOSE dbcursor
+																	 DEALLOCATE dbcursor
+																END
 																SELECT
 																		@sql = N'declare dbcursor cursor static for 
 																select Value 
@@ -9295,6 +9300,11 @@ AS -- <Idera SQLsecure version and copyright>
 														(dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) > dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'9.'))))
 														or (@serverType = @azuresqldatabaseservertype))
                                                         BEGIN
+															IF CURSOR_STATUS('global','dbcursor')>= 0
+															BEGIN
+																	CLOSE dbcursor
+																	DEALLOCATE dbcursor
+															END
 															SELECT
 																	@sql = N'declare dbcursor cursor static for 
 															select FQN 
@@ -9388,6 +9398,11 @@ AS -- <Idera SQLsecure version and copyright>
                                                         BEGIN
 															IF(ISNULL(@severityvalues, '') <> '')
 															BEGIN
+																IF CURSOR_STATUS('global','dbcursor')>= 0
+																BEGIN
+																	 CLOSE dbcursor
+																	 DEALLOCATE dbcursor
+																END
 																SELECT
 																		@sql = N'declare dbcursor cursor static for
 																select FQN 
@@ -9477,6 +9492,11 @@ AS -- <Idera SQLsecure version and copyright>
                                                         BEGIN
 															IF(ISNULL(@severityvalues, '') <> '')
 															BEGIN
+																IF CURSOR_STATUS('global','dbcursor')>= 0
+																BEGIN
+																	 CLOSE dbcursor
+																	 DEALLOCATE dbcursor
+																END
 																SELECT
 																		@sql = N'declare dbcursor cursor static for 
 																		select Value 
@@ -9569,6 +9589,11 @@ AS -- <Idera SQLsecure version and copyright>
                                                         BEGIN
 															IF(ISNULL(@severityvalues, '') <> '')
 															BEGIN
+																IF CURSOR_STATUS('global','dbcursor')>= 0
+																BEGIN
+																	 CLOSE dbcursor
+																	 DEALLOCATE dbcursor
+																END
 																SELECT
 																		@sql = N'declare dbcursor cursor static for 
 																		select Value 
@@ -9660,6 +9685,11 @@ AS -- <Idera SQLsecure version and copyright>
 														BEGIN
 															IF(ISNULL(@severityvalues, '') <> '')
 															BEGIN
+																IF CURSOR_STATUS('global','dbcursor')>= 0
+																BEGIN
+																	 CLOSE dbcursor
+																	 DEALLOCATE dbcursor
+																END
 																--stored procedure, function (possibly trigger) UNION assembly
 																SELECT
 																		@sql = N'declare dbcursor cursor static for 
@@ -9759,6 +9789,11 @@ AS -- <Idera SQLsecure version and copyright>
 														-- Only supported for ADB
 														IF(@serverType = @azuresqldatabaseservertype) 
 														BEGIN
+															IF CURSOR_STATUS('global','illegalrulescursor')>= 0
+															BEGIN
+																CLOSE illegalrulescursor
+																DEALLOCATE illegalrulescursor
+															END
 															SELECT @sql = N'declare illegalrulescursor cursor static for  
 															select ur.name 
 															from 
@@ -9854,6 +9889,11 @@ AS -- <Idera SQLsecure version and copyright>
 														-- Only supported for ADB
 														IF(@serverType = @azuresqldatabaseservertype) 
 														BEGIN
+															IF CURSOR_STATUS('global','illegaldbrulescursor') >= 0
+															BEGIN
+																CLOSE illegaldbrulescursor
+																DEALLOCATE illegaldbrulescursor
+															END
 																SELECT @sql = N'declare illegaldbrulescursor cursor static for  
 															select ur.name  
 															from 
