@@ -27,7 +27,8 @@ BEGIN
 			WHEN 'R' THEN 'Server Role'
 			WHEN 'C' THEN 'Certificate Mapped Login'
 			WHEN 'K' THEN 'Asymmetric Key Mapped Login'
-
+			WHEN 'E' THEN 'Azure AD User'   -- SQL Secure 3.1 (Anshul) : Add support for Azure.
+			WHEN 'X' THEN 'Azure AD Group'
 			ELSE 'Unknown'
 		END END
 
