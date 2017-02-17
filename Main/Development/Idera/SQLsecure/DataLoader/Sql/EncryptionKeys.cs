@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using Idera.SQLsecure.Core.Logger;
-
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
     public class EncryptionKeys
@@ -88,7 +88,7 @@ namespace Idera.SQLsecure.Collector.Sql
             Debug.Assert(!string.IsNullOrEmpty(repositoryConnection));
 
             bool isOk = true;
-            if(serverType != ServerType.ADB)
+            if(serverType != ServerType.AzureSQLDatabase)
                 targetConnection = Sql.SqlHelper.AppendDatabaseToConnectionString(targetConnection, "master");
             Program.ImpersonationContext wi = Program.SetLocalImpersonationContext();
             if (version == ServerVersion.SQL2000) return true;

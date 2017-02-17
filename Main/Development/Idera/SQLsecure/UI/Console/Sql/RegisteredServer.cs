@@ -750,7 +750,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
             Debug.Assert(!string.IsNullOrEmpty(newConnection));
             Debug.Assert(!string.IsNullOrEmpty(machine));
-
+            newConnection = newConnection.ToUpper();
             // Encrypt passwords before saving them to the repository
             string cipherSqlPassword = Encryptor.Encrypt(sqlPassword);
             string cipherWindowsPassword = Encryptor.Encrypt(windowsPassword);

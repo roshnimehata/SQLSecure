@@ -31,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+ 
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -73,6 +74,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Sql\AvailabilityGroup.cs" />
+    <Compile Include="Sql\AzureSqlDBFirewallRule.cs" />
     <Compile Include="Sql\Certificate.cs" />
     <Compile Include="Sql\Database.cs" />
     <Compile Include="Sql\DatabaseObject.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Sql\Endpoint.cs" />
     <Compile Include="Sql\FilePermission.cs" />
     <Compile Include="Sql\FilterRule.cs" />
+    <Compile Include="Sql\AzureSqlDBFirewallRules.cs" />
     <Compile Include="Sql\LinkedServer.cs" />
     <Compile Include="Sql\LinkedServerPrincipal.cs" />
     <Compile Include="Sql\RegistryPermission.cs" />
@@ -96,6 +99,7 @@
     <Compile Include="Sql\WindowsAccount.cs" />
     <Compile Include="Target.cs" />
     <Compile Include="Utility\Exception.cs" />
+    <Compile Include="Utility\Helper.cs" />
     <Compile Include="Utility\Logging.cs" />
     <Compile Include="Utility\MemberEnumeration.cs" />
     <Compile Include="Utility\ProgramArgs.cs" />

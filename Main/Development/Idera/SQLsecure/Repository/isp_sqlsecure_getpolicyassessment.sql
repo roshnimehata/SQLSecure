@@ -336,23 +336,17 @@ AS -- <Idera SQLsecure version and copyright>
                                         @severity int,
                                         @severityvalues nvarchar(4000),
                                         @configuredvalues nvarchar(4000);
+								--START (Barkha Khatri) Declaring constants for comparisons
+								--moving metric cursor inside snapcursor 
+								--as now we are having different types of server in one policy
+								DECLARE @onpremiseservertype nvarchar(3),
+										@azuresqldatabaseservertype nvarchar(3),
+										@sqlserveronazurevmservertype nvarchar(3);
 
-                                DECLARE metriccursor CURSOR STATIC FOR
-                                SELECT
-                                        metricid,
-                                        metricname,
-                                        metrictype,
-                                        metricdescription,
-                                        reportkey,
-                                        reporttext,
-                                        severity,
-                                        severityvalues
-                                FROM vwpolicymetric
-                                WHERE policyid = @policyid
-                                AND assessmentid = @assessmentid
-                                AND isenabled = 1;
-                                OPEN metriccursor;
-
+								SELECT @onpremiseservertype = 'OP',
+									   @azuresqldatabaseservertype = 'ADB',
+									   @sqlserveronazurevmservertype = 'AVM';
+								--START (Barkha Khatri) Declaring constants for comparisons
                                 -- process the snapshots for each metric
                                 DECLARE @snapshotid int,
                                         @connection nvarchar(400),
@@ -447,7 +441,7 @@ AS -- <Idera SQLsecure version and copyright>
                                         id int,
                                         name nvarchar(256) COLLATE DATABASE_DEFAULT
                                 );
-
+								DECLARE @serverType nvarchar(5)
                                 FETCH NEXT FROM snapcursor INTO @snapshotid,
                                 @registeredserverid, @connection, @snapshottime,
                                 @status, @baseline, @collectorversion, @version, @os,
@@ -461,6 +455,26 @@ AS -- <Idera SQLsecure version and copyright>
 
                                 WHILE @@fetch_status = 0
                                 BEGIN
+										
+										--START(Barkha Khatri) Changing metric cursor to get the metrics applicable on a particular server type
+										select @serverType=servertype from dbo.registeredserver where registeredserverid=@registeredserverid
+										DECLARE metriccursor CURSOR STATIC FOR
+										SELECT
+												metricid,
+												metricname,
+												metrictype,
+												metricdescription,
+												reportkey,
+												reporttext,
+												severity,
+												severityvalues
+										FROM vwpolicymetric
+										WHERE policyid = @policyid
+										AND assessmentid = @assessmentid
+										AND isenabled = 1
+										AND ((@serverType=@onpremiseservertype and applicableonpremise=1)OR (@serverType=@azuresqldatabaseservertype and applicableonazuredb=1)OR(@serverType=@sqlserveronazurevmservertype and applicableonazurevm=1)) ;
+										--END(Barkha Khatri) Changing metric cursor to get the metrics applicable on a particular server type
+										OPEN metriccursor;
                                         IF (@debug = 1)
                                         BEGIN
                                                 SELECT
@@ -469,10 +483,13 @@ AS -- <Idera SQLsecure version and copyright>
                                                 + ': @connection=' + @connection;
                                                 PRINT '@snapshotid='
                                                 + CONVERT(nvarchar, @snapshotid);
+												
                                         END;
 
                                         -- save a list of sysadmin members in this snapshot for use by multiple metrics
                                         DELETE FROM #sysadminstbl;
+										IF(@serverType=@onpremiseservertype or @serverType=@sqlserveronazurevmservertype)
+										BEGIN
                                         INSERT INTO #sysadminstbl
                                                 SELECT DISTINCT
                                                         a.memberprincipalid,
@@ -486,7 +503,26 @@ AS -- <Idera SQLsecure version and copyright>
                                                 AND b.sid = @sysadminsid
                                                 AND a.snapshotid = c.snapshotid
                                                 AND a.memberprincipalid = c.principalid;
-
+										END
+										--START(Barkha Khatri) For azure SQL DB -considering users having loginmanager and dbmanager role as admins
+										ELSE IF(@serverType=@azuresqldatabaseservertype)
+										BEGIN
+										INSERT INTO #sysadminstbl
+											SELECT DISTINCT principalid,name
+											FROM serverprincipal
+											WHERE snapshotid=@snapshotid AND 
+											principalid IN 
+													(SELECT memberprincipalid
+													 FROM serverrolemember	
+													 WHERE snapshotid=@snapshotid
+													 AND principalid IN 
+																	(SELECT principalid
+																	FROM serverprincipal WHERE snapshotid=@snapshotid
+																	AND( name='loginmanager' or name='dbmanager'))
+													GROUP BY memberprincipalid
+													HAVING COUNT(memberprincipalid)>=2)	
+										END
+										--END(Barkha Khatri) For azure SQL DB -considering users having loginmanager and dbmanager role as admins
                                         FETCH FIRST FROM metriccursor INTO @metricid,
                                         @metricname, @metrictype, @metricdescription,
                                         @metricreportkey, @metricreporttext, @severity,
@@ -7720,6 +7756,10 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                 WHEN DPU.type = 'U' THEN 'Windows User'
                                                                                 WHEN DPU.type = 'G' THEN 'Windows Group'
                                                                                 WHEN DPU.type = 'S' THEN 'SQL login'
+																				--START(Barkha Khatri) For azure SQL DB -adding 2 new types
+																				WHEN DPU.type = 'E' THEN 'External User'
+																				WHEN DPU.type = 'X' THEN 'External Group'
+																				--END(Barkha Khatri) For azure SQL DB -adding 2 new types
                                                                         END AS usertype,
                                                                         WG.name AS groupname,
                                                                         RP.rolepermission
@@ -7951,6 +7991,10 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                 WHEN SPU.type = 'U' THEN 'Windows User'
                                                                                 WHEN SPU.type = 'G' THEN 'Windows Group'
                                                                                 WHEN SPU.type = 'S' THEN 'SQL login'
+																				--START(Barkha Khatri) For azure SQL DB -adding 2 new types
+																				WHEN SPU.type = 'E' THEN 'External User'
+																				WHEN SPU.type = 'X' THEN 'External Group'
+																				--END(Barkha Khatri) For azure SQL DB -adding 2 new types
                                                                         END AS usertype,
                                                                         WG.name AS groupname,
                                                                         CASE
@@ -9148,7 +9192,843 @@ AS -- <Idera SQLsecure version and copyright>
 																  
 															END;
                                                         
-     
+													ELSE
+                                                   --Always Encrypted
+													IF ( @metricid = 117 )
+													BEGIN
+														-- Only supported for OP(SQL Server 2016 and above), ADB.
+														IF(
+														(@serverType = @onpremiseservertype and
+														dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) > dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'12.')))
+														or (@serverType = @azuresqldatabaseservertype)
+														)
+                                                        BEGIN
+															IF(ISNULL(@severityvalues, '') <> '')
+															BEGIN
+																IF CURSOR_STATUS('global','dbcursor')>= 0
+																BEGIN
+																	 CLOSE dbcursor
+																	 DEALLOCATE dbcursor
+																END
+																SELECT
+																		@sql = N'declare dbcursor cursor static for 
+																select Value 
+																from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','')
+																where Value NOT LIKE ''%\[%\]%''  ESCAPE ''\'' or  
+																(UPPER(SUBSTRING(Value, CHARINDEX(''['', Value) + 1, 
+																CHARINDEX('']'', Value) - CHARINDEX(''['', Value) - 1)) = ''' + @connection + ''' and  
+																Value not in (
+																	select distinct d.FQN 
+																	from databaseobject d 
+																	where d.snapshotid = '
+																			+ CONVERT(nvarchar, @snapshotid)
+																			+ N' 
+																	and d.type = ''iCO''  
+																	and d.alwaysencryptiontype is not null  
+																	and d.FQN in ('
+																			+ @severityvalues
+																			+ N'))) 
+																order by Value';
+																EXEC (@sql);
+																OPEN dbcursor;
+																SELECT
+																		@intval2 = 0;
+																FETCH NEXT FROM
+																dbcursor INTO @strval;
+																WHILE @@fetch_status = 0
+																BEGIN
+																		IF (@intval2 = 1
+																				OR LEN(@metricval)
+																				+ LEN(@strval) > 1010
+																				)
+																		BEGIN
+																				IF @intval2 = 0
+																						SELECT
+																								@metricval = @metricval
+																								+ N', more...',
+																								@intval2 = 1;
+																		END
+																		ELSE
+																				SELECT
+																						@metricval = @metricval
+																						+ CASE
+																								WHEN LEN(@metricval) > 0 THEN N', '
+																								ELSE N''
+																						END + N''''
+																						+ @strval
+																						+ N'''';
+
+																		FETCH NEXT FROM
+																		dbcursor INTO @strval;
+																END;
+																CLOSE dbcursor;
+																DEALLOCATE dbcursor;
+																IF (@isadmin = 1)
+																		INSERT INTO policyassessmentdetail (policyid,
+																		assessmentid,
+																		metricid,
+																		snapshotid,
+																		detailfinding,
+																		databaseid,
+																		objecttype,
+																		objectid,
+																		objectname)
+																				VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following columns don''t use always encryption: ''' + @strval + N'''', NULL, -- database ID,
+																				N'iCO', -- object type
+																				NULL, -- object id
+																				@strval);
+															END
+
+															IF (LEN(@metricval) = 0)
+																	SELECT
+																			@sevcode = @sevcodeok,
+																			@metricval = N'None found.';
+															ELSE
+																	SELECT
+																			@sevcode = @severity,
+																			@metricval = N'Following columns don''t use always encryption: '
+																			+ @metricval;
+														END
+														ELSE
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2016 or later databases, Azure SQL DB have not used always encrypted.';
+													END 
+													ELSE
+													--Transparent Data Encryption
+													IF ( @metricid = 118 )
+													BEGIN
+														-- Only supported for OP(SQL Server 2008 and above), ADB.
+														IF(
+														(@serverType = @onpremiseservertype and 
+														(dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) > dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'9.'))))
+														or (@serverType = @azuresqldatabaseservertype))
+                                                        BEGIN
+															IF CURSOR_STATUS('global','dbcursor')>= 0
+															BEGIN
+																	CLOSE dbcursor
+																	DEALLOCATE dbcursor
+															END
+															SELECT
+																	@sql = N'declare dbcursor cursor static for 
+															select FQN 
+															from sqldatabase 
+															where snapshotid = '
+																	+ CONVERT(nvarchar, @snapshotid)
+																	+ N'
+															and istdeencrypted = 0';
+															 
+															if(ISNULL(@severityvalues, '') <> '')
+																SELECT @sql += 'and FQN not in ('
+																	+ @severityvalues
+																	+ N')';
+
+															SELECT @sql += 'and databasename not in (''msdb'', ''master'',
+                                                                       ''model'', ''tempdb'') 
+															order by databasename';
+
+															EXEC (@sql);
+															OPEN dbcursor;
+															SELECT
+																	@intval2 = 0;
+															FETCH NEXT FROM
+															dbcursor INTO @strval;
+															WHILE @@fetch_status = 0
+															BEGIN
+																	IF (@intval2 = 1
+																			OR LEN(@metricval)
+																			+ LEN(@strval) > 1010
+																			)
+																	BEGIN
+																			IF @intval2 = 0
+																					SELECT
+																							@metricval = @metricval
+																							+ N', more...',
+																							@intval2 = 1;
+																	END
+																	ELSE
+																			SELECT
+																					@metricval = @metricval
+																					+ CASE
+																							WHEN LEN(@metricval) > 0 THEN N', '
+																							ELSE N''
+																							END + N''''
+																							+ @strval
+																							+ N'''';
+																	FETCH NEXT FROM
+																	dbcursor INTO @strval;
+															END;
+
+															CLOSE dbcursor;
+															DEALLOCATE dbcursor;
+
+															IF (@isadmin = 1)
+																	INSERT INTO policyassessmentdetail (policyid,
+																	assessmentid,
+																	metricid,
+																	snapshotid,
+																	detailfinding,
+																	databaseid,
+																	objecttype,
+																	objectid,
+																	objectname)
+																			VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following databases don''t use Transparent Data Encryption: ''' + @strval + N'''', NULL, -- database ID,
+																			N'DB', -- object type
+																			NULL, -- object id
+																			@strval);
+
+
+															IF (LEN(@metricval) = 0)
+																	SELECT
+																			@sevcode = @sevcodeok,
+																			@metricval = N'None found.';
+															ELSE
+																	SELECT
+																			@sevcode = @severity,
+																			@metricval = N'Following databases don''t use Transparent Data Encryption: '
+																			+ @metricval;
+														END
+														ELSE  
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END 
+														SELECT
+																@metricthreshold = N'Server is vulnerable if any SQL Server 2008 or later databases, Azure SQL DB have TDE disabled (other than ' + @severityvalues + ').';
+													END
+													ELSE
+													--Backup Encryption
+													IF ( @metricid = 119 )
+													BEGIN
+														-- Only supported for OP(SQL Server 2014 and above)
+														IF((@serverType = @onpremiseservertype) and
+														(dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) > dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'11.'))))
+                                                        BEGIN
+															IF(ISNULL(@severityvalues, '') <> '')
+															BEGIN
+																IF CURSOR_STATUS('global','dbcursor')>= 0
+																BEGIN
+																	 CLOSE dbcursor
+																	 DEALLOCATE dbcursor
+																END
+																SELECT
+																		@sql = N'declare dbcursor cursor static for
+																select FQN 
+																from sqldatabase
+																where snapshotid = '
+																		+ CONVERT(nvarchar, @snapshotid)
+																		+ N'
+																and wasbackupnotencrypted = 1  
+																and databasename not in ('
+																		+ @severityvalues
+																		+ N') 
+																order by databasename';
+																EXEC (@sql);
+																OPEN dbcursor;
+																SELECT
+																		@intval2 = 0;
+																FETCH NEXT FROM
+																dbcursor INTO @strval;
+																WHILE @@fetch_status = 0
+																BEGIN
+																		IF (@intval2 = 1
+																				OR LEN(@metricval)
+																				+ LEN(@strval) > 1010
+																				)
+																		BEGIN
+																				IF @intval2 = 0
+																						SELECT
+																								@metricval = @metricval
+																								+ N', more...',
+																								@intval2 = 1;
+																		END
+																		ELSE
+																				SELECT
+																						@metricval = @metricval
+																						+ CASE
+																								WHEN LEN(@metricval) > 0 THEN N', '
+																								ELSE N''
+																						END + N''''
+																						+ @strval
+																						+ N'''';
+
+																		FETCH NEXT FROM
+																		dbcursor INTO @strval;
+																END;
+																CLOSE dbcursor;
+																DEALLOCATE dbcursor;
+																IF (@isadmin = 1)
+																		INSERT INTO policyassessmentdetail (policyid,
+																		assessmentid,
+																		metricid,
+																		snapshotid,
+																		detailfinding,
+																		databaseid,
+																		objecttype,
+																		objectid,
+																		objectname)
+																				VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following databases did not use Backup Encryption: ''' + @strval + N'''', NULL, -- database ID,
+																				N'DB', -- object type
+																				NULL, -- object id
+																				@strval);
+
+															END
+
+															IF (LEN(@metricval) = 0)
+																	SELECT
+																			@sevcode = @sevcodeok,
+																			@metricval = N'None found.';
+															ELSE
+																	SELECT
+																			@sevcode = @severity,
+																			@metricval = N'Following databases did not use Backup Encryption: '
+																			+ @metricval;
+														END
+														ELSE 
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END     
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2014 or later databases have backup encryption disabled (other than: '
+																+ @severityvalues + ').';
+													END
+													ELSE
+													--Row-Level Security
+													IF ( @metricid = 120 )
+													BEGIN
+														-- Only supported for OP(SQL Server 2016 and above), ADB
+														IF((@serverType = @onpremiseservertype and
+														(dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) > dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'12.'))))
+														or (@serverType = @azuresqldatabaseservertype ))
+                                                        BEGIN
+															IF(ISNULL(@severityvalues, '') <> '')
+															BEGIN
+																IF CURSOR_STATUS('global','dbcursor')>= 0
+																BEGIN
+																	 CLOSE dbcursor
+																	 DEALLOCATE dbcursor
+																END
+																SELECT
+																		@sql = N'declare dbcursor cursor static for 
+																		select Value 
+																from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','') 
+																where Value NOT LIKE ''%\[%\]%''  ESCAPE ''\'' or  
+																(UPPER(SUBSTRING(Value, CHARINDEX(''['', Value) + 1, 
+																CHARINDEX('']'', Value) - CHARINDEX(''['', Value) - 1)) = ''' + @connection + ''' and  
+																	Value not in (
+																	select distinct d.FQN 
+																	from databaseobject d 
+																	where d.snapshotid = '
+																			+ CONVERT(nvarchar, @snapshotid)
+																			+ N'  
+																	and d.type = ''U'' 
+																	and d.isrowsecurityenabled = 1 
+																	and d.FQN in ('
+																			+ @severityvalues
+																			+ N'))) 
+																order by Value';
+																EXEC (@sql);
+																OPEN dbcursor;
+																SELECT
+																		@intval2 = 0;
+																FETCH NEXT FROM
+																dbcursor INTO @strval;
+																WHILE @@fetch_status = 0
+																BEGIN
+																		IF (@intval2 = 1
+																				OR LEN(@metricval)
+																				+ LEN(@strval) > 1010
+																				)
+																		BEGIN
+																				IF @intval2 = 0
+																						SELECT
+																								@metricval = @metricval
+																								+ N', more...',
+																								@intval2 = 1;
+																		END
+																		ELSE
+																				SELECT
+																						@metricval = @metricval
+																						+ CASE
+																								WHEN LEN(@metricval) > 0 THEN N', '
+																								ELSE N''
+																						END + N''''
+																						+ @strval
+																						+ N'''';
+
+																		FETCH NEXT FROM
+																		dbcursor INTO @strval;
+																END;
+																CLOSE dbcursor;
+																DEALLOCATE dbcursor;
+																IF (@isadmin = 1)
+																				INSERT INTO policyassessmentdetail (policyid,
+																				assessmentid,
+																				metricid,
+																				snapshotid,
+																				detailfinding,
+																				databaseid,
+																				objecttype,
+																				objectid,
+																				objectname)
+																						VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following tables don''t use Row-Level Security: ''' + @strval + N'''', NULL, -- database ID,
+																						N'U', -- object type
+																						NULL, -- object id
+																						@strval);
+
+															END
+
+															IF (LEN(@metricval) = 0)
+																	SELECT
+																			@sevcode = @sevcodeok,
+																			@metricval = N'None found.';
+															ELSE
+																	SELECT
+																			@sevcode = @severity,
+																			@metricval = N'Following tables don''t use Row-Level Security: '
+																			+ @metricval;
+														END
+														ELSE  
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END  
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2016 or later databases, Azure SQL DB have not used row-level security.';
+													END
+													ELSE
+													--Dynamic Data Masking
+													IF ( @metricid = 121 )
+													BEGIN
+														-- Only supported for OP(SQL Server 2016 and above), ADB
+														IF((@serverType = @onpremiseservertype  and
+														(dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) > dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'12.'))))
+														or (@serverType = @azuresqldatabaseservertype ))
+                                                        BEGIN
+															IF(ISNULL(@severityvalues, '') <> '')
+															BEGIN
+																IF CURSOR_STATUS('global','dbcursor')>= 0
+																BEGIN
+																	 CLOSE dbcursor
+																	 DEALLOCATE dbcursor
+																END
+																SELECT
+																		@sql = N'declare dbcursor cursor static for 
+																		select Value 
+																from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','') 
+															    where Value NOT LIKE ''%\[%\]%''  ESCAPE ''\'' or  
+																(UPPER(SUBSTRING(Value, CHARINDEX(''['', Value) + 1, 
+																CHARINDEX('']'', Value) - CHARINDEX(''['', Value) - 1)) = ''' + @connection + ''' and  
+																Value not in (
+																select distinct d.FQN 
+																from databaseobject d 
+																where d.snapshotid = '
+																		+ CONVERT(nvarchar, @snapshotid)
+																		+ N' 
+																and d.type = ''iCO'' 
+																and d.isdatamasked = 1 
+																and d.FQN in ('
+																		+ @severityvalues
+																		+ N'))) 
+																order by Value';
+																EXEC (@sql);
+																OPEN dbcursor;
+																SELECT
+																		@intval2 = 0;
+																FETCH NEXT FROM
+																dbcursor INTO @strval;
+																WHILE @@fetch_status = 0
+																BEGIN
+																		IF (@intval2 = 1
+																				OR LEN(@metricval)
+																				+ LEN(@strval) > 1010
+																				)
+																		BEGIN
+																				IF @intval2 = 0
+																						SELECT
+																								@metricval = @metricval
+																								+ N', more...',
+																								@intval2 = 1;
+																		END
+																		ELSE
+																				SELECT
+																						@metricval = @metricval
+																						+ CASE
+																								WHEN LEN(@metricval) > 0 THEN N', '
+																								ELSE N''
+																						END + N''''
+																						+ @strval
+																						+ N'''';
+
+																		FETCH NEXT FROM
+																		dbcursor INTO @strval;
+																END
+																CLOSE dbcursor;
+																DEALLOCATE dbcursor;
+																IF (@isadmin = 1)
+																		INSERT INTO policyassessmentdetail (policyid,
+																		assessmentid,
+																		metricid,
+																		snapshotid,
+																		detailfinding,
+																		databaseid,
+																		objecttype,
+																		objectid,
+																		objectname)
+																				VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following columns don''t use Dynamic Data Masking: ''' + @strval + N'''', NULL, -- database ID,
+																				N'iCO', -- object type
+																				NULL, -- object id
+																				@strval);
+															END
+
+															IF (LEN(@metricval) = 0)
+																	SELECT
+																			@sevcode = @sevcodeok,
+																			@metricval = N'None found.';
+															ELSE
+																	SELECT
+																			@sevcode = @severity,
+																			@metricval = N'Following columns don''t use Dynamic Data Masking: '
+																			+ @metricval;
+														END
+														ELSE  
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END  
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2016 or later databases, Azure SQL DB have not used dynamic data masking.';
+													END
+													ELSE
+													--Signed Objects [stored procedure, function, assembly or trigger]
+													IF ( @metricid = 122 )
+													BEGIN
+														-- Only supported for OP(SQL Server 2008 and above)
+														IF((@serverType = @onpremiseservertype) and
+														(dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) > dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'9.')))
+														)
+														BEGIN
+															IF(ISNULL(@severityvalues, '') <> '')
+															BEGIN
+																IF CURSOR_STATUS('global','dbcursor')>= 0
+																BEGIN
+																	 CLOSE dbcursor
+																	 DEALLOCATE dbcursor
+																END
+																--stored procedure, function (possibly trigger) UNION assembly
+																SELECT
+																		@sql = N'declare dbcursor cursor static for 
+																		select Value 
+																from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','') 
+																where Value NOT LIKE ''%\[%\]%''  ESCAPE ''\'' or  
+																(UPPER(SUBSTRING(Value, CHARINDEX(''['', Value) + 1, 
+																CHARINDEX('']'', Value) - CHARINDEX(''['', Value) - 1)) = ''' + @connection + ''' and  
+																Value not in (
+																select distinct d.FQN  
+																from databaseobject d 
+																where d.snapshotid = '
+																		+ CONVERT(nvarchar, @snapshotid)
+																		+ N'  
+																and d.type in (''P'',''FN'',''TR'')  
+																and d.signedcrypttype is not null  
+																and d.FQN in ('
+																		+ @severityvalues
+																		+ N') 
+																UNION
+																select distinct d.FQN 
+																from databaseobject d 
+																where d.snapshotid = '
+																		+ CONVERT(nvarchar, @snapshotid)
+																		+ N' 
+																and d.type = ''iASM'' 
+																and d.signedcrypttype is not null  
+																and d.FQN in ('
+																		+ @severityvalues
+																		+ N'))) 
+																order by Value';
+																EXEC (@sql);
+																OPEN dbcursor;
+																SELECT
+																		@intval2 = 0;
+																FETCH NEXT FROM
+																dbcursor INTO @strval;
+																WHILE @@fetch_status = 0
+																BEGIN
+																		IF (@intval2 = 1
+																				OR LEN(@metricval)
+																				+ LEN(@strval) > 1010
+																				)
+																		BEGIN
+																				IF @intval2 = 0
+																						SELECT
+																								@metricval = @metricval
+																								+ N', more...',
+																								@intval2 = 1;
+																		END
+																		ELSE
+																				SELECT
+																						@metricval = @metricval
+																						+ CASE
+																								WHEN LEN(@metricval) > 0 THEN N', '
+																								ELSE N''
+																						END + N''''
+																						+ @strval
+																						+ N'''';
+
+																		FETCH NEXT FROM
+																		dbcursor INTO @strval;
+																END;
+																CLOSE dbcursor;
+																DEALLOCATE dbcursor;
+																IF (@isadmin = 1)
+																		INSERT INTO policyassessmentdetail (policyid,
+																		assessmentid,
+																		metricid,
+																		snapshotid,
+																		detailfinding,
+																		databaseid,
+																		objecttype,
+																		objectid,
+																		objectname)
+																				VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following objects are not signed: ''' + @strval + N'''', NULL, -- database ID,
+																				N'U', -- object type
+																				NULL, -- object id
+																				@strval);
+
+															END
+															IF (LEN(@metricval) = 0)
+																	SELECT
+																			@sevcode = @sevcodeok,
+																			@metricval = N'None found.';
+															ELSE
+																	SELECT
+																			@sevcode = @severity,
+																			@metricval = N'Following objects are not signed: ' + @metricval;
+															
+														END
+														ELSE  
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END 
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2008 or later databases do not use signed objects.';
+													END
+													ELSE
+												
+													--Server-level Firewall Rules
+													IF ( @metricid = 123 )
+													BEGIN
+														-- Only supported for ADB
+														IF(@serverType = @azuresqldatabaseservertype) 
+														BEGIN
+															IF CURSOR_STATUS('global','illegalrulescursor')>= 0
+															BEGIN
+																CLOSE illegalrulescursor
+																DEALLOCATE illegalrulescursor
+															END
+															SELECT @sql = N'declare illegalrulescursor cursor static for  
+															select ur.name 
+															from 
+															(
+																select name, startipaddress, dbo.fn_getIPAddressToInteger(startipaddress) as n_start, endipaddress, dbo.fn_getIPAddressToInteger(endipaddress) as n_end  
+																from azuresqldbfirewallrules 
+																where snapshotid = '
+																		+ CONVERT(nvarchar, @snapshotid)
+																		+ N'
+																and isserverlevel = 1
+															) ur'
+															IF(ISNULL(@severityvalues, '') <> '')
+																SELECT @sql += ' where NOT EXISTS (Select * 
+																from 
+																(
+																	select dbo.fn_getIPAddressToInteger(SUBSTRING(Value, 0, CHARINDEX(''-'', Value))) as n_start, 
+																	dbo.fn_getIPAddressToInteger(SUBSTRING(Value, CHARINDEX(''-'', Value) + 1, lEN(Value) - CHARINDEX(''-'', Value))) as n_end 
+																	from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','') 
+																) ar 
+																where (ur.n_start >= ar.n_start and ur.n_end <= ar.n_end))';
+															EXEC (@sql);
+
+															OPEN illegalrulescursor;
+															SELECT
+																	@intval2 = 0;
+
+															FETCH NEXT FROM
+															illegalrulescursor INTO @strval;
+															WHILE @@fetch_status = 0
+															BEGIN
+
+																	IF (@intval2 = 1
+																			OR LEN(@metricval)
+																			+ LEN(@strval) > 1010
+																			)
+																	BEGIN
+																			IF @intval2 = 0
+																					SELECT
+																							@metricval = @metricval
+																							+ N', more...',
+																							@intval2 = 1;
+																	END
+																	ELSE
+																			SELECT
+																					@metricval = @metricval
+																					+ CASE
+																							WHEN LEN(@metricval) > 0 THEN N', '
+																							ELSE N''
+																					END + N''''
+																					+ @strval + ''
+																					+ N'''';
+
+																	FETCH NEXT FROM
+																	illegalrulescursor INTO @strval;
+															END;
+
+															IF (@isadmin = 1)
+																INSERT INTO policyassessmentdetail (policyid,
+																assessmentid,
+																metricid,
+																snapshotid,
+																detailfinding,
+																databaseid,
+																objecttype,
+																objectid,
+																objectname)
+																		VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following Server-Level Firewall rules are unauthorized: ''' + @strval + N'''', NULL, -- database ID,
+																		N'DB', -- object type
+																		NULL, -- object id
+																		@strval);
+
+															IF (LEN(@metricval) = 0)
+																	SELECT
+																			@sevcode = @sevcodeok,
+																			@metricval = N'None found.';
+															ELSE
+																	SELECT
+																			@sevcode = @severity,
+																			@metricval = N'Following Server-Level Firewall rules are unauthorized: '
+																			+ @metricval;
+
+															CLOSE illegalrulescursor;
+															DEALLOCATE illegalrulescursor;
+														END
+														ELSE 
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END 
+														SELECT @metricthreshold = N'Server is vulnerable if Azure SQL DB has unauthorized Server-Level Firewall rules.';
+
+													END
+													ELSE
+													--Database-level Firewall Rules
+													IF ( @metricid = 124 )
+													BEGIN
+														-- Only supported for ADB
+														IF(@serverType = @azuresqldatabaseservertype) 
+														BEGIN
+															IF CURSOR_STATUS('global','illegaldbrulescursor') >= 0
+															BEGIN
+																CLOSE illegaldbrulescursor
+																DEALLOCATE illegaldbrulescursor
+															END
+																SELECT @sql = N'declare illegaldbrulescursor cursor static for  
+															select ur.name  
+															from 
+															(
+																select name, startipaddress, dbo.fn_getIPAddressToInteger(startipaddress) as n_start, endipaddress, dbo.fn_getIPAddressToInteger(endipaddress) as n_end  
+																from azuresqldbfirewallrules 
+																where snapshotid = '
+																		+ CONVERT(nvarchar, @snapshotid)
+																		+ N'
+																and isserverlevel = 0
+															) ur' 
+															IF(ISNULL(@severityvalues, '') <> '')
+																SELECT @sql += ' where NOT EXISTS (Select * 
+																from 
+																(
+																	select dbo.fn_getIPAddressToInteger(SUBSTRING(Value, 0, CHARINDEX(''-'', Value))) as n_start, 
+																	dbo.fn_getIPAddressToInteger(SUBSTRING(Value, CHARINDEX(''-'', Value) + 1, lEN(Value) - CHARINDEX(''-'', Value))) as n_end 
+																	from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','') 
+																) ar 
+																where (ur.n_start >= ar.n_start and ur.n_end <= ar.n_end))';
+															EXEC (@sql);
+
+															OPEN illegaldbrulescursor;
+															SELECT
+																	@intval2 = 0;
+
+															FETCH NEXT FROM
+															illegaldbrulescursor INTO @strval;
+															WHILE @@fetch_status = 0
+															BEGIN
+
+																	IF (@intval2 = 1
+																			OR LEN(@metricval)
+																			+ LEN(@strval) > 1010
+																			)
+																	BEGIN
+																			IF @intval2 = 0
+																					SELECT
+																							@metricval = @metricval
+																							+ N', more...',
+																							@intval2 = 1;
+																	END
+																	ELSE
+																			SELECT
+																					@metricval = @metricval
+																					+ CASE
+																							WHEN LEN(@metricval) > 0 THEN N', '
+																							ELSE N''
+																					END + N''''
+																					+ @strval + ''
+																					+ N'''';
+
+																	FETCH NEXT FROM
+																	illegaldbrulescursor INTO @strval;
+															END;
+													
+															IF (@isadmin = 1)
+																	INSERT INTO policyassessmentdetail (policyid,
+																	assessmentid,
+																	metricid,
+																	snapshotid,
+																	detailfinding,
+																	databaseid,
+																	objecttype,
+																	objectid,
+																	objectname)
+																			VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following Database-Level Firewall rules are unauthorized: ''' + @strval + N'''', NULL, -- database ID,
+																			N'DB', -- object type
+																			NULL, -- object id
+																			@strval);
+
+															IF (LEN(@metricval) = 0)
+																	SELECT
+																			@sevcode = @sevcodeok,
+																			@metricval = N'None found.';
+															ELSE
+																	SELECT
+																			@sevcode = @severity,
+																			@metricval = N'Following Database-Level Firewall rules are unauthorized: '
+																			+ @metricval;
+															CLOSE illegaldbrulescursor;
+															DEALLOCATE illegaldbrulescursor;
+													END
+													ELSE
+													BEGIN
+															SELECT
+                                                                    @sevcode = @sevcodeok,
+                                                                    @metricval = N'N/A';
+													END 
+													SELECT @metricthreshold = N'Server is vulnerable if Azure SQL DB has unauthorized Server-Level Firewall rules.';
+
+												END
                                                 
                                                 --**************************** code added to handle user defined security checks, but never used (first added in version 2.5)
                                                 -- User implemented
@@ -9302,7 +10182,9 @@ AS -- <Idera SQLsecure version and copyright>
                                                 @serverruntime,
                                                 GETDATE()))
                                                 + ' seconds';
-
+										CLOSE metriccursor;
+										DEALLOCATE metriccursor;
+												
                                         FETCH NEXT FROM snapcursor INTO @snapshotid,
                                         @registeredserverid, @connection,
                                         @snapshottime, @status, @baseline,
@@ -9543,8 +10425,7 @@ AS -- <Idera SQLsecure version and copyright>
                                 --													@severity, @severityvalues
                                 --			end
 
-                                CLOSE metriccursor;
-                                DEALLOCATE metriccursor;
+                                
 
                                 -- if any servers are left in the server table, there was no audit data and this is a finding
                                 IF EXISTS (SELECT

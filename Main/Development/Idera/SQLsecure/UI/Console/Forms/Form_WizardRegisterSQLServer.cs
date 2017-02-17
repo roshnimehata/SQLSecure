@@ -941,6 +941,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             connection = _txtbx_Server.Text;
                             isOk = false;
                             allowRegisterAnyway = false;
+                            logX.loggerX.Error("Could not establish a connection with SQL Server {0}.", _txtbx_Server.Text.ToUpper());
+                            logX.loggerX.Error("Exception :" + ex.Message);
                         }
 
                     }

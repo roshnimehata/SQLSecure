@@ -19,7 +19,7 @@ using System.Diagnostics;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.Collector;
 using Idera.SQLsecure.Collector.Sql;
-
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
     internal static class SqlHelper
@@ -156,7 +156,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 string instance,
                 string user,
                 string password,
-                ServerType serverType = ServerType.Null,
+                ServerType serverType = ServerType.OnPremise,
                 bool azureADAuth=false
             )
         {
@@ -169,7 +169,6 @@ namespace Idera.SQLsecure.Collector.Sql
                 SqlConnectionStringBuilder bldr = new SqlConnectionStringBuilder();
                 bldr.DataSource = instance;
                 bldr.ApplicationName = Constants.SqlAppName;
-
                 // If user is specified then its not integrated security,
                 // so set the user & password.
                 bldr.IntegratedSecurity = (user == null || user.Length == 0);
@@ -178,13 +177,13 @@ namespace Idera.SQLsecure.Collector.Sql
                     bldr.UserID = user;
                     bldr.Password = password;
                 }
-                if (serverType == ServerType.ADB || (serverType == ServerType.AVM && azureADAuth))
+                if (serverType == ServerType.AzureSQLDatabase || (serverType == ServerType.SQLServerOnAzureVM && azureADAuth))
                 {
                     bldr.ConnectionString = ConstructConnectionString(instance, user, password, azureADAuth);
 
                 }
                 //SQLsecure (Tushar)--Added support for Azure VM
-                if(serverType == ServerType.AVM)
+                if(serverType == ServerType.SQLServerOnAzureVM)
                     bldr.ConnectionString =     @"Data Source=" + instance + ";Initial Catalog=master ;User ID= " + user + ";Password=" + password + ";";
                 return bldr;
             }
@@ -468,7 +467,10 @@ namespace Idera.SQLsecure.Collector.Sql
         }
 
 
+       
     }
+
+   
     #region SQL Command Timeout
     public class SQLCommandTimeout
     {
@@ -521,6 +523,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 }
             }
             return timeout;
+            
         }
 
         private static void WriteDefaultSQLCommandTimeout(int defaultTimeout)
