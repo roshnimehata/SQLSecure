@@ -892,17 +892,19 @@
 		<row><td>SetupResume</td><td>txtUpgrade</td><td>Text</td><td>151</td><td>7</td><td>272</td><td>25</td><td>65539</td><td/><td>##ID_STRING173##</td><td/><td>##ID_STRING175##</td><td/><td/><td/><td/></row>
 		<row><td>SetupType</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>Note</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>CompText1</td><td>Text</td><td>223</td><td>112</td><td>157</td><td>33</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_AllFeatures##</td><td>rbSetupType</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>CompText2</td><td>Text</td><td>224</td><td>187</td><td>164</td><td>35</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseFeatures##</td><td>CompText1</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>CompText1</td><td>Text</td><td>223</td><td>112</td><td>157</td><td>33</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_AllFeatures##</td><td>CompText2</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>CompText2</td><td>Text</td><td>224</td><td>187</td><td>164</td><td>35</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseFeatures##</td><td>rbSetupType</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>CompleteIco</td><td>Icon</td><td>178</td><td>112</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary10</td></row>
 		<row><td>SetupType</td><td>CustomIco</td><td>Icon</td><td>178</td><td>187</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary11</td></row>
 		<row><td>SetupType</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>240</td><td>18</td><td>65539</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseSetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>DlgText</td><td>Text</td><td>152</td><td>67</td><td>112</td><td>14</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_SelectSetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>254</td><td>16</td><td>65539</td><td/><td>##IDS__IsSetupTypeMinDlg_SetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>Icon1</td><td>Icon</td><td>178</td><td>240</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary11</td></row>
 		<row><td>SetupType</td><td>ImageMain_All</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048576</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Overview</td></row>
 		<row><td>SetupType</td><td>ImageMain_GUI</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048576</td><td/><td/><td/><td/><td/><td/><td/><td>Image_GUI</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>Note</td><td>Text</td><td>178</td><td>150</td><td>223</td><td>16</td><td>3</td><td/><td>##NEW_STRING158##</td><td>CompText2</td><td/><td/><td/><td/><td/></row>
+		<row><td>SetupType</td><td>Note</td><td>Text</td><td>178</td><td>150</td><td>223</td><td>16</td><td>3</td><td/><td>##NEW_STRING158##</td><td>Text1</td><td/><td/><td/><td/><td/></row>
+		<row><td>SetupType</td><td>Text1</td><td>Text</td><td>224</td><td>239</td><td>164</td><td>35</td><td>3</td><td>NewProperty5</td><td>##NEW_STRING165##</td><td>CompText1</td><td/><td/><td/><td/><td/></row>
 		<row><td>SetupType</td><td>rbSetupType</td><td>RadioButtonGroup</td><td>166</td><td>97</td><td>238</td><td>182</td><td>3</td><td>_IsSetupTypeMin</td><td>##IDS__IsSetupTypeMinDlg_13##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SplashBitmap</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SplashBitmap</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td/><td/><td>0</td><td/><td/><td/></row>
@@ -3704,7 +3706,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>IDS_INSTALLSHIELD_FORMATTED</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_ISSCRIPT_VERSION_MISSING</td><td>1033</td><td>The InstallScript engine is missing from this machine.  If available, please run ISScript.msi, or contact your support personnel for further assistance.</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_ISSCRIPT_VERSION_OLD</td><td>1033</td><td>The InstallScript engine on this machine is older than the version required to run this setup.  If available, please install the latest version of ISScript.msi, or contact your support personnel for further assistance.</td><td>0</td><td/><td>-1256677244</td></row>
-		<row><td>IDS_NEXT</td><td>1033</td><td>&amp;Next Test&gt;</td><td>0</td><td/><td>-1591400281</td></row>
+		<row><td>IDS_NEXT</td><td>1033</td><td>&amp;Next &gt;</td><td>0</td><td/><td>-1591394228</td></row>
 		<row><td>IDS_OK</td><td>1033</td><td>OK</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_PRINT_BUTTON</td><td>1033</td><td>&amp;Print</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_PRODUCTNAME_INSTALLSHIELD</td><td>1033</td><td>[ProductName] - Setup Wizard</td><td>0</td><td/><td>865710349</td></row>
@@ -4525,11 +4527,12 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>NEW_STRING158</td><td>1033</td><td>{\Tahoma7Red}Note: Install locally on a SQL Server computer hosting the Repository.</td><td>0</td><td/><td>572318505</td></row>
 		<row><td>NEW_STRING159</td><td>1033</td><td>&amp;Cluster Installation </td><td>0</td><td/><td>1176634634</td></row>
 		<row><td>NEW_STRING16</td><td>1033</td><td>&amp;Next &gt;</td><td>0</td><td/><td>-199646929</td></row>
-		<row><td>NEW_STRING160</td><td>1033</td><td>{&amp;MSSansBold8}&amp;RepoCollector</td><td>0</td><td/><td>-1591391610</td></row>
+		<row><td>NEW_STRING160</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Repository + Collector only</td><td>0</td><td/><td>-1591402324</td></row>
 		<row><td>NEW_STRING161</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591360410</td></row>
 		<row><td>NEW_STRING162</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591350170</td></row>
 		<row><td>NEW_STRING163</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591401338</td></row>
 		<row><td>NEW_STRING164</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591387002</td></row>
+		<row><td>NEW_STRING165</td><td>1033</td><td>Installs the Collector and creates the repository database on local SQL Server instance</td><td>0</td><td/><td>-1591373780</td></row>
 		<row><td>NEW_STRING17</td><td>1033</td><td>Cancel</td><td>0</td><td/><td>-199642833</td></row>
 		<row><td>NEW_STRING173</td><td>1033</td><td>&amp;OK</td><td>0</td><td/><td>-2070198543</td></row>
 		<row><td>NEW_STRING174</td><td>1033</td><td>The database specified is an unsupported version.  The SQL diagnostic manager installer can not update this version of the database.</td><td>0</td><td/><td>-2070213742</td></row>
@@ -5218,6 +5221,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>NewProperty2</td><td>0</td><td/></row>
 		<row><td>NewProperty3</td><td>0</td><td/></row>
 		<row><td>NewProperty4</td><td>0</td><td/></row>
+		<row><td>NewProperty5</td><td>0</td><td/></row>
 		<row><td>PIDTemplate</td><td>12345&lt;###-%%%%%%%&gt;@@@@@</td><td/></row>
 		<row><td>PROGMSG_IIS_CREATEAPPPOOL</td><td>##IDS_PROGMSG_IIS_CREATEAPPPOOL##</td><td/></row>
 		<row><td>PROGMSG_IIS_CREATEAPPPOOLS</td><td>##IDS_PROGMSG_IIS_CREATEAPPPOOLS##</td><td/></row>
@@ -5331,7 +5335,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>_IsMaintenance</td><td>2</td><td>Remove</td><td>0</td><td>90</td><td>118</td><td>14</td><td>##IDS__IsMaintenanceDlg_Remove##</td><td/><td>0</td></row>
 		<row><td>_IsSetupTypeMin</td><td>1</td><td>Typical</td><td>0</td><td>0</td><td>192</td><td>14</td><td>##IDS__IsSetupTypeMinDlg_Complete##</td><td/><td>0</td></row>
 		<row><td>_IsSetupTypeMin</td><td>2</td><td>GUI</td><td>0</td><td>73</td><td>193</td><td>14</td><td>##IDS__IsSetupTypeMinDlg_Custom##</td><td/><td>0</td></row>
-		<row><td>_IsSetupTypeMin</td><td>3</td><td>Collector</td><td>0</td><td>123</td><td>166</td><td>37</td><td>##NEW_STRING160##</td><td/><td>0</td></row>
+		<row><td>_IsSetupTypeMin</td><td>3</td><td>Collector</td><td>0</td><td>115</td><td>166</td><td>37</td><td>##NEW_STRING160##</td><td/><td>0</td></row>
 	</table>
 
 	<table name="RegLocator">
