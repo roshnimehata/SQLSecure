@@ -176,7 +176,7 @@ namespace Idera.SQLsecure.Collector.Sql
                             isContainedUser = cast(( case authentication_type
                                when 2 then 1
                                when 3 then  isnull((select top 1 0 from " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals cdp
-							    where cdp.principal_id=dp.principal_id 
+							    where cdp.principal_id=dp.principal_id and cdp.sid  in (SELECT sid FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.server_principals) 
 								and    type in ( 'U', 'S', 'G' )    
 								), 1)
 								else 0
