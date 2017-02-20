@@ -899,7 +899,7 @@
 		<row><td>SetupType</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>240</td><td>18</td><td>65539</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseSetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>DlgText</td><td>Text</td><td>152</td><td>67</td><td>112</td><td>14</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_SelectSetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>254</td><td>16</td><td>65539</td><td/><td>##IDS__IsSetupTypeMinDlg_SetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>Icon1</td><td>Icon</td><td>178</td><td>240</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary11</td></row>
+		<row><td>SetupType</td><td>Icon1</td><td>Icon</td><td>178</td><td>239</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary11</td></row>
 		<row><td>SetupType</td><td>ImageMain_All</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048576</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Overview</td></row>
 		<row><td>SetupType</td><td>ImageMain_GUI</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048576</td><td/><td/><td/><td/><td/><td/><td/><td>Image_GUI</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
