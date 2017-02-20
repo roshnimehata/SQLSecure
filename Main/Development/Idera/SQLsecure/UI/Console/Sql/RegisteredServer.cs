@@ -84,6 +84,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private String m_ReplicationEnabled;
         private String m_SaPasswordEmpty;
         private int m_LastSnapshotId;
+        private ServerType m_ServerType;
 
         Form_StartSnapshotJobAndShowProgress m_StartSnapshotForm;
 
@@ -187,6 +188,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
             set { m_ShowDataCollectionComplete = value; }
         }
 
+        public ServerType ServerType
+        {
+            get { return m_ServerType; }
+        }
+
         #endregion
 
         #region Queries & Constants
@@ -222,7 +228,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         serverisdomaincontroller,
                         replicationenabled,
                         sapasswordempty,
-                        auditfoldersstring
+                        auditfoldersstring,
+                        servertype
                       FROM SQLsecure.dbo.vwregisteredserver";
 
         private static string QueryGetRegisteredServer = QueryGetAllRegisteredServerBase + @" WHERE connectionname = @instance";
@@ -260,7 +267,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             ServerIsDomainController,
             ReplicationEnabled,
             SaPasswordEmpty,
-            AuditFoldersString
+            AuditFoldersString,
+            ServerType
         }
 
         // Is server registered.
@@ -356,6 +364,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_ReplicationEnabled = SqlHelper.GetString(rdr, (int)RegisteredServerColumn.ReplicationEnabled);
             m_SaPasswordEmpty = SqlHelper.GetString(rdr, (int)RegisteredServerColumn.SaPasswordEmpty);
             m_auditfoldersstring = rdr.GetSqlString((int)RegisteredServerColumn.AuditFoldersString);
+            m_ServerType = Helper.ConvertSQLTypeStringToEnum(rdr.GetString((int)RegisteredServerColumn.ServerType));
         }
 
         #endregion
