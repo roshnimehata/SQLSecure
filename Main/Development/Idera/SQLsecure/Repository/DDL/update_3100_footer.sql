@@ -592,7 +592,7 @@ FROM
                           severityvalues ,
                           reporttext ,
                           severity ,
-                          severityvalues ,
+                          reportkey ,
                           assessmentid
 		                )
                 VALUES
@@ -600,10 +600,10 @@ FROM
                           0 , -- policyid - int
                           @metricid , -- metricid - int
                           1 , -- isenabled - bit
-                          N'''12.0.2000.8''' , -- reportkey - nvarchar(32)
+                          N'''12.0.2000.8''' ,-- severityvalues - nvarchar(4000) 
                           N'Is Azure SQL Database below the minimum acceptable version?' , -- reporttext - nvarchar(4000)
                           1 , -- severity - int
-                          N'' , -- severityvalues - nvarchar(4000)
+                          N'' , -- reportkey - nvarchar(32)
                           0  -- assessmentid - int
                         );
             END;
