@@ -11,6 +11,7 @@ FROM
 		WHERE metricid in (
 		1,
 		15,
+		22,
 		54,
 		58,
 		76,
@@ -22,6 +23,7 @@ FROM
 		93,
 		102,
 		103,
+		113,
 		114
 		)
 		--END(Barkha Khatri) updating applicableonazuredb value for supported metrics
@@ -541,7 +543,73 @@ FROM
                           0  -- assessmentid - int
                         );
             END;
+-- Barkha Khatri SQLSecure3.1 adding new metric azure SQL DB version check
+-----Azure SQL Database Version
+        SELECT
+            @metricid = 125;
+        IF NOT EXISTS ( SELECT
+                            *
+                        FROM
+                            metric
+                        WHERE
+                            metricid = @metricid )
+            BEGIN  
+                INSERT  INTO dbo.metric
+                        (
+                          metricid ,
+                          metrictype ,
+                          metricname ,
+                          metricdescription ,
+                          isuserentered ,
+                          ismultiselect ,
+                          validvalues ,
+                          valuedescription,
+						  applicableonazuredb,
+						  applicableonazurevm,
+						  applicableonpremise
+		                )
+                VALUES
+                        (
+                          @metricid , -- metricid - int
+                          N'Configuration' , -- metrictype - nvarchar(32)
+                          N'Azure SQL Database Version' , -- metricname - nvarchar(256)
+                          N'Determine whether the Azure SQL Database is at an acceptable minimum version' , -- metricdescription - nvarchar(1024)
+                          1 , -- isuserentered - bit
+                          1 , -- ismultiselect - bit
+                          N'' , -- validvalues - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if the Azure SQL Database version is below the minimum acceptable level. Specify the minimum acceptable level for each Azure SQL Database version.',  -- valuedescription - nvarchar(1024),
+						  1, -- applicableonazuredb bit
+						  0, -- applicableonazurevm bit
+						  0	-- applicableonpremise bit								        
+                        );
+		
+		
+                INSERT  INTO dbo.policymetric
+                        (
+                          policyid ,
+                          metricid ,
+                          isenabled ,
+                          severityvalues ,
+                          reporttext ,
+                          severity ,
+                          severityvalues ,
+                          assessmentid
+		                )
+                VALUES
+                        (
+                          0 , -- policyid - int
+                          @metricid , -- metricid - int
+                          1 , -- isenabled - bit
+                          N'''12.0.2000.8''' , -- reportkey - nvarchar(32)
+                          N'Is Azure SQL Database below the minimum acceptable version?' , -- reporttext - nvarchar(4000)
+                          1 , -- severity - int
+                          N'' , -- severityvalues - nvarchar(4000)
+                          0  -- assessmentid - int
+                        );
+            END;
 
+			
+			
 ---------------------Update Policy Metrics with new checks--------------------------------------------------------------------------------------------------------
 
         IF (

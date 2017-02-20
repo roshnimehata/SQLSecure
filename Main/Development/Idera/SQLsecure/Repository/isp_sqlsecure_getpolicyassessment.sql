@@ -594,7 +594,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                 END;
                                                 -- SQL Server version
                                                 ELSE
-                                                IF (@metricid = 2)
+                                                IF (@metricid = 2 or @metricid = 125)
                                                 BEGIN
                                                         --make sure the version doesn't start with a 0 before comparing
                                                         SELECT
@@ -846,10 +846,20 @@ AS -- <Idera SQLsecure version and copyright>
                                                         SELECT
                                                                 @metricval = N'Current version is '
                                                                 + @version;
+														IF (@metricid = 2)
+														BEGIN
                                                         SELECT
                                                                 @metricthreshold = N'Acceptable levels for each SQL Server version are '
                                                                 + @severityvalues
                                                                 + N' and above.';
+														END;
+														ELSE IF (@metricid = 125)
+														BEGIN
+                                                        SELECT
+                                                                @metricthreshold = N'Acceptable levels for each Azure SQL Database version are '
+                                                                + @severityvalues
+                                                                + N' and above.';
+														END;
                                                 END;
                                                 -- SQL Authentication Enabled
                                                 ELSE
