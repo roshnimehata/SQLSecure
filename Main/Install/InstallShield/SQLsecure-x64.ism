@@ -5327,7 +5327,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>_IsMaintenance</td><td>2</td><td>Remove</td><td>0</td><td>90</td><td>118</td><td>14</td><td>##IDS__IsMaintenanceDlg_Remove##</td><td/><td>0</td></row>
 		<row><td>_IsSetupTypeMin</td><td>1</td><td>Typical</td><td>0</td><td>0</td><td>192</td><td>14</td><td>##IDS__IsSetupTypeMinDlg_Complete##</td><td/><td>0</td></row>
 		<row><td>_IsSetupTypeMin</td><td>2</td><td>GUI</td><td>0</td><td>73</td><td>193</td><td>14</td><td>##IDS__IsSetupTypeMinDlg_Custom##</td><td/><td>0</td></row>
-		<row><td>_IsSetupTypeMin</td><td>3</td><td>Collector</td><td>0</td><td>127</td><td>166</td><td>37</td><td>##NEW_STRING160##</td><td/><td>0</td></row>
+		<row><td>_IsSetupTypeMin</td><td>3</td><td>Collector</td><td>0</td><td>126</td><td>166</td><td>37</td><td>##NEW_STRING160##</td><td/><td>0</td></row>
 	</table>
 
 	<table name="RegLocator">
