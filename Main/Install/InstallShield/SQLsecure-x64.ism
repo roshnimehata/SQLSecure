@@ -892,7 +892,7 @@
 		<row><td>SetupResume</td><td>txtUpgrade</td><td>Text</td><td>151</td><td>7</td><td>272</td><td>25</td><td>65539</td><td/><td>##ID_STRING173##</td><td/><td>##ID_STRING175##</td><td/><td/><td/><td/></row>
 		<row><td>SetupType</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>Note</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>CompText1</td><td>Text</td><td>223</td><td>112</td><td>157</td><td>33</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_AllFeatures##</td><td>PushButton4</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>CompText1</td><td>Text</td><td>223</td><td>112</td><td>157</td><td>33</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_AllFeatures##</td><td>rbSetupType</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>CompText2</td><td>Text</td><td>224</td><td>187</td><td>164</td><td>35</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseFeatures##</td><td>CompText1</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>CompleteIco</td><td>Icon</td><td>178</td><td>112</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary10</td></row>
 		<row><td>SetupType</td><td>CustomIco</td><td>Icon</td><td>178</td><td>187</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary11</td></row>
@@ -903,10 +903,6 @@
 		<row><td>SetupType</td><td>ImageMain_GUI</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048576</td><td/><td/><td/><td/><td/><td/><td/><td>Image_GUI</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>Note</td><td>Text</td><td>178</td><td>150</td><td>223</td><td>16</td><td>3</td><td/><td>##NEW_STRING158##</td><td>CompText2</td><td/><td/><td/><td/><td/></row>
-		<row><td>SetupType</td><td>PushButton1</td><td>PushButton</td><td>209</td><td>44</td><td>94</td><td>11</td><td>3</td><td/><td>##NEW_STRING161##</td><td>PushButton2</td><td/><td/><td/><td/><td/></row>
-		<row><td>SetupType</td><td>PushButton2</td><td>PushButton</td><td>259</td><td>229</td><td>94</td><td>11</td><td>3</td><td/><td>##NEW_STRING162##</td><td>PushButton3</td><td/><td/><td/><td/><td/></row>
-		<row><td>SetupType</td><td>PushButton3</td><td>PushButton</td><td>347</td><td>91</td><td>94</td><td>11</td><td>3</td><td/><td>##NEW_STRING163##</td><td>rbSetupType</td><td/><td/><td/><td/><td/></row>
-		<row><td>SetupType</td><td>PushButton4</td><td>PushButton</td><td>131</td><td>225</td><td>94</td><td>11</td><td>3</td><td/><td>##NEW_STRING164##</td><td>PushButton1</td><td/><td/><td/><td/><td/></row>
 		<row><td>SetupType</td><td>rbSetupType</td><td>RadioButtonGroup</td><td>166</td><td>97</td><td>238</td><td>182</td><td>3</td><td>_IsSetupTypeMin</td><td>##IDS__IsSetupTypeMinDlg_13##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SplashBitmap</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SplashBitmap</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td/><td/><td>0</td><td/><td/><td/></row>
