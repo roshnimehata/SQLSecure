@@ -4525,7 +4525,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>NEW_STRING158</td><td>1033</td><td>{\Tahoma7Red}Note: Install locally on a SQL Server computer hosting the Repository.</td><td>0</td><td/><td>572318505</td></row>
 		<row><td>NEW_STRING159</td><td>1033</td><td>&amp;Cluster Installation </td><td>0</td><td/><td>1176634634</td></row>
 		<row><td>NEW_STRING16</td><td>1033</td><td>&amp;Next &gt;</td><td>0</td><td/><td>-199646929</td></row>
-		<row><td>NEW_STRING160</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Collector</td><td>0</td><td/><td>-1859844745</td></row>
+		<row><td>NEW_STRING160</td><td>1033</td><td>{&amp;MSSansBold8}&amp;RepoCollector</td><td>0</td><td/><td>-1591391610</td></row>
 		<row><td>NEW_STRING17</td><td>1033</td><td>Cancel</td><td>0</td><td/><td>-199642833</td></row>
 		<row><td>NEW_STRING173</td><td>1033</td><td>&amp;OK</td><td>0</td><td/><td>-2070198543</td></row>
 		<row><td>NEW_STRING174</td><td>1033</td><td>The database specified is an unsupported version.  The SQL diagnostic manager installer can not update this version of the database.</td><td>0</td><td/><td>-2070213742</td></row>
