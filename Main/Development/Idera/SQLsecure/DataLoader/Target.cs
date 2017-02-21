@@ -2820,26 +2820,26 @@ namespace Idera.SQLsecure.Collector
                     // Process database level objects.
 
 
-                    //    // Save the snapshot filters being used to the repository.
-                    //    sw.Reset();
-                    //    sw.Start();
-                    //    if (isOk)
-                    //    {
-                    //        isOk = processFilters(m_snapshotId);
-                    //        if (!isOk)
-                    //        {
-                    //            strNewMessage = "Failed to save filters to repository";
-                    //            PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
-                    //            snapshotStatus = Constants.StatusError;
-                    //        }
-                    //    }
-                    //    sw.Stop();
-                    //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                    //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                    //    logX.loggerX.Verbose("TIMING - Time to Save Filters = " + sw.ElapsedMilliseconds.ToString() +
-                    //                         " msec");
-                    //}
+                    // Save the snapshot filters being used to the repository.
+                    sw.Reset();
+                    sw.Start();
+                    if (isOk)
+                    {
+                        isOk = processFilters(m_snapshotId);
+                        if (!isOk)
+                        {
+                            strNewMessage = "Failed to save filters to repository";
+                            PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                            snapshotStatus = Constants.StatusError;
+                        }
+                    }
+                    sw.Stop();
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to Save Filters = " + sw.ElapsedMilliseconds.ToString() +
+                                         " msec");
                 }
+
                 int numErrorsAndWarnings = 0;
                 string strDoneStatus = null;
                 if (isOk)
