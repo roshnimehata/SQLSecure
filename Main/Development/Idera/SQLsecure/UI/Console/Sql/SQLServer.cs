@@ -15,6 +15,7 @@ using System.Diagnostics;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.UI.Console.SQL;
 using Idera.SQLsecure.UI.Console.Import.Models;
+using Idera.SQLsecure.UI.Console.Utility;
 
 namespace Idera.SQLsecure.UI.Console.Sql
 {
@@ -86,7 +87,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             {
                 case ServerType.OnPremise: return Utility.Activity.TypeServerOnPremise;
                 case ServerType.SQLServerOnAzureVM: return Utility.Activity.TypeServerAzureVM;
-                case ServerType.AzureDB: return Utility.Activity.TypeServerAzureDB;
+                case ServerType.AzureSQLDatabase: return Utility.Activity.TypeServerAzureDB;
                 
                 default: return Utility.Activity.TypeServerOnPremise;
 
