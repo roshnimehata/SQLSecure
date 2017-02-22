@@ -1364,21 +1364,24 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupResume</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>OutOfNoRbDiskSpace &lt;&gt; 1 and !Repository=3 and IS_MINOR_UPGRADE</td><td>3</td></row>
 		<row><td>SetupType</td><td>BackLarge</td><td>NewDialog</td><td>DestinationFolder</td><td>1</td><td>1</td></row>
 		<row><td>SetupType</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Collector</td><td>_IsSetupTypeMin = "Collector"</td><td>13</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Collector</td><td>_IsSetupTypeMin = "Collector"</td><td>16</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "GUI"</td><td>2</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "Typical"</td><td>7</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "Typical"</td><td>10</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "GUI"</td><td>5</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "Typical"</td><td>8</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Collector"</td><td>12</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Typical"</td><td>9</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI"</td><td>6</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector"</td><td>16</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical"</td><td>11</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "Typical"</td><td>11</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Collector"</td><td>15</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Typical"</td><td>12</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI"</td><td>9</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector"</td><td>19</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical"</td><td>14</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "GUI"</td><td>4</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "Typical"</td><td>10</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Console</td><td>_IsSetupTypeMin = "Collector"</td><td>14</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Reports</td><td>_IsSetupTypeMin = "Collector"</td><td>15</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "Typical"</td><td>13</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Console</td><td>_IsSetupTypeMin = "Collector"</td><td>17</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Reports</td><td>_IsSetupTypeMin = "Collector"</td><td>18</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Repository</td><td>_IsSetupTypeMin = "GUI"</td><td>3</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>[LAUNCHPROGRAM]</td><td>0</td><td>_IsSetupTypeMin = "Collector"</td><td>6</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>[LAUNCHPROGRAM]</td><td>1</td><td>_IsSetupTypeMin = "GUI"</td><td>8</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>[LAUNCHPROGRAM]</td><td>1</td><td>_IsSetupTypeMin = "Typical"</td><td>7</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>[SQLSERVER_AUTHENTICATION]</td><td>{}</td><td>_IsSetupTypeMin = "GUI"</td><td>1</td></row>
 		<row><td>SplashBitmap</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
 		<row><td>SplashBitmap</td><td>NextLarge</td><td>NewDialog</td><td>InstallWelcome</td><td>1</td><td>0</td></row>
@@ -3317,28 +3320,28 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>##ID_STRING231##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272652859</td></row>
 		<row><td>##ID_STRING235##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272652859</td></row>
 		<row><td>##ID_STRING239##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING243##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING247##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING251##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING255##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING259##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING243##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING247##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING251##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING255##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING259##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING263##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675329726</td></row>
-		<row><td>##ID_STRING267##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING271##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING275##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING267##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING271##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING275##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING279##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1550133816</td></row>
-		<row><td>##ID_STRING283##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING287##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING283##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING287##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING291##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING295##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING299##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING295##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING299##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING303##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING307##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING307##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING311##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675329726</td></row>
 		<row><td>##ID_STRING315##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
 		<row><td>##ID_STRING319##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675329726</td></row>
-		<row><td>##ID_STRING323##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING327##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING323##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING327##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING331##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272706075</td></row>
 		<row><td>##ID_STRING335##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272706075</td></row>
 		<row><td>##ID_STRING339##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272706075</td></row>
