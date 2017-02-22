@@ -399,7 +399,6 @@ namespace Idera.SQLsecure.UI.Console
 
             // File Menu
             _menuStrip_File_Connect.Image = AppIcons.AppImage16(AppIcons.Enum.Connect);
-            _menuStrip_Deploy_Repository.Image = AppIcons.AppImage16(AppIcons.Enum.Connect);
             // deleted - _menuStrip_File_ConnectionProperties.Image = AppIcons.AppImage16(AppIcons.Enum.Properties);
             _menuStrip_File_NewSQLServer.Image = AppIcons.AppImage16(AppIcons.Enum.AuditSQLServer);
             _menuStrip_File_NewLogin.Image = AppIcons.AppImage16(AppIcons.Enum.NewSQLsecureLogin);
@@ -1616,8 +1615,7 @@ namespace Idera.SQLsecure.UI.Console
         {
 
             this._menuStrip_File_Connect.ToolTipText = Utility.Constants.Menu_Descr_File_Connect;
-            this._menuStrip_Deploy_Repository.ToolTipText = Utility.Constants.Menu_Descr_Deploy_Repository;
-
+            
             // deleted - this._menuStrip_File_ConnectionProperties.ToolTipText = Utility.Constants.Menu_Descr_File_ConnectionProperties;
             this._menuStrip_File_NewSQLServer.ToolTipText = Utility.Constants.Menu_Descr_File_NewSQLServer;
             this._menuStrip_File_NewLogin.ToolTipText = Utility.Constants.Menu_Descr_File_NewLogin;
@@ -1672,14 +1670,7 @@ namespace Idera.SQLsecure.UI.Console
         {
             //Check for user option to connect/deploy repository.
             Cursor = Cursors.WaitCursor;
-            if (sender == _menuStrip_Deploy_Repository)
-            {
-                promptForConnection(false);
-            }
-            else
-            {
-                promptForConnection(true);
-            }
+            promptForConnection(true);
             Cursor = Cursors.Default;
         }
 
