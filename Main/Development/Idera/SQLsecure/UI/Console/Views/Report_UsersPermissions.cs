@@ -192,7 +192,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                             SqlParameter paramRunDate = new SqlParameter(SqlParamRunDate, m_reportDate);
                             SqlParameter paramUser = new SqlParameter(SqlParamUser, _textBox_User.Text.Trim());
                             SqlParameter paramServer = new SqlParameter(ReportParamServer, server);
-                            SqlParameter paramUserType = new SqlParameter(SqlParamUserType, Sql.LoginType.AzureADUser);
+                            SqlParameter paramUserType = new SqlParameter(SqlParamUserType, m_loginType);
                             SqlParameter paramPermission = new SqlParameter(SqlParamPermissionType, m_permissionType);
                             cmd.Parameters.Add(paramRunDate);
                             cmd.Parameters.Add(paramUser);
@@ -303,7 +303,7 @@ namespace Idera.SQLsecure.UI.Console.Views
                     SqlParameter paramRunDate = new SqlParameter(SqlParamRunDate, m_reportDate);
                     SqlParameter paramUser = new SqlParameter(SqlParamUser, _textBox_User.Text.Trim());
                     SqlParameter paramServer = new SqlParameter(ReportParamServer, getServerName(_comboBox_Server.Text));
-                    SqlParameter paramUserType = new SqlParameter(SqlParamUserType, Sql.LoginType.AzureADUser);
+                    SqlParameter paramUserType = new SqlParameter(SqlParamUserType, m_loginType);
                     SqlParameter paramPolicyid = new SqlParameter(SqlParamPolicyid, m_policyid);
                     SqlParameter paramUsebaseline = new SqlParameter(SqlParamUsebaseline, m_useBaseline);
                     cmd.Parameters.Add(paramRunDate);
