@@ -1244,27 +1244,30 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 tnServer.Tag = tag;
                 tnServer.ImageIndex = tnServer.SelectedImageIndex = tag.ImageIndex;
 
-                // Add server level environment node and environment level container nodes.
-                tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Environment);
-                TreeNode tnServerEnvironment = tnServer.Nodes.Add(tag.NodeName, tag.NodeName);
-                tnServerEnvironment.Tag = tag;
-                tnServerEnvironment.ImageIndex = tnServerEnvironment.SelectedImageIndex = tag.ImageIndex;
+                //SQLsecure 3.1 (Tushar)--Added support for AzureSQLDatabase.
+                if (m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
+                {
+                    // Add server level environment node and environment level container nodes.
+                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Environment);
+                    TreeNode tnServerEnvironment = tnServer.Nodes.Add(tag.NodeName, tag.NodeName);
+                    tnServerEnvironment.Tag = tag;
+                    tnServerEnvironment.ImageIndex = tnServerEnvironment.SelectedImageIndex = tag.ImageIndex;
 
-                tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.FileSystem);
-                tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
-                tn.Tag = tag;
-                tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.FileSystem);
+                    tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
+                    tn.Tag = tag;
+                    tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
 
-                tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Registry);
-                tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
-                tn.Tag = tag;
-                tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Registry);
+                    tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
+                    tn.Tag = tag;
+                    tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
 
-                tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Services);
-                tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
-                tn.Tag = tag;
-                tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
-
+                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Services);
+                    tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
+                    tn.Tag = tag;
+                    tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                }
                 // Add server level security node.
                 tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.ServerSecurity);
                 TreeNode tnServerSecurity = tnServer.Nodes.Add(tag.NodeName, tag.NodeName);
@@ -1281,8 +1284,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 tn.Tag = tag;
                 tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
 
+                //SQLsecure 3.1 (Tushar)--Added support for AzureSQLDatabase.
                 // Add server objects node if 2005 or higher.
-                if (m_Version > Sql.ServerVersion.SQL2000 && m_Version != Sql.ServerVersion.Unsupported)
+                if (m_Version > Sql.ServerVersion.SQL2000 && m_Version != Sql.ServerVersion.Unsupported && m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
                 {
                     tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.ServerObjects);
                     TreeNode svObjects = tnServer.Nodes.Add(tag.NodeName, tag.NodeName);

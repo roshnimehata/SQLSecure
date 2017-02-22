@@ -935,4 +935,11 @@ namespace Idera.SQLsecure.UI.Console.Utility
     }
 
     #endregion
+
+    public enum ServerType
+    {
+        OnPremise,//On-Premise
+        AzureSQLDatabase,//Azure SqlDatabase
+        SQLServerOnAzureVM//Azure VM
+    }
 }

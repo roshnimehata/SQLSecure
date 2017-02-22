@@ -30,16 +30,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            Infragistics.Win.ValueListItem connect_repository = new Infragistics.Win.ValueListItem();
-            Infragistics.Win.ValueListItem deploy_repository = new Infragistics.Win.ValueListItem();
-            this._label1 = new System.Windows.Forms.Label();
+           this._label1 = new System.Windows.Forms.Label();
             this._textBox_Server = new System.Windows.Forms.TextBox();
             this._button_Lookup = new Infragistics.Win.Misc.UltraButton();
             this._button_Cancel = new Infragistics.Win.Misc.UltraButton();
             this._button_OK = new Infragistics.Win.Misc.UltraButton();
             this.label1 = new System.Windows.Forms.Label();
             this.ultraButton_Help = new Infragistics.Win.Misc.UltraButton();
-            this.action_choice = new Infragistics.Win.UltraWinEditors.UltraOptionSet();
             this._username_label = new System.Windows.Forms.Label();
             this._password_label = new System.Windows.Forms.Label();
             this.username = new System.Windows.Forms.TextBox();
@@ -49,7 +46,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.windows_authentication = new System.Windows.Forms.RadioButton();
             this._bfd_ButtonPanel.SuspendLayout();
             this._bf_MainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.action_choice)).BeginInit();
             this.SuspendLayout();
             // 
             // _bfd_ButtonPanel
@@ -57,7 +53,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._bfd_ButtonPanel.Controls.Add(this.ultraButton_Help);
             this._bfd_ButtonPanel.Controls.Add(this._button_Cancel);
             this._bfd_ButtonPanel.Controls.Add(this._button_OK);
-            this._bfd_ButtonPanel.Location = new System.Drawing.Point(0, 284);
+            this._bfd_ButtonPanel.Location = new System.Drawing.Point(0, 254);
             this._bfd_ButtonPanel.Size = new System.Drawing.Size(451, 40);
             this._bfd_ButtonPanel.Controls.SetChildIndex(this._button_OK, 0);
             this._bfd_ButtonPanel.Controls.SetChildIndex(this._button_Cancel, 0);
@@ -72,12 +68,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._bf_MainPanel.Controls.Add(this.username);
             this._bf_MainPanel.Controls.Add(this._password_label);
             this._bf_MainPanel.Controls.Add(this._username_label);
-            this._bf_MainPanel.Controls.Add(this.action_choice);
+            //this._bf_MainPanel.Controls.Add(this.action_choice);
             this._bf_MainPanel.Controls.Add(this.label1);
             this._bf_MainPanel.Controls.Add(this._label1);
             this._bf_MainPanel.Controls.Add(this._textBox_Server);
             this._bf_MainPanel.Controls.Add(this._button_Lookup);
-            this._bf_MainPanel.Size = new System.Drawing.Size(451, 231);
+            this._bf_MainPanel.Size = new System.Drawing.Size(451, 201);
             // 
             // _bf_HeaderPanel
             // 
@@ -87,7 +83,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             this._label1.AutoSize = true;
             this._label1.BackColor = System.Drawing.Color.Transparent;
-            this._label1.Location = new System.Drawing.Point(12, 78);
+            this._label1.Location = new System.Drawing.Point(12, 48);
             this._label1.Name = "_label1";
             this._label1.Size = new System.Drawing.Size(65, 13);
             this._label1.TabIndex = 0;
@@ -95,7 +91,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _textBox_Server
             // 
-            this._textBox_Server.Location = new System.Drawing.Point(83, 76);
+            this._textBox_Server.Location = new System.Drawing.Point(83, 46);
             this._textBox_Server.Name = "_textBox_Server";
             this._textBox_Server.Size = new System.Drawing.Size(269, 20);
             this._textBox_Server.TabIndex = 1;
@@ -103,7 +99,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _button_Lookup
             // 
-            this._button_Lookup.Location = new System.Drawing.Point(358, 73);
+            this._button_Lookup.Location = new System.Drawing.Point(358, 43);
             this._button_Lookup.Name = "_button_Lookup";
             this._button_Lookup.Size = new System.Drawing.Size(24, 23);
             this._button_Lookup.TabIndex = 2;
@@ -134,7 +130,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(12, 51);
+            this.label1.Location = new System.Drawing.Point(12, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(346, 13);
             this.label1.TabIndex = 6;
@@ -149,29 +145,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraButton_Help.Text = "&Help";
             this.ultraButton_Help.Click += new System.EventHandler(this.ultraButton_Help_Click);
             // 
-            // action_choice
-            // 
-            this.action_choice.ItemOrigin = new System.Drawing.Point(10, 10);
-            connect_repository.DataValue = "Connect";
-            connect_repository.DisplayText = "Connect to Repository";
-            deploy_repository.DataValue = "Deploy";
-            deploy_repository.DisplayText = "Deploy Repository";
-            
-            this.action_choice.Items.AddRange(new Infragistics.Win.ValueListItem[] {
-            connect_repository,
-            deploy_repository});
-            this.action_choice.Location = new System.Drawing.Point(0, 0);
-            this.action_choice.Margin = new System.Windows.Forms.Padding(20);
-            this.action_choice.Name = "action_choice";
-            this.action_choice.Size = new System.Drawing.Size(500, 30);//SQLsecure (3.1)--Changing y-coordinates to make radio buttons appear horizontally
-            this.action_choice.TabIndex = 0;
-            this.action_choice.ValueChanged += new System.EventHandler(this.Action_choice_ValueChanged);
-            this.action_choice.CheckedIndex = button_index;
-            // 
             // _username_label
             // 
             this._username_label.AutoSize = true;
-            this._username_label.Location = new System.Drawing.Point(15, 150);
+            this._username_label.Location = new System.Drawing.Point(15, 120);
             this._username_label.Name = "_username_label";
             this._username_label.Size = new System.Drawing.Size(69, 13);
             this._username_label.TabIndex = 8;
@@ -180,7 +157,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // _password_label
             // 
             this._password_label.AutoSize = true;
-            this._password_label.Location = new System.Drawing.Point(20, 184);
+            this._password_label.Location = new System.Drawing.Point(20, 154);
             this._password_label.Name = "_password_label";
             this._password_label.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this._password_label.Size = new System.Drawing.Size(62, 13);
@@ -191,7 +168,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // username
             // 
             this.username.Enabled = false;
-            this.username.Location = new System.Drawing.Point(83, 147);
+            this.username.Location = new System.Drawing.Point(83, 117);
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(269, 20);
             this.username.TabIndex = 10;
@@ -200,7 +177,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // password
             // 
             this.password.Enabled = false;
-            this.password.Location = new System.Drawing.Point(83, 179);
+            this.password.Location = new System.Drawing.Point(83, 149);
             this.password.Name = "password";
             this.password.PasswordChar = '*';
             this.password.Size = new System.Drawing.Size(268, 20);
@@ -209,7 +186,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // azure_authentication
             // 
             this.azure_authentication.AutoSize = true;
-            this.azure_authentication.Location = new System.Drawing.Point(9, 113);
+            this.azure_authentication.Location = new System.Drawing.Point(9, 83);
             this.azure_authentication.Name = "azure_authentication";
             this.azure_authentication.Size = new System.Drawing.Size(70, 17);
             this.azure_authentication.TabIndex = 12;
@@ -221,7 +198,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // sql_authentication
             // 
             this.sql_authentication.AutoSize = true;
-            this.sql_authentication.Location = new System.Drawing.Point(77, 113);
+            this.sql_authentication.Location = new System.Drawing.Point(77, 83);
             this.sql_authentication.Name = "sql_authentication";
             this.sql_authentication.Size = new System.Drawing.Size(117, 17);
             this.sql_authentication.TabIndex = 13;
@@ -233,7 +210,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // windows_authentication
             // 
             this.windows_authentication.AutoSize = true;
-            this.windows_authentication.Location = new System.Drawing.Point(194, 113);
+            this.windows_authentication.Location = new System.Drawing.Point(194, 83);
             this.windows_authentication.Name = "windows_authentication";
             this.windows_authentication.Size = new System.Drawing.Size(140, 17);
             this.windows_authentication.TabIndex = 14;
@@ -256,7 +233,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._bfd_ButtonPanel.ResumeLayout(false);
             this._bf_MainPanel.ResumeLayout(false);
             this._bf_MainPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.action_choice)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -271,7 +247,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private Infragistics.Win.Misc.UltraButton _button_OK;
         private System.Windows.Forms.Label label1;
         private Infragistics.Win.Misc.UltraButton ultraButton_Help;
-        private Infragistics.Win.UltraWinEditors.UltraOptionSet action_choice;
         private System.Windows.Forms.Label _password_label;
         private System.Windows.Forms.Label _username_label;
         private System.Windows.Forms.TextBox password;
