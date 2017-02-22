@@ -499,6 +499,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string ReportSelect_LoginTypes_WindowsUsers = "Windows Users";
         public const string ReportSelect_LoginTypes_WindowsGroup = "Windows Groups";
         public const string ReportSelect_LoginTypes_SQLLogins = "SQL Logins";
+        public const string ReportSelect_LoginTypes_AzureADAccounts = "All Azure AD Accounts";  // SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure AD Users or Groups
+        public const string ReportSelect_LoginTypes_AzureADUser = "Azure AD User";
+        public const string ReportSelect_LoginTypes_AzureADGroup = "Azure AD Group";
 
         #endregion
 
