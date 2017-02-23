@@ -1274,8 +1274,23 @@ namespace Idera.SQLsecure.Collector.Sql
 			Debug.Assert(objid != null);
 
 			string query = null;
-
-			if (version == ServerVersion.SQL2000) // 2000
+            
+            if (serverType == ServerType.AzureSQLDatabase)   // Azure SQL database
+            {
+                // SQLSECU-1622 Secure 3.1 : 'Always Encryption' fails for Azure DB.
+                query = @"SELECT 
+							type = 'iCO', 
+							owner = null, 
+							schemaid = null, 
+							classid = 1,
+							parentobjectid = " + objid.ObjectId.ToString() + @", "
+                          + @"objectid = column_id, 
+							name, alwaysencryptiontype = encryption_type, isdatamasked = cast(isnull(is_masked,0) as bit), "
+                       + @"FQN = " + GetFullyQualifidColumnQuery(version, serverType, database, targetServerName, objid.ObjectId.ToString()) + @" "
+                      + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.columns "
+                      + @"WHERE object_id = " + objid.ObjectId.ToString();
+            }
+			else if (version == ServerVersion.SQL2000) // 2000
 			{
 				// For table valued function this query will return columns and parameters.
 				// We need to get rid of the parameters, otherwise we will have wrong information
