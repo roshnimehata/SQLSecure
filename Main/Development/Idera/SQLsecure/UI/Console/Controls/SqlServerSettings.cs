@@ -575,8 +575,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
                         row[colStartTime] = ((DateTime) row[colStartTime]).ToLocalTime();
                         row[colAuthMode] = Sql.RegisteredServer.AuthenticationModeStr((string)row[colAuthMode]);
-                        row[colAutomated] = Sql.RegisteredServer.YesNoStr((string)row[colAutomated]);
-                        row[colLoginAuditMode] = Sql.RegisteredServer.LoginAuditModeStr((string)row[colLoginAuditMode]);
+                        //Barkha Khatri (secure 3.1) Adding null check 
+                        row[colLoginAuditMode] = Sql.RegisteredServer.LoginAuditModeStr(row[colLoginAuditMode] == DBNull.Value ? null : (string)row[colLoginAuditMode]);
                         row[colEnableProxy] = Sql.RegisteredServer.YesNoStr((string)row[colEnableProxy]);
                         row[colC2] = Sql.RegisteredServer.YesNoStr((string)row[colC2]);
                         row[colCrossDb] = Sql.RegisteredServer.YesNoStr((string)row[colCrossDb]);
@@ -590,7 +590,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         row[colOleAutomationProceduresEnabled] = Sql.RegisteredServer.YesNoStr((string)row[colOleAutomationProceduresEnabled]);
                         row[colWebAssistantProceduresEnabled] = Sql.RegisteredServer.YesNoStr((string)row[colWebAssistantProceduresEnabled]);
                         row[colXp_cmdshellEnabled] = Sql.RegisteredServer.YesNoStr((string)row[colXp_cmdshellEnabled]);
-                        row[colHideInstance] = Sql.RegisteredServer.YesNoStr((string)row[colHideInstance]);
+                        //Barkha Khatri (secure 3.1) Adding null check 
+                        row[colHideInstance] = Sql.RegisteredServer.YesNoStr(row[colHideInstance] == DBNull.Value ? null : (string)row[colHideInstance]);
                         row[colAgentSysadminOnly] = Sql.RegisteredServer.YesNoStr((string)row[colAgentSysadminOnly]);
                         row[colDomainController] = Sql.RegisteredServer.YesNoStr((string)row[colDomainController]);
                         row[colSaPasswordEmpty] = Sql.RegisteredServer.YesNoStr((string)row[colSaPasswordEmpty]);
