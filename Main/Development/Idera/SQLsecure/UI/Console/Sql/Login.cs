@@ -400,7 +400,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
             Group,
             User,
             Unknown,
-            WellKnownGroup
+            WellKnownGroup,
+            //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+            AzureADUSer,
+            AzureADGroup
         }
 
         private bool m_IsValid;

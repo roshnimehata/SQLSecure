@@ -151,6 +151,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
         internal const string ServerRole = "R";
         internal const string Certificate = "C";
         internal const string AsymmetricKey = "K";
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        internal const string AzureADUSer = "E";
+        internal const string AzureADGroup = "X";
 
         internal const string SqlLoginText = "SQL Login";
         internal const string WindowsUserText = "Windows User";
@@ -158,6 +161,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
         internal const string ServerRoleText = "Server Role";
         internal const string CertificateText = "Certificate Mapped Login";
         internal const string AsymmetricKeyText = "Asymmetric Key Mapped Login";
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        internal const string AzureADUSerText = "Azure AD User";
+        internal const string AzureADGroupText = "Azure AD Group";
     }
 
     public static class DatabasePrincipalTypes
@@ -169,6 +175,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
         internal const string DatabaseRole = "R";
         internal const string Certificate = "C";
         internal const string AsymmetricKey = "K";
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        internal const string AzureADUser = "E";
+        internal const string AzureADGroup = "X";
 
         internal const string SqlLoginText = "SQL Login";
         internal const string WindowsUserText = "Windows User";
@@ -177,6 +186,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
         internal const string DatabaseRoleText = "Database Role";
         internal const string CertificateText = "Certificate Mapped User";
         internal const string AsymmetricKeyText = "Asymmetric Key Mapped User";
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        internal const string AzureADUsertext = "Azure AD USer";
+        internal const string AzureADGrouptext = "Azure AD Group";
     }
 
     public static class ServerLoginTypes
@@ -190,6 +202,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
         internal const string DistributionGroup = "DistributionGroup";
         internal const string WellknownGroup = "WellknownGroup";
         internal const string User = "User";
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        internal const string AzureADUser = "E";
+        internal const string AzureADGroup = "X";
 
         internal const string SqlLoginText = "SQL Login";
         internal const string WindowsUserText = "Windows User";
@@ -200,6 +215,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
         internal const string DistributionGroupText = "Distribution Group";
         internal const string WellknownGroupText = "Well-known Group";
         internal const string UserText = "Windows User";
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        internal const string AzureADUserText = "Azure AD user";
+        internal const string AzureADGrouptext = "Azure AD group";
     }
 
     public static class ServerAccessTypes
@@ -298,7 +316,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
             AvailabilityGroup,
             AvailabilityGroupReplica,
             SequenceObject,
-            LinkedServer
+            LinkedServer,
+            //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+            AzureADUser,
+            AzureADGroup
         }
 
         // TypeEnum/Object type string name map element.
@@ -403,7 +424,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
             "Always On Availability Group",
             "Availability Group Replica",
             "Sequence Object",
-            "LinkedServer"
+            "LinkedServer",
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+            "AzureADUser",
+            "AzureADGroup"
         };
 
         private static TypeStringElement[] m_TypeStringMap = new TypeStringElement[] {
@@ -517,6 +541,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 else if (string.Compare(type.Value, "G", true) == 0) { return TypeEnum.WindowsGroupLogin; }
                 else if (string.Compare(type.Value, "S", true) == 0) { return TypeEnum.SqlLogin; }
                 else if (string.Compare(type.Value, "R", true) == 0) { return TypeEnum.ServerRole; }
+                //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                else if (string.Compare(type.Value, "E", true) == 0) { return TypeEnum.AzureADUser; }
+                else if (string.Compare(type.Value, "X", true) == 0) { return TypeEnum.AzureADGroup; }
                 else 
                 { 
                     Debug.Assert(false, "Unknown login type"); 
@@ -670,17 +697,20 @@ namespace Idera.SQLsecure.UI.Console.Sql
             )
         {
             Debug.Assert(snapshotId != 0);
-            Debug.Assert(objType == ObjectType.TypeEnum.File
-                         || objType == ObjectType.TypeEnum.RegistryKey
-                         || objType == ObjectType.TypeEnum.Service
-                         || objType == ObjectType.TypeEnum.SqlLogin
-                         || objType == ObjectType.TypeEnum.WindowsGroupLogin
-                         || objType == ObjectType.TypeEnum.WindowsUserLogin
-                         || objType == ObjectType.TypeEnum.ServerRole
-                           || objType == ObjectType.TypeEnum.ServerRole
-                           || objType == ObjectType.TypeEnum.AvailabilityGroup
-                           || objType == ObjectType.TypeEnum.AvailabilityGroupReplica
-                         || objType == ObjectType.TypeEnum.Endpoint);
+            //Debug.Assert(
+            //             ObjType == ObjectType.TypeEnum.AzureADUser
+            //             || ObjType == ObjectType.TypeEnum.AzureADGroup
+            //             || objType == ObjectType.TypeEnum.File
+            //             || objType == ObjectType.TypeEnum.RegistryKey
+            //             || objType == ObjectType.TypeEnum.Service
+            //             || objType == ObjectType.TypeEnum.SqlLogin
+            //             || objType == ObjectType.TypeEnum.WindowsGroupLogin
+            //             || objType == ObjectType.TypeEnum.WindowsUserLogin
+            //             || objType == ObjectType.TypeEnum.ServerRole
+            //               || objType == ObjectType.TypeEnum.ServerRole
+            //               || objType == ObjectType.TypeEnum.AvailabilityGroup
+            //               || objType == ObjectType.TypeEnum.AvailabilityGroupReplica
+            //             || objType == ObjectType.TypeEnum.Endpoint);
             Debug.Assert(!string.IsNullOrEmpty(objectName));
 
             m_SnapshotId = snapshotId;
@@ -1025,7 +1055,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                        || m_ObjType == ObjectType.TypeEnum.AvailabilityGroupReplica
                        || m_ObjType == ObjectType.TypeEnum.AvailabilityGroup
                        || m_ObjType == ObjectType.TypeEnum.SequenceObject
-                       || m_ObjType == ObjectType.TypeEnum.FullTextCatalog);
+                       || m_ObjType == ObjectType.TypeEnum.FullTextCatalog
+                       //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                       || m_ObjType == ObjectType.TypeEnum.AzureADUser
+                       || m_ObjType == ObjectType.TypeEnum.AzureADGroup);
             }
         }
 

@@ -47,7 +47,16 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 _groupBox_SelectUser.Enabled =
                     _groupBox_Server.Enabled =
                     _label_Run.Enabled = true;
-
+                //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                if (m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
+                {
+                    SetViewForAzureSQLDatabase();
+                }
+                else
+                {
+                    ClearViewForOnPremise();
+                }
+                //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                 // if the user clicked off of the server and then back on it
                 // there will be no snapshot passed in from the tree, so
                 // make sure that it resets to the same snapshot that was shown
@@ -1016,6 +1025,16 @@ namespace Idera.SQLsecure.UI.Console.Controls
                                 dr[colIcon] = Sql.ObjectType.TypeImage16(Sql.ObjectType.TypeEnum.KeyAsymmetric);
                                 dr[colPrincipalType] = Sql.ServerPrincipalTypes.AsymmetricKeyText;
                                 break;
+                            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                            case Sql.ServerPrincipalTypes.AzureADUSer:
+                                dr[colIcon] = Sql.ObjectType.TypeImage16(Sql.ObjectType.TypeEnum.WindowsUserLogin);
+                                dr[colPrincipalType] = Sql.ServerPrincipalTypes.AzureADUSerText;
+                                break;
+                            case Sql.ServerPrincipalTypes.AzureADGroup:
+                                dr[colIcon] = Sql.ObjectType.TypeImage16(Sql.ObjectType.TypeEnum.WindowsGroupLogin);
+                                dr[colPrincipalType] = Sql.ServerPrincipalTypes.AzureADGroupText;
+                                break;
+                            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                             default:
                                 logX.loggerX.Warn("Unknown Login Type encountered in Server Login data");
                                 dr[colIcon] = Sql.ObjectType.TypeImage16(Sql.ObjectType.TypeEnum.Unknown);
@@ -1130,6 +1149,16 @@ namespace Idera.SQLsecure.UI.Console.Controls
                                 dr[colIcon] = Sql.ObjectType.TypeImage16(Sql.ObjectType.TypeEnum.KeyAsymmetric);
                                 dr[colDatabasePrincipalType] = Sql.DatabasePrincipalTypes.AsymmetricKeyText;
                                 break;
+                            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                            case Sql.DatabasePrincipalTypes.AzureADUser:
+                                dr[colIcon] = Sql.ObjectType.TypeImage16(Sql.ObjectType.TypeEnum.WindowsUserLogin);
+                                dr[colDatabasePrincipalType] = Sql.DatabasePrincipalTypes.AzureADUsertext;
+                                break;
+                            case Sql.DatabasePrincipalTypes.AzureADGroup:
+                                dr[colIcon] = Sql.ObjectType.TypeImage16(Sql.ObjectType.TypeEnum.WindowsGroupLogin);
+                                dr[colDatabasePrincipalType] = Sql.DatabasePrincipalTypes.AzureADGrouptext;
+                                break;
+                            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                             default:
                                 logX.loggerX.Warn("Unknown User Type encountered in Database User data");
                                 dr[colIcon] = Sql.ObjectType.TypeImage16(Sql.ObjectType.TypeEnum.Unknown);
@@ -2207,6 +2236,19 @@ namespace Idera.SQLsecure.UI.Console.Controls
             _toolStripProgressBar_Status.Visible = false;
             _statusStrip.Refresh();
         }
+        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        private void ClearViewForOnPremise()
+        {
+            _radioButton_WindowsUser.Text = "Window User or Group";
+            _radioButton_Server.Text = "Server Only";
+            _radioButton_Database.Text = "Server and Database";
+        }
+        
+        private void SetViewForAzureSQLDatabase()
+        {
+            _radioButton_WindowsUser.Text = "AzureAD User or Group";
+        }
+        //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
 
         #region Grid
 
@@ -2367,7 +2409,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             if (checkSnapshot())
             {
-                Sql.User user = Forms.Form_SelectUser.GetUser(m_snapshotId, m_loginType);
+                Sql.User user = Forms.Form_SelectUser.GetUser(m_snapshotId, m_loginType,m_serverInstance.ServerType);//SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
 
                 if (user != null)
                 {

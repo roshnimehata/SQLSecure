@@ -266,7 +266,8 @@ Permission\tab :
         {
             Cursor = Cursors.WaitCursor;
 
-            Sql.User user = Forms.Form_SelectUser.GetUser(m_SelectedSnapshotID, m_loginType);
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+            Sql.User user = Forms.Form_SelectUser.GetUser(m_SelectedSnapshotID, m_loginType, m_SelectedServer.ServerType);
 
             if (user != null)
             {
