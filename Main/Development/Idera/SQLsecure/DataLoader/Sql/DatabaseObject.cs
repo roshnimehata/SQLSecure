@@ -649,6 +649,8 @@ namespace Idera.SQLsecure.Collector.Sql
 
                     if (serverType == ServerType.AzureSQLDatabase)
                     {
+                        //Barkha Khatri - metric Id 22 
+                        //changing isencrypted logic - using sys.sql_modules definition column for it
                         query = @" SELECT 
 									a.type, 
 									owner = b.principal_id,         
@@ -658,7 +660,7 @@ namespace Idera.SQLsecure.Collector.Sql
 									objectid = a.object_id,                                     
 									a.name,
 									runatstartup = CASE WHEN ObjectProperty(a.object_id, 'ExecIsStartup') = 1 THEN 'Y' ELSE 'N' END,
-									isencypted = CASE WHEN isnull(c.encrypted,0) = 0 THEN 'N' ELSE 'Y' END,
+									isencypted =CASE WHEN c.definition is null THEN 'Y' ELSE 'N' END,
 									userdefined = case 
 													when is_ms_shipped = 1 then 'N'
 													when (
@@ -667,7 +669,7 @@ namespace Idera.SQLsecure.Collector.Sql
 														from 
 															sys.extended_properties 
 														where 
-														   major_id = object_id and 
+														   major_id = a.object_id and 
 															minor_id = 0 and 
 															class = 1 and 
 														   name = N'microsoft_database_tools_support') 
@@ -680,7 +682,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     @"FQN = " + GetADBFullyQualifidObjectQuery(database, targetServerName, "b.name", "a.name") + @" " +
                                     "FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
                                   + "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
-                                  + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.syscomments c ON (a.object_id = c.id and c.colid=1)"
+                                  + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.sql_modules c ON (a.object_id = c.object_id )"
                                   + "WHERE " + strScopeText + LIKEClause;
                     }
                     else if (version == ServerVersion.SQL2000) // 2000
@@ -1272,8 +1274,23 @@ namespace Idera.SQLsecure.Collector.Sql
 			Debug.Assert(objid != null);
 
 			string query = null;
-
-			if (version == ServerVersion.SQL2000) // 2000
+            
+            if (serverType == ServerType.AzureSQLDatabase)   // Azure SQL database
+            {
+                // SQLSECU-1622 Secure 3.1 : 'Always Encryption' fails for Azure DB.
+                query = @"SELECT 
+							type = 'iCO', 
+							owner = null, 
+							schemaid = null, 
+							classid = 1,
+							parentobjectid = " + objid.ObjectId.ToString() + @", "
+                          + @"objectid = column_id, 
+							name, alwaysencryptiontype = encryption_type, isdatamasked = cast(isnull(is_masked,0) as bit), "
+                       + @"FQN = " + GetFullyQualifidColumnQuery(version, serverType, database, targetServerName, objid.ObjectId.ToString()) + @" "
+                      + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.columns "
+                      + @"WHERE object_id = " + objid.ObjectId.ToString();
+            }
+			else if (version == ServerVersion.SQL2000) // 2000
 			{
 				// For table valued function this query will return columns and parameters.
 				// We need to get rid of the parameters, otherwise we will have wrong information

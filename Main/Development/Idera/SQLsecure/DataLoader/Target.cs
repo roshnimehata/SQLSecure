@@ -2820,26 +2820,26 @@ namespace Idera.SQLsecure.Collector
                     // Process database level objects.
 
 
-                    //    // Save the snapshot filters being used to the repository.
-                    //    sw.Reset();
-                    //    sw.Start();
-                    //    if (isOk)
-                    //    {
-                    //        isOk = processFilters(m_snapshotId);
-                    //        if (!isOk)
-                    //        {
-                    //            strNewMessage = "Failed to save filters to repository";
-                    //            PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
-                    //            snapshotStatus = Constants.StatusError;
-                    //        }
-                    //    }
-                    //    sw.Stop();
-                    //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                    //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                    //    logX.loggerX.Verbose("TIMING - Time to Save Filters = " + sw.ElapsedMilliseconds.ToString() +
-                    //                         " msec");
-                    //}
+                    // Save the snapshot filters being used to the repository.
+                    sw.Reset();
+                    sw.Start();
+                    if (isOk)
+                    {
+                        isOk = processFilters(m_snapshotId);
+                        if (!isOk)
+                        {
+                            strNewMessage = "Failed to save filters to repository";
+                            PostActivityMessage(ref strErrorMessage, strNewMessage, Collector.Constants.ActivityType_Error);
+                            snapshotStatus = Constants.StatusError;
+                        }
+                    }
+                    sw.Stop();
+                    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
+                                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
+                    logX.loggerX.Verbose("TIMING - Time to Save Filters = " + sw.ElapsedMilliseconds.ToString() +
+                                         " msec");
                 }
+
                 int numErrorsAndWarnings = 0;
                 string strDoneStatus = null;
                 if (isOk)
@@ -2964,15 +2964,15 @@ namespace Idera.SQLsecure.Collector
                     PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                     snapshotStatus = Constants.StatusWarning;
                 }
-                //Tushar--Commenting it, since server object is not created
+                
                 // Check if we read OS information successfull, & issue warning if we didn't
                 // -------------------------------------------------------------------------
-                //if (m_Server.NumWarnings > 0)
-                //{
-                //    strNewMessage = "Failed to load some OS settings";
-                //    PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //    snapshotStatus = Constants.StatusWarning;
-                //}
+                if (m_Server.NumWarnings > 0)
+                {
+                    strNewMessage = "Failed to load some OS settings";
+                    PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                    snapshotStatus = Constants.StatusWarning;
+                }
 
 
                 // Update Application and Event Log with start status
@@ -2998,91 +2998,91 @@ namespace Idera.SQLsecure.Collector
                 }
 
                 if (isOk)
-                //{
-                //    // Load SQLServer Settings from Registry of Target Server
-                //    if (registryPermissions == null)
-                //    {
-                //        registryPermissions =
-                //            new RegistryPermissions(m_snapshotId, /*m_Server.Name*/"52.172.42.105",
-                //                                    Idera.SQLsecure.Core.Accounts.Path.GetInstanceFromSQLServerInstance(TargetInstance),
-                //                                    m_VersionEnum);
-                //        int numWarnings = registryPermissions.LoadRegistrySettings();
-                //        if (numWarnings > 0)
-                //        {
-                //            //isOk = false;
-                //            strNewMessage = "Failed to load some registry configuration options for target SQL Server";
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //        //else
-                //        {
-                //            registryPermissions.WriteRegistrySettingsToRepository(m_Repository.ConnectionString);
-                //        }
-                //    }
-                //}
+                {
+                    // Load SQLServer Settings from Registry of Target Server
+                    if (registryPermissions == null)
+                    {
+                        registryPermissions =
+                            new RegistryPermissions(m_snapshotId, m_Server.Name,
+                                                    Idera.SQLsecure.Core.Accounts.Path.GetInstanceFromSQLServerInstance(TargetInstance),
+                                                    m_VersionEnum);
+                        int numWarnings = registryPermissions.LoadRegistrySettings();
+                        if (numWarnings > 0)
+                        {
+                            //isOk = false;
+                            strNewMessage = "Failed to load some registry configuration options for target SQL Server";
+                            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                            snapshotStatus = Constants.StatusWarning;
+                        }
+                        //else
+                        {
+                            registryPermissions.WriteRegistrySettingsToRepository(m_Repository.ConnectionString);
+                        }
+                    }
+                }
 
                 // Get SQLServer Services from Target
-                //if (isOk)
-                //{
-                //    string instanceName = Path.GetInstanceFromSQLServerInstance(TargetInstance);
-                //    string computerName = Path.WhackPrefixComputer(m_Server.Name);
-                //    sqlServices = new SQLServices(computerName, instanceName, m_VersionEnum);
-                //    if (sqlServices.GetSQLServices(m_Repository.ConnectionString, m_snapshotId) != 0)
-                //    {
-                //        // Don't abort if GetSQLServices Fails
-                //        strNewMessage = "Failed to load properties for some SQL Services on target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-                //}
+                if (isOk)
+                {
+                    string instanceName = Path.GetInstanceFromSQLServerInstance(TargetInstance);
+                    string computerName = Path.WhackPrefixComputer(m_Server.Name);
+                    sqlServices = new SQLServices(computerName, instanceName, m_VersionEnum);
+                    if (sqlServices.GetSQLServices(m_Repository.ConnectionString, m_snapshotId) != 0)
+                    {
+                        // Don't abort if GetSQLServices Fails
+                        strNewMessage = "Failed to load properties for some SQL Services on target SQL Server";
+                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                        snapshotStatus = Constants.StatusWarning;
+                    }
+                }
 
                 // Load Registry Permissions
-                //if (isOk)
-                //{
-                //    if (registryPermissions != null)
-                //    {
-                //        if (registryPermissions.ProcessRegistryPermissions(sqlServices.Services) != 0)
-                //        {
-                //            strNewMessage = "Failed to load registry permissions for target SQL Server";
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //        registryPermissions.WriteRegistryPermissionToRepository(m_Repository.ConnectionString, 0);
-                //    }
-                //}
+                if (isOk)
+                {
+                    if (registryPermissions != null)
+                    {
+                        if (registryPermissions.ProcessRegistryPermissions(sqlServices.Services) != 0)
+                        {
+                            strNewMessage = "Failed to load registry permissions for target SQL Server";
+                            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                            snapshotStatus = Constants.StatusWarning;
+                        }
+                        registryPermissions.WriteRegistryPermissionToRepository(m_Repository.ConnectionString, 0);
+                    }
+                }
 
                 // Load File Permissions
-                //if (isOk)
-                //{
-                //    if (filePermissions == null)
-                //    {
-                //        filePermissions = new FilePermissions(m_snapshotId, m_Server.Name, m_VersionEnum);
-                //    }
-                //    if (filePermissions.LoadFilePermissionsForInstallationDirectory(registryPermissions.InstallPath) != 0)
-                //    {
-                //        strNewMessage = "Failed to load file permissions for target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
+                if (isOk)
+                {
+                    if (filePermissions == null)
+                    {
+                        filePermissions = new FilePermissions(m_snapshotId, m_Server.Name, m_VersionEnum);
+                    }
+                    if (filePermissions.LoadFilePermissionsForInstallationDirectory(registryPermissions.InstallPath) != 0)
+                    {
+                        strNewMessage = "Failed to load file permissions for target SQL Server";
+                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                        snapshotStatus = Constants.StatusWarning;
+                    }
 
-                //    //for audit folders
-                //    foreach (string auditFolder in m_auditFolders)
-                //    {
-                //        if (filePermissions.LoadFilePermissionsForAuditDirectory(auditFolder) != 0)
-                //        {
-                //            strNewMessage = string.Format("Failed to load file permissions for '{0}' audit folder", auditFolder);
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //    }
+                    //for audit folders
+                    foreach (string auditFolder in m_auditFolders)
+                    {
+                        if (filePermissions.LoadFilePermissionsForAuditDirectory(auditFolder) != 0)
+                        {
+                            strNewMessage = string.Format("Failed to load file permissions for '{0}' audit folder", auditFolder);
+                            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                            snapshotStatus = Constants.StatusWarning;
+                        }
+                    }
 
-                //    if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
-                //    {
-                //        strNewMessage = "Failed to load file permissions for SQL Services on target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-                //}
+                    if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
+                    {
+                        strNewMessage = "Failed to load file permissions for SQL Services on target SQL Server";
+                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                        snapshotStatus = Constants.StatusWarning;
+                    }
+                }
 
                 // Get a list of databases, from the target SQL Server.
                 sw.Reset();
@@ -3114,36 +3114,36 @@ namespace Idera.SQLsecure.Collector
                 }
 
                 // Process Database File Permissions
-                //if (isOk)
-                //{
-                //    if (filePermissions.GetDatabaseFilePermissions(databases) != 0)
-                //    {
-                //        strNewMessage = "Failed to load some Database File permissions for target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
+                if (isOk)
+                {
+                    if (filePermissions.GetDatabaseFilePermissions(databases) != 0)
+                    {
+                        strNewMessage = "Failed to load some Database File permissions for target SQL Server";
+                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                        snapshotStatus = Constants.StatusWarning;
+                    }
 
-                //    filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
-                //                                                        registryPermissions.NumOSObjectsWrittenToRepository);
-                //}
-                //if (isOk)
-                //{
-                //    List<Account> users = new List<Account>();
-                //    List<Account> groups = new List<Account>();
-                //    List<string> wellKnownAccounts = null;
-                //    int numWarn = filePermissions.GetUsersAndGroups(ref users, ref groups);
-                //    numWarn += registryPermissions.GetUsersAndGroups(ref users, ref groups);
-                //    if (loadDomainInformation(m_snapshotId, true, users, groups, out wellKnownAccounts) != 0 || numWarn != 0)
-                //    {
-                //        //don't run this function because next code overwrites some snapshot results
-                //        //UpdateSuspectAccounts(true);
-                //        strNewMessage = "Suspect Windows accounts encountered processing OS objects";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-                //    // Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
+                    filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
+                                                                        registryPermissions.NumOSObjectsWrittenToRepository);
+                }
+                if (isOk)
+                {
+                    List<Account> users = new List<Account>();
+                    List<Account> groups = new List<Account>();
+                    List<string> wellKnownAccounts = null;
+                    int numWarn = filePermissions.GetUsersAndGroups(ref users, ref groups);
+                    numWarn += registryPermissions.GetUsersAndGroups(ref users, ref groups);
+                    if (loadDomainInformation(m_snapshotId, true, users, groups, out wellKnownAccounts) != 0 || numWarn != 0)
+                    {
+                        //don't run this function because next code overwrites some snapshot results
+                        //UpdateSuspectAccounts(true);
+                        strNewMessage = "Suspect Windows accounts encountered processing OS objects";
+                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                        snapshotStatus = Constants.StatusWarning;
+                    }
+                    // Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
 
-                //}
+                }
 
                 // Optimize the filters.
                 sw.Reset();

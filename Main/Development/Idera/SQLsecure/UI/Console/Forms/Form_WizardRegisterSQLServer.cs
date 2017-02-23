@@ -1068,20 +1068,23 @@ namespace Idera.SQLsecure.UI.Console.Forms
             {
                 m_Machine = machine;
                 m_Instance = instance;
-                m_Connection = connection;
+                
                 m_Version = version;
                 if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerOnPremise)
                 {
                     m_ServerType = "OP";
+                    m_Connection = connection;
                 }
                 else if(_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureDB)
                 {
                     m_ServerType = "ADB";
+                    m_Connection = connection;
                     m_ConnectionPort =Int32.Parse( _txtbx_PortNumber.Text);
                 }
                 else
                 {
                     m_ServerType = "AVM";
+                    m_Connection = _txtbx_Server.Text;
                     m_ConnectionPort = Int32.Parse(_txtbx_PortNumber.Text);
                 }
                 addEditFoldersControl.TargetServerName = m_Machine;
