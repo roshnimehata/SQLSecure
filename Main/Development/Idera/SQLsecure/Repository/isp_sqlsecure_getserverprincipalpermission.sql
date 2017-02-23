@@ -20,7 +20,7 @@ as
 					when classid=101 then (select name from serverprincipal where snapshotid = @snapshotid and principalid = a.majorid) 
 					when classid=105 then (select name from endpoint where snapshotid = @snapshotid and endpointid = a.majorid) 
 					else 'Server' end, 
-		objecttype=dbo.getclasstype(a.classid),
+		objecttype=case when exists(select 1 from registeredserver r join serversnapshot s on r.connectionname = s.connectionname where s.snapshotid = @snapshotid and servertype = 'ADB') then 'Server' else dbo.getclasstype(a.classid) end,
 		permission=a.permission, 
 		grantor=dbo.getserverprincipalname(a.snapshotid, a.grantor),
 		grantee=dbo.getserverprincipalname(a.snapshotid, a.grantee),
