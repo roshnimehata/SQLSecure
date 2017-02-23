@@ -43,21 +43,6 @@ namespace Idera.SQLsecure.UI.Console.Views
         // SQLsecure 3.1 (Anshul Aggarwal) - Dictionary that maps connection name to RegisteredServer so we can extract ServerType based on server dropdown.
         private Dictionary<string, RegisteredServer> _connectionNameToServer = new Dictionary<string, RegisteredServer>();
 
-        // SQLsecure 3.1 (Anshul Aggarwal) - Different values server for dropdown based server type.
-        private static List<string> _allServersLoginTypes = new List<string>(){
-            Utility.Constants.ReportSelect_LoginTypes_All, Utility.Constants.ReportSelect_LoginTypes_AllWindows, Utility.Constants.ReportSelect_LoginTypes_WindowsUsers,
-            Utility.Constants.ReportSelect_LoginTypes_WindowsGroup, Utility.Constants.ReportSelect_LoginTypes_AzureADAccounts, Utility.Constants.ReportSelect_LoginTypes_AzureADUser,
-            Utility.Constants.ReportSelect_LoginTypes_AzureADGroup, Utility.Constants.ReportSelect_LoginTypes_SQLLogins,
-        };
-        private static List<string> _azureSQLDatabaseLoginTypes = new List<string>(){
-            Utility.Constants.ReportSelect_LoginTypes_All, Utility.Constants.ReportSelect_LoginTypes_AzureADAccounts, Utility.Constants.ReportSelect_LoginTypes_AzureADUser,
-            Utility.Constants.ReportSelect_LoginTypes_AzureADGroup, Utility.Constants.ReportSelect_LoginTypes_SQLLogins,
-        };
-        private static List<string> _onPremiseDatabaseLoginTypes = new List<string>(){
-            Utility.Constants.ReportSelect_LoginTypes_All, Utility.Constants.ReportSelect_LoginTypes_AllWindows, Utility.Constants.ReportSelect_LoginTypes_WindowsUsers,
-            Utility.Constants.ReportSelect_LoginTypes_WindowsGroup, Utility.Constants.ReportSelect_LoginTypes_SQLLogins
-        };
-
         #endregion
 
         #region Ctors
@@ -94,10 +79,8 @@ namespace Idera.SQLsecure.UI.Console.Views
             _comboBox_Server.Items.Clear();
             _comboBox_Server.Items.Add(Utility.Constants.ReportSelect_AllServers);
             _comboBox_Server.Text = Utility.Constants.ReportSelect_AllServers;
-
-            //and a default for login types
-            _comboBox_Login.Items.Clear();
-            _allServersLoginTypes.ForEach(loginType => _comboBox_Login.Items.Add(loginType));   // SQLsecure 3.1 (Anshul Aggarwal) - Add login types for 'All Servers'
+            
+            PopulateLoginTypesDropdown(Utility.Constants.ReportSelect_AllServers);  // SQLsecure 3.1 (Anshul Aggarwal) - Add login types for 'All Servers'
             _comboBox_Login.SelectedItem = Utility.Constants.ReportSelect_LoginTypes_All;
 
             checkSelections();
@@ -273,6 +256,43 @@ namespace Idera.SQLsecure.UI.Console.Views
             _reportViewer.RefreshReport();
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Pupulate Login Types Dropdown based on selected server dropdown value.
+        /// </summary>
+        private void PopulateLoginTypesDropdown(string serverDropdownValue)
+        {
+            if (serverDropdownValue == Utility.Constants.ReportSelect_AllServers)
+            {
+                _comboBox_Login.Items.Clear();
+                _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_All);
+                _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_AllWindows);
+                _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_WindowsUsers);
+                _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_WindowsGroup);
+                _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_AzureADAccounts);
+                _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_AzureADUser);
+                _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_AzureADGroup);
+                _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_SQLLogins);
+            }
+            else if (_connectionNameToServer.ContainsKey(serverDropdownValue))
+            {
+                var server = _connectionNameToServer[serverDropdownValue];
+                _comboBox_Login.Items.Clear();
+                _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_All);
+                if (server.ServerType == ServerType.AzureSQLDatabase)
+                {
+                    _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_AzureADAccounts);
+                    _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_AzureADUser);
+                    _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_AzureADGroup);
+                }
+                else
+                {
+                    _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_AllWindows);
+                    _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_WindowsUsers);
+                    _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_WindowsGroup);
+                }
+                _comboBox_Login.Items.Add(Utility.Constants.ReportSelect_LoginTypes_SQLLogins);
+            }
+        }
         #endregion
 
         #region Filters
@@ -411,28 +431,16 @@ namespace Idera.SQLsecure.UI.Console.Views
                 _comboBox_Login.SuspendLayout();    // Suspend changes to dropdown
 
                 string selectedLoginType = _comboBox_Login.SelectedItem as string;
-                if (connectionname == Utility.Constants.ReportSelect_AllServers)
+                PopulateLoginTypesDropdown(connectionname); // Populate login types dropdown.
+                
+                // If current selected type is not found in the possible dropdown values, change to 'All Types'.
+                if (!_comboBox_Login.Items.Contains(selectedLoginType))
                 {
-                    _comboBox_Login.Items.Clear();
-                    _allServersLoginTypes.ForEach(loginType => _comboBox_Login.Items.Add(loginType));
-                    _comboBox_Login.SelectedItem = selectedLoginType;
+                    _comboBox_Login.SelectedItem = Utility.Constants.ReportSelect_LoginTypes_All;
                 }
-                else if (_connectionNameToServer.ContainsKey(connectionname))
+                else
                 {
-                    var server = _connectionNameToServer[connectionname];
-                    _comboBox_Login.Items.Clear();
-
-                    var dropdownValues = server.ServerType == ServerType.AzureSQLDatabase ? _azureSQLDatabaseLoginTypes : _onPremiseDatabaseLoginTypes;
-                    dropdownValues.ForEach(loginType => _comboBox_Login.Items.Add(loginType));
-                    if (!dropdownValues.Contains(selectedLoginType))
-                    {
-                        // If current selected type is not found in the possible dropdown values, change to 'All Types'.
-                        _comboBox_Login.SelectedItem = Utility.Constants.ReportSelect_LoginTypes_All;
-                    }
-                    else
-                    {
-                        _comboBox_Login.SelectedItem = selectedLoginType;
-                    }
+                    _comboBox_Login.SelectedItem = selectedLoginType;
                 }
 
                 SetUsersButtonState(); 
