@@ -62,6 +62,23 @@ AS
 					set @validuser = 'Y'
 	
 			end
+			else if (UPPER(@usertype) = 'E' or UPPER(@usertype) = 'X') -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD User or Group
+			begin
+				if (@iscasesensitive = 'Y')
+				begin
+
+					if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = UPPER(@usertype))
+						set @validuser = 'Y'
+
+				end
+				else
+				begin
+					if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = UPPER(@usertype))
+						set @validuser = 'Y'
+
+				end
+	
+			end
 			else
 			begin
 				if (@iscasesensitive = 'Y')
@@ -97,6 +114,10 @@ AS
 							SELECT @sid = sid FROM windowsaccount WHERE UPPER(name) = @user
 							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='W', @inputsid=@sid, @sqllogin='', @databasename=@databasename, @permissiontype=@permission
 						END
+						ELSE IF(@usertype = 'E' or @usertype = 'X')
+						BEGIN
+							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype=@usertype ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+						END
 						ELSE
 						BEGIN
 							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='S' ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
@@ -127,6 +148,23 @@ AS
 			if exists (select 1 from windowsaccount where snapshotid = @snapshotid and UPPER(name)= UPPER(@user))
 				set @validuser = 'Y'
 
+		end
+		else if (UPPER(@usertype) = 'E' or UPPER(@usertype) = 'X') -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD User or Group
+		begin
+			if (@iscasesensitive = 'Y')
+			begin
+
+				if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = UPPER(@usertype))
+					set @validuser = 'Y'
+
+			end
+			else
+			begin
+				if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = UPPER(@usertype))
+					set @validuser = 'Y'
+
+			end
+	
 		end
 		else
 		begin
@@ -164,6 +202,10 @@ AS
 					BEGIN
 						SELECT @sid = sid FROM windowsaccount WHERE snapshotid = @snapshotid and UPPER(name)= UPPER(@user)
 						EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='W', @inputsid=@sid, @sqllogin='', @databasename=@databasename, @permissiontype=@permission
+					END
+					ELSE IF(UPPER(@usertype) = 'E' or UPPER(@usertype) = 'X') -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD User or Group
+					BEGIN
+						EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype=@usertype ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
 					END
 					ELSE
 					BEGIN

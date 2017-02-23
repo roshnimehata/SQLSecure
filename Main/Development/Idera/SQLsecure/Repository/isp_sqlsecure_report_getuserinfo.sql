@@ -45,7 +45,7 @@ WHERE	d.registeredserverid IN (SELECT registeredserverid FROM #tmpservers)
 		AND c.snapshotid = b.snapshotid 
 		AND a.sid = b.usersid 
 		AND b.dbid = c.dbid 
-		AND a.type IN ('U', 'G', 'S')
+		AND a.type IN ('U', 'G', 'S', 'E', 'X')	 -- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure AD Users or Groups
 
 ORDER BY connectionname, loginname, logintype, databasename, username, isalias, hasaccess, defaultschema
 

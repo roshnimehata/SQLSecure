@@ -168,7 +168,6 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._comboBox_Login.Size = new System.Drawing.Size(144, 21);
             this._comboBox_Login.TabIndex = 5;
             this._comboBox_Login.SelectionChangeCommitted += new System.EventHandler(this._comboBox_Login_SelectionChangeCommitted);
-            this._comboBox_Login.DropDown += new System.EventHandler(this._comboBox_Login_DropDown);
             // 
             // _label_Database
             // 

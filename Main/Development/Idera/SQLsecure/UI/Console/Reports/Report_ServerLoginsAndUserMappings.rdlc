@@ -50,6 +50,18 @@
             <Value>SQL Login</Value>
             <Label>SQL Logins</Label>
           </ParameterValue>
+		 <ParameterValue>
+            <Value>Azure AD*</Value>
+            <Label>All Azure AD Accounts</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>Azure AD User</Value>
+            <Label>Azure AD Users</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>Azure AD Group</Value>
+            <Label>Azure AD Groups</Label>
+          </ParameterValue>
         </ParameterValues>
       </ValidValues>
     </ReportParameter>
