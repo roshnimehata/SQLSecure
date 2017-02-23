@@ -143,23 +143,48 @@ namespace Idera.SQLsecure.UI.Console.Forms
             _lbl_SQLServerVersionVal.Text = m_RegisteredServer.VersionFriendlyLong;
             _lbl_SQLServerEditionVal.Text = m_RegisteredServer.Edition;
             _lbl_ReplicationVal.Text = m_RegisteredServer.ReplicationEnabled;
-            if(type_of_server == "On-Premise SQL Server")
+            //Barkha Khatri(SQLSecure 3.1) - changing server properties page depending on server type
+            if(m_RegisteredServer.ServerType == ServerType.OnPremise)
             {
                 _lbl_SaVal.Text = m_RegisteredServer.SaPasswordEmpty;
                 _lbl_DcVal.Text = m_RegisteredServer.ServerIsDomainController;
             }
             else
             {
-                _grpbx_WindowsGMCredentials.Text = "Azure AD Credentials to gather Operating System and Active Directory objects";
-                label10.Text = resources.GetString("label10.TextAzure");
-                ultraTabControl_ServerProperties.Tabs.RemoveAt(2);
-                label2.Text = "Azure AD Account";
-                radioButton_WindowsAuth.Text = "“Azure Active Directory";
-                _lbl_Replication.Text = "Geo-Replication Enabled";
-                _lbl_SaVal.Hide();
-                _lbl_Sa.Hide();
-                _lbl_DcVal.Hide();
-                _lbl_Dc.Hide();
+                if (m_RegisteredServer.ServerType == ServerType.AzureSQLDatabase)
+                {
+                    _grpbx_WindowsGMCredentials.Text = "Azure Active Directory Credentials to gather Active Directory objects";
+                    label10.Text = resources.GetString("label10.AzureDbLabel");
+                    _lbl_Replication.Text = "Geo-Replication Enabled:";
+                    
+                    _lbl_Replication.Location = new System.Drawing.Point(30, 123);
+                    _lbl_SaVal.Hide();
+                    _lbl_Sa.Hide();
+                    _lbl_DcVal.Hide();
+                    _lbl_Dc.Hide();
+                    ultraTabControl_ServerProperties.Tabs.RemoveAt(2);
+                    groupBox1.Hide();
+                    _grpbx_Snapshot.Location = new System.Drawing.Point(17, 175);
+                }
+                else if (m_RegisteredServer.ServerType == ServerType.SQLServerOnAzureVM)
+                {
+                    _grpbx_WindowsGMCredentials.Text = "Azure AD Credentials to gather Operating System and Active Directory objects";
+                    label10.Text = resources.GetString("label10.AzureVMLabel");
+                }
+                
+                checkBox_UseSameAuth.Text = "Use same Azure AD Authentication as above";
+                //label10.Text = resources.GetString("label10.TextAzure");
+               
+                _lbl_WindowsUser.Text = "Azure AD Account:";
+                label2.Text = "Azure AD Account:";
+                label2.Location = new System.Drawing.Point(17, 46);
+                label9.Location = new System.Drawing.Point(17, 72);
+                _lbl_SqlLogin.Location = new System.Drawing.Point(17, 137);
+                _lbl_SqlLoginPassword.Location = new System.Drawing.Point(17, 163);
+                radioButton_WindowsAuth.Text = "Azure Active Directory";
+                
+               
+                
             }
             
 

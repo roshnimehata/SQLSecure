@@ -903,7 +903,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         try
                         {
                             showWorking.UpdateText(string.Format("Connecting to SQL Server {0}...", _txtbx_Server.Text.ToUpper()));
-                            
+                            //Barkha Khatri (SQLSecure 3.1) Removing protocol name from server name
+                            if (_txtbx_Server.Text.Contains(":"))
+                            {
+                                _txtbx_Server.Text = _txtbx_Server.Text.Split(':')[1];
+                            }
                             if (_comboBox_ServerType.SelectedItem!= Utility.Activity.TypeServerOnPremise)
                             {
                                 serverName = _txtbx_Server.Text + "," + _txtbx_PortNumber.Text;

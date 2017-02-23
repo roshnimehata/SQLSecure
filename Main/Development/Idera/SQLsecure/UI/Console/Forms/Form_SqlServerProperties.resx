@@ -189,4 +189,10 @@
   <data name="label10.TextAzure" xml:space="preserve">
     <value>Azure AD Credentials are used to connect to the target server to gather Active Directory objects and file and registry key permissions. The specified account must have admin access to the target server.</value>
   </data>
+<data name="label10.AzureDbLabel" xml:space="preserve">
+    <value>Azure AD Credentials are used to connect to the target server to gather Active Directory objects. The specified account must have admin access to the target server.</value>
+  </data>
+  <data name="label10.AzureVMLabel" xml:space="preserve">
+    <value>Azure AD Credentials are used to connect to the target server to gather Active Directory objects and file and registry key permissions. The specified account must have admin access to the target server.</value>
+  </data>
 </root>
