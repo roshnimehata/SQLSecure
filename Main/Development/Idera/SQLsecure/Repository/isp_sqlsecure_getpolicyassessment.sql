@@ -10035,7 +10035,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                     @sevcode = @sevcodeok,
                                                                     @metricval = N'N/A';
 													END 
-													SELECT @metricthreshold = N'Server is vulnerable if Azure SQL DB has unauthorized Server-Level Firewall rules.';
+													SELECT @metricthreshold = N'Server is vulnerable if Azure SQL DB has unauthorized Database-Level Firewall rules.';
 
 												END
                                                 
