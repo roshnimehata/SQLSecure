@@ -9331,7 +9331,7 @@ AS -- <Idera SQLsecure version and copyright>
 																	+ N'
 															and istdeencrypted = 0';
 															 
-															if(ISNULL(@severityvalues, '') <> '')
+															if(LOWER(ISNULL(@severityvalues, '')) <> 'none')
 																SELECT @sql += 'and FQN not in ('
 																	+ @severityvalues
 																	+ N')';
@@ -9408,7 +9408,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         @metricval = N'N/A';
 														END 
 														SELECT
-																@metricthreshold = N'Server is vulnerable if any SQL Server 2008 or later databases, Azure SQL DB have TDE disabled (other than ' + @severityvalues + ').';
+																@metricthreshold = N'Server is vulnerable if any SQL Server 2008 or later databases, Azure SQL DB have TDE disabled.';
 													END
 													ELSE
 													--Backup Encryption
@@ -9504,8 +9504,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         @sevcode = @sevcodeok,
                                                                         @metricval = N'N/A';
 														END     
-														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2014 or later databases have backup encryption disabled (other than: '
-																+ @severityvalues + ').';
+														SELECT @metricthreshold = N'Server is vulnerable if any SQL Server 2014 or later databases have backup encryption disabled';
 													END
 													ELSE
 													--Row-Level Security
@@ -10036,7 +10035,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                     @sevcode = @sevcodeok,
                                                                     @metricval = N'N/A';
 													END 
-													SELECT @metricthreshold = N'Server is vulnerable if Azure SQL DB has unauthorized Server-Level Firewall rules.';
+													SELECT @metricthreshold = N'Server is vulnerable if Azure SQL DB has unauthorized Database-Level Firewall rules.';
 
 												END
                                                 
