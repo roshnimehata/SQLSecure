@@ -662,7 +662,7 @@ namespace Idera.SQLsecure.Collector.Sql
 									runatstartup = CASE WHEN ObjectProperty(a.object_id, 'ExecIsStartup') = 1 THEN 'Y' ELSE 'N' END,
 									isencypted =CASE WHEN c.definition is null THEN 'Y' ELSE 'N' END,
 									userdefined = case 
-													when is_ms_shipped = 1 then 'N'
+													when a.is_ms_shipped = 1 then 'N'
 													when (
 														select 
 														  major_id 
@@ -678,12 +678,14 @@ namespace Idera.SQLsecure.Collector.Sql
 												  end ,
 								permission_set=null, 
 								createdate=null, 
-								modifydate=null, signedcrypttype = null, isrowsecurityenabled = cast(0 as bit), " +
+								modifydate=null, signedcrypttype = null, isrowsecurityenabled = cast(isnull(spo.is_enabled, 0) as bit), " +
                                     @"FQN = " + GetADBFullyQualifidObjectQuery(database, targetServerName, "b.name", "a.name") + @" " +
                                     "FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
                                   + "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
-                                  + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.sql_modules c ON (a.object_id = c.object_id )"
-                                  + "WHERE " + strScopeText + LIKEClause;
+                                  + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.sql_modules c ON (a.object_id = c.object_id ) LEFT JOIN "
+                                  + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.security_predicates AS spd ON (a.object_id = spd.target_object_id) LEFT JOIN "
+                                  + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.security_policies spo ON (spd.object_id = spo.object_id) "
+                                  + "WHERE " + strScopeText.Replace("type", "a.type") + LIKEClause;
                     }
                     else if (version == ServerVersion.SQL2000) // 2000
 					{

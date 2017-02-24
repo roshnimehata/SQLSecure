@@ -2,8 +2,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
 {
     partial class Form_SqlServerProperties
     {
-        public const string type_of_server = "SQL Server on Azure Virtual Machine";
-        //public static string type_of_server = "On-Premise SQL Server";
         /// <summary>
         /// Required designer variable.
         /// </summary>
