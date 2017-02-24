@@ -196,7 +196,8 @@ namespace Idera.SQLsecure.Collector.Sql
                             Principals.type, 
                             Principals.sid, 
                             serveraccess = CASE Permissions.state
-                                              WHEN 'G' THEN 'Y'
+                                              WHEN 'G' THEN 'Y' 
+                                              WHEN 'W' THEN 'Y' 
                                               ELSE 'N'
                                            END,
                             serverdeny = CASE Permissions.state
