@@ -47,12 +47,13 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                 if (m_ServerInstance.ServerType == ServerType.AzureSQLDatabase)
                 {
-                    
                     this._ultraTabControl.Tabs["_tab_WindowsAccounts"].Text = "Azure AD Accounts";
+                    this._ultraTabControl.Tabs["_tab_OSWindowsAccounts"].Visible = false;
                 }
                 else
                 {
                     this._ultraTabControl.Tabs["_tab_WindowsAccounts"].Text = "Windows Accounts";
+                    this._ultraTabControl.Tabs["_tab_OSWindowsAccounts"].Visible = true;
                 }
                 //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                 int snapshotid = ((Data.PermissionExplorer)contextIn).SnapShotId;

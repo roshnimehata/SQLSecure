@@ -700,20 +700,21 @@ namespace Idera.SQLsecure.UI.Console.Sql
             )
         {
             Debug.Assert(snapshotId != 0);
-            //Debug.Assert(
-            //             ObjType == ObjectType.TypeEnum.AzureADUser
-            //             || ObjType == ObjectType.TypeEnum.AzureADGroup
-            //             || objType == ObjectType.TypeEnum.File
-            //             || objType == ObjectType.TypeEnum.RegistryKey
-            //             || objType == ObjectType.TypeEnum.Service
-            //             || objType == ObjectType.TypeEnum.SqlLogin
-            //             || objType == ObjectType.TypeEnum.WindowsGroupLogin
-            //             || objType == ObjectType.TypeEnum.WindowsUserLogin
-            //             || objType == ObjectType.TypeEnum.ServerRole
-            //               || objType == ObjectType.TypeEnum.ServerRole
-            //               || objType == ObjectType.TypeEnum.AvailabilityGroup
-            //               || objType == ObjectType.TypeEnum.AvailabilityGroupReplica
-            //             || objType == ObjectType.TypeEnum.Endpoint);
+            Debug.Assert(
+                         objType == ObjectType.TypeEnum.File
+                         || objType == ObjectType.TypeEnum.RegistryKey
+                         || objType == ObjectType.TypeEnum.Service
+                         || objType == ObjectType.TypeEnum.SqlLogin
+                         || objType == ObjectType.TypeEnum.WindowsGroupLogin
+                         || objType == ObjectType.TypeEnum.WindowsUserLogin
+                         || objType == ObjectType.TypeEnum.ServerRole
+                           || objType == ObjectType.TypeEnum.ServerRole
+                           || objType == ObjectType.TypeEnum.AvailabilityGroup
+                           || objType == ObjectType.TypeEnum.AvailabilityGroupReplica
+                         || objType == ObjectType.TypeEnum.Endpoint
+                         || objType == ObjectType.TypeEnum.AzureADUser
+                         || objType == ObjectType.TypeEnum.AzureADGroup
+                         );
             Debug.Assert(!string.IsNullOrEmpty(objectName));
 
             m_SnapshotId = snapshotId;

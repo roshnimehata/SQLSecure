@@ -14,13 +14,16 @@ as
    -- Description :
    --             Get all explict server permissions belonging to a server login or role
    -- 	           
-
+   --SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database --if @serverType = 1 then snapshot is of ADB type server.      
+   DECLARE @serverType int;
+   SELECT serverType =case when exists(select 1 from registeredserver r join serversnapshot s on r.connectionname = s.connectionname where s.snapshotid = @snapshotid and servertype = 'ADB') then 1 else 0 end
+	
 	select 
 		objectname=case 
 					when classid=101 then (select name from serverprincipal where snapshotid = @snapshotid and principalid = a.majorid) 
 					when classid=105 then (select name from endpoint where snapshotid = @snapshotid and endpointid = a.majorid) 
 					else 'Server' end, 
-		objecttype=case when exists(select 1 from registeredserver r join serversnapshot s on r.connectionname = s.connectionname where s.snapshotid = @snapshotid and servertype = 'ADB') then 'Server' else dbo.getclasstype(a.classid) end,
+		objecttype = case when @serverType = 1 then 'Server' else dbo.getclasstype(a.classid) end ,
 		permission=a.permission, 
 		grantor=dbo.getserverprincipalname(a.snapshotid, a.grantor),
 		grantee=dbo.getserverprincipalname(a.snapshotid, a.grantee),
