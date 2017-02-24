@@ -16,7 +16,7 @@ as
    -- 	           
    --SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database --if @serverType = 1 then snapshot is of ADB type server.      
    DECLARE @serverType int;
-   SELECT serverType =case when exists(select 1 from registeredserver r join serversnapshot s on r.connectionname = s.connectionname where s.snapshotid = @snapshotid and servertype = 'ADB') then 1 else 0 end
+   SET @serverType =case when exists(select 1 from registeredserver r join serversnapshot s on r.connectionname = s.connectionname where s.snapshotid = @snapshotid and servertype = 'ADB') then 1 else 0 end
 	
 	select 
 		objectname=case 
