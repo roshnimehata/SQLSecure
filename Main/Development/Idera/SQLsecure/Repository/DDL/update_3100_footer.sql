@@ -134,7 +134,7 @@ FROM
                           1 , -- isuserentered - bit
                           1 , -- ismultiselect - bit
                           N'' , -- validvalues - nvarchar(1024)
-                          N'When enabled, this check will identify a risk if XXXXXXXX. Please specify in format [SERVER].[DATABASE] for DBs to be excluded.',  -- valuedescription - nvarchar(1024)
+                          N'When enabled, this check will identify a risk if XXXXXXXX. Please specify in format [SERVER].[DATABASE] for DBs to be excluded or none.',  -- valuedescription - nvarchar(1024)
 						  1, -- applicableonazuredb bit
 						  1, -- applicableonazurevm bit
 						  1	-- applicableonpremise bit											        
@@ -159,7 +159,7 @@ FROM
                           N'' , -- reportkey - nvarchar(32)
                           N'Is TDE enabled at the database level?' , -- reporttext - nvarchar(4000)
                           3 , -- severity - int
-                          N'' , -- severityvalues - nvarchar(4000)
+                          N'''none''' , -- severityvalues - nvarchar(4000)
                           0  -- assessmentid - int
                         );
             END;
