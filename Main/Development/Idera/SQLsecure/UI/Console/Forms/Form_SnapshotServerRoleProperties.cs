@@ -70,7 +70,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             List<Sql.Login> members = Sql.ServerRole.GetSnapshotServerRoleMembers(tag.SnapshotId, tag.ObjectId);
             foreach (Sql.Login l in members)
             {
-                dataTable.Rows.Add(Sql.ObjectType.TypeImage16(l.Type), l.Name, l.TypeStr);
+                //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database -- Using Windows user and group images for Azure AD user and group for now.
+                if (l.Type == Sql.ObjectType.TypeEnum.AzureADUser)
+                    dataTable.Rows.Add(Sql.ObjectType.TypeImage16(Sql.ObjectType.TypeEnum.WindowsUserLogin), l.Name, l.TypeStr);
+                else if(l.Type == Sql.ObjectType.TypeEnum.AzureADGroup)
+                    dataTable.Rows.Add(Sql.ObjectType.TypeImage16(Sql.ObjectType.TypeEnum.WindowsGroupLogin), l.Name, l.TypeStr);
+                else
+                    dataTable.Rows.Add(Sql.ObjectType.TypeImage16(l.Type), l.Name, l.TypeStr);
+                //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
             }
             _ultraGrid.BeginUpdate();
             _ultraGrid.DataSource = dataTable;

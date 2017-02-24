@@ -372,6 +372,14 @@ namespace Idera.SQLsecure.Core.Accounts
             }
             else
             {
+                //Start-SQLsecure 3.1 (Tushar)-- Added support for Azure SQL Database
+                index = account.IndexOf("@");
+                if (index != -1)
+                {
+                    user = account.Substring(0, index);
+                    domain = account.Substring(index +1,account.Length - index -1);
+                }
+                //End-SQLsecure 3.1 (Tushar)-- Added support for Azure SQL Database
                 user = account;
             }
         }
