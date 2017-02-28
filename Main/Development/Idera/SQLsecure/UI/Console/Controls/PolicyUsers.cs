@@ -41,6 +41,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 _ultraTabControl_Users.Tabs[tabKey_Windows].Visible = true;
                 _ultraTabControl_Users.Tabs[tabKey_AzureSQLDatabase].Visible = false;
             }
+            else if (m_serverInstance == null)
+            {
+                _ultraTabControl_Users.Tabs[tabKey_Windows].Visible = true;
+                _ultraTabControl_Users.Tabs[tabKey_AzureSQLDatabase].Visible = true;
+            }
             //End-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
             loadDataSource();
         }
