@@ -458,21 +458,44 @@ AS -- <Idera SQLsecure version and copyright>
 										
 										--START(Barkha Khatri) Changing metric cursor to get the metrics applicable on a particular server type
 										select @serverType=servertype from dbo.registeredserver where registeredserverid=@registeredserverid
-										DECLARE metriccursor CURSOR STATIC FOR
-										SELECT
-												metricid,
-												metricname,
-												metrictype,
-												metricdescription,
-												reportkey,
-												reporttext,
-												severity,
-												severityvalues
-										FROM vwpolicymetric
-										WHERE policyid = @policyid
-										AND assessmentid = @assessmentid
-										AND isenabled = 1
-										AND ((@serverType=@onpremiseservertype and applicableonpremise=1)OR (@serverType=@azuresqldatabaseservertype and applicableonazuredb=1)OR(@serverType=@sqlserveronazurevmservertype and applicableonazurevm=1)) ;
+										IF(@serverType=@onpremiseservertype OR @serverType=@sqlserveronazurevmservertype)
+										BEGIN
+											DECLARE metriccursor CURSOR STATIC FOR
+											SELECT
+													metricid,
+													metricname,
+													metrictype,
+													metricdescription,
+													reportkey,
+													reporttext,
+													severity,
+													severityvalues
+											FROM vwpolicymetric
+											WHERE policyid = @policyid
+											AND assessmentid = @assessmentid
+											AND isenabled = 1
+										END
+										ELSE 
+										BEGIN
+											DECLARE metriccursor CURSOR STATIC FOR
+											select b.metricid,
+													b.metricname,
+													a.metrictype,
+													b.metricdescription,
+													d.reportkey,
+													d.reporttext,
+													d.severity,
+													d.severityvalues
+											FROM [metric] a
+											INNER JOIN [metricextendedinfo] b on a.metricid=b.metricid
+											INNER JOIN [policymetric] c on b.metricid=c.metricid
+											INNER JOIN [policymetricextendedinfo] d on (d.metricid=c.metricid and c.policyid=d.policyid and c.assessmentid=d.assessmentid)
+											WHERE d.policyid = @policyid
+											AND d.assessmentid = @assessmentid
+											AND c.isenabled = 1
+											AND b.servertype=@servertype
+										END
+										
 										--END(Barkha Khatri) Changing metric cursor to get the metrics applicable on a particular server type
 										OPEN metriccursor;
                                         IF (@debug = 1)
@@ -4226,10 +4249,14 @@ AS -- <Idera SQLsecure version and copyright>
                                                 ELSE
                                                 IF (@metricid = 56)
                                                 BEGIN
+												print @baseline;
                                                         SELECT
+														
                                                                 @strval = ISNULL(@baseline,
                                                                 N''),
+																
                                                                 @severityvalues = N'Y';
+																print @baseline;
                                                         IF (@strval = @severityvalues)
                                                                 SELECT
                                                                         @sevcode = @sevcodeok,
