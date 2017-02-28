@@ -460,11 +460,6 @@ namespace Idera.SQLsecure.UI.Console.Controls
             bool bAllowContinue = true;
             refreshSort = false;
            
-            if (!OKToSave())
-            {
-                return false;
-            }
-
             if (row.Cells[colReportKey].Value.ToString() != textBox_ReportKey.Text
                             || (radioButton_SeverityLow.Checked && row.Cells[colSeverity].Value.ToString() != "1")
                             || (radioButton_SeverityMedium.Checked && row.Cells[colSeverity].Value.ToString() != "2")
@@ -625,8 +620,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             }
 
             row.Cells[colSeverityValues].Value = values.ToString();
-
-            //UpdateEnabledCount();
+            
             return bAllowContinue;
         }
 

@@ -208,54 +208,52 @@ namespace Idera.SQLsecure.UI.Console.Controls
         /// <summary>
         /// SQLsecure 3.1 (Anshul Aggarwal) - Checks if current configuration is valid or not.
         /// </summary>
-        public bool OKToSave(UltraTab tabToCheck = null)
+        public bool OKToSave()
         {
-            bool ok = true;
-            Infragistics.Win.UltraWinGrid.UltraGridRow row = ultraGridPolicyMetrics.ActiveRow;
+            UltraGridRow row = ultraGridPolicyMetrics.ActiveRow;
             if (row != null && row.IsDataRow)
             {
-                Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED];
+                UltraGridCell cell = row.Cells[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED];
                 var policyMetric = row.ListObject as PolicyMetric;
                 if (policyMetric != null && cell != null && cell.Value is bool && (bool)cell.Value == true)
                 {
-                   
                     if (row.IsDataRow && policyMetric != null)
                     {
-                        if(tabToCheck == null)  // Check both Tabs
+                        bool okOnPremise = false;
+                        bool okADB = false;
+                        if (policyMetric.ApplicableOnPremise)
                         {
-                            if (policyMetric.ApplicableOnPremise && ok)
+                            okOnPremise = sqlServerCriteriaControl.OKToSave();
+                        }
+
+                        // SQLsecure 3.1 (Anshul Aggarwal) - Even if a single tab is valid, we will accept it.
+                        if (!policyMetric.ApplicableOnPremise || (policyMetric.ApplicableOnAzureDB && !okOnPremise))
+                        {
+                            okADB = azureSQLDatabaseCriteriaControl.OKToSave();
+                        }
+
+
+                        bool ok = (policyMetric.ApplicableOnPremise && okOnPremise) || (policyMetric.ApplicableOnAzureDB && okADB);
+                        if (!ok)
+                        {
+                            //  SQLsecure 3.1 (Anshul Aggarwal) - Switch to the tab that is invalid.
+                            if (policyMetric.ApplicableOnPremise && !okOnPremise)
                             {
-                                ok = sqlServerCriteriaControl.OKToSave();
+                                ultraTabControl1.SelectedTab = ultraTabControl1.Tabs[0];
+                            }
+                            else if (policyMetric.ApplicableOnAzureDB && !okADB)
+                            {
+                                ultraTabControl1.SelectedTab = ultraTabControl1.Tabs[1];
                             }
 
-                            if (policyMetric.ApplicableOnAzureDB && ok)
-                            {
-                                ok = azureSQLDatabaseCriteriaControl.OKToSave();
-                            }
+                            MsgBox.ShowError("Security Checks",
+                                             "This security check requires at least one criteria be specified.\n\nEither specify a criteria or disable this security check.");
                         }
-                        else if(tabToCheck == ultraTabControl1.Tabs[0]) // SQL Server Tab
-                        {
-                            if (policyMetric.ApplicableOnPremise && ok)
-                            {
-                                ok = sqlServerCriteriaControl.OKToSave();
-                            }
-                        }
-                        else if (tabToCheck == ultraTabControl1.Tabs[1]) // Azure SQL DB Tab
-                        {
-                            if (policyMetric.ApplicableOnAzureDB && ok)
-                            {
-                                ok = azureSQLDatabaseCriteriaControl.OKToSave();
-                            }
-                        }
+                        return ok;
                     }
                 }
             }
-            if(!ok)
-            {
-                MsgBox.ShowError("Security Checks",
-                                 "This security check requires at least one criteria be specified.\n\nEither specify a criteria or disable this security check.");                
-            }
-            return ok;
+            return true;
         }
 
         public void SaveMetricChanges(Policy policy)
@@ -762,36 +760,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         }
 
         #endregion
-
-        #region Tab functions
-
-        /// <summary>
-        /// SQLsecure 3.1 (Anshul Aggarwal) - Suspend tab change if current tab configuration is not valid.
-        /// </summary>
-        private void ultraTabControl1_SelectedTabChanged(object sender, SelectedTabChangedEventArgs e)
-        {
-            UltraTab originalTab = e.Tab;
-            if (ultraTabControl1.Tabs[0].Visible && ultraTabControl1.Tabs[1].Visible)
-            {
-                if (e.Tab == ultraTabControl1.Tabs[0])
-                {
-                    originalTab = ultraTabControl1.Tabs[1];
-                }
-                else
-                {
-                    originalTab = ultraTabControl1.Tabs[0];
-                }
-            }
-            if (!OKToSave(originalTab))
-            {
-                ultraTabControl1.SelectedTabChanged -= ultraTabControl1_SelectedTabChanged;
-                ultraTabControl1.SelectedTab = originalTab;
-                ultraTabControl1.SelectedTabChanged += ultraTabControl1_SelectedTabChanged;
-            }
-        }
-
-        #endregion
-
+        
         #endregion
     }
 

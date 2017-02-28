@@ -460,6 +460,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ValidValues; }
         }
+
         public string ADBValueDescription
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ValueDescription; }
@@ -570,6 +571,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                                 policyMetricList.Add(policyMetric);
                             }
                         }
+
+                        logX.loggerX.Info("Retrieving Policies Metrics Extended Information.");
 
                         // SQLsecure 3.1 (Anshul Aggarwal) - Fetch extended info values for metrics.      
                         using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,

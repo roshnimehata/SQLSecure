@@ -167,7 +167,6 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraTab1,
             ultraTab2});
             this.ultraTabControl1.SelectedTab = ultraTab1;
-            this.ultraTabControl1.SelectedTabChanged += new Infragistics.Win.UltraWinTabControl.SelectedTabChangedEventHandler(this.ultraTabControl1_SelectedTabChanged);
             // 
             // groupBox1
             // 
@@ -281,7 +280,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridColumn16.Hidden = true;
             ultraGridColumn17.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Append;   // ADB MetricName
             ultraGridColumn17.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect;
-            ultraGridColumn17.Header.Caption = "Name (ADB)";
+            ultraGridColumn17.Header.Caption = "Name (Azure)";
             ultraGridColumn17.Header.VisiblePosition =17;
             ultraGridColumn17.Width = 237;
             ultraGridColumn17.Hidden = true;
@@ -290,19 +289,19 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridColumn18.Hidden = true;
             ultraGridColumn19.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Append;  // ADB ReportKey
             ultraGridColumn19.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect;
-            ultraGridColumn19.Header.Caption = "Cross Ref (ADB)";
+            ultraGridColumn19.Header.Caption = "Cross Ref (Azure)";
             ultraGridColumn19.Header.VisiblePosition = 19;
             ultraGridColumn19.Hidden = true;
             ultraGridColumn19.Width = 87;
             ultraGridColumn20.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Append;  // ADB ReportText
             ultraGridColumn20.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect;
-            ultraGridColumn20.Header.Caption = "Report Text (ADB)";
+            ultraGridColumn20.Header.Caption = "Report Text (Azure)";
             ultraGridColumn20.Header.VisiblePosition = 20;
             ultraGridColumn20.Hidden = true;
             ultraGridColumn20.Width = 237;
             ultraGridColumn21.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.None;    // ADB Severity
             ultraGridColumn21.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect;
-            ultraGridColumn21.Header.Caption = "Risk Level (ADB)";
+            ultraGridColumn21.Header.Caption = "Risk Level (Azure)";
             ultraGridColumn21.Header.VisiblePosition = 21;
             ultraGridColumn21.Hidden = true;
             ultraGridColumn21.Width = 87;
