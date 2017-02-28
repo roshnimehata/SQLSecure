@@ -37,11 +37,56 @@ SELECT @usebaseline = case when assessmentstate in (N'C', N'S') then @usebaselin
 		policyid = @policyid
 		and assessmentid = @assessmentid
 
-SELECT	* 
-FROM	vwserversnapshot
+--SQLsecure 3.1 (Tushar)--Returning server type to support azure sql databases.
+SELECT	vwss.[connectionname]
+      ,vwss.[servername]
+      ,vwss.[instancename]
+      ,vwss.[authenticationmode]
+      ,vwss.[os]
+      ,vwss.[version]
+      ,vwss.[edition]
+      ,vwss.[status]
+      ,vwss.[starttime]
+      ,vwss.[endtime]
+      ,vwss.[automated]
+      ,vwss.[numobject]
+      ,vwss.[numpermission]
+      ,vwss.[numlogin]
+      ,vwss.[numwindowsgroupmember]
+      ,vwss.[baseline]
+      ,vwss.[baselinecomment]
+      ,vwss.[snapshotcomment]
+      ,vwss.[loginauditmode]
+      ,vwss.[enableproxyaccount]
+      ,vwss.[enablec2audittrace]
+      ,vwss.[crossdbownershipchaining]
+      ,vwss.[casesensitivemode]
+      ,vwss.[hashkey]
+      ,vwss.[snapshotid]
+      ,vwss.[registeredserverid]
+      ,vwss.[collectorversion]
+      ,vwss.[allowsystemtableupdates]
+      ,vwss.[remoteadminconnectionsenabled]
+      ,vwss.[remoteaccessenabled]
+      ,vwss.[scanforstartupprocsenabled]
+      ,vwss.[sqlmailxpsenabled]
+      ,vwss.[databasemailxpsenabled]
+      ,vwss.[oleautomationproceduresenabled]
+      ,vwss.[webassistantproceduresenabled]
+      ,vwss.[xp_cmdshellenabled]
+      ,vwss.[agentmailprofile]
+      ,vwss.[hideinstance]
+      ,vwss.[agentsysadminonly]
+      ,vwss.[serverisdomaincontroller]
+      ,vwss.[replicationenabled]
+      ,vwss.[sapasswordempty]
+      ,vwss.[systemdrive]
+      ,vwss.[adhocdistributedqueriesenabled]
+      ,vwss.[weakpassworddectectionenabled] , r.serverType
+FROM	vwserversnapshot vwss JOIN registeredserver r on r.connectionname = vwss.connectionname
 WHERE	snapshotid IN (SELECT snapshotid FROM dbo.getsnapshotlist(@rundate, @usebaseline))
-		AND registeredserverid IN (SELECT registeredserverid FROM #tmpservers)
-		AND registeredserverid = case when @registeredserverid = 0 then registeredserverid else @registeredserverid end
+		AND vwss.registeredserverid IN (SELECT registeredserverid FROM #tmpservers)
+		AND vwss.registeredserverid = case when @registeredserverid = 0 then vwss.registeredserverid else @registeredserverid end
 
 DROP TABLE #tmpservers
 
