@@ -456,7 +456,7 @@ FROM
                         1 , -- isuserentered - bit
                         1 , -- ismultiselect - bit
                         N'' , -- validvalues - nvarchar(1024)
-                        N'When enabled, this check will identify a risk if always encryption is not configured for specified columns on SQL Server 2016 or later. Please specify in [Server].[Database].[Schema].Table].[Column] format.'  -- valuedescription - nvarchar(1024)							        
+                        N'When enabled, this check will identify a risk if always encryption is not configured for specified columns on SQL Server 2016 or later. Please specify in [Server].[Database].[Schema].[Table].[Column] format.'  -- valuedescription - nvarchar(1024)							        
                     );
 		
             INSERT  INTO dbo.policymetric
@@ -498,7 +498,7 @@ FROM
                         N'Always Encrypted' , -- metricname - nvarchar(256)
                         N'Determine whether always encryption is configured for specified columns on Azure SQL Database.' , -- metricdescription - nvarchar(1024)
                         N'' , -- validvalues - nvarchar(1024)
-                        N'When enabled, this check will identify a risk if always encryption is not configured for specified columns on Azure SQL Database. Please specify in [Server].[Database].[Schema].Table].[Column] format.'  -- valuedescription - nvarchar(1024)							        
+                        N'When enabled, this check will identify a risk if always encryption is not configured for specified columns on Azure SQL Database. Please specify in [Server].[Database].[Schema].[Table].[Column] format.'  -- valuedescription - nvarchar(1024)							        
                     );
 		
             INSERT  INTO dbo.policymetricextendedinfo
