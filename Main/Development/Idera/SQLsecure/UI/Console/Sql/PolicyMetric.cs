@@ -45,34 +45,13 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private SqlInt32 m_Severity;
         private SqlString m_SeverityValues;
         private bool m_isSelected = true;
+        private PolicyMetricConfiguration m_AzureSQLDatabaseConfiguration; 
 
         [XmlIgnoreAttribute]
         private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Sql.PolicyMetric");
         [XmlIgnoreAttribute]
         private bool m_dirty = false;
-
-
-        private enum PolicyColumn
-        {
-            PolicyId = 0,
-            AssessmentId,
-            PolicyName,
-            MetricId,
-            MetricType,
-            MetricName,
-            MetricDescription,
-            IsUserEntered,
-            IsMultiSelect,
-            ValidValues,
-            ValueDescription,
-            IsEnabled,
-            ReportKey,
-            ReportText,
-            Severity,
-            SeverityValues
-        }
-
-
+        
         #endregion
 
         #region Querries
@@ -98,10 +77,37 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 FROM SQLsecure.dbo.vwpolicymetric 
                 WHERE policyid = @policyid";
 
+        private const string QueryGetMetricsExtendedInfo =
+          @"SELECT
+	        a.policyid,
+	        a.assessmentid, 
+	        a.metricid,
+            a.servertype,
+	        b.metricname,
+	        b.metricdescription,
+	        b.validvalues,
+	        b.valuedescription,
+	        a.reportkey,
+	        a.reporttext,
+	        a.severity,
+	        a.severityvalues
+        FROM 
+	        SQLsecure.dbo.policymetricextendedinfo a,
+	        SQLsecure.dbo.metricextendedinfo b,
+            SQLsecure.dbo.assessment c 
+        WHERE a.metricid = b.metricid AND 
+              a.assessmentid = c.assessmentid AND 
+            a.policyid = @policyid";
+
         private const string QueryGetPolicyMetrics = QueryGetMetrics +
                                                      @" AND assessmentstate = N'" + Utility.Policy.AssessmentState.Settings + @"'";
         private const string QueryGetAssessmentMetrics = QueryGetMetrics +
                                                      @" AND assessmentid = @assessmentid";
+
+        private const string QueryGetPolicyMetricsExtendedInfo = QueryGetMetricsExtendedInfo +
+                                                    @" AND assessmentstate = N'" + Utility.Policy.AssessmentState.Settings + @"'";
+        private const string QueryGetAssessmentMetricsExtendedInfo = QueryGetMetricsExtendedInfo +
+                                                     @" AND a.assessmentid = @assessmentid";
 
         private const string ParamPolicyId = "policyid";
         private const string ParamAssessmentId = "@assessmentid";
@@ -115,6 +121,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private const string SPParamReportText = "@reporttext";
         private const string SPParamSeverity = "@severity";
         private const string SPParamSeverityValues = "@severityvalues";
+        private const string SPParamADBReportKey = "@adbreportkey";
+        private const string SPParamADBReportText = "@adbreporttext";
+        private const string SPParamADBSeverity = "@adbseverity";
+        private const string SPParamADBSeverityValues = "@adbseverityvalues";
 
         #endregion
 
@@ -340,6 +350,133 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        [XmlIgnoreAttribute]
+        public bool ApplicableOnPremise
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(MetricName) && MetricName != "NA";
+            }
+        }
+
+        [XmlIgnoreAttribute]
+        public bool ApplicableOnAzureDB
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(ADBMetricName) && ADBMetricName != "NA";
+            }
+        }
+
+        [XmlIgnoreAttribute]
+        public string MetricDisplayName
+        {
+            get
+            {
+
+                if (ApplicableOnPremise)
+                {
+                    return m_MetricName.IsNull ? string.Empty : m_MetricName.Value;
+                }
+                else if (ApplicableOnAzureDB)
+                {
+                    return m_AzureSQLDatabaseConfiguration.MetricName;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+        }
+
+        public string ADBMetricName
+        {
+            get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.MetricName; }
+        }
+
+        public string ADBMetricDescription
+        {
+            get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.MetricDescription; }
+        }
+
+        public string ADBReportKey
+        {
+            get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ReportKey; }
+            set
+            {
+                if (m_AzureSQLDatabaseConfiguration != null && value != m_AzureSQLDatabaseConfiguration.ReportKey)
+                {
+                    m_dirty = true;
+                    m_AzureSQLDatabaseConfiguration.ReportKey = value;
+                }
+            }
+        }
+
+        public string ADBReportText
+        {
+            get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ReportText; }
+            set
+            {
+                if (m_AzureSQLDatabaseConfiguration != null && value != m_AzureSQLDatabaseConfiguration.ReportText)
+                {
+                    m_dirty = true;
+                    m_AzureSQLDatabaseConfiguration.ReportText = value;
+                }
+            }
+
+        }
+
+        public int ADBSeverity
+        {
+            get { return m_AzureSQLDatabaseConfiguration == null ? 0 : m_AzureSQLDatabaseConfiguration.Severity; }
+            set
+            {
+                if (m_AzureSQLDatabaseConfiguration != null && value != m_AzureSQLDatabaseConfiguration.Severity)
+                {
+                    m_dirty = true;
+                    m_AzureSQLDatabaseConfiguration.Severity = value;
+                }
+            }
+        }
+
+        public string ADBSeverityValues
+        {
+            get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.SeverityValues; }
+            set
+            {
+                if (m_AzureSQLDatabaseConfiguration != null && value != m_AzureSQLDatabaseConfiguration.SeverityValues)
+                {
+                    m_dirty = true;
+                    m_AzureSQLDatabaseConfiguration.SeverityValues = value;
+                }
+            }
+        }
+
+        public string ADBValidValues
+        {
+            get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ValidValues; }
+            //set
+            //{
+            //    if (m_ValidValues.IsNull || value != m_ValidValues.Value)
+            //    {
+            //        m_dirty = true;
+            //        m_ValidValues = value;
+            //    }
+            //}
+        }
+        public string ADBValueDescription
+        {
+            get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ValueDescription; }
+            //set
+            //{
+            //    if (m_ValueDescription.IsNull || value != m_ValueDescription.Value)
+            //    {
+            //        m_dirty = true;
+            //        m_ValueDescription = value;
+            //    }
+            //}
+        }
+
         #endregion
 
         #region Methods
@@ -370,23 +507,39 @@ namespace Idera.SQLsecure.UI.Console.Sql
                             SqlParameter paramAssessmentId = new SqlParameter(SPParamAssessmentId, AssessmentId);
                             SqlParameter paramMetricId = new SqlParameter(SPParamMetricId, MetricId);
                             SqlParameter paramIsEnabled = new SqlParameter(SPParamIsEnabled, IsEnabled);
-                            SqlParameter paramReportKey = new SqlParameter(SPParamReportKey, ReportKey);
-                            SqlParameter paramReportText = new SqlParameter(SPParamReportText, ReportText);
-                            SqlParameter paramSeverity = new SqlParameter(SPParamSeverity, Severity);
-                            SqlParameter paramSeverityValues = new SqlParameter(SPParamSeverityValues, SeverityValues);
+                           
+                            List<SqlParameter> paramValues = new List<SqlParameter>();
+                            paramValues.Add(paramPolicyId);
+                            paramValues.Add(paramAssessmentId);
+                            paramValues.Add(paramMetricId);
+                            paramValues.Add(paramIsEnabled);
+                           
+                            if (ApplicableOnPremise)
+                            {
+                                SqlParameter paramReportKey = new SqlParameter(SPParamReportKey, ReportKey);
+                                SqlParameter paramReportText = new SqlParameter(SPParamReportText, ReportText);
+                                SqlParameter paramSeverity = new SqlParameter(SPParamSeverity, Severity);
+                                SqlParameter paramSeverityValues = new SqlParameter(SPParamSeverityValues, SeverityValues);
+                                paramValues.Add(paramReportKey);
+                                paramValues.Add(paramReportText);
+                                paramValues.Add(paramSeverity);
+                                paramValues.Add(paramSeverityValues);
+                            }   
+                                      
+                            if (ApplicableOnAzureDB)
+                            {
+                                SqlParameter paramADBReportKey = new SqlParameter(SPParamADBReportKey, m_AzureSQLDatabaseConfiguration.ReportKey);
+                                SqlParameter paramADBReportText = new SqlParameter(SPParamADBReportText, m_AzureSQLDatabaseConfiguration.ReportText);
+                                SqlParameter paramADBSeverity = new SqlParameter(SPParamADBSeverity, m_AzureSQLDatabaseConfiguration.Severity);
+                                SqlParameter paramADBSeverityValues = new SqlParameter(SPParamADBSeverityValues, m_AzureSQLDatabaseConfiguration.SeverityValues);
+                                paramValues.Add(paramADBReportKey);
+                                paramValues.Add(paramADBReportText);
+                                paramValues.Add(paramADBSeverity);
+                                paramValues.Add(paramADBSeverityValues);
+                            }
 
                             Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                                          NonQueryUpdatePolicyMetrics, new SqlParameter[]
-                                                                                           {
-                                                                                               paramPolicyId,
-                                                                                               paramAssessmentId,
-                                                                                               paramMetricId,
-                                                                                               paramIsEnabled,
-                                                                                               paramReportKey,
-                                                                                               paramReportText,
-                                                                                               paramSeverity,
-                                                                                               paramSeverityValues
-                                                                                           });
+                                                          NonQueryUpdatePolicyMetrics, paramValues.ToArray());
                         }
 
                         saved = true;
@@ -435,6 +588,24 @@ namespace Idera.SQLsecure.UI.Console.Sql
                                 policyMetricList.Add(policyMetric);
                             }
                         }
+
+                        using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                                                                               assessmentId.HasValue ? QueryGetAssessmentMetricsExtendedInfo : QueryGetPolicyMetricsExtendedInfo,
+                                                                               assessmentId.HasValue ? new SqlParameter[] { paramPolicyId, paramAssessmentId } : new SqlParameter[] { paramPolicyId }))
+                        {
+                            while (rdr.Read())
+                            {
+                                PolicyMetricConfiguration configuration = new PolicyMetricConfiguration(rdr);
+                                if(configuration.ServerType == ServerType.AzureSQLDatabase)
+                                {
+                                    var matchingPolicyMetric = policyMetricList.Find(pm => pm.MetricId == configuration.MetricId);
+                                    if(matchingPolicyMetric != null)
+                                    {
+                                        matchingPolicyMetric.m_AzureSQLDatabaseConfiguration = configuration;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -474,6 +645,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_ReportText = rdr.GetSqlString((int)PolicyColumn.ReportText);
             m_Severity = rdr.GetSqlInt32((int)PolicyColumn.Severity);
             m_SeverityValues = rdr.GetSqlString((int)PolicyColumn.SeverityValues);
+            m_AzureSQLDatabaseConfiguration = PolicyMetricConfiguration.GetNAConfiguration();
         }
 
         #endregion

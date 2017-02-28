@@ -280,6 +280,12 @@
     <Compile Include="Controls\CommonTask.designer.cs">
       <DependentUpon>CommonTask.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\controlConfigureMetricCriteria.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\controlConfigureMetricCriteria.Designer.cs">
+      <DependentUpon>controlConfigureMetricCriteria.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\controlConfigurePolicyVulnerabilities.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1483,6 +1489,7 @@
     <Compile Include="SQL\ObjectPermissions.cs" />
     <Compile Include="SQL\Policy.cs" />
     <Compile Include="SQL\PolicyAssessmentNotes.cs" />
+    <Compile Include="SQL\PolicyMetricConfiguration.cs" />
     <Compile Include="SQL\PolicyMetric.cs" />
     <Compile Include="SQL\RegistryKey.cs" />
     <Compile Include="SQL\ReportsRecord.cs" />
