@@ -151,30 +151,33 @@ namespace Idera.SQLsecure.UI.Console.Controls
         #endregion
 
         #region methods
-
+        
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes control using specified configuration values.
+        /// </summary>
         public void InitializeControl(Policy policy)
         {
             m_policy = policy;
             m_importing = m_policy.PolicyId == 0;
-            //button_Remove.Enabled = false;
             checkBox_GroupByCategories.Checked = true;
             
-            sqlServerCriteriaControl.InitializeControl(policy, m_metrics, null);
-            azureSQLDatabaseCriteriaControl.InitializeControl(policy, m_metrics, GetAzureSQLDBGridColumnMapping());
+            sqlServerCriteriaControl.InitializeControl();      // SQLsecure 3.1 (Anshul Aggarwal) - Initialize both tabs.
+            azureSQLDatabaseCriteriaControl.InitializeControl(GetAzureSQLDBGridColumnMapping());
 
             loadPolicyMetrics();
-
         }
-
+        
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes control using specified configuration values.
+        /// </summary>
         public void InitializeControl(Policy policy, int metricId, bool allowEdit)
         {
             m_policy = policy;
             m_importing = m_policy.PolicyId == 0;
-            //button_Remove.Enabled = false;
             checkBox_GroupByCategories.Checked = true;
             
-            sqlServerCriteriaControl.InitializeControl(policy, m_metrics, metricId, allowEdit, null);
-            azureSQLDatabaseCriteriaControl.InitializeControl(policy, m_metrics, metricId, allowEdit, GetAzureSQLDBGridColumnMapping());
+            sqlServerCriteriaControl.InitializeControl(allowEdit);     // SQLsecure 3.1 (Anshul Aggarwal) - Initialize both tabs.
+            azureSQLDatabaseCriteriaControl.InitializeControl(allowEdit, GetAzureSQLDBGridColumnMapping());
 
             loadPolicyMetrics();
 
@@ -202,6 +205,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
             }
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Checks if current configuration is valid or not.
+        /// </summary>
         public bool OKToSave(UltraTab tabToCheck = null)
         {
             bool ok = true;
@@ -317,6 +323,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
             UpdateEnabledCount();
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Gets grid column name mapping of Azure SQL Database.
+        /// </summary>
         private static Dictionary<PolicyMetricConfigurationColumn, string> GetAzureSQLDBGridColumnMapping()
         {
             return new Dictionary<PolicyMetricConfigurationColumn, string>() {
@@ -396,7 +405,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridPolicyMetrics.DisplayLayout.Bands[0].SortedColumns.Add("MetricName", false);
         }
 
-
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Set values into gridrow from UI.
+        /// </summary>
         private bool RetrieveValuesFromUI()
         {
             bool bAllowContinue = true;
@@ -470,6 +481,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
             return count;
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Updates UI using grid row.
+        /// </summary>
         private void UpdateUIWithMetric()
         {
             foreach (UltraGridRow row in ultraGridPolicyMetrics.Selected.Rows)
@@ -748,9 +762,12 @@ namespace Idera.SQLsecure.UI.Console.Controls
         }
 
         #endregion
-        
+
         #region Tab functions
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Suspend tab change if current tab configuration is not valid.
+        /// </summary>
         private void ultraTabControl1_SelectedTabChanged(object sender, SelectedTabChangedEventArgs e)
         {
             UltraTab originalTab = e.Tab;

@@ -77,6 +77,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         NewPolicy
     }
     
+    // SQLsecure 3.1 (Anshul Aggarwal) - Represents values configurable for a metric based on server type.
     internal enum PolicyMetricConfigurationColumn
     {
         PolicyId = 0,
@@ -92,7 +93,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
         Severity,
         SeverityValues
     }
-    
+
+    // SQLsecure 3.1 (Anshul Aggarwal) - Represents values configurable for a metric.
     internal enum PolicyColumn
     {
         PolicyId = 0,
@@ -569,7 +571,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         #region Configure Policy Vulnerabilities
         
-        // Columns for handling the grid and policymetric results
+        // SQLsecure 3.1 (Anshul Aggarwal) - Columns for handling the grid and policymetric results
         public const string POLICY_METRIC_VALUE_LIST_SERVERITY = @"Severity";
         public const string POLICY_METRIC_VALUE_LIST_ENABLED = @"Enabled";
 
