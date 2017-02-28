@@ -485,7 +485,7 @@ namespace Idera.SQLsecure.Collector
         private void SettingsForOnPremiseTargets(string server)
         {
             Program.ImpersonationContext wi2 = Program.SetTargetImpersonationContext();
-            m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword,
+            m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword, Server.ServerType.OnPremise,
                                                                 WriteAppActivityToRepository);
             Program.RestoreImpersonationContext(wi2);
 
@@ -504,7 +504,7 @@ namespace Idera.SQLsecure.Collector
         private void SettingsForAzureVM( string server)
         {
             Program.ImpersonationContext wi2 = Program.SetTargetImpersonationContext();
-            m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword,
+            m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword, Server.ServerType.SQLServerOnAzureVM,
                                                                 WriteAppActivityToRepository);
             Program.RestoreImpersonationContext(wi2);
 
@@ -553,7 +553,7 @@ namespace Idera.SQLsecure.Collector
                     if (serverType == ServerType.OnPremise)
                     {
                         Program.ImpersonationContext wi2 = Program.SetTargetImpersonationContext();
-                        m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword,
+                        m_Server = new Idera.SQLsecure.Core.Accounts.Server(server, serverLogin, serverPassword, Server.ServerType.OnPremise,
                                                                             WriteAppActivityToRepository);
                         Program.RestoreImpersonationContext(wi2);
                     }
@@ -1062,16 +1062,19 @@ namespace Idera.SQLsecure.Collector
                         // Create a snapshot instance.
                         //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
                         string instance = string.Empty;
-                        if (serverType == ServerType.SQLServerOnAzureVM)
-                            instance = servername;
-                        else
-                            instance = m_ConnectionStringBuilder.DataSource.Split(',')[0];
+
+                        //Support Azure VM
+                        //if (serverType == ServerType.SQLServerOnAzureVM)
+                        //    instance = servername;
+                        //else
+
+                        instance = m_ConnectionStringBuilder.DataSource.Split(',')[0];
                         SqlParameter paramConnectionname =
                             new SqlParameter(ParamConnectionname, instance);
                         SqlParameter paramStarttime =
                             new SqlParameter(ParamStarttime, DateTime.Now.ToUniversalTime());
                         string os;
-                        if (serverType == ServerType.OnPremise)
+                        if (serverType == ServerType.OnPremise || serverType == ServerType.SQLServerOnAzureVM)
                         {
                             os = m_Server.Product;
                             if (!string.IsNullOrEmpty(m_Server.ServicePack))
