@@ -1063,7 +1063,7 @@ namespace Idera.SQLsecure.Collector
                         //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
                         string instance = string.Empty;
 
-                        //Support Azure VM
+                        // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
                         //if (serverType == ServerType.SQLServerOnAzureVM)
                         //    instance = servername;
                         //else

@@ -39,7 +39,7 @@ namespace Idera.SQLsecure.Core.Accounts
             Failed
         }
 
-        //Support Azure VM
+        // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
         public enum ServerType
         {
             OnPremise,//On-Premise
@@ -54,7 +54,7 @@ namespace Idera.SQLsecure.Core.Accounts
         private bool m_IsAdmin = false;
         private string m_Name;
 
-        //Support Azure VM
+        // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
         private string m_AccountName;
         private ServerType m_serverType;
 
@@ -1100,7 +1100,7 @@ namespace Idera.SQLsecure.Core.Accounts
                     string refDom;
                     byte[] bSid;
 
-                    //Support Azure VM
+                    // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
                     string accountName = m_Name;
 
                     if (m_serverType == ServerType.SQLServerOnAzureVM)
@@ -1170,7 +1170,7 @@ namespace Idera.SQLsecure.Core.Accounts
             WriteApplicationActivityToRepository = WriteAppActivityToRepositoryParam;
             m_Name = name;
 
-            //Support Azure VM
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
             m_serverType = serverType;
 
             try
