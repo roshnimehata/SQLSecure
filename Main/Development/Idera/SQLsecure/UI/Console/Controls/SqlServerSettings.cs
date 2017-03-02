@@ -625,7 +625,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
                         if (m_serverInstance != null && m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
                         {
-                            row[colNumAzureADGroupMember] = Convert.ToString(AzureADUsersAndGroupCount(Convert.ToInt16(row[colSnapshotId])));
+                            row[colNumAzureADGroupMember] = Convert.ToString(AzureADUsersAndGroupCount(Convert.ToInt32(row[colSnapshotId])));
                         }
                         //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
                     }
@@ -825,7 +825,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         row[colSystemDrive] = notApplicableTag;
                         row[coladhocDistributedQueriesEnabled] = notApplicableTag;
                         row[colNumWindowsGroupMember] = notApplicableTag;
-                        row[colNumAzureADGroupMember] = Convert.ToString(AzureADUsersAndGroupCount((int)row[colSnapshotId]));
+                        row[colNumAzureADGroupMember] = Convert.ToString(AzureADUsersAndGroupCount(Convert.ToInt32(row[colSnapshotId])));
                     }
                     else
                     {
@@ -858,7 +858,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     cmd.CommandType = CommandType.Text;
                     try
                     {
-                        numOfAzureADAccounts = Convert.ToInt16(cmd.ExecuteScalar());
+                        numOfAzureADAccounts = Convert.ToInt32(cmd.ExecuteScalar());
                     }
                     catch (Exception ex)
                     {
@@ -1295,10 +1295,13 @@ namespace Idera.SQLsecure.UI.Console.Controls
             band.Columns[colNumObject].Format = NumericFormat;
 
             //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
-            band.Columns[colNumAzureADGroupMember].Header.Caption = "Azure AD Group Members";
-            band.Columns[colNumAzureADGroupMember].Hidden = false;
-            band.Columns[colNumAzureADGroupMember].CellAppearance.TextHAlign = Infragistics.Win.HAlign.Right;
-            band.Columns[colNumObject].Format = NumericFormat;
+            if (band.Columns.Exists(colNumAzureADGroupMember))
+            {
+                band.Columns[colNumAzureADGroupMember].Header.Caption = "Azure AD Group Members";
+                band.Columns[colNumAzureADGroupMember].Hidden = false;
+                band.Columns[colNumAzureADGroupMember].CellAppearance.TextHAlign = Infragistics.Win.HAlign.Right;
+                band.Columns[colNumObject].Format = NumericFormat;
+            }
             //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
 
             band.Columns[colNumWindowsGroupMember].Header.Caption = "Windows Group Members";
@@ -1309,12 +1312,18 @@ namespace Idera.SQLsecure.UI.Console.Controls
             if (m_serverInstance != null && m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
             {
                 band.Columns[colNumWindowsGroupMember].Hidden = true;
-                band.Columns[colNumAzureADGroupMember].Hidden = false;
+                if (band.Columns.Exists(colNumAzureADGroupMember))
+                {
+                    band.Columns[colNumAzureADGroupMember].Hidden = false;
+                }
             }
             else if(m_serverInstance != null && m_serverInstance.ServerType != ServerType.AzureSQLDatabase)
             {
                 band.Columns[colNumWindowsGroupMember].Hidden = false;
-                band.Columns[colNumAzureADGroupMember].Hidden = true;
+                if (band.Columns.Exists(colNumAzureADGroupMember))
+                {
+                    band.Columns[colNumAzureADGroupMember].Hidden = true;
+                }
             }
             //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
 
