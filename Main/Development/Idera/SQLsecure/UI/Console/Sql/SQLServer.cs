@@ -42,25 +42,25 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             var serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword);
 
-            if (serverProperties.IsServerInAoag)
-            {
-                SQLServerProperties nodeProperties;
-                var forcingTCP = "tcp:";
-                var tcpServerName = string.Concat(forcingTCP, serverProperties.ServerName);
-                var isLocalhost = string.IsNullOrEmpty(serverProperties.LocalNetAddress);
-                var isWeOnWantedNode = serverProperties.ClientNetAddress == serverProperties.LocalNetAddress;
-                var isConnectionDirectlyToTheNode = isLocalhost || isWeOnWantedNode ||
-                                                    TryGetSqlServerProperties(tcpServerName, sqlLogin, sqlPassword, out nodeProperties) &&
-                                                    nodeProperties.LocalNetAddress == serverProperties.LocalNetAddress;
+            //if (serverProperties.IsServerInAoag)
+            //{
+            //    SQLServerProperties nodeProperties;
+             //   var forcingTCP = "tcp:";
+            //    var tcpServerName = string.Concat(forcingTCP, serverProperties.ServerName);
+             //   var isLocalhost = string.IsNullOrEmpty(serverProperties.LocalNetAddress);
+             //   var isWeOnWantedNode = serverProperties.ClientNetAddress == serverProperties.LocalNetAddress;
+             //   var isConnectionDirectlyToTheNode = isLocalhost || isWeOnWantedNode ||
+             //                                       TryGetSqlServerProperties(tcpServerName, sqlLogin, sqlPassword, out nodeProperties) &&
+            //                                        nodeProperties.LocalNetAddress == serverProperties.LocalNetAddress;
 
-                if (!isConnectionDirectlyToTheNode)
-                {
-                    version = serverProperties.Version;
-                    instanceName = serverProperties.InstanceName;
-                    fullName =machineName = serverProperties.HadrClusterName;
-                    return;
+            //    if (!isConnectionDirectlyToTheNode)
+            //    {
+            //        version = serverProperties.Version;
+             //       instanceName = serverProperties.InstanceName;
+            //        fullName =machineName = serverProperties.HadrClusterName;
+            //        return;
                 }
-            }
+            //}
 
             version = serverProperties.Version;
             machineName = serverProperties.MachineName;
