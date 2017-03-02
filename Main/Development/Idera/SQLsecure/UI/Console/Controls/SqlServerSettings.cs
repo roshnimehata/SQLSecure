@@ -292,6 +292,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private DataTable m_SettingsTable;
         private DataTable m_SettingsPivotTable;
         private SortedList<int, string> m_versions = new SortedList<int, string>();
+        private DataTable m_SettingsTableTemporary;//SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
 
         #endregion
 
@@ -349,6 +350,14 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string colSaPasswordEmpty = @"sapasswordempty";
 
         private const string colMajorVersion = @"majorversion";
+
+        //Start-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
+        private const string colSystemDrive = @"systemdrive";
+        private const string coladhocDistributedQueriesEnabled = @"adhocdistributedqueriesenabled";
+        private const string colNumAzureADGroupMember = @"numazuregroupmember";
+        private const string colServerType = @"serverType";
+        private const string notApplicableTag = @"NA";
+        //End-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
 
         //Pivot table columns
         private const string colSetting = @"Setting";
@@ -458,7 +467,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
             dt.Columns.Add(colNumObject, typeof(long));
             dt.Columns.Add(colNumPermission, typeof(long));
             dt.Columns.Add(colNumLogin, typeof(long));
-            dt.Columns.Add(colNumWindowsGroupMember, typeof(long));
+            //Start-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
+            //Added column for azure ad users and groups count and changed type of windows user and groups count column to supoort 'NA' text for All Servers screen.
+            dt.Columns.Add(colNumWindowsGroupMember, typeof(string));
+            dt.Columns.Add(colNumAzureADGroupMember, typeof(string));
+            //End-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
             dt.Columns.Add(colBaseline, typeof(string));
             dt.Columns.Add(colBaselineComment, typeof(string));
             dt.Columns.Add(colSnapshotComment, typeof(string));
@@ -530,11 +543,23 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     DataSet ds = new DataSet();
                     da.Fill(ds);
 
-                    m_SettingsTable = ds.Tables[0];
-
+                    //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+                    //Loaded results of stored procedure in temporary data table first, to change the datatype
+                    //of colNumWindowsGroupMember column to string to support 'NA' text.
+                    m_SettingsTableTemporary = ds.Tables[0];
+                    //m_SettingsTable = ds.Tables[0];
+                    m_SettingsTable = m_SettingsTableTemporary.Clone();
+                    m_SettingsTable.Columns[colNumWindowsGroupMember].DataType = typeof(string);
+                    foreach (DataRow row in m_SettingsTableTemporary.Rows)
+                    {
+                        m_SettingsTable.ImportRow(row);
+                    }
+                    //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
                     // Add a column for the major version name and put the values in
                     // Fix other values for display in the datatable so they will pivot correctly
                     m_SettingsTable.Columns.Add(colMajorVersion, typeof(string));
+                    //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+                    m_SettingsTable.Columns.Add(colNumAzureADGroupMember, typeof(string)).SetOrdinal(m_SettingsTable.Columns.IndexOf(colNumWindowsGroupMember) + 1);
                     m_versions.Clear();
                     foreach (DataRow row in m_SettingsTable.Rows)
                     {
@@ -574,7 +599,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         }
 
                         row[colStartTime] = ((DateTime) row[colStartTime]).ToLocalTime();
-                        row[colAuthMode] = Sql.RegisteredServer.AuthenticationModeStr((string)row[colAuthMode]);
+                        //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+                        row[colAuthMode] = Sql.RegisteredServer.AuthenticationModeStr((string)row[colAuthMode], Helper.ConvertSQLTypeStringToEnum(Convert.ToString(row[colServerType])));
                         //Barkha Khatri (secure 3.1) Adding null check 
                         row[colLoginAuditMode] = Sql.RegisteredServer.LoginAuditModeStr(row[colLoginAuditMode] == DBNull.Value ? null : (string)row[colLoginAuditMode]);
                         row[colEnableProxy] = Sql.RegisteredServer.YesNoStr((string)row[colEnableProxy]);
@@ -596,6 +622,12 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         row[colDomainController] = Sql.RegisteredServer.YesNoStr((string)row[colDomainController]);
                         row[colSaPasswordEmpty] = Sql.RegisteredServer.YesNoStr((string)row[colSaPasswordEmpty]);
                         row[colReplicationEnabled] = Sql.RegisteredServer.YesNoStr((string)row[colReplicationEnabled]);
+                        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+                        if (m_serverInstance != null && m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
+                        {
+                            row[colNumAzureADGroupMember] = Convert.ToString(AzureADUsersAndGroupCount(Convert.ToInt32(row[colSnapshotId])));
+                        }
+                        //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
                     }
 
                     //Update the tabs to determine the filter before building the dataview
@@ -685,8 +717,18 @@ namespace Idera.SQLsecure.UI.Console.Controls
             {
                 filter = string.Format(ServerFilter, m_serverInstance.ConnectionName);
             }
-
-            DataView dv = new DataView(m_SettingsTable);
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+            //Filtering the data table for UI according to server type.
+            DataView dv;
+            if (m_serverInstance != null && m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
+            {
+                dv = new DataView(FilterViewForAzureSQLDatabase(m_SettingsTable));
+            }
+            else
+            {
+                dv = new DataView(FilterAllServersViewForSettings(m_SettingsTable));
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
             dv.RowFilter = filter;
 
             _grid_Settings.SetDataBinding(dv, null);
@@ -718,6 +760,120 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             _grid_PivotSettings.SetDataBinding(m_SettingsPivotTable, null);
         }
+
+        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+        /// <summary>
+        /// This method removes all those columns which are not applicable to azure sql database for single instance settings view.
+        /// </summary>
+        /// <param name="settingsTable"></param>
+        /// <returns></returns>
+        private DataTable FilterViewForAzureSQLDatabase(DataTable settingsTable)
+        {
+            DataTable filteredTable = settingsTable.Copy();
+
+            //filteredTable.Columns[colOs];
+            filteredTable.Columns.Remove(colOs);
+            filteredTable.Columns.Remove(colLoginAuditMode);
+            filteredTable.Columns.Remove(colRemoteAdminConnectionsEnabled);
+            filteredTable.Columns.Remove(colRemoteAccessEnabled);
+            filteredTable.Columns.Remove(colSqlMailXpsEnabled);
+            filteredTable.Columns.Remove(colDatabaseMailXpsEnabled);
+            filteredTable.Columns.Remove(colOleAutomationProceduresEnabled);
+            filteredTable.Columns.Remove(colWebAssistantProceduresEnabled);
+            filteredTable.Columns.Remove(colXp_cmdshellEnabled);
+            filteredTable.Columns.Remove(colAgentMailProfile);
+            filteredTable.Columns.Remove(colAgentSysadminOnly);
+            filteredTable.Columns.Remove(colDomainController);
+            filteredTable.Columns.Remove(colReplicationEnabled);
+            filteredTable.Columns.Remove(colSaPasswordEmpty);
+            filteredTable.Columns.Remove(colSystemDrive);
+            filteredTable.Columns.Remove(coladhocDistributedQueriesEnabled);
+            filteredTable.Columns.Remove(colServerType);
+
+            return filteredTable;
+        }
+
+        /// <summary>
+        /// This method specifies 'NA' tag to all those columns which are not applicable to them according to their server type for All servers view.
+        /// </summary>
+        /// <param name="settingsTable"></param>
+        /// <returns></returns>
+        private DataTable FilterAllServersViewForSettings(DataTable settingsTable)
+        {
+            DataTable filteredTable = settingsTable.Copy();
+
+            try
+            {
+                foreach (DataRow row in filteredTable.Rows)
+                {
+                    if (Helper.ConvertSQLTypeStringToEnum(Convert.ToString(row[colServerType])) == ServerType.AzureSQLDatabase)
+                    {
+                        row[colOs] = notApplicableTag;
+                        row[colLoginAuditMode] = notApplicableTag;
+                        row[colRemoteAdminConnectionsEnabled] = notApplicableTag;
+                        row[colRemoteAccessEnabled] = notApplicableTag;
+                        row[colSqlMailXpsEnabled] = notApplicableTag;
+                        row[colDatabaseMailXpsEnabled] = notApplicableTag;
+                        row[colOleAutomationProceduresEnabled] = notApplicableTag;
+                        row[colWebAssistantProceduresEnabled] = notApplicableTag;
+                        row[colXp_cmdshellEnabled] = notApplicableTag;
+                        row[colAgentMailProfile] = notApplicableTag;
+                        row[colAgentSysadminOnly] = notApplicableTag;
+                        row[colDomainController] = notApplicableTag;
+                        row[colReplicationEnabled] = notApplicableTag;
+                        row[colSaPasswordEmpty] = notApplicableTag;
+                        row[colSystemDrive] = notApplicableTag;
+                        row[coladhocDistributedQueriesEnabled] = notApplicableTag;
+                        row[colNumWindowsGroupMember] = notApplicableTag;
+                        row[colNumAzureADGroupMember] = Convert.ToString(AzureADUsersAndGroupCount(Convert.ToInt32(row[colSnapshotId])));
+                    }
+                    else
+                    {
+                        row[colNumAzureADGroupMember] = notApplicableTag;
+                    }
+                }
+                filteredTable.Columns.Remove(colServerType);
+            }
+            catch (Exception ex)
+            {
+                logX.loggerX.Info("ERROR - loading settings view.", ex);
+            }
+            return filteredTable;
+        }
+
+        /// <summary>
+        /// Returns number of Azure AD users and groups for particular snapshotid given.
+        /// </summary>
+        /// <param name="snapshotId"></param>
+        /// <returns></returns>
+        private int AzureADUsersAndGroupCount(int snapshotId)
+        {
+            int numOfAzureADAccounts = 0;
+            string query = string.Format("select COUNT(*) from SQLsecure.dbo.serverprincipal a where a.snapshotid = {0} and type in ('E', 'X')", snapshotId);
+            using (SqlConnection connection = new SqlConnection(Program.gController.Repository.ConnectionString))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    try
+                    {
+                        numOfAzureADAccounts = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                    catch (Exception ex)
+                    {
+                        logX.loggerX.Info("ERROR - unable to load Azure AD Accounts from the selected Snapshot.", ex);
+                        Utility.MsgBox.ShowError(Utility.ErrorMsgs.SnapshotPropertiesCaption, ex.Message);
+                    }
+                    finally
+                    {
+                        connection.Close();
+                    }
+                }
+            }
+            return numOfAzureADAccounts;
+        }
+        //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
 
         #endregion
 
@@ -1101,7 +1257,13 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             band.Columns[colAuthMode].Header.Caption = "Authentication Mode";
 
-            band.Columns[colOs].Header.Caption = "Operating System";
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+            // Added this check because for single instance settings view lots of columns are not present.
+            if (band.Columns.Exists(colOs))
+            {
+                band.Columns[colOs].Header.Caption = "Operating System";
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
 
             band.Columns[colVersion].Header.Caption = "Version";
             band.Columns[colVersion].SortComparer = new SqlVersionComparer();
@@ -1132,9 +1294,39 @@ namespace Idera.SQLsecure.UI.Console.Controls
             band.Columns[colNumLogin].CellAppearance.TextHAlign = Infragistics.Win.HAlign.Right;
             band.Columns[colNumObject].Format = NumericFormat;
 
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+            if (band.Columns.Exists(colNumAzureADGroupMember))
+            {
+                band.Columns[colNumAzureADGroupMember].Header.Caption = "Azure AD Group Members";
+                band.Columns[colNumAzureADGroupMember].Hidden = false;
+                band.Columns[colNumAzureADGroupMember].CellAppearance.TextHAlign = Infragistics.Win.HAlign.Right;
+                band.Columns[colNumObject].Format = NumericFormat;
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+
             band.Columns[colNumWindowsGroupMember].Header.Caption = "Windows Group Members";
             band.Columns[colNumWindowsGroupMember].CellAppearance.TextHAlign = Infragistics.Win.HAlign.Right;
             band.Columns[colNumObject].Format = NumericFormat;
+
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+            if (m_serverInstance != null && m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
+            {
+                band.Columns[colNumWindowsGroupMember].Hidden = true;
+                if (band.Columns.Exists(colNumAzureADGroupMember))
+                {
+                    band.Columns[colNumAzureADGroupMember].Hidden = false;
+                }
+            }
+            else if(m_serverInstance != null && m_serverInstance.ServerType != ServerType.AzureSQLDatabase)
+            {
+                band.Columns[colNumWindowsGroupMember].Hidden = false;
+                if (band.Columns.Exists(colNumAzureADGroupMember))
+                {
+                    band.Columns[colNumAzureADGroupMember].Hidden = true;
+                }
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+
 
             band.Columns[colBaseline].Hidden = true;
             band.Columns[colBaseline].ExcludeFromColumnChooser = ExcludeFromColumnChooser.True;
@@ -1145,7 +1337,12 @@ namespace Idera.SQLsecure.UI.Console.Controls
             band.Columns[colSnapshotComment].Hidden = true;
             band.Columns[colSnapshotComment].ExcludeFromColumnChooser = ExcludeFromColumnChooser.True;
 
-            band.Columns[colLoginAuditMode].Header.Caption = "Login Audit Mode";
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+            if (band.Columns.Exists(colLoginAuditMode))
+            {
+                band.Columns[colLoginAuditMode].Header.Caption = "Login Audit Mode";
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
 
             band.Columns[colEnableProxy].Header.Caption = "Proxy";
 
@@ -1166,33 +1363,71 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             band.Columns[colAllowSystemTableUpdates].Header.Caption = "System Table Updates";
 
-            band.Columns[colRemoteAdminConnectionsEnabled].Header.Caption = "Remote Admin Connections";
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+            if (band.Columns.Exists(colRemoteAdminConnectionsEnabled))
+            {
+                band.Columns[colRemoteAdminConnectionsEnabled].Header.Caption = "Remote Admin Connections";
+            }
 
-            band.Columns[colRemoteAccessEnabled].Header.Caption = "Remote Access";
+            if (band.Columns.Exists(colRemoteAccessEnabled))
+            {
+                band.Columns[colRemoteAccessEnabled].Header.Caption = "Remote Access";
+            }
 
             band.Columns[colScanForStartupProcsEnabled].Header.Caption = "Scan for Startup Procs";
 
-            band.Columns[colSqlMailXpsEnabled].Header.Caption = "SQL Mail Xps";
+            if (band.Columns.Exists(colSqlMailXpsEnabled))
+            {
+                band.Columns[colSqlMailXpsEnabled].Header.Caption = "SQL Mail Xps";
+            }
 
-            band.Columns[colDatabaseMailXpsEnabled].Header.Caption = "Database Mail Xps";
+            if (band.Columns.Exists(colDatabaseMailXpsEnabled))
+            {
+                band.Columns[colDatabaseMailXpsEnabled].Header.Caption = "Database Mail Xps";
+            }
 
-            band.Columns[colOleAutomationProceduresEnabled].Header.Caption = "Ole Automation Procedures";
+            if (band.Columns.Exists(colOleAutomationProceduresEnabled))
+            {
+                band.Columns[colOleAutomationProceduresEnabled].Header.Caption = "Ole Automation Procedures";
+            }
 
-            band.Columns[colWebAssistantProceduresEnabled].Header.Caption = "Web Assistant Procedures";
+            if (band.Columns.Exists(colWebAssistantProceduresEnabled))
+            {
+                band.Columns[colWebAssistantProceduresEnabled].Header.Caption = "Web Assistant Procedures";
+            }
 
-            band.Columns[colXp_cmdshellEnabled].Header.Caption = "Xp_cmdshell";
+            if (band.Columns.Exists(colXp_cmdshellEnabled))
+            {
+                band.Columns[colXp_cmdshellEnabled].Header.Caption = "Xp_cmdshell";
+            }
 
-            band.Columns[colAgentMailProfile].Header.Caption = "Agent Mail Profile";
+            if (band.Columns.Exists(colAgentMailProfile))
+            {
+                band.Columns[colAgentMailProfile].Header.Caption = "Agent Mail Profile";
+            }
 
             band.Columns[colHideInstance].Header.Caption = "Hide Instance";
 
-            band.Columns[colAgentSysadminOnly].Header.Caption = "Agent Sysadmin Only";
+            if (band.Columns.Exists(colAgentSysadminOnly))
+            {
+                band.Columns[colAgentSysadminOnly].Header.Caption = "Agent Sysadmin Only";
+            }
 
-            band.Columns[colDomainController].Header.Caption = "Server is Domain Controller";
+            if (band.Columns.Exists(colDomainController))
+            {
+                band.Columns[colDomainController].Header.Caption = "Server is Domain Controller";
+            }
 
-            band.Columns[colReplicationEnabled].Header.Caption = "Replication";
+            if (band.Columns.Exists(colReplicationEnabled))
+            {
+                band.Columns[colReplicationEnabled].Header.Caption = "Replication";
+            }
 
-            band.Columns[colSaPasswordEmpty].Header.Caption = "Sa Account Password Empty";
+            if (band.Columns.Exists(colSaPasswordEmpty))
+            {
+                band.Columns[colSaPasswordEmpty].Header.Caption = "Sa Account Password Empty";
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
 
             band.Columns[colMajorVersion].Header.Caption = "Major Version";
 
@@ -1216,18 +1451,24 @@ namespace Idera.SQLsecure.UI.Console.Controls
             }
             else
             {
-                band.Columns[colRemoteAdminConnectionsEnabled].Hidden = false;
-                band.Columns[colRemoteAdminConnectionsEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
-                band.Columns[colSqlMailXpsEnabled].Hidden = false;
-                band.Columns[colSqlMailXpsEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
-                band.Columns[colDatabaseMailXpsEnabled].Hidden = false;
-                band.Columns[colDatabaseMailXpsEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
-                band.Columns[colOleAutomationProceduresEnabled].Hidden = false;
-                band.Columns[colOleAutomationProceduresEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
-                band.Columns[colWebAssistantProceduresEnabled].Hidden = false;
-                band.Columns[colWebAssistantProceduresEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
-                band.Columns[colXp_cmdshellEnabled].Hidden = false;
-                band.Columns[colXp_cmdshellEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
+                //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
+                // Added this check becasue we need to do this for single instance view when server type is not Azure SQL Database.
+                if (m_serverInstance != null && m_serverInstance.ServerType != ServerType.AzureSQLDatabase)
+                {
+                    band.Columns[colRemoteAdminConnectionsEnabled].Hidden = false;
+                    band.Columns[colRemoteAdminConnectionsEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
+                    band.Columns[colSqlMailXpsEnabled].Hidden = false;
+                    band.Columns[colSqlMailXpsEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
+                    band.Columns[colDatabaseMailXpsEnabled].Hidden = false;
+                    band.Columns[colDatabaseMailXpsEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
+                    band.Columns[colOleAutomationProceduresEnabled].Hidden = false;
+                    band.Columns[colOleAutomationProceduresEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
+                    band.Columns[colWebAssistantProceduresEnabled].Hidden = false;
+                    band.Columns[colWebAssistantProceduresEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
+                    band.Columns[colXp_cmdshellEnabled].Hidden = false;
+                    band.Columns[colXp_cmdshellEnabled].ExcludeFromColumnChooser = ExcludeFromColumnChooser.False;
+                }
+                //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
             }
         }
 
