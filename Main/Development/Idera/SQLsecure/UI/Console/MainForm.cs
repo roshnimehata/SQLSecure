@@ -1280,7 +1280,15 @@ namespace Idera.SQLsecure.UI.Console
                         refreshExplorerBar(false); // keep the existing view current
                         this.Cursor = Cursors.Default;
                     }
-                    bConnecting = false;
+                    //Start-SQLsecure 3.1 (Tushar)--Fix for SQLSECU-1657
+                    if (!Program.gController.Repository.IsValid)
+                    {
+                        if (MessageBox.Show("Please select the repository for this installation of SQL Secure. If you have not yet installed a repository, please run the SQL Secure installer on the Windows machine where the target SQL Server instance resides.", "Repository", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.Cancel)
+                        {
+                            bConnecting = false;
+                        }
+                    }
+                    //End-SQLsecure 3.1 (Tushar)--Fix for SQLSECU-1657
                 }
             }
 
