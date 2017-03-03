@@ -167,6 +167,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 }
             }
 
+            // SQLsecure 3.1 (Anshul Aggarwal) - Now a single metric can have different risk levels based on server type for some policies.
             public string ConsolidatedRiskText
             {
                 get
@@ -226,29 +227,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     {
                         text += string.Format(" + {0} Low Explained", RiskCountLowExplained);
                     }
-
-                    //switch ((int)HighestRisk)
-                    //{
-                    //    case (int)Policy.SeverityExplained.Low:
-                    //if (RiskCountLowExplained > 0)
-                    //        {
-                    //            text += string.Format(" + {0} Low Explained", RiskCountLowExplained);
-                    //        }
-                    //    //    break;
-                    //    //case (int)Policy.SeverityExplained.Medium:
-                    //        if (RiskCountMediumExplained > 0)
-                    //        {
-                    //            text += string.Format(" + {0} Medium Explained", RiskCountMediumExplained);
-                    //        }
-                    //    //    break;
-                    //    //case (int)Policy.SeverityExplained.High:
-                    //        if (RiskCountHighExplained > 0)
-                    //        {
-                    //            text += string.Format(" + {0} High Explained", RiskCountHighExplained);
-                    //        }
-                            //break;
-                    //}
-
+                    
                     return text;
                 }
             }
@@ -1067,20 +1046,15 @@ namespace Idera.SQLsecure.UI.Console.Controls
                             // fix the result and add the row
                             if (metricCounts.HighestRisk == Policy.SeverityExplained.Ok)
                             {
+                                // SQLsecure 3.1 (Anshul Aggarwal) - Now a single metric can have different risk levels based on server type for some policies.
                                 summary = metricCounts.ConsolidatedRiskText;
                                 details += DisplayNoFindings;
                                 detailsRtf += DisplayRtfNoFindings;
                             }
                             else
                             {
-                                if (m_serverInstance == null && metricCounts.RiskCount > 0)
-                                {
-                                    summary = metricCounts.ConsolidatedRiskText;
-                                }
-                                else
-                                {
-                                    summary = metricCounts.ConsolidatedRiskText;
-                                }
+                                // SQLsecure 3.1 (Anshul Aggarwal) - Now a single metric can have different risk levels based on server type for some policies.
+                                summary = metricCounts.ConsolidatedRiskText;
                             }
 
                             newRow[colSummary] = summary;
@@ -1195,20 +1169,15 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         // fix the result and add the row
                         if (metricCounts.HighestRisk == Policy.SeverityExplained.Ok)
                         {
+                            // SQLsecure 3.1 (Anshul Aggarwal) - Now a single metric can have different risk levels based on server type for some policies.
                             summary = metricCounts.ConsolidatedRiskText;
                             details += DisplayNoFindings;
                             detailsRtf += DisplayRtfNoFindings;
                         }
                         else
                         {
-                            if (m_serverInstance == null && metricCounts.RiskCount > 0)
-                            {
-                                summary = metricCounts.ConsolidatedRiskText;
-                            }
-                            else
-                            {
-                                summary = metricCounts.ConsolidatedRiskText;
-                            }
+                            // SQLsecure 3.1 (Anshul Aggarwal) - Now a single metric can have different risk levels based on server type for some policies.
+                            summary = metricCounts.ConsolidatedRiskText;
                         }
 
                         newRow[colSummary] = summary;
