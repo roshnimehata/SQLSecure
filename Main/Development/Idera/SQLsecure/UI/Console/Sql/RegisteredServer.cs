@@ -1046,6 +1046,32 @@ namespace Idera.SQLsecure.UI.Console.Sql
             return ret;
         }
 
+        //Start-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
+        /// <summary>
+        /// Return authentication mode string that needs to be viwed at UI according to server type.
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="serverType"></param>
+        /// <returns></returns>
+        static public string AuthenticationModeStr(string mode, ServerType serverType)
+        {
+            string ret = string.Empty;
+            try
+            {
+                if (string.IsNullOrEmpty(mode)) { ret = string.Empty; }
+                else if (string.Compare(mode, "W", true) == 0) { ret = "Windows Authentication"; }
+                else if (string.Compare(mode, "M", true) == 0 && serverType == ServerType.AzureSQLDatabase) { ret = "SQL Login and Azure AD"; }
+                else if (string.Compare(mode, "M", true) == 0) { ret = "SQL Server and Windows Authentication"; }
+                else { Debug.Assert(false, "Unknown SQL authentication mode"); }
+            }
+            catch (Exception ex)
+            {
+                logX.loggerX.Error(@"Error while converting authentication mode string.", ex);
+            }
+            return ret;
+        }
+        //End-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
+
         static public string LoginAuditModeStr(string mode)
         {
             string ret = string.Empty;
