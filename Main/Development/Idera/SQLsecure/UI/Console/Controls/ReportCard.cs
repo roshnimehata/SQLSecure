@@ -167,43 +167,87 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 }
             }
 
-            public string HighestRiskText
+            public string ConsolidatedRiskText
             {
                 get
                 {
-                    string text = DescriptionHelper.GetEnumDescription(HighestRisk);
+                    string text = string.Empty;
 
-                    if (HighestRisk != Policy.SeverityExplained.Ok)
+                    if (HighestRisk == Policy.SeverityExplained.Ok)
+                        return DescriptionHelper.GetEnumDescription(Policy.SeverityExplained.Ok);
+
+                    if (RiskCountHigh > 0)
                     {
+                        text += string.Format("{0} {1}", RiskCountHigh, DescriptionHelper.GetEnumDescription(Policy.SeverityExplained.High));
                         text += @" Risk";
-
-                        if (RiskCount != 1)
+                        if (RiskCountHigh != 1)
                         {
                             text = DescriptionHelper.GetPlural(text);
                         }
                     }
- 
-                    switch ((int)HighestRisk)
+
+                    if (RiskCountHighExplained > 0)
                     {
-                        case (int)Policy.SeverityExplained.Low:
-                            if (RiskCountLowExplained > 0)
-                            {
-                                text += string.Format(" + {0} Explained", RiskCountLowExplained);
-                            }
-                            break;
-                        case (int)Policy.SeverityExplained.Medium:
-                            if (RiskCountMediumExplained > 0)
-                            {
-                                text += string.Format(" + {0} Explained", RiskCountMediumExplained);
-                            }
-                            break;
-                        case (int)Policy.SeverityExplained.High:
-                            if (RiskCountHighExplained > 0)
-                            {
-                                text += string.Format(" + {0} Explained", RiskCountHighExplained);
-                            }
-                            break;
+                        text += string.Format(" + {0} High Explained", RiskCountHighExplained);
                     }
+
+                    if (RiskCountMedium > 0)
+                    {
+                        if (!string.IsNullOrWhiteSpace(text))
+                            text += ", "; 
+
+                        text += string.Format("{0} {1}", RiskCountMedium, DescriptionHelper.GetEnumDescription(Policy.SeverityExplained.Medium));
+                        text += @" Risk";
+                        if (RiskCountMedium != 1)
+                        {
+                            text = DescriptionHelper.GetPlural(text);
+                        }
+                    }
+
+                    if (RiskCountMediumExplained > 0)
+                    {
+                        text += string.Format(" + {0} Medium Explained", RiskCountMediumExplained);
+                    }
+
+                    if (RiskCountLow > 0)
+                    {
+                        if (!string.IsNullOrWhiteSpace(text))
+                            text += ", ";
+
+                        text += string.Format("{0} {1}", RiskCountLow, DescriptionHelper.GetEnumDescription(Policy.SeverityExplained.Low));
+                        text += @" Risk";
+                        if (RiskCountLow != 1)
+                        {
+                            text = DescriptionHelper.GetPlural(text);
+                        }
+                    }
+                    
+                    if (RiskCountLowExplained > 0)
+                    {
+                        text += string.Format(" + {0} Low Explained", RiskCountLowExplained);
+                    }
+
+                    //switch ((int)HighestRisk)
+                    //{
+                    //    case (int)Policy.SeverityExplained.Low:
+                    //if (RiskCountLowExplained > 0)
+                    //        {
+                    //            text += string.Format(" + {0} Low Explained", RiskCountLowExplained);
+                    //        }
+                    //    //    break;
+                    //    //case (int)Policy.SeverityExplained.Medium:
+                    //        if (RiskCountMediumExplained > 0)
+                    //        {
+                    //            text += string.Format(" + {0} Medium Explained", RiskCountMediumExplained);
+                    //        }
+                    //    //    break;
+                    //    //case (int)Policy.SeverityExplained.High:
+                    //        if (RiskCountHighExplained > 0)
+                    //        {
+                    //            text += string.Format(" + {0} High Explained", RiskCountHighExplained);
+                    //        }
+                            //break;
+                    //}
 
                     return text;
                 }
@@ -1023,7 +1067,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                             // fix the result and add the row
                             if (metricCounts.HighestRisk == Policy.SeverityExplained.Ok)
                             {
-                                summary = metricCounts.HighestRiskText;
+                                summary = metricCounts.ConsolidatedRiskText;
                                 details += DisplayNoFindings;
                                 detailsRtf += DisplayRtfNoFindings;
                             }
@@ -1031,14 +1075,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
                             {
                                 if (m_serverInstance == null && metricCounts.RiskCount > 0)
                                 {
-                                    summary =
-                                        string.Format(PolicySummaryFormat,
-                                                      metricCounts.RiskCount.ToString(NumericFormat),
-                                                      metricCounts.HighestRiskText);
+                                    summary = metricCounts.ConsolidatedRiskText;
                                 }
                                 else
                                 {
-                                    summary = metricCounts.HighestRiskText;
+                                    summary = metricCounts.ConsolidatedRiskText;
                                 }
                             }
 
@@ -1154,7 +1195,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         // fix the result and add the row
                         if (metricCounts.HighestRisk == Policy.SeverityExplained.Ok)
                         {
-                            summary = metricCounts.HighestRiskText;
+                            summary = metricCounts.ConsolidatedRiskText;
                             details += DisplayNoFindings;
                             detailsRtf += DisplayRtfNoFindings;
                         }
@@ -1162,14 +1203,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         {
                             if (m_serverInstance == null && metricCounts.RiskCount > 0)
                             {
-                                summary =
-                                    string.Format(PolicySummaryFormat,
-                                                  metricCounts.RiskCount.ToString(NumericFormat),
-                                                  metricCounts.HighestRiskText);
+                                summary = metricCounts.ConsolidatedRiskText;
                             }
                             else
                             {
-                                summary = metricCounts.HighestRiskText;
+                                summary = metricCounts.ConsolidatedRiskText;
                             }
                         }
 

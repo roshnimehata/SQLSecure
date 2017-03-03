@@ -15,7 +15,7 @@ using Infragistics.Win.UltraWinTabControl;
 
 namespace Idera.SQLsecure.UI.Console.Controls
 {
-    public partial class controlConfigurePolicyVulnerabilities : UserControl
+    internal partial class controlConfigurePolicyVulnerabilities : UserControl
     {
         #region fields
 
@@ -26,13 +26,17 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private bool m_importing = false;
 
         private bool m_allowEdit = true;
+        private ConfigurePolicyControlType m_ControlType;
 
         #endregion
         
         #region ctors
 
-        public controlConfigurePolicyVulnerabilities()
+        internal controlConfigurePolicyVulnerabilities(ConfigurePolicyControlType state)
         {
+            // SQLsecure 3.1 (Anshul Aggarwal) - Represents current state of control - 'Configure Security Check' or 'Export/Import Policy'.
+            m_ControlType = state;
+
             InitializeComponent();
 
             ultraTabControl1.DrawFilter = new HideFocusRectangleDrawFilter();
@@ -78,6 +82,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             enabledValueList.ValueListItems.Add(listItem);
             listItem = new ValueListItem(false, "No");
             enabledValueList.ValueListItems.Add(listItem);
+            
+            RefreshState();
         }
 
         #endregion
@@ -147,11 +153,17 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 return count;
             }
         }
+        
+        public string IsSelectColumnDisplayText
+        {
+            get { return ultraGridPolicyMetrics.DisplayLayout.Bands[0].Columns[Utility.Constants.POLICY_METRIC_VALUE_IS_SELECTED].Header.Caption; }
+            set { ultraGridPolicyMetrics.DisplayLayout.Bands[0].Columns[Utility.Constants.POLICY_METRIC_VALUE_IS_SELECTED].Header.Caption = value; }
+        }
 
         #endregion
 
         #region methods
-        
+
         /// <summary>
         /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes control using specified configuration values.
         /// </summary>
@@ -411,7 +423,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             bool bAllowContinue = true;
             if (Visible && !m_InternalUpdate)
             {
-                if(!OKToSave())
+                if(m_ControlType == ConfigurePolicyControlType.ConfigureSecurityCheck && !OKToSave())
                 {
                     return false;
                 }
@@ -515,6 +527,20 @@ namespace Idera.SQLsecure.UI.Console.Controls
             }
         }
 
+        private void RefreshState()
+        {
+            if (m_ControlType == ConfigurePolicyControlType.ImportExportSecurityCheck)
+            {
+                button_Import.Visible = button_Clear.Visible = false;
+                checkBox_GroupByCategories.Visible = false;
+                button_ResetToDefaults.Visible = false;
+
+                button_Import.Enabled =
+                   button_Clear.Enabled =
+                   button_ResetToDefaults.Enabled = false;
+            }
+        }
+
         #endregion
 
         #region events
@@ -545,11 +571,25 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     Infragistics.Win.UltraWinGrid.UltraGridRow row = selectedElement.SelectableItem as Infragistics.Win.UltraWinGrid.UltraGridRow;
                     if (row != null && row.Cells != null)
                     {
-                        Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED];
-                        if (cell != null && cell.Value is bool)
+                        // SQLsecure 3.1 (Anshul Aggarwal) - Type of control decides editable columns in the grid.
+                        if(m_ControlType == ConfigurePolicyControlType.ImportExportSecurityCheck)
                         {
-                            cell.Value = !(bool) cell.Value;
-                            UpdateEnabledCount();
+                            UltraGridCell cell = selectedElement.GetContext(typeof(UltraGridCell)) as UltraGridCell;
+                            if (cell != null &&
+                                (cell.Column.Key == Utility.Constants.POLICY_METRIC_VALUE_IS_SELECTED))
+                            {
+                                cell.Value = !((bool)cell.Value);
+                                UpdateEnabledCount();
+                            }
+                        }
+                        else if (m_ControlType == ConfigurePolicyControlType.ConfigureSecurityCheck)
+                        {
+                            Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED];
+                            if (cell != null && cell.Value is bool)
+                            {
+                                cell.Value = !(bool)cell.Value;
+                                UpdateEnabledCount();
+                            }
                         }
                     }
                 }

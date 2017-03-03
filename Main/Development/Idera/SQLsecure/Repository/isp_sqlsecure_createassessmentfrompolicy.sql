@@ -265,6 +265,22 @@ as
 			return -1
 		end
 
+		-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+		delete from policymetricextendedinfo
+			where policyid = @policyid
+				and assessmentid = @newassessmentid
+
+			select @err = @@error
+
+		if @err <> 0
+		begin
+			ROLLBACK TRAN
+			set @msg = 'Error: Failed to refresh current ' + lower(@category) + ' for "' + @policyname + '". The security check (policymetricextendedinfo) settings could not be deleted. '
+			exec isp_sqlsecure_addactivitylog @activitytype=@failure, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname = null
+			RAISERROR (@msg, 16, 1)
+			return -1
+		end
+
 		-- clear the settings
 		delete from policymetric
 			where policyid = @policyid
@@ -340,6 +356,42 @@ as
 	begin
 		ROLLBACK TRAN
 		set @msg = 'Error: Failed to ' + lower(@action) + ' ' + lower(@category) + ' "' + @policyname + '". The security check settings could not be copied. '
+		exec isp_sqlsecure_addactivitylog @activitytype=@failure, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname = null
+		RAISERROR (@msg, 16, 1)
+		return -1
+	end
+
+		set @msg = 'Anshul'
+		exec isp_sqlsecure_addactivitylog @activitytype=@failure, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname = null
+
+	-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+	insert into policymetricextendedinfo (
+			policyid,
+			assessmentid,
+			metricid,
+			servertype,
+			reportkey,
+			reporttext,
+			severity,
+			severityvalues)
+	select policyid,
+			@newassessmentid,
+			metricid,
+			servertype,
+			reportkey,
+			reporttext,
+			severity,
+			severityvalues
+		from policymetricextendedinfo
+		where policyid = @policyid
+			and assessmentid = @assessmentid
+
+	select @err = @@error
+
+	if @err <> 0
+	begin
+		ROLLBACK TRAN
+		set @msg = 'Error: Failed to ' + lower(@action) + ' ' + lower(@category) + ' "' + @policyname + '". The security check settings(policymetricextendedinfo) could not be copied. '
 		exec isp_sqlsecure_addactivitylog @activitytype=@failure, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname = null
 		RAISERROR (@msg, 16, 1)
 		return -1

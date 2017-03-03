@@ -62,6 +62,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             Infragistics.Win.UltraWinGrid.UltraGridColumn ultraGridColumn25 = new Infragistics.Win.UltraWinGrid.UltraGridColumn(Constants.POLICY_METRIC_COLUMN_METRIC_DISPLAY_NAME, -1, null, 1, Infragistics.Win.UltraWinGrid.SortIndicator.Ascending, false);
             Infragistics.Win.UltraWinGrid.UltraGridColumn ultraGridColumn26 = new Infragistics.Win.UltraWinGrid.UltraGridColumn(Constants.POLICY_METRIC_COLUMN_ADB_VALID_VALUES);
             Infragistics.Win.UltraWinGrid.UltraGridColumn ultraGridColumn27 = new Infragistics.Win.UltraWinGrid.UltraGridColumn(Constants.POLICY_METRIC_COLUMN_ADB_VALUE_DESCRIPTION);
+            Infragistics.Win.UltraWinGrid.UltraGridColumn ultraGridColumn28 = new Infragistics.Win.UltraWinGrid.UltraGridColumn(Constants.POLICY_METRIC_COLUMN_AZURE_DB);
+            Infragistics.Win.UltraWinGrid.UltraGridColumn ultraGridColumn29 = new Infragistics.Win.UltraWinGrid.UltraGridColumn(Constants.POLICY_METRIC_VALUE_IS_SELECTED);
             Infragistics.Win.Appearance appearance2 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance3 = new Infragistics.Win.Appearance();
             Infragistics.Win.Appearance appearance4 = new Infragistics.Win.Appearance();
@@ -75,8 +77,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.checkBox_GroupByCategories = new System.Windows.Forms.CheckBox();
             this.button_Import = new Infragistics.Win.Misc.UltraButton();
             this.button_ResetToDefaults = new Infragistics.Win.Misc.UltraButton();
-            this.sqlServerCriteriaControl = new controlConfigureMetricCriteria();
-            this.azureSQLDatabaseCriteriaControl = new controlConfigureMetricCriteria();
+            this.sqlServerCriteriaControl = new controlConfigureMetricCriteria(m_ControlType);
+            this.azureSQLDatabaseCriteriaControl = new controlConfigureMetricCriteria(m_ControlType);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.openFileDialog_ImportPolicy = new System.Windows.Forms.OpenFileDialog();
             this._ultraPrintPreviewDialog = new Infragistics.Win.Printing.UltraPrintPreviewDialog(this.components);
@@ -313,14 +315,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridColumn23.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect; // ApplicableOnAzureDB
             ultraGridColumn23.ExcludeFromColumnChooser = Infragistics.Win.UltraWinGrid.ExcludeFromColumnChooser.True;
             ultraGridColumn23.Hidden = true;
-            ultraGridColumn23.Header.VisiblePosition = 23;
-            ultraGridColumn23.Width = 49;
             ultraGridColumn24.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Append;
             ultraGridColumn24.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect; // ApplicableOnPremise
             ultraGridColumn24.ExcludeFromColumnChooser = Infragistics.Win.UltraWinGrid.ExcludeFromColumnChooser.True;
             ultraGridColumn24.Hidden = true;
-            ultraGridColumn24.Header.VisiblePosition = 25;
-            ultraGridColumn24.Width = 49;
             ultraGridColumn25.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Append;
             ultraGridColumn25.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect;
             ultraGridColumn25.Header.Caption = "Name";
@@ -329,13 +327,27 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridColumn26.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect; // Valid Values
             ultraGridColumn26.ExcludeFromColumnChooser = Infragistics.Win.UltraWinGrid.ExcludeFromColumnChooser.True;
             ultraGridColumn26.Hidden = true;
-            ultraGridColumn26.Header.VisiblePosition = 26;
-            ultraGridColumn26.Width = 49;
             ultraGridColumn27.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect; // Value Description
             ultraGridColumn27.ExcludeFromColumnChooser = Infragistics.Win.UltraWinGrid.ExcludeFromColumnChooser.True;
             ultraGridColumn27.Hidden = true;
-            ultraGridColumn27.Header.VisiblePosition = 27;
-            ultraGridColumn27.Width = 49;
+            ultraGridColumn28.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect; // Value Description
+            ultraGridColumn28.ExcludeFromColumnChooser = Infragistics.Win.UltraWinGrid.ExcludeFromColumnChooser.True;
+            ultraGridColumn28.Hidden = true;
+            ultraGridColumn29.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Append;  // IsSelected
+            ultraGridColumn29.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect;
+            ultraGridColumn29.Header.VisiblePosition = 1;
+
+            // SQLsecure 3.1 (Anshul Aggarwal) - Set control properties based on usage of the control.
+            if(m_ControlType == ConfigurePolicyControlType.ConfigureSecurityCheck)
+            {
+                ultraGridColumn29.ExcludeFromColumnChooser = Infragistics.Win.UltraWinGrid.ExcludeFromColumnChooser.True;
+                ultraGridColumn29.Hidden = true;
+            }
+            else if(m_ControlType == ConfigurePolicyControlType.ImportExportSecurityCheck)
+            {
+                ultraGridColumn12.Header.VisiblePosition = 2;   // Move IsEnabled behind Export/Import column
+            }
+
             ultraGridBand1.Columns.AddRange(new object[] {
             ultraGridColumn1,
             ultraGridColumn2,
@@ -363,7 +375,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridColumn24,
             ultraGridColumn25,
             ultraGridColumn26,
-            ultraGridColumn27
+            ultraGridColumn27,
+            ultraGridColumn28,
+            ultraGridColumn29
             });
             this.ultraGridPolicyMetrics.DisplayLayout.BandsSerializer.Add(ultraGridBand1);
             this.ultraGridPolicyMetrics.DisplayLayout.CaptionVisible = Infragistics.Win.DefaultableBoolean.False;

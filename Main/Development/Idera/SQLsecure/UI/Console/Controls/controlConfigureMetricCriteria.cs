@@ -14,7 +14,7 @@ using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 
 namespace Idera.SQLsecure.UI.Console.Controls
 {
-    public partial class controlConfigureMetricCriteria : UserControl
+    internal partial class controlConfigureMetricCriteria : UserControl
     {
         #region Queries, Columns & Constants
 
@@ -31,18 +31,20 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private string colReportText = Utility.Constants.POLICY_METRIC_COLUMN_REPORT_TEXT;
         private string colSeverity = Utility.Constants.POLICY_METRIC_COLUMN_SEVERITY;
         private string colSeverityValues = Utility.Constants.POLICY_METRIC_COLUMN_SEVERITY_VALUES;
-        
+
+        private ConfigurePolicyControlType m_State;
+
         #endregion
-        
+
         #region ctors
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public controlConfigureMetricCriteria()
+        internal controlConfigureMetricCriteria(ConfigurePolicyControlType state)
         {
-            InitializeComponent();
+            // SQLsecure 3.1 (Anshul Aggarwal) - Represents current state of control - 'Configure Security Check' or 'Export/Import Policy'.
+            m_State = state;
 
+            InitializeComponent();
+            
             // Hide all radio buttons for single selection group box
             radioButton1.Visible = false;
             radioButton2.Visible = false;
@@ -119,6 +121,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             enabledValueList.ValueListItems.Add(listItem);
             listItem = new ValueListItem(false, "No");
             enabledValueList.ValueListItems.Add(listItem);
+            
+            RefreshState();
         }
 
         #endregion
@@ -151,7 +155,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             if (!allowEdit)
             {
                 button_Edit.Enabled =
-                button_Remove.Enabled = false;
+                   button_Remove.Enabled = false;
                 textBox_ReportKey.Enabled =
                     textBox_ReportText.Enabled =
                     textBox_UserEnterSingle.Enabled = false;
@@ -715,6 +719,44 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             if (gridColumnNames.ContainsKey(PolicyMetricConfigurationColumn.ValueDescription))
                 colValueDescription = gridColumnNames[PolicyMetricConfigurationColumn.ValueDescription];
+        }
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Configure control based on its current state
+        /// </summary>
+        private void RefreshState()
+        {
+            if (m_State == ConfigurePolicyControlType.ImportExportSecurityCheck)
+            {
+                button_Remove.Visible = false;
+                button_Edit.Visible = false;
+
+                button_Edit.Enabled =
+                   button_Remove.Enabled = false;
+                textBox_ReportKey.Enabled =
+                    textBox_ReportText.Enabled =
+                    textBox_UserEnterSingle.Enabled = false;
+                radioButton_SeverityCritical.Enabled =
+                    radioButton_SeverityMedium.Enabled =
+                    radioButton_SeverityLow.Enabled = false;
+                checkBox1.Enabled =
+                    checkBox2.Enabled =
+                    checkBox3.Enabled =
+                    checkBox4.Enabled =
+                    checkBox5.Enabled =
+                    checkBox6.Enabled =
+                    checkBox7.Enabled =
+                    checkBox8.Enabled = false;
+                radioButton1.Enabled =
+                    radioButton2.Enabled =
+                    radioButton3.Enabled =
+                    radioButton4.Enabled =
+                    radioButton5.Enabled =
+                    radioButton6.Enabled =
+                    radioButton7.Enabled =
+                    radioButton8.Enabled = false;
+                //listView_MultiSelect.Enabled = false;
+            }
         }
 
         #endregion

@@ -92,12 +92,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
 	        a.severity,
 	        a.severityvalues
         FROM 
-	        SQLsecure.dbo.policymetricextendedinfo a,
-	        SQLsecure.dbo.metricextendedinfo b,
-            SQLsecure.dbo.assessment c 
-        WHERE a.metricid = b.metricid AND 
-              a.assessmentid = c.assessmentid AND 
-            a.policyid = @policyid";
+	        SQLsecure.dbo.policymetricextendedinfo a INNER JOIN 
+	        SQLsecure.dbo.metricextendedinfo b ON a.metricid = b.metricid INNER JOIN  
+            SQLsecure.dbo.assessment c ON a.policyid = c.policyid AND a.assessmentid = c.assessmentid 
+        WHERE a.policyid = @policyid";
 
         private const string QueryGetPolicyMetrics = QueryGetMetrics +
                                                      @" AND assessmentstate = N'" + Utility.Policy.AssessmentState.Settings + @"'";
@@ -354,7 +352,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         }
 
         // SQLsecure 3.1 (Anshul Aggarwal) - Added support for Azure SQL Database Configuration.
-        [XmlIgnoreAttribute]
+        [XmlIgnore]
         public bool ApplicableOnPremise
         {
             get
@@ -363,7 +361,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
-        [XmlIgnoreAttribute]
+        [XmlIgnore]
         public bool ApplicableOnAzureDB
         {
             get
@@ -372,7 +370,20 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
-        [XmlIgnoreAttribute]
+        public PolicyMetricConfiguration AzureDB
+        {
+            get
+            {
+                return m_AzureSQLDatabaseConfiguration;
+            }
+
+            set
+            {
+                m_AzureSQLDatabaseConfiguration = value;
+            }
+        }
+
+        [XmlIgnore]
         public string MetricDisplayName
         {
             get
@@ -393,16 +404,19 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        [XmlIgnore]
         public string ADBMetricName
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.MetricName; }
         }
 
+        [XmlIgnore]
         public string ADBMetricDescription
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.MetricDescription; }
         }
 
+        [XmlIgnore]
         public string ADBReportKey
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ReportKey; }
@@ -416,6 +430,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        [XmlIgnore]
         public string ADBReportText
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ReportText; }
@@ -430,6 +445,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         }
 
+        [XmlIgnore]
         public int ADBSeverity
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? 0 : m_AzureSQLDatabaseConfiguration.Severity; }
@@ -443,6 +459,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        [XmlIgnore]
         public string ADBSeverityValues
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.SeverityValues; }
@@ -456,11 +473,13 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        [XmlIgnore]
         public string ADBValidValues
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ValidValues; }
         }
 
+        [XmlIgnore]
         public string ADBValueDescription
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ValueDescription; }
