@@ -69,7 +69,7 @@ END
 GO
 
 
-IF NOT EXISTS ( SELECT *
+IF NOT EXISTS ( SELECT TOP 1 *
 FROM   dbo.sysobjects
 WHERE  id = OBJECT_ID(N'[dbo].[azuresqldbfirewallrules]')
     AND xtype = N'U' ) 
@@ -103,7 +103,7 @@ WHERE  id = OBJECT_ID(N'[dbo].[azuresqldbfirewallrules]')
 	end
 /* END SQL Secure 3.1 (Anshul Aggarwal) New risk assessments */ 
 /* START SQL Secure 3.1 (Anshul Aggarwal) Support different metric settings based on type of server */ 
-IF NOT EXISTS ( SELECT *
+IF NOT EXISTS ( SELECT TOP 1 *
 FROM   dbo.sysobjects
 WHERE  id = OBJECT_ID(N'[dbo].[metricextendedinfo]')
     AND xtype = N'U' ) 
@@ -130,7 +130,7 @@ WHERE  id = OBJECT_ID(N'[dbo].[metricextendedinfo]')
 
 	end
 
-IF NOT EXISTS ( SELECT *
+IF NOT EXISTS ( SELECT TOP 1 *
 FROM   dbo.sysobjects
 WHERE  id = OBJECT_ID(N'[dbo].[policymetricextendedinfo]')
     AND xtype = N'U' ) 
