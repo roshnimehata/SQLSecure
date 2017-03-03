@@ -464,10 +464,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             bool bAllowContinue = true;
             refreshSort = false;
            
-            if (row.Cells[colReportKey].Value.ToString() != textBox_ReportKey.Text
-                            || (radioButton_SeverityLow.Checked && row.Cells[colSeverity].Value.ToString() != "1")
-                            || (radioButton_SeverityMedium.Checked && row.Cells[colSeverity].Value.ToString() != "2")
-                            || (radioButton_SeverityCritical.Checked && row.Cells[colSeverity].Value.ToString() != "3"))
+            if (Convert.ToString(row.Cells[colReportKey]) != textBox_ReportKey.Text
+                            || (radioButton_SeverityLow.Checked && Convert.ToString(row.Cells[colSeverity].Value) != "1")
+                            || (radioButton_SeverityMedium.Checked && Convert.ToString(row.Cells[colSeverity].Value) != "2")
+                            || (radioButton_SeverityCritical.Checked && Convert.ToString(row.Cells[colSeverity].Value) != "3"))
             {
                 refreshSort = true;
             }
@@ -623,7 +623,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 values.Append("'");
             }
 
-            row.Cells[colSeverityValues].Value = values.ToString();
+            row.Cells[colSeverityValues].Value = Convert.ToString(values);
             
             return bAllowContinue;
         }

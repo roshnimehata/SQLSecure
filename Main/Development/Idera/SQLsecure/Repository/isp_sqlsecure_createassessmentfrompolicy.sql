@@ -361,9 +361,6 @@ as
 		return -1
 	end
 
-		set @msg = 'Anshul'
-		exec isp_sqlsecure_addactivitylog @activitytype=@failure, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname = null
-
 	-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
 	insert into policymetricextendedinfo (
 			policyid,
