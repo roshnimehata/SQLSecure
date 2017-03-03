@@ -1224,9 +1224,10 @@
 		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>EndDialog</td><td>Return</td><td>1</td><td>3</td></row>
 		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>Reinstall</td><td>ALL</td><td>PATCH And REINSTALL=""</td><td>1</td></row>
 		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>ReinstallMode</td><td>omus</td><td>PATCH And REINSTALLMODE=""</td><td>2</td></row>
-		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "No" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>3</td></row>
+		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "No" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>4</td></row>
 		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>MaintenanceType</td><td>Installed AND _IsMaintenance = "Reinstall" and not IS_MAJOR_UPGRADE</td><td>1</td></row>
-		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLocation</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "Yes" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>4</td></row>
+		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLocation</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "Yes" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>5</td></row>
+		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>3</td></row>
 		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>2</td></row>
 		<row><td>ReadyToInstall</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
 		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1</td><td>1</td></row>
@@ -1339,7 +1340,7 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpFatalExit</td><td>1</td><td>1</td></row>
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpSuccess</td><td>1</td><td>1</td></row>
-		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>LAUNCHPROGRAM</td><td>3</td></row>
+		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>_IsSetupTypeMin &lt;&gt; "Collector"</td><td>3</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupError</td><td>A</td><td>EndDialog</td><td>ErrorAbort</td><td>1</td><td>1</td></row>
 		<row><td>SetupError</td><td>C</td><td>EndDialog</td><td>ErrorCancel</td><td>1</td><td>0</td></row>
@@ -4530,12 +4531,12 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>NEW_STRING158</td><td>1033</td><td>{\Tahoma7Red}Note: Install locally on a SQL Server computer hosting the Repository.</td><td>0</td><td/><td>572318505</td></row>
 		<row><td>NEW_STRING159</td><td>1033</td><td>&amp;Cluster Installation </td><td>0</td><td/><td>1176634634</td></row>
 		<row><td>NEW_STRING16</td><td>1033</td><td>&amp;Next &gt;</td><td>0</td><td/><td>-199646929</td></row>
-		<row><td>NEW_STRING160</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Repository + Collector only</td><td>0</td><td/><td>-1591402324</td></row>
+		<row><td>NEW_STRING160</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Repository and Services only</td><td>0</td><td/><td>430276614</td></row>
 		<row><td>NEW_STRING161</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591360410</td></row>
 		<row><td>NEW_STRING162</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591350170</td></row>
 		<row><td>NEW_STRING163</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591401338</td></row>
 		<row><td>NEW_STRING164</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591387002</td></row>
-		<row><td>NEW_STRING165</td><td>1033</td><td>Installs the Collector and creates the repository database on local SQL Server instance</td><td>0</td><td/><td>-1591373780</td></row>
+		<row><td>NEW_STRING165</td><td>1033</td><td>Installs the Collector service and creates the repository database on local SQL Server instance</td><td>0</td><td/><td>430268454</td></row>
 		<row><td>NEW_STRING17</td><td>1033</td><td>Cancel</td><td>0</td><td/><td>-199642833</td></row>
 		<row><td>NEW_STRING173</td><td>1033</td><td>&amp;OK</td><td>0</td><td/><td>-2070198543</td></row>
 		<row><td>NEW_STRING174</td><td>1033</td><td>The database specified is an unsupported version.  The SQL diagnostic manager installer can not update this version of the database.</td><td>0</td><td/><td>-2070213742</td></row>
