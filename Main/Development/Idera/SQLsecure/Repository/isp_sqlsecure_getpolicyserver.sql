@@ -82,7 +82,7 @@ SELECT	vwss.[connectionname]
       ,vwss.[sapasswordempty]
       ,vwss.[systemdrive]
       ,vwss.[adhocdistributedqueriesenabled]
-      ,vwss.[weakpassworddectectionenabled] , r.serverType
+      ,vwss.[weakpassworddectectionenabled] , r.servertype
 FROM	vwserversnapshot vwss JOIN registeredserver r on r.connectionname = vwss.connectionname
 WHERE	snapshotid IN (SELECT snapshotid FROM dbo.getsnapshotlist(@rundate, @usebaseline))
 		AND vwss.registeredserverid IN (SELECT registeredserverid FROM #tmpservers)
