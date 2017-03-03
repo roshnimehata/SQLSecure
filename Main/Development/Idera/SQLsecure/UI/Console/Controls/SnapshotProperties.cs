@@ -49,11 +49,17 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 {
                     this._ultraTabControl.Tabs["_tab_WindowsAccounts"].Text = "Azure AD Accounts";
                     this._ultraTabControl.Tabs["_tab_OSWindowsAccounts"].Visible = false;
+                    //SQLSecure 3.1 (Tushar)--FIx for defect SQLSECU-1666
+                    this._ultraTabControl.Tabs["_tab_SuspectWindowsAccounts"].Visible = false;
+                    this._ultraTabControl.Tabs["_tab_SuspectOsWindowsAccounts"].Visible = false;
                 }
                 else
                 {
                     this._ultraTabControl.Tabs["_tab_WindowsAccounts"].Text = "Windows Accounts";
                     this._ultraTabControl.Tabs["_tab_OSWindowsAccounts"].Visible = true;
+                    //SQLSecure 3.1 (Tushar)--FIx for defect SQLSECU-1666
+                    this._ultraTabControl.Tabs["_tab_SuspectWindowsAccounts"].Visible = true;
+                    this._ultraTabControl.Tabs["_tab_SuspectOsWindowsAccounts"].Visible = true;
                 }
                 //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                 int snapshotid = ((Data.PermissionExplorer)contextIn).SnapShotId;
