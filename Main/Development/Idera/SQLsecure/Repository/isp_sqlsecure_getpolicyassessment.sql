@@ -9332,11 +9332,11 @@ AS -- <Idera SQLsecure version and copyright>
 															and istdeencrypted = 0';
 															 
 															if(LOWER(ISNULL(@severityvalues, '')) <> 'none')
-																SELECT @sql += 'and FQN not in ('
+																SELECT @sql = @sql + 'and FQN not in ('
 																	+ @severityvalues
 																	+ N')';
 
-															SELECT @sql += 'and databasename not in (''msdb'', ''master'',
+															SELECT @sql = @sql + 'and databasename not in (''msdb'', ''master'',
                                                                        ''model'', ''tempdb'') 
 															order by databasename';
 
@@ -9853,7 +9853,7 @@ AS -- <Idera SQLsecure version and copyright>
 																and isserverlevel = 1
 															) ur'
 															IF(ISNULL(@severityvalues, '') <> '')
-																SELECT @sql += ' where NOT EXISTS (Select * 
+																SELECT @sql = @sql + ' where NOT EXISTS (Select * 
 																from 
 																(
 																	select dbo.fn_getIPAddressToInteger(SUBSTRING(Value, 0, CHARINDEX(''-'', Value))) as n_start, 
@@ -9958,7 +9958,7 @@ AS -- <Idera SQLsecure version and copyright>
 																and isserverlevel = 0
 															) ur' 
 															IF(ISNULL(@severityvalues, '') <> '')
-																SELECT @sql += ' where NOT EXISTS (Select * 
+																SELECT @sql = @sql + ' where NOT EXISTS (Select * 
 																from 
 																(
 																	select dbo.fn_getIPAddressToInteger(SUBSTRING(Value, 0, CHARINDEX(''-'', Value))) as n_start, 
