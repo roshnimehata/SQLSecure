@@ -1063,8 +1063,10 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         + @metricval;
 
                                                         SELECT
-                                                                @metricthreshold = N'Server is vulnerable if Guest user access is available on databases other than: '
-                                                                + @severityvalues;
+                                                                @metricthreshold = N'Server is vulnerable if Guest user access is available on databases'
+
+														IF(ISNULL(@severityvalues, '') <> '')
+															SELECT @metricthreshold = @metricthreshold + N' other than: '  + @severityvalues;
 
                                                         CLOSE dbcursor;
                                                         DEALLOCATE dbcursor;
@@ -6484,9 +6486,11 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         + @metricval;
 
                                                         SELECT
-                                                                @metricthreshold = N'Server is vulnerable if any SQL Server 2005 or later databases are trustworthy other than: '
-                                                                + @severityvalues;
+                                                                @metricthreshold = N'Server is vulnerable if any SQL Server 2005 or later databases are trustworthy';
 
+														IF(ISNULL(@severityvalues, '') <> '')
+															SELECT @metricthreshold = @metricthreshold + N' other than: '  + @severityvalues;
+                                                               
                                                         CLOSE dbcursor;
                                                         DEALLOCATE dbcursor;
                                                 END;
@@ -6570,9 +6574,11 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         + @metricval;
 
                                                         SELECT
-                                                                @metricthreshold = N'Server is vulnerable if a login who is a member of sysadmin or has the CONTROL SERVER permission owns any databases other than: '
-                                                                + @severityvalues;
+                                                                @metricthreshold = N'Server is vulnerable if a login who is a member of sysadmin or has the CONTROL SERVER permission owns any databases';
 
+														IF(ISNULL(@severityvalues, '') <> '')
+															SELECT @metricthreshold = @metricthreshold + N' other than: '  + @severityvalues;
+                                                              
                                                         CLOSE dbcursor;
                                                         DEALLOCATE dbcursor;
                                                 END;
@@ -6657,8 +6663,10 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         + @metricval;
 
                                                         SELECT
-                                                                @metricthreshold = N'Server is vulnerable if a login who is a member of sysadmin or has the CONTROL SERVER permission owns any trustworthy databases other than: '
-                                                                + @severityvalues;
+                                                                @metricthreshold = N'Server is vulnerable if a login who is a member of sysadmin or has the CONTROL SERVER permission owns any trustworthy databases';
+
+														IF(ISNULL(@severityvalues, '') <> '')
+															SELECT @metricthreshold = @metricthreshold + N' other than: '  + @severityvalues;
 
                                                         CLOSE dbcursor;
                                                         DEALLOCATE dbcursor;
@@ -6870,7 +6878,7 @@ AS -- <Idera SQLsecure version and copyright>
 													IF(ISNULL(@severityvalues, '') = '')
 														BEGIN
 															SELECT @sevcode = @sevcodeok,
-																			@metricval = 'No dangerous members found in SSIS security roles.';
+																			@metricval = 'No unacceptable permissions found.';
 														END
 													ELSE
 														BEGIN
@@ -8756,7 +8764,7 @@ AS -- <Idera SQLsecure version and copyright>
 													IF(ISNULL(@severityvalues, '') = '')
 														BEGIN
 															SELECT @sevcode = @sevcodeok,
-																			@metricval = 'No dangerous members found in SSIS security roles.';
+																			@metricval = 'No unacceptable permissions found.';
 														END
 													ELSE
 														BEGIN
@@ -9372,11 +9380,11 @@ AS -- <Idera SQLsecure version and copyright>
 
 														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
 														BEGIN
-															SELECT @metricthreshold = N'Server is vulnerable if always encryption is not configured for specified columns on SQL Server 2016 or later.';
+															SELECT @metricthreshold = N'Server is vulnerable if always encryption is not configured for specified columns on SQL Server 2016 or later';
 														END
 														ELSE IF (@serverType = @azuresqldatabaseservertype)
 														BEGIN
-															SELECT @metricthreshold = N'Server is vulnerable if always encryption is not configured for specified columns on Azure SQL Database.';
+															SELECT @metricthreshold = N'Server is vulnerable if always encryption is not configured for specified columns on Azure SQL Database';
 														END;
 
 														
@@ -9485,11 +9493,15 @@ AS -- <Idera SQLsecure version and copyright>
 
 														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
 														BEGIN
-															SELECT @metricthreshold = N'Server is vulnerable if transparent data encryption is not configured for any databases on SQL Server 2008 or later.';
+															SELECT @metricthreshold = N'Server is vulnerable if transparent data encryption is not configured for any databases on SQL Server 2008 or later';
+															if(LOWER(ISNULL(@severityvalues, '')) <> '' and LOWER(ISNULL(@severityvalues, '')) <> 'none')
+																SELECT @metricthreshold = @metricthreshold + N' other than: ' + @severityvalues
 														END
 														ELSE IF (@serverType = @azuresqldatabaseservertype)
 														BEGIN
-															SELECT @metricthreshold = N'Server is vulnerable if transparent data encryption is not configured for any databases on Azure SQL Database.';
+															SELECT @metricthreshold = N'Server is vulnerable if transparent data encryption is not configured for any databases on Azure SQL Database';
+															if(LOWER(ISNULL(@severityvalues, '')) <> '' and LOWER(ISNULL(@severityvalues, '')) <> 'none')
+																SELECT @metricthreshold = @metricthreshold + N' other than: ' + @severityvalues
 														END;
 													END
 													ELSE
@@ -9589,11 +9601,11 @@ AS -- <Idera SQLsecure version and copyright>
 														  
 														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
 														BEGIN
-															SELECT @metricthreshold = N'Server is vulnerable if native backup encryption was not configured on SQL Server 2014 or later.';
+															SELECT @metricthreshold = N'Server is vulnerable if native backup encryption was not configured on SQL Server 2014 or later';
 														END
 														ELSE IF (@serverType = @azuresqldatabaseservertype)
 														BEGIN
-															SELECT @metricthreshold = N'Server is vulnerable if native backup encryption was not configured on Azure SQL Database.';
+															SELECT @metricthreshold = N'Server is vulnerable if native backup encryption was not configured on Azure SQL Database';
 														END;
 													END
 													ELSE
@@ -9703,11 +9715,11 @@ AS -- <Idera SQLsecure version and copyright>
 
 														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
 														BEGIN
-															SELECT @metricthreshold = N'Server is vulnerable if row-level security is not configured for specified databases on SQL Server 2016 or later.';
+															SELECT @metricthreshold = N'Server is vulnerable if row-level security is not configured for specified databases on SQL Server 2016 or later';
 														END
 														ELSE IF (@serverType = @azuresqldatabaseservertype)
 														BEGIN
-															SELECT @metricthreshold = N'Server is vulnerable if row-level security is not configured for specified databases on Azure SQL Database.';
+															SELECT @metricthreshold = N'Server is vulnerable if row-level security is not configured for specified databases on Azure SQL Database';
 														END;
 													END
 													ELSE
@@ -9816,11 +9828,11 @@ AS -- <Idera SQLsecure version and copyright>
 
 														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
 														BEGIN
-															SELECT @metricthreshold = N'Server is vulnerable if dynamic data masking is not configured for specified databases on SQL Server 2016 or later.';
+															SELECT @metricthreshold = N'Server is vulnerable if dynamic data masking is not configured for specified databases on SQL Server 2016 or later';
 														END
 														ELSE IF (@serverType = @azuresqldatabaseservertype)
 														BEGIN
-															SELECT @metricthreshold = N'Server is vulnerable if dynamic data masking is not configured for specified databases on Azure SQL Database.';
+															SELECT @metricthreshold = N'Server is vulnerable if dynamic data masking is not configured for specified databases on Azure SQL Database';
 														END;
 													END
 													ELSE
@@ -9936,7 +9948,8 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         @sevcode = @sevcodeok,
                                                                         @metricval = N'N/A';
 														END 
-														SELECT @metricthreshold = N'Server is vulnerable if digital signature has not been added to specified stored procedure, function, assembly or trigger on SQL Server 2008 or later.';
+
+														SELECT @metricthreshold = N'Server is vulnerable if digital signature has not been added to specified stored procedure, function, assembly or trigger on SQL Server 2008 or later';
 													END
 													ELSE
 												
@@ -10041,7 +10054,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         @sevcode = @sevcodeok,
                                                                         @metricval = N'N/A';
 														END 
-														SELECT @metricthreshold = N'Server is vulnerable if unapproved server-level firewall rules have been configured on Azure SQL Database.';
+														SELECT @metricthreshold = N'Server is vulnerable if unapproved server-level firewall rules have been configured on Azure SQL Database';
 
 													END
 													ELSE
@@ -10145,7 +10158,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                     @sevcode = @sevcodeok,
                                                                     @metricval = N'N/A';
 													END 
-													SELECT @metricthreshold = N'Server is vulnerable if unapproved database-level firewall rules have been configured on Azure SQL Database.';
+													SELECT @metricthreshold = N'Server is vulnerable if unapproved database-level firewall rules have been configured on Azure SQL Database';
 
 												END
                                                 
