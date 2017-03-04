@@ -186,10 +186,9 @@ BEGIN
 
 				-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
 				if exists (select * from policymetric a inner join policymetric b on a.policyid = b.policyid and a.metricid = b.metricid
-				left join  policymetricextendedinfo c  on a.policyid = c.policyid and a.metricid = c.metricid
-				left join policymetricextendedinfo d on c.policyid = d.policyid and c.metricid = d.metricid and c.servertype = d.servertype 
-							where a.policyid = @policyid and a.assessmentid = @settingsid and b.assessmentid = @currentid and
-							      c.policyid = @policyid and c.assessmentid = @settingsid and d.assessmentid = @currentid
+				left join  policymetricextendedinfo c  on a.policyid = c.policyid and a.metricid = c.metricid and a.assessmentid = c.assessmentid
+				left join policymetricextendedinfo d on c.policyid = d.policyid and c.metricid = d.metricid and c.servertype = d.servertype and b.assessmentid = d.assessmentid
+							where a.policyid = @policyid and a.assessmentid = @settingsid and b.assessmentid = @currentid
 								and (a.isenabled <> b.isenabled
 									 or a. reportkey <> b.reportkey
 									 or a. reporttext <> b.reporttext
