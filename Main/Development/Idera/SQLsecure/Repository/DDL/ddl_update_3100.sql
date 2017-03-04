@@ -26,10 +26,10 @@ BEGIN
 		ALTER TABLE sqldatabase
 		ADD istdeencrypted BIT NOT NULL DEFAULT(0)
 	END
-	IF COL_LENGTH('sqldatabase','wasbackupnotencrypted') IS NULL
+	IF COL_LENGTH('sqldatabase','nativebackupnotencrypted') IS NULL
 	 BEGIN
 		ALTER TABLE sqldatabase
-		ADD wasbackupnotencrypted BIT NOT NULL DEFAULT(0)
+		ADD nativebackupnotencrypted BIT NOT NULL DEFAULT(0)
 	END
 	IF COL_LENGTH('sqldatabase','FQN') IS NULL
 	 BEGIN
@@ -66,6 +66,22 @@ IF OBJECT_ID('databaseobject', 'U') IS NOT NULL
 		ADD FQN nvarchar(1000)
 	END
 END
+
+-- SQLsecure 3.1 (Anshul Aggarwal) - New columns for NTFS Encrytion.
+IF OBJECT_ID('serverosobject', 'U') IS NOT NULL 
+BEGIN
+	IF COL_LENGTH('serverosobject','issqldatabasefolder') IS NULL
+	 BEGIN
+		ALTER TABLE serverosobject
+		ADD issqldatabasefolder BIT NOT NULL DEFAULT(0)
+	END
+	IF COL_LENGTH('serverosobject','isencrypted') IS NULL
+	 BEGIN
+		ALTER TABLE serverosobject
+		ADD isencrypted BIT NULL
+	END
+END
+
 GO
 
 

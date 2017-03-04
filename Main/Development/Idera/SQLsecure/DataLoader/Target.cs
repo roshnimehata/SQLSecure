@@ -2205,8 +2205,16 @@ namespace Idera.SQLsecure.Collector
                         snapshotStatus = Constants.StatusWarning;
                     }
 
+                    // SQLsecure 3.1 (Anshul Aggarwal) - Process Database Folders NTFS Encryption
+                    if (filePermissions.GetDatabaseFolderPermissions(databases) != 0)
+                    {
+                        strNewMessage = "Failed to load some Database Folder permissions for target SQL Server to check NTFS Encryption";
+                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                        snapshotStatus = Constants.StatusWarning;
+                    }
+
                     filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
-                                                                        registryPermissions.NumOSObjectsWrittenToRepository);
+                                                                        filePermissions.NumOSObjectsWrittenToRepository);
                 }
                 if (isOk)
                 {
@@ -3126,8 +3134,16 @@ namespace Idera.SQLsecure.Collector
                         snapshotStatus = Constants.StatusWarning;
                     }
 
+                    // SQLsecure 3.1 (Anshul Aggarwal) - Process Database Folders NTFS Encryption
+                    if (filePermissions.GetDatabaseFolderPermissions(databases) != 0)
+                    {
+                        strNewMessage = "Failed to load some Database Folder permissions for target SQL Server to check NTFS Encryption";
+                        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
+                        snapshotStatus = Constants.StatusWarning;
+                    }
+
                     filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
-                                                                        registryPermissions.NumOSObjectsWrittenToRepository);
+                                                                        filePermissions.NumOSObjectsWrittenToRepository);
                 }
                 if (isOk)
                 {

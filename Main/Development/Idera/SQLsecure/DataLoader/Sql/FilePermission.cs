@@ -98,6 +98,8 @@ namespace Idera.SQLsecure.Collector.Sql
         //private string ownerName;
         private string disktype;      // NTFS, FAT or null if not file object
         private string objectSid;
+        private bool isSQLDatabaseFolder;     // SQLsecure 3.1 (Anshul Aggarwal) - Track SQL files to check for NTFS Encryption for new risk assessment.
+        private bool? isEncrypted;
         private List<FileAccessRight> accessRightsList = new List<FileAccessRight>();
         private List<FileAuditSetting> auditSettingsList = new List<FileAuditSetting>();
         #endregion
@@ -164,6 +166,20 @@ namespace Idera.SQLsecure.Collector.Sql
             get { return objectSid; }
             set { objectSid = value; }
         }
+
+        // SQLsecure 3.1 (Anshul Aggarwal) - Track SQL folder to check for NTFS Encryption for new risk assessment.
+        public bool IsSQLDatabaseFolder
+        {
+            get { return isSQLDatabaseFolder; }
+            set { isSQLDatabaseFolder = value; }
+        }
+
+        public bool? IsEncrypted
+        {
+            get { return isEncrypted; }
+            set { isEncrypted = value; }
+        }
+
         #endregion
     }
 
@@ -404,6 +420,60 @@ namespace Idera.SQLsecure.Collector.Sql
             return numWarnings;
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Check for NTFS encryption for SQL Folders.
+        /// </summary>
+        public int GetDatabaseFolderPermissions(List<Database> databases)
+        {
+            int numWarnings = 0;
+            using (logX.loggerX.DebugCall())
+            {
+                Program.ImpersonationContext wi = Program.SetTargetImpersonationContext();
+                try
+                {
+                    List<string> processedDirectories = new List<string>();
+                    foreach (Database db in databases)
+                    {
+                        if (db.DatabaseFolderNames != null)
+                        {
+                            foreach (string dirName in db.DatabaseFolderNames)
+                            {
+                                try
+                                {
+                                    if (processedDirectories.Contains(dirName))
+                                        continue;
+                                    
+                                    processedDirectories.Add(dirName);
+
+                                    // Get Disk Type (NTFS or FAT)
+                                    string diskType = GetDiskTypeFromLocalPath(dirName);
+                                    
+                                    numWarnings += GetDirectoryNTFSEncryption(dirName, enumOSObjectType.FDir, diskType);
+                                }
+                                catch (Exception ex)
+                                {
+                                    numWarnings++;
+                                    logX.loggerX.Error(
+                                        string.Format("Error Getting Database {0} Folder Permissions for NTFS Encryption: {1}", dirName,
+                                                      ex.Message));
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    numWarnings++;
+                    logX.loggerX.Error(string.Format("Error Getting Database Folder Permissions for NTFS Encryption: {0}", ex.Message));
+                }
+                finally
+                {
+                    Program.RestoreImpersonationContext(wi);
+                }
+            }
+            return numWarnings;
+        }
+
         public bool WriteFilePermissionToRepository(string repositoryConnectionString, int startID)
         {
             bool isOK = true;
@@ -456,6 +526,17 @@ namespace Idera.SQLsecure.Collector.Sql
                                     }
                                     dr[SQLServerObjectTable.ParamOwnerSid] = fp.OwnerSid.BinarySid;
                                     dr[SQLServerObjectTable.ParamDiskType] = fp.Disktype.ToString();
+
+                                    // SQLsecure 3.1 (Anshul Aggarwal) - Add new columns to track NTFS encryption for SQL Folder/Files.
+                                    dr[SQLServerObjectTable.ParamIsSQLDatabaseFolder] = fp.IsSQLDatabaseFolder;
+                                    if (fp.IsEncrypted.HasValue)
+                                    {
+                                        dr[SQLServerObjectTable.ParamIsEncrypted] = fp.IsEncrypted;
+                                    }
+                                    else
+                                    {
+                                        dr[SQLServerObjectTable.ParamIsEncrypted] = DBNull.Value;
+                                    }
 
                                     dataTableObject.Rows.Add(dr);
                                     if (dataTableObject.Rows.Count >= Constants.RowBatchSize)
@@ -993,6 +1074,65 @@ namespace Idera.SQLsecure.Collector.Sql
 
             return numWarnings;
         }
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Check for NTFS encryption for SQL Folders.
+        /// </summary>
+        private int GetDirectoryNTFSEncryption(string dirName, enumOSObjectType eObjectType, string diskType)
+        {
+            int numWarnings = 0;
+            try
+            {
+                FilePermission fp = new FilePermission();
+                fp.DatabaseId = int.MinValue;
+
+                string localDirName = ConvertUNCPathToLocalPath(dirName);
+                if (localDirName.Length > 260)
+                {
+                    fp.ObjectName = localDirName.Substring(0, 260);
+                    fp.LongObjectname = localDirName;
+                }
+                else
+                {
+                    fp.ObjectName = localDirName;
+                }
+                fp.Disktype = diskType;
+                if (eObjectType == enumOSObjectType.FDir)
+                {
+                    fp.ObjectType = eObjectType;
+                }
+                else
+                {
+                    logX.loggerX.Error("GetDirectoryNTFSEncryption - Invalid OS Object Type : ", eObjectType.ToString());
+                }
+
+                DirectorySecurity ds = Directory.GetAccessControl(dirName, AccessControlSections.All);
+
+                // Get Owner SID
+                // -------------
+                fp.OwnerSid = new Sid(ds.GetOwner(Type.GetType("System.Security.Principal.SecurityIdentifier")).Value);
+                
+                // SQLsecure 3.1 (Anshul Aggarwal) - Check for NTFS Encryption for SQL Folders
+                fp.IsSQLDatabaseFolder = true;
+                DirectoryInfo di = new DirectoryInfo(dirName);
+                // Determine whether the directory exists.
+                if (di.Exists)
+                {
+                    fp.IsEncrypted = (di.Attributes & FileAttributes.Encrypted) == FileAttributes.Encrypted;
+                }
+
+                AddFilePermision(fp);
+            }
+            catch (Exception ex)
+            {
+                numWarnings++;
+                string msg = string.Format("Failed to get directory NTFS encryption status for {0}: {1}", dirName, ex);
+                logX.loggerX.Warn(msg);
+            }
+
+            return numWarnings;
+        }
+
 
         private int GetFilePermission(string fileName, enumOSObjectType eObjectType, string diskType, int dbId)
         {

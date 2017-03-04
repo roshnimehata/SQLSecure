@@ -9512,75 +9512,68 @@ AS -- <Idera SQLsecure version and copyright>
 														IF((@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype) and
 														(dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(@version)) >= dbo.fn_getversionasdecimal(dbo.fn_normalizeversion(N'12.'))))
                                                         BEGIN
-															IF(ISNULL(@severityvalues, '') <> '')
+															IF CURSOR_STATUS('global','dbcursor')>= 0
 															BEGIN
-																IF CURSOR_STATUS('global','dbcursor')>= 0
-																BEGIN
-																	 CLOSE dbcursor
-																	 DEALLOCATE dbcursor
-																END
-																SELECT
-																		@sql = N'declare dbcursor cursor static for
-																select FQN 
-																from sqldatabase
-																where snapshotid = '
-																		+ CONVERT(nvarchar, @snapshotid)
-																		+ N'
-																and wasbackupnotencrypted = 1  
-																and databasename not in ('
-																		+ @severityvalues
-																		+ N') 
-																order by databasename';
-																EXEC (@sql);
-																OPEN dbcursor;
-																SELECT
-																		@intval2 = 0;
-																FETCH NEXT FROM
-																dbcursor INTO @strval;
-																WHILE @@fetch_status = 0
-																BEGIN
-																		IF (@intval2 = 1
-																				OR LEN(@metricval)
-																				+ LEN(@strval) > 1010
-																				)
-																		BEGIN
-																				IF @intval2 = 0
-																						SELECT
-																								@metricval = @metricval
-																								+ N', more...',
-																								@intval2 = 1;
-																		END
-																		ELSE
-																				SELECT
-																						@metricval = @metricval
-																						+ CASE
-																								WHEN LEN(@metricval) > 0 THEN N', '
-																								ELSE N''
-																						END + N''''
-																						+ @strval
-																						+ N'''';
-
-																		FETCH NEXT FROM
-																		dbcursor INTO @strval;
-																END;
-																CLOSE dbcursor;
-																DEALLOCATE dbcursor;
-																IF (@isadmin = 1)
-																		INSERT INTO policyassessmentdetail (policyid,
-																		assessmentid,
-																		metricid,
-																		snapshotid,
-																		detailfinding,
-																		databaseid,
-																		objecttype,
-																		objectid,
-																		objectname)
-																				VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following databases don''t have native backup encryption configured: ''' + @strval + N'''', NULL, -- database ID,
-																				N'DB', -- object type
-																				NULL, -- object id
-																				@strval);
-
+																	CLOSE dbcursor
+																	DEALLOCATE dbcursor
 															END
+
+															declare dbcursor cursor static for
+															select FQN 
+															from sqldatabase
+															where snapshotid = @snapshotid
+															and nativebackupnotencrypted = 1  
+															and databasename not in ('msdb', 'master',
+                                                                    'model', 'tempdb')  
+															order by databasename;
+
+															OPEN dbcursor;
+															SELECT
+																	@intval2 = 0;
+															FETCH NEXT FROM
+															dbcursor INTO @strval;
+															WHILE @@fetch_status = 0
+															BEGIN
+																	IF (@intval2 = 1
+																			OR LEN(@metricval)
+																			+ LEN(@strval) > 1010
+																			)
+																	BEGIN
+																			IF @intval2 = 0
+																					SELECT
+																							@metricval = @metricval
+																							+ N', more...',
+																							@intval2 = 1;
+																	END
+																	ELSE
+																			SELECT
+																					@metricval = @metricval
+																					+ CASE
+																							WHEN LEN(@metricval) > 0 THEN N', '
+																							ELSE N''
+																					END + N''''
+																					+ @strval
+																					+ N'''';
+
+																	FETCH NEXT FROM
+																	dbcursor INTO @strval;
+															END;
+															CLOSE dbcursor;
+															DEALLOCATE dbcursor;
+															IF (@isadmin = 1)
+																	INSERT INTO policyassessmentdetail (policyid,
+																	assessmentid,
+																	metricid,
+																	snapshotid,
+																	detailfinding,
+																	databaseid,
+																	objecttype,
+																	objectid,
+																	objectname)
+																			VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following databases don''t have native backup encryption configured: ''' + @strval + N'''', NULL, -- database ID,
+																			N'DB', -- object type
+																			NULL, -- object id
+																			@strval);
 
 															IF (LEN(@metricval) = 0)
 																	SELECT
@@ -10161,7 +10154,100 @@ AS -- <Idera SQLsecure version and copyright>
 													SELECT @metricthreshold = N'Server is vulnerable if unapproved database-level firewall rules have been configured on Azure SQL Database';
 
 												END
-                                                
+												ELSE
+                                                --NTFS Folder Level Encryption
+												IF ( @metricid = 125 )
+													BEGIN
+														IF(@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+                                                        BEGIN
+															IF CURSOR_STATUS('global','dbcursor')>= 0
+															BEGIN
+																	CLOSE dbcursor
+																	DEALLOCATE dbcursor
+															END
+															
+															declare dbcursor cursor static for
+															select objectname 
+															from serverosobject 
+															where snapshotid = @snapshotid
+															and disktype = 'NTFS' and objecttype = 'FDir' and
+															issqldatabasefolder = 1 and isencrypted = 0 
+															order by objectname;
+
+															OPEN dbcursor;
+															SELECT
+																	@intval2 = 0;
+															FETCH NEXT FROM
+															dbcursor INTO @strval;
+															WHILE @@fetch_status = 0
+															BEGIN
+																	IF (@intval2 = 1
+																			OR LEN(@metricval)
+																			+ LEN(@strval) > 1010
+																			)
+																	BEGIN
+																			IF @intval2 = 0
+																					SELECT
+																							@metricval = @metricval
+																							+ N', more...',
+																							@intval2 = 1;
+																	END
+																	ELSE
+																			SELECT
+																					@metricval = @metricval
+																					+ CASE
+																							WHEN LEN(@metricval) > 0 THEN N', '
+																							ELSE N''
+																					END + N''''
+																					+ @strval
+																					+ N'''';
+
+																	FETCH NEXT FROM
+																	dbcursor INTO @strval;
+															END;
+															CLOSE dbcursor;
+															DEALLOCATE dbcursor;
+															IF (@isadmin = 1)
+																	INSERT INTO policyassessmentdetail (policyid,
+																	assessmentid,
+																	metricid,
+																	snapshotid,
+																	detailfinding,
+																	databaseid,
+																	objecttype,
+																	objectid,
+																	objectname)
+																			VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following SQL Server folders don''t have NTFS folder level encryption configured: ''' + @strval + N'''', NULL, -- database ID,
+																			N'DB', -- object type
+																			NULL, -- object id
+																			@strval);
+
+															IF (LEN(@metricval) = 0)
+																	SELECT
+																			@sevcode = @sevcodeok,
+																			@metricval = N'None found.';
+															ELSE
+																	SELECT
+																			@sevcode = @severity,
+																			@metricval = N'Following SQL Server folders don''t have NTFS folder level encryption configured: '
+																			+ @metricval;
+														END
+														ELSE 
+														BEGIN
+															  SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'N/A';
+														END   
+														  
+														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+														BEGIN
+															SELECT @metricthreshold = N'Server is vulnerable if Windows NTFS folder level encryption was not configured for SQL Server folders';
+														END
+														ELSE IF (@serverType = @azuresqldatabaseservertype)
+														BEGIN
+															SELECT @metricthreshold = N'Server is vulnerable if Windows NTFS folder level encryption was not configured for SQL Server folders';
+														END;
+													END
                                                 --**************************** code added to handle user defined security checks, but never used (first added in version 2.5)
                                                 -- User implemented
                                                 ELSE

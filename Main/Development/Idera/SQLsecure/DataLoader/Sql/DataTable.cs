@@ -945,7 +945,9 @@ namespace Idera.SQLsecure.Collector.Sql
                     colObjectName = new DataColumn(ParamObjectName, typeof(SqlString)),
                     colLongName = new DataColumn(ParamLongName, typeof(SqlString)),
                     colOwnerSid = new DataColumn(ParamOwnerSid, typeof(SqlBinary)),
-                    colDiskType = new DataColumn(ParamDiskType, typeof(SqlString)))
+                    colDiskType = new DataColumn(ParamDiskType, typeof(SqlString)),
+                    colIsSQLDatabaseFolder = new DataColumn(ParamIsSQLDatabaseFolder, typeof(SqlBoolean)),
+                    colIsEncrypted = new DataColumn(ParamIsEncrypted, typeof(SqlBoolean)))
             {
                 // Create the data table object & define its columns.
                 // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
@@ -958,7 +960,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colObjectName,
                                                                 colLongName,
                                                                 colOwnerSid,
-                                                                colDiskType
+                                                                colDiskType,
+                                                                colIsSQLDatabaseFolder,
+                                                                colIsEncrypted
                                                             });
             }
 
@@ -973,6 +977,10 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamLongName = "longname";
         internal const string ParamOwnerSid = "ownersid";
         internal const string ParamDiskType = "disktype";
+
+        // SQLsecure 3.1 (Anshul Aggarwal) - Add new columns to track NTFS encryption for SQL Folder/Files.
+        internal const string ParamIsSQLDatabaseFolder = "issqldatabasefolder";
+        internal const string ParamIsEncrypted = "isencrypted";
 
         internal const string RepositoryTable = "SQLsecure.dbo.serverosobject";
     }

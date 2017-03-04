@@ -826,6 +826,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                     dr[SQLServerObjectTable.ParamOwnerSid] = fp.OwnerSid.BinarySid;
                                     dr[SQLServerObjectTable.ParamDiskType] = DBNull.Value;
 
+                                    // SQLsecure 3.1 (Anshul Aggarwal) - Add new columns to track NTFS encryption for SQL Folder/Files.
+                                    dr[SQLServerObjectTable.ParamIsSQLDatabaseFolder] = false;
+                                    dr[SQLServerObjectTable.ParamIsEncrypted] = DBNull.Value;
+
                                     dataTableObject.Rows.Add(dr);
                                     if (dataTableObject.Rows.Count >= Constants.RowBatchSize)
                                     {
