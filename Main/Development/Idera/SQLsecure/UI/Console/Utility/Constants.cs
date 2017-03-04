@@ -394,7 +394,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string ReportRunInstructions_UserName = @"Type or browse for the User name.";
         public const string ReportRunInstructions_Server = @"Select a target SQL Server instance.";
 
-		-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+		// SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
         public const string ReportRunInstructions_Server_OP_OR_ADB = @"Select a target SQL Server or Azure SQL Database instance.";
         
 		public const string ReportRunInstructions_Database = @"Select a Database you would like to analyze.";
@@ -415,7 +415,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         // General Reports
         public const string ReportTitle_AuditedServers = @"Audited SQL Servers";
         
-		-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+		// SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
 		public static string ReportSummary_AuditedServers = @"Show all the SQL Server and Azure SQL Database instances that are being audited by " + PRODUCT_STR + ".";
 
         public const string ReportTitle_CrossServerLoginCheck = @"Cross Server Login Check";
