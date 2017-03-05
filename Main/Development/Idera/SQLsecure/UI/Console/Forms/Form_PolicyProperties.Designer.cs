@@ -43,7 +43,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.textBox_PolicyName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.ultraTabPageControl1 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
-            this.controlConfigurePolicyVulnerabilities1 = new Idera.SQLsecure.UI.Console.Controls.controlConfigurePolicyVulnerabilities();
+            this.controlConfigurePolicyVulnerabilities1 = new Idera.SQLsecure.UI.Console.Controls.controlConfigurePolicyVulnerabilities(Utility.ConfigurePolicyControlType.ConfigureSecurityCheck);
             this.ultraTabPageControl2 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this.controlPolicyAddServers1 = new Idera.SQLsecure.UI.Console.Controls.ControlPolicyAddServers();
             this.ultraTabPageControl4 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();

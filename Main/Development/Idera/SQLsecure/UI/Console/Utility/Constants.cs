@@ -76,7 +76,52 @@ namespace Idera.SQLsecure.UI.Console.Utility
         NewAuditServer,
         NewPolicy
     }
+    
+    // SQLsecure 3.1 (Anshul Aggarwal) - Represents values configurable for a metric based on server type.
+    internal enum PolicyMetricConfigurationColumn
+    {
+        PolicyId = 0,
+        AssessmentId,
+        MetricId,
+        ServerType,
+        MetricName,
+        MetricDescription,
+        ValidValues,
+        ValueDescription,
+        ReportKey,
+        ReportText,
+        Severity,
+        SeverityValues
+    }
 
+    // SQLsecure 3.1 (Anshul Aggarwal) - Represents values configurable for a metric.
+    internal enum PolicyColumn
+    {
+        PolicyId = 0,
+        AssessmentId,
+        PolicyName,
+        MetricId,
+        MetricType,
+        MetricName,
+        MetricDescription,
+        IsUserEntered,
+        IsMultiSelect,
+        ValidValues,
+        ValueDescription,
+        IsEnabled,
+        ReportKey,
+        ReportText,
+        Severity,
+        SeverityValues
+    }
+
+    // SQLsecure 3.1 (Anshul Aggarwal) - Used to differentiate between 2 states of Configure Policy Control
+    internal enum ConfigurePolicyControlType
+    {
+        ConfigureSecurityCheck,
+        ImportExportSecurityCheck
+    }
+    
     internal static class Constants
     {
         #region General
@@ -528,6 +573,50 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string IMPORT_COLUMN_TEXT = "Import";
         public const string IMPORTING_EXPORTING_DESCRIPTION_FORMAT = "Check security checks in {0} column for {1} operation.";
         public const string IMPORTING_EXPORTING_FORM_TITLE_FORMAT = "{0} {1} Security Checks - {2}";
+
+        #endregion
+
+        #region Configure Policy Vulnerabilities
+        
+        // SQLsecure 3.1 (Anshul Aggarwal) - Columns for handling the grid and policymetric results
+        public const string POLICY_METRIC_VALUE_IS_SELECTED = @"IsSelected";
+
+        public const string POLICY_METRIC_VALUE_LIST_SERVERITY = @"Severity";
+        public const string POLICY_METRIC_VALUE_LIST_ENABLED = @"Enabled";
+
+        public const string POLICY_METRIC_COLUMN_IS_ENABLED = @"IsEnabled";
+        public const string POLICY_METRIC_COLUMN_IS_MULTISELECT = @"IsMultiSelect";
+        public const string POLICY_METRIC_COLUMN_IS_USER_ENTERED = @"IsUserEntered";
+        public const string POLICY_METRIC_COLUMN_METRIC_TYPE = @"MetricType";
+        public const string POLICY_METRIC_COLUMN_VALID_VALUES = @"ValidValues";
+        public const string POLICY_METRIC_COLUMN_VALUE_DESCRIPTION = @"ValueDescription";
+        
+        public const string POLICY_METRIC_PROPERTIES_HEADER_DISPLAY = "Security Checks ({0} enabled)";
+        public const string POLICY_METRIC_PROPERTIES_PRINT_TITLE = @"Policy Security Checks";
+        public const string POLICY_METRIC_PROPERTIES_PRINT_HEADER_DISPLAY = "Security Checks for '{0}' as of {1}";
+
+        public const string POLICY_METRIC_COLUMN_APPLICABLE_AZUREDB = @"ApplicableOnAzureDB";
+        public const string POLICY_METRIC_COLUMN_APPLICABLE_PREMISE = @"ApplicableOnPremise";
+        public const string POLICY_METRIC_COLUMN_METRIC_DISPLAY_NAME = @"MetricDisplayName";
+
+        public const string POLICY_METRIC_COLUMN_REPORT_KEY = @"ReportKey";
+        public const string POLICY_METRIC_COLUMN_REPORT_TEXT = @"ReportText";
+        public const string POLICY_METRIC_COLUMN_SEVERITY = @"Severity";
+        public const string POLICY_METRIC_COLUMN_SEVERITY_VALUES = @"SeverityValues";
+        public const string POLICY_METRIC_COLUMN_METRIC_DESCRIPTION = @"MetricDescription";
+        public const string POLICY_METRIC_COLUMN_METRIC_NAME = @"MetricName";
+        
+        public const string POLICY_METRIC_COLUMN_ADB_METRIC_NAME = @"ADBMetricName";
+        public const string POLICY_METRIC_COLUMN_ADB_METRIC_DESCRIPTION = @"ADBMetricDescription";
+        public const string POLICY_METRIC_COLUMN_ADB_REPORT_KEY = @"ADBReportKey";
+        public const string POLICY_METRIC_COLUMN_ADB_REPORT_TEXT = @"ADBReportText";
+        public const string POLICY_METRIC_COLUMN_ADB_SEVERITY = @"ADBSeverity";
+        public const string POLICY_METRIC_COLUMN_ADB_SEVERITY_VALUES = @"ADBSeverityValues";
+        public const string POLICY_METRIC_COLUMN_ADB_VALID_VALUES = @"ADBValidValues";
+        public const string POLICY_METRIC_COLUMN_ADB_VALUE_DESCRIPTION = @"ADBValueDescription";
+        public const string POLICY_METRIC_COLUMN_AZURE_DB = @"AzureDB";
+
+        public const string POLICY_METRIC_CONSTANT_NOT_APPLICABLE = @"NA";
 
         #endregion
     }
