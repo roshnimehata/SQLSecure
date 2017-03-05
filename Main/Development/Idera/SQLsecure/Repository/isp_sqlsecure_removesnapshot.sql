@@ -67,6 +67,9 @@ as
 			delete from dbo.availabilitygroups where snapshotid = @snapshotid
 			delete from dbo.availabilityreplicas where snapshotid = @snapshotid
 			
+			-- SQLsecure 3.1 (Anshul Aggarwal) - New Risk Assessments (Server-Level and DB-Level Firewall rules for Azure SQL DB)
+			delete from azuresqldbfirewallrules where snapshotid = @snapshotid
+
 			delete from databaseprincipalpermission where snapshotid = @snapshotid
 			delete from databaseobjectpermission where snapshotid = @snapshotid
 			delete from databaseschemapermission where snapshotid = @snapshotid

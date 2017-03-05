@@ -183,24 +183,39 @@ BEGIN
 			else 
 			begin
 				-- check current metrics against the settings metrics
+
+				-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
 				if exists (select * from policymetric a inner join policymetric b on a.policyid = b.policyid and a.metricid = b.metricid
+				left join  policymetricextendedinfo c  on a.policyid = c.policyid and a.metricid = c.metricid and a.assessmentid = c.assessmentid
+				left join policymetricextendedinfo d on c.policyid = d.policyid and c.metricid = d.metricid and c.servertype = d.servertype and b.assessmentid = d.assessmentid
 							where a.policyid = @policyid and a.assessmentid = @settingsid and b.assessmentid = @currentid
 								and (a.isenabled <> b.isenabled
 									 or a. reportkey <> b.reportkey
 									 or a. reporttext <> b.reporttext
 									 or a. severity <> b.severity
-									 or a. severityvalues <> b.severityvalues))
+									 or a. severityvalues <> b.severityvalues
+									 or c. reportkey <> d.reportkey
+									 or c. reporttext <> d.reporttext
+									 or c. severity <> d.severity
+									 or c. severityvalues <> d.severityvalues))
 				begin
 					if (@debug=1)
 					begin
 						print 'current policymetric not matching settings'
 						select * from policymetric a inner join policymetric b on a.policyid = b.policyid and a.metricid = b.metricid
-							where a.policyid = @policyid and a.assessmentid = @settingsid and b.assessmentid = @currentid
+							left join  policymetricextendedinfo c  on a.policyid = c.policyid and a.metricid = c.metricid
+							left join policymetricextendedinfo d on c.policyid = d.policyid and c.metricid = d.metricid and c.servertype = d.servertype 
+							where a.policyid = @policyid and a.assessmentid = @settingsid and b.assessmentid = @currentid and
+							      c.policyid = @policyid and c.assessmentid = @settingsid and d.assessmentid = @currentid
 								and (a.isenabled <> b.isenabled
 									 or a. reportkey <> b.reportkey
 									 or a. reporttext <> b.reporttext
 									 or a. severity <> b.severity
-									 or a. severityvalues <> b.severityvalues)
+									 or a. severityvalues <> b.severityvalues
+									 or c. reportkey <> d.reportkey
+									 or c. reporttext <> d.reporttext
+									 or c. severity <> d.severity
+									 or c. severityvalues <> d.severityvalues)
 					end
 					select @isvalid = 0
 				end
@@ -292,26 +307,54 @@ BEGIN
 			else 
 			begin 
 				-- check the metrics against the assessment settings to see if any changed
-				if exists (select * from policymetric a left join policyassessment b on a.policyid = b.policyid and a.assessmentid = b.assessmentid and a.metricid = b.metricid
+
+				-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database
+				if exists (select * from policymetric a 
+							left join policyassessment b on a.policyid = b.policyid and a.assessmentid = b.assessmentid and a.metricid = b.metricid
+							inner join registeredserver c on b.connectionname = c.connectionname 
+							left join policymetricextendedinfo d on a.policyid = d.policyid and a.assessmentid = d.assessmentid and a.metricid = d.metricid 
 							where a.policyid = @policyid and a.assessmentid = @assessmentid
 								and ((a.isenabled <> case when b.policyid is null then 0 else 1 end)
-									 or a.reportkey <> b.metricreportkey
-									 or a.reporttext <> b.metricreporttext
-									 or a.severity <> b.metricseveritycode
-									 or a.severityvalues <> b.metricseverityvalues))
+									 or 
+									(
+										 (c.servertype = 'OP' or c.servertype = 'AVM') and (a.reportkey <> b.metricreportkey
+																							 or a.reporttext <> b.metricreporttext
+																							 or a.severity <> b.metricseveritycode
+																							 or a.severityvalues <> b.metricseverityvalues)
+									 )
+									 or 
+									 (
+										 (c.servertype = 'ADB') and (c.servertype = d.servertype) and (d.reportkey <> b.metricreportkey
+																				 or d.reporttext <> b.metricreporttext
+																				 or d.severity <> b.metricseveritycode
+																				 or a.severityvalues <> b.metricseverityvalues)
+									 )))
 								-- if only metric 54 is returned, then there were no snapshots and other metrics will not be returned
 								and exists (select * from policyassessment where policyid = @policyid and assessmentid = @assessmentid and metricid <> 54)
 				begin
 					if (@debug=1)
 					begin
 						print 'policymetric not matching saved values from policyassessment'
-						select * from policymetric a left join policyassessment b on a.policyid = b.policyid and a.assessmentid = b.assessmentid and a.metricid = b.metricid
+						select * from policymetric a 
+							left join policyassessment b on a.policyid = b.policyid and a.assessmentid = b.assessmentid and a.metricid = b.metricid
+							inner join registeredserver c on b.connectionname = c.connectionname 
+							left join policymetricextendedinfo d on a.policyid = d.policyid and a.assessmentid = d.assessmentid and a.metricid = d.metricid 
 							where a.policyid = @policyid and a.assessmentid = @assessmentid
 								and ((a.isenabled <> case when b.policyid is null then 0 else 1 end)
-									 or a.reportkey <> b.metricreportkey
-									 or a.reporttext <> b.metricreporttext
-									 or a.severity <> b.metricseveritycode
-									 or a.severityvalues <> b.metricseverityvalues)
+									 or 
+									(
+										 (c.servertype = 'OP' or c.servertype = 'AVM') and (a.reportkey <> b.metricreportkey
+																							 or a.reporttext <> b.metricreporttext
+																							 or a.severity <> b.metricseveritycode
+																							 or a.severityvalues <> b.metricseverityvalues)
+									 )
+									 or 
+									 (
+										 (c.servertype = 'ADB') and (c.servertype = d.servertype) and (d.reportkey <> b.metricreportkey
+																				 or d.reporttext <> b.metricreporttext
+																				 or d.severity <> b.metricseveritycode
+																				 or a.severityvalues <> b.metricseverityvalues)
+									 ))
 					end
 					select @isvalid = 0
 				end
