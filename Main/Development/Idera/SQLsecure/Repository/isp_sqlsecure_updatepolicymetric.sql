@@ -16,7 +16,11 @@ CREATE procedure [dbo].[isp_sqlsecure_updatepolicymetric]
 	@reportkey nvarchar(32),
 	@reporttext nvarchar(4000),
 	@severity int,
-	@severityvalues nvarchar(4000)
+	@severityvalues nvarchar(4000),
+	@adbreportkey nvarchar(32) = null,
+	@adbreporttext nvarchar(4000) = null,
+	@adbseverity int = null,
+	@adbseverityvalues nvarchar(4000) = null
 )
 AS
    -- <Idera SQLsecure version and copyright>
@@ -75,6 +79,10 @@ AS
 			@oldreporttext nvarchar(4000),
 			@oldseverity int,
 			@oldseverityvalues nvarchar(4000),
+			@oldadbreportkey nvarchar(32),
+			@oldadbreporttext nvarchar(4000),
+			@oldadbseverity int,
+			@oldadbseverityvalues nvarchar(4000),
 			@assessmentstate nvarchar(20) 
 	select @oldisenabled = a.isenabled, 
 			@oldreportkey = a.reportkey, 
@@ -88,6 +96,17 @@ AS
 			and a.metricid = @metricid 
 			and b.policyid = @policyid 
 			and b.assessmentid = @assessmentid 
+
+	-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+	select @oldadbreportkey = a.reportkey, 
+			@oldadbreporttext = a.reporttext, 
+			@oldadbseverity = a.severity, 
+			@oldadbseverityvalues = a.severityvalues
+		from [policymetricextendedinfo] a INNER JOIN assessment b ON a.assessmentid = b.assessmentid and a.policyid = b.policyid 
+		where a.policyid = @policyid 
+			and a.assessmentid = @assessmentid 
+			and a.metricid = @metricid 
+			and a.servertype = 'ADB'
 
 	select @err = @@error
 
@@ -104,7 +123,11 @@ AS
 		or @oldreportkey <> @reportkey 
 		or @oldreporttext <> @reporttext
 		or @oldseverity <> @severity
-		or @oldseverityvalues <> @severityvalues)
+		or @oldseverityvalues <> @severityvalues
+		or @oldadbreportkey <> @adbreportkey 
+		or @oldadbreporttext <> @adbreporttext
+		or @oldadbseverity <> @adbseverity
+		or @oldadbseverityvalues <> @adbseverityvalues)
 	begin
 		update [policymetric] set 
 				isenabled=@isenabled, 
@@ -115,6 +138,28 @@ AS
 			where policyid = @policyid 
 				and assessmentid = @assessmentid
 				and metricid = @metricid
+
+		select @err = @@error
+
+		if @err <> 0
+		begin
+			set @msg = 'Error: Failed to ' + lower(@action) + ' ' + lower(@category) + ' with policy id ' + CONVERT(nvarchar, @policyid) + ' and assessment id ' + CONVERT(NVARCHAR, @assessmentid) + ' and metric id ' + CONVERT(nvarchar, @metricid)
+			exec isp_sqlsecure_addactivitylog @activitytype=@failure, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname = null
+			RAISERROR (@msg, 16, 1)
+			ROLLBACK TRAN
+			return -1
+		end
+
+		-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+		update [policymetricextendedinfo] set
+				reportkey=@adbreportkey, 
+				reporttext=@adbreporttext, 
+				severity=@adbseverity, 
+				severityvalues=@adbseverityvalues 
+			where policyid = @policyid 
+				and assessmentid = @assessmentid
+				and metricid = @metricid
+				and servertype = 'ADB'
 
 		select @err = @@error
 
@@ -159,6 +204,30 @@ AS
 		if (@oldseverityvalues <> @severityvalues)
 		begin
 			set @msg = N'Security Check ' + @metricname + N' configured values changed from ' + @oldseverityvalues + N' to ' + @severityvalues
+			exec isp_sqlsecure_addpolicychangelog @policyid=@policyid, @assessmentid=@assessmentid, @state=@assessmentstate, @description=@msg
+		end
+
+		if (@oldadbreportkey <> @adbreportkey)
+		begin
+			set @msg = N'Security Check ' + @metricname + N' ADB External Cross Reference changed from ' + @oldadbreportkey + N' to ' + @adbreportkey
+			exec isp_sqlsecure_addpolicychangelog @policyid=@policyid, @assessmentid=@assessmentid, @state=@assessmentstate, @description=@msg
+		end
+
+		if (@oldadbreporttext <> @adbreporttext)
+		begin
+			set @msg = N'Security Check ' + @metricname + N' ADB External Cross Reference changed from ' + @oldadbreporttext + N' to ' + @adbreporttext
+			exec isp_sqlsecure_addpolicychangelog @policyid=@policyid, @assessmentid=@assessmentid, @state=@assessmentstate, @description=@msg
+		end
+
+		if (@oldadbseverity <> @adbseverity)
+		begin
+			set @msg = N'Security Check ' + @metricname + N' ADB Risk Level changed from ' + dbo.getpolicyseverityname(@oldadbseverity) + N' to ' + dbo.getpolicyseverityname(@adbseverity)
+			exec isp_sqlsecure_addpolicychangelog @policyid=@policyid, @assessmentid=@assessmentid, @state=@assessmentstate, @description=@msg
+		end
+
+		if (@oldadbseverityvalues <> @adbseverityvalues)
+		begin
+			set @msg = N'Security Check ' + @metricname + N' ADB configured values changed from ' + @oldadbseverityvalues + N' to ' + @adbseverityvalues
 			exec isp_sqlsecure_addpolicychangelog @policyid=@policyid, @assessmentid=@assessmentid, @state=@assessmentstate, @description=@msg
 		end
 
