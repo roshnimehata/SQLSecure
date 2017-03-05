@@ -31,7 +31,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.button_Cancel = new Infragistics.Win.Misc.UltraButton();
             this.button_OK = new Infragistics.Win.Misc.UltraButton();
             this._btn_Help = new Infragistics.Win.Misc.UltraButton();
-            this.ctrSelectingPolicyVulnerabilities = new Idera.SQLsecure.UI.Console.Controls.ControlImportExportPolicyVulnerabilities();
+
+            // SQLsecure 3.1 (Anshul Aggarwal) - Disable editing. 
+            this.ctrSelectingPolicyVulnerabilities = new Idera.SQLsecure.UI.Console.Controls.controlConfigurePolicyVulnerabilities(Utility.ConfigurePolicyControlType.ImportExportSecurityCheck);
+
             this._bfd_ButtonPanel.SuspendLayout();
             this._bf_MainPanel.SuspendLayout();
             this.SuspendLayout();
@@ -115,6 +118,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private Infragistics.Win.Misc.UltraButton button_Cancel;
         private Infragistics.Win.Misc.UltraButton button_OK;
         private Infragistics.Win.Misc.UltraButton _btn_Help;
-        private Idera.SQLsecure.UI.Console.Controls.ControlImportExportPolicyVulnerabilities ctrSelectingPolicyVulnerabilities;
+        private Idera.SQLsecure.UI.Console.Controls.controlConfigurePolicyVulnerabilities ctrSelectingPolicyVulnerabilities;
     }
 }

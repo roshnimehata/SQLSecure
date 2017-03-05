@@ -45,13 +45,13 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private SqlInt32 m_Severity;
         private SqlString m_SeverityValues;
         private bool m_isSelected = true;
-        private PolicyMetricConfiguration m_AzureSQLDatabaseConfiguration; 
+        private PolicyMetricConfiguration m_AzureSQLDatabaseConfiguration; // SQLsecure 3.1 (Anshul Aggarwal) - Added support for Azure SQL Database Configuration.
 
         [XmlIgnoreAttribute]
         private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Sql.PolicyMetric");
         [XmlIgnoreAttribute]
         private bool m_dirty = false;
-        
+
         #endregion
 
         #region Querries
@@ -77,7 +77,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 FROM SQLsecure.dbo.vwpolicymetric 
                 WHERE policyid = @policyid";
 
-        private const string QueryGetMetricsExtendedInfo =
+        private const string QueryGetMetricsExtendedInfo =   // SQLsecure 3.1 (Anshul Aggarwal) - Added support for Azure SQL Database Configuration.
           @"SELECT
 	        a.policyid,
 	        a.assessmentid, 
@@ -92,18 +92,17 @@ namespace Idera.SQLsecure.UI.Console.Sql
 	        a.severity,
 	        a.severityvalues
         FROM 
-	        SQLsecure.dbo.policymetricextendedinfo a,
-	        SQLsecure.dbo.metricextendedinfo b,
-            SQLsecure.dbo.assessment c 
-        WHERE a.metricid = b.metricid AND 
-              a.assessmentid = c.assessmentid AND 
-            a.policyid = @policyid";
+	        SQLsecure.dbo.policymetricextendedinfo a INNER JOIN 
+	        SQLsecure.dbo.metricextendedinfo b ON a.metricid = b.metricid INNER JOIN  
+            SQLsecure.dbo.assessment c ON a.policyid = c.policyid AND a.assessmentid = c.assessmentid 
+        WHERE a.policyid = @policyid";
 
         private const string QueryGetPolicyMetrics = QueryGetMetrics +
                                                      @" AND assessmentstate = N'" + Utility.Policy.AssessmentState.Settings + @"'";
         private const string QueryGetAssessmentMetrics = QueryGetMetrics +
                                                      @" AND assessmentid = @assessmentid";
-
+        
+        // SQLsecure 3.1 (Anshul Aggarwal) - Added support for Azure SQL Database Configuration.
         private const string QueryGetPolicyMetricsExtendedInfo = QueryGetMetricsExtendedInfo +
                                                     @" AND assessmentstate = N'" + Utility.Policy.AssessmentState.Settings + @"'";
         private const string QueryGetAssessmentMetricsExtendedInfo = QueryGetMetricsExtendedInfo +
@@ -121,7 +120,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private const string SPParamReportText = "@reporttext";
         private const string SPParamSeverity = "@severity";
         private const string SPParamSeverityValues = "@severityvalues";
-        private const string SPParamADBReportKey = "@adbreportkey";
+        private const string SPParamADBReportKey = "@adbreportkey";     
+
+        // SQLsecure 3.1 (Anshul Aggarwal) - Added support for Azure SQL Database Configuration.
         private const string SPParamADBReportText = "@adbreporttext";
         private const string SPParamADBSeverity = "@adbseverity";
         private const string SPParamADBSeverityValues = "@adbseverityvalues";
@@ -350,25 +351,39 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
-        [XmlIgnoreAttribute]
+        // SQLsecure 3.1 (Anshul Aggarwal) - Added support for Azure SQL Database Configuration.
+        [XmlIgnore]
         public bool ApplicableOnPremise
         {
             get
             {
-                return !string.IsNullOrEmpty(MetricName) && MetricName != "NA";
+                return !string.IsNullOrEmpty(MetricName) && MetricName != Utility.Constants.POLICY_METRIC_CONSTANT_NOT_APPLICABLE;
             }
         }
 
-        [XmlIgnoreAttribute]
+        [XmlIgnore]
         public bool ApplicableOnAzureDB
         {
             get
             {
-                return !string.IsNullOrEmpty(ADBMetricName) && ADBMetricName != "NA";
+                return !string.IsNullOrEmpty(ADBMetricName) && ADBMetricName != Utility.Constants.POLICY_METRIC_CONSTANT_NOT_APPLICABLE;
             }
         }
 
-        [XmlIgnoreAttribute]
+        public PolicyMetricConfiguration AzureDB
+        {
+            get
+            {
+                return m_AzureSQLDatabaseConfiguration;
+            }
+
+            set
+            {
+                m_AzureSQLDatabaseConfiguration = value;
+            }
+        }
+
+        [XmlIgnore]
         public string MetricDisplayName
         {
             get
@@ -389,16 +404,19 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        [XmlIgnore]
         public string ADBMetricName
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.MetricName; }
         }
 
+        [XmlIgnore]
         public string ADBMetricDescription
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.MetricDescription; }
         }
 
+        [XmlIgnore]
         public string ADBReportKey
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ReportKey; }
@@ -412,6 +430,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        [XmlIgnore]
         public string ADBReportText
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ReportText; }
@@ -426,6 +445,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         }
 
+        [XmlIgnore]
         public int ADBSeverity
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? 0 : m_AzureSQLDatabaseConfiguration.Severity; }
@@ -439,6 +459,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        [XmlIgnore]
         public string ADBSeverityValues
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.SeverityValues; }
@@ -452,29 +473,16 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
+        [XmlIgnore]
         public string ADBValidValues
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ValidValues; }
-            //set
-            //{
-            //    if (m_ValidValues.IsNull || value != m_ValidValues.Value)
-            //    {
-            //        m_dirty = true;
-            //        m_ValidValues = value;
-            //    }
-            //}
         }
+
+        [XmlIgnore]
         public string ADBValueDescription
         {
             get { return m_AzureSQLDatabaseConfiguration == null ? null : m_AzureSQLDatabaseConfiguration.ValueDescription; }
-            //set
-            //{
-            //    if (m_ValueDescription.IsNull || value != m_ValueDescription.Value)
-            //    {
-            //        m_dirty = true;
-            //        m_ValueDescription = value;
-            //    }
-            //}
         }
 
         #endregion
@@ -507,36 +515,30 @@ namespace Idera.SQLsecure.UI.Console.Sql
                             SqlParameter paramAssessmentId = new SqlParameter(SPParamAssessmentId, AssessmentId);
                             SqlParameter paramMetricId = new SqlParameter(SPParamMetricId, MetricId);
                             SqlParameter paramIsEnabled = new SqlParameter(SPParamIsEnabled, IsEnabled);
-                           
+                            SqlParameter paramReportKey = new SqlParameter(SPParamReportKey, ReportKey);
+                            SqlParameter paramReportText = new SqlParameter(SPParamReportText, ReportText);
+                            SqlParameter paramSeverity = new SqlParameter(SPParamSeverity, Severity);
+                            SqlParameter paramSeverityValues = new SqlParameter(SPParamSeverityValues, SeverityValues);
+                            SqlParameter paramADBReportKey = new SqlParameter(SPParamADBReportKey, m_AzureSQLDatabaseConfiguration.ReportKey);
+                            SqlParameter paramADBReportText = new SqlParameter(SPParamADBReportText, m_AzureSQLDatabaseConfiguration.ReportText);
+                            SqlParameter paramADBSeverity = new SqlParameter(SPParamADBSeverity, m_AzureSQLDatabaseConfiguration.Severity);
+                            SqlParameter paramADBSeverityValues = new SqlParameter(SPParamADBSeverityValues, m_AzureSQLDatabaseConfiguration.SeverityValues);
+
                             List<SqlParameter> paramValues = new List<SqlParameter>();
                             paramValues.Add(paramPolicyId);
                             paramValues.Add(paramAssessmentId);
                             paramValues.Add(paramMetricId);
                             paramValues.Add(paramIsEnabled);
-                           
-                            if (ApplicableOnPremise)
-                            {
-                                SqlParameter paramReportKey = new SqlParameter(SPParamReportKey, ReportKey);
-                                SqlParameter paramReportText = new SqlParameter(SPParamReportText, ReportText);
-                                SqlParameter paramSeverity = new SqlParameter(SPParamSeverity, Severity);
-                                SqlParameter paramSeverityValues = new SqlParameter(SPParamSeverityValues, SeverityValues);
-                                paramValues.Add(paramReportKey);
-                                paramValues.Add(paramReportText);
-                                paramValues.Add(paramSeverity);
-                                paramValues.Add(paramSeverityValues);
-                            }   
-                                      
-                            if (ApplicableOnAzureDB)
-                            {
-                                SqlParameter paramADBReportKey = new SqlParameter(SPParamADBReportKey, m_AzureSQLDatabaseConfiguration.ReportKey);
-                                SqlParameter paramADBReportText = new SqlParameter(SPParamADBReportText, m_AzureSQLDatabaseConfiguration.ReportText);
-                                SqlParameter paramADBSeverity = new SqlParameter(SPParamADBSeverity, m_AzureSQLDatabaseConfiguration.Severity);
-                                SqlParameter paramADBSeverityValues = new SqlParameter(SPParamADBSeverityValues, m_AzureSQLDatabaseConfiguration.SeverityValues);
-                                paramValues.Add(paramADBReportKey);
-                                paramValues.Add(paramADBReportText);
-                                paramValues.Add(paramADBSeverity);
-                                paramValues.Add(paramADBSeverityValues);
-                            }
+                            paramValues.Add(paramReportKey);
+                            paramValues.Add(paramReportText);
+                            paramValues.Add(paramSeverity);
+                            paramValues.Add(paramSeverityValues);
+
+                            // SQLsecure 3.1 (Anshul Aggarwal) - Update Azure SQL Database configuration.      
+                            paramValues.Add(paramADBReportKey);
+                            paramValues.Add(paramADBReportText);
+                            paramValues.Add(paramADBSeverity);
+                            paramValues.Add(paramADBSeverityValues);
 
                             Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
                                                           NonQueryUpdatePolicyMetrics, paramValues.ToArray());
@@ -589,6 +591,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
                             }
                         }
 
+                        logX.loggerX.Info("Retrieving Policies Metrics Extended Information.");
+
+                        // SQLsecure 3.1 (Anshul Aggarwal) - Fetch extended info values for metrics.      
                         using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
                                                                                assessmentId.HasValue ? QueryGetAssessmentMetricsExtendedInfo : QueryGetPolicyMetricsExtendedInfo,
                                                                                assessmentId.HasValue ? new SqlParameter[] { paramPolicyId, paramAssessmentId } : new SqlParameter[] { paramPolicyId }))

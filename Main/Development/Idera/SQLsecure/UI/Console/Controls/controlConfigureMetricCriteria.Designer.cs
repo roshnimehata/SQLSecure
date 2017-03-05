@@ -219,7 +219,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.groupbox_Vulnerability.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupbox_Vulnerability.Location = new System.Drawing.Point(0, 0);
             this.groupbox_Vulnerability.Name = "groupbox_Vulnerability";
-            this.groupbox_Vulnerability.Size = new System.Drawing.Size(422, 248);
+            this.groupbox_Vulnerability.Size = new System.Drawing.Size(422, 244);
             this.groupbox_Vulnerability.TabIndex = 8;
             this.groupbox_Vulnerability.TabStop = false;
             this.groupbox_Vulnerability.Text = "Display Settings";
@@ -386,7 +386,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.label_ValueDescriptionUEM.ForeColor = System.Drawing.Color.Navy;
             this.label_ValueDescriptionUEM.Location = new System.Drawing.Point(5, 16);
             this.label_ValueDescriptionUEM.Name = "label_ValueDescriptionUEM";
-            this.label_ValueDescriptionUEM.Size = new System.Drawing.Size(411, 46);
+            this.label_ValueDescriptionUEM.Size = new System.Drawing.Size(400, 46);
             this.label_ValueDescriptionUEM.TabIndex = 4;
             this.label_ValueDescriptionUEM.Text = "Description of the data to be supplied for this vulnerablity. For example a list " +
                 "of valid Startup Stored Proceedures";

@@ -77,6 +77,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         NewPolicy
     }
     
+    // SQLsecure 3.1 (Anshul Aggarwal) - Represents values configurable for a metric based on server type.
     internal enum PolicyMetricConfigurationColumn
     {
         PolicyId = 0,
@@ -92,7 +93,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
         Severity,
         SeverityValues
     }
-    
+
+    // SQLsecure 3.1 (Anshul Aggarwal) - Represents values configurable for a metric.
     internal enum PolicyColumn
     {
         PolicyId = 0,
@@ -111,6 +113,13 @@ namespace Idera.SQLsecure.UI.Console.Utility
         ReportText,
         Severity,
         SeverityValues
+    }
+
+    // SQLsecure 3.1 (Anshul Aggarwal) - Used to differentiate between 2 states of Configure Policy Control
+    internal enum ConfigurePolicyControlType
+    {
+        ConfigureSecurityCheck,
+        ImportExportSecurityCheck
     }
     
     internal static class Constants
@@ -569,7 +578,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         #region Configure Policy Vulnerabilities
         
-        // Columns for handling the grid and policymetric results
+        // SQLsecure 3.1 (Anshul Aggarwal) - Columns for handling the grid and policymetric results
+        public const string POLICY_METRIC_VALUE_IS_SELECTED = @"IsSelected";
+
         public const string POLICY_METRIC_VALUE_LIST_SERVERITY = @"Severity";
         public const string POLICY_METRIC_VALUE_LIST_ENABLED = @"Enabled";
 
@@ -603,6 +614,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string POLICY_METRIC_COLUMN_ADB_SEVERITY_VALUES = @"ADBSeverityValues";
         public const string POLICY_METRIC_COLUMN_ADB_VALID_VALUES = @"ADBValidValues";
         public const string POLICY_METRIC_COLUMN_ADB_VALUE_DESCRIPTION = @"ADBValueDescription";
+        public const string POLICY_METRIC_COLUMN_AZURE_DB = @"AzureDB";
 
         public const string POLICY_METRIC_CONSTANT_NOT_APPLICABLE = @"NA";
 

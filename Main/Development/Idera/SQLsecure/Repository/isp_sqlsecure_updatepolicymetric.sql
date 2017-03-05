@@ -97,16 +97,15 @@ AS
 			and b.policyid = @policyid 
 			and b.assessmentid = @assessmentid 
 
+	-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
 	select @oldadbreportkey = a.reportkey, 
 			@oldadbreporttext = a.reporttext, 
 			@oldadbseverity = a.severity, 
 			@oldadbseverityvalues = a.severityvalues
-		from [policymetricextendedinfo] a, assessment b 
+		from [policymetricextendedinfo] a INNER JOIN assessment b ON a.assessmentid = b.assessmentid and a.policyid = b.policyid 
 		where a.policyid = @policyid 
 			and a.assessmentid = @assessmentid 
 			and a.metricid = @metricid 
-			and b.policyid = @policyid 
-			and b.assessmentid = @assessmentid 
 			and a.servertype = 'ADB'
 
 	select @err = @@error
@@ -151,6 +150,7 @@ AS
 			return -1
 		end
 
+		-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
 		update [policymetricextendedinfo] set
 				reportkey=@adbreportkey, 
 				reporttext=@adbreporttext, 
