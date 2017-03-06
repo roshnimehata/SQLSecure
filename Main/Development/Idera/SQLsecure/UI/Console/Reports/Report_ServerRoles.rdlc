@@ -217,7 +217,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="This report shows all direct members of Server Roles on all SQL Servers."</Value>
+            <Value>="This report shows all direct members of Server Roles on all SQL Servers and Azure SQL Databases."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>

@@ -493,7 +493,7 @@ AS -- <Idera SQLsecure version and copyright>
 											WHERE d.policyid = @policyid
 											AND d.assessmentid = @assessmentid
 											AND c.isenabled = 1
-											AND b.servertype=@servertype
+											AND b.servertype=@serverType
 										END
 										
 										--END(Barkha Khatri) Changing metric cursor to get the metrics applicable on a particular server type
