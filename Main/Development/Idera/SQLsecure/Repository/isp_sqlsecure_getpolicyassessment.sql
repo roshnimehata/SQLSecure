@@ -9522,7 +9522,7 @@ AS -- <Idera SQLsecure version and copyright>
 															select FQN 
 															from sqldatabase
 															where snapshotid = @snapshotid
-															and nativebackupnotencrypted = 1  
+															and (lastbackupencrypted = 0 or intermediatebackupencrypted = 0)  
 															and databasename not in ('msdb', 'master',
                                                                     'model', 'tempdb')  
 															order by databasename;
@@ -10167,11 +10167,11 @@ AS -- <Idera SQLsecure version and copyright>
 															END
 															
 															declare dbcursor cursor static for
-															select objectname 
+															select distinct objectname 
 															from serverosobject 
 															where snapshotid = @snapshotid
 															and disktype = 'NTFS' and objecttype = 'FDir' and
-															issqldatabasefolder = 1 and isencrypted = 0 
+															isencrypted = 0 
 															order by objectname;
 
 															OPEN dbcursor;
