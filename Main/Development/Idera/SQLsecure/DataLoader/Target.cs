@@ -2205,7 +2205,7 @@ namespace Idera.SQLsecure.Collector
                         snapshotStatus = Constants.StatusWarning;
                     }
                     filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
-                                                                        filePermissions.NumOSObjectsWrittenToRepository);
+                                                                        registryPermissions.NumOSObjectsWrittenToRepository);
                 }
                 if (isOk)
                 {
@@ -3125,7 +3125,7 @@ namespace Idera.SQLsecure.Collector
                         snapshotStatus = Constants.StatusWarning;
                     }
                     filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
-                                                                        filePermissions.NumOSObjectsWrittenToRepository);
+                                                                        registryPermissions.NumOSObjectsWrittenToRepository);
                 }
                 if (isOk)
                 {
