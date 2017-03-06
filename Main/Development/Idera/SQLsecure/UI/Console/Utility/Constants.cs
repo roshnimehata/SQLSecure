@@ -77,6 +77,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         NewPolicy
     }
     
+    // SQLsecure 3.1 (Anshul Aggarwal) - Represents values configurable for a metric based on server type.
     internal enum PolicyMetricConfigurationColumn
     {
         PolicyId = 0,
@@ -92,7 +93,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
         Severity,
         SeverityValues
     }
-    
+
+    // SQLsecure 3.1 (Anshul Aggarwal) - Represents values configurable for a metric.
     internal enum PolicyColumn
     {
         PolicyId = 0,
@@ -111,6 +113,13 @@ namespace Idera.SQLsecure.UI.Console.Utility
         ReportText,
         Severity,
         SeverityValues
+    }
+
+    // SQLsecure 3.1 (Anshul Aggarwal) - Used to differentiate between 2 states of Configure Policy Control
+    internal enum ConfigurePolicyControlType
+    {
+        ConfigureSecurityCheck,
+        ImportExportSecurityCheck
     }
     
     internal static class Constants
@@ -429,7 +438,11 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string ReportRunInstructions_LoginType = @"Choose the type of Login.";
         public const string ReportRunInstructions_UserName = @"Type or browse for the User name.";
         public const string ReportRunInstructions_Server = @"Select a target SQL Server instance.";
-        public const string ReportRunInstructions_Database = @"Select a Database you would like to analyze.";
+
+		// SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+        public const string ReportRunInstructions_Server_OP_OR_ADB = @"Select a target SQL Server or Azure SQL Database instance.";
+        
+		public const string ReportRunInstructions_Database = @"Select a Database you would like to analyze.";
         public const string ReportRunInstructions_PermissionType = @"Select a permisson type.";
         public const string ReportRunInstructions_StartDate = @"Choose a start date and time for the report. (in UTC)";
         public const string ReportRunInstructions_EndDate = @"Choose an end date and time for the report. (in UTC)";
@@ -446,10 +459,12 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         // General Reports
         public const string ReportTitle_AuditedServers = @"Audited SQL Servers";
-        public static string ReportSummary_AuditedServers = @"Show all the SQL Server instances that are being audited by " + PRODUCT_STR + ".";
+        
+		// SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+		public static string ReportSummary_AuditedServers = @"Show all the SQL Server and Azure SQL Database instances that are being audited by " + PRODUCT_STR + ".";
 
         public const string ReportTitle_CrossServerLoginCheck = @"Cross Server Login Check";
-        public static string ReportSummary_CrossServerLoginCheck = @"Show all SQL Servers where a selected user has access.";
+        public static string ReportSummary_CrossServerLoginCheck = @"Show all SQL Servers and Azure SQL Databases where a selected user has access.";
 
         public const string ReportTitle_Filters = @"Data Collection Filters";
         public static string ReportSummary_Filters = @"Show the data collection filters for all SQL Server instances.";
@@ -468,16 +483,16 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public static string ReportSummary_SuspectSqlLogins = @"Show all SQL server logins that do not have permissions.";
         
         public const string ReportTitle_ServerLoginsAndUserMappings = @"Server Logins and User Mappings";
-        public static string ReportSummary_ServerLoginsAndUserMappings = @"Show all Server Logins and associated Database User Mappings for each SQL Server instance being audited.";
+        public static string ReportSummary_ServerLoginsAndUserMappings = @"Show all Server Logins and associated Database User Mappings for each SQL Server and Azure SQL Database instance being audited.";
 
         public const string ReportTitle_UsersPermissions = @"User Permissions";
         public static string ReportSummary_UsersPermissions = @"Show permissions for a user across all servers.";
 
         public const string ReportTitle_DatabaseRoles = @"Database Roles";
-        public static string ReportSummary_DatabaseRoles = @"Show all direct members of Database Roles on all SQL Servers.";
+        public static string ReportSummary_DatabaseRoles = @"Show all direct members of Database Roles on all SQL Servers and Azure SQL Databases.";
 
         public const string ReportTitle_ServerRoles = @"Server Roles";
-        public static string ReportSummary_ServerRoles = @"Show all direct members of Server Roles on all SQL Servers.";
+        public static string ReportSummary_ServerRoles = @"Show all direct members of Server Roles on all SQL Servers and Azure SQL Database.";
 
         public const string ReportTitle_AllObjectsWithPermissions = @"All User Permissions";
         public static string ReportSummary_AllObjectsWithPermissions = @"Show all objects with permissions in databases for all servers.";
@@ -569,7 +584,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         #region Configure Policy Vulnerabilities
         
-        // Columns for handling the grid and policymetric results
+        // SQLsecure 3.1 (Anshul Aggarwal) - Columns for handling the grid and policymetric results
+        public const string POLICY_METRIC_VALUE_IS_SELECTED = @"IsSelected";
+
         public const string POLICY_METRIC_VALUE_LIST_SERVERITY = @"Severity";
         public const string POLICY_METRIC_VALUE_LIST_ENABLED = @"Enabled";
 
@@ -603,6 +620,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string POLICY_METRIC_COLUMN_ADB_SEVERITY_VALUES = @"ADBSeverityValues";
         public const string POLICY_METRIC_COLUMN_ADB_VALID_VALUES = @"ADBValidValues";
         public const string POLICY_METRIC_COLUMN_ADB_VALUE_DESCRIPTION = @"ADBValueDescription";
+        public const string POLICY_METRIC_COLUMN_AZURE_DB = @"AzureDB";
 
         public const string POLICY_METRIC_CONSTANT_NOT_APPLICABLE = @"NA";
 

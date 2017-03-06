@@ -172,6 +172,37 @@ as
 		return -1
 	end
 
+	-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+	insert into policymetricextendedinfo (policyid,
+							assessmentid,
+							metricid,
+							servertype,
+							reportkey,
+							reporttext,
+							severity,
+							severityvalues)
+	select @policyid,
+			@assessmentid,
+			metricid,
+			servertype,
+			reportkey,
+			reporttext,
+			severity,
+			severityvalues
+		from policymetricextendedinfo
+		where policyid = 0
+
+	select @err = @@error
+
+	if @err <> 0
+	begin
+		set @msg = 'Error: Failed to ' + lower(@action) + ' ' + lower(@category) + ' "' + @policyname + '". The default metric settings (policymetricextendedinfo) could not be saved. '
+		exec isp_sqlsecure_addactivitylog @activitytype=@failure, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname = null
+		RAISERROR (@msg, 16, 1)
+		ROLLBACK TRAN
+		return -1
+	end
+
 
 	set @msg = @category + N' "' + @policyname + '" with policy id ' + CONVERT(NVARCHAR, @policyid)
 	exec isp_sqlsecure_addactivitylog @activitytype=@success, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname=null

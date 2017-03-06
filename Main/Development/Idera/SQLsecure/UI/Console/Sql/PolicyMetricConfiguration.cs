@@ -1,12 +1,12 @@
 /******************************************************************
- * Name: PolicyMetric.cs
+ * Name: PolicyMetricConfiguration.cs
  *
- * Description: Encapsulates a SQLsecure security policy PolicyMetric (now called security check).
+ * Description: Encapsulates a SQLsecure security policy configuration PolicyMetricConfiguration.
  *
  *
  * Assemblies/DLLs needed:
  *
- * (C) 2007 - Idera, a division of BBS Technologies, Inc.
+ * (C) 2017 - Idera, a division of BBS Technologies, Inc.
  *******************************************************************/
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ using Idera.SQLsecure.UI.Console.Utility;
 namespace Idera.SQLsecure.UI.Console.Sql
 {
     /// <summary>
-    /// Encapsulates a SQLsecure security PolicyMetricConfiguration
+    /// SQLsecure 3.1 (Anshul Aggarwal) - Encapsulates a SQLsecure security Policy Metric Configuration
     /// </summary>
     public class PolicyMetricConfiguration
     {
@@ -40,9 +40,6 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private SqlString m_ReportText;
         private SqlInt32 m_Severity;
         private SqlString m_SeverityValues;
-
-        [XmlIgnoreAttribute]
-        private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Sql.PolicyMetricConfiguration");
 
         #endregion
 

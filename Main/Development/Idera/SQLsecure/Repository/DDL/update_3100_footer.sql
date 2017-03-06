@@ -17,7 +17,7 @@ FROM
 
 		select @startmetricid = 1
 		select @metricid = @startmetricid
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
@@ -29,7 +29,7 @@ FROM
 		end
 
 		select @metricid = 2
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
@@ -41,7 +41,7 @@ FROM
 		end
 
 		select @metricid = 15
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
@@ -54,7 +54,7 @@ FROM
 		end
 
 		select @metricid = 22
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
@@ -66,7 +66,7 @@ FROM
 		end
 		
 		select @metricid = 54
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin			
 
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
@@ -77,7 +77,7 @@ FROM
 		end
 
 		select @metricid = 55
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
@@ -88,7 +88,7 @@ FROM
 		end
 
 		select @metricid = 56
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
@@ -100,7 +100,7 @@ FROM
 		end
 
 		select @metricid = 58
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
@@ -112,7 +112,7 @@ FROM
 		end
 		
 		select @metricid = 76
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 							
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
@@ -124,7 +124,7 @@ FROM
 		end
 			
 		select @metricid = 86
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 						
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
@@ -136,7 +136,7 @@ FROM
 		
 		
 		select @metricid = 87
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
 							values (@metricid, 'ADB', 'Sysadmins Own Databases', 'Determine whether any databases are owned by a system administrator', '', 'When enabled, this check will identify a risk if any unapproved databases are owned by system administrators. Specify the approved databases.')
@@ -147,7 +147,7 @@ FROM
 		end
 
 		select @metricid = 88
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
 							values (@metricid, 'ADB', 'Sysadmins Own Trustworthy Databases', 'Determine whether any trustworthy databases are owned by system administrators on Azure SQL Database', '', 'When enabled, this check will identify a risk if any unapproved databases have the trustworthy bit set on and the owner has system administrator privileges on Azure SQL Database. Specify the approved databases.')
@@ -158,7 +158,7 @@ FROM
 		end
 
 		select @metricid = 89
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
 							values (@metricid, 'ADB', 'Public Role Has Permissions on User Database Objects', 'Determine whether the public database role has been granted permissions on user database objects.', '', 'When enabled, this check will identify a risk if the public database role has been granted permissions on any user objects within a user database. Specify the approved databases.')
@@ -169,7 +169,7 @@ FROM
 
 		
 		select @metricid = 92
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
 							values (@metricid, 'ADB', 'Weak Passwords','Determine whether any SQL login passwords match the login name or a list of common and restricted passwords.', '', 'When enabled, this check will identify a risk if a SQL login on the target instance has a weak password. Specify which SQL logins should not be checked.')
@@ -178,7 +178,7 @@ FROM
 		end
 
 		select @metricid = 93
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
 			values (
@@ -199,12 +199,12 @@ FROM
 					,3
 					,N''
 					,N''
-					,N'Does master have user-created symmetric keys? ')
+					,N'Does master have user-created symmetric keys?')
 		end
 
 		
 		select @metricid = 102
-		if not exists (select * from metricextendedinfo where metricid = @metricid)
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
  
 				 insert into dbo.metricextendedinfo
@@ -251,7 +251,7 @@ FROM
 			end   
 
 			select @metricid = 103
-			if not exists (select * from metricextendedinfo where metricid = @metricid)
+			if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 			begin
 					insert into dbo.metricextendedinfo
 					(
@@ -269,7 +269,7 @@ FROM
 							N'Public role permissions', -- metricname - nvarchar(256)
 							N'Determine whether the public roles have permissions to user defined objects', -- metricdescription - nvarchar(1024)
 							N'', -- validvalues - nvarchar(1024)
-							N'When enabled, this check will identify a risk if permissions have been granted to the public roles '  -- valuedescription - nvarchar(1024)									        
+							N'When enabled, this check will identify a risk if permissions have been granted to the public roles.'  -- valuedescription - nvarchar(1024)									        
 						)
 					insert into dbo.policymetricextendedinfo
 					(
@@ -297,7 +297,7 @@ FROM
 
 		
         SELECT @metricid = 113;
-       	if not exists (select * from metricextendedinfo where metricid = @metricid)
+       	if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
         BEGIN  
             insert into dbo.metricextendedinfo
 					(
@@ -344,7 +344,7 @@ FROM
 
 	--Certificates check
         SELECT @metricid = 114
-      	if not exists (select * from metricextendedinfo where metricid = @metricid)
+      	if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
         BEGIN
             insert into dbo.metricextendedinfo
 					(
@@ -362,7 +362,7 @@ FROM
                         'Certificate private keys were never exported' ,
                         'Determine whether certificate private keys were not exported' ,
                         N'' ,
-                        'When enabled, this check will identify a risk if certtificate private keys were not exported' 
+                        'When enabled, this check will identify a risk if certificate private keys were not exported.' 
                     )
 
 
@@ -393,7 +393,7 @@ FROM
 			
 --------------------- Update Policy Metrics for server type Azure SQL Database --------------------------------------------------------------------------------------------------------
 
-		IF (NOT EXISTS ( SELECT  * FROM policymetricextendedinfo where policyid <> 0 and metricid between @startmetricid AND @metricid))
+		IF (NOT EXISTS ( SELECT  TOP 1 * FROM policymetricextendedinfo where policyid <> 0 and metricid between @startmetricid AND @metricid))
 		BEGIN
 			INSERT INTO policymetricextendedinfo
 			SELECT pm.policyid, pm.metricid, pm.assessmentid, 'ADB', pme.reportkey, pme.reporttext, pm.severity, pme.severityvalues
@@ -430,7 +430,7 @@ FROM
         SELECT
             @metricid = 117;
         IF NOT EXISTS ( SELECT
-                            *
+                            TOP 1 * 
                         FROM
                             metric
                         WHERE
@@ -452,11 +452,11 @@ FROM
                         @metricid , -- metricid - int
                         N'Access' , -- metrictype - nvarchar(32)
                         N'Always Encrypted' , -- metricname - nvarchar(256)
-                        N'Determine whether always encryption is configured for specified columns on SQL Server 2016 or later.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether always encryption is configured for specified columns on SQL Server 2016 or later' , -- metricdescription - nvarchar(1024)
                         1 , -- isuserentered - bit
                         1 , -- ismultiselect - bit
                         N'' , -- validvalues - nvarchar(1024)
-                        N'When enabled, this check will identify a risk if always encryption is not configured for specified columns on SQL Server 2016 or later. Please specify in [Server].[Database].[Schema].Table].[Column] format.'  -- valuedescription - nvarchar(1024)							        
+                        N'When enabled, this check will identify a risk if always encryption is not configured for specified columns on SQL Server 2016 or later. Please specify in [Server].[Database].[Schema].[Table].[Column] format.'  -- valuedescription - nvarchar(1024)							        
                     );
 		
             INSERT  INTO dbo.policymetric
@@ -496,9 +496,9 @@ FROM
                         @metricid , -- metricid - int
                         N'ADB', -- servertype - nvarchar(3)
                         N'Always Encrypted' , -- metricname - nvarchar(256)
-                        N'Determine whether always encryption is configured for specified columns on Azure SQL Database.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether always encryption is configured for specified columns on Azure SQL Database' , -- metricdescription - nvarchar(1024)
                         N'' , -- validvalues - nvarchar(1024)
-                        N'When enabled, this check will identify a risk if always encryption is not configured for specified columns on Azure SQL Database. Please specify in [Server].[Database].[Schema].Table].[Column] format.'  -- valuedescription - nvarchar(1024)							        
+                        N'When enabled, this check will identify a risk if always encryption is not configured for specified columns on Azure SQL Database. Please specify in [Server].[Database].[Schema].[Table].[Column] format.'  -- valuedescription - nvarchar(1024)							        
                     );
 		
             INSERT  INTO dbo.policymetricextendedinfo
@@ -530,7 +530,7 @@ FROM
         SELECT
             @metricid = 118;
         IF NOT EXISTS ( SELECT
-                            *
+                            TOP 1 * 
                         FROM
                             metric
                         WHERE
@@ -552,11 +552,11 @@ FROM
                         @metricid , -- metricid - int
                         N'Access' , -- metrictype - nvarchar(32)
                         N'Transparent Data Encryption' , -- metricname - nvarchar(256)
-                        N'Determine whether Transparent Data Encryption is configured for any databases on SQL Server 2008 or later.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether transparent data encryption is configured for any databases on SQL Server 2008 or later' , -- metricdescription - nvarchar(1024)
                         1 , -- isuserentered - bit
                         1 , -- ismultiselect - bit
                         N'' , -- validvalues - nvarchar(1024)
-                        N'When enabled, this check will identify a risk if Transparent Data Encryption is not configured for any databases on SQL Server 2008 or later. Please specify in format [SERVER].[DATABASE] for DBs to be excluded or none.'  -- valuedescription - nvarchar(1024)									        
+                        N'When enabled, this check will identify a risk if transparent data encryption is not configured for any databases on SQL Server 2008 or later. Please specify in format [SERVER].[DATABASE] for DBs to be excluded or none.'  -- valuedescription - nvarchar(1024)									        
                     );
 		
             INSERT  INTO dbo.policymetric
@@ -576,7 +576,7 @@ FROM
                         @metricid , -- metricid - int
                         1 , -- isenabled - bit
                         N'' , -- reportkey - nvarchar(32)
-                        N'Is TDE enabled at the database level on SQL Server 2008 or later?' , -- reporttext - nvarchar(4000)
+                        N'Is transparent data encryption enabled at the database level on SQL Server 2008 or later?' , -- reporttext - nvarchar(4000)
                         3 , -- severity - int
                         N'''none''' , -- severityvalues - nvarchar(4000)
                         0  -- assessmentid - int
@@ -596,9 +596,9 @@ FROM
                         @metricid , -- metricid - int
                         N'ADB', -- servertype - nvarchar(3)
                         N'Transparent Data Encryption' , -- metricname - nvarchar(256)
-                        N'Determine whether TDE is configured for any databases on Azure SQL Database.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether transparent data encryption is configured for any databases on Azure SQL Database' , -- metricdescription - nvarchar(1024)
                         N'' , -- validvalues - nvarchar(1024)
-                        N'When enabled, this check will identify a risk if Transparent Data Encryption is not configured for any databases on Azure SQL Database. Please specify in format [SERVER].[DATABASE] for DBs to be excluded or none.'  -- valuedescription - nvarchar(1024)									        
+                        N'When enabled, this check will identify a risk if transparent data encryption is not configured for any databases on Azure SQL Database. Please specify in format [SERVER].[DATABASE] for DBs to be excluded or none.'  -- valuedescription - nvarchar(1024)									        
                     );
 		
             INSERT  INTO dbo.policymetricextendedinfo
@@ -619,7 +619,7 @@ FROM
                         0 , -- assessmentid - int,
 						N'ADB', -- servertype - nvarchar(3)
                         N'' , -- reportkey - nvarchar(32)
-                        N'Is TDE enabled at the database level on Azure SQL Database?' , -- reporttext - nvarchar(4000)
+                        N'Is transparent data encryption enabled at the database level on Azure SQL Database?' , -- reporttext - nvarchar(4000)
                         3 , -- severity - int
                         N'''none'''  -- severityvalues - nvarchar(4000)
                     );
@@ -629,7 +629,7 @@ FROM
         SELECT
             @metricid = 119;
         IF NOT EXISTS ( SELECT
-                            *
+                            TOP 1 * 
                         FROM
                             metric
                         WHERE
@@ -651,7 +651,7 @@ FROM
                         @metricid , -- metricid - int
                         N'Access' , -- metrictype - nvarchar(32)
                         N'Native Backup Encryption' , -- metricname - nvarchar(256)
-                        N'Determine whether native backup encryption was configured on SQL Server 2014 or later.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether native backup encryption was configured on SQL Server 2014 or later' , -- metricdescription - nvarchar(1024)
                         0 , -- isuserentered - bit
                         0 , -- ismultiselect - bit
                         N'' , -- validvalues - nvarchar(1024)
@@ -686,7 +686,7 @@ FROM
         SELECT
             @metricid = 120;
         IF NOT EXISTS ( SELECT
-                            *
+                            TOP 1 * 
                         FROM
                             metric
                         WHERE
@@ -708,7 +708,7 @@ FROM
                         @metricid , -- metricid - int
                         N'Access' , -- metrictype - nvarchar(32)
                         N'Row-Level Security' , -- metricname - nvarchar(256)
-                        N'Determine whether row-level security is configured for specified databases on SQL Server 2016 or later.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether row-level security is configured for specified databases on SQL Server 2016 or later' , -- metricdescription - nvarchar(1024)
                         1 , -- isuserentered - bit
                         1 , -- ismultiselect - bit
                         N'' , -- validvalues - nvarchar(1024)
@@ -752,7 +752,7 @@ FROM
                         @metricid , -- metricid - int
                         N'ADB', -- servertype - nvarchar(3)
 						N'Row-Level Security' , -- metricname - nvarchar(256)
-                        N'Determine whether row-level security is configured for specified databases on Azure SQL Database.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether row-level security is configured for specified databases on Azure SQL Database' , -- metricdescription - nvarchar(1024)
                         N'' , -- validvalues - nvarchar(1024)
                         N'When enabled, this check will identify a risk if row-level security is not configured for specified databases on Azure SQL Database. Please specify in [Server].[Database].[Schema].[Table] format.'  -- valuedescription - nvarchar(1024)							        								        
                     );
@@ -786,7 +786,7 @@ FROM
         SELECT
             @metricid = 121;
         IF NOT EXISTS ( SELECT
-                            *
+                            TOP 1 * 
                         FROM
                             metric
                         WHERE
@@ -808,7 +808,7 @@ FROM
                         @metricid , -- metricid - int
                         N'Access' , -- metrictype - nvarchar(32)
                         N'Dynamic Data Masking' , -- metricname - nvarchar(256)
-                        N'Determine whether dynamic data masking is configured for specified databases on SQL Server 2016 or later.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether dynamic data masking is configured for specified databases on SQL Server 2016 or later' , -- metricdescription - nvarchar(1024)
                         1 , -- isuserentered - bit
                         1 , -- ismultiselect - bit
                         N'' , -- validvalues - nvarchar(1024)
@@ -852,7 +852,7 @@ FROM
                         @metricid , -- metricid - int
                         N'ADB', -- servertype - nvarchar(3)
 						N'Dynamic Data Masking' , -- metricname - nvarchar(256)
-                        N'Determine whether dynamic data masking is configured for specified databases on Azure SQL Database.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether dynamic data masking is configured for specified databases on Azure SQL Database' , -- metricdescription - nvarchar(1024)
                         N'' , -- validvalues - nvarchar(1024)
                         N'When enabled, this check will identify a risk if dynamic data masking is not configured for specified databases on Azure SQL Database. Please specify in [Server].[Database].[Schema].[Table].[Column] format.'  -- valuedescription - nvarchar(1024)							        								        
                     );
@@ -887,7 +887,7 @@ FROM
         SELECT
             @metricid = 122;
         IF NOT EXISTS ( SELECT
-                            *
+                            TOP 1 * 
                         FROM
                             metric
                         WHERE
@@ -909,7 +909,7 @@ FROM
                         @metricid , -- metricid - int
                         N'Access' , -- metrictype - nvarchar(32)
                         N'Signed Objects' , -- metricname - nvarchar(256)
-                        N'Determine whether a digital signature has been added to sepcified stored procedure, function, assembly or trigger on SQL Server 2008 or later.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether a digital signature has been added to sepcified stored procedure, function, assembly or trigger on SQL Server 2008 or later' , -- metricdescription - nvarchar(1024)
                         1 , -- isuserentered - bit
                         1 , -- ismultiselect - bit
                         N'' , -- validvalues - nvarchar(1024)
@@ -944,7 +944,7 @@ FROM
         SELECT
             @metricid = 123;
         IF NOT EXISTS ( SELECT
-                            *
+                            TOP 1 * 
                         FROM
                             metric
                         WHERE
@@ -1011,7 +1011,7 @@ FROM
                         @metricid , -- metricid - int
                         N'ADB' , -- metrictype - nvarchar(32)
                         N'Server-level Firewall Rules' , -- metricname - nvarchar(256)
-                        N'Determine whether unapproved server-level firewall rules have been configured on Azure SQL Database.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether unapproved server-level firewall rules have been configured on Azure SQL Database' , -- metricdescription - nvarchar(1024)
                         N'' , -- validvalues - nvarchar(1024)
                         N'When enabled, this check will identify a risk if unapproved server-level firewall rules have been configured on Azure SQL Database. Please specify authorized firewall rules in START_IP-END_IP format.'  -- valuedescription - nvarchar(1024)
 						);
@@ -1045,7 +1045,7 @@ FROM
         SELECT
             @metricid = 124;
         IF NOT EXISTS ( SELECT
-                            *
+                            TOP 1 * 
                         FROM
                             metric
                         WHERE
@@ -1112,7 +1112,7 @@ FROM
                         @metricid , -- metricid - int
                         N'ADB' , -- metrictype - nvarchar(32)
                         N'Database-level Firewall Rules' , -- metricname - nvarchar(256)
-                        N'Determine whether unapproved database-level firewall rules have been configured on Azure SQL Database.' , -- metricdescription - nvarchar(1024)
+                        N'Determine whether unapproved database-level firewall rules have been configured on Azure SQL Database' , -- metricdescription - nvarchar(1024)
                         N'' , -- validvalues - nvarchar(1024)
                         N'When enabled, this check will identify a risk if unapproved database-level firewall rules have been configured on Azure SQL Database. Please specify authorized firewall rules in START_IP-END_IP format.'  -- valuedescription - nvarchar(1024)							        
                     );
@@ -1148,7 +1148,7 @@ FROM
         IF (
              @ver IS NULL	-- this is a new install, so fix the All Servers policy to use the default values for the new security checks
              AND NOT EXISTS ( SELECT
-                                *
+                                TOP 1 * 
                               FROM
                                 policymetric
                               WHERE
@@ -1224,10 +1224,10 @@ FROM
 						
 --------------------- Update New Policy Metrics for server type Azure SQL Database --------------------------------------------------------------------------------------------------------
 
-		IF (NOT EXISTS ( SELECT  * FROM policymetricextendedinfo where policyid <> 0 AND metricid between @startmetricid AND @metricid ))
+		IF (NOT EXISTS ( SELECT  TOP 1 * FROM policymetricextendedinfo where policyid <> 0 AND metricid between @startmetricid AND @metricid ))
 		BEGIN
 			INSERT INTO policymetricextendedinfo
-			SELECT pm.policyid, pm.metricid, pm.assessmentid, 'ADB', pme.reportkey, pme.reporttext, pm.severity, pme.severityvalues
+			SELECT pm.policyid, pm.metricid, pm.assessmentid, 'ADB', pme.reportkey, pme.reporttext, pme.severity, pme.severityvalues
 			FROM policymetric pm INNER JOIN policymetricextendedinfo pme ON pm.metricid = pme.metricid
 			WHERE pm.policyid <> 0 AND 
 			pme.policyid = 0 AND pme.assessmentid = 0 AND

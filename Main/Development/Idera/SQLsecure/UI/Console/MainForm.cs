@@ -1280,7 +1280,15 @@ namespace Idera.SQLsecure.UI.Console
                         refreshExplorerBar(false); // keep the existing view current
                         this.Cursor = Cursors.Default;
                     }
-                    bConnecting = false;
+                    //Start-SQLsecure 3.1 (Tushar)--Fix for SQLSECU-1657
+                    if (!Program.gController.Repository.IsValid)
+                    {
+                        if (MessageBox.Show("Please select the repository for this installation of SQL Secure. If you have not yet installed a repository, please run the SQL Secure installer on the Windows machine where the target SQL Server instance resides.", "Repository", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.Cancel)
+                        {
+                            bConnecting = false;
+                        }
+                    }
+                    //End-SQLsecure 3.1 (Tushar)--Fix for SQLSECU-1657
                 }
             }
 
@@ -1945,6 +1953,11 @@ namespace Idera.SQLsecure.UI.Console
         private void _menuStrip_Tools_DropDownOpening(object sender, EventArgs e)
         {
             ((ToolStripMenuItem)sender).ForeColor = MENU_TEXT_COLOR_DROPDOWN;
+
+            //SQLsecure 3.1 (Tushar)--Disabling the drop down items if repository connection is not valid.
+            this._menuStrip_Tools_ReportingServices.Enabled = Program.gController.Repository.IsValid;
+            this.configureSMPTEmaiToolStripMenuItem.Enabled = Program.gController.Repository.IsValid;
+            this.configureWeakPasswordDetectionToolStripMenuItem.Enabled = Program.gController.Repository.IsValid;
         }
 
         // Note: This menu is partially dynamic and other items will be built and handled at run time
@@ -2577,6 +2590,10 @@ namespace Idera.SQLsecure.UI.Console
                     Program.gController.isViewer;
                 _explorerBar.Groups[Utility.Constants.ExplorerBar_GroupKey_Manage].Enabled = Program.gController.isAdmin;
 
+                //SQLsecure 3.1 (Tushar)--Fix for SQLSECU-1647 and 1511
+                _explorerBar.Groups[Utility.Constants.ExplorerBar_GroupKey_Explore].Enabled = Program.gController.Repository.IsValid;
+                _explorerBar.Groups[Utility.Constants.ExplorerBar_GroupKey_Summary].Enabled = Program.gController.Repository.IsValid;
+                
                 // If the repository server has changed then go to the security summary group
                 // otherwise stay on the present group if possible.
                 if (isServerChanged)

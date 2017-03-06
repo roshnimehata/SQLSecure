@@ -14,20 +14,8 @@ using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 
 namespace Idera.SQLsecure.UI.Console.Controls
 {
-    public partial class controlConfigureMetricCriteria : UserControl
+    internal partial class controlConfigureMetricCriteria : UserControl
     {
-        #region fields
-
-        private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Controls.controlConfigureMetricCriteria");
-        //private Policy m_policy;
-        List<PolicyMetric> m_metrics = null;
-        //private bool m_InternalUpdate = false;
-        //private bool m_importing = false;
-
-        private bool m_allowEdit = true;
-
-        #endregion
-
         #region Queries, Columns & Constants
 
         private string valueListSeverity = Utility.Constants.POLICY_METRIC_VALUE_LIST_SERVERITY;
@@ -43,18 +31,20 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private string colReportText = Utility.Constants.POLICY_METRIC_COLUMN_REPORT_TEXT;
         private string colSeverity = Utility.Constants.POLICY_METRIC_COLUMN_SEVERITY;
         private string colSeverityValues = Utility.Constants.POLICY_METRIC_COLUMN_SEVERITY_VALUES;
-        
+
+        private ConfigurePolicyControlType m_State;
+
         #endregion
-        
+
         #region ctors
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public controlConfigureMetricCriteria()
+        internal controlConfigureMetricCriteria(ConfigurePolicyControlType state)
         {
-            InitializeComponent();
+            // SQLsecure 3.1 (Anshul Aggarwal) - Represents current state of control - 'Configure Security Check' or 'Export/Import Policy'.
+            m_State = state;
 
+            InitializeComponent();
+            
             // Hide all radio buttons for single selection group box
             radioButton1.Visible = false;
             radioButton2.Visible = false;
@@ -131,35 +121,32 @@ namespace Idera.SQLsecure.UI.Console.Controls
             enabledValueList.ValueListItems.Add(listItem);
             listItem = new ValueListItem(false, "No");
             enabledValueList.ValueListItems.Add(listItem);
+            
+            RefreshState();
         }
 
         #endregion
 
         #region methods
 
-        internal void InitializeControl(Policy policy, List<PolicyMetric> policymetrics, Dictionary<PolicyMetricConfigurationColumn, string> gridColumnNames)
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes control using specified configuration values.
+        /// </summary>
+        internal void InitializeControl(Dictionary<PolicyMetricConfigurationColumn, string> gridColumnNames = null)
         {
-            //m_policy = policy;
-            m_metrics = policymetrics;
-            //m_importing = m_policy.PolicyId == 0;
             button_Remove.Enabled = false;
-
             if(gridColumnNames != null)
             {
                 SetPolicyConfigurationFieldNames(gridColumnNames);
             }
         }
 
-        internal void InitializeControl(Policy policy, List<PolicyMetric> policymetrics,
-            int metricId, bool allowEdit, Dictionary<PolicyMetricConfigurationColumn, string> gridColumnNames)
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes control using specified configuration values.
+        /// </summary>
+        internal void InitializeControl(bool allowEdit, Dictionary<PolicyMetricConfigurationColumn, string> gridColumnNames = null)
         {
-            //m_policy = policy;
-            m_metrics = policymetrics;
-            //m_importing = m_policy.PolicyId == 0;
             button_Remove.Enabled = false;
-
-            m_allowEdit = allowEdit;
-
             if (gridColumnNames != null)
             {
                 SetPolicyConfigurationFieldNames(gridColumnNames);
@@ -168,7 +155,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             if (!allowEdit)
             {
                 button_Edit.Enabled =
-                button_Remove.Enabled = false;
+                   button_Remove.Enabled = false;
                 textBox_ReportKey.Enabled =
                     textBox_ReportText.Enabled =
                     textBox_UserEnterSingle.Enabled = false;
@@ -195,6 +182,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
             }
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Updates UI using grid row.
+        /// </summary>
         public void UpdateUIWithMetric(UltraGridRow row)
         {
             textBox_Name.Text = row.Cells[colMetricName].Text;
@@ -466,20 +456,18 @@ namespace Idera.SQLsecure.UI.Console.Controls
             }
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Set values into gridrow from UI.
+        /// </summary>
         public bool RetrieveValuesFromUI(UltraGridRow row, out bool refreshSort)
         {
             bool bAllowContinue = true;
             refreshSort = false;
            
-            if (!OKToSave())
-            {
-                return false;
-            }
-
-            if (row.Cells[colReportKey].Value.ToString() != textBox_ReportKey.Text
-                            || (radioButton_SeverityLow.Checked && row.Cells[colSeverity].Value.ToString() != "1")
-                            || (radioButton_SeverityMedium.Checked && row.Cells[colSeverity].Value.ToString() != "2")
-                            || (radioButton_SeverityCritical.Checked && row.Cells[colSeverity].Value.ToString() != "3"))
+            if (Convert.ToString(row.Cells[colReportKey]) != textBox_ReportKey.Text
+                            || (radioButton_SeverityLow.Checked && Convert.ToString(row.Cells[colSeverity].Value) != "1")
+                            || (radioButton_SeverityMedium.Checked && Convert.ToString(row.Cells[colSeverity].Value) != "2")
+                            || (radioButton_SeverityCritical.Checked && Convert.ToString(row.Cells[colSeverity].Value) != "3"))
             {
                 refreshSort = true;
             }
@@ -635,12 +623,14 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 values.Append("'");
             }
 
-            row.Cells[colSeverityValues].Value = values.ToString();
-
-            //UpdateEnabledCount();
+            row.Cells[colSeverityValues].Value = Convert.ToString(values);
+            
             return bAllowContinue;
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Checks if current configuration is valid or not.
+        /// </summary>
         public bool OKToSave()
         {
             bool ok = true;
@@ -700,7 +690,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             }
             return ok;
         }
-        
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Changes grid's column name based on server type.
+        /// </summary>
         private void SetPolicyConfigurationFieldNames(Dictionary<PolicyMetricConfigurationColumn, string> gridColumnNames)
         {
             if (gridColumnNames.ContainsKey(PolicyMetricConfigurationColumn.MetricName))
@@ -726,6 +719,44 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             if (gridColumnNames.ContainsKey(PolicyMetricConfigurationColumn.ValueDescription))
                 colValueDescription = gridColumnNames[PolicyMetricConfigurationColumn.ValueDescription];
+        }
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Configure control based on its current state
+        /// </summary>
+        private void RefreshState()
+        {
+            if (m_State == ConfigurePolicyControlType.ImportExportSecurityCheck)
+            {
+                button_Remove.Visible = false;
+                button_Edit.Visible = false;
+
+                button_Edit.Enabled =
+                   button_Remove.Enabled = false;
+                textBox_ReportKey.Enabled =
+                    textBox_ReportText.Enabled =
+                    textBox_UserEnterSingle.Enabled = false;
+                radioButton_SeverityCritical.Enabled =
+                    radioButton_SeverityMedium.Enabled =
+                    radioButton_SeverityLow.Enabled = false;
+                checkBox1.Enabled =
+                    checkBox2.Enabled =
+                    checkBox3.Enabled =
+                    checkBox4.Enabled =
+                    checkBox5.Enabled =
+                    checkBox6.Enabled =
+                    checkBox7.Enabled =
+                    checkBox8.Enabled = false;
+                radioButton1.Enabled =
+                    radioButton2.Enabled =
+                    radioButton3.Enabled =
+                    radioButton4.Enabled =
+                    radioButton5.Enabled =
+                    radioButton6.Enabled =
+                    radioButton7.Enabled =
+                    radioButton8.Enabled = false;
+                //listView_MultiSelect.Enabled = false;
+            }
         }
 
         #endregion
