@@ -43,9 +43,11 @@ SELECT	a.snapshotid,
 		a.ispolicychecked,
 		passwordstatus = [dbo].[getpasswordstatusdescription](a.passwordstatus),
 		a.defaultdatabase,
-		a.defaultlanguage
+		a.defaultlanguage,
+		r.servertype --SQLsecure 3.1 (Tushar)--Added server type to support Azure SQL database on UI.
 FROM	serverprincipal a
 		INNER JOIN serversnapshot b ON a.snapshotid = b.snapshotid
+		INNER JOIN registeredserver r ON b.connectionname = r.connectionname
 WHERE	a.snapshotid IN	(
 						SELECT	snapshotid
 						FROM	dbo.getsnapshotlist(@rundate, @usebaseline)
