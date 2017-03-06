@@ -188,6 +188,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     ON Permissions.grantee_principal_id = Principals.principal_id AND Permissions.type = N'COSQ'";
                 }
             }
+            //isdisabled- fix for SQLSECU-1656,SQLSECU-1643
             else
             {
                 query = @" SELECT DISTINCT 
@@ -204,7 +205,14 @@ namespace Idera.SQLsecure.Collector.Sql
                                             WHEN 'D' THEN 'Y'
                                             ELSE 'N'
                                          END, 
-                            isdisabled = NULL,
+                            isdisabled = CASE WHEN Principals.type = 'S'
+                                            THEN
+                                                        CASE  SqlLogins.is_disabled WHEN 1
+                                                             THEN 'Y'
+                                                             ELSE 'N'
+                                                        END
+                                                    ELSE null
+                                              END,
                             ispolicychecked = CASE SqlLogins.is_policy_checked
                                                  WHEN 1 THEN 'Y'
                                                  ELSE 'N'
