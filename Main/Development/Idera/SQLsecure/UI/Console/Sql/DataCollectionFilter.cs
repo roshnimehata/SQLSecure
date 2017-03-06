@@ -326,7 +326,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 		private int m_FilterId = Constants.InvalidId;
 		private string m_Instance;
         //SQLSecure 3.1 (Barkha Khatri) adding servertype 
-        private string m_ServerType;
+        private ServerType m_ServerType;
         private string m_FilterName;
 		private string m_CreatedBy = string.Empty;
 		private DateTime m_CreationTime = DateTime.Now;
@@ -447,7 +447,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 			StringBuilder details = new StringBuilder();
 			details.Append(FilterDetailsPrefix);
             //SQLSecure 3.1 (Barkha Khatri) populating strings based on servertype
-            if (ServerType == "ADB")
+            if (ServerType == ServerType.AzureSQLDatabase)
             {
                 details.Append(AlwaysCollectedForAzureDB);
             }
@@ -541,7 +541,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 				details.Append(FilterDetailsPrefix);
 			}
             //SQLSecure 3.1 (Barkha Khatri) populating strings based on servertype
-            if (ServerType == "ADB")
+            if (ServerType == ServerType.AzureSQLDatabase)
             {
                 details.Append(AlwaysCollectedForAzureDB);
             }
@@ -778,7 +778,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 				SqlDateTime creationTime,
 				SqlString lastModifiedBy,
 				SqlDateTime lastModificationTime,
-                SqlString serverType
+                ServerType serverType
 			)
 		{
 			Debug.Assert(!filterId.IsNull);
@@ -794,7 +794,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
 			m_CreationTime = creationTime.IsNull ? DateTime.Now : creationTime.Value;
 			m_LastModifiedBy = lastModifiedBy.IsNull ? string.Empty : lastModifiedBy.Value;
 			m_LastModificationTime = lastModificationTime.IsNull ? DateTime.Now : lastModificationTime.Value;
-            m_ServerType = serverType.IsNull ? string.Empty : serverType.Value;
+            m_ServerType = serverType;
+            
         }
 
 		public DataCollectionFilter(
@@ -855,7 +856,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 			get { return m_Instance; }
 		}
         //SQLSecure 3.1 (Barkha Khatri) adding servertype
-        public string ServerType
+        public ServerType ServerType
         {
             get { return m_ServerType; }
         }
@@ -1092,7 +1093,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 							SqlString lastModifiedBy = rdr.GetSqlString((int)RegisteredServerFiltersColumn.LastModifiedBy);
 							SqlDateTime lastModificationTime = rdr.GetSqlDateTime((int)RegisteredServerFiltersColumn.LastModifiedTm);
                             //SQLSecure 3.1 (Barkha Khatri) getting servertype as well
-                            SqlString serverType = rdr.GetSqlString((int)RegisteredServerFiltersColumn.ServerType);
+                            ServerType serverType = Helper.ConvertSQLTypeStringToEnum(rdr.GetString((int)RegisteredServerFiltersColumn.ServerType));
                             filter = new DataCollectionFilter(filterId, connectionName, filterName, description, createdBy, creationTime,
 																lastModifiedBy, lastModificationTime,serverType);
 							filterDictionary.Add(filterId.Value, filter);
