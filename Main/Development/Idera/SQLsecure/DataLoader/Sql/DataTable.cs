@@ -946,7 +946,6 @@ namespace Idera.SQLsecure.Collector.Sql
                     colLongName = new DataColumn(ParamLongName, typeof(SqlString)),
                     colOwnerSid = new DataColumn(ParamOwnerSid, typeof(SqlBinary)),
                     colDiskType = new DataColumn(ParamDiskType, typeof(SqlString)),
-                    colIsSQLDatabaseFolder = new DataColumn(ParamIsSQLDatabaseFolder, typeof(SqlBoolean)),
                     colIsEncrypted = new DataColumn(ParamIsEncrypted, typeof(SqlBoolean)))
             {
                 // Create the data table object & define its columns.
@@ -961,7 +960,6 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                 colLongName,
                                                                 colOwnerSid,
                                                                 colDiskType,
-                                                                colIsSQLDatabaseFolder,
                                                                 colIsEncrypted
                                                             });
             }
@@ -979,7 +977,6 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamDiskType = "disktype";
 
         // SQLsecure 3.1 (Anshul Aggarwal) - Add new columns to track NTFS encryption for SQL Folder/Files.
-        internal const string ParamIsSQLDatabaseFolder = "issqldatabasefolder";
         internal const string ParamIsEncrypted = "isencrypted";
 
         internal const string RepositoryTable = "SQLsecure.dbo.serverosobject";
