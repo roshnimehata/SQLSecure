@@ -891,18 +891,20 @@
 		<row><td>SetupResume</td><td>txtUpgrade</td><td>Text</td><td>151</td><td>7</td><td>265</td><td>25</td><td>65539</td><td/><td>##ID_STRING173##</td><td/><td>##ID_STRING175##</td><td/><td/><td/><td/></row>
 		<row><td>SetupType</td><td>BackLarge</td><td>PushButton</td><td>231</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>Note</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>CompText1</td><td>Text</td><td>224</td><td>89</td><td>157</td><td>34</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_AllFeatures##</td><td>rbSetupType</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>CompText2</td><td>Text</td><td>224</td><td>164</td><td>164</td><td>35</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseFeatures##</td><td>CompText1</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>CompText1</td><td>Text</td><td>224</td><td>89</td><td>157</td><td>34</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_AllFeatures##</td><td>CompText2</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>CompText2</td><td>Text</td><td>224</td><td>164</td><td>164</td><td>35</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseFeatures##</td><td>rbSetupType</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>CompleteIco</td><td>Icon</td><td>178</td><td>89</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary10</td></row>
 		<row><td>SetupType</td><td>CustomIco</td><td>Icon</td><td>178</td><td>164</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary11</td></row>
 		<row><td>SetupType</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>232</td><td>18</td><td>65539</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseSetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>DlgText</td><td>Text</td><td>152</td><td>44</td><td>112</td><td>14</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_SelectSetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>217</td><td>16</td><td>65539</td><td/><td>##IDS__IsSetupTypeMinDlg_SetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>Icon1</td><td>Icon</td><td>183</td><td>224</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary11</td></row>
 		<row><td>SetupType</td><td>ImageMain_All</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048576</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Overview</td></row>
 		<row><td>SetupType</td><td>ImageMain_GUI</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048576</td><td/><td/><td/><td/><td/><td/><td/><td>Image_GUI</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>PushButton</td><td>297</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>Note</td><td>Text</td><td>178</td><td>127</td><td>223</td><td>16</td><td>3</td><td/><td>##NEW_STRING156##</td><td>CompText2</td><td/><td/><td/><td/><td/></row>
-		<row><td>SetupType</td><td>rbSetupType</td><td>RadioButtonGroup</td><td>166</td><td>74</td><td>232</td><td>120</td><td>3</td><td>_IsSetupTypeMin</td><td>##IDS__IsSetupTypeMinDlg_13##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>Note</td><td>Text</td><td>178</td><td>127</td><td>223</td><td>16</td><td>3</td><td/><td>##NEW_STRING156##</td><td>Text1</td><td/><td/><td/><td/><td/></row>
+		<row><td>SetupType</td><td>Text1</td><td>Text</td><td>229</td><td>224</td><td>164</td><td>35</td><td>3</td><td>NewProperty6</td><td>##NEW_STRING160##</td><td>CompText1</td><td/><td/><td/><td/><td/></row>
+		<row><td>SetupType</td><td>rbSetupType</td><td>RadioButtonGroup</td><td>166</td><td>74</td><td>232</td><td>200</td><td>3</td><td>_IsSetupTypeMin</td><td>##IDS__IsSetupTypeMinDlg_13##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SplashBitmap</td><td>BackLarge</td><td>PushButton</td><td>231</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SplashBitmap</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SplashBitmap</td><td>Image</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary5</td></row>
@@ -1222,9 +1224,10 @@
 		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>EndDialog</td><td>Return</td><td>1</td><td>3</td></row>
 		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>Reinstall</td><td>ALL</td><td>PATCH And REINSTALL=""</td><td>1</td></row>
 		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>ReinstallMode</td><td>omus</td><td>PATCH And REINSTALLMODE=""</td><td>2</td></row>
-		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "No" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>3</td></row>
+		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "No" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>4</td></row>
 		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>MaintenanceType</td><td>Installed AND _IsMaintenance = "Reinstall" and not IS_MAJOR_UPGRADE</td><td>1</td></row>
-		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLocation</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "Yes" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>4</td></row>
+		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLocation</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "Yes" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>5</td></row>
+		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>3</td></row>
 		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>2</td></row>
 		<row><td>ReadyToInstall</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
 		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1</td><td>1</td></row>
@@ -1339,7 +1342,7 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpFatalExit</td><td>1</td><td>1</td></row>
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpSuccess</td><td>1</td><td>1</td></row>
-		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>LAUNCHPROGRAM</td><td>3</td></row>
+		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>LAUNCHPROGRAM AND _IsSetupTypeMin &lt;&gt; "Collector"</td><td>3</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupError</td><td>A</td><td>EndDialog</td><td>ErrorAbort</td><td>1</td><td>1</td></row>
 		<row><td>SetupError</td><td>C</td><td>EndDialog</td><td>ErrorCancel</td><td>1</td><td>0</td></row>
@@ -1364,11 +1367,20 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupResume</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>OutOfNoRbDiskSpace &lt;&gt; 1 and !Repository=3 and IS_MINOR_UPGRADE</td><td>3</td></row>
 		<row><td>SetupType</td><td>BackLarge</td><td>NewDialog</td><td>DestinationFolder</td><td>1</td><td>1</td></row>
 		<row><td>SetupType</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>ALL</td><td>_IsSetupTypeMin = "Typical"</td><td>6</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Collector</td><td>_IsSetupTypeMin = "Collector"</td><td>12</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "GUI"</td><td>2</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "GUI"</td><td>4</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI"</td><td>5</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical"</td><td>7</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "Typical"</td><td>7</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "GUI"</td><td>5</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "Typical"</td><td>8</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Collector"</td><td>13</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Typical"</td><td>9</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI"</td><td>6</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector"</td><td>16</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical"</td><td>11</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "GUI"</td><td>4</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "Typical"</td><td>10</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Console</td><td>_IsSetupTypeMin = "Collector"</td><td>14</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Reports</td><td>_IsSetupTypeMin = "Collector"</td><td>15</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Repository</td><td>_IsSetupTypeMin = "GUI"</td><td>3</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>[SQLSERVER_AUTHENTICATION]</td><td>{}</td><td>_IsSetupTypeMin = "GUI"</td><td>1</td></row>
 		<row><td>SplashBitmap</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>1</td></row>
@@ -2185,6 +2197,7 @@ Set oServer = Nothing</td><td/></row>
 		<col def="S255">ISComments</col>
 		<col def="S255">ISFeatureCabName</col>
 		<col def="S255">ISProFeatureName</col>
+		<row><td>Collector</td><td/><td>##ID_STRING416##</td><td/><td>8</td><td>1</td><td>INSTALLDIR</td><td>0</td><td/><td/><td/><td/></row>
 		<row><td>Console</td><td/><td>##ID_STRING14##</td><td>##ID_STRING15##</td><td>2</td><td>1</td><td>INSTALLDIR</td><td>8</td><td/><td/><td/><td/></row>
 		<row><td>Reports</td><td/><td>##ID_STRING54##</td><td>##ID_STRING55##</td><td>6</td><td>1</td><td>INSTALLDIR</td><td>8</td><td/><td/><td/><td/></row>
 		<row><td>Repository</td><td/><td>##ID_STRING13##</td><td>##ID_STRING52##</td><td>4</td><td>1</td><td>INSTALLDIR</td><td>8</td><td/><td/><td/><td/></row>
@@ -2193,6 +2206,23 @@ Set oServer = Nothing</td><td/></row>
 	<table name="FeatureComponents">
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
+		<row><td>Collector</td><td>Idera.SQLsecure.Collector.exe</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Collector.exe.config</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.Accounts.dll</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.EventMessages.dll</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.Interop.dll</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.Logger.dll</td></row>
+		<row><td>Collector</td><td>Interop.ActiveDs.dll</td></row>
+		<row><td>Collector</td><td>License4Net.dll</td></row>
+		<row><td>Collector</td><td>Manage.dll</td></row>
+		<row><td>Collector</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td></row>
+		<row><td>Collector</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td></row>
+		<row><td>Collector</td><td>Microsoft.SqlServer.Smo.dll</td></row>
+		<row><td>Collector</td><td>PowerCollections.dll</td></row>
+		<row><td>Collector</td><td>SQLsecure_Help.chm</td></row>
+		<row><td>Collector</td><td>TracerX.exe</td></row>
+		<row><td>Collector</td><td>TracerX.exe.config</td></row>
+		<row><td>Collector</td><td>WebHelp.exe</td></row>
 		<row><td>Console</td><td>Doc_WebHelp</td></row>
 		<row><td>Console</td><td>EULA</td></row>
 		<row><td>Console</td><td>Idera.SQLsecure.Collector.exe</td></row>
@@ -4351,6 +4381,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ID_STRING413</td><td>1033</td><td>Help</td><td>0</td><td/><td>-1306604117</td></row>
 		<row><td>ID_STRING414</td><td>1033</td><td>INSTAL~1|Install Guide</td><td>0</td><td/><td>-1306603761</td></row>
 		<row><td>ID_STRING415</td><td>1033</td><td>RELEAS~1|Release Notes</td><td>0</td><td/><td>-1306621904</td></row>
+		<row><td>ID_STRING416</td><td>1033</td><td>NewFeature1</td><td>0</td><td/><td>832925547</td></row>
 		<row><td>ID_STRING42</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>-48638456</td></row>
 		<row><td>ID_STRING43</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>-48667223</td></row>
 		<row><td>ID_STRING44</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>-48667223</td></row>
@@ -4481,7 +4512,9 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>NEW_STRING156</td><td>1033</td><td>{\Tahoma7Red}Note: Install locally on a SQL Server computer hosting the Repository.</td><td>0</td><td/><td>572301929</td></row>
 		<row><td>NEW_STRING157</td><td>1033</td><td>Installs the Console and Reports, and creates the Repository database on a local SQL Server instance.</td><td>0</td><td/><td>572275401</td></row>
 		<row><td>NEW_STRING158</td><td>1033</td><td>&amp;Cluster Installation </td><td>0</td><td/><td>1176670025</td></row>
+		<row><td>NEW_STRING159</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Repository and Services only</td><td>0</td><td/><td>832939787</td></row>
 		<row><td>NEW_STRING16</td><td>1033</td><td>&amp;Next &gt;</td><td>0</td><td/><td>-199646929</td></row>
+		<row><td>NEW_STRING160</td><td>1033</td><td>Installs the Collector service and creates the repository database on local SQL Server instance</td><td>0</td><td/><td>832937771</td></row>
 		<row><td>NEW_STRING17</td><td>1033</td><td>Cancel</td><td>0</td><td/><td>-199642833</td></row>
 		<row><td>NEW_STRING173</td><td>1033</td><td>&amp;OK</td><td>0</td><td/><td>-2070198543</td></row>
 		<row><td>NEW_STRING174</td><td>1033</td><td>The database specified is an unsupported version.  The SQL diagnostic manager installer can not update this version of the database.</td><td>0</td><td/><td>-2070213742</td></row>
@@ -5172,6 +5205,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>NewProperty3</td><td>0</td><td/></row>
 		<row><td>NewProperty4</td><td>0</td><td/></row>
 		<row><td>NewProperty5</td><td>0</td><td/></row>
+		<row><td>NewProperty6</td><td>0</td><td/></row>
 		<row><td>PIDTemplate</td><td>12345&lt;###-%%%%%%%&gt;@@@@@</td><td/></row>
 		<row><td>PROGMSG_IIS_CREATEAPPPOOL</td><td>##IDS_PROGMSG_IIS_CREATEAPPPOOL##</td><td/></row>
 		<row><td>PROGMSG_IIS_CREATEAPPPOOLS</td><td>##IDS_PROGMSG_IIS_CREATEAPPPOOLS##</td><td/></row>
@@ -5284,6 +5318,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>_IsMaintenance</td><td>2</td><td>Remove</td><td>0</td><td>90</td><td>118</td><td>14</td><td>##IDS__IsMaintenanceDlg_Remove##</td><td/><td>0</td></row>
 		<row><td>_IsSetupTypeMin</td><td>1</td><td>Typical</td><td>0</td><td>0</td><td>192</td><td>14</td><td>##IDS__IsSetupTypeMinDlg_Complete##</td><td/><td>0</td></row>
 		<row><td>_IsSetupTypeMin</td><td>2</td><td>GUI</td><td>0</td><td>74</td><td>193</td><td>14</td><td>##IDS__IsSetupTypeMinDlg_Custom##</td><td/><td>0</td></row>
+		<row><td>_IsSetupTypeMin</td><td>3</td><td>Collector</td><td>0</td><td>123</td><td>174</td><td>20</td><td>##NEW_STRING159##</td><td/><td>0</td></row>
 	</table>
 
 	<table name="RegLocator">
