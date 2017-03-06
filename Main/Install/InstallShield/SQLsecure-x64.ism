@@ -1340,7 +1340,7 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpFatalExit</td><td>1</td><td>1</td></row>
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpSuccess</td><td>1</td><td>1</td></row>
-		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>_IsSetupTypeMin &lt;&gt; "Collector"</td><td>3</td></row>
+		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>LAUNCHPROGRAM AND _IsSetupTypeMin &lt;&gt; "Collector"</td><td>3</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupError</td><td>A</td><td>EndDialog</td><td>ErrorAbort</td><td>1</td><td>1</td></row>
 		<row><td>SetupError</td><td>C</td><td>EndDialog</td><td>ErrorCancel</td><td>1</td><td>0</td></row>
