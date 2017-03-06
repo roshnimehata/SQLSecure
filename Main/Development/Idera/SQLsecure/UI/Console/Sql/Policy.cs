@@ -1754,6 +1754,15 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     p.ReportText = newPolicy.PolicyMetrics[i].ReportText.Replace("\n", "\r\n");
                     p.Severity = newPolicy.PolicyMetrics[i].Severity;
                     p.SeverityValues = newPolicy.PolicyMetrics[i].SeverityValues;   
+
+                    // SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database
+                    if(newPolicy.PolicyMetrics[i].AzureDB != null)
+                    {
+                        p.AzureDB.ReportKey = newPolicy.PolicyMetrics[i].AzureDB.ReportKey;
+                        p.AzureDB.ReportText = newPolicy.PolicyMetrics[i].AzureDB.ReportText.Replace("\n", "\r\n");
+                        p.AzureDB.Severity = newPolicy.PolicyMetrics[i].AzureDB.Severity;
+                        p.AzureDB.SeverityValues = newPolicy.PolicyMetrics[i].AzureDB.SeverityValues;
+                    }
                 }
                 else
                 {
@@ -1792,6 +1801,15 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         p.ReportText = newPolicy.PolicyMetrics[i].ReportText.Replace("\n", "\r\n");
                         p.Severity = newPolicy.PolicyMetrics[i].Severity;
                         p.SeverityValues = newPolicy.PolicyMetrics[i].SeverityValues;
+
+                        // SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database
+                        if (newPolicy.PolicyMetrics[i].AzureDB != null)
+                        {
+                            p.AzureDB.ReportKey = newPolicy.PolicyMetrics[i].AzureDB.ReportKey;
+                            p.AzureDB.ReportText = newPolicy.PolicyMetrics[i].AzureDB.ReportText.Replace("\n", "\r\n");
+                            p.AzureDB.Severity = newPolicy.PolicyMetrics[i].AzureDB.Severity;
+                            p.AzureDB.SeverityValues = newPolicy.PolicyMetrics[i].AzureDB.SeverityValues;
+                        }
                     }
                 }
                 else

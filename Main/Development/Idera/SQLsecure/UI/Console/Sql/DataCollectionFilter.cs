@@ -184,8 +184,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
 		private const string FilterDetailsPrefix = @"{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss\fcharset0 Microsoft Sans Serif;}{\f1\fmodern\fcharset0 Courier New;}{\f2\fnil\fcharset2 Symbol;}}
 {\*\generator Msftedit 5.41.15.1507;}\viewkind4\uc1\pard\f0\fs16\par";
 		private const string AlwaysCollected = @"\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\tx720 All Server objects, Database Security objects, Stored Procedures and Extended Stored Procedures \par";
+        //SQLSecure 3.1 (Barkha Khatri) not collecting extended stored procedures in case of Azure DB
+        private const string AlwaysCollectedForAzureDB = @"\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\tx720 All Server objects, Database Security objects and Stored Procedures\par";
 
-		private const string FilterDetailsPrefixForSubReport = @"{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss\fcharset0 Microsoft Sans Serif;}{\f1\fmodern\fcharset0 Courier New;}{\f2\fnil\fcharset2 Symbol;}}
+        private const string FilterDetailsPrefixForSubReport = @"{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss\fcharset0 Microsoft Sans Serif;}{\f1\fmodern\fcharset0 Courier New;}{\f2\fnil\fcharset2 Symbol;}}
 {\*\generator Msftedit 5.41.15.1507;}\viewkind4\uc1\pard\f0\fs16\par";
 
 		private const string RuleSrvrPrefix = @"\pard{\pntext\f2\'B7\tab}{\*\pn\pnlvlblt\pnf2\pnindent360{\pntxtb\'B7}}\fi-360\li720\tx720 All ";
@@ -246,6 +248,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 		private const string ParamUpdateFilterHeaderDescription = @"description";
 
 		// Get filters for a registered server.
+        //SQLSecure 3.1 (Barkha Khatri) getting servertype as well
 		private const string QueryGetRegisteredServerFilters
 								= @"SELECT 
 										filterruleheaderid, 
@@ -259,7 +262,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 										filterruleid, 
 										class, 
 										scope, 
-										matchstring 
+										matchstring,servertype
 									FROM SQLsecure.dbo.vwfilterrules
 									WHERE connectionname = @instance";
 		private const string ParamQueryGetRegisteredServerFiltersInstance = "instance";
@@ -276,8 +279,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
 			FilterRuleId,
 			Class,
 			Scope,
-			MatchString
-		};
+			MatchString,
+            //SQLSecure 3.1 (Barkha Khatri) adding servertype 
+            ServerType
+        };
 
 		// Get filters for a snapshot.
 		private const string QueryGetSnapshotFilters
@@ -320,7 +325,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
 		private Disposition m_Disposition;
 		private int m_FilterId = Constants.InvalidId;
 		private string m_Instance;
-		private string m_FilterName;
+        //SQLSecure 3.1 (Barkha Khatri) adding servertype 
+        private ServerType m_ServerType;
+        private string m_FilterName;
 		private string m_CreatedBy = string.Empty;
 		private DateTime m_CreationTime = DateTime.Now;
 		private string m_LastModifiedBy = string.Empty;
@@ -439,8 +446,16 @@ namespace Idera.SQLsecure.UI.Console.Sql
 			// Initialize the string builder object.
 			StringBuilder details = new StringBuilder();
 			details.Append(FilterDetailsPrefix);
-			details.Append(AlwaysCollected);
-			StringBuilder objs = new StringBuilder();
+            //SQLSecure 3.1 (Barkha Khatri) populating strings based on servertype
+            if (ServerType == ServerType.AzureSQLDatabase)
+            {
+                details.Append(AlwaysCollectedForAzureDB);
+            }
+            else
+            {
+                details.Append(AlwaysCollected);
+            }
+            StringBuilder objs = new StringBuilder();
 
 			// Process each of the rules.
 			foreach (DataCollectionFilter.Rule rule in m_Rules)
@@ -525,7 +540,15 @@ namespace Idera.SQLsecure.UI.Console.Sql
 			{
 				details.Append(FilterDetailsPrefix);
 			}
-			details.Append(AlwaysCollected);
+            //SQLSecure 3.1 (Barkha Khatri) populating strings based on servertype
+            if (ServerType == ServerType.AzureSQLDatabase)
+            {
+                details.Append(AlwaysCollectedForAzureDB);
+            }
+            else
+            {
+                details.Append(AlwaysCollected);
+            }
 			StringBuilder dbDetails = new StringBuilder();
 			StringBuilder tblDetails = new StringBuilder();
 			StringBuilder tblMatchString = new StringBuilder();
@@ -745,7 +768,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
 			m_Description = description;
 		}
 
-		public DataCollectionFilter(
+        //SQLSecure 3.1 (Barkha Khatri) adding servertype
+        public DataCollectionFilter(
 				SqlInt32 filterId,
 				SqlString instance,
 				SqlString filterName,
@@ -753,7 +777,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
 				SqlString createdBy,
 				SqlDateTime creationTime,
 				SqlString lastModifiedBy,
-				SqlDateTime lastModificationTime
+				SqlDateTime lastModificationTime,
+                ServerType serverType
 			)
 		{
 			Debug.Assert(!filterId.IsNull);
@@ -769,7 +794,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
 			m_CreationTime = creationTime.IsNull ? DateTime.Now : creationTime.Value;
 			m_LastModifiedBy = lastModifiedBy.IsNull ? string.Empty : lastModifiedBy.Value;
 			m_LastModificationTime = lastModificationTime.IsNull ? DateTime.Now : lastModificationTime.Value;
-		}
+            m_ServerType = serverType;
+            
+        }
 
 		public DataCollectionFilter(
 				SqlInt32 filterId,
@@ -828,8 +855,13 @@ namespace Idera.SQLsecure.UI.Console.Sql
 		{
 			get { return m_Instance; }
 		}
+        //SQLSecure 3.1 (Barkha Khatri) adding servertype
+        public ServerType ServerType
+        {
+            get { return m_ServerType; }
+        }
 
-		public string FilterName
+        public string FilterName
 		{
 			get { return m_FilterName; }
 			set { m_FilterName = value; }
@@ -1060,8 +1092,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
 							SqlDateTime creationTime = rdr.GetSqlDateTime((int)RegisteredServerFiltersColumn.CreatedTm);
 							SqlString lastModifiedBy = rdr.GetSqlString((int)RegisteredServerFiltersColumn.LastModifiedBy);
 							SqlDateTime lastModificationTime = rdr.GetSqlDateTime((int)RegisteredServerFiltersColumn.LastModifiedTm);
-							filter = new DataCollectionFilter(filterId, connectionName, filterName, description, createdBy, creationTime,
-																lastModifiedBy, lastModificationTime);
+                            //SQLSecure 3.1 (Barkha Khatri) getting servertype as well
+                            ServerType serverType = Helper.ConvertSQLTypeStringToEnum(rdr.GetString((int)RegisteredServerFiltersColumn.ServerType));
+                            filter = new DataCollectionFilter(filterId, connectionName, filterName, description, createdBy, creationTime,
+																lastModifiedBy, lastModificationTime,serverType);
 							filterDictionary.Add(filterId.Value, filter);
 						}
 

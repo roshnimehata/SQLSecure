@@ -865,7 +865,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 }
                 isOK = (m_BBSProductLicense.CombinedLicense.licState == BBSProductLicense.LicenseState.Valid);
             }
-            return true;
+            return isOK;
         }
 
         #endregion
