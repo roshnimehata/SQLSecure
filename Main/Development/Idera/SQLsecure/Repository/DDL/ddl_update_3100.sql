@@ -24,12 +24,12 @@ BEGIN
 	IF COL_LENGTH('sqldatabase','istdeencrypted') IS NULL
 	 BEGIN
 		ALTER TABLE sqldatabase
-		ADD istdeencrypted BIT NOT NULL DEFAULT(0)
+		ADD istdeencrypted bit
 	END
 	IF COL_LENGTH('sqldatabase','wasbackupnotencrypted') IS NULL
 	 BEGIN
 		ALTER TABLE sqldatabase
-		ADD wasbackupnotencrypted BIT NOT NULL DEFAULT(0)
+		ADD wasbackupnotencrypted bit
 	END
 	IF COL_LENGTH('sqldatabase','FQN') IS NULL
 	 BEGIN
@@ -43,7 +43,7 @@ IF OBJECT_ID('databaseobject', 'U') IS NOT NULL
 	IF COL_LENGTH('databaseobject','isdatamasked') IS NULL
 	 BEGIN
 		ALTER TABLE databaseobject
-		ADD isdatamasked BIT NOT NULL DEFAULT(0)
+		ADD isdatamasked bit
 	 END
 	 IF COL_LENGTH('databaseobject','alwaysencryptiontype') IS NULL
 	 BEGIN
@@ -58,7 +58,7 @@ IF OBJECT_ID('databaseobject', 'U') IS NOT NULL
 	 IF COL_LENGTH('databaseobject','isrowsecurityenabled') IS NULL
 	 BEGIN
 		ALTER TABLE databaseobject
-		ADD isrowsecurityenabled bit NOT NULL DEFAULT(0)
+		ADD isrowsecurityenabled bit
 	 END
 	 IF COL_LENGTH('databaseobject','FQN') IS NULL
 	 BEGIN
