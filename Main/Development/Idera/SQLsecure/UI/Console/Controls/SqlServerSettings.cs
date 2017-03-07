@@ -789,6 +789,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             filteredTable.Columns.Remove(colSystemDrive);
             filteredTable.Columns.Remove(coladhocDistributedQueriesEnabled);
             filteredTable.Columns.Remove(colServerType);
+            filteredTable.Columns.Remove(colHideInstance);//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1675
 
             return filteredTable;
         }
@@ -826,6 +827,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         row[coladhocDistributedQueriesEnabled] = notApplicableTag;
                         row[colNumWindowsGroupMember] = notApplicableTag;
                         row[colNumAzureADGroupMember] = Convert.ToString(AzureADUsersAndGroupCount(Convert.ToInt32(row[colSnapshotId])));
+                        row[colHideInstance] = notApplicableTag;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1675
                     }
                     else
                     {
@@ -1406,7 +1408,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 band.Columns[colAgentMailProfile].Header.Caption = "Agent Mail Profile";
             }
 
-            band.Columns[colHideInstance].Header.Caption = "Hide Instance";
+            if (band.Columns.Exists(colHideInstance))
+            {
+                band.Columns[colHideInstance].Header.Caption = "Hide Instance";
+            }
 
             if (band.Columns.Exists(colAgentSysadminOnly))
             {
