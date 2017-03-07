@@ -677,7 +677,7 @@ FROM
                         N'' , -- reportkey - nvarchar(32)
                         N'Are any native backups configured for encryption on SQL Server 2014 or later?' , -- reporttext - nvarchar(4000)
                         3 , -- severity - int
-                        N'' , -- severityvalues - nvarchar(4000)
+                        N'''master'',''msdb'',''model'',''tempdb''' , -- severityvalues - nvarchar(4000)
                         0  -- assessmentid - int
                     );
         END;
@@ -1170,10 +1170,10 @@ FROM
                         N'Access' , -- metrictype - nvarchar(32)
                         N'NTFS Folder Level Encryption' , -- metricname - nvarchar(256)
                         N'Determine whether NTFS folder level encryption is configured for SQL Server folders' , -- metricdescription - nvarchar(1024)
-                        0 , -- isuserentered - bit
-                        0 , -- ismultiselect - bit
+                        1 , -- isuserentered - bit
+                        1 , -- ismultiselect - bit
                         N'' , -- validvalues - nvarchar(1024)
-                        N'When enabled, this check will identify SQL Server folders that do not have NTFS encryption enabled.'  -- valuedescription - nvarchar(1024)	
+                        N'When enabled, this check will identify SQL Server folders that do not have NTFS encryption enabled. Please specify in \\servername\path\to\folder format.'  -- valuedescription - nvarchar(1024)	
                     );
 		
             INSERT  INTO dbo.policymetric
