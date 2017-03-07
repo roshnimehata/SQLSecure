@@ -92,7 +92,7 @@ WHILE @@fetch_status = 0
 		-- Check if any of these logins have deny or no access, if so then don't show
 		IF EXISTS (SELECT 1 FROM #tmplogins)
 			BEGIN
-				IF EXISTS (SELECT 1 FROM #tmplogins WHERE serveraccess = 'Y' AND (serverdeny IS NULL OR serverdeny <> 'Y'))
+				IF EXISTS (SELECT 1 FROM #tmplogins WHERE serveraccess = 'Y' AND (serverdeny IS NULL OR serverdeny <> 'Y') AND ([disabled] = '' OR [disabled] <> 'Y'))
 					BEGIN
 						INSERT INTO #tmpserveraccess (snapshotid, connectionname, logintype, loginname)
 						SELECT DISTINCT @snapshotid, @connectionname, dbo.getserverprincipaltypename([type]) AS [type], [name] FROM #tmplogins				
