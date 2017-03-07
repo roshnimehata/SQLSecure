@@ -193,6 +193,7 @@ namespace Idera.SQLsecure.Collector.Sql
             {
                 // SQLsecure 3.1 (Anshul Aggarwal) - SQLSECU-1704 : "Reports- Audited SQL Servers" is not getting updated for Azure DB
                 // Check for 'CO' permission instead of 'COSQ' for Azure SQL Database.
+                // For now, isdisabled = 'N' for Azure SQL Database (Azure AD User or Group login types) 
 
                 query = @" SELECT DISTINCT 
                             Principals.name, 
@@ -214,7 +215,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                                              THEN 'Y'
                                                              ELSE 'N'
                                                         END
-                                                    ELSE null
+                                                    ELSE 'N'
                                               END,
                             ispolicychecked = CASE SqlLogins.is_policy_checked
                                                  WHEN 1 THEN 'Y'
