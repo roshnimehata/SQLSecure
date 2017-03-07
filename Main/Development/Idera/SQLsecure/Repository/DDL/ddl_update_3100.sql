@@ -3,11 +3,33 @@
 /* ---------------------------------------------------------------------- */
 
 /* START SQL Secure 3.1 (Barkha Khatri) Register azure servers */ 
-SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
+
+/* ---------------------------------------------------------------------- */
+/* Validate the db is correct version for upgrade                         */
+/*     >= 2000 or < 3000 or null are valid values		                  */
+/* ---------------------------------------------------------------------- */
+
+DECLARE @ver INT;
+SELECT
+    @ver = schemaversion
+FROM
+    currentversion;
+IF (ISNULL(@ver, 900) >= 3100)
+    BEGIN
+        DECLARE @msg NVARCHAR(500);
+        SET @msg = N'Database schema is not at a level that can be upgraded to version 3100';
+        IF (@ver IS NOT NULL)
+            EXEC isp_sqlsecure_addactivitylog @activitytype = 'Failure Audit',
+                @source = 'Install', @eventcode = 'Upgrade',
+                @category = 'Schema', @description = @msg,
+                @connectionname = NULL;
+        RAISERROR (@msg, 16, 1);
+    END;
 GO
 
-SET QUOTED_IDENTIFIER ON
-GO
+
 IF OBJECT_ID('registeredserver', 'U') IS NOT NULL 
 BEGIN
 IF COL_LENGTH('registeredserver','servertype') IS NULL
