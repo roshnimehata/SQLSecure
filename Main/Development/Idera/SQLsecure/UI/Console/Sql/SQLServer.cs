@@ -71,7 +71,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             {
                 machineName = serverProperties.MachineName;
                 instanceName = serverProperties.InstanceName;
-                fullName = serverProperties.ServerName;
+                fullName = instance.Split(',')[0];//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1702--Supporting FQDN names.
             }
             else
             {   
