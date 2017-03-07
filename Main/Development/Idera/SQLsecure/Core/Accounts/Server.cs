@@ -1726,7 +1726,7 @@ namespace Idera.SQLsecure.Core.Accounts
             string connectionString;
             if (!azureADAuth)
             {
-                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;";
+                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;";
             }
             else
             {
