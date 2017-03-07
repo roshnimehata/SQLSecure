@@ -650,7 +650,7 @@ FROM
                     (
                         @metricid , -- metricid - int
                         N'Access' , -- metrictype - nvarchar(32)
-                        N'Native Backup Encryption' , -- metricname - nvarchar(256)
+                        N'Backup Encryption' , -- metricname - nvarchar(256)
                         N'Determine whether native backup encryption was configured on SQL Server 2014 or later' , -- metricdescription - nvarchar(1024)
                         0 , -- isuserentered - bit
                         0 , -- ismultiselect - bit
@@ -1169,11 +1169,11 @@ FROM
                         @metricid , -- metricid - int
                         N'Access' , -- metrictype - nvarchar(32)
                         N'NTFS Folder Level Encryption' , -- metricname - nvarchar(256)
-                        N'Determine whether NTFS folder level encryption is configured for SQL Server folders' , -- metricdescription - nvarchar(1024)
-                        1 , -- isuserentered - bit
-                        1 , -- ismultiselect - bit
+                        N'Determine whether NTFS folder level encryption is configured for Windows folders' , -- metricdescription - nvarchar(1024)
+                        0 , -- isuserentered - bit
+                        0 , -- ismultiselect - bit
                         N'' , -- validvalues - nvarchar(1024)
-                        N'When enabled, this check will identify SQL Server folders that do not have NTFS encryption enabled. Please specify in \\servername\path\to\folder format.'  -- valuedescription - nvarchar(1024)	
+                        N'When enabled, this check will identify Windows folders that do not have NTFS encryption enabled.'  -- valuedescription - nvarchar(1024)	
                     );
 		
             INSERT  INTO dbo.policymetric
@@ -1193,7 +1193,7 @@ FROM
                         @metricid , -- metricid - int
                         0 , -- isenabled - bit
                         N'' , -- reportkey - nvarchar(32)
-                        N'Are SQL Server folders not configured for NTFS encryption?' , -- reporttext - nvarchar(4000)
+                        N'Are Windows folders not configured for NTFS encryption?' , -- reporttext - nvarchar(4000)
                         1 , -- severity - int
                         N'' , -- severityvalues - nvarchar(4000)
                         0  -- assessmentid - int

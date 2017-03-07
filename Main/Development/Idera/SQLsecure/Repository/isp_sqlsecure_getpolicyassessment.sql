@@ -10172,82 +10172,68 @@ AS -- <Idera SQLsecure version and copyright>
 													BEGIN
 														IF(@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
                                                         BEGIN
-															IF(ISNULL(@severityvalues, '') <> '')
-															BEGIN
-																IF CURSOR_STATUS('global','dbcursor')>= 0
-																BEGIN
-																		CLOSE dbcursor
-																		DEALLOCATE dbcursor
-																END
 															
-																SELECT		
- 																	@sql = N'declare dbcursor cursor static for		
- 																	select Value 
-																	from dbo.splitbydelimiter(''' + REPLACE(@severityvalues, '''', '''''') + ''','','')
-																	where Value NOT LIKE ''\\_%\%'' OR 
-																	(Value LIKE ''\\' + @servername + '\%'' AND 
-																	NOT EXISTS (
-																		select 1   		
- 																		from serverosobject 		
- 																		where snapshotid = '		
- 																				+ CONVERT(nvarchar, @snapshotid)		
- 																				+ N' 
-																		and objectname LIKE ''\\' + @servername + '\'' + Value and  
-																		disktype = ''NTFS'' and objecttype = ''FDir'' and
-																	isencrypted = 1))
-																	order by Value';
-															 
- 																EXEC (@sql);
-
-																OPEN dbcursor;
-																SELECT
-																		@intval2 = 0;
-																FETCH NEXT FROM
-																dbcursor INTO @strval;
-																WHILE @@fetch_status = 0
-																BEGIN
-																		IF (@intval2 = 1
-																				OR LEN(@metricval)
-																				+ LEN(@strval) > 1010
-																				)
-																		BEGIN
-																				IF @intval2 = 0
-																						SELECT
-																								@metricval = @metricval
-																								+ N', more...',
-																								@intval2 = 1;
-																		END
-																		ELSE
-																				SELECT
-																						@metricval = @metricval
-																						+ CASE
-																								WHEN LEN(@metricval) > 0 THEN N', '
-																								ELSE N''
-																						END + N''''
-																						+ @strval
-																						+ N'''';
-
-																		FETCH NEXT FROM
-																		dbcursor INTO @strval;
-																END;
-																CLOSE dbcursor;
-																DEALLOCATE dbcursor;
-																IF (@isadmin = 1)
-																		INSERT INTO policyassessmentdetail (policyid,
-																		assessmentid,
-																		metricid,
-																		snapshotid,
-																		detailfinding,
-																		databaseid,
-																		objecttype,
-																		objectid,
-																		objectname)
-																				VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following SQL Server folders don''t have NTFS folder level encryption configured: ''' + @strval + N'''', NULL, -- database ID,
-																				N'DB', -- object type
-																				NULL, -- object id
-																				@strval);
-
+															IF CURSOR_STATUS('global','dbcursor')>= 0
+															BEGIN
+																	CLOSE dbcursor
+																	DEALLOCATE dbcursor
 															END
+															
+															declare dbcursor cursor static for		
+ 															select distinct objectname
+															from  serverosobject	
+															where snapshotid = @snapshotid	
+															and disktype = 'NTFS' and objecttype = 'FDir' and isencrypted = 0
+															order by objectname;
+
+															OPEN dbcursor;
+															SELECT
+																	@intval2 = 0;
+															FETCH NEXT FROM
+															dbcursor INTO @strval;
+															WHILE @@fetch_status = 0
+															BEGIN
+																	IF (@intval2 = 1
+																			OR LEN(@metricval)
+																			+ LEN(@strval) > 1010
+																			)
+																	BEGIN
+																			IF @intval2 = 0
+																					SELECT
+																							@metricval = @metricval
+																							+ N', more...',
+																							@intval2 = 1;
+																	END
+																	ELSE
+																			SELECT
+																					@metricval = @metricval
+																					+ CASE
+																							WHEN LEN(@metricval) > 0 THEN N', '
+																							ELSE N''
+																					END + N''''
+																					+ @strval
+																					+ N'''';
+
+																	FETCH NEXT FROM
+																	dbcursor INTO @strval;
+															END;
+															CLOSE dbcursor;
+															DEALLOCATE dbcursor
+
+															IF (@isadmin = 1)
+																	INSERT INTO policyassessmentdetail (policyid,
+																	assessmentid,
+																	metricid,
+																	snapshotid,
+																	detailfinding,
+																	databaseid,
+																	objecttype,
+																	objectid,
+																	objectname)
+																			VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'Following SQL Server folders don''t have NTFS folder level encryption configured: ''' + @strval + N'''', NULL, -- database ID,
+																			N'DB', -- object type
+																			NULL, -- object id
+																			@strval);
 
 															IF (LEN(@metricval) = 0)
 																	SELECT
