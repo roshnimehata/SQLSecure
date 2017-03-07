@@ -33,6 +33,8 @@ SELECT	a.connectionname,
 		a.servername,
 		a.instancename,
 		version =	CASE 
+						WHEN b.servertype = 'ADB' -- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+							THEN 'Azure SQL DB v'
 						WHEN SUBSTRING(a.version,1,3) = '08.' OR SUBSTRING(a.version,1,2) = '8.' 
 							THEN 'SQL Server 2000 v'
 						WHEN SUBSTRING(a.version,1,3) = '09.' OR SUBSTRING(a.version,1,2) = '9.'
@@ -45,11 +47,13 @@ SELECT	a.connectionname,
 							THEN 'SQL Server 2012 v'
 						WHEN SUBSTRING(a.version,1,3) = '12.'
 							THEN 'SQL Server 2014 v'
+						WHEN SUBSTRING(a.version,1,3) = '13.'
+							THEN 'SQL Server 2016 v'
 						ELSE ''
 					END + a.version,
 		a.edition,
 		a.authenticationmode,
-		a.os,
+		os = CASE WHEN b.servertype = 'ADB' THEN 'Azure' ELSE a.os END,
 		a.loginauditmode,
 		a.enableproxyaccount,
 		a.enablec2audittrace,
@@ -58,14 +62,16 @@ SELECT	a.connectionname,
 		numwindowsuser = (SELECT COUNT(1) FROM serverprincipal WHERE snapshotid = a.snapshotid AND [type] = 'U' AND serveraccess = 'Y' AND serverdeny = 'N'),
 		numwindowsgroup = (SELECT COUNT(1) FROM serverprincipal WHERE snapshotid = a.snapshotid AND [type] = 'G' AND serveraccess = 'Y' AND serverdeny = 'N'),
 		numsqllogin = (SELECT COUNT(1) FROM serverprincipal WHERE snapshotid = a.snapshotid AND [type] = 'S' AND serveraccess = 'Y' AND serverdeny = 'N'),
-		a.starttime AS snapshottime
-FROM	serversnapshot a
+		a.starttime AS snapshottime,
+		numazureaduser = (SELECT COUNT(1) FROM serverprincipal WHERE snapshotid = a.snapshotid AND [type] = 'E' AND serveraccess = 'Y' AND serverdeny = 'N'),
+		numazureadgroup = (SELECT COUNT(1) FROM serverprincipal WHERE snapshotid = a.snapshotid AND [type] = 'X' AND serveraccess = 'Y' AND serverdeny = 'N')
+FROM	serversnapshot a INNER JOIN registeredserver b ON a.connectionname = b.connectionname 
 WHERE	snapshotid IN (SELECT snapshotid FROM dbo.getsnapshotlist(@rundate, @usebaseline))
-		AND registeredserverid IN (SELECT registeredserverid FROM #tmpservers)
+		AND a.registeredserverid IN (SELECT registeredserverid FROM #tmpservers)
 		AND	(
 			(UPPER(@connectionname) = 'ALL')
 			OR 
-			(UPPER(connectionname) = UPPER(@connectionname))
+			(UPPER(a.connectionname) = UPPER(@connectionname))
 			)
 
 

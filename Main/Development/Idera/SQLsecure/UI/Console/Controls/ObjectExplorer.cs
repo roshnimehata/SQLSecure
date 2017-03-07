@@ -237,9 +237,20 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 foreach (Sql.Login login in logins)
                 {
                     Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, login.Type, login.Id, login.Name, null);
-                    m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(tag.ObjType), tag.ObjectName, tag.TypeName, tag,
-                                        null, null, null, null, null, null,
-                                        getMembersOf(tag), login.ServerAccess, login.ServerDeny);
+                    //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.--Currently using Windows user and group images for azure AD user and groups.
+                    if (tag.ObjType == ObjectType.TypeEnum.AzureADUser)
+                        m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(ObjectType.TypeEnum.WindowsUserLogin), tag.ObjectName, tag.TypeName, tag,
+                                            null, null, null, null, null, null,
+                                            getMembersOf(tag), login.ServerAccess, login.ServerDeny);
+                    else if(tag.ObjType == ObjectType.TypeEnum.AzureADGroup)
+                        m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(ObjectType.TypeEnum.WindowsGroupLogin), tag.ObjectName, tag.TypeName, tag,
+                                            null, null, null, null, null, null,
+                                            getMembersOf(tag), login.ServerAccess, login.ServerDeny);
+                    else
+                        m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(tag.ObjType), tag.ObjectName, tag.TypeName, tag,
+                                            null, null, null, null, null, null,
+                                            getMembersOf(tag), login.ServerAccess, login.ServerDeny);
+                    //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
                 }
             }
             catch (Exception ex)
@@ -1531,6 +1542,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 case Sql.ObjectType.TypeEnum.WindowsUserLogin:
                 case Sql.ObjectType.TypeEnum.WindowsGroupLogin:
                 case Sql.ObjectType.TypeEnum.SqlLogin:
+                //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                case ObjectType.TypeEnum.AzureADUser:
+                case ObjectType.TypeEnum.AzureADGroup:
                     Forms.Form_SnapshotLoginProperties.Process(m_Version, tag);
                     break;
                 case Sql.ObjectType.TypeEnum.ServerRole:

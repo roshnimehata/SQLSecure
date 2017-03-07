@@ -217,6 +217,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.windows_authentication.TabStop = true;
             this.windows_authentication.Text = "Windows Authentication";
             this.windows_authentication.UseVisualStyleBackColor = true;
+            this.windows_authentication.Checked = true;//SQLsecure 3.1 (Tushar)Fix for defect SQLSECU-1514--Making windows authentication checked by default.
             this.windows_authentication.CheckedChanged += new System.EventHandler(this.windows_authentication_CheckedChanged);
             // 
             // Form_ConnectRepository

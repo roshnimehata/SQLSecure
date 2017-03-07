@@ -41,6 +41,13 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private string m_loginType;
         private Sql.User m_user;
+        
+        // SQLsecure 3.1 (Anshul Aggarwal) - Maintains a mapping from connection to server so we can check RegisteredServer type based on server dropdown value.
+        private Dictionary<string, RegisteredServer> _connectionNameToServer = new Dictionary<string, RegisteredServer>();
+
+        private static Point WINDOWS_RADIO_BUTTON_LOCATION = new Point(75, 42);
+        private static Point AZURE_RADIO_BUTTON_LOCATION = new Point(221, 42);
+        private static Point SQL_RADIO_BUTTON_LOCATION = new Point(370, 42);
 
         #endregion
 
@@ -66,7 +73,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             StringBuilder instructions = new StringBuilder(Utility.Constants.ReportRunInstructions_MultiStep);
             instructions.Append(newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_UseSelection, newline);
-            instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Server, newline);
+            instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Server_OP_OR_ADB, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_LoginType, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_UserName, newline);
             instructions.AppendFormat(instructionformat, i, Utility.Constants.ReportRunInstructions_NoParameters, newline);
@@ -125,7 +132,8 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             if (m_user == null)
             {
-                if (m_loginType.Equals(Sql.LoginType.SqlLogin))
+                // SQLsecure 3.1 (Anshul Aggarwal) - Skip domain check for Azure AD Accounts as well.
+                if (m_loginType.Equals(Sql.LoginType.SqlLogin) || m_loginType.Equals(Sql.LoginType.AzureADAccount))
                 {
                     // if it is a SQL Login, it will not be validated, so just create the m_user without a sid
                     m_user = new Idera.SQLsecure.UI.Console.Sql.User(_textBox_User.Text, null, m_loginType, Sql.User.UserSource.UserEntry);
@@ -158,6 +166,8 @@ namespace Idera.SQLsecure.UI.Console.Views
                     SqlCommand cmd = new SqlCommand(QueryDataSource, connection);
                     cmd.CommandType = CommandType.StoredProcedure;
 
+                    DataSet ds = new DataSet();
+
                     // Build parameters
                     SqlParameter paramLoginType = new SqlParameter(SqlParamLoginType, m_loginType);
                     SqlParameter paramSqlLogin = new SqlParameter(SqlParamUser, m_user.Name);
@@ -171,11 +181,26 @@ namespace Idera.SQLsecure.UI.Console.Views
                     cmd.Parameters.Add(paramPolicyid);
                     cmd.Parameters.Add(paramServerName);
                     cmd.Parameters.Add(paramUseBaseline);
+                    
+                    // SQLsecure 3.1 (Anshul Aggarwal) - Fill Data for Azure AD Account (User or Group) separately.
+                    if (m_loginType == Sql.LoginType.AzureADAccount)
+                    {
+                        // Get data for Azure AD User
+                        paramLoginType.Value = Sql.LoginType.AzureADUser;
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(ds);
 
-                    // Get data
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    DataSet ds = new DataSet();
-                    da.Fill(ds);
+                        // Get data for Azure AD Group
+                        paramLoginType.Value = Sql.LoginType.AzureADGroup;
+                        da = new SqlDataAdapter(cmd);
+                        da.Fill(ds);
+                    }
+                    else
+                    {
+                        // Get data
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(ds);
+                    }
 
                     ReportDataSource rds = new ReportDataSource();
                     rds.Name = DataSourceName;
@@ -224,28 +249,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         #endregion
 
         #region Events
-
-        private void _comboBox_Server_DropDown(object sender, EventArgs e)
-        {
-            //Initialize the combobox for server selection to refresh on every open
-            string selection = _comboBox_Server.Text;
-            _comboBox_Server.Items.Clear();
-            _comboBox_Server.Items.Add(Utility.Constants.ReportSelect_AllServers);
-
-            foreach (Sql.RegisteredServer server in Program.gController.ReportPolicy.GetMemberServers())
-            {
-                _comboBox_Server.Items.Add(server.ConnectionName);
-            }
-
-            //Keep the last selection for the user
-            _comboBox_Server.Text = selection;
-        }
-
-        private void _comboBox_Server_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            checkSelections(); 
-        }
-
+        
         private void _button_BrowseUsers_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -329,6 +333,30 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             Cursor = Cursors.Default;
         }
+        
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes user for Azure AD Account.
+        /// </summary>
+        private void _radioButton_AzureADUserOrGroup_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            _button_BrowseUsers.Enabled = !((RadioButton)sender).Checked;
+            if (((RadioButton)sender).Checked)
+            {
+                if (m_loginType != Sql.LoginType.AzureADAccount)
+                {
+                    // try to be smart and not clear the user if it was not validated to type previously
+                    if (m_user != null && m_user.Sid != null)
+                    {
+                        _textBox_User.Text = string.Empty;
+                        m_user = null;
+                    }
+                    m_loginType = Sql.LoginType.AzureADAccount;
+                }
+            }
+            checkSelections();
+            Cursor = Cursors.Default;
+        }
 
         private void _textBox_User_TextChanged(object sender, EventArgs e)
         {
@@ -339,6 +367,103 @@ namespace Idera.SQLsecure.UI.Console.Views
             checkSelections();
 
             Cursor = Cursors.Default;
+        }
+
+
+		/// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Keep track of registered servers.
+        /// </summary>
+        private void _comboBox_Server_DropDown(object sender, EventArgs e)
+        {
+            //Initialize the combobox for server selection to refresh on every open
+            string selection = _comboBox_Server.Text;
+            _comboBox_Server.Items.Clear();
+            _comboBox_Server.Items.Add(Utility.Constants.ReportSelect_AllServers);
+
+            _connectionNameToServer.Clear();    // SQLsecure 3.1 (Anshul Aggarwal) - Clear the old mapping.
+
+            foreach (Sql.RegisteredServer server in Program.gController.ReportPolicy.GetMemberServers())
+            {
+                _comboBox_Server.Items.Add(server.ConnectionName);
+
+                if (!_connectionNameToServer.ContainsKey(server.ConnectionName)) // SQLsecure 3.1 (Anshul Aggarwal) - Populate the new mapping.
+                    _connectionNameToServer.Add(server.ConnectionName, server);
+            }
+
+            //Keep the last selection for the user
+            _comboBox_Server.Text = selection;
+        }
+
+        private void _comboBox_Server_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            RefreshLoginTypesRadioButtons(); // Change login types radio buttons based on server type.
+            checkSelections();
+        }
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Change login types radio buttons based on server type.
+        /// </summary>
+        private void RefreshLoginTypesRadioButtons()
+        {
+            string connectionname = _comboBox_Server.SelectedItem as string;
+            if (connectionname != null)
+            {
+                if (connectionname == Utility.Constants.ReportSelect_AllServers)
+                {
+                    this.SuspendLayout();  // Suspend changes.
+
+                    this._radioButton_WindowsUser.Location = WINDOWS_RADIO_BUTTON_LOCATION;
+                    this._radioButton_SQLLogin.Location = SQL_RADIO_BUTTON_LOCATION;
+                    this._radioButton_AzureADUserOrGroup.Location = AZURE_RADIO_BUTTON_LOCATION;
+                    this._radioButton_WindowsUser.Visible = true;
+                    this._radioButton_SQLLogin.Visible = true;
+                    this._radioButton_AzureADUserOrGroup.Visible = true;
+
+                    this.ResumeLayout();  // Resume changes.
+                }
+                else if (_connectionNameToServer.ContainsKey(connectionname))
+                {
+                    var server = _connectionNameToServer[connectionname];
+                    if (server.ServerType == ServerType.AzureSQLDatabase)
+                    {
+                        this.SuspendLayout();  // Suspend changes.
+
+                        this._radioButton_AzureADUserOrGroup.Location = WINDOWS_RADIO_BUTTON_LOCATION;
+                        this._radioButton_SQLLogin.Location = AZURE_RADIO_BUTTON_LOCATION;
+                        this._radioButton_WindowsUser.Visible = false;
+                        this._radioButton_SQLLogin.Visible = true;
+                        this._radioButton_AzureADUserOrGroup.Visible = true;
+
+                        this.ResumeLayout();  // Resume changes.
+
+                        // Change selected button if it does not exist for current server type.
+                        if (_radioButton_WindowsUser.Checked)
+                        {
+                            m_user = null;
+                            _radioButton_AzureADUserOrGroup.Checked = true;
+                        }
+                    }
+                    else
+                    {
+                        this.SuspendLayout(); // Suspend changes.
+
+                        this._radioButton_WindowsUser.Location = WINDOWS_RADIO_BUTTON_LOCATION;
+                        this._radioButton_SQLLogin.Location = AZURE_RADIO_BUTTON_LOCATION;
+                        this._radioButton_WindowsUser.Visible = true;
+                        this._radioButton_SQLLogin.Visible = true;
+                        this._radioButton_AzureADUserOrGroup.Visible = false;
+
+                        this.ResumeLayout();  // Resume changes.
+
+
+                        if (_radioButton_AzureADUserOrGroup.Checked)
+                        {
+                            m_user = null;
+                            _radioButton_WindowsUser.Checked = true;
+                        }
+                    }
+                }
+            }
         }
 
         #endregion

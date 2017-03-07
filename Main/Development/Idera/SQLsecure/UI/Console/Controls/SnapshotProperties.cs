@@ -44,6 +44,24 @@ namespace Idera.SQLsecure.UI.Console.Controls
             }
             else
             {
+                //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                if (m_ServerInstance.ServerType == ServerType.AzureSQLDatabase)
+                {
+                    this._ultraTabControl.Tabs["_tab_WindowsAccounts"].Text = "Azure AD Accounts";
+                    this._ultraTabControl.Tabs["_tab_OSWindowsAccounts"].Visible = false;
+                    //SQLSecure 3.1 (Tushar)--FIx for defect SQLSECU-1666
+                    this._ultraTabControl.Tabs["_tab_SuspectWindowsAccounts"].Visible = false;
+                    this._ultraTabControl.Tabs["_tab_SuspectOsWindowsAccounts"].Visible = false;
+                }
+                else
+                {
+                    this._ultraTabControl.Tabs["_tab_WindowsAccounts"].Text = "Windows Accounts";
+                    this._ultraTabControl.Tabs["_tab_OSWindowsAccounts"].Visible = true;
+                    //SQLSecure 3.1 (Tushar)--FIx for defect SQLSECU-1666
+                    this._ultraTabControl.Tabs["_tab_SuspectWindowsAccounts"].Visible = true;
+                    this._ultraTabControl.Tabs["_tab_SuspectOsWindowsAccounts"].Visible = true;
+                }
+                //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                 int snapshotid = ((Data.PermissionExplorer)contextIn).SnapShotId;
 
                 if (m_SnapshotId == snapshotid)
@@ -367,6 +385,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string IntroUnresolvedWindowsAccounts = @"SQLsecure was unable to collect data for the accounts listed in the table below.  This can happen when accounts are deleted or when SQLsecure does not have privileges to collect this information.  It can lead to incomplete SQL Server permissions information for Windows accounts.  Tell me more.";
         private const string IntroUnavailableDatabases = "SQLsecure was unable to collect SQL Server security data for the databases listed in the table below.   This can happen when a database is unavailable during SQLsecure data collection.   For example, a database being backed up is unavailable for data collection.  Tell me more.";
         private const int TellMeMoreLen = 12;
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        private const string IntroAzureADAccounts = @"The table below contains a{0} list of Azure AD users and groups that have access to this Azure SQL Database either by a direct SQL Login or inherited via a group membership.  Tell me more.";
 
         private const string WindowsAccounts = "Windows Accounts";
         private static string WindowsAccountsFmt = WindowsAccounts + " ({0})";
@@ -381,6 +401,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string UnavailableDatabases = "Unavailable Databases";
         private static string UnavailableDatabasesFmt = UnavailableDatabases + " ({0})";
         private const string PrintHeaderDisplay = "{0} for {1} audited on {2}";
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        private const string AzureADAccounts = "Azure AD Accounts";
+        private static string AzureADAccountsFmt = AzureADAccounts + "({0})";
 
         private const string DelimFieldSep = @"','";
         private const string Delim = @"'";
@@ -427,16 +450,43 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 {
                     if (m_DataTable_UnresolvedAccounts.Rows.Count == 0)
                     {
-                        _lbl_IntroWindowsAccounts.Text = string.Format(IntroWindowsAccounts, IntroAccountsAll);
+                        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                        if (m_ServerInstance.ServerType == ServerType.AzureSQLDatabase)
+                        {
+                            _lbl_IntroWindowsAccounts.Text = string.Format(IntroAzureADAccounts, IntroAccountsAll);
+                        }
+                        else
+                        {
+                            _lbl_IntroWindowsAccounts.Text = string.Format(IntroWindowsAccounts, IntroAccountsAll);
+                        }
+                        //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                     }
                     else
                     {
-                        _lbl_IntroWindowsAccounts.Text = string.Format(IntroWindowsAccounts, IntroAccountsPartial);
+                        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                        if (m_ServerInstance.ServerType == ServerType.AzureSQLDatabase)
+                        {
+                            _lbl_IntroWindowsAccounts.Text = string.Format(IntroAzureADAccounts, IntroAccountsPartial);
+                        }
+                        else
+                        {
+                            _lbl_IntroWindowsAccounts.Text = string.Format(IntroWindowsAccounts, IntroAccountsPartial);
+                        }
+                        //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                     }
                 }
                 else
                 {
-                    _lbl_IntroWindowsAccounts.Text = string.Format(IntroWindowsAccounts, string.Empty);
+                    //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                    if (m_ServerInstance.ServerType == ServerType.AzureSQLDatabase)
+                    {
+                        _lbl_IntroWindowsAccounts.Text = string.Format(IntroAzureADAccounts, string.Empty);
+                    }
+                    else
+                    {
+                        _lbl_IntroWindowsAccounts.Text = string.Format(IntroWindowsAccounts, string.Empty);
+                    }
+                    //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                 }
                 _lbl_IntroWindowsAccounts.LinkArea = new LinkArea(_lbl_IntroWindowsAccounts.Text.Length - TellMeMoreLen - 1, TellMeMoreLen);
 
@@ -489,10 +539,22 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     _label_Databases.Text = String.Empty;
 
                 // Windows Accounts
-                _ultraTabControl.Tabs["_tab_WindowsAccounts"].Text =
-                    _tslbl_ItemsWindowsAccounts.Text = WindowsAccounts;
-                _lbl_IntroWindowsAccounts.Text = string.Format(IntroWindowsAccounts, string.Empty);
-                _lbl_IntroWindowsAccounts.LinkArea = new LinkArea(_lbl_IntroWindowsAccounts.Text.Length - TellMeMoreLen - 1, TellMeMoreLen);
+                //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                if (m_ServerInstance.ServerType == ServerType.AzureSQLDatabase)
+                {
+                    _ultraTabControl.Tabs["_tab_WindowsAccounts"].Text =
+                      _tslbl_ItemsWindowsAccounts.Text = AzureADAccounts;
+                    _lbl_IntroWindowsAccounts.Text = string.Format(IntroAzureADAccounts, string.Empty);
+                    _lbl_IntroWindowsAccounts.LinkArea = new LinkArea(_lbl_IntroWindowsAccounts.Text.Length - TellMeMoreLen - 1, TellMeMoreLen);
+                }
+                else
+                {
+                    _ultraTabControl.Tabs["_tab_WindowsAccounts"].Text =
+                      _tslbl_ItemsWindowsAccounts.Text = WindowsAccounts;
+                    _lbl_IntroWindowsAccounts.Text = string.Format(IntroWindowsAccounts, string.Empty);
+                    _lbl_IntroWindowsAccounts.LinkArea = new LinkArea(_lbl_IntroWindowsAccounts.Text.Length - TellMeMoreLen - 1, TellMeMoreLen);
+                }
+                //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                 m_DataTable_Accounts.Clear();
                 _ultraGridWindowsAccounts.BeginUpdate();
                 _ultraGridWindowsAccounts.SetDataBinding(m_DataTable_Accounts, null);
@@ -580,7 +642,18 @@ namespace Idera.SQLsecure.UI.Console.Controls
             _label_Objects.Text = m_Snapshot.NumObject.ToString("n0");
             _label_Permissions.Text = m_Snapshot.NumPermission.ToString("n0");
             _label_Logins.Text = m_Snapshot.NumLogin.ToString("n0");
-            _label_WindowsGroups.Text = m_Snapshot.NumWindowsGroupMember.ToString("n0");
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+            if (m_ServerInstance.ServerType == ServerType.AzureSQLDatabase)
+            {
+                this.label5.Text = "Azure AD accounts:";
+                _label_WindowsGroups.Text = m_DataTable_Accounts.Rows.Count.ToString("n0");
+            }
+            else
+            {
+                this.label5.Text = "Windows accounts:";
+                _label_WindowsGroups.Text = m_Snapshot.NumWindowsGroupMember.ToString("n0");
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
 
             switch (m_Snapshot.WeakPasswordDectectionEnabled)
             {
@@ -639,18 +712,26 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 {
                     // Open the connection.
                     connection.Open();
-
-                    string groups = Delim + Sql.LoginType.WindowsUser + DelimFieldSep
-                                        + Sql.LoginType.WindowsGroup + DelimFieldSep
-                                        + Core.Accounts.ObjectClass.User.ToString() + DelimFieldSep
-                                        + Core.Accounts.ObjectClass.Group.ToString() + DelimFieldSep
-                                        + Core.Accounts.ObjectClass.LocalGroup.ToString() + DelimFieldSep
-                                        + Core.Accounts.ObjectClass.GlobalGroup.ToString() + DelimFieldSep
-                                        + Core.Accounts.ObjectClass.UniversalGroup.ToString() + DelimFieldSep
-                                        + Core.Accounts.ObjectClass.DistributionGroup.ToString() + DelimFieldSep
-                                        + Core.Accounts.ObjectClass.WellknownGroup.ToString() + Delim;
-                    string query = string.Format(QueryGetLogins, m_Snapshot.SnapshotId, groups);
-
+                    //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                    string query = string.Empty;
+                    if (m_ServerInstance.ServerType == ServerType.AzureSQLDatabase)
+                    {
+                        query = string.Format("select name, type, login=CASE WHEN a.sid IS NULL THEN 'N' ELSE 'Y' END,sid from SQLsecure.dbo.serverprincipal a where a.snapshotid = {0} and type in ('E', 'X')", m_Snapshot.SnapshotId);
+                    }
+                    else
+                    {
+                        string groups = Delim + Sql.LoginType.WindowsUser + DelimFieldSep
+                                          + Sql.LoginType.WindowsGroup + DelimFieldSep
+                                          + Core.Accounts.ObjectClass.User.ToString() + DelimFieldSep
+                                          + Core.Accounts.ObjectClass.Group.ToString() + DelimFieldSep
+                                          + Core.Accounts.ObjectClass.LocalGroup.ToString() + DelimFieldSep
+                                          + Core.Accounts.ObjectClass.GlobalGroup.ToString() + DelimFieldSep
+                                          + Core.Accounts.ObjectClass.UniversalGroup.ToString() + DelimFieldSep
+                                          + Core.Accounts.ObjectClass.DistributionGroup.ToString() + DelimFieldSep
+                                          + Core.Accounts.ObjectClass.WellknownGroup.ToString() + Delim;
+                        query = string.Format(QueryGetLogins, m_Snapshot.SnapshotId, groups);
+                    }
+                    //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                     //Get Users
                     // Execute stored procedure and get the users.
                     using (SqlCommand cmd = new SqlCommand(query, connection))
@@ -680,9 +761,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
                                     icon = AppIcons.AppImage16(AppIcons.Enum.WindowsGroup);
                                     break;
                                 case Sql.WindowsAccount.Type.WellKnownGroup:
+                                case WindowsAccount.Type.AzureADGroup://SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                                     icon = AppIcons.AppImage16(AppIcons.Enum.WindowsGroup);
                                     break;
                                 case Sql.WindowsAccount.Type.User:
+                                case WindowsAccount.Type.AzureADUSer://Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                                     icon = AppIcons.AppImage16(AppIcons.Enum.WindowsUser);
                                     break;
                                 default:
@@ -726,6 +809,14 @@ namespace Idera.SQLsecure.UI.Console.Controls
                                 case ServerLoginTypes.User:
                                     loginType = ServerLoginTypes.UserText;
                                     break;
+                                //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                                case ServerLoginTypes.AzureADUser:
+                                    loginType = ServerLoginTypes.AzureADUserText;
+                                    break;
+                                case ServerLoginTypes.AzureADGroup:
+                                    loginType = ServerLoginTypes.AzureADGrouptext;
+                                    break;
+                                //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                                 default:
                                     //Debug.Assert(false, "Unknown status encountered");
                                     logX.loggerX.Warn("Warning - unknown User Type encountered", drvSource[colType]);
@@ -758,8 +849,18 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         _ultraGridWindowsAccounts.SetDataBinding(m_DataTable_Accounts, null);
                         _ultraGridWindowsAccounts.EndUpdate();
 
-                        _ultraTabControl.Tabs["_tab_WindowsAccounts"].Text =
-                            _tslbl_ItemsWindowsAccounts.Text = string.Format(WindowsAccountsFmt, dv.Count);
+                        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                        if (m_ServerInstance.ServerType == ServerType.AzureSQLDatabase)
+                        {
+                            _ultraTabControl.Tabs["_tab_WindowsAccounts"].Text =
+                                  _tslbl_ItemsWindowsAccounts.Text = string.Format(AzureADAccountsFmt, dv.Count);
+                        }
+                        else
+                        {
+                            _ultraTabControl.Tabs["_tab_WindowsAccounts"].Text =
+                                  _tslbl_ItemsWindowsAccounts.Text = string.Format(WindowsAccountsFmt, dv.Count);
+                        }
+                        //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                     }
                 }
             }

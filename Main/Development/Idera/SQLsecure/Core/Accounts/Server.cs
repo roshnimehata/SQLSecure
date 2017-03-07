@@ -39,12 +39,25 @@ namespace Idera.SQLsecure.Core.Accounts
             Failed
         }
 
+        // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+        public enum ServerType
+        {
+            OnPremise,//On-Premise
+            AzureSQLDatabase,//Azure SqlDatabase
+            SQLServerOnAzureVM//Azure VM
+        }
+
         #region Fields
         private static LogX logX = new LogX("Idera.SQLsecure.Core.Accounts.Server");
         private int m_numWarnings;
         private bool m_IsValid;
         private bool m_IsAdmin = false;
         private string m_Name;
+
+        // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+        private string m_AccountName;
+        private ServerType m_serverType;
+
         private string m_BindUser;
         private string m_BindDomain;
         private string m_BindAccount;
@@ -1087,8 +1100,16 @@ namespace Idera.SQLsecure.Core.Accounts
                     string refDom;
                     byte[] bSid;
 
+                    // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                    string accountName = m_Name;
+
+                    if (m_serverType == ServerType.SQLServerOnAzureVM)
+                    {
+                        accountName = m_AccountName;
+                    }
+
                     if (Core.Interop.Authorization.LookupAccountName(m_Name,
-                                   m_Name, out bSid,
+                                   accountName, out bSid,
                                    out refDom, out peUse) || peUse == SID_NAME_USE.SidTypeDomain)
                     {
                         m_ComputerSid = new Sid(bSid);
@@ -1140,6 +1161,7 @@ namespace Idera.SQLsecure.Core.Accounts
                 string name,
                 string bindAcct,
                 string bindPassword,
+                ServerType serverType,
                 WriteActivityToRepositoryDelegate WriteAppActivityToRepositoryParam
             )
         {
@@ -1147,10 +1169,24 @@ namespace Idera.SQLsecure.Core.Accounts
             Debug.Assert(string.IsNullOrEmpty(bindAcct) || (!string.IsNullOrEmpty(bindAcct) && !string.IsNullOrEmpty(bindPassword)));
             WriteApplicationActivityToRepository = WriteAppActivityToRepositoryParam;
             m_Name = name;
+
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            m_serverType = serverType;
+
             try
             {
-                m_Name = GetActiveComputerName(name);
-                logX.loggerX.Info(string.Format(@"Active Computer Name: {0}", m_Name));
+                if (m_serverType == ServerType.SQLServerOnAzureVM)
+                {
+                    m_AccountName = GetActiveComputerName(name);
+                    logX.loggerX.Info(string.Format(@"Active Computer Name: {0}", m_Name));
+                }
+                else
+                {
+                    m_Name = GetActiveComputerName(name);
+                    logX.loggerX.Info(string.Format(@"Active Computer Name: {0}", m_Name));
+                }
+
+                
             }
             catch (Exception e)
             {
@@ -1690,7 +1726,7 @@ namespace Idera.SQLsecure.Core.Accounts
             string connectionString;
             if (!azureADAuth)
             {
-                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;";
+                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;";
             }
             else
             {

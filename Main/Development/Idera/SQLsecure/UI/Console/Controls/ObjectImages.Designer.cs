@@ -114,7 +114,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.AppImageList16.Images.SetKeyName(69, "");
             this.AppImageList16.Images.SetKeyName(70, "");
             this.AppImageList16.Images.SetKeyName(71, "");
-            this.AppImageList16.Images.SetKeyName(72, "");
+            this.AppImageList16.Images.SetKeyName(72, "ServerTag_16.png");//SQLsecure 3.1 (Tushar) - Added support for Azure SQL Database
             this.AppImageList16.Images.SetKeyName(73, "");
             this.AppImageList16.Images.SetKeyName(74, "Report_AssessmentCompare_16.png");
             this.AppImageList16.Images.SetKeyName(75, "Report_SnapshotCompare_16.png");

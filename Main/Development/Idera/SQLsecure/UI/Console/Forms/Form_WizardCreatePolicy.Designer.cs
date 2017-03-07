@@ -49,7 +49,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.textBox_PolicyName = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this._page_Vulnerabilities = new Divelements.WizardFramework.WizardPage();
-            this.controlConfigurePolicyVulnerabilities1 = new Idera.SQLsecure.UI.Console.Controls.controlConfigurePolicyVulnerabilities();
+            this.controlConfigurePolicyVulnerabilities1 = new Idera.SQLsecure.UI.Console.Controls.controlConfigurePolicyVulnerabilities(Utility.ConfigurePolicyControlType.ConfigureSecurityCheck);
             this._page_SQLServers = new Divelements.WizardFramework.WizardPage();
             this.controlPolicyAddServers1 = new Idera.SQLsecure.UI.Console.Controls.ControlPolicyAddServers();
             this._page_Interview = new Divelements.WizardFramework.WizardPage();

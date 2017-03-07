@@ -82,6 +82,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 case Sql.ObjectType.TypeEnum.SqlLogin:
                     Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.SQLServerLogin_48;
                     break;
+                //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                case Sql.ObjectType.TypeEnum.AzureADUser:
+                    Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.WindowsUser_48;
+                    break;
+                case Sql.ObjectType.TypeEnum.AzureADGroup:
+                    Picture = global::Idera.SQLsecure.UI.Console.Properties.Resources.WindowsGroup_48;
+                    break;
+                //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
             }
 
             // Fill fields.
