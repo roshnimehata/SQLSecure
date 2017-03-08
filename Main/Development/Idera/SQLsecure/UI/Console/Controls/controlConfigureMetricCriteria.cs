@@ -32,16 +32,16 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private string colSeverity = Utility.Constants.POLICY_METRIC_COLUMN_SEVERITY;
         private string colSeverityValues = Utility.Constants.POLICY_METRIC_COLUMN_SEVERITY_VALUES;
 
-        private ConfigurePolicyControlType m_State;
+        private ConfigurePolicyControlType m_ControlType;
 
         #endregion
 
         #region ctors
 
-        internal controlConfigureMetricCriteria(ConfigurePolicyControlType state)
+        internal controlConfigureMetricCriteria(ConfigurePolicyControlType controlType)
         {
             // SQLsecure 3.1 (Anshul Aggarwal) - Represents current state of control - 'Configure Security Check' or 'Export/Import Policy'.
-            m_State = state;
+            m_ControlType = controlType;
 
             InitializeComponent();
             
@@ -122,6 +122,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             listItem = new ValueListItem(false, "No");
             enabledValueList.ValueListItems.Add(listItem);
             
+            // SQLsecure 3.1 (Anshul Aggarwal) - Change control state based on current control usage type.
             RefreshState();
         }
 
@@ -726,7 +727,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         /// </summary>
         private void RefreshState()
         {
-            if (m_State == ConfigurePolicyControlType.ImportExportSecurityCheck)
+            if (m_ControlType == ConfigurePolicyControlType.ImportExportSecurityCheck)
             {
                 button_Remove.Visible = false;
                 button_Edit.Visible = false;
@@ -755,7 +756,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     radioButton6.Enabled =
                     radioButton7.Enabled =
                     radioButton8.Enabled = false;
-                //listView_MultiSelect.Enabled = false;
+            }
+            else if(m_ControlType == ConfigurePolicyControlType.CreatePolicySecurityCheck)
+            {
+                this.groupBox_CriteriaUserEnterMultiple.Size = new System.Drawing.Size(400, 140);
+                this.listView_MultiSelect.Size = new System.Drawing.Size(300, 65);
             }
         }
 

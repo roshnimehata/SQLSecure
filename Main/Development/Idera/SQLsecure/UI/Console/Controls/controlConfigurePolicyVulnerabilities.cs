@@ -82,7 +82,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             enabledValueList.ValueListItems.Add(listItem);
             listItem = new ValueListItem(false, "No");
             enabledValueList.ValueListItems.Add(listItem);
-            
+
+            // SQLsecure 3.1 (Anshul Aggarwal) - Change control state based on current control usage type.
             RefreshState();
         }
 
@@ -423,7 +424,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             bool bAllowContinue = true;
             if (Visible && !m_InternalUpdate)
             {
-                if(m_ControlType == ConfigurePolicyControlType.ConfigureSecurityCheck && !OKToSave())
+                if(m_ControlType != ConfigurePolicyControlType.ImportExportSecurityCheck && !OKToSave())
                 {
                     return false;
                 }
@@ -582,7 +583,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                                 UpdateEnabledCount();
                             }
                         }
-                        else if (m_ControlType == ConfigurePolicyControlType.ConfigureSecurityCheck)
+                        else
                         {
                             Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED];
                             if (cell != null && cell.Value is bool)
