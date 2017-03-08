@@ -5228,7 +5228,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>PROGMSG_IIS_ROLLBACKVROOTS</td><td>##IDS_PROGMSG_IIS_ROLLBACKVROOTS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>Password_Result</td><td>0</td><td/></row>
-		<row><td>ProductCode</td><td>{54F8E58E-0261-4020-A44F-09C656E58D0C}</td><td/></row>
+		<row><td>ProductCode</td><td>{4608F5F6-68DD-4A93-9AF8-12201ABEB783}</td><td/></row>
 		<row><td>ProductID</td><td>none</td><td/></row>
 		<row><td>ProductLanguage</td><td>1033</td><td/></row>
 		<row><td>ProductName</td><td>Idera SQLsecure</td><td/></row>
