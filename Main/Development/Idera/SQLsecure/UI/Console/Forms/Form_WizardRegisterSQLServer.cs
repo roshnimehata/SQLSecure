@@ -1034,23 +1034,26 @@ namespace Idera.SQLsecure.UI.Console.Forms
 							// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
                             string errorMsg = string.Empty;
                             Server.ServerAccess sa = Server.ServerAccess.ERROR_OTHER;
-                            if (_comboBox_ServerType.SelectedItem== Utility.Activity.TypeServerOnPremise)
+                            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                            if ((Convert.ToString(_comboBox_ServerType.SelectedItem)== Utility.Activity.TypeServerOnPremise) || (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
                             {
                                 sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
                             }
 							// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
-                            else if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)
-                            {
-                                if (this.radioButton_WindowsAuth.Checked)
-                                {
-                                    sa = Server.CheckAzureServerAccess(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg, this.radioButton_WindowsAuth.Checked);
-                                }
-                                else
-                                {
-                                    sa = Server.CheckAzureServerAccess(serverName, textbox_SqlLogin.Text, textbox_SqlLoginPassword.Text, out errorMsg, this.radioButton_WindowsAuth.Checked);
-                                }
+                            //else if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)
+                            //{
+                            //    sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
 
-                            }
+                            //    //if (this.radioButton_WindowsAuth.Checked)
+                            //    //{
+                            //    //    sa = Server.CheckAzureServerAccess(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg, this.radioButton_WindowsAuth.Checked);
+                            //    //}
+                            //    //else
+                            //    //{
+                            //    //    sa = Server.CheckAzureServerAccess(serverName, textbox_SqlLogin.Text, textbox_SqlLoginPassword.Text, out errorMsg, this.radioButton_WindowsAuth.Checked);
+                            //    //}
+
+                            //}
 							// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
                             else if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureDB)
                             {
