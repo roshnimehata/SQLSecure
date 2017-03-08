@@ -46,6 +46,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._grpbx_WindowsGMCredentials = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.checkBox_UseSameAuth = new System.Windows.Forms.CheckBox();
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+			this._lbl_AzureAuth = new System.Windows.Forms.Label();
             this._lbl_WindowsUser = new System.Windows.Forms.Label();
             this.textbox_WindowsUser = new System.Windows.Forms.TextBox();
             this._lbl_WindowsPassword = new System.Windows.Forms.Label();
@@ -306,6 +308,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             this._grpbx_WindowsGMCredentials.Controls.Add(this.label2);
             this._grpbx_WindowsGMCredentials.Controls.Add(this.checkBox_UseSameAuth);
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+			this._grpbx_WindowsGMCredentials.Controls.Add(this._lbl_AzureAuth);
             this._grpbx_WindowsGMCredentials.Controls.Add(this._lbl_WindowsUser);
             this._grpbx_WindowsGMCredentials.Controls.Add(this.textbox_WindowsUser);
             this._grpbx_WindowsGMCredentials.Controls.Add(this._lbl_WindowsPassword);
@@ -335,6 +339,17 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.checkBox_UseSameAuth.Text = "Use same Windows Authentication as above";
             this.checkBox_UseSameAuth.UseVisualStyleBackColor = true;
             this.checkBox_UseSameAuth.CheckedChanged += new System.EventHandler(this.checkBox_UseSameAuth_CheckedChanged);
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+			// 
+            // _lbl_AzureAuth
+            // 
+            this._lbl_AzureAuth.AutoSize = true;
+            this._lbl_AzureAuth.Location = new System.Drawing.Point(10, 89);
+            this._lbl_AzureAuth.Name = "_lbl_AzureAuth";
+            this._lbl_AzureAuth.Size = new System.Drawing.Size(238, 17);
+            this._lbl_AzureAuth.TabIndex = 0;
+            this._lbl_AzureAuth.Text = "Azure AD Authentication";
+
             // 
             // _lbl_WindowsUser
             // 
@@ -1268,6 +1283,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private System.Windows.Forms.RadioButton radioButtonSendEmailFindingHigh;
         private System.Windows.Forms.RadioButton radioButtonSendEmailFindingHighMedium;
         private System.Windows.Forms.CheckBox checkBox_UseSameAuth;
+		// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+        private System.Windows.Forms.Label _lbl_AzureAuth;
+
         private System.Windows.Forms.Label label2;
         private Divelements.WizardFramework.WizardPage _page_Policies;
         private System.Windows.Forms.Label label4;
