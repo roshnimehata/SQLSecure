@@ -67,7 +67,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
 
             version = serverProperties.Version;
-            if (serverType == Utility.Activity.TypeServerOnPremise)
+            if (serverType == Utility.Activity.TypeServerOnPremise || serverType == Utility.Activity.TypeServerAzureVM)
             {
                 machineName = serverProperties.MachineName;
                 instanceName = serverProperties.InstanceName;
