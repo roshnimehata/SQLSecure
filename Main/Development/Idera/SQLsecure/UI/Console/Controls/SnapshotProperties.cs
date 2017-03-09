@@ -655,6 +655,23 @@ namespace Idera.SQLsecure.UI.Console.Controls
             }
             //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
 
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+            if (m_ServerInstance.ServerType == ServerType.AzureSQLDatabase)
+            {
+                _label_WellKnownGroups.Visible = false;
+                label6.Visible = false;
+                this.label12.Location = new Point(35, 115);
+                this.weakPasswordDetectionLink.Location = new Point(215, 115);
+            }
+            else
+            {
+                this.label12.Location = new Point(35, 131);
+                this.weakPasswordDetectionLink.Location = new Point(259, 131);
+                _label_WellKnownGroups.Visible = true;
+                label6.Visible = true;
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+
             switch (m_Snapshot.WeakPasswordDectectionEnabled)
             {
                 case "Yes":

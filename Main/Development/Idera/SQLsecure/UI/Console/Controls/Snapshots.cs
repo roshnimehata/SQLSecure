@@ -335,6 +335,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string colLogins = @"Logins";
         private const string colWindowsGroupMembers = @"Windows Accounts";
         private const string colSnapshot = @"Snapshot";
+        private const string colAzureADMembers = "Azure AD Accounts";
 
         private const string HeaderSnapshots = @"Server Snapshots";
         private const string HeaderDisplay = HeaderSnapshots + " ({0} items)";
@@ -349,7 +350,22 @@ namespace Idera.SQLsecure.UI.Console.Controls
         {
             m_snapshots = Snapshot.LoadSnapshots(m_serverInstance.ConnectionName);
             m_dt_snapshots.Clear();
-
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+            if (m_serverInstance.ServerType == Utility.ServerType.AzureSQLDatabase)
+            {
+                if (m_dt_snapshots.Columns.Contains(colWindowsGroupMembers))
+                {
+                    m_dt_snapshots.Columns[colWindowsGroupMembers].ColumnName = colAzureADMembers;
+                }
+            }
+            else
+            {
+                if (m_dt_snapshots.Columns.Contains(colAzureADMembers))
+                {
+                    m_dt_snapshots.Columns[colAzureADMembers].ColumnName = colWindowsGroupMembers;
+                }
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
             foreach (Snapshot snap in m_snapshots)
             {
                 m_dt_snapshots.Rows.Add(snap.Icon,
@@ -363,7 +379,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                                         snap.NumObject,
                                         snap.NumPermission,
                                         snap.NumLogin,
-                                        snap.NumWindowsGroupMember,
+                                        m_serverInstance.ServerType != Utility.ServerType.AzureSQLDatabase? snap.NumWindowsGroupMember:Utility.Helper.AzureADUsersAndGroupCount(snap.SnapshotId),//SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                                         snap);
             }
             m_dt_snapshots.DefaultView.Sort = colStartTime + @" desc";
@@ -540,8 +556,13 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             band.Columns[colLogins].Header.ToolTipText = Utility.Snapshot.ToolTipLogins;
 
-            band.Columns[colWindowsGroupMembers].Header.ToolTipText = Utility.Snapshot.ToolTipGroupMembers;
-            band.Columns[colWindowsGroupMembers].Width = 90;
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+            if (band.Columns.Exists(colWindowsGroupMembers))
+            {
+                band.Columns[colWindowsGroupMembers].Header.ToolTipText = Utility.Snapshot.ToolTipGroupMembers;
+                band.Columns[colWindowsGroupMembers].Width = 90;
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
 
             band.Columns[colSnapshot].Hidden = true;
             band.Columns[colSnapshot].ExcludeFromColumnChooser = ExcludeFromColumnChooser.True;
