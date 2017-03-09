@@ -255,7 +255,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridColumn11.Header.VisiblePosition = 12;
             ultraGridColumn11.Hidden = true;
             ultraGridColumn12.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Append;
-            ultraGridColumn12.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect;
+            ultraGridColumn12.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.Edit;   // Enabled
             ultraGridColumn12.Header.Caption = "Enabled";
             ultraGridColumn12.Header.Fixed = true;
             ultraGridColumn12.Header.VisiblePosition = 0;
@@ -337,7 +337,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridColumn28.ExcludeFromColumnChooser = Infragistics.Win.UltraWinGrid.ExcludeFromColumnChooser.True;
             ultraGridColumn28.Hidden = true;
             ultraGridColumn29.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Append;  // IsSelected
-            ultraGridColumn29.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect;
+            ultraGridColumn29.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.Edit;
             ultraGridColumn29.Header.VisiblePosition = 1;
 
             // SQLsecure 3.1 (Anshul Aggarwal) - Set control properties based on usage of the control.
