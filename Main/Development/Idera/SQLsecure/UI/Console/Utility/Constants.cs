@@ -119,7 +119,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
     internal enum ConfigurePolicyControlType
     {
         ConfigureSecurityCheck,
-        ImportExportSecurityCheck
+        ImportExportSecurityCheck,
+        CreatePolicySecurityCheck
     }
     
     internal static class Constants

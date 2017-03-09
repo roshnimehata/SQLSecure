@@ -118,15 +118,16 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.sqlServerCriteriaControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sqlServerCriteriaControl.Location = new System.Drawing.Point(0, 0);
             this.sqlServerCriteriaControl.Name = "azureSQLDatabaseCriteriaControl";
-            this.sqlServerCriteriaControl.Padding = new System.Windows.Forms.Padding(5);
-            this.sqlServerCriteriaControl.Size = new System.Drawing.Size(410, 528);
+            this.sqlServerCriteriaControl.Padding = new System.Windows.Forms.Padding(5, 3, 5, 3);
+            this.sqlServerCriteriaControl.Size = new System.Drawing.Size(410, 495);
             // 
             // ultraTabPageControl1
             // 
             this.ultraTabPageControl1.Controls.Add(this.sqlServerCriteriaControl);
             this.ultraTabPageControl1.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabPageControl1.Name = "ultraTabPageControl1";
-            this.ultraTabPageControl1.Size = new System.Drawing.Size(410, 528);
+            this.ultraTabPageControl1.Size = new System.Drawing.Size(410, 495);
+            this.ultraTabPageControl1.Padding = new System.Windows.Forms.Padding(2, 3, 2, 0);
             // 
             // azureSQLDatabaseCriteriaControl
             // 
@@ -134,15 +135,16 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.azureSQLDatabaseCriteriaControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.azureSQLDatabaseCriteriaControl.Location = new System.Drawing.Point(0, 0);
             this.azureSQLDatabaseCriteriaControl.Name = "azureSQLDatabaseCriteriaControl";
-            this.azureSQLDatabaseCriteriaControl.Padding = new System.Windows.Forms.Padding(5);
-            this.azureSQLDatabaseCriteriaControl.Size = new System.Drawing.Size(410, 528);
+            this.azureSQLDatabaseCriteriaControl.Padding = new System.Windows.Forms.Padding(5, 3, 5, 3);
+            this.azureSQLDatabaseCriteriaControl.Size = new System.Drawing.Size(410, 495);
             // 
             // ultraTabPageControl2
             // 
             this.ultraTabPageControl2.Controls.Add(this.azureSQLDatabaseCriteriaControl);
             this.ultraTabPageControl2.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabPageControl2.Name = "ultraTabPageControl2";
-            this.ultraTabPageControl2.Size = new System.Drawing.Size(410, 528);
+            this.ultraTabPageControl2.Size = new System.Drawing.Size(410, 495);
+            this.ultraTabPageControl2.Padding = new System.Windows.Forms.Padding(2, 3, 2, 0);
             // 
             // ultraTabControl1
             // 
@@ -155,10 +157,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.ultraTabControl1.ClientAreaAppearance = appearance6;
             this.ultraTabControl1.Controls.Add(this.ultraTabPageControl1);
             this.ultraTabControl1.Controls.Add(this.ultraTabPageControl2);
-            this.ultraTabControl1.Location = new System.Drawing.Point(0, 0);
+            this.ultraTabControl1.Location = new System.Drawing.Point(0, 5);
             this.ultraTabControl1.Name = "ultraTabControl1";
-            this.ultraTabControl1.Size = new System.Drawing.Size(410, 528);
+            this.ultraTabControl1.Size = new System.Drawing.Size(410, 495);
             this.ultraTabControl1.TabIndex = 0;
+            this.ultraTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             ultraTab1.Key = "SQLServer";
             ultraTab1.TabPage = this.ultraTabPageControl1;
             ultraTab1.Text = "SQL Server";
@@ -252,7 +255,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridColumn11.Header.VisiblePosition = 12;
             ultraGridColumn11.Hidden = true;
             ultraGridColumn12.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Append;
-            ultraGridColumn12.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect;
+            ultraGridColumn12.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.Edit;   // Enabled
             ultraGridColumn12.Header.Caption = "Enabled";
             ultraGridColumn12.Header.Fixed = true;
             ultraGridColumn12.Header.VisiblePosition = 0;
@@ -334,18 +337,18 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridColumn28.ExcludeFromColumnChooser = Infragistics.Win.UltraWinGrid.ExcludeFromColumnChooser.True;
             ultraGridColumn28.Hidden = true;
             ultraGridColumn29.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.Append;  // IsSelected
-            ultraGridColumn29.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.RowSelect;
+            ultraGridColumn29.CellClickAction = Infragistics.Win.UltraWinGrid.CellClickAction.Edit;
             ultraGridColumn29.Header.VisiblePosition = 1;
 
             // SQLsecure 3.1 (Anshul Aggarwal) - Set control properties based on usage of the control.
-            if(m_ControlType == ConfigurePolicyControlType.ConfigureSecurityCheck)
+            if(m_ControlType == ConfigurePolicyControlType.ImportExportSecurityCheck)
+            {
+                ultraGridColumn12.Header.VisiblePosition = 2;   // Move IsEnabled behind Export/Import column
+            }
+            else
             {
                 ultraGridColumn29.ExcludeFromColumnChooser = Infragistics.Win.UltraWinGrid.ExcludeFromColumnChooser.True;
                 ultraGridColumn29.Hidden = true;
-            }
-            else if(m_ControlType == ConfigurePolicyControlType.ImportExportSecurityCheck)
-            {
-                ultraGridColumn12.Header.VisiblePosition = 2;   // Move IsEnabled behind Export/Import column
             }
 
             ultraGridBand1.Columns.AddRange(new object[] {
@@ -478,6 +481,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // 
             this.splitContainer1.Panel2.Controls.Add(this.ultraTabControl1);
             this.splitContainer1.Panel2MinSize = 50;
+            // 
+            // splitContainer1
+            //
             this.splitContainer1.Size = new System.Drawing.Size(708, 528);
             this.splitContainer1.SplitterDistance = 313;
             this.splitContainer1.SplitterWidth = 3;

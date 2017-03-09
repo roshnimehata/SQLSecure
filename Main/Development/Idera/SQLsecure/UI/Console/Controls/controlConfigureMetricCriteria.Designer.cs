@@ -219,7 +219,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.groupbox_Vulnerability.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupbox_Vulnerability.Location = new System.Drawing.Point(0, 0);
             this.groupbox_Vulnerability.Name = "groupbox_Vulnerability";
-            this.groupbox_Vulnerability.Size = new System.Drawing.Size(422, 244);
+            this.groupbox_Vulnerability.Size = new System.Drawing.Size(422, 240);
             this.groupbox_Vulnerability.TabIndex = 8;
             this.groupbox_Vulnerability.TabStop = false;
             this.groupbox_Vulnerability.Text = "Display Settings";
@@ -228,7 +228,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // 
             this.textBox_ReportKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_ReportKey.Location = new System.Drawing.Point(88, 152);
+            this.textBox_ReportKey.Location = new System.Drawing.Point(88, 148);
             this.textBox_ReportKey.MaxLength = 32;
             this.textBox_ReportKey.Name = "textBox_ReportKey";
             this.textBox_ReportKey.Size = new System.Drawing.Size(327, 20);
@@ -237,7 +237,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // label1
             // 
             this.label1.ForeColor = System.Drawing.Color.Navy;
-            this.label1.Location = new System.Drawing.Point(8, 152);
+            this.label1.Location = new System.Drawing.Point(8, 146);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(108, 34);
             this.label1.TabIndex = 15;
@@ -247,7 +247,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // 
             this.radioButton_SeverityCritical.AutoSize = true;
             this.radioButton_SeverityCritical.ForeColor = System.Drawing.Color.Navy;
-            this.radioButton_SeverityCritical.Location = new System.Drawing.Point(88, 186);
+            this.radioButton_SeverityCritical.Location = new System.Drawing.Point(88, 179);
             this.radioButton_SeverityCritical.Name = "radioButton_SeverityCritical";
             this.radioButton_SeverityCritical.Size = new System.Drawing.Size(138, 17);
             this.radioButton_SeverityCritical.TabIndex = 2;
@@ -261,7 +261,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // 
             this.radioButton_SeverityMedium.AutoSize = true;
             this.radioButton_SeverityMedium.ForeColor = System.Drawing.Color.Navy;
-            this.radioButton_SeverityMedium.Location = new System.Drawing.Point(88, 204);
+            this.radioButton_SeverityMedium.Location = new System.Drawing.Point(88, 197);
             this.radioButton_SeverityMedium.Name = "radioButton_SeverityMedium";
             this.radioButton_SeverityMedium.Size = new System.Drawing.Size(153, 17);
             this.radioButton_SeverityMedium.TabIndex = 3;
@@ -275,7 +275,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // 
             this.radioButton_SeverityLow.AutoSize = true;
             this.radioButton_SeverityLow.ForeColor = System.Drawing.Color.Navy;
-            this.radioButton_SeverityLow.Location = new System.Drawing.Point(88, 222);
+            this.radioButton_SeverityLow.Location = new System.Drawing.Point(88, 215);
             this.radioButton_SeverityLow.Name = "radioButton_SeverityLow";
             this.radioButton_SeverityLow.Size = new System.Drawing.Size(136, 17);
             this.radioButton_SeverityLow.TabIndex = 4;
@@ -289,7 +289,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.Navy;
-            this.label5.Location = new System.Drawing.Point(8, 188);
+            this.label5.Location = new System.Drawing.Point(8, 181);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(57, 13);
             this.label5.TabIndex = 8;
@@ -300,12 +300,12 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.textBox_ReportText.AcceptsReturn = true;
             this.textBox_ReportText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_ReportText.Location = new System.Drawing.Point(88, 97);
+            this.textBox_ReportText.Location = new System.Drawing.Point(88, 98);
             this.textBox_ReportText.MaxLength = 4000;
             this.textBox_ReportText.Multiline = true;
             this.textBox_ReportText.Name = "textBox_ReportText";
             this.textBox_ReportText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox_ReportText.Size = new System.Drawing.Size(327, 49);
+            this.textBox_ReportText.Size = new System.Drawing.Size(327, 42);
             this.textBox_ReportText.TabIndex = 0;
             // 
             // label4
@@ -325,19 +325,19 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Description.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this.textBox_Description.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            this.textBox_Description.Location = new System.Drawing.Point(88, 42);
+            this.textBox_Description.Location = new System.Drawing.Point(88, 45);
             this.textBox_Description.Multiline = true;
             this.textBox_Description.Name = "textBox_Description";
             this.textBox_Description.ReadOnly = true;
             this.textBox_Description.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox_Description.Size = new System.Drawing.Size(327, 49);
+            this.textBox_Description.Size = new System.Drawing.Size(327, 44);
             this.textBox_Description.TabIndex = 5;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.Color.Navy;
-            this.label3.Location = new System.Drawing.Point(8, 45);
+            this.label3.Location = new System.Drawing.Point(8, 48);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(60, 13);
             this.label3.TabIndex = 4;
@@ -347,7 +347,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.Navy;
-            this.label2.Location = new System.Drawing.Point(8, 19);
+            this.label2.Location = new System.Drawing.Point(8, 22);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 2;
@@ -359,7 +359,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Name.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this.textBox_Name.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            this.textBox_Name.Location = new System.Drawing.Point(88, 16);
+            this.textBox_Name.Location = new System.Drawing.Point(88, 19);
             this.textBox_Name.Name = "textBox_Name";
             this.textBox_Name.ReadOnly = true;
             this.textBox_Name.Size = new System.Drawing.Size(327, 20);
@@ -372,9 +372,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.groupBox_CriteriaUserEnterMultiple.Controls.Add(this.button_Remove);
             this.groupBox_CriteriaUserEnterMultiple.Controls.Add(this.button_Edit);
             this.groupBox_CriteriaUserEnterMultiple.Controls.Add(this.listView_MultiSelect);
-            this.groupBox_CriteriaUserEnterMultiple.Location = new System.Drawing.Point(0, 248);
+            this.groupBox_CriteriaUserEnterMultiple.Location = new System.Drawing.Point(5, 248);
             this.groupBox_CriteriaUserEnterMultiple.Name = "groupBox_CriteriaUserEnterMultiple";
-            this.groupBox_CriteriaUserEnterMultiple.Size = new System.Drawing.Size(422, 200);
+            this.groupBox_CriteriaUserEnterMultiple.Size = new System.Drawing.Size(400, 185);
+            this.groupBox_CriteriaUserEnterMultiple.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_CriteriaUserEnterMultiple.TabIndex = 11;
             this.groupBox_CriteriaUserEnterMultiple.TabStop = false;
             this.groupBox_CriteriaUserEnterMultiple.Text = "Criteria";
@@ -386,7 +387,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.label_ValueDescriptionUEM.ForeColor = System.Drawing.Color.Navy;
             this.label_ValueDescriptionUEM.Location = new System.Drawing.Point(5, 16);
             this.label_ValueDescriptionUEM.Name = "label_ValueDescriptionUEM";
-            this.label_ValueDescriptionUEM.Size = new System.Drawing.Size(400, 46);
+            this.label_ValueDescriptionUEM.Size = new System.Drawing.Size(390, 46);
             this.label_ValueDescriptionUEM.TabIndex = 4;
             this.label_ValueDescriptionUEM.Text = "Description of the data to be supplied for this vulnerablity. For example a list " +
                 "of valid Startup Stored Proceedures";
@@ -394,7 +395,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // button_Remove
             // 
             this.button_Remove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Remove.Location = new System.Drawing.Point(325, 96);
+            this.button_Remove.Location = new System.Drawing.Point(315, 90);
             this.button_Remove.Name = "button_Remove";
             this.button_Remove.Size = new System.Drawing.Size(75, 23);
             this.button_Remove.TabIndex = 3;
@@ -404,7 +405,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // button_Edit
             // 
             this.button_Edit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Edit.Location = new System.Drawing.Point(325, 65);
+            this.button_Edit.Location = new System.Drawing.Point(315, 65);
             this.button_Edit.Name = "button_Edit";
             this.button_Edit.Size = new System.Drawing.Size(75, 23);
             this.button_Edit.TabIndex = 2;
@@ -423,7 +424,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.listView_MultiSelect.Location = new System.Drawing.Point(7, 65);
             this.listView_MultiSelect.Name = "listView_MultiSelect";
             this.listView_MultiSelect.ShowItemToolTips = true;
-            this.listView_MultiSelect.Size = new System.Drawing.Size(312, 125);
+            this.listView_MultiSelect.Size = new System.Drawing.Size(300, 110);
             this.listView_MultiSelect.TabIndex = 0;
             this.listView_MultiSelect.UseCompatibleStateImageBehavior = false;
             this.listView_MultiSelect.View = System.Windows.Forms.View.Details;
@@ -613,7 +614,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             this.Controls.Add(this.groupBox_CriteriaMultiple);
             this.Controls.Add(this.groupbox_Vulnerability);
             this.Controls.Add(this.groupBox_TriggerSingle);
-            this.Controls.Add(this.groupBox_TriggerDisabledEnabledOnly);
+            //this.Controls.Add(this.groupBox_TriggerDisabledEnabledOnly);
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
