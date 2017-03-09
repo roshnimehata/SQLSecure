@@ -350,7 +350,6 @@ AS -- <Idera SQLsecure version and copyright>
                                 -- process the snapshots for each metric
                                 DECLARE @snapshotid int,
                                         @connection nvarchar(400),
-										@servername nvarchar(400),
                                         @snapshottime datetime,
                                         @status nchar(1),
                                         @baseline nchar(1),
@@ -414,8 +413,7 @@ AS -- <Idera SQLsecure version and copyright>
                                         a.allowsystemtableupdates,
                                         a.systemdrive,
                                         a.adhocdistributedqueriesenabled,
-                                        a.isweakpassworddetectionenabled,
-										a.servername
+                                        a.isweakpassworddetectionenabled
                                 FROM serversnapshot a,
                                      dbo.getsnapshotlist(@rundate, @usebaseline) b
                                 WHERE a.registeredserverid IN (SELECT
@@ -453,7 +451,7 @@ AS -- <Idera SQLsecure version and copyright>
                                 @webassistant, @xp_cmdshell, @agentmailprofile, @hide,
                                 @agentsysadmin, @dc, @replication, @sapassword,
                                 @systemtables, @systemdrive, @adhocqueries,
-                                @weakpasswordenabled, @servername;
+                                @weakpasswordenabled;
 
                                 WHILE @@fetch_status = 0
                                 BEGIN
@@ -10493,7 +10491,7 @@ AS -- <Idera SQLsecure version and copyright>
                                         @xp_cmdshell, @agentmailprofile, @hide,
                                         @agentsysadmin, @dc, @replication, @sapassword,
                                         @systemtables, @systemdrive, @adhocqueries,
-                                        @weakpasswordenabled, @servername;
+                                        @weakpasswordenabled;
                                 END;
 
                                 -- drop saved temp table after all snapshot processing is done
