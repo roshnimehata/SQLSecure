@@ -159,14 +159,11 @@ namespace Idera.SQLsecure.Collector.Sql
                         connection.Open();
 
                         // Create the query based on server version.
-                        string query = QueryDb2K;    
+                        string query = QueryDb2K;                       // 2000
                         //SQLsecure 3.1 (Tushar)--Query Change for Azure DB.
                         if (serverType == ServerType.AzureSQLDatabase)
                             query = string.Format(QueryDbAzureDatabase, targetServerName);
-                        else if (sqlServerVersion >= ServerVersion.SQL2014) // 2014, 2016
-                            query = string.Format(QueryDb2K14, lastCollectionEndTime.HasValue ? string.Format(QueryDb2K14_LastCollection, lastCollectionEndTime.Value) :
-                                QueryDb2K14_FirstCollection, targetServerName);
-                        else if (sqlServerVersion >= ServerVersion.SQL2012) // 2012
+                        else if (sqlServerVersion >= ServerVersion.SQL2012) // 2012, 2014, 2016
                             query = string.Format(QueryDb2K12, targetServerName);
                         else if (sqlServerVersion >= ServerVersion.SQL2008) // 2008
                             query = string.Format(QueryDb2K8, targetServerName);
@@ -187,37 +184,11 @@ namespace Idera.SQLsecure.Collector.Sql
                                 SqlBoolean trustworthy = rdr.GetBoolean(FieldTrustworthy);
                                 SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);
 
-                                SqlBoolean isTDEEncrypted = SqlBoolean.Null;    // SQLSecure 3.1 (Anshul Aggarwal) - New columns for new risk assessments.
+                                // SQLSecure 3.1 (Anshul Aggarwal) - New column for TDE risk assessments.
+                                SqlBoolean isTDEEncrypted = SqlBoolean.Null;    
                                 if (!rdr.IsDBNull(FieldIsTDEEncrypted))
                                 {
                                     isTDEEncrypted = rdr.GetBoolean(FieldIsTDEEncrypted);
-                                }
-
-                                SqlBoolean lastBackupEncrypted = SqlBoolean.Null;
-                                if (!rdr.IsDBNull(FieldLastBackupEncrypted))
-                                {
-                                    lastBackupEncrypted = rdr.GetBoolean(FieldLastBackupEncrypted);
-                                }
-
-                                SqlBoolean intermediateBackupEncrypted = SqlBoolean.Null;
-                                if (!rdr.IsDBNull(FieldIntermediateBackupEncrypted))
-                                {
-                                    SqlInt32 intermediateCount = rdr.GetSqlInt32(FieldIntermediateBackupEncrypted);
-                                    if (!intermediateCount.IsNull)
-                                    {
-                                        int count = intermediateCount.Value;
-                                        if(count > 0)
-                                        {
-                                            if (!lastBackupEncrypted.IsNull && !lastBackupEncrypted.Value)
-                                            {
-                                                intermediateBackupEncrypted = count - 1 > 0;
-                                            }
-                                            else
-                                            {
-                                                intermediateBackupEncrypted = false;
-                                            }
-                                        }
-                                    }
                                 }
 
                                 // SQLsecure 3.1 (Anshul Aggarwal) - SQLSECU-1662 - Snapshot collection fails for 'SF-TEDDY' instance.
@@ -253,7 +224,6 @@ namespace Idera.SQLsecure.Collector.Sql
                                     //SQLsecure 3.1 (Anshul Aggarwal) - Backup encryption not supported for ADB or AVM.
                                     db = new Database(name.Value, dbid.Value, osid, owner, targetServerName, trustworthy.Value, isContained.Value,
                                        isTDEEncrypted.IsNull ? (bool?)null : isTDEEncrypted.Value,
-                                       null, null,
                                        FQN.IsNull ? null : FQN.Value);
                                     targerConnectionBuilder.InitialCatalog = db.Name;
                                 }
@@ -262,10 +232,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                     db = new Database(name.Value, dbid.Value, osid, owner, server.Name, trustworthy.Value, 
                                         isContained.Value, 
                                          isTDEEncrypted.IsNull ? (bool?)null : isTDEEncrypted.Value,
-                                         lastBackupEncrypted.IsNull ? (bool?)null : lastBackupEncrypted.Value,
-                                         intermediateBackupEncrypted.IsNull ? (bool?)null : intermediateBackupEncrypted.Value,
                                          FQN.IsNull ? null : FQN.Value);
                                 }
+
                                 db.GetDatabaseFiles(targerConnectionBuilder.ConnectionString);
                                 // Add filter to the list.
                                 databaseList.Add(db);
@@ -291,8 +260,31 @@ namespace Idera.SQLsecure.Collector.Sql
                         databaseList = null;
                         isOk = false;
                     }
-                }
 
+                    // SQLsecure 3.1 (Anshul) - Process Backup Information for databases
+                    try
+                    {
+                        GetDatabaseBackupInformation(connection, serverType, sqlServerVersion, lastCollectionEndTime, databaseList);
+                    }
+                    catch (SqlException ex)
+                    {
+                        string strMessage = "Getting backup information for databases on target raised an exception. ";
+                        logX.loggerX.Error("ERROR - " + strMessage, ex);
+                        AppLog.WriteAppEventError(SQLsecureEvent.ExErrExceptionRaised, SQLsecureCat.DlDataLoadCat,
+                                                    "Retrieve backup information for databases from target " + targetConnectionString,
+                                                    ex.Message);
+                        Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnectionString,
+                                                                                snapshotid,
+                                                                                Collector.Constants.ActivityType_Error,
+                                                                                Collector.Constants.ActivityEvent_Error,
+                                                                                strMessage + ex.Message);
+
+                        databaseList.Clear();
+                        databaseList = null;
+                        isOk = false;
+                    }
+                }
+                
                 //SQLsecure 3.1 (Tushar)--Added support for Azure SQLDb.
                 //once we are done with processing individual databases, setting it back to empty.
                 targerConnectionBuilder.InitialCatalog = string.Empty;
@@ -323,6 +315,108 @@ namespace Idera.SQLsecure.Collector.Sql
             return isOk;
         }
 
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul) - Get Backup Information for SQL Server 2008+ databases.
+        /// </summary>
+        private static void GetDatabaseBackupInformation(SqlConnection connection, 
+                ServerType serverType,
+                ServerVersion sqlServerVersion,
+                DateTime? lastCollectionEndTime,    // SQLSecure 3.1 (Anshul Aggarwal) - Need last collection time for "Backup Encryption".
+                List<Sql.Database> databaseList)
+        {
+            if (serverType != ServerType.OnPremise && serverType != ServerType.SQLServerOnAzureVM)
+                return;
+
+            if (sqlServerVersion < ServerVersion.SQL2008)
+                return;
+
+            // Create the query based on server version.
+            string query = QueryDb2k8_Backup;
+            if (sqlServerVersion >= ServerVersion.SQL2014) // 2014, 2016
+                query = QueryDb2k14_Backup;
+
+            // Add check for last collection if this is not the first collection for the server.
+            query = string.Format(query,
+                    lastCollectionEndTime.HasValue ? string.Format(QueryDb_BackupLastCollection, lastCollectionEndTime.Value) : string.Empty);
+
+            // Get a list of databases from the target instance.
+            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
+                CommandType.Text, query, null))
+            {
+                while (rdr.Read())
+                {
+                    // Retrieve the fields.
+                    SqlString dbName = rdr.GetSqlString(FieldDbName);
+
+                    SqlBoolean isLastBackupNative = SqlBoolean.Null;
+                    if (!rdr.IsDBNull(FieldLastBackupType))
+                    {
+                        isLastBackupNative = rdr.GetBoolean(FieldLastBackupType);
+                    }
+
+                    SqlBoolean lastBackupEncrypted = SqlBoolean.Null;
+                    if (!rdr.IsDBNull(FieldLastBackupEncrypted))
+                    {
+                        lastBackupEncrypted = rdr.GetBoolean(FieldLastBackupEncrypted);
+                    }
+
+                    if (!dbName.IsNull) {
+                        var db = databaseList.Find(d => d.Name == dbName.Value);
+                        if(db != null)
+                        {
+                            db.IsLastBackupNative = isLastBackupNative.IsNull ? (bool?)null : isLastBackupNative.Value;
+                            db.LastBackupEncrypted = lastBackupEncrypted.IsNull ? (bool?)null : lastBackupEncrypted.Value;
+                        }
+                    }
+                }
+
+                if (rdr.NextResult())
+                {
+                    while (rdr.Read())
+                    {
+                        // Retrieve the fields.
+                        SqlString dbName = rdr.GetSqlString(FieldDbName);
+                        
+                        SqlBoolean isCurrentRecordNative = SqlBoolean.Null;
+                        if (!rdr.IsDBNull(FieldNonNativeBackupAvailable))
+                        {
+                            isCurrentRecordNative = rdr.GetBoolean(FieldNonNativeBackupAvailable);
+                        }
+
+
+                        SqlBoolean intermediateBackupEncrypted = SqlBoolean.Null;
+                        if (!rdr.IsDBNull(FieldIntermediateBackupEncrypted))
+                        {
+                            intermediateBackupEncrypted = rdr.GetBoolean(FieldIntermediateBackupEncrypted);
+                        }
+
+                        if (!dbName.IsNull && !isCurrentRecordNative.IsNull)
+                        {
+                            var db = databaseList.Find(d => d.Name == dbName.Value);
+                            if (db != null)
+                            {
+                                if (!db.NonNativeBackupAvailable.HasValue)
+                                    db.NonNativeBackupAvailable = false;
+
+                                // Backup Encryption only applicable for SQLServer 2014+
+                                if (sqlServerVersion > ServerVersion.SQL2012 && !db.IntermediateBackupEncrypted.HasValue)
+                                    db.IntermediateBackupEncrypted = true;
+
+                                if (!isCurrentRecordNative.IsTrue)
+                                {
+                                    db.NonNativeBackupAvailable = true;
+                                }
+                                else if (!intermediateBackupEncrypted.IsNull && intermediateBackupEncrypted.IsFalse)
+                                {
+                                    db.IntermediateBackupEncrypted = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         public void GetDatabaseFiles(string targetConnectionString)
         {
@@ -451,50 +545,68 @@ namespace Idera.SQLsecure.Collector.Sql
         
         private const string QueryDb2K =
                             @"SELECT name = db.name, dbid = CAST(db.dbid AS int), ownersid = db.sid, ownername = l.loginname, trustworthy = cast(0 as bit), isContained=cast( 0 as bit)
-                             , istdeencrypted= NULL, lastbackupencrypted = NULL, intermediatebackupencrypted = NULL, FQN = NULL FROM master.dbo.sysdatabases AS db LEFT OUTER JOIN master.dbo.syslogins AS l 
+                             , istdeencrypted= NULL, FQN = NULL  
+                                FROM master.dbo.sysdatabases AS db LEFT OUTER JOIN master.dbo.syslogins AS l 
 	                                    ON (db.sid = l.sid)";
         private const string QueryDb2K5 =
                             @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( 0 as bit)
-                              , istdeencrypted= NULL, lastbackupencrypted = NULL, intermediatebackupencrypted = NULL, FQN = NULL FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
+                              , istdeencrypted= NULL, FQN = NULL
+                            FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
 
         // SQLsecure 3.1 (Anshul Aggarwal) - New query as 2k8 onwards supports TDE encryption but 2k5 does not.
         private const string QueryDb2K8 =
                                    @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( 0 as bit)
-                              ,istdeencrypted = db.is_encrypted, lastbackupencrypted = NULL, intermediatebackupencrypted = NULL, FQN = QUOTENAME('{0}') + '.' + QUOTENAME(db.name) 
+                              ,istdeencrypted = cast(db.is_encrypted as bit), FQN = QUOTENAME('{0}') + '.' + QUOTENAME(db.name)  
                                FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
         
         private const string QueryDb2K12 =
                             @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( db.containment as bit)
-                              ,istdeencrypted = db.is_encrypted, lastbackupencrypted = NULL, intermediatebackupencrypted = NULL, FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name)) 
+                              ,istdeencrypted = cast(db.is_encrypted as bit), FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name))
                                 FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
-
-        // SQLsecure 3.1 (Anshul Aggarwal) - New query as 2k14+ supports Backup encryption.
-        private const string QueryDb2K14 =
-                         @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( db.containment as bit)
-                              ,istdeencrypted = cast(db.is_encrypted as bit), 
-                                lastbackupencrypted = (select TOP 1 
-                                CASE WHEN bk.encryptor_type IS NULL THEN cast(0 as bit) ELSE cast(1 as bit) END 
-                                from msdb.dbo.backupset bk INNER JOIN msdb.dbo.backupmediaset bm ON bk.media_set_id = bm.media_set_id 
-                                where bm.software_name = 'Microsoft SQL Server' and bm.software_vendor_id = 4608 and bk.database_name = db.name 
-								ORDER BY bk.backup_start_date DESC),
-								intermediatebackupencrypted = (select count(*) from msdb.dbo.backupset bk INNER JOIN msdb.dbo.backupmediaset bm ON bk.media_set_id = bm.media_set_id 
-                                                where bm.software_name = 'Microsoft SQL Server' and bm.software_vendor_id = 4608 and bk.database_name = db.name and bk.encryptor_type is null 
-									            and {0}), 
-                                FQN = CONCAT(QUOTENAME('{1}'), '.',QUOTENAME(db.name))  
-                                FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
-	                                    ON (db.owner_sid = l.sid)";
-
-        private const string QueryDb2K14_FirstCollection = @"bk.backup_start_date is not null";
-        private const string QueryDb2K14_LastCollection = @"DATEADD(second, DATEDIFF(second, GETDATE(), GETUTCDATE()), bk.backup_start_date) > '{0}'";
-
+        
         //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
         private const string QueryDbAzureDatabase = @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, 
-                    isContained=cast(db.containment as bit),istdeencrypted = db.is_encrypted, lastbackupencrypted = NULL, intermediatebackupencrypted = NULL, FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name))   
+                    isContained=cast(db.containment as bit),istdeencrypted = db.is_encrypted, FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name))   
                               FROM sys.databases AS db LEFT OUTER JOIN sys.database_principals AS l
                                             ON (db.owner_sid = l.sid)";
+        
+        private const string QueryDb2k14_Backup = @"SELECT a.database_name, 
+                                            CASE WHEN (a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server') THEN cast(1 as bit) ELSE cast(0 as bit) END,
+                                            CASE WHEN (a.encryptor_type IS NULL) THEN cast(0 as bit) ELSE cast(1 as bit) END
+	                                        FROM msdb.dbo.backupset a 
+	                                        INNER JOIN msdb.dbo.backupmediaset b ON a.media_set_id = b.media_set_id
+	                                        INNER JOIN (SELECT database_name, max(backup_start_date) AS max_backup_start_date
+	                                        FROM msdb.dbo.backupset
+	                                        GROUP BY(database_name)) c ON c.database_name = a.database_name AND c.max_backup_start_date = a.backup_start_date
+
+                                            SELECT distinct a.database_name,
+                                            CASE WHEN (a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server') THEN cast(1 as bit) ELSE cast(0 as bit) END,
+                                            CASE WHEN (a.encryptor_type is not null) THEN cast(1 as bit) ELSE cast(0 as bit) END
+                                            FROM msdb.dbo.backupset a 
+                                            INNER JOIN msdb.dbo.backupmediaset b ON a.media_set_id = b.media_set_id
+                                            WHERE ((a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server' and a.encryptor_type is null) OR
+                                            (a.software_vendor_id <> 4608 OR b.software_name <> 'Microsoft SQL Server')){0}";
+
+        private const string QueryDb2k8_Backup = @"SELECT a.database_name, 
+                                            CASE WHEN (a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server') THEN cast(1 as bit) ELSE cast(0 as bit) END,
+                                            NULL
+	                                        FROM msdb.dbo.backupset a 
+	                                        INNER JOIN msdb.dbo.backupmediaset b ON a.media_set_id = b.media_set_id
+	                                        INNER JOIN (SELECT database_name, max(backup_start_date) AS max_backup_start_date
+	                                        FROM msdb.dbo.backupset
+	                                        GROUP BY(database_name)) c ON c.database_name = a.database_name AND c.max_backup_start_date = a.backup_start_date
+
+                                            SELECT distinct a.database_name, 
+                                            CASE WHEN (a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server') THEN cast(1 as bit) ELSE cast(0 as bit) END,
+                                            NULL
+                                            FROM msdb.dbo.backupset a 
+                                            INNER JOIN msdb.dbo.backupmediaset b ON a.media_set_id = b.media_set_id
+                                            WHERE (a.software_vendor_id <> 4608 OR b.software_name <> 'Microsoft SQL Server'){0}";
+        
+        private const string QueryDb_BackupLastCollection = @" AND DATEADD(second, DATEDIFF(second, GETDATE(), GETUTCDATE()), a.backup_start_date) > '{0}'";
 
         private const int FieldName = 0;
         private const int FieldDbid = 1;
@@ -502,10 +614,15 @@ namespace Idera.SQLsecure.Collector.Sql
         private const int FieldOwnername = 3;
         private const int FieldTrustworthy = 4;
         private const int FieldIscontained = 5;
-        private const int FieldIsTDEEncrypted = 6;   // SQLsecure 3.1 (Anshul Aggarwal) - New fields for new risk assessments.
-        private const int FieldLastBackupEncrypted = 7;
-        private const int FieldIntermediateBackupEncrypted = 8;
-        private const int FieldFQN = 9;
+        private const int FieldIsTDEEncrypted = 6;   // SQLsecure 3.1 (Anshul Aggarwal) - New fields for TDE risk assessments.
+        private const int FieldFQN = 7;
+
+        private const int FieldDbName = 0;
+        private const int FieldLastBackupType = 1;
+        private const int FieldLastBackupEncrypted = 2;
+        private const int FieldNonNativeBackupAvailable = 1;
+        private const int FieldIntermediateBackupEncrypted = 2;
+      
 
         private const string QueryDbStatus1 = @"
                             --Declare variables
@@ -748,15 +865,18 @@ namespace Idera.SQLsecure.Collector.Sql
                         SqlParameter paramIsTrustworthy = new SqlParameter(ParamTrustworthy, database.IsTrustworthyChar);
                         SqlParameter paramIsContained = new SqlParameter(ParamIsContained, database.IsContained);
                         SqlParameter paramIsTDEEncrypted = new SqlParameter(ParamIsTDEEnrypted, database.IsTDEEncrypted);    // SQLsecure 3.1 (Anshul Aggarwal) - New fields for new risk assessments.
-                        SqlParameter paramLastBackupNotEncrypted = new SqlParameter(ParamLastBackupEnrypted, database.LastBackupEncrypted);
-                        SqlParameter paramIntermediateBackupNotEncrypted = new SqlParameter(ParamIntermeidateBackupEnrypted, database.IntermediateBackupEncrypted);
+                        SqlParameter paramIsLastBackupNative = new SqlParameter(ParamLastBackupType, database.IsLastBackupNative);
+                        SqlParameter paramLastBackupEncrypted = new SqlParameter(ParamLastBackupEnrypted, database.LastBackupEncrypted);
+                        SqlParameter paramIntermediateBackupEncrypted = new SqlParameter(ParamIntermediateBackupEnrypted, database.IntermediateBackupEncrypted);
+                        SqlParameter paramNonNativeBackupAvailable = new SqlParameter(ParamNonNativeBackupAvailable, database.NonNativeBackupAvailable);
                         SqlParameter paramFQN = new SqlParameter(ParamFQN, database.FQN);
-
+                        
                         Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.Text, NonQueryDatabaseInsert, 
                                             new SqlParameter[] {  paramDbid, paramSnapshotid, paramDatabasename, paramOwner, 
                                                                     paramGuestenabled, paramAvailable, paramStatus, paramHashkey, 
-                                                                    paramIsAudited, paramIsTrustworthy,paramIsContained, paramIsTDEEncrypted, paramLastBackupNotEncrypted,
-                                            paramIntermediateBackupNotEncrypted, paramFQN});
+                                                                    paramIsAudited, paramIsTrustworthy,paramIsContained, paramFQN,
+                                                paramIsTDEEncrypted, paramIsLastBackupNative, paramLastBackupEncrypted,
+                                            paramIntermediateBackupEncrypted, paramNonNativeBackupAvailable});
                     }
                     catch (SqlException ex)
                     {
@@ -1350,9 +1470,9 @@ namespace Idera.SQLsecure.Collector.Sql
         #region SQL Queries
         private const string NonQueryDatabaseInsert =
                     @"INSERT INTO SQLsecure.dbo.sqldatabase (dbid, snapshotid, databasename, owner, guestenabled, trustworthy, available, status, hashkey, isaudited,IsContained,
-                    istdeencrypted, lastbackupencrypted, intermediatebackupencrypted, FQN)
-                      VALUES (@dbid, @snapshotid, @databasename, @owner, @guestenabled, @trustworthy, @available, @status, @hashkey, @isaudited,@iscontained, @istdeencrypted,
-                        @lastbackupencrypted, @intermediatebackupencrypted, @FQN)";
+                    FQN, istdeencrypted, islastbackupnative, lastbackupencrypted, intermediatebackupencrypted, intermediatebackupnonnative)
+                      VALUES (@dbid, @snapshotid, @databasename, @owner, @guestenabled, @trustworthy, @available, @status, @hashkey, @isaudited, @iscontained, @FQN, @istdeencrypted,
+                        @islastbackupnative, @lastbackupencrypted, @intermediatebackupencrypted, @intermediatebackupnonnative)";
         private const string NonQueryObjectInsert =
                     @"INSERT INTO SQLsecure.dbo.databaseobject (snapshotid, dbid, classid, parentobjectid, objectid, schemaid, type, owner, name, hashkey, FQN)
                       VALUES (@snapshotid, @dbid, @classid, @parentobjectid, @objectid, @schemaid, @type, @ownerid, @name, @hashkey, @FQN)"; 
@@ -1367,10 +1487,12 @@ namespace Idera.SQLsecure.Collector.Sql
         private const string ParamStatus = "status";
         private const string ParamHashkey = "hashkey";
         private const string ParamIsAudited = "isaudited";
-        private const string ParamIsTDEEnrypted = "istdeencrypted";  // SQLsecure 3.1 (Anshul Aggarwal) - New fields for new risk assessments.
-        private const string ParamLastBackupEnrypted = "lastbackupencrypted";
-        private const string ParamIntermeidateBackupEnrypted = "intermediatebackupencrypted";
         private const string ParamFQN = "FQN";
+        private const string ParamIsTDEEnrypted = "istdeencrypted";  // SQLsecure 3.1 (Anshul Aggarwal) - New fields for new risk assessments.
+        private const string ParamLastBackupType = "islastbackupnative";
+        private const string ParamLastBackupEnrypted = "lastbackupencrypted";
+        private const string ParamIntermediateBackupEnrypted = "intermediatebackupencrypted";
+        private const string ParamNonNativeBackupAvailable = "intermediatebackupnonnative";
 
         private const string ParamClassid = "classid";
         private const string ParamParentobjectid = "parentobjectid";
@@ -1398,8 +1520,10 @@ namespace Idera.SQLsecure.Collector.Sql
         private string m_Status;
         private bool m_isContained;
         private bool? m_isTDEEncrypted;   // SQLsecure 3.1 (Anshul Aggarwal) - New fields for new risk assessments.
+        private bool? m_IsLastBackupNative;
         private bool? m_lastBackupEncrypted;
         private bool? m_intermediateBackupEncrypted;
+        private bool? m_nonNativeBackupAvailable;
         private string m_FQN;
 
         #endregion
@@ -1408,8 +1532,8 @@ namespace Idera.SQLsecure.Collector.Sql
         #endregion
 
         #region Ctors
-        public Database(string name, int dbId, Sid ownerSid, string ownerName, string serverName, bool trustworthy, bool isContained, bool? isTDEEncrypted
-            , bool? lastBackupEncrypted, bool? intermediateBackupEncrypted, string FQN)
+        public Database(string name, int dbId, Sid ownerSid, string ownerName, string serverName, bool trustworthy, bool isContained, bool? isTDEEncrypted,
+            string FQN)
         {
             Debug.Assert(!string.IsNullOrEmpty(name));
             Debug.Assert(ownerSid != null);
@@ -1425,8 +1549,6 @@ namespace Idera.SQLsecure.Collector.Sql
             m_Status = "Available";
             m_isContained = isContained;
             m_isTDEEncrypted = isTDEEncrypted;
-            m_lastBackupEncrypted = lastBackupEncrypted;
-            m_intermediateBackupEncrypted = intermediateBackupEncrypted;
             m_FQN = FQN;
         }
         #endregion
@@ -1507,19 +1629,33 @@ namespace Idera.SQLsecure.Collector.Sql
             get { return m_isTDEEncrypted; }
         }
 
+        public bool? IsLastBackupNative
+        {
+            get { return m_IsLastBackupNative; }
+            set { m_IsLastBackupNative = value; }
+        }
+
         public bool? LastBackupEncrypted
         {
             get { return m_lastBackupEncrypted; }
+            set { m_lastBackupEncrypted = value; }
         }
 
         public bool? IntermediateBackupEncrypted
         {
             get { return m_intermediateBackupEncrypted; }
+            set { m_intermediateBackupEncrypted = value; }
         }
 
         public string FQN
         {
             get { return m_FQN; }
+        }
+
+        public bool? NonNativeBackupAvailable
+        {
+            get { return m_nonNativeBackupAvailable; }
+            set { m_nonNativeBackupAvailable = value; }
         }
         #endregion
     }

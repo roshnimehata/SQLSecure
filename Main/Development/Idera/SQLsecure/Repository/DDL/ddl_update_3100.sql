@@ -43,10 +43,20 @@ END
 /* START SQL Secure 3.1 (Anshul Aggarwal) New risk assessments */ 
 IF OBJECT_ID('sqldatabase', 'U') IS NOT NULL 
 BEGIN
+	IF COL_LENGTH('sqldatabase','FQN') IS NULL
+	 BEGIN
+		ALTER TABLE sqldatabase
+		ADD FQN nvarchar(1000)
+	END
 	IF COL_LENGTH('sqldatabase','istdeencrypted') IS NULL
 	 BEGIN
 		ALTER TABLE sqldatabase
 		ADD istdeencrypted bit
+	END
+	IF COL_LENGTH('sqldatabase','islastbackupnative') IS NULL
+	 BEGIN
+		ALTER TABLE sqldatabase
+		ADD islastbackupnative bit
 	END
 	IF COL_LENGTH('sqldatabase','lastbackupencrypted') IS NULL
 	 BEGIN
@@ -58,10 +68,10 @@ BEGIN
 		ALTER TABLE sqldatabase
 		ADD intermediatebackupencrypted bit
 	END
-	IF COL_LENGTH('sqldatabase','FQN') IS NULL
+	IF COL_LENGTH('sqldatabase','intermediatebackupnonnative') IS NULL
 	 BEGIN
 		ALTER TABLE sqldatabase
-		ADD FQN nvarchar(1000)
+		ADD intermediatebackupnonnative bit
 	END
 END
 

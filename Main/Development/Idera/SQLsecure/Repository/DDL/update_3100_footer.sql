@@ -650,7 +650,7 @@ FROM
                     (
                         @metricid , -- metricid - int
                         N'Access' , -- metrictype - nvarchar(32)
-                        N'Backup Encryption' , -- metricname - nvarchar(256)
+                        N'Backup Encryption (Native)' , -- metricname - nvarchar(256)
                         N'Determine whether native backup encryption was configured on SQL Server 2014 or later' , -- metricdescription - nvarchar(1024)
                         0 , -- isuserentered - bit
                         0 , -- ismultiselect - bit
@@ -677,7 +677,7 @@ FROM
                         N'' , -- reportkey - nvarchar(32)
                         N'Are any native backups configured for encryption on SQL Server 2014 or later?' , -- reporttext - nvarchar(4000)
                         3 , -- severity - int
-                        N'''master'',''msdb'',''model'',''tempdb''' , -- severityvalues - nvarchar(4000)
+                        N'' , -- severityvalues - nvarchar(4000)
                         0  -- assessmentid - int
                     );
         END;
@@ -1195,6 +1195,65 @@ FROM
                         N'' , -- reportkey - nvarchar(32)
                         N'Are Windows folders not configured for NTFS encryption?' , -- reporttext - nvarchar(4000)
                         1 , -- severity - int
+                        N'' , -- severityvalues - nvarchar(4000)
+                        0  -- assessmentid - int
+                    );
+        END;
+
+		
+
+----- Non-Native Backup Encryption
+        SELECT
+            @metricid = 126;
+        IF NOT EXISTS ( SELECT
+                            TOP 1 * 
+                        FROM
+                            metric
+                        WHERE
+                            metricid = @metricid )
+        BEGIN  
+            INSERT  INTO dbo.metric
+                    (
+                        metricid ,
+                        metrictype ,
+                        metricname ,
+                        metricdescription ,
+                        isuserentered ,
+                        ismultiselect ,
+                        validvalues ,
+                        valuedescription
+		            )
+            VALUES
+                    (
+                        @metricid , -- metricid - int
+                        N'Access' , -- metrictype - nvarchar(32)
+                        N'Backup Encryption (Non-Native)' , -- metricname - nvarchar(256)
+                        N'Determine whether non-native backups were configured on SQL Server 2008 or later' , -- metricdescription - nvarchar(1024)
+                        0 , -- isuserentered - bit
+                        0 , -- ismultiselect - bit
+                        N'' , -- validvalues - nvarchar(1024)
+                        N'When enabled, this check will identify a risk if non-native backups were configured on SQL Server 2008 or later.'  -- valuedescription - nvarchar(1024)	
+                    );
+		
+            INSERT  INTO dbo.policymetric
+                    (
+                        policyid ,
+                        metricid ,
+                        isenabled ,
+                        reportkey ,
+                        reporttext ,
+                        severity ,
+                        severityvalues ,
+                        assessmentid
+		            )
+            VALUES
+                    (
+                        0 , -- policyid - int
+                        @metricid , -- metricid - int
+                        1 , -- isenabled - bit
+                        N'' , -- reportkey - nvarchar(32)
+                        N'Are any non-native backups configured on SQL Server 2008 or later?' , -- reporttext - nvarchar(4000)
+                        3 , -- severity - int
                         N'' , -- severityvalues - nvarchar(4000)
                         0  -- assessmentid - int
                     );
