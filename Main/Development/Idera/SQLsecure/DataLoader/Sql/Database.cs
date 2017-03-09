@@ -328,7 +328,7 @@ namespace Idera.SQLsecure.Collector.Sql
             if (serverType != ServerType.OnPremise && serverType != ServerType.SQLServerOnAzureVM)
                 return;
 
-            if (sqlServerVersion < ServerVersion.SQL2008)
+            if (sqlServerVersion < ServerVersion.SQL2014)
                 return;
 
             // Create the query based on server version.
