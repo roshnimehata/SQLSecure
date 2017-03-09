@@ -138,8 +138,31 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public String ReplicationEnabled { get { return YesNoStr(m_ReplicationEnabled); } }
         public String SaPasswordEmpty { get { return YesNoStr(m_SaPasswordEmpty); } }
 
-        public string VersionFriendly { get { return SqlHelper.ParseVersionFriendly(m_Version.Value); } }
-        public string VersionFriendlyLong { get { return SqlHelper.ParseVersionFriendly(m_Version.Value, true); } }
+        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        public string VersionFriendly
+        { get
+            { if (ServerType == ServerType.AzureSQLDatabase)
+                {
+                    return VersionName.AzureSQLDatabase;
+                }
+                else { return SqlHelper.ParseVersionFriendly(m_Version.Value); }
+            }
+        }
+        public string VersionFriendlyLong
+        {
+            get
+            {
+                if (ServerType == ServerType.AzureSQLDatabase)
+                {
+                    return String.Format("{0} v{1}", VersionName.AzureSQLDatabase, m_Version.Value);
+                }
+                else
+                {
+                    return SqlHelper.ParseVersionFriendly(m_Version.Value, true);
+                }
+            }
+        }
+        //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
         public string AuditFoldersString { get { return m_auditfoldersstring.IsNull ? string.Empty : m_auditfoldersstring.Value.ToLower(); } }
 
         public string NextCollectionTime

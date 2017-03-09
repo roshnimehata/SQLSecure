@@ -176,7 +176,16 @@ namespace Idera.SQLsecure.UI.Console.Views
             _label_Server.Text = m_serverInstance.ConnectionName;
             _label_Version.Text = m_serverInstance.VersionFriendlyLong;
             _label_Edition.Text = m_serverInstance.Edition;
-            _label_Os.Text = m_serverInstance.OS;
+            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+            if (m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
+            {
+                _label_Os.Visible = false;
+            }
+            else
+            {
+                _label_Os.Text = m_serverInstance.OS;
+            }
+            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
 
             _label_CurrentSnapshotTime.Text = m_serverInstance.CurrentCollectionTime;
             _label_LastSuccessfulTime.Text = m_serverInstance.LastCollectionTime;
@@ -190,7 +199,18 @@ namespace Idera.SQLsecure.UI.Console.Views
                 _label_Objects.Text = snap.NumObject.ToString("n0");
                 _label_Permissions.Text = snap.NumPermission.ToString("n0");
                 _label_Logins.Text = snap.NumLogin.ToString("n0");
-                _label_GroupMembers.Text = snap.NumWindowsGroupMember.ToString("n0");
+                //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                if (m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
+                {
+                    this._lbl_ND.Text = "Azure AD accounts";
+                    _label_GroupMembers.Text = Convert.ToString(Helper.AzureADUsersAndGroupCount(snap.SnapshotId));
+                }
+                else
+                {
+                    this._lbl_ND.Text = "Windows accounts";
+                    _label_GroupMembers.Text = snap.NumWindowsGroupMember.ToString("n0");
+                }
+                //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
 
                 if (string.Compare(snap.Status, Utility.Snapshot.StatusSuccessful) == 0)
                 {
@@ -216,19 +236,39 @@ namespace Idera.SQLsecure.UI.Console.Views
                 }
 
                 List<Sql.WindowsAccount> accounts = Sql.WindowsAccount.GetSuspectAccounts(snap.SnapshotId);
-                if (accounts != null)
+                //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                if (m_serverInstance.ServerType != ServerType.AzureSQLDatabase)
                 {
-                    int wellknownaccounts = 0;
-                    foreach (Sql.WindowsAccount acct in accounts)
+                    label5.Visible = true;
+                    if (accounts != null)
                     {
-                        wellknownaccounts += (acct.AccountType == Sql.WindowsAccount.Type.WellKnownGroup) ? 1 : 0;
+                        int wellknownaccounts = 0;
+                        foreach (Sql.WindowsAccount acct in accounts)
+                        {
+                            wellknownaccounts += (acct.AccountType == Sql.WindowsAccount.Type.WellKnownGroup) ? 1 : 0;
+                        }
+                        _label_WellKnownGroups.Text = wellknownaccounts.ToString("n0");
                     }
-                    _label_WellKnownGroups.Text = wellknownaccounts.ToString("n0");
+                    else
+                    {
+                        _label_WellKnownGroups.Text = String.Empty;
+                    }
                 }
                 else
                 {
-                    _label_WellKnownGroups.Text = String.Empty;
+                    label5.Visible = false;
+                    _label_WellKnownGroups.Visible = false;
                 }
+
+                if (m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
+                {
+                    _lbl_WindowsOS.Visible = false;
+                }
+                else
+                {
+                    _lbl_WindowsOS.Visible = true;
+                }
+                //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
             }
             else
             {
