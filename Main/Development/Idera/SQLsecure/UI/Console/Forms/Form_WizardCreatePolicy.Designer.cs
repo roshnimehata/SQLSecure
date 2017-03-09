@@ -49,7 +49,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.textBox_PolicyName = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this._page_Vulnerabilities = new Divelements.WizardFramework.WizardPage();
-            this.controlConfigurePolicyVulnerabilities1 = new Idera.SQLsecure.UI.Console.Controls.controlConfigurePolicyVulnerabilities(Utility.ConfigurePolicyControlType.ConfigureSecurityCheck);
+
+            // SQLsecure 3.1 (Anshul Aggarwal) - Use the same control across application.
+            this.controlConfigurePolicyVulnerabilities1 = new Controls.controlConfigurePolicyVulnerabilities(Utility.ConfigurePolicyControlType.CreatePolicySecurityCheck);
+
             this._page_SQLServers = new Divelements.WizardFramework.WizardPage();
             this.controlPolicyAddServers1 = new Idera.SQLsecure.UI.Console.Controls.ControlPolicyAddServers();
             this._page_Interview = new Divelements.WizardFramework.WizardPage();
@@ -328,7 +331,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.controlConfigurePolicyVulnerabilities1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.controlConfigurePolicyVulnerabilities1.Location = new System.Drawing.Point(0, 0);
             this.controlConfigurePolicyVulnerabilities1.Name = "controlConfigurePolicyVulnerabilities1";
-            this.controlConfigurePolicyVulnerabilities1.Size = new System.Drawing.Size(748, 440);
+            this.controlConfigurePolicyVulnerabilities1.Size = new System.Drawing.Size(756, 536);
             this.controlConfigurePolicyVulnerabilities1.TabIndex = 0;
             // 
             // _page_SQLServers
@@ -422,6 +425,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ForeColor = System.Drawing.Color.Navy;
             this.MinimumSize = new System.Drawing.Size(794, 600);
             this.Name = "Form_WizardCreatePolicy";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "SQLsecure Create Policy";
             this._wizard.ResumeLayout(false);
             this._page_Introduction.ResumeLayout(false);
