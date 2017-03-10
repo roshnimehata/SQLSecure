@@ -40,6 +40,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public const string SQL2014 = @"SQL Server 2014";
         public const string SQL2016 = @"SQL Server 2016";
         public const string Unsupported = @"Unknown version";
+        public const string AzureSQLDatabase = @"Microsoft SQL Azure";
     }
     public class ServicePack
     {
