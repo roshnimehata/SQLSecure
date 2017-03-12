@@ -60,8 +60,8 @@
 		<lastauthor>Administrator</lastauthor>
 		<revnumber>{C20EF196-9EB9-43F5-9C83-D4A6C9583ACA}</revnumber>
 		<lastprinted/>
-		<createdtm>06/21/1999 03:00</createdtm>
-		<lastsavedtm>07/14/2000 06:50</lastsavedtm>
+		<createdtm>06/21/1999 04:00</createdtm>
+		<lastsavedtm>07/14/2000 07:50</lastsavedtm>
 		<pagecount>300</pagecount>
 		<wordcount>0</wordcount>
 		<charcount/>
@@ -4405,7 +4405,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ID_STRING440</td><td>1033</td><td>RELEAS~1|Release Notes</td><td>0</td><td/><td>-1306609103</td></row>
 		<row><td>ID_STRING441</td><td>1033</td><td>NewFeature1</td><td>0</td><td/><td>1898279235</td></row>
 		<row><td>ID_STRING442</td><td>1033</td><td>LAUNCH~1.EXE|Launch Idera.SQLsecure.UI.Console.exe</td><td>0</td><td/><td>1369794886</td></row>
-		<row><td>ID_STRING443</td><td>1033</td><td>SQLSEC~1|SQL Secure</td><td>0</td><td/><td>1638249409</td></row>
+		<row><td>ID_STRING443</td><td>1033</td><td>SQLSEC~1|SQLsecure</td><td>0</td><td/><td>1638226090</td></row>
 		<row><td>ID_STRING444</td><td>1033</td><td>SQLSEC~1|SQL Secure</td><td>0</td><td/><td>1638220769</td></row>
 		<row><td>ID_STRING45</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>228144489</td></row>
 		<row><td>ID_STRING46</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>228144489</td></row>
@@ -4747,7 +4747,6 @@ Set oServer = Nothing</td><td/></row>
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I2">ISIconIndex</col>
 		<row><td>ARPPRODUCTICON.exe</td><td/><td>&lt;PATH_IMAGES&gt;\app.ico</td><td>0</td></row>
-		<row><td>NewShortcut11_ED9B592B2BD94F9EBA9FB5ABF8EADE2D.exe</td><td/><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Secure.ico</td><td>0</td></row>
 		<row><td>NewShortcut1_4C6A9ACB080A4424BAF97E7D730892C1.exe</td><td/><td>&lt;PATH_RELEASE&gt;\Idera.SQLdm.ExportUtility.exe</td><td>0</td></row>
 		<row><td>NewShortcut1_ED9B592B2BD94F9EBA9FB5ABF8EADE2D.exe</td><td/><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Secure.ico</td><td>0</td></row>
 		<row><td>NewShortcut1_F5F326438B69434A87BF18463B401FAA.exe</td><td/><td>&lt;PATH_RELEASE&gt;\dssmanager.exe</td><td>0</td></row>
@@ -5392,6 +5391,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<col def="s72">DirProperty</col>
 		<col def="i2">InstallMode</col>
 		<row><td>FileKey1</td><td>Idera.SQLsecure.UI.Console.exe</td><td/><td>ideras_1_idera_sqlsecure_x64</td><td>2</td></row>
+		<row><td>NewShortcut1</td><td>Idera.SQLsecure.UI.Console.exe</td><td/><td>SQLsecure</td><td>2</td></row>
 		<row><td>NewShortcut2</td><td>WebHelp.exe</td><td/><td>Docs</td><td>2</td></row>
 		<row><td>NewShortcut3</td><td>WebHelp.exe</td><td/><td>Docs</td><td>2</td></row>
 		<row><td>NewShortcut4</td><td>WebHelp.exe</td><td/><td>Docs</td><td>2</td></row>
@@ -5479,8 +5479,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<col def="I4">ISAttributes</col>
 		<row><td>Help</td><td>Docs</td><td>##ID_STRING438##</td><td>WebHelp.exe</td><td>[BIN]WebHelp.exe</td><td/><td/><td/><td>NewShortcut2_F4439BBBFF784CBDB54AF62D4C15EB73.exe</td><td>0</td><td>1</td><td>BIN</td><td/><td/><td/></row>
 		<row><td>InstallGuide</td><td>Docs</td><td>##ID_STRING439##</td><td>WebHelp.exe</td><td>[BIN]WebHelp.exe</td><td> -Topic "SQLsecure Help\Install and Deploy SQLsecure.htm"</td><td/><td/><td>NewShortcut3_F4439BBBFF784CBDB54AF62D4C15EB73.exe</td><td>0</td><td>1</td><td>BIN</td><td/><td/><td/></row>
-		<row><td>NewShortcut1</td><td>ProgramMenuFolder</td><td>##ID_STRING443##</td><td>Idera.SQLsecure.UI.Console.exe</td><td>[INSTALLDIR]bin\Idera.SQLsecure.UI.Console.exe</td><td/><td/><td/><td>NewShortcut1_ED9B592B2BD94F9EBA9FB5ABF8EADE2D.exe</td><td>0</td><td>1</td><td/><td/><td/><td/></row>
-		<row><td>NewShortcut11</td><td>DesktopFolder</td><td>##ID_STRING444##</td><td>Idera.SQLsecure.UI.Console.exe</td><td>[INSTALLDIR]bin\Idera.SQLsecure.UI.Console.exe</td><td/><td/><td>0</td><td>NewShortcut11_ED9B592B2BD94F9EBA9FB5ABF8EADE2D.exe</td><td>0</td><td>1</td><td/><td/><td/><td/></row>
+		<row><td>NewShortcut1</td><td>SQLsecure</td><td>##ID_STRING443##</td><td>Idera.SQLsecure.UI.Console.exe</td><td>[INSTALLDIR]bin\Idera.SQLsecure.UI.Console.exe</td><td/><td/><td/><td>NewShortcut1_ED9B592B2BD94F9EBA9FB5ABF8EADE2D.exe</td><td>0</td><td>1</td><td/><td/><td/><td/></row>
 		<row><td>ReleaseNotes</td><td>Docs</td><td>##ID_STRING440##</td><td>WebHelp.exe</td><td>[BIN]WebHelp.exe</td><td> -Topic "SQLsecure Help\What's New.htm"</td><td/><td/><td>NewShortcut4_F4439BBBFF784CBDB54AF62D4C15EB73.exe</td><td>0</td><td>1</td><td>BIN</td><td/><td/><td/></row>
 	</table>
 
