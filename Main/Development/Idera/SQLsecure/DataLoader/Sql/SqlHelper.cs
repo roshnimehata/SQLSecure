@@ -133,13 +133,21 @@ namespace Idera.SQLsecure.Collector.Sql
             )
         {
             SqlConnectionStringBuilder bldr;
-            if (port.HasValue)
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            if (serverType == ServerType.SQLServerOnAzureVM)
             {
-                bldr = ConstructConnectionString(string.Format("{0},{1}", instance, port.Value), user, password,serverType,azureADAuth);
+                bldr = ConstructConnectionString(instance, user, password, serverType, azureADAuth);
             }
             else
             {
-                bldr = ConstructConnectionString(instance, user, password,serverType,azureADAuth);
+                if (port.HasValue)
+                {
+                    bldr = ConstructConnectionString(string.Format("{0},{1}", instance, port.Value), user, password, serverType, azureADAuth);
+                }
+                else
+                {
+                    bldr = ConstructConnectionString(instance, user, password, serverType, azureADAuth);
+                }
             }
 
             return bldr;
@@ -182,9 +190,10 @@ namespace Idera.SQLsecure.Collector.Sql
                     bldr.ConnectionString = ConstructConnectionString(instance, user, password, azureADAuth);
 
                 }
-                //SQLsecure (Tushar)--Added support for Azure VM
-                if(serverType == ServerType.SQLServerOnAzureVM)
-                    bldr.ConnectionString =     @"Data Source=" + instance + ";Initial Catalog=master ;User ID= " + user + ";Password=" + password + ";";
+                //
+                ////SQLsecure (Tushar)--Added support for Azure VM
+                //if(serverType == ServerType.SQLServerOnAzureVM)
+                //    bldr.ConnectionString =     @"Data Source=" + instance + ";Initial Catalog=master ;User ID= " + user + ";Password=" + password + ";";
                 return bldr;
             }
         }
