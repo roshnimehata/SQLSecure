@@ -2405,6 +2405,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>BiildInternetEnabled</td><td/></row>
 		<row><td>BiildSingleExeEnabled</td><td/></row>
 		<row><td>BiildSingleMSIEnabled</td><td/></row>
+		<row><td>IIIIIIIIIIIIIIIIIIIIIIIIIIIIII</td><td/></row>
 	</table>
 
 	<table name="ISCEApp">
