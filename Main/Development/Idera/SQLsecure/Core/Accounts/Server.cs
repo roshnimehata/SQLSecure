@@ -147,7 +147,19 @@ namespace Idera.SQLsecure.Core.Accounts
              }
              catch (Exception ex)
              {
-                throw; //caller should handle this exception
+                // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                if (computerName.IndexOf(Constants.Dot) != -1)
+                 {
+                    remoteBaseKey =
+                   RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine,
+                                                  computerName.Substring(0, computerName.IndexOf(Constants.Dot)));
+                    valueKey = remoteBaseKey.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName");
+                    activeComputerName = (string)valueKey.GetValue("ComputerName");
+                }                
+                else
+                {
+                    throw; //caller should handle this exception
+                }
              }
              finally
              {

@@ -1041,6 +1041,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
                             if ((Convert.ToString(_comboBox_ServerType.SelectedItem)== Utility.Activity.TypeServerOnPremise) || (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
                             {
+                                if ((machine != null) && (machine.IndexOf(".") < 0) && (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
+                                {
+                                    if ((textbox_WindowsUser.Text != null) && (textbox_WindowsUser.Text.IndexOf(@"\") != -1))
+                                    {
+                                        machine = string.Format("{0}.{1}", machine, textbox_WindowsUser.Text.Substring(0, textbox_WindowsUser.Text.IndexOf(@"\")));
+                                    }
+                                }
+
                                 sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
                             }
 							// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
