@@ -25,6 +25,7 @@ namespace Idera.SQLsecure.Core.Accounts
         internal const string DoubleBackSlashStr = @"\\";
         internal const string SingleSlashStr = "/";
         internal const string DoubleSlashStr = "//";
+        internal const string Dot = @".";
 
         // Path related constants.
         internal const string GcPrefix = @"GC://";
