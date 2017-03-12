@@ -56,6 +56,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public static String RepositoryDBNotFound = @"A " + Constants.PRODUCT_STR + " database was not found on the selected server";
         public const String SMOError = @"Exception raised using SMO to retrieve Server List";
         public const String VersionNotSupported = @"Version not supported";
+        public const String IncompatibleVersion = @"Choose a different Repository or make sure the console and Repository versions are compatible";//SQLsecure 3.1 (Tushar)--Fix for Defect SQLSECU-1672
 
         // Add server wizard error messages.
         public const string RegisterSqlServerCaption = "Register SQL Server";

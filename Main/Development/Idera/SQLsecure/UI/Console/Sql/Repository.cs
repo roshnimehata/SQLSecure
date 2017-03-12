@@ -530,8 +530,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         {
                             logX.loggerX.Error(string.Format(Utility.ErrorMsgs.ErrorStub, Utility.ErrorMsgs.DalNotSupported), Utility.Constants.DalVersion);
                             MsgBox.ShowError(Utility.ErrorMsgs.VersionNotSupported,
-                                             String.Format(Utility.ErrorMsgs.DalNotSupported, m_ServerName,
-                                                           Utility.Constants.DalVersion));
+                                             String.Format(Utility.ErrorMsgs.IncompatibleVersion));//SQLsecure 3.1 (Tushar)--Fix for Defect SQLSECU-1672
                             return false;
                         }
                     }

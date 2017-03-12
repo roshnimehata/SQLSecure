@@ -1279,6 +1279,7 @@ namespace Idera.SQLsecure.UI.Console
                         connectToServer(currentServer);
                         refreshExplorerBar(false); // keep the existing view current
                         this.Cursor = Cursors.Default;
+                        bConnecting = false; //SQLsecure 3.1--(Tushar)--Fix for defect SQLSECU-1735--When user cancels dialog, and old repository connection is valid, then close the dialog.
                     }
                     //Start-SQLsecure 3.1 (Tushar)--Fix for SQLSECU-1657
                     if (!Program.gController.Repository.IsValid)
