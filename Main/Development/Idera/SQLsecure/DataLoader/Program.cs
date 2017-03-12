@@ -493,7 +493,11 @@ namespace Idera.SQLsecure.Collector
                                             //SQLsecure 3.1 (Tushar)--Support for Azure VM.
                                             else if (serverType == ServerType.SQLServerOnAzureVM)
                                             {
+                                                wi = SetTargetImpersonationContext();
+
                                                 m_Target.LoadDataForAzureVM(programArgs.AutomatedRun);
+
+                                                RestoreImpersonationContext(wi);
                                             }
                                         }
                                         else

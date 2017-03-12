@@ -418,7 +418,7 @@ namespace Idera.SQLsecure.Collector
                         login = sqlLogin;
                         password = sqlPassword;
                     }
-                    bool azureADAuth = (authType == AuthType.W && serverType != ServerType.OnPremise) ? true : false;
+                    bool azureADAuth = (authType == AuthType.W && serverType != ServerType.OnPremise && serverType != ServerType.SQLServerOnAzureVM) ? true : false;
                     m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(targetInstance, port, login,
                                                                                             password, serverType, azureADAuth);
                     TargetInstance = targetInstance;
