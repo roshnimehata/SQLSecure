@@ -21,7 +21,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string DynamicSqlVersion2012Code = "Left(version,3) = '11.'";
         private const string DynamicSqlVersion2014Code = "Left(version,3) = '12.'";
         private const string DynamicSqlVersion2016Code = "Left(version,3) = '13.'";
-        private const string DynamicSqlVersionAzureCode = "Left(version,3) = '14.'";
+        private const string DynamicSqlVersionAzureCode = "servertype = 'ADB'";//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1728
 
 
         private const string TITLE_POLICY = "Policy";
