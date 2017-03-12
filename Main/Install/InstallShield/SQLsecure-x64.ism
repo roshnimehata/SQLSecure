@@ -3977,7 +3977,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>IDS__IsSetupTypeMinDlg_AllFeatures</td><td>1033</td><td>Installs the Console and Reports, and creates the Repository database on a local SQL Server instance.</td><td>0</td><td/><td>438087502</td></row>
 		<row><td>IDS__IsSetupTypeMinDlg_ChooseFeatures</td><td>1033</td><td>Install only the [txtConsole]</td><td>0</td><td/><td>1536866029</td></row>
 		<row><td>IDS__IsSetupTypeMinDlg_ChooseSetupType</td><td>1033</td><td>Choose either a Typical or Console only installation.</td><td>0</td><td/><td>-73735602</td></row>
-		<row><td>IDS__IsSetupTypeMinDlg_Complete</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Typical</td><td>0</td><td/><td>605736650</td></row>
+		<row><td>IDS__IsSetupTypeMinDlg_Complete</td><td>1033</td><td>{&amp;MSSansBold8}&amp;All Components</td><td>0</td><td/><td>1638254154</td></row>
 		<row><td>IDS__IsSetupTypeMinDlg_Custom</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Console only</td><td>0</td><td/><td>1805280366</td></row>
 		<row><td>IDS__IsSetupTypeMinDlg_Minimal</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Minimal</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS__IsSetupTypeMinDlg_MinimumFeatures</td><td>1033</td><td>Minimum required features will be installed.</td><td>0</td><td/><td>-1256677244</td></row>
