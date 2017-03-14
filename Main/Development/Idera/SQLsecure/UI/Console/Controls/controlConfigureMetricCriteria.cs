@@ -464,8 +464,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
         {
             bool bAllowContinue = true;
             refreshSort = false;
-           
-            if (Convert.ToString(row.Cells[colReportKey]) != textBox_ReportKey.Text
+
+            // SQLSECU-1715 (Anshul Aggarwal) - SQLSecure 3.1: When we try to select any check , 'security checks' list is moving Up&Down and selecting the wrong one
+            if (Convert.ToString(row.Cells[colReportKey].Value) != textBox_ReportKey.Text
                             || (radioButton_SeverityLow.Checked && Convert.ToString(row.Cells[colSeverity].Value) != "1")
                             || (radioButton_SeverityMedium.Checked && Convert.ToString(row.Cells[colSeverity].Value) != "2")
                             || (radioButton_SeverityCritical.Checked && Convert.ToString(row.Cells[colSeverity].Value) != "3"))
