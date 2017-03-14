@@ -450,7 +450,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 			// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
             else if (comboBox.SelectedItem == Utility.Activity.TypeServerAzureVM)
             {
-                _btn_BrowseServers.Visible = true;
+                _btn_BrowseServers.Visible = false;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1714
                 checkBox_UseSameAuth.Enabled = false;
                 checkBox_UseSameAuth.Checked = false;
                 checkBox_UseSameAuth.Hide();
