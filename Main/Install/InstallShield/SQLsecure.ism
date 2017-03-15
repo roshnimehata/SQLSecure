@@ -233,6 +233,7 @@
 		<col key="yes" def="s72">Property</col>
 		<col key="yes" def="s72">Signature_</col>
 		<row><td>DOTNET</td><td>NewSignature13</td></row>
+		<row><td>DOTNETFRAMEWORKVERSION</td><td>NewSignature16</td></row>
 		<row><td>INSTALLED_INSTANCE</td><td>NewSignature12</td></row>
 		<row><td>INSTALL_DIRECTORY</td><td>NewSignature14</td></row>
 		<row><td>MDACFOUND</td><td>NewSignature111</td></row>
@@ -3387,6 +3388,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_OS</td><td>1033</td><td>The operating system is not adequate for running [ProductName].</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_PROCESSOR</td><td>1033</td><td>The processor is not adequate for running [ProductName].</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_RAM</td><td>1033</td><td>The amount of RAM is not adequate for running [ProductName].</td><td>0</td><td/><td>-1256677244</td></row>
+		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_RELEASE</td><td>1033</td><td>[ProductName] requires that your computer has the .NET Framework  version4.6</td><td>0</td><td/><td>2040894695</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_SCREEN</td><td>1033</td><td>The screen resolution is not adequate for running [ProductName].</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDPROP_SETUPTYPE_COMPACT</td><td>1033</td><td>Compact</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDPROP_SETUPTYPE_COMPACT_DESC</td><td>1033</td><td>Compact Description</td><td>0</td><td/><td>-1256677244</td></row>
@@ -4384,6 +4386,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ID_STRING416</td><td>1033</td><td>NewFeature1</td><td>0</td><td/><td>832925547</td></row>
 		<row><td>ID_STRING417</td><td>1033</td><td>SQLSEC~1|SQLsecure</td><td>0</td><td/><td>1638213802</td></row>
 		<row><td>ID_STRING418</td><td>1033</td><td>SQLSEC~1|SQLsecure</td><td>0</td><td/><td>1638249610</td></row>
+		<row><td>ID_STRING419</td><td>1033</td><td>[ProductName] requires that your computer has the .NET Framework  version4.6</td><td>0</td><td/><td>2040917255</td></row>
 		<row><td>ID_STRING42</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>-48638456</td></row>
 		<row><td>ID_STRING43</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>-48667223</td></row>
 		<row><td>ID_STRING44</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>-48667223</td></row>
@@ -4957,6 +4960,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>AdminUser</td><td>##ID_STRING33##</td></row>
 		<row><td>BETA_INSTALL &lt;&gt; "TRUE"</td><td>##ID_STRING411##</td></row>
 		<row><td>DOTNET &lt;&gt; 0</td><td>##ID_STRING398##</td></row>
+		<row><td>DOTNETFRAMEWORKVERSION &gt;= "#393295"</td><td>##ID_STRING419##</td></row>
 		<row><td>MDACFOUND &gt;= MDAC_MIN_VERSION</td><td>##ID_STRING404##</td></row>
 		<row><td>not Intel64 and not Msix64</td><td>##ID_STRING412##</td></row>
 	</table>
@@ -5157,6 +5161,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>Blank</td><td/><td/></row>
 		<row><td>CONFIG_REPOSITORY</td><td>Yes</td><td/></row>
 		<row><td>DOTNET</td><td>0</td><td/></row>
+		<row><td>DOTNETFRAMEWORKVERSION</td><td/><td/></row>
 		<row><td>DRIVE_LETTER</td><td>0</td><td/></row>
 		<row><td>DRIVE_LETTER_INSTALLDIR</td><td>0</td><td/></row>
 		<row><td>DRIVE_TYPE</td><td>0</td><td/></row>
@@ -5337,6 +5342,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>NewSignature13</td><td>2</td><td>Software\Microsoft\NET Framework Setup\NDP\v2.0.50727</td><td>Install</td><td>2</td></row>
 		<row><td>NewSignature14</td><td>2</td><td>Software\Idera\SQLsecure</td><td>Path</td><td>2</td></row>
 		<row><td>NewSignature15</td><td>2</td><td>Software\Idera\SQLsecure\Repository</td><td>PreserveJobs</td><td>2</td></row>
+		<row><td>NewSignature16</td><td>2</td><td>SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full</td><td>Release</td><td>2</td></row>
 	</table>
 
 	<table name="Registry">

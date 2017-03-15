@@ -233,6 +233,7 @@
 		<col key="yes" def="s72">Property</col>
 		<col key="yes" def="s72">Signature_</col>
 		<row><td>DOTNET</td><td>NewSignature13</td></row>
+		<row><td>DOTNETFRAMEWORKVERSION</td><td>NewSignature16</td></row>
 		<row><td>INSTALLED_INSTANCE</td><td>NewSignature12</td></row>
 		<row><td>INSTALL_DIRECTORY</td><td>NewSignature14</td></row>
 		<row><td>MDACFOUND</td><td>NewSignature111</td></row>
@@ -4407,6 +4408,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ID_STRING442</td><td>1033</td><td>LAUNCH~1.EXE|Launch Idera.SQLsecure.UI.Console.exe</td><td>0</td><td/><td>1369794886</td></row>
 		<row><td>ID_STRING443</td><td>1033</td><td>SQLSEC~1|SQLsecure</td><td>0</td><td/><td>1638226090</td></row>
 		<row><td>ID_STRING444</td><td>1033</td><td>SQLSEC~1|SQL Secure</td><td>0</td><td/><td>1638220769</td></row>
+		<row><td>ID_STRING445</td><td>1033</td><td>[ProductName] requires that your computer has the .NET Framework  version4.6</td><td>0</td><td/><td>2040899944</td></row>
 		<row><td>ID_STRING45</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>228144489</td></row>
 		<row><td>ID_STRING46</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>228144489</td></row>
 		<row><td>ID_STRING47</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>496621705</td></row>
@@ -4983,6 +4985,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>AdminUser</td><td>##ID_STRING33##</td></row>
 		<row><td>BETA_INSTALL &lt;&gt; "TRUE"</td><td>##ID_STRING411##</td></row>
 		<row><td>DOTNET &lt;&gt; 0</td><td>##ID_STRING398##</td></row>
+		<row><td>DOTNETFRAMEWORKVERSION &gt;= "#378389"</td><td>##ID_STRING445##</td></row>
 		<row><td>MDACFOUND &gt;= MDAC_MIN_VERSION</td><td>##ID_STRING404##</td></row>
 	</table>
 
@@ -5182,6 +5185,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>Blank</td><td/><td/></row>
 		<row><td>CONFIG_REPOSITORY</td><td>Yes</td><td/></row>
 		<row><td>DOTNET</td><td>0</td><td/></row>
+		<row><td>DOTNETFRAMEWORKVERSION</td><td/><td/></row>
 		<row><td>DRIVE_LETTER</td><td>0</td><td/></row>
 		<row><td>DRIVE_LETTER_INSTALLDIR</td><td>0</td><td/></row>
 		<row><td>DRIVE_TYPE</td><td>0</td><td/></row>
@@ -5362,6 +5366,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>NewSignature13</td><td>2</td><td>Software\Microsoft\NET Framework Setup\NDP\v2.0.50727</td><td>Install</td><td>18</td></row>
 		<row><td>NewSignature14</td><td>2</td><td>Software\Idera\SQLsecure</td><td>Path</td><td>18</td></row>
 		<row><td>NewSignature15</td><td>2</td><td>Software\Idera\SQLsecure\Repository</td><td>PreserveJobs</td><td>18</td></row>
+		<row><td>NewSignature16</td><td>2</td><td>SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full</td><td>Release</td><td>2</td></row>
 	</table>
 
 	<table name="Registry">
