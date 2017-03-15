@@ -56,6 +56,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     _label_Descr.Text = "Select a AzureAD Account from the list, or click Browse Active Directory to locat" +
                 "e users by name";
                     Text = @"Select AzureAD User";
+                    _button_BrowseDomain.Visible = false; //SQLsecure 3.1 (Tushar)--Turning off the visiblility of this button since for Azure VM and Azure DB, this button is not applicable.
                 }
                 //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
             }
