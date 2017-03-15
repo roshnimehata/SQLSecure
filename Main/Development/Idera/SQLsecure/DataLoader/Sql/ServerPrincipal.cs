@@ -194,12 +194,13 @@ namespace Idera.SQLsecure.Collector.Sql
                 // SQLsecure 3.1 (Anshul Aggarwal) - SQLSECU-1704 : "Reports- Audited SQL Servers" is not getting updated for Azure DB
                 // Check for 'CO' permission instead of 'COSQ' for Azure SQL Database.
                 // For now, isdisabled = 'N' for Azure SQL Database (Azure AD User or Group login types) 
+                
 
-                query = @" SELECT DISTINCT 
-                            Principals.name, 
-                            principalid = Principals.principal_id, 
-                            Principals.type, 
-                            Principals.sid, 
+                query = @" (SELECT DISTINCT 
+                            SqlLogins.name, 
+                            principalid = ISNULL(Principals.principal_id,SqlLogins.principal_id*-1), 
+                            SqlLogins.type collate database_default, 
+                            SqlLogins.sid, 
                             serveraccess = CASE Permissions.state
                                               WHEN 'G' THEN 'Y' 
                                               WHEN 'W' THEN 'Y' 
@@ -209,13 +210,13 @@ namespace Idera.SQLsecure.Collector.Sql
                                             WHEN 'D' THEN 'Y'
                                             ELSE 'N'
                                          END, 
-                            isdisabled = CASE WHEN Principals.type = 'S'
+                            isdisabled = CASE WHEN SqlLogins.type = 'S'
                                             THEN
                                                         CASE  SqlLogins.is_disabled WHEN 1
                                                              THEN 'Y'
                                                              ELSE 'N'
                                                         END
-                                                    ELSE 'N'
+                                                    ELSE null
                                               END,
                             ispolicychecked = CASE SqlLogins.is_policy_checked
                                                  WHEN 1 THEN 'Y'
@@ -225,7 +226,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                                      WHEN 1 THEN 'Y'
                                                      ELSE 'N'
                                                   END, 
-                            ispasswordblank = CASE WHEN Principals.type = 'S'
+                            ispasswordblank = CASE WHEN SqlLogins.type = 'S'
                                                     THEN
                                                         CASE WHEN pwdcompare('', SqlLogins.password_hash) = 1
                                                              THEN 'Y'
@@ -234,13 +235,43 @@ namespace Idera.SQLsecure.Collector.Sql
                                                     ELSE null
                                               END,
                             defaultdatabase =NULL,
-                            defaultlanguage = Principals.default_language_name,
+                            defaultlanguage = SqlLogins.default_language_name,
                             SqlLogins.password_hash
-                          FROM sys.database_principals Principals LEFT OUTER JOIN sys.sql_logins SqlLogins ON
-                                    Principals.principal_id = SqlLogins.principal_id
+                          FROM sys.sql_logins SqlLogins  LEFT OUTER JOIN sys.database_principals Principals ON 
+                                    Principals.sid = SqlLogins.sid
                                 LEFT OUTER JOIN sys.database_permissions Permissions
                                     ON Permissions.grantee_principal_id = Principals.principal_id AND Permissions.type = N'CO'
-                            WHERE Principals.sid IS NOT NULL and Principals.is_fixed_role<>1; ";
+                            WHERE SqlLogins.sid IS NOT NULL )
+       
+                       UNION
+                       (
+                       SELECT DISTINCT 
+                            Principals.name, 
+                            principalid = Principals.principal_id, 
+                            Principals.type  collate database_default,
+							sid=ISNULL(Principals.sid,0x0), 
+                            serveraccess = CASE Permissions.state
+                                              WHEN 'G' THEN 'Y' 
+                                              WHEN 'W' THEN 'Y' 
+                                              ELSE 'N'
+                                           END,
+                            serverdeny = CASE Permissions.state
+                                            WHEN 'D' THEN 'Y'
+                                            ELSE 'N'
+                                         END, 
+                            isdisabled ='N' ,
+                            ispolicychecked = 'N', 
+                            isexpirationchecked =  'N', 
+                            ispasswordblank = NULL,
+                            defaultdatabase =NULL,
+                            defaultlanguage = Principals.default_language_name,
+                            password_hash=NULL
+                          FROM sys.database_principals Principals 
+                                LEFT OUTER JOIN sys.database_permissions Permissions
+                                    ON Permissions.grantee_principal_id = Principals.principal_id AND Permissions.type = N'CO'
+                            WHERE  Principals.is_fixed_role<>1 and (Principals.type <> 'S' or Principals.name='dbo' or Principals.name='guest'  or Principals.name='sys' or Principals.name='INFORMATION_SCHEMA')
+
+							)";
             }
             return query;
         }
@@ -266,7 +297,10 @@ namespace Idera.SQLsecure.Collector.Sql
             }
             else 
             {
-                query = @"SELECT * FROM sys.database_role_members INNER JOIN sys.database_principals ON role_principal_id= principal_id WHERE is_fixed_role=0";
+                query = @"SELECT role_principal_id, member_principal_id FROM sys.database_role_members INNER JOIN sys.database_principals ON role_principal_id= principal_id WHERE is_fixed_role=0 
+                            and member_principal_id in (
+                            select p.principal_id from sys.database_principals p
+                            inner join sys.sql_logins l on ((p.sid=l.sid) or p.type='E' or p.type='X'))";
             }
             return query;
         }
@@ -480,7 +514,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                     SqlInt32 passwordStatus = SqlInt32.Null; 
 
                                     //only calculate the password status for SQL Logins
-                                    if (type.CompareTo(Constants.SQLLogin) == 0)
+                                    //SQL Secure 3.1(Barkha Khatri)
+                                    //skipping sys,guest,dbo,information_Schema for Azure SQL DB as there ispasswordnull values is null
+                                    if (type.CompareTo(Constants.SQLLogin) == 0 &&(String.Compare((string)name,"sys")!=0 && String.Compare((string)name, "dbo") != 0 && String.Compare((string)name, "guest") != 0 && String.Compare((string)name, "INFORMATION_SCHEMA") != 0 ))
                                     {
                                         //This tells us if the password is blank.
                                         if (ispasswordnull.Value == "Y")
