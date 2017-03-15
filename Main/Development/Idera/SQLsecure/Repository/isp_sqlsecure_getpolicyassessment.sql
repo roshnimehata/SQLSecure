@@ -473,7 +473,7 @@ AS -- <Idera SQLsecure version and copyright>
 											FROM vwpolicymetric
 											WHERE policyid = @policyid
 											AND assessmentid = @assessmentid
-											AND isenabled = 1
+											AND isenabled = 1 and metricname <> 'NA' -- SQLsecure 3.1 (Anshul) - Skip metrics not applicable to OP/AVM.
 										END
 										ELSE 
 										BEGIN

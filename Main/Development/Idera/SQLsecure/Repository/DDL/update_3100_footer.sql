@@ -3,8 +3,8 @@ SELECT
     @ver = schemaversion
 FROM
     currentversion;
---IF ( ISNULL(@ver, 900) >= 3100 )	
-    --BEGIN
+IF ( ISNULL(@ver, 900) < 3100 )	
+    BEGIN
 
         DECLARE
             @metricid INT ,
@@ -1358,7 +1358,7 @@ FROM
 			)
 		END
 				
-    --END;
+    END;
 GO
 
 

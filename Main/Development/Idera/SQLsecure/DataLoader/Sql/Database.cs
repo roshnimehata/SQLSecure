@@ -328,7 +328,7 @@ namespace Idera.SQLsecure.Collector.Sql
             if (serverType != ServerType.OnPremise && serverType != ServerType.SQLServerOnAzureVM)
                 return;
 
-            if (sqlServerVersion < ServerVersion.SQL2014)
+            if (sqlServerVersion < ServerVersion.SQL2008)
                 return;
 
             // Create the query based on server version.
@@ -568,10 +568,10 @@ namespace Idera.SQLsecure.Collector.Sql
 	                                    ON (db.owner_sid = l.sid)";
         
         //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
-        private const string QueryDbAzureDatabase = @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, 
+        private const string QueryDbAzureDatabase = @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = ISNULL(ISNULL(s.name, l.name), 'dbo'), trustworthy = db.is_trustworthy_on, 
                     isContained=cast(db.containment as bit),istdeencrypted = db.is_encrypted, FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name))   
-                              FROM sys.databases AS db LEFT OUTER JOIN sys.database_principals AS l
-                                            ON (db.owner_sid = l.sid)";
+                              FROM sys.databases AS db LEFT OUTER JOIN sys.sql_logins AS s ON (db.owner_sid = s.sid)
+							  LEFT OUTER JOIN sys.database_principals AS l ON (db.owner_sid = l.sid) and l.type = 'E'";
         
         private const string QueryDb2k14_Backup = @"SELECT a.database_name, 
                                             CASE WHEN (a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server') THEN cast(1 as bit) ELSE cast(0 as bit) END,
