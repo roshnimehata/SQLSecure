@@ -60,7 +60,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             int i = 1;
             StringBuilder instructions = new StringBuilder(Utility.Constants.ReportRunInstructions_MultiStep);
             instructions.Append(newline);
-            instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Server, newline);
+            instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Select_Target_Instance, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_SnapshotsToCompare, newline);
             instructions.AppendFormat(instructionformat, i, Utility.Constants.ReportRunInstructions_NoParameters, newline);
             instructions.AppendFormat(warningformat, Utility.Constants.ReportWarning_Resources);

@@ -108,6 +108,18 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._comboBox_Server.SelectionChangeCommitted += new System.EventHandler(this._comboBox_Server_SelectionChangeCommitted);
             this._comboBox_Server.DropDown += new System.EventHandler(this._comboBox_Server_DropDown);
             // 
+            // _label_Description
+            // 
+            this._label_Description.Size = new System.Drawing.Size(495, 70);
+            // 
+            // _label_GettingStartedTitle
+            // 
+            this._label_GettingStartedTitle.Location = new System.Drawing.Point(11, 145);
+            // 
+            // _label_Instructions
+            // 
+            this._label_Instructions.Location = new System.Drawing.Point(132, 145);
+            // 
             // Report_GuestEnabledDatabases
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

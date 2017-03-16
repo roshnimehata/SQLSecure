@@ -88,6 +88,18 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._label_Server.TabIndex = 17;
             this._label_Server.Text = "SQL Server:";
             // 
+            // _label_Description
+            // 
+            this._label_Description.Size = new System.Drawing.Size(495, 70);
+            // 
+            // _label_GettingStartedTitle
+            // 
+            this._label_GettingStartedTitle.Location = new System.Drawing.Point(11, 145);
+            // 
+            // _label_Instructions
+            // 
+            this._label_Instructions.Location = new System.Drawing.Point(132, 145);
+            // 
             // Report_MixedModeAuthentication
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
