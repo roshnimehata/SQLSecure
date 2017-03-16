@@ -222,7 +222,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._radioButton_WindowsUser.TabStop = true;
             this._radioButton_WindowsUser.Text = "Windows User or Group";
             this._radioButton_WindowsUser.UseVisualStyleBackColor = false;
-            this._radioButton_WindowsUser.CheckedChanged += new System.EventHandler(this._radioButton_WindowsUser_Click);
+            this._radioButton_WindowsUser.CheckedChanged += new System.EventHandler(this._radioButton_WindowsUser_CheckedChanged);
             // 
             // _radioButton_SQLLogin
             // 
@@ -235,7 +235,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._radioButton_SQLLogin.TabIndex = 1;
             this._radioButton_SQLLogin.Text = "SQL Login";
             this._radioButton_SQLLogin.UseVisualStyleBackColor = false;
-            this._radioButton_SQLLogin.CheckedChanged += new System.EventHandler(this._radioButton_SQLLogin_Click);
+            this._radioButton_SQLLogin.CheckedChanged += new System.EventHandler(this._radioButton_SQLLogin_CheckedChanged);
             // 
             // _radioButton_AzureADUserOrGroup
             // 
@@ -248,7 +248,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._radioButton_AzureADUserOrGroup.TabIndex = 2;
             this._radioButton_AzureADUserOrGroup.Text = "Azure AD User or Group";
             this._radioButton_AzureADUserOrGroup.UseVisualStyleBackColor = false;
-            this._radioButton_AzureADUserOrGroup.CheckedChanged += new System.EventHandler(this._radioButton_AzureADUserOrGroup_Click);
+            this._radioButton_AzureADUserOrGroup.CheckedChanged += new System.EventHandler(this._radioButton_AzureADUserOrGroup_CheckedChanged);
             // 
             // _label_LoginType
             // 
