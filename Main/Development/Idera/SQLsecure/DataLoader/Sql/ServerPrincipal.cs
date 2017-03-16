@@ -721,7 +721,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
                                         // Update count of logins collected
                                         // --------------------------------
-                                        Target.numLoginsCollected++;
+                                        // Target.numLoginsCollected++;
 
                                         // Write to repository if exceeds threshold.
                                         if (dataTable.Rows.Count > Constants.RowBatchSize)
