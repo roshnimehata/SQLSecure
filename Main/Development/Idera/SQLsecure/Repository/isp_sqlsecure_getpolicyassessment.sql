@@ -4227,6 +4227,9 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         AND b.snapshotid = @snapshotid
                                                                         )
                                                                 WHERE b.snapshotid IS NULL;
+
+																IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+																BEGIN
                                                                 IF (@version > N'9.'
                                                                         OR @version < N'6.'
                                                                         )
@@ -4245,12 +4248,31 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                         @metricval = @metricval
                                                                                         + N'  Some objects may have been omitted by filtering during data collection.';
                                                                 END;
+																END
+																ELSE IF (@serverType = @azuresqldatabaseservertype)
+																BEGIN
+																	SELECT
+                                                                                        @sevcode = @severity,
+                                                                                        @metricval = @metricval
+                                                                                        + N'  Some objects may have been omitted by filtering during data collection.';
+																END
                                                         END;
 
-                                                        SELECT
+														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+														BEGIN
+														SELECT
                                                                 @metricthreshold = N'Server may be vulnerable if Snapshot status is not '
                                                                 + dbo.getsnapshotstatus(@severityvalues)
                                                                 + ' or data collection filters are excluding data.';
+														END;
+														ELSE IF (@serverType = @azuresqldatabaseservertype)
+														BEGIN
+														SELECT
+                                                                @metricthreshold = N'Azure SQL Database may be vulnerable if Snapshot status is not '
+                                                                + dbo.getsnapshotstatus(@severityvalues)
+                                                                + ' or data collection filters are excluding data.';
+														END;
+                                                        
                                                 END;
                                                 -- Baseline Data
                                                 ELSE
@@ -8599,6 +8621,9 @@ AS -- <Idera SQLsecure version and copyright>
 
                                                         DECLARE @orphanedUsersCount AS int;
                                                         DECLARE @orphanedUsersnames AS varchar(max);
+														
+														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+														BEGIN
                                                         WITH OrphanedUsers (dbid, name, uid, type)
                                                         AS (SELECT
                                                                 dbid,
@@ -8633,7 +8658,49 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         uid,
                                                                         name
                                                                 FROM OrphanedUsers;
-                                                        WITH OrphanedUsersForDb (orphanedUsersCountForDb, orphanedUsersnamesForDb, dbname, dbid)
+														END
+														ELSE IF (@serverType = @azuresqldatabaseservertype)
+														BEGIN
+															WITH OrphanedUsers (dbid, name, uid, type)
+                                                        AS (SELECT
+                                                                dbid,
+                                                                name,
+                                                                uid,
+                                                                type
+                                                        FROM dbo.databaseprincipal
+                                                        WHERE usersid NOT IN (SELECT
+                                                                sid
+                                                        FROM dbo.azuresqldbsqllogin
+                                                        WHERE snapshotid = @snapshotid)
+                                                        AND type = N'S'
+														AND name NOT IN ('guest', 'INFORMATION_SCHEMA', 'sys')
+														AND AuthenticationType = 'INSTANCE'
+                                                        AND usersid <> 0x00
+                                                        AND usersid IS NOT NULL
+                                                        AND IsContainedUser = 0
+                                                        AND snapshotid = @snapshotid
+                                                        AND NOT EXISTS (SELECT
+                                                                *
+                                                        FROM #sevrVal
+                                                        WHERE Value = name))
+
+														INSERT INTO #tempdetails
+                                                                SELECT
+                                                                        @policyid,
+                                                                        @assessmentid,
+                                                                        @metricid,
+                                                                        @snapshotid,
+                                                                        N'Orphaned user found - '
+                                                                        + name,
+                                                                        dbid,
+                                                                        type,
+                                                                        uid,
+                                                                        name
+                                                                FROM OrphanedUsers;
+														END
+
+                                                        
+                                                        ;WITH OrphanedUsersForDb (orphanedUsersCountForDb, orphanedUsersnamesForDb, dbname, dbid)
                                                         AS (SELECT
                                                                 COUNT(*) AS orphanedUsersCount,
                                                                 STUFF((SELECT
