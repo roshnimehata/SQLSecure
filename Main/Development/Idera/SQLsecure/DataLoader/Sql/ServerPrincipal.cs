@@ -480,7 +480,15 @@ namespace Idera.SQLsecure.Collector.Sql
                                 {
                                     // Retrieve information.
                                     SqlString name = rdr.GetSqlString(FieldPrincipalName);
-                                    SqlString type = rdr.GetSqlString(FieldPrincipalType);
+                                    SqlString type;
+                                    if (serverType==ServerType.AzureSQLDatabase && Helper.CheckForSystemSqlUsers((string)name))
+                                    {
+                                        type = Constants.SQLUser;
+                                    }
+                                    else
+                                    {
+                                        type = rdr.GetSqlString(FieldPrincipalType);
+                                    }
                                     SqlBinary sid = rdr.GetSqlBinary(FieldPrincipalSid);
                                     SqlInt32 principalid = rdr.GetSqlInt32(FieldPrincipalPid);
                                     SqlString serveraccess = rdr.GetSqlString(FieldPrincipalServeraccess);
@@ -516,7 +524,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     //only calculate the password status for SQL Logins
                                     //SQL Secure 3.1(Barkha Khatri)
                                     //skipping sys,guest,dbo,information_Schema for Azure SQL DB as there ispasswordnull values is null
-                                    if (type.CompareTo(Constants.SQLLogin) == 0 &&(String.Compare((string)name,"sys",true)!=0 && String.Compare((string)name, "dbo",true) != 0 && String.Compare((string)name, "guest",true) != 0 && String.Compare((string)name, "INFORMATION_SCHEMA",true) != 0 ))
+                                    if (type.CompareTo(Constants.SQLLogin) == 0 )//&&(String.Compare((string)name,"sys",true)!=0 && String.Compare((string)name, "dbo",true) != 0 && String.Compare((string)name, "guest",true) != 0 && String.Compare((string)name, "INFORMATION_SCHEMA",true) != 0 ))
                                     {
                                         //This tells us if the password is blank.
                                         if (ispasswordnull.Value == "Y")

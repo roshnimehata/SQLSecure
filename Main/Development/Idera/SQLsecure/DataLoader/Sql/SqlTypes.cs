@@ -190,8 +190,11 @@ namespace Idera.SQLsecure.Collector.Sql
         public const string WindowsGroup = "G";
         public const string WindowsUser = "U";
         public const string SQLLogin = "S";
+        public const string SQLUser = "Q";
 
         #endregion
+
+        
 
         #region Database Principal
 
