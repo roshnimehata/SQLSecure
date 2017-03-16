@@ -61,7 +61,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             instructions.Append(newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_UsePolicy, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_AssessmentsToCompare, newline);
-            instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Select_Target_Instance, newline);
+            instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Server, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_ShowDifferencesOnly, newline);
             instructions.AppendFormat(instructionformat, i, Utility.Constants.ReportRunInstructions_NoParameters, newline);
             _label_Instructions.Text = instructions.ToString();
