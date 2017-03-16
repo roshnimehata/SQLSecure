@@ -276,6 +276,29 @@ namespace Idera.SQLsecure.Collector.Sql
             return query;
         }
 
+
+        // SQLsecure 3.1 (Biresh Kumar Mishra) Add SQL_Login from Azure SQL DB to repository
+        private static string createSqlLoginQuery(
+                ServerType serverType
+            )
+        {
+            string query = null;
+
+            // Create query based on the SQL Server version.
+            if (serverType == ServerType.AzureSQLDatabase)
+            {
+                // SQLsecure 3.1 (Biresh Kumar Mishra) 
+                query = @" SELECT [name]
+                        ,[principal_id]
+                        ,[sid]
+                        ,[type]
+                        ,[is_disabled]
+                        FROM [sys].[sql_logins]
+                        WHERE type = 'S'; ";
+            }
+            return query;
+        }
+
         private static string createRoleMemberQuery(
                 ServerVersion version,ServerType serverType
             )
