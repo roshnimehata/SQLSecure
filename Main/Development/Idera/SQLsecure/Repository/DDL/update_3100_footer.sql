@@ -146,26 +146,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 											'Are any unapproved databases owned by a system administrator?')
 		end
 
-		select @metricid = 88
-		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
-		begin
-			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
-							values (@metricid, 'ADB', 'Sysadmins Own Trustworthy Databases', 'Determine whether any trustworthy databases are owned by system administrators on Azure SQL Database', '', 'When enabled, this check will identify a risk if any unapproved databases have the trustworthy bit set on and the owner has system administrator privileges on Azure SQL Database. Specify the approved databases.')
 
-			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-							values (0, @metricid, 0, 'ADB', 3, '''none''', '',
-											'Are any unapproved trustworthy databases owned by a system administrator?')
-		end
-
-		select @metricid = 89
-		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
-		begin
-			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
-							values (@metricid, 'ADB', 'Public Role Has Permissions on User Database Objects', 'Determine whether the public database role has been granted permissions on user database objects.', '', 'When enabled, this check will identify a risk if the public database role has been granted permissions on any user objects within a user database. Specify the approved databases.')
-			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-							values (0, @metricid, 0, 'ADB', 3, '', '',
-											'Has the public database role been granted permissions on user database objects?')
-		end
 
 		
 		select @metricid = 92
@@ -177,29 +158,22 @@ IF ( ISNULL(@ver, 900) < 3100 )
 							values (0, @metricid, 0, 'ADB', 3, '', '', 'Does this SQL login have a weak password?')
 		end
 
-		select @metricid = 93
+		select @metricid = 100
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
-			values (
-					 @metricid
-					,N'ADB'
-					,N'Symmetric key'
-					,N'Determine whether master have user-created symmetric keys'
-					,N''
-					,N'When enabled, this check will identify a risk if master have user-created symmetric keys'
-					)
-
+							values (@metricid, 'ADB', 'Database roles and members','Shows information about database roles and their members', '', 'When enabled, this check will list database, database role, corresponding members, login type, windows group, permissions.')
 			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-			values (
-					 0
-					,@metricid
-					,0
-					,N'ADB'
-					,3
-					,N''
-					,N''
-					,N'Does master have user-created symmetric keys?')
+							values (0, @metricid, 0, 'ADB', 2, '', '', 'Have you check information about database roles and their memebers?')
+		end
+		
+		select @metricid = 101
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
+		begin
+			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
+							values (@metricid, 'ADB', 'Server roles and members','Shows information about server roles and their members', '', 'When enabled, this check will list SQL instance, role, corresponding members, login type, windows group, disabled.')
+			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
+							values (0, @metricid, 0, 'ADB', 2, '', '', 'Have you check information about server roles and their members?')
 		end
 
 		
@@ -457,10 +431,9 @@ IF ( ISNULL(@ver, 900) < 3100 )
 			76,
 			86,
 			87,
-			88,
-			89,
 			92,
-			93,
+			100,
+			101,
 			102,
 			103,
 			107,
