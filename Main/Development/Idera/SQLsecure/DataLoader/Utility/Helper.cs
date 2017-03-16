@@ -22,6 +22,20 @@ namespace Idera.SQLsecure.Collector.Utility
             stype = stype.ToUpper();
             return (stype == "ADB" ? ServerType.AzureSQLDatabase : (stype == "AVM" ? ServerType.SQLServerOnAzureVM : ServerType.OnPremise));
         }
+
+        /// <summary>
+        /// Checking for default sql users in case of Azure SQL DB
+        /// </summary>
+        /// <param name="name">User name</param>
+        /// <returns></returns>
+        public static bool CheckForSystemSqlUsers(string name)
+        {
+            if(String.Compare((string)name, Constants.sysUser, true) == 0 || String.Compare((string)name, Constants.dboUser, true) == 0 || String.Compare((string)name, Constants.guestUser, true) == 0 || String.Compare((string)name, Constants.informationSchemaUser, true) == 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
     public enum ServerType
     {

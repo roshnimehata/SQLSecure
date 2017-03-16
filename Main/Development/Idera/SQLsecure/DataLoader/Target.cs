@@ -2511,94 +2511,6 @@ namespace Idera.SQLsecure.Collector
                                          " msec");
                 }
 
-                //if (isOk)-Registry is not there for Azure DB
-                //{
-                //    // Load SQLServer Settings from Registry of Target Server
-                //    if (registryPermissions == null)
-                //    {
-                //        registryPermissions =
-                //            new RegistryPermissions(m_snapshotId, m_Server.Name,
-                //                                    Idera.SQLsecure.Core.Accounts.Path.GetInstanceFromSQLServerInstance(TargetInstance),
-                //                                    m_VersionEnum);
-                //        int numWarnings = registryPermissions.LoadRegistrySettings();
-                //        if (numWarnings > 0)
-                //        {
-                //            //isOk = false;
-                //            strNewMessage = "Failed to load some registry configuration options for target SQL Server";
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //        //else
-                //        {
-                //            registryPermissions.WriteRegistrySettingsToRepository(m_Repository.ConnectionString);
-                //        }
-                //    }
-                //}
-
-                // Get SQLServer Services from Target-SQL Azure DB services are not there in Azure DB
-                //if (isOk)
-                //{
-                //    string instanceName = Path.GetInstanceFromSQLServerInstance(TargetInstance);
-                //    string computerName = Path.WhackPrefixComputer(m_Server.Name);
-                //    sqlServices = new SQLServices(computerName, instanceName, m_VersionEnum);
-                //    if (sqlServices.GetSQLServices(m_Repository.ConnectionString, m_snapshotId) != 0)
-                //    {
-                //        // Don't abort if GetSQLServices Fails
-                //        strNewMessage = "Failed to load properties for some SQL Services on target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-                //}
-
-                // Load Registry Permissions- does not apply to Azure DB
-                //if (isOk)
-                //{
-                //    if (registryPermissions != null)
-                //    {
-                //        if (registryPermissions.ProcessRegistryPermissions(sqlServices.Services) != 0)
-                //        {
-                //            strNewMessage = "Failed to load registry permissions for target SQL Server";
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //        registryPermissions.WriteRegistryPermissionToRepository(m_Repository.ConnectionString, 0);
-                //    }
-                //}
-
-                // Load File Permissions-not applicable to azure DB
-                //if (isOk)
-                //{
-                //    if (filePermissions == null)
-                //    {
-                //        filePermissions = new FilePermissions(m_snapshotId, m_Server.Name, m_VersionEnum);
-                //    }
-                //    if (filePermissions.LoadFilePermissionsForInstallationDirectory(registryPermissions.InstallPath) != 0)
-                //    {
-                //        strNewMessage = "Failed to load file permissions for target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-
-                //    //for audit folders--they are not applicable to azure DB
-                //    foreach (string auditFolder in m_auditFolders)
-                //    {
-                //        if (filePermissions.LoadFilePermissionsForAuditDirectory(auditFolder) != 0)
-                //        {
-                //            strNewMessage = string.Format("Failed to load file permissions for '{0}' audit folder", auditFolder);
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //    }
-
-                //    if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
-                //    {
-                //        strNewMessage = "Failed to load file permissions for SQL Services on target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-                //}
-
-
 
                 //Done
                 //Get a list of databases, from the target SQL Server.
@@ -2621,47 +2533,7 @@ namespace Idera.SQLsecure.Collector
                     }
                 }
 
-                //sw.Stop();
-                //if (isOk)
-                //{
-                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                //    logX.loggerX.Verbose("TIMING - Time to Get all databases = " + sw.ElapsedMilliseconds.ToString() +
-                //                         " msec");
-                //}
-
-                // Process Database File Permissions-not applicable on azure
-                //if (isOk)
-                //{
-                //    if (filePermissions.GetDatabaseFilePermissions(databases) != 0)
-                //    {
-                //        strNewMessage = "Failed to load some Database File permissions for target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-
-                //    filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
-                //                                                        registryPermissions.NumOSObjectsWrittenToRepository);
-                //}
-                //if (isOk) todo
-                //{
-                //    List<Account> users = new List<Account>();
-                //    List<Account> groups = new List<Account>();
-                //    List<string> wellKnownAccounts = null;
-                //    int numWarn = filePermissions.GetUsersAndGroups(ref users, ref groups);
-                //    numWarn += registryPermissions.GetUsersAndGroups(ref users, ref groups);
-                //    if (loadDomainInformation(m_snapshotId, true, users, groups, out wellKnownAccounts) != 0 || numWarn != 0)
-                //    {
-                //        //don't run this function because next code overwrites some snapshot results
-                //        //UpdateSuspectAccounts(true);
-                //        strNewMessage = "Suspect Windows accounts encountered processing OS objects";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-                //    // Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
-
-                //}
-
+                
                 // Optimize the filters
                 sw.Reset();
                 sw.Start();
