@@ -146,8 +146,16 @@ IF ( ISNULL(@ver, 900) < 3100 )
 											'Are any unapproved databases owned by a system administrator?')
 		end
 
+		select @metricid = 89
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
+		begin
+			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
+							values (@metricid, 'ADB', 'Public Role Has Permissions on User Database Objects', 'Determine whether the public database role has been granted permissions on user database objects', '', 'When enabled, this check will identify a risk if the public database role has been granted permissions on any user objects within a user database. Specify the approved databases.')
 
-
+			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
+							values (0, @metricid, 0, 'ADB', 3, '', '',
+											'Has the public database role been granted permissions on user database objects?')
+		end
 		
 		select @metricid = 92
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
@@ -431,6 +439,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 			76,
 			86,
 			87,
+			89,
 			92,
 			100,
 			101,

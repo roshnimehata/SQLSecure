@@ -438,12 +438,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string ReportRunInstructions_NoParameters = @"Click the ""View Report"" button to generate your report.";
         public const string ReportRunInstructions_LoginType = @"Choose the type of Login.";
         public const string ReportRunInstructions_UserName = @"Type or browse for the User name.";
-        public const string ReportRunInstructions_Server = @"Select a target SQL Server instance.";
+        public const string ReportRunInstructions_Server = @"Select a target instance.";    // SQLsecure 3.1 (Anshul Aggarwal) - SQLSECU-1711 : Report UI Msg Changes.
 
-		// SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
-        public const string ReportRunInstructions_Select_Target_Instance = @"Select a target instance.";
-        
-		public const string ReportRunInstructions_Database = @"Select a Database you would like to analyze.";
+        public const string ReportRunInstructions_Database = @"Select a Database you would like to analyze.";
         public const string ReportRunInstructions_PermissionType = @"Select a permisson type.";
         public const string ReportRunInstructions_StartDate = @"Choose a start date and time for the report. (in UTC)";
         public const string ReportRunInstructions_EndDate = @"Choose an end date and time for the report. (in UTC)";
