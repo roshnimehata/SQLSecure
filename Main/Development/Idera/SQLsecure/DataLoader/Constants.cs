@@ -23,6 +23,12 @@ namespace Idera.SQLsecure.Collector
         internal const string SQLsecureCollectorVersion = "2.0.0.0";
         internal const string SpecialMasterDatabase = "SpecialMasterDB987654321";
 
+        #region default sql users
+        public const string sysUser = "sys";
+        public const string dboUser = "dbo";
+        public const string guestUser = "guest";
+        public const string informationSchemaUser = "INFORMATION_SCHEMA";
+        #endregion
         #region Logging
 
         public enum CollectionStatus
