@@ -123,18 +123,6 @@ IF ( ISNULL(@ver, 900) < 3100 )
 											'Do required administrative accounts exist?')
 		end
 			
-		select @metricid = 86
-		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
-		begin
-						
-			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
-						values (@metricid, 'ADB','Databases Are Trustworthy', 'Determine whether any unapproved databases are trustworthy on Azure SQL Database', '', 'When enabled, this check will identify a risk if any unapproved databases are trustworthy on Azure SQL Database. Specify the approved databases.')
-			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-						values (0, @metricid, 0,  'ADB', 2, '''none''', '',
-										'Is the trustworthy bit on for any unapproved databases?')
-		end
-		
-		
 		select @metricid = 87
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
@@ -150,7 +138,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
-							values (@metricid, 'ADB', 'Public Role Has Permissions on User Database Objects', 'Determine whether the public database role has been granted permissions on user database objects', '', 'When enabled, this check will identify a risk if the public database role has been granted permissions on any user objects within a user database. Specify the approved databases.')
+							values (@metricid, 'ADB', 'Public Role Has Permissions on User Database Objects', 'Determine whether the public database role has been granted permissions on user database objects.', '', 'When enabled, this check will identify a risk if the public database role has been granted permissions on any user objects within a user database. Specify the approved databases.')
 
 			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
 							values (0, @metricid, 0, 'ADB', 3, '', '',
