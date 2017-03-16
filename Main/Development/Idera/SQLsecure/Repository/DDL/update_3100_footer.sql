@@ -295,6 +295,51 @@ IF ( ISNULL(@ver, 900) < 3100 )
 						)
 			end
 
+			select @metricid = 107
+			if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
+			begin
+					insert into dbo.metricextendedinfo
+					(
+						metricid,
+						servertype,
+						metricname,
+						metricdescription,
+						validvalues,
+						valuedescription
+					)
+					values
+						(
+							@metricid, -- metricid - int
+							N'ADB', -- servertype - nvarchar(3)
+							N'Orphaned users', -- metricname - nvarchar(256)
+							N'Determine whether any orphaned users exist in databases.', -- metricdescription - nvarchar(1024)
+							N'MS_DataCollectorInternalUser', -- validvalues - nvarchar(1024)
+							N'When enabled, this check will identify a risk if there any orphaned user exists.'  -- valuedescription - nvarchar(1024)									        
+						)
+					insert into dbo.policymetricextendedinfo
+					(
+						policyid,
+						metricid,
+						assessmentid,
+						servertype,
+						reportkey,
+						reporttext,
+						severity,
+						severityvalues
+					)
+					values
+						(
+							0, -- policyid - int
+							@metricid, -- metricid - int
+							0,  -- assessmentid - int
+							N'ADB', -- servertype - nvarchar(3)
+							N'', -- reportkey - nvarchar(32)
+							N'Is there any orphaned users?', -- reporttext - nvarchar(4000)
+							1, -- severity - int
+							N'MS_DataCollectorInternalUser' -- severityvalues - nvarchar(4000)
+						)
+			end
+
 		
         SELECT @metricid = 113;
        	if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
@@ -418,6 +463,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 			93,
 			102,
 			103,
+			107,
 			113,
 			114
 			)
