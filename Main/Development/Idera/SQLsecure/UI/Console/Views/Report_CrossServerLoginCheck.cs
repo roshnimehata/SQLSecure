@@ -286,7 +286,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             Cursor = Cursors.Default;
         }
 
-        private void _radioButton_SQLLogin_Click(object sender, EventArgs e)
+        private void _radioButton_SQLLogin_CheckedChanged(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -310,7 +310,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             Cursor = Cursors.Default;
         }
 
-        private void _radioButton_WindowsUser_Click(object sender, EventArgs e)
+        private void _radioButton_WindowsUser_CheckedChanged(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -337,7 +337,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         /// <summary>
         /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes user for Azure AD Account.
         /// </summary>
-        private void _radioButton_AzureADUserOrGroup_Click(object sender, EventArgs e)
+        private void _radioButton_AzureADUserOrGroup_CheckedChanged(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
             _button_BrowseUsers.Enabled = !((RadioButton)sender).Checked;
