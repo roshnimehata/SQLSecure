@@ -64,7 +64,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             StringBuilder instructions = new StringBuilder(Utility.Constants.ReportRunInstructions_MultiStep);
             instructions.Append(newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_UseSelection, newline);
-            instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Server_OP_OR_ADB, newline);
+            instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Select_Target_Instance, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Database, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_LoginType, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_UserName, newline);

@@ -441,7 +441,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string ReportRunInstructions_Server = @"Select a target SQL Server instance.";
 
 		// SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
-        public const string ReportRunInstructions_Server_OP_OR_ADB = @"Select a target SQL Server or Azure SQL Database instance.";
+        public const string ReportRunInstructions_Select_Target_Instance = @"Select a target instance.";
         
 		public const string ReportRunInstructions_Database = @"Select a Database you would like to analyze.";
         public const string ReportRunInstructions_PermissionType = @"Select a permisson type.";
@@ -468,7 +468,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public static string ReportSummary_CrossServerLoginCheck = @"Show all SQL Servers and Azure SQL Databases where a selected user has access.";
 
         public const string ReportTitle_Filters = @"Data Collection Filters";
-        public static string ReportSummary_Filters = @"Show the data collection filters for all SQL Server instances.";
+        public static string ReportSummary_Filters = @"Show the data collection filters for all SQL Server and Azure SQL Database instances.";
 
         public const string ReportTitle_ActivityHistory = @"Activity History";
         public static string ReportSummary_ActivityHistory = @"Show all SQLsecure activity history.";
@@ -478,10 +478,12 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         // Entitlement Reports
         public const string ReportTitle_SuspectWindowsAccounts = @"Suspect Windows Accounts";
-        public static string ReportSummary_SuspectWindowsAccounts = @"Show all the unresolved Windows Accounts that have Server Logins.";
+        public static string ReportSummary_SuspectWindowsAccounts = @"Show all the unresolved Windows Accounts that have Server Logins.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_SuspectSqlLogins = @"Suspect SQL Logins";
-        public static string ReportSummary_SuspectSqlLogins = @"Show all SQL server logins that do not have permissions.";
+        public static string ReportSummary_SuspectSqlLogins = @"Show all SQL Server and Azure SQL Database logins that do not have permissions.";
         
         public const string ReportTitle_ServerLoginsAndUserMappings = @"Server Logins and User Mappings";
         public static string ReportSummary_ServerLoginsAndUserMappings = @"Show all Server Logins and associated Database User Mappings for each SQL Server and Azure SQL Database instance being audited.";
@@ -490,47 +492,61 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public static string ReportSummary_UsersPermissions = @"Show permissions for a user across all servers.";
 
         public const string ReportTitle_DatabaseRoles = @"Database Roles";
-        public static string ReportSummary_DatabaseRoles = @"Show all direct members of Database Roles on all SQL Servers and Azure SQL Databases.";
+        public static string ReportSummary_DatabaseRoles = @"Show all direct members of Database Roles on all SQL Server and Azure SQL Database instances.";
 
         public const string ReportTitle_ServerRoles = @"Server Roles";
-        public static string ReportSummary_ServerRoles = @"Show all direct members of Server Roles on all SQL Servers and Azure SQL Database.";
+        public static string ReportSummary_ServerRoles = @"Show all direct members of Server Roles on all SQL Server and Azure SQL Database instances.";
 
         public const string ReportTitle_AllObjectsWithPermissions = @"All User Permissions";
         public static string ReportSummary_AllObjectsWithPermissions = @"Show all objects with permissions in databases for all servers.";
 
         // Vulnerability Reports
         public const string ReportTitle_GuestEnabledDatabases = @"Guest Enabled Databases";
-        public static string ReportSummary_GuestEnabledDatabases = @"Show all databases on a SQL Server instance where the Guest user has access.";
+        public static string ReportSummary_GuestEnabledDatabases = @"Show all databases on a SQL Server instance where the Guest user has access.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_MixedModeAuthentication = @"Mixed Mode Authentication";
-        public static string ReportSummary_MixedModeAuthentication = @"Show all SQL Server instances where Windows Authentication is not the only login method.";
+        public static string ReportSummary_MixedModeAuthentication = @"Show all SQL Server instances where Windows Authentication is not the only login method.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_SystemAdministratorVulnerability = @"System Administrator Vulnerability";
-        public static string ReportSummary_SystemAdministratorVulnerability = @"Show all SQL Server instances that include Built-in Administrators as members of the sysadmin role.";
+        public static string ReportSummary_SystemAdministratorVulnerability = @"Show all SQL Server instances that include Built-in Administrators as members of the sysadmin role.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_VulnerableFixedRoles = @"Vulnerable Fixed Roles";
-        public static string ReportSummary_VulnerableFixedRoles = @"Show all SQL Server instances that contain fixed roles assigned to public or guest.";
+        public static string ReportSummary_VulnerableFixedRoles = @"Show all SQL Server and Azure SQL Database instances that contain fixed roles assigned to public or guest.";
 
         public const string ReportTitle_ServersWithDangerousGroups = @"Dangerous Windows Groups";
-        public static string ReportSummary_ServersWithDangerousGroups = @"Show all SQL Server instances that grant access to any OS controlled Windows Group.";
+        public static string ReportSummary_ServersWithDangerousGroups = @"Show all SQL Server instances that grant access to any OS controlled Windows Group.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_DatabaseChaining = @"Database Chaining Enabled";
-        public static string ReportSummary_DatabaseChaining = @"Show all SQL Server instances that have cross-database ownership chaining enabled.";
+        public static string ReportSummary_DatabaseChaining = @"Show all SQL Server instances that have cross-database ownership chaining enabled.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_CMDShellVulnerability = @"CMD Shell Vulnerability";
         public static string ReportSummary_CMDShellVulnerability = @"Show all SQL Server instances that have xp_cmdshell extended stored procedures available.";
 
         public const string ReportTitle_MailVulnerability = @"Mail Vulnerability";
-        public static string ReportSummary_MailVulnerability = @"Show all SQL Server instances with SQL Mail stored procedures.";
+        public static string ReportSummary_MailVulnerability = @"Show all SQL Server instances with SQL Mail stored procedures.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_LoginVulnerability = @"Login Vulnerability";
-        public static string ReportSummary_LoginVulnerability = @"Show all SQL Server instance whose SQL logins have weak passwords.";
+        public static string ReportSummary_LoginVulnerability = @"Show all SQL Server and Azure SQL Database instances whose SQL logins have weak passwords.";
 
         public const string ReportTitle_RiskAssessment = @"Risk Assessment";
         public static string ReportSummary_RiskAssessment = @"Show all policy and risk assessment results.";
 
         public const string ReportTitle_OSVulnerability = @"OS Vulnerability via XSPs";
-        public static string ReportSummary_OSVulnerability = @"Show all extended stored procedures that grant non-Administrator users permission to access operating system functions.";
+        public static string ReportSummary_OSVulnerability = @"Show all extended stored procedures that grant non-Administrator users permission to access operating system functions.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         // Comparison Reports
         public const string ReportTitle_CompareAssessments = @"Assessment Comparison";
