@@ -302,7 +302,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         protected System.Windows.Forms.Label _label_Description;
         protected System.Windows.Forms.Label _label_ReportTitle;
         private System.Windows.Forms.Panel _panel_preRun;
-        private System.Windows.Forms.Label _label_GettingStartedTitle;
+        protected System.Windows.Forms.Label _label_GettingStartedTitle;
         private System.Windows.Forms.Label _label_DescriptionTitle;
         protected System.Windows.Forms.Label _label_Instructions;
         private System.Windows.Forms.Panel _panel_buttonHolder;
