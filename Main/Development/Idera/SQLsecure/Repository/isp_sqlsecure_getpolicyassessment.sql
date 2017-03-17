@@ -2318,6 +2318,69 @@ AS -- <Idera SQLsecure version and copyright>
                                                 ELSE
                                                 IF (@metricid = 30)
                                                 BEGIN
+													IF (@serverType = @azuresqldatabaseservertype)
+													BEGIN
+														
+														declare replicationcursor cursor static for
+														select databasename
+														from sqldatabase
+														where snapshotid = @snapshotid and georeplication=1
+                                                               
+                                                        
+                                                        OPEN replicationcursor;
+											
+                                                        SELECT
+                                                                @intval2 = 0;
+                                                        FETCH NEXT FROM
+                                                        replicationcursor INTO @strval;
+                                                        WHILE @@fetch_status = 0
+                                                        BEGIN
+                                                                IF (@intval2 = 1
+                                                                        OR LEN(@metricval)
+                                                                        + LEN(@strval) > 1010
+                                                                        )
+                                                                BEGIN
+                                                                        IF @intval2 = 0
+                                                                                SELECT
+                                                                                        @metricval = @metricval
+                                                                                        + N', more...',
+                                                                                        @intval2 = 1;
+                                                                END;
+                                                                ELSE
+                                                                        SELECT
+                                                                                @metricval = @metricval
+                                                                                + CASE
+                                                                                        WHEN LEN(@metricval) > 0 THEN N', '
+                                                                                        ELSE N''
+                                                                                END + N''''
+                                                                                + @strval
+                                                                                + N'''';
+
+                                                                
+
+                                                                FETCH NEXT FROM
+                                                                replicationcursor INTO @strval;
+                                                        END;
+
+                                                        IF (LEN(@metricval) = 0)
+                                                                SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'None found.';
+                                                        ELSE
+                                                                SELECT
+                                                                        @sevcode = @severity,
+                                                                        @metricval = N'Databases with geo-replication enabled: '
+                                                                        + @metricval;
+
+                                                        SELECT
+                                                                @metricthreshold = N'Server is vulnerable if geo-replication is enabled on any of the database. '
+                                                                + @severityvalues;
+
+                                                        CLOSE replicationcursor;
+                                                        DEALLOCATE replicationcursor;
+													END
+													ELSE
+													BEGIN
                                                         SELECT
                                                                 @strval = @replication,
                                                                 @severityvalues = N'N';
@@ -2332,6 +2395,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 @metricval = dbo.getyesnotext(@strval);
                                                         SELECT
                                                                 @metricthreshold = N'Server is vulnerable if replication is enabled.';
+													END
                                                 END;
                                                 -- Unexpected Registry Key Owners
                                                 ELSE
