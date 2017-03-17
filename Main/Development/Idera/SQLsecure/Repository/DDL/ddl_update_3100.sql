@@ -221,3 +221,14 @@ WHERE  id = OBJECT_ID(N'[dbo].[policymetricextendedinfo]')
 /* END SQL Secure 3.1 (Anshul Aggarwal) Support different metric settings based on type of server */ 
 
 GO
+/*START Barkha khatri (SQlSecure 3.1)georeplication risk assessment */
+IF OBJECT_ID('sqldatabase', 'U') IS NOT NULL 
+BEGIN
+IF COL_LENGTH('sqldatabase','georeplication') IS NULL
+ BEGIN
+	ALTER TABLE sqldatabase
+	ADD georeplication bit 
+ END
+END
+Go
+/*END Barkha khatri (SQlSecure 3.1)georeplication risk assessment */

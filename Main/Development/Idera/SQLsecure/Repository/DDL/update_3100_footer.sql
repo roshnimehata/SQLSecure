@@ -65,6 +65,18 @@ IF ( ISNULL(@ver, 900) < 3100 )
 											'Are any user stored procedures not encrypted?')	
 		end
 		
+		select @metricid = 30
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
+		begin
+
+			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
+							values (@metricid, 'ADB', 'Replication Enabled', 'Determine whether replication is enabled on Azure SQL Databases', '', 'When enabled, this check will identify a risk if replication is enabled on Azure SQL Databases.')
+
+			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
+							values (0, @metricid, 0, 'ADB', 1, '', '',
+											'Is replication enabled on Azure SQL Databases?')	
+		end
+		
 		select @metricid = 54
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin			
@@ -420,6 +432,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 			2,
 			15,
 			22,
+			30,
 			54,
 			55,
 			56,
