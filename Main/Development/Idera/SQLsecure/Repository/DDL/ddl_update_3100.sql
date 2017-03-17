@@ -116,7 +116,7 @@ END
 
 GO
 
-
+-- SQLsecure 3.1 (Anshul Aggarwal) - New table for risk assessment ADB: Server and DB Level Firewall Rules.
 IF NOT EXISTS ( SELECT TOP 1 *
 FROM   dbo.sysobjects
 WHERE  id = OBJECT_ID(N'[dbo].[azuresqldbfirewallrules]')
@@ -220,35 +220,4 @@ WHERE  id = OBJECT_ID(N'[dbo].[policymetricextendedinfo]')
 	end
 /* END SQL Secure 3.1 (Anshul Aggarwal) Support different metric settings based on type of server */ 
 
-/* START SQL Secure 3.1 (Biresh Kumar Mishra) Add azuresqldbsqllogin table to save SQL_Login tables. Used in metricid 107 - Orphaned user  */
-IF NOT EXISTS ( SELECT TOP 1 *
-FROM   dbo.sysobjects
-WHERE  id = OBJECT_ID(N'[dbo].[azuresqldbsqllogin]')
-    AND xtype = N'U' ) 
-	begin
-			CREATE TABLE [dbo].[azuresqldbsqllogin](
-						[snapshotid] [int] NOT NULL,
-						[name] [nvarchar](128) NOT NULL,
-						[principalid] [int] NOT NULL,
-						[sid] [varbinary](85) NOT NULL,
-						[type] [nchar](1) NOT NULL,
-						[isdisabled] [bit] NOT NULL,						
-			CONSTRAINT [PK_azuresqldbsqllogin] PRIMARY KEY CLUSTERED 
-			(
-				[snapshotid] ASC,
-				[principalid] ASC,
-				[sid] ASC,
-				[name] ASC
-			)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-			) ON [PRIMARY]
-
-	ALTER TABLE [dbo].[azuresqldbsqllogin]  WITH NOCHECK ADD  CONSTRAINT [FK_azuresqldbsqllogin_serversnapshot] FOREIGN KEY([snapshotid])
-	REFERENCES [dbo].[serversnapshot] ([snapshotid]) ON DELETE CASCADE;
-
-	ALTER TABLE [dbo].[azuresqldbsqllogin] CHECK CONSTRAINT [FK_azuresqldbsqllogin_serversnapshot]
-
-	
-
-	end
-	/* END SQL Secure 3.1 (Biresh Kumar Mishra) Add azuresqldbsqllogin table to save SQL_Login tables. Used in metricid 107 - Orphaned user  */
 GO

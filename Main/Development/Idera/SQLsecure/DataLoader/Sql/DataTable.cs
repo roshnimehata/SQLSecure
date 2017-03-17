@@ -89,45 +89,6 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string RepositoryTable = "SQLsecure.dbo.serverprincipal";
     }
 
-    internal static class AzureSqlDBSqloginDataTable
-    {
-        public static DataTable Create()
-        {
-            DataTable dataTable = null;
-            using (DataColumn
-                    colSnapshotId = new DataColumn(ParamSnapshotid, typeof(SqlInt32)),
-                    colName = new DataColumn(ParamName, typeof(SqlString)),
-                    colPrincipalId = new DataColumn(ParamPrincipalid, typeof(SqlInt32)),
-                    colSid = new DataColumn(ParamSid, typeof(SqlBinary)),
-                    colType = new DataColumn(ParamType, typeof(SqlString)),
-                    colIsDisabled = new DataColumn(ParamIsDisabled, typeof(SqlBoolean)))
-            {
-                // Create the data table object & define its columns.
-                // NOTE : THE ORDER OF THE COLUMNS MUST MATCH WHAT IS IN THE REPOSITORY
-                dataTable = new DataTable("azuresqldbsqllogin");
-                dataTable.Columns.AddRange(new DataColumn[] {
-                                                                colSnapshotId,
-                                                                colName,
-                                                                colPrincipalId,
-                                                                colSid,                                                                
-                                                                colType,
-                                                                colIsDisabled
-                                                            });
-            }
-
-            return dataTable;
-        }
-
-        internal const string ParamSnapshotid = "snapshotid";
-        internal const string ParamPrincipalid = "principalid";
-        internal const string ParamSid = "sid";
-        internal const string ParamName = "name";
-        internal const string ParamType = "type";
-        internal const string ParamIsDisabled = "isdisabled";
-        
-        internal const string RepositoryTable = "SQLsecure.dbo.azuresqldbsqllogin";
-    }
-
     internal static class ServerRoleMemberDataTable
     {
         public static DataTable Create()

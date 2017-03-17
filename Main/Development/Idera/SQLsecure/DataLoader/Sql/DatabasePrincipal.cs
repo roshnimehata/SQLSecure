@@ -158,9 +158,6 @@ namespace Idera.SQLsecure.Collector.Sql
                           + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers "
                           + @"WHERE isaliased = 1";
                 }
-
-
-                //SQLsecure 3.1 (Tushar)--Query for Azure DB.
                 else
                 {
                     query = @"SELECT
@@ -208,6 +205,7 @@ namespace Idera.SQLsecure.Collector.Sql
             }
             else
             {
+				//SQLsecure 3.1 (Tushar)--Query for Azure DB.
                 query = @"SELECT
                             dp.name, 
                             uid = dp.principal_id, 
@@ -218,15 +216,13 @@ namespace Idera.SQLsecure.Collector.Sql
                             hasaccess = CASE WHEN su.hasdbaccess = 1 THEN 'Y' ELSE 'N' END,
                             owner = dp.owning_principal_id, 
                             defaultschemaname = dp.default_schema_name, 
-                            isContainedUser = cast(( case authentication_type
+                            isContainedUser = cast((case authentication_type
                                when 2 then 1
-                               when 3 then  isnull((select top 1 0 from " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals cdp
-							    where cdp.principal_id=dp.principal_id 
-								and    type in ( 'U', 'S', 'G' )    
-								), 1)
-								else 0
-                             end ) as bit), " +
-                             " authenticationtype = authentication_type_desc "
+                               when 4 then IIF(type = 'E' or type = 'X',"
+                            + ((database.Name == Constants.MASTER_DB_NAME) ? 0 : 1) 
+							+ @", 0) else 0
+                               end) as bit),
+                              authenticationtype = authentication_type_desc "
                             + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.database_principals AS dp JOIN "
                                   + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.sysusers AS su ON (dp.principal_id = su.uid) "
                             + @"UNION ALL SELECT
@@ -528,7 +524,11 @@ namespace Idera.SQLsecure.Collector.Sql
                                     SqlString hasaccess = rdr.GetSqlString(FieldPrincipalHasaccess);
                                     SqlInt32 owner = rdr.GetSqlInt32(FieldPrincipalOwner);
                                     SqlString defaultSchemaName = rdr.GetSqlString(FieldPrincipalDefaultschemaname);
-                                    SqlBoolean isContained = database.IsContained && rdr.GetBoolean(FieldIsContainedUser);
+
+                                    // Azure SQL DB does not support contained databases.
+                                    SqlBoolean isContained = (serverType == ServerType.AzureSQLDatabase ? true : database.IsContained)
+                                        && rdr.GetBoolean(FieldIsContainedUser);
+                                    
                                     SqlString authenticationType = rdr.GetString(FieldAuthenticationType);
 
                                     // Add to uid collection for later permission processing.
