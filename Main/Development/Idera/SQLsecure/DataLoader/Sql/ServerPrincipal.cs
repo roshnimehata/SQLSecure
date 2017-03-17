@@ -276,29 +276,6 @@ namespace Idera.SQLsecure.Collector.Sql
             return query;
         }
 
-
-        // SQLsecure 3.1 (Biresh Kumar Mishra) Add SQL_Login from Azure SQL DB to repository
-        private static string createSqlLoginQuery(
-                ServerType serverType
-            )
-        {
-            string query = null;
-
-            // Create query based on the SQL Server version.
-            if (serverType == ServerType.AzureSQLDatabase)
-            {
-                // SQLsecure 3.1 (Biresh Kumar Mishra) 
-                query = @" SELECT [name]
-                        ,[principal_id]
-                        ,[sid]
-                        ,[type]
-                        ,[is_disabled]
-                        FROM [sys].[sql_logins]
-                        WHERE type = 'S'; ";
-            }
-            return query;
-        }
-
         private static string createRoleMemberQuery(
                 ServerVersion version,ServerType serverType
             )
@@ -676,72 +653,6 @@ namespace Idera.SQLsecure.Collector.Sql
                             }
                         }
                     }
-
-					// SQLSecure 3.1 (Biresh Kumar Mishra) - Add SQL Logins for Azure SQL DB
-                    ////azure sql db sql login starts
-                    if (serverType == ServerType.AzureSQLDatabase)
-                    {
-                        // Use bulk copy object to write to repository.
-                        using (SqlBulkCopy bcp = new SqlBulkCopy(repository))
-                        {
-                            // Set the destination table.
-                            bcp.DestinationTableName = AzureSqlDBSqloginDataTable.RepositoryTable;
-                            bcp.BulkCopyTimeout = 0;//SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry();
-                                                    // Create the datatable to write to the repository.
-                            using (DataTable dataTable = AzureSqlDBSqloginDataTable.Create())
-                            {
-                                // Create the query.
-                                string query = createSqlLoginQuery(serverType);
-                                Debug.Assert(!string.IsNullOrEmpty(query));
-
-                                // Query to get the table objects.
-                                using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null,
-                                                    CommandType.Text, query, null))
-                                {
-                                    while (rdr.Read())
-                                    {
-                                        // Retrieve information.
-                                        SqlString name = rdr.GetSqlString(0);
-                                        SqlInt32 principalid = rdr.GetSqlInt32(1);
-                                        SqlBinary sid = rdr.GetSqlBinary(2);
-                                        SqlString type = rdr.GetSqlString(3);
-                                        SqlBoolean isdisabled = rdr.GetSqlBoolean(4);
-                                       
-
-                                        // Update the datatable.
-                                        DataRow dr = dataTable.NewRow();
-                                        dr[ServerPrincipalDataTable.ParamSnapshotid] = snapshotid;
-                                        dr[ServerPrincipalDataTable.ParamPrincipalid] = principalid;
-                                        dr[ServerPrincipalDataTable.ParamSid] = sid;
-                                        dr[ServerPrincipalDataTable.ParamName] = name;
-                                        dr[ServerPrincipalDataTable.ParamType] = type;
-                                        dr[ServerPrincipalDataTable.ParamAzureSqlLoginIsDisabled] = isdisabled;
-                                        
-                                        dataTable.Rows.Add(dr);
-
-                                        // Update count of logins collected
-                                        // --------------------------------
-                                        // Target.numLoginsCollected++;
-
-                                        // Write to repository if exceeds threshold.
-                                        if (dataTable.Rows.Count > Constants.RowBatchSize)
-                                        {
-                                            bcp.WriteToServer(dataTable);
-                                            dataTable.Clear();
-                                        }
-                                    }
-
-                                    // Write any items still in the data table.
-                                    if (dataTable.Rows.Count > 0)
-                                    {
-                                        bcp.WriteToServer(dataTable);
-                                        dataTable.Clear();
-                                    }
-                                }                                
-                            }
-                        }
-                    }
-                    ////azure sql db sql login ends
                 }
                 catch (Exception ex)
                 {
