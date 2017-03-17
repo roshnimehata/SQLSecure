@@ -8624,43 +8624,45 @@ AS -- <Idera SQLsecure version and copyright>
 														
 														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
 														BEGIN
-                                                        WITH OrphanedUsers (dbid, name, uid, type)
-                                                        AS (SELECT
-                                                                dbid,
-                                                                name,
-                                                                uid,
-                                                                type
-                                                        FROM dbo.databaseprincipal
-                                                        WHERE usersid NOT IN (SELECT
-                                                                sid
-                                                        FROM dbo.serverprincipal
-                                                        WHERE sid IS NOT NULL
-                                                        AND snapshotid = @snapshotid)
-                                                        AND type = N'S'
-                                                        AND usersid <> 0x00
-                                                        AND usersid IS NOT NULL
-                                                        AND IsContainedUser = 0
-                                                        AND snapshotid = @snapshotid
-                                                        AND NOT EXISTS (SELECT
-                                                                *
-                                                        FROM #sevrVal
-                                                        WHERE Value = name))
-                                                        INSERT INTO #tempdetails
-                                                                SELECT
-                                                                        @policyid,
-                                                                        @assessmentid,
-                                                                        @metricid,
-                                                                        @snapshotid,
-                                                                        N'Orphaned user found - '
-                                                                        + name,
-                                                                        dbid,
-                                                                        type,
-                                                                        uid,
-                                                                        name
-                                                                FROM OrphanedUsers;
+
+															WITH OrphanedUsers (dbid, name, uid, type)
+															AS (SELECT
+																	dbid,
+																	name,
+																	uid,
+																	type
+															FROM dbo.databaseprincipal
+															WHERE usersid NOT IN (SELECT
+																	sid
+															FROM dbo.serverprincipal
+															WHERE sid IS NOT NULL
+															AND snapshotid = @snapshotid)
+															AND type = N'S'
+															AND usersid <> 0x00
+															AND usersid IS NOT NULL
+															AND IsContainedUser = 0
+															AND snapshotid = @snapshotid
+															AND NOT EXISTS (SELECT
+																	*
+															FROM #sevrVal
+															WHERE Value = name))
+															INSERT INTO #tempdetails
+																	SELECT
+																			@policyid,
+																			@assessmentid,
+																			@metricid,
+																			@snapshotid,
+																			N'Orphaned user found - '
+																			+ name,
+																			dbid,
+																			type,
+																			uid,
+																			name
+																	FROM OrphanedUsers;
 														END
 														ELSE IF (@serverType = @azuresqldatabaseservertype)
 														BEGIN
+
 															WITH OrphanedUsers (dbid, name, uid, type)
                                                         AS (SELECT
                                                                 dbid,
@@ -8669,9 +8671,10 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 type
                                                         FROM dbo.databaseprincipal
                                                         WHERE usersid NOT IN (SELECT
-                                                                sid
-                                                        FROM dbo.azuresqldbsqllogin
-                                                        WHERE snapshotid = @snapshotid)
+																	sid
+															FROM dbo.serverprincipal
+															WHERE sid IS NOT NULL
+															AND snapshotid = @snapshotid)
                                                         AND type = N'S'
 														AND name NOT IN ('guest', 'INFORMATION_SCHEMA', 'sys')
 														AND AuthenticationType = 'INSTANCE'

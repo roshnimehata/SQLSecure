@@ -306,7 +306,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 							N'', -- reportkey - nvarchar(32)
 							N'Is there any orphaned users?', -- reporttext - nvarchar(4000)
 							1, -- severity - int
-							N'MS_DataCollectorInternalUser' -- severityvalues - nvarchar(4000)
+							N'' -- severityvalues - nvarchar(4000)
 						)
 			end
 
