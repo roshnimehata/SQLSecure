@@ -56,6 +56,10 @@ namespace Idera.SQLsecure.Collector
         private ServerType serverType = ServerType.OnPremise;
         private AuthType authType = AuthType.Null;
 
+		// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+        private string m_SQLServerOnAzureVM_FullName;
+        private string m_SQLServerOnAzureVM_DomainName;
+
         #endregion
 
         Server.WriteActivityToRepositoryDelegate WriteAppActivityToRepository;
@@ -411,6 +415,20 @@ namespace Idera.SQLsecure.Collector
                     //serverType = (ServerType)Enum.Parse(typeof(ServerType), serverTypeString);
                     serverType = Helper.ConvertSQLTypeStringToEnum(serverTypeString);
                     authType = (AuthType)Enum.Parse(typeof(AuthType), sqlAuthTypeString);
+
+					// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+
+                    if (serverType == ServerType.SQLServerOnAzureVM)
+                    {
+                        m_SQLServerOnAzureVM_FullName = server;
+
+                        if (server.IndexOf(".") != -1)
+                        {
+                            m_SQLServerOnAzureVM_DomainName = server.Substring(server.IndexOf(".") + 1);
+                            server = server.Substring(0, server.IndexOf("."));
+                        }
+                    }
+
                     string login = string.Empty;
                     string password = string.Empty;
                     if (authType == AuthType.S || serverType==ServerType.AzureSQLDatabase)
@@ -538,6 +556,20 @@ namespace Idera.SQLsecure.Collector
                     //serverType = (ServerType)Enum.Parse(typeof(ServerType), serverTypeString);
                     serverType = Helper.ConvertSQLTypeStringToEnum(serverTypeString);
                     authType = (AuthType)Enum.Parse(typeof(AuthType), sqlAuthTypeString);
+
+					// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+
+                    if (serverType == ServerType.SQLServerOnAzureVM)
+                    {
+                        m_SQLServerOnAzureVM_FullName = server;
+
+                        if (server.IndexOf(".") != -1)
+                        {
+                            m_SQLServerOnAzureVM_DomainName = server.Substring(server.IndexOf(".") + 1);
+                            server = server.Substring(0, server.IndexOf("."));
+                        }
+                    }
+
                     string login = string.Empty;
                     string password = string.Empty;
                     if (authType == AuthType.S)
