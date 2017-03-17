@@ -183,7 +183,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                 SqlString ownername = rdr.GetSqlString(FieldOwnername);
                                 SqlBoolean trustworthy = rdr.GetBoolean(FieldTrustworthy);
                                 SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);
-
+                                //SQLSecure 3.1 (Barkha Khatri) getting georeplication for Azure DB ,null for other server types
+                                SqlBoolean geoReplication = rdr.IsDBNull(FieldGeoReplication)?SqlBoolean.Null: rdr.GetSqlBoolean(FieldGeoReplication);
                                 // SQLSecure 3.1 (Anshul Aggarwal) - New column for TDE risk assessments.
                                 SqlBoolean isTDEEncrypted = SqlBoolean.Null;    
                                 if (!rdr.IsDBNull(FieldIsTDEEncrypted))
@@ -224,7 +225,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     //SQLsecure 3.1 (Anshul Aggarwal) - Backup encryption not supported for ADB or AVM.
                                     db = new Database(name.Value, dbid.Value, osid, owner, targetServerName, trustworthy.Value, isContained.Value,
                                        isTDEEncrypted.IsNull ? (bool?)null : isTDEEncrypted.Value,
-                                       FQN.IsNull ? null : FQN.Value);
+                                       FQN.IsNull ? null : FQN.Value,geoReplication.Value);
                                     targerConnectionBuilder.InitialCatalog = db.Name;
                                 }
                                 else
@@ -232,7 +233,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     db = new Database(name.Value, dbid.Value, osid, owner, server.Name, trustworthy.Value, 
                                         isContained.Value, 
                                          isTDEEncrypted.IsNull ? (bool?)null : isTDEEncrypted.Value,
-                                         FQN.IsNull ? null : FQN.Value);
+                                         FQN.IsNull ? null : FQN.Value,null);
                                 }
 
                                 db.GetDatabaseFiles(targerConnectionBuilder.ConnectionString);
@@ -545,33 +546,35 @@ namespace Idera.SQLsecure.Collector.Sql
         
         private const string QueryDb2K =
                             @"SELECT name = db.name, dbid = CAST(db.dbid AS int), ownersid = db.sid, ownername = l.loginname, trustworthy = cast(0 as bit), isContained=cast( 0 as bit)
-                             , istdeencrypted= NULL, FQN = NULL  
+                             , istdeencrypted= NULL, FQN = NULL,NULL  
                                 FROM master.dbo.sysdatabases AS db LEFT OUTER JOIN master.dbo.syslogins AS l 
 	                                    ON (db.sid = l.sid)";
         private const string QueryDb2K5 =
                             @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( 0 as bit)
-                              , istdeencrypted= NULL, FQN = NULL
+                              , istdeencrypted= NULL, FQN = NULL,NULL
                             FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
 
         // SQLsecure 3.1 (Anshul Aggarwal) - New query as 2k8 onwards supports TDE encryption but 2k5 does not.
         private const string QueryDb2K8 =
                                    @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( 0 as bit)
-                              ,istdeencrypted = cast(db.is_encrypted as bit), FQN = QUOTENAME('{0}') + '.' + QUOTENAME(db.name)  
+                              ,istdeencrypted = cast(db.is_encrypted as bit), FQN = QUOTENAME('{0}') + '.' + QUOTENAME(db.name) ,NULL 
                                FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
         
         private const string QueryDb2K12 =
                             @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( db.containment as bit)
-                              ,istdeencrypted = cast(db.is_encrypted as bit), FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name))
+                              ,istdeencrypted = cast(db.is_encrypted as bit), FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name)),NULL
                                 FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
         
         //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
         private const string QueryDbAzureDatabase = @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = ISNULL(ISNULL(s.name, l.name), 'dbo'), trustworthy = db.is_trustworthy_on, 
-                    isContained=cast(db.containment as bit),istdeencrypted = db.is_encrypted, FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name))   
+                    isContained=cast(db.containment as bit),istdeencrypted = db.is_encrypted, FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name)),
+                    georeplication=CASE WHEN (R.database_id IS NULL) THEN cast(0 as bit) ELSE cast(1 as bit) END   
                               FROM sys.databases AS db LEFT OUTER JOIN sys.sql_logins AS s ON (db.owner_sid = s.sid)
-							  LEFT OUTER JOIN sys.database_principals AS l ON (db.owner_sid = l.sid) and l.type = 'E'";
+							  LEFT OUTER JOIN sys.database_principals AS l ON (db.owner_sid = l.sid) and l.type = 'E'
+                              LEFT OUTER JOIN [sys].geo_replication_links AS R ON(db.database_id=R.database_id)";
         
         private const string QueryDb2k14_Backup = @"SELECT a.database_name, 
                                             CASE WHEN (a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server') THEN cast(1 as bit) ELSE cast(0 as bit) END,
@@ -616,6 +619,7 @@ namespace Idera.SQLsecure.Collector.Sql
         private const int FieldIscontained = 5;
         private const int FieldIsTDEEncrypted = 6;   // SQLsecure 3.1 (Anshul Aggarwal) - New fields for TDE risk assessments.
         private const int FieldFQN = 7;
+        private const int FieldGeoReplication = 8;
 
         private const int FieldDbName = 0;
         private const int FieldLastBackupType = 1;
@@ -870,13 +874,14 @@ namespace Idera.SQLsecure.Collector.Sql
                         SqlParameter paramIntermediateBackupEncrypted = new SqlParameter(ParamIntermediateBackupEnrypted, database.IntermediateBackupEncrypted);
                         SqlParameter paramNonNativeBackupAvailable = new SqlParameter(ParamNonNativeBackupAvailable, database.NonNativeBackupAvailable);
                         SqlParameter paramFQN = new SqlParameter(ParamFQN, database.FQN);
-                        
+                        SqlParameter paramGeoReplication = new SqlParameter(ParamGeoReplication, database.GeoReplication);
+
                         Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.Text, NonQueryDatabaseInsert, 
                                             new SqlParameter[] {  paramDbid, paramSnapshotid, paramDatabasename, paramOwner, 
                                                                     paramGuestenabled, paramAvailable, paramStatus, paramHashkey, 
                                                                     paramIsAudited, paramIsTrustworthy,paramIsContained, paramFQN,
                                                 paramIsTDEEncrypted, paramIsLastBackupNative, paramLastBackupEncrypted,
-                                            paramIntermediateBackupEncrypted, paramNonNativeBackupAvailable});
+                                            paramIntermediateBackupEncrypted, paramNonNativeBackupAvailable,paramGeoReplication});
                     }
                     catch (SqlException ex)
                     {
@@ -1470,9 +1475,9 @@ namespace Idera.SQLsecure.Collector.Sql
         #region SQL Queries
         private const string NonQueryDatabaseInsert =
                     @"INSERT INTO SQLsecure.dbo.sqldatabase (dbid, snapshotid, databasename, owner, guestenabled, trustworthy, available, status, hashkey, isaudited,IsContained,
-                    FQN, istdeencrypted, islastbackupnative, lastbackupencrypted, intermediatebackupencrypted, intermediatebackupnonnative)
+                    FQN, istdeencrypted, islastbackupnative, lastbackupencrypted, intermediatebackupencrypted, intermediatebackupnonnative,georeplication)
                       VALUES (@dbid, @snapshotid, @databasename, @owner, @guestenabled, @trustworthy, @available, @status, @hashkey, @isaudited, @iscontained, @FQN, @istdeencrypted,
-                        @islastbackupnative, @lastbackupencrypted, @intermediatebackupencrypted, @intermediatebackupnonnative)";
+                        @islastbackupnative, @lastbackupencrypted, @intermediatebackupencrypted, @intermediatebackupnonnative,@georeplication)";
         private const string NonQueryObjectInsert =
                     @"INSERT INTO SQLsecure.dbo.databaseobject (snapshotid, dbid, classid, parentobjectid, objectid, schemaid, type, owner, name, hashkey, FQN)
                       VALUES (@snapshotid, @dbid, @classid, @parentobjectid, @objectid, @schemaid, @type, @ownerid, @name, @hashkey, @FQN)"; 
@@ -1488,6 +1493,7 @@ namespace Idera.SQLsecure.Collector.Sql
         private const string ParamHashkey = "hashkey";
         private const string ParamIsAudited = "isaudited";
         private const string ParamFQN = "FQN";
+        private const string ParamGeoReplication = "georeplication";
         private const string ParamIsTDEEnrypted = "istdeencrypted";  // SQLsecure 3.1 (Anshul Aggarwal) - New fields for new risk assessments.
         private const string ParamLastBackupType = "islastbackupnative";
         private const string ParamLastBackupEnrypted = "lastbackupencrypted";
@@ -1525,6 +1531,7 @@ namespace Idera.SQLsecure.Collector.Sql
         private bool? m_intermediateBackupEncrypted;
         private bool? m_nonNativeBackupAvailable;
         private string m_FQN;
+        private bool? m_geoReplication;
 
         #endregion
 
@@ -1533,7 +1540,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
         #region Ctors
         public Database(string name, int dbId, Sid ownerSid, string ownerName, string serverName, bool trustworthy, bool isContained, bool? isTDEEncrypted,
-            string FQN)
+            string FQN,bool? geoReplication)
         {
             Debug.Assert(!string.IsNullOrEmpty(name));
             Debug.Assert(ownerSid != null);
@@ -1550,6 +1557,7 @@ namespace Idera.SQLsecure.Collector.Sql
             m_isContained = isContained;
             m_isTDEEncrypted = isTDEEncrypted;
             m_FQN = FQN;
+            m_geoReplication = geoReplication;
         }
         #endregion
         
@@ -1650,6 +1658,11 @@ namespace Idera.SQLsecure.Collector.Sql
         public string FQN
         {
             get { return m_FQN; }
+        }
+
+        public bool? GeoReplication
+        {
+            get { return m_geoReplication; }
         }
 
         public bool? NonNativeBackupAvailable
