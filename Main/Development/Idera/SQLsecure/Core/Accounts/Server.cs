@@ -56,6 +56,8 @@ namespace Idera.SQLsecure.Core.Accounts
 
         // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
         private string m_AccountName;
+        private string m_SQLServerOnAzureVM_FullName = string.Empty;
+        private string m_SQLServerOnAzureVM_DomainName = string.Empty;
         private ServerType m_serverType;
 
         private string m_BindUser;
@@ -1189,6 +1191,17 @@ namespace Idera.SQLsecure.Core.Accounts
             {
                 if (m_serverType == ServerType.SQLServerOnAzureVM)
                 {
+					// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                    m_SQLServerOnAzureVM_FullName = name;
+                    
+                    if (name.IndexOf(Constants.Dot) != -1)
+                    {
+                        m_SQLServerOnAzureVM_DomainName = name.Substring(name.IndexOf(Constants.Dot) + 1);
+                        name = name.Substring(0, name.IndexOf(Constants.Dot));                        
+                    }
+
+                    m_Name = name;
+
                     m_AccountName = GetActiveComputerName(name);
                     logX.loggerX.Info(string.Format(@"Active Computer Name: {0}", m_Name));
                 }

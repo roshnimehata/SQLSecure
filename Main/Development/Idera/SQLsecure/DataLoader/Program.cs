@@ -43,6 +43,10 @@ namespace Idera.SQLsecure.Collector
         private static string m_targetUserPassword;
         private static bool m_UserSQLAuthentication = false;
 
+		// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+        private static string m_SQLServerOnAzureVM_FullName = string.Empty;
+        private static string m_SQLServerOnAzureVM_DomainName = string.Empty;
+
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Program");
         #endregion
 
@@ -419,6 +423,20 @@ namespace Idera.SQLsecure.Collector
                                             authType = (AuthType)Enum.Parse(typeof(AuthType),sqlAuthTypeString);
                                             m_targetUserName = serverLogin;
                                             m_targetUserPassword = serverPassword;
+
+											// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+
+                                            if (serverType == ServerType.SQLServerOnAzureVM)
+                                            {
+                                                m_SQLServerOnAzureVM_FullName = server;
+
+                                                if (server.IndexOf(".") != -1)
+                                                {
+                                                    m_SQLServerOnAzureVM_DomainName = server.Substring(server.IndexOf(".") + 1);
+                                                    server = server.Substring(0, server.IndexOf("."));
+                                                }
+                                            }
+
                                             if (string.IsNullOrEmpty(serverLogin))
                                             {
                                                 // Only issue warning for this case
