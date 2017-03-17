@@ -548,8 +548,23 @@ namespace Idera.SQLsecure.UI.Console.Forms
             Sql.DataCollectionFilter filter = lvi.Tag as Sql.DataCollectionFilter;
             Debug.Assert(filter != null);
             ServerVersion parsedVersion = Sql.SqlHelper.ParseVersion(m_RegisteredServer.Version);
+            //Start-SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1742
+            string serverType = string.Empty;
+            switch (m_RegisteredServer.ServerType)
+            {
+                case ServerType.AzureSQLDatabase:
+                    serverType = Utility.Activity.TypeServerAzureDB;
+                    break;
+                case ServerType.SQLServerOnAzureVM:
+                    serverType = Utility.Activity.TypeServerAzureVM;
+                    break;
+                case ServerType.OnPremise:
+                    serverType = Utility.Activity.TypeServerOnPremise;
+                    break;
+            }
             Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedVersion, m_RegisteredServer.SQLServerAuthType == "W", 
-                m_RegisteredServer.SqlLogin, m_RegisteredServer.SqlPassword, m_RegisteredServer.FullConnectionName, Utility.Activity.TypeServerOnPremise);
+                m_RegisteredServer.SqlLogin, m_RegisteredServer.SqlPassword, m_RegisteredServer.FullConnectionName, serverType);
+            //End-SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1742
             if (Form_FilterProperties.Process(filter, serverInfo, FiltersInListView, m_IsEdit)
                         == DialogResult.OK)
             {
