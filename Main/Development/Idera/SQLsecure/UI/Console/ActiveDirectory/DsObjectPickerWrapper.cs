@@ -117,8 +117,9 @@ namespace Idera.SQLsecure.UI.Console.ActiveDirectory
                                        refScopeInitInfo, false);
 
                 logX.loggerX.Debug("Marshal 2nd search scope");
+                //SQLsecure 3.1 (Tushar)--Making it int64 to make sure the addition does not overflow range of integer.
                 Marshal.StructureToPtr(scopeInitInfo[1],
-                                       (IntPtr) ((int) refScopeInitInfo + Marshal.SizeOf
+                                       (IntPtr) ((Int64) refScopeInitInfo + Marshal.SizeOf
                                                                               (typeof (DSOP_SCOPE_INIT_INFO))), false);
 
 
