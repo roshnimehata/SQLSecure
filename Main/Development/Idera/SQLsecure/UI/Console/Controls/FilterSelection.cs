@@ -244,7 +244,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             FilterObject filterObj = new FilterObject(RuleObjectType.Database, RuleScope.All, matchAll);
             m_FilterObjects.Add(RuleObjectType.Database, filterObj);
 
-            if(type_of_server == "On-Premise SQL Server")
+            //SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1742
+            if(m_ServerInfo.serverType != Utility.Activity.TypeServerAzureDB)
             {
                 // Extended Stored Procedures
                 filterObj = new FilterObject(RuleObjectType.ExtendedStoredProcedure, RuleScope.System, matchAll);
