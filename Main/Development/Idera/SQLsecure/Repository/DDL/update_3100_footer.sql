@@ -70,7 +70,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 		begin
 
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
-							values (@metricid, 'ADB', 'Replication Enabled', 'Determine whether replication is enabled on Azure SQL Databases', '', 'When enabled, this check will identify a risk if replication is enabled on Azure SQL Databases')
+							values (@metricid, 'ADB', 'Replication Enabled', 'Determine whether replication is enabled on Azure SQL Databases', '', 'When enabled, this check will identify a risk if replication is enabled on Azure SQL Databases.')
 
 			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
 							values (0, @metricid, 0, 'ADB', 1, '', '',
