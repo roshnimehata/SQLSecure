@@ -504,7 +504,6 @@ as
 		AND TABLE_NAME NOT LIKE (N'policy%')
 		AND TABLE_NAME NOT LIKE (N'serverfilterrule%')
 		AND TABLE_NAME NOT IN (N'snapshothistory', N'ancillarywindowsgroup', N'azuresqldbfirewallrules')
-		AND (TABLE_NAME NOT IN (N'databaseprincipal',N'databaseprincipalpermission') OR COLUMN_NAME <> N'uid')
 		AND COLUMN_NAME not in (N'connectionname', N'servername', N'instancename', N'starttime', N'endtime', N'automated', 
 								N'numobject',N'numpermission', N'numlogin', N'numwindowsgroupmember', 
 								N'baseline', N'baselinecomment', N'snapshotcomment', N'collectorversion', N'hashkey',
