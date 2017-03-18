@@ -499,17 +499,22 @@ as
 		AND (TABLE_NAME <> N'sqldatabase' OR COLUMN_NAME <> N'status')
 		AND (TABLE_NAME NOT IN (N'databaseprincipal',N'databaseprincipalpermission') OR COLUMN_NAME <> N'uid')
 		AND (TABLE_NAME NOT LIKE (N'databaseschema%') OR COLUMN_NAME <> N'schemaid')
+		AND (TABLE_NAME <> N'serverosobject' OR COLUMN_NAME <> N'isencrypted')	-- SQLsecure 3.1 (Anshul Aggarwal) - Ignore new NTFS Folder Encryption metadata column. 
 		AND TABLE_NAME NOT LIKE (N'%member')
 		AND TABLE_NAME NOT LIKE (N'policy%')
 		AND TABLE_NAME NOT LIKE (N'serverfilterrule%')
-		AND TABLE_NAME NOT IN (N'snapshothistory', N'ancillarywindowsgroup')
+		AND TABLE_NAME NOT IN (N'snapshothistory', N'ancillarywindowsgroup', N'azuresqldbfirewallrules')
+		AND (TABLE_NAME NOT IN (N'databaseprincipal',N'databaseprincipalpermission') OR COLUMN_NAME <> N'uid')
 		AND COLUMN_NAME not in (N'connectionname', N'servername', N'instancename', N'starttime', N'endtime', N'automated', 
 								N'numobject',N'numpermission', N'numlogin', N'numwindowsgroupmember', 
 								N'baseline', N'baselinecomment', N'snapshotcomment', N'collectorversion', N'hashkey',
 								N'snapshotid', N'registeredserverid', N'osobjectid', N'endpointid', N'protocolname', N'servicetype', N'servicename',
 								N'auditflags', N'accesstype', N'isinherited', N'principalid', N'majorid', N'minorid',
 								N'dbid', N'classid', N'parentobjectid', N'objectid', N'schemaid', N'permission', N'grantee', N'grantor', 
-								N'type', N'name', N'isrevoke', N'isaudited')
+								N'type', N'name', N'isrevoke', N'isaudited',	
+								N'FQN', N'istdeencrypted', -- SQLsecure 3.1 (Anshul Aggarwal) - Ignore new columns for new risks. 
+								N'islastbackupnative', N'lastbackupencrypted', N'intermediatebackupencrypted', N'intermediatebackupnonnative', 
+								N'isdatamasked', N'alwaysencryptiontype', N'signedcrypttype', N'isrowsecurityenabled', N'georeplication')
 		AND DATA_TYPE <>  N'nvarchar(max)'
 
 		--AND TABLE_NAME LIKE 'sql%'	--	restriction for testing on certain tables
@@ -843,7 +848,7 @@ as
 		AND TABLE_NAME NOT LIKE (N'%member')
 		AND TABLE_NAME NOT LIKE (N'policy%')
 		AND TABLE_NAME NOT LIKE (N'serverfilterrule%')
-		AND TABLE_NAME NOT IN (N'snapshothistory', N'ancillarywindowsgroup')
+		AND TABLE_NAME NOT IN (N'snapshothistory', N'ancillarywindowsgroup', N'azuresqldbfirewallrules')
 
 		--AND TABLE_NAME LIKE ('database%')
 

@@ -80,7 +80,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="This report shows all the Sql server logins that do not have any permissions."</Value>
+            <Value>="This report shows all the SQL Server and Azure SQL Database logins that do not have any permissions."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
