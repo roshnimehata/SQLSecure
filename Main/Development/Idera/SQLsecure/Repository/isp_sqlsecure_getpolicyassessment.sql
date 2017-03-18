@@ -9656,7 +9656,6 @@ AS -- <Idera SQLsecure version and copyright>
  															select databasename 		
  															from sqldatabase		
  															where snapshotid = @snapshotid
-															and databasename not in ('msdb', 'master', 'model', 'tempdb')
 															and ((islastbackupnative = 1 and lastbackupencrypted = 0)  or intermediatebackupencrypted = 0)
 															order by databasename;
 															
@@ -10387,7 +10386,6 @@ AS -- <Idera SQLsecure version and copyright>
  															select databasename 		
  															from sqldatabase		
  															where snapshotid = @snapshotid
-															and databasename not in ('msdb', 'master', 'model', 'tempdb')
 															and (islastbackupnative = 0 or intermediatebackupnonnative = 1)
 															order by databasename;
 
