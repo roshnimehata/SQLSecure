@@ -32,6 +32,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
                 String m_ServerName;
             string userName;
             string password;
+            string authenticationMode;//SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
                 #endregion
 
                 #region Ctors
@@ -66,9 +67,16 @@ namespace Idera.SQLsecure.UI.Console.Utility
                 get { return password; }
                 set { password = value; }
             }
-                #endregion
+            //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+            public string AuthenticationMode
+            {
+                get { return authenticationMode; }
+                set { authenticationMode = value;}
             }
+            //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
             #endregion
+        }
+        #endregion
 
             #region MainFormData
             public class MainFormData
