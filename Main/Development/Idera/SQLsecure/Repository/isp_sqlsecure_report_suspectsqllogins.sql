@@ -43,7 +43,7 @@ AS -- <Idera SQLsecure version and copyright>
 	            
     SELECT  d.connectionname ,
             a.name ,
-            [type] = CASE WHEN a.type = 'G' THEN 'Group'
+            [type] = CASE WHEN a.type = 'G' or a.type='X' THEN 'Group'
                           ELSE 'User'
                      END ,
 		-- if there are any resolved accounts in the domain
