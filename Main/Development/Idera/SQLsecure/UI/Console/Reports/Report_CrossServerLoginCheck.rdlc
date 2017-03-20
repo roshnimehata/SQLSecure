@@ -32,7 +32,7 @@
             <Label>SQL Login</Label>
           </ParameterValue>
           <ParameterValue>
-            <Value>EX</Value>
+            <Value>A</Value>
             <Label>Azure AD Account</Label>
           </ParameterValue>
         </ParameterValues>
@@ -103,7 +103,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="This report shows all SQL Servers where a selected user has access."</Value>
+            <Value>="This report shows all SQL Server and Azure SQL Database instances where a selected user has access."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
@@ -840,6 +840,8 @@ End Function
 Function loginTypeToString(t As String) As String
 	If t = "W" Then
 		Return "Windows Account"
+  Else If t = "A" Then
+		Return "Azure AD Account"
 	Else
 		Return "SQL Login"
 	End If

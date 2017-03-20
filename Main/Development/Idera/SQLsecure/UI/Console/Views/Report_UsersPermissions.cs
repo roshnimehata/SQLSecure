@@ -199,29 +199,10 @@ namespace Idera.SQLsecure.UI.Console.Views
                             cmd.Parameters.Add(paramServer);
                             cmd.Parameters.Add(paramUserType);
                             cmd.Parameters.Add(paramPermission);
-
-                            // SQLsecure 3.1 (Anshul Aggarwal) - Fill Data for Azure Account (User or Group) separately.
-                            if (m_loginType == Sql.LoginType.AzureADAccount)
-                            {
-                                paramUserType.Value = Sql.LoginType.AzureADUser;
-
-                                // Get data for Azure AD Users
-                                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                                da.Fill(ds);
                             
-                                paramUserType.Value = Sql.LoginType.AzureADGroup;
-
-                                // Get data for Azure AD Group
-                                da = new SqlDataAdapter(cmd);
-                                da.Fill(ds);
-
-                            }
-                            else
-                            {
-                                // Get data
-                                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                                da.Fill(ds);
-                            }
+                            // Get data
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            da.Fill(ds);
 
                             // Attach datasource
                             rds.Name = SubReportPermissionsDataSourceName;
@@ -313,25 +294,9 @@ namespace Idera.SQLsecure.UI.Console.Views
                     cmd.Parameters.Add(paramPolicyid);
                     cmd.Parameters.Add(paramUsebaseline);
 
-                    // SQLsecure 3.1 (Anshul Aggarwal) - Fill Data for Azure AD Account (User or Group) separately.
-                    if (m_loginType == Sql.LoginType.AzureADAccount)
-                    {
-                        // Get data for Azure AD User
-                        paramUserType.Value = Sql.LoginType.AzureADUser;
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-
-                        // Get data for Azure AD Group
-                        paramUserType.Value = Sql.LoginType.AzureADGroup;
-                        da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-                    }
-                    else
-                    {
-                        // Get data
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-                    }
+                    // Get data
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(ds);
 
                     ReportDataSource rds = new ReportDataSource();
                     rds.Name = DataSourceName;
