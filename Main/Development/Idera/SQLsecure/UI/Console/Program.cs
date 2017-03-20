@@ -7,6 +7,7 @@ using System.Threading;
 using Infragistics.Win.AppStyling;
 
 using Idera.SQLsecure.Core.Logger;
+using System.Security.Principal;
 
 namespace Idera.SQLsecure.UI.Console
 {
@@ -15,6 +16,7 @@ namespace Idera.SQLsecure.UI.Console
         static public Controller gController;
         static public Forms.Form_Splash splashScreen;
         private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Program");
+        public static WindowsImpersonationContext targetRepositoryImpersonationContext = null;//SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
 
         #region Helpers
         private static void startup()
@@ -68,6 +70,14 @@ namespace Idera.SQLsecure.UI.Console
             // Save the user options.
             Utility.UserData.Current.Save();
 
+            //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+            if (targetRepositoryImpersonationContext != null)
+            {
+                targetRepositoryImpersonationContext.Undo();
+                targetRepositoryImpersonationContext.Dispose();
+                targetRepositoryImpersonationContext = null;
+            }
+            //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
             // Exiting utility, do shutdown processing.
             shutdown();
         }
