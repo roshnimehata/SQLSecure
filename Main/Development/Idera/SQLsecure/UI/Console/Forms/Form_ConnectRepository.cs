@@ -128,7 +128,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 {
                     if (this.username.Text.Length == 0 && this.password.Text.Length == 0)
                     {
-                        if (MessageBox.Show("SQLsecure will be using local machine's windows credentials to connect to above entered sql server instance name.", "Repository", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.Cancel)
+                        if (MessageBox.Show("Windows login credentials are not specified. You will not be able to connect to the repository on other computer. Do you want to connect to repository on this computer?", "Repository", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
                         {
                             DialogResult = DialogResult.None;
                         }
