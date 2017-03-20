@@ -166,8 +166,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._wizard.HelpVisible = true;
             this._wizard.Location = new System.Drawing.Point(0, 0);
             this._wizard.MarginImage = ((System.Drawing.Image)(resources.GetObject("_wizard.MarginImage")));
-            this._wizard.Name = "_wizard";
-            this._wizard.SelectedPage = this._page_CollectData;
+            this._wizard.Name = "_wizard"; 
+            this._wizard.SelectedPage = this._PageTags;
             this._wizard.Size = new System.Drawing.Size(514, 536);
             this._wizard.TabIndex = 0;
             this._wizard.HelpRequested += new System.Windows.Forms.HelpEventHandler(this._wizard_HelpRequested);

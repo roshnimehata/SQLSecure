@@ -20,6 +20,7 @@ using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 using System.IO;
 using System.Data.SqlClient;
 using Microsoft.SqlServer.Management.Common;
+using System.Security.Principal;
 
 namespace Idera.SQLsecure.UI.Console
 {
@@ -516,6 +517,11 @@ namespace Idera.SQLsecure.UI.Console
         private bool m_Refresh = false;
         private string m_UserName;
         private string m_Password;
+        //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+        private type_of_authentication m_AuthenticationMode;
+        WindowsImpersonationContext targetRepositoryImpersonationContext = null;
+        //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+
 
         private TreeNode m_ClickedNode;             // Used by Context menus to trick node clicks
         private TreeNode m_NodeToProcess;           // Used by Context menus to process the correct node after clicking
@@ -1230,11 +1236,25 @@ namespace Idera.SQLsecure.UI.Console
                                     isServerChanged = true;
                                 }
 
-                                // Refresh explorer bar.
-                                refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
-                                                                     // else it will stay on the current view if valid
-                                #endregion
-                            
+                            // Refresh explorer bar.
+                            //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                            if (m_AuthenticationMode == type_of_authentication.windows && (UserData.Current.RepositoryInfo.UserName != null && UserData.Current.RepositoryInfo.UserName.Length > 0) && (UserData.Current.RepositoryInfo.Password != null && UserData.Current.RepositoryInfo.Password.Length > 0))
+                            {
+                                WindowsIdentity wi =
+                                                  Impersonation.GetCurrentIdentity(m_UserName, m_Password);
+                                targetRepositoryImpersonationContext = wi.Impersonate();
+                            }
+                            refreshExplorerBar(isServerChanged); // if server has changed then it will go to explore permissions
+                                                                 // else it will stay on the current view if valid
+                            if (targetRepositoryImpersonationContext != null)
+                            {
+                                targetRepositoryImpersonationContext.Undo();
+                                targetRepositoryImpersonationContext.Dispose();
+                                targetRepositoryImpersonationContext = null;
+                            }
+                            //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                            #endregion
+
                         }
                     }
                     //SQLSecure 3.1 (Mitul Kapoor) - functionality for "Deploy Repository". 
@@ -1296,6 +1316,15 @@ namespace Idera.SQLsecure.UI.Console
             // If we are connected, check product license.
             if (bConnected)
             {
+                //Start--SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                if (m_AuthenticationMode == type_of_authentication.windows && (MainForm.UserName!=null && MainForm.UserName.Length > 0) && (MainForm.Password!=null && MainForm.Password.Length > 0))
+                {
+                    WindowsIdentity wi =
+                                      Impersonation.GetCurrentIdentity(m_UserName, m_Password);
+                    targetRepositoryImpersonationContext = wi.Impersonate();
+                }
+                //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+
                 CheckProductLicense();
                 // If the license isn't valid, then it will exit the application, so stop processing
                 if (!Program.gController.Repository.IsLicenseOk())
@@ -1314,6 +1343,15 @@ namespace Idera.SQLsecure.UI.Console
                 {
                     Form_GetMissingCredentials.Process();
                 }
+
+                //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                if (targetRepositoryImpersonationContext != null)
+                {
+                    targetRepositoryImpersonationContext.Undo();
+                    targetRepositoryImpersonationContext.Dispose();
+                    targetRepositoryImpersonationContext = null;
+                }
+                //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
             }
             return bConnected;
         }
@@ -1429,7 +1467,26 @@ namespace Idera.SQLsecure.UI.Console
 
         private bool connectToServer(string server)
         {
-            bool isConnected = Program.gController.Repository.Connect(server,UserName,Password);
+            //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+            WindowsImpersonationContext targetImpersonationContext = null;
+            bool isConnected;
+            type_of_authentication authenticationMode = (type_of_authentication)MainForm.typeOfAuthentication;
+            if (authenticationMode == type_of_authentication.windows && (UserName!=null && UserName.Length>0) && (Password !=null && Password.Length>0))
+            {
+                WindowsIdentity wi =
+                                Impersonation.GetCurrentIdentity(UserName, Password);
+                targetImpersonationContext = wi.Impersonate();
+            }
+            
+            isConnected = Program.gController.Repository.Connect(server, UserName, Password, authenticationMode);
+            
+            if (targetImpersonationContext != null)
+            {
+                targetImpersonationContext.Undo();
+                targetImpersonationContext.Dispose();
+                targetImpersonationContext = null;
+            }
+            //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
             setTitle();
             return isConnected;
         }
@@ -1496,6 +1553,8 @@ namespace Idera.SQLsecure.UI.Console
                     m_RepositoryName = Utility.UserData.Current.RepositoryInfo.ServerName;
                     m_UserName = Utility.UserData.Current.RepositoryInfo.UserName;
                     m_Password = Utility.UserData.Current.RepositoryInfo.Password;
+                    //SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                    m_AuthenticationMode = Utility.UserData.Current.RepositoryInfo.AuthenticationMode == "windows" ? type_of_authentication.windows:type_of_authentication.sa;
                     bool isRepositoryValid = m_RepositoryName.Length != 0;
 
                     // If repository is specified, make sure its valid.
@@ -1504,8 +1563,22 @@ namespace Idera.SQLsecure.UI.Console
                     {
                         // Initialize and validate the repository.
                         logX.loggerX.Debug("Create repository object");
-                        Program.gController.Repository = new Sql.Repository(m_RepositoryName, m_UserName, m_Password);
+                        //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                        if (m_AuthenticationMode == type_of_authentication.windows && (m_UserName!=null && m_UserName.Length > 0) && (m_Password != null &&m_Password.Length > 0))
+                        {
+                            WindowsIdentity wi =
+                                Impersonation.GetCurrentIdentity(m_UserName, m_Password);
+                            targetRepositoryImpersonationContext = wi.Impersonate();
+                        }
+                        Program.gController.Repository = new Sql.Repository(m_RepositoryName, m_UserName, m_Password,m_AuthenticationMode);
                         isRepositoryValid = Program.gController.Repository.IsConnectionValid;
+                        if (targetRepositoryImpersonationContext != null)
+                        {
+                            targetRepositoryImpersonationContext.Undo();
+                            targetRepositoryImpersonationContext.Dispose();
+                            targetRepositoryImpersonationContext = null;
+                        }
+                        //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
                     }
 
                     // If the repository is not specified, prompt the user.
@@ -1515,6 +1588,14 @@ namespace Idera.SQLsecure.UI.Console
                     }
                     else
                     {
+                        //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                        if (m_AuthenticationMode == type_of_authentication.windows && (m_UserName!=null && m_UserName.Length > 0) && (m_Password!=null && m_Password.Length > 0))
+                        {
+                            WindowsIdentity wi =
+                                              Impersonation.GetCurrentIdentity(m_UserName, m_Password);
+                            targetRepositoryImpersonationContext = wi.Impersonate();
+                        }
+                        //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
                         // If repository is specified and valid, set the title
                         // and do a license check.
                         CheckProductLicense();
@@ -1536,8 +1617,24 @@ namespace Idera.SQLsecure.UI.Console
                         {
                             Form_GetMissingCredentials.Process();
                         }
-                    }
 
+                        //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                        if (targetRepositoryImpersonationContext != null)
+                        {
+                            targetRepositoryImpersonationContext.Undo();
+                            targetRepositoryImpersonationContext.Dispose();
+                            targetRepositoryImpersonationContext = null;
+                        }
+                        //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                    }
+                    //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                    if (m_AuthenticationMode == type_of_authentication.windows &&(m_UserName!=null && m_UserName.Length > 0) && (m_Password!=null && m_Password.Length > 0))
+                    {
+                        WindowsIdentity wi =
+                                          Impersonation.GetCurrentIdentity(m_UserName, m_Password);
+                        Program.targetRepositoryImpersonationContext = wi.Impersonate();
+                    }
+                    //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
                     // Refresh the explorer bar based and reset the cursor.
                     setTitle();
                     logX.loggerX.Debug("Call refreshExplorerBar");
@@ -1678,8 +1775,17 @@ namespace Idera.SQLsecure.UI.Console
         private void _menuStrip_File_Connect_Click(object sender, EventArgs e)
         {
             //Check for user option to connect/deploy repository.
+            bool isConnected;
             Cursor = Cursors.WaitCursor;
-            promptForConnection(true);
+            //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+            isConnected = promptForConnection(true);
+            if (isConnected && Utility.UserData.Current.RepositoryInfo.AuthenticationMode == "windows" && (Utility.UserData.Current.RepositoryInfo.UserName != null && Utility.UserData.Current.RepositoryInfo.UserName.Length > 0) && (Utility.UserData.Current.RepositoryInfo.Password != null && Utility.UserData.Current.RepositoryInfo.Password.Length > 0))
+            {
+                WindowsIdentity wi =
+                                          Impersonation.GetCurrentIdentity(Utility.UserData.Current.RepositoryInfo.UserName, Utility.UserData.Current.RepositoryInfo.Password);
+                Program.targetRepositoryImpersonationContext = wi.Impersonate();
+            }
+            //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
             Cursor = Cursors.Default;
         }
 

@@ -450,7 +450,10 @@ namespace Idera.SQLsecure.Collector
                     }
                     //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
                     else if (serverType == ServerType.SQLServerOnAzureVM)
-                        SettingsForAzureVM(server);
+                    {
+
+                        SettingsForAzureVM(m_SQLServerOnAzureVM_FullName);
+                    }
                 }
                 catch (Exception ex)
                 {

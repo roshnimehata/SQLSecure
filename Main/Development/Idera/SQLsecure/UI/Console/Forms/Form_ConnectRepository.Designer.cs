@@ -41,7 +41,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._password_label = new System.Windows.Forms.Label();
             this.username = new System.Windows.Forms.TextBox();
             this.password = new System.Windows.Forms.TextBox();
-            this.azure_authentication = new System.Windows.Forms.RadioButton();
+            //this.azure_authentication = new System.Windows.Forms.RadioButton();
             this.sql_authentication = new System.Windows.Forms.RadioButton();
             this.windows_authentication = new System.Windows.Forms.RadioButton();
             this._bfd_ButtonPanel.SuspendLayout();
@@ -63,7 +63,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             this._bf_MainPanel.Controls.Add(this.windows_authentication);
             this._bf_MainPanel.Controls.Add(this.sql_authentication);
-            this._bf_MainPanel.Controls.Add(this.azure_authentication);
+            //this._bf_MainPanel.Controls.Add(this.azure_authentication);
             this._bf_MainPanel.Controls.Add(this.password);
             this._bf_MainPanel.Controls.Add(this.username);
             this._bf_MainPanel.Controls.Add(this._password_label);
@@ -153,6 +153,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._username_label.Size = new System.Drawing.Size(69, 13);
             this._username_label.TabIndex = 8;
             this._username_label.Text = "User Name : ";
+            this._username_label.BackColor = System.Drawing.Color.Transparent;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1661
             // 
             // _password_label
             // 
@@ -164,10 +165,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._password_label.TabIndex = 9;
             this._password_label.Text = "Password : ";
             this._password_label.Click += new System.EventHandler(this.label3_Click);
+            this._password_label.BackColor = System.Drawing.Color.Transparent;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1661
             // 
             // username
             // 
-            this.username.Enabled = false;
+            this.username.Enabled = true;
             this.username.Location = new System.Drawing.Point(83, 117);
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(269, 20);
@@ -176,7 +178,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // password
             // 
-            this.password.Enabled = false;
+            this.password.Enabled = true;
             this.password.Location = new System.Drawing.Point(83, 149);
             this.password.Name = "password";
             this.password.PasswordChar = '*';
@@ -185,15 +187,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // azure_authentication
             // 
-            this.azure_authentication.AutoSize = true;
-            this.azure_authentication.Location = new System.Drawing.Point(9, 83);
-            this.azure_authentication.Name = "azure_authentication";
-            this.azure_authentication.Size = new System.Drawing.Size(70, 17);
-            this.azure_authentication.TabIndex = 12;
-            this.azure_authentication.TabStop = true;
-            this.azure_authentication.Text = "Azure AD";
-            this.azure_authentication.UseVisualStyleBackColor = true;
-            this.azure_authentication.CheckedChanged += new System.EventHandler(this.azure_authentication_CheckedChanged);
+            //this.azure_authentication.AutoSize = true;
+            //this.azure_authentication.Location = new System.Drawing.Point(9, 83);
+            //this.azure_authentication.Name = "azure_authentication";
+            //this.azure_authentication.Size = new System.Drawing.Size(70, 17);
+            //this.azure_authentication.TabIndex = 12;
+            //this.azure_authentication.TabStop = true;
+            //this.azure_authentication.Text = "Azure AD";
+            //this.azure_authentication.UseVisualStyleBackColor = true;
+            //this.azure_authentication.CheckedChanged += new System.EventHandler(this.azure_authentication_CheckedChanged);
             // 
             // sql_authentication
             // 
@@ -206,6 +208,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.sql_authentication.Text = "SQL Authentication";
             this.sql_authentication.UseVisualStyleBackColor = true;
             this.sql_authentication.CheckedChanged += new System.EventHandler(this.sql_authentication_CheckedChanged);
+            this.sql_authentication.BackColor = System.Drawing.Color.Transparent;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1661
             // 
             // windows_authentication
             // 
@@ -219,6 +222,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.windows_authentication.UseVisualStyleBackColor = true;
             this.windows_authentication.Checked = true;//SQLsecure 3.1 (Tushar)Fix for defect SQLSECU-1514--Making windows authentication checked by default.
             this.windows_authentication.CheckedChanged += new System.EventHandler(this.windows_authentication_CheckedChanged);
+            this.windows_authentication.BackColor = System.Drawing.Color.Transparent;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1661
             // 
             // Form_ConnectRepository
             // 
