@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,6 +37,73 @@ namespace Idera.SQLsecure.Collector.Utility
             }
             return false;
         }
+		
+		
+        // SQLSecure 3.1 (Biresh Kumar Mishra) - Add support for Azure VM
+        public static RegistryKey OpenRemoteBaseKey(RegistryHive enumRegistryHive, string serverName, bool checkForDomain = true)
+        {
+            RegistryKey remoteBaseKey = null;
+            try
+            {
+                remoteBaseKey = RegistryKey.OpenRemoteBaseKey(enumRegistryHive, serverName);
+
+                // test for valid key
+                switch(enumRegistryHive)
+                {
+                    case RegistryHive.LocalMachine:
+                        remoteBaseKey.OpenSubKey(@"Software");
+                        break;
+                    case RegistryHive.CurrentUser:
+                        remoteBaseKey.OpenSubKey(@"System");
+                        break;
+                    case RegistryHive.ClassesRoot:
+                        remoteBaseKey.OpenSubKey(@"Windows Media");
+                        break;
+                    case RegistryHive.Users:
+                        remoteBaseKey.OpenSubKey(@"S-1-5-18");
+                        break;
+                    case RegistryHive.CurrentConfig:
+                        remoteBaseKey.OpenSubKey(@"System");
+                        break;
+                }
+                
+            }
+            catch (Exception ex)
+            {                
+                if (checkForDomain && (serverName.IndexOf(".") != -1))
+                {
+                    remoteBaseKey =
+                   RegistryKey.OpenRemoteBaseKey(enumRegistryHive,
+                                                  serverName.Substring(0, serverName.IndexOf(".")));
+
+                    // test for valid key
+                    switch (enumRegistryHive)
+                    {
+                        case RegistryHive.LocalMachine:
+                            remoteBaseKey.OpenSubKey(@"Software");
+                            break;
+                        case RegistryHive.CurrentUser:
+                            remoteBaseKey.OpenSubKey(@"System");
+                            break;
+                        case RegistryHive.ClassesRoot:
+                            remoteBaseKey.OpenSubKey(@"Windows Media");
+                            break;
+                        case RegistryHive.Users:
+                            remoteBaseKey.OpenSubKey(@"S-1-5-18");
+                            break;
+                        case RegistryHive.CurrentConfig:
+                            remoteBaseKey.OpenSubKey(@"System");
+                            break;
+                    }
+                }
+                else
+                {
+                    throw; //caller should handle this exception
+                }
+            }
+            return remoteBaseKey;
+        }
+
     }
     public enum ServerType
     {

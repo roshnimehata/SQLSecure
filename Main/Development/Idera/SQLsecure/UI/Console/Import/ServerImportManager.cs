@@ -251,8 +251,19 @@ namespace Idera.SQLsecure.UI.Console.Import
                     else
                     {
                         Core.Accounts.Server.ServerAccess sa;
-                        if (SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerOnPremise)
+						
+						// SQLSecure 3.1 (Biresh Kumar Mishra) - Fix server import for Azure VM
+                        if ((SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerOnPremise)
+                             || (SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerAzureVM))
                         {
+                            if ((machine != null) && (machine.IndexOf(".") < 0) && (SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerAzureVM))
+                            {
+                                if ((winUser != null) && (winUser.IndexOf(@"\") != -1))
+                                {
+                                    machine = string.Format("{0}.{1}", machine, winUser.Substring(0, winUser.IndexOf(@"\")));
+                                }
+                            }
+
                             sa = Core.Accounts.Server.CheckServerAccess(machine, winUser,winUserPassword,out errorMsg);
                         }
                         else
