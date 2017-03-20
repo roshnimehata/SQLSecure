@@ -123,7 +123,23 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         MessageBox.Show("Please enter username and password to access selected SQL server instance.", "Repository", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
-
+                //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                if (MainForm.typeOfAuthentication == 0)
+                {
+                    if (this.username.Text.Length == 0 && this.password.Text.Length == 0)
+                    {
+                        if (MessageBox.Show("Windows login credentials are not specified. You will not be able to connect to the repository on other computer. Do you want to connect to repository on this computer?", "Repository", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            DialogResult = DialogResult.None;
+                        }
+                    }
+                    else
+                    {
+                        MainForm.UserName = this.username.Text;
+                        MainForm.Password = this.password.Text;
+                    }
+                }
+                //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
 
             }
             else
@@ -188,7 +204,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             //SQLsecure 3.1 (Tushar)--Saving values for type of authentication and server.
             typeOfServer = (int)Constants.typeOfServer.remoteVM;
-            selected_authentication_type = (int)Constants.type_of_authentication.sa;
+            selected_authentication_type = (int)Utility.type_of_authentication.sa;
             this.username.Enabled = true;
             this.password.Enabled = true;
             areCredentialsRequired = true;
@@ -208,11 +224,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             //SQLsecure 3.1 (Tushar)--Saving values for type of authentication and server.
             typeOfServer = (int)Constants.typeOfServer.onPremise;
-            selected_authentication_type = (int)Constants.type_of_authentication.windows;
-
-            this.username.Enabled = false;
-            this.password.Enabled = false;
+            selected_authentication_type = (int)Utility.type_of_authentication.windows;
+            //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+            this.username.Enabled = true;
+            this.password.Enabled = true;
             areCredentialsRequired = false;
+            this._button_OK.Enabled = true;
+            //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
         }
 
         //SQLSecure3.1 (Mitul Kapoor) - functionality for azure AD authentication
@@ -220,7 +238,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             //SQLsecure 3.1 (Tushar)--Saving values for type of authentication and server.
             typeOfServer = (int)Constants.typeOfServer.azureVM;
-            selected_authentication_type = (int)Constants.type_of_authentication.sa;
+            selected_authentication_type = (int)Utility.type_of_authentication.sa;
 
             this.username.Enabled = true;
             this.password.Enabled = true;

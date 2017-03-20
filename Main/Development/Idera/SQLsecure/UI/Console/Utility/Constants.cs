@@ -175,12 +175,6 @@ namespace Idera.SQLsecure.UI.Console.Utility
             onPremise
         };
 
-        public enum type_of_authentication
-        {
-            windows,
-            sa
-        };
-
         #endregion
 
         #region Date & Time
@@ -1054,4 +1048,10 @@ Note : This report is not applicable to Azure SQL Database instances.";
         AzureSQLDatabase,//Azure SqlDatabase
         SQLServerOnAzureVM//Azure VM
     }
+
+    public enum type_of_authentication
+    {
+        windows,
+        sa
+    };
 }
