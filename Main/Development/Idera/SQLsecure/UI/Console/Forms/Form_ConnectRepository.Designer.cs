@@ -153,6 +153,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._username_label.Size = new System.Drawing.Size(69, 13);
             this._username_label.TabIndex = 8;
             this._username_label.Text = "User Name : ";
+            this._username_label.BackColor = System.Drawing.Color.Transparent;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1661
             // 
             // _password_label
             // 
@@ -164,6 +165,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._password_label.TabIndex = 9;
             this._password_label.Text = "Password : ";
             this._password_label.Click += new System.EventHandler(this.label3_Click);
+            this._password_label.BackColor = System.Drawing.Color.Transparent;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1661
             // 
             // username
             // 
@@ -206,6 +208,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.sql_authentication.Text = "SQL Authentication";
             this.sql_authentication.UseVisualStyleBackColor = true;
             this.sql_authentication.CheckedChanged += new System.EventHandler(this.sql_authentication_CheckedChanged);
+            this.sql_authentication.BackColor = System.Drawing.Color.Transparent;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1661
             // 
             // windows_authentication
             // 
@@ -219,6 +222,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.windows_authentication.UseVisualStyleBackColor = true;
             this.windows_authentication.Checked = true;//SQLsecure 3.1 (Tushar)Fix for defect SQLSECU-1514--Making windows authentication checked by default.
             this.windows_authentication.CheckedChanged += new System.EventHandler(this.windows_authentication_CheckedChanged);
+            this.windows_authentication.BackColor = System.Drawing.Color.Transparent;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1661
             // 
             // Form_ConnectRepository
             // 
