@@ -1041,15 +1041,35 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
                             if ((Convert.ToString(_comboBox_ServerType.SelectedItem)== Utility.Activity.TypeServerOnPremise) || (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
                             {
-                                if ((machine != null) && (machine.IndexOf(".") < 0) && (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
+                                sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+
+                                if (sa != Server.ServerAccess.OK)
                                 {
-                                    if ((textbox_WindowsUser.Text != null) && (textbox_WindowsUser.Text.IndexOf(@"\") != -1))
+                                    if ((machine != null) && (machine.IndexOf(".") < 0) && (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
                                     {
-                                        machine = string.Format("{0}.{1}", machine, textbox_WindowsUser.Text.Substring(0, textbox_WindowsUser.Text.IndexOf(@"\")));
+                                        if ((textbox_WindowsUser.Text != null) && (textbox_WindowsUser.Text.IndexOf(@"\") != -1))
+                                        {
+                                            string tempMachine = string.Format("{0}.{1}", machine, textbox_WindowsUser.Text.Substring(0, textbox_WindowsUser.Text.IndexOf(@"\")));
+                                            Server.ServerAccess tempSa = sa;
+                                            sa = Server.ServerAccess.ERROR_OTHER;
+                                            string tempErrorMsg = errorMsg;
+                                            errorMsg = string.Empty;
+                                            sa = Server.CheckServerAccess(tempMachine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+
+                                            if (sa != Server.ServerAccess.OK)
+                                            {
+                                                sa = tempSa;
+                                                errorMsg = tempErrorMsg;
+                                            }
+                                            else
+                                            {
+                                                machine = tempMachine;
+                                            }
+                                        }
                                     }
                                 }
 
-                                sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+                                
                             }
 							// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
                             //else if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)

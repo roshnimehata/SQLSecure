@@ -165,26 +165,39 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     ultraTabControl_ServerProperties.Tabs.RemoveAt(2);
                     groupBox1.Hide();
                     _grpbx_Snapshot.Location = new System.Drawing.Point(17, 175);
+
+                    checkBox_UseSameAuth.Text = "Use same Azure AD Authentication as above";
+                    //label10.Text = resources.GetString("label10.TextAzure");
+
+                    _lbl_WindowsUser.Text = "Azure AD Account:";
+                    label2.Text = "Azure AD Account:";
+                    label2.Location = new System.Drawing.Point(17, 46);
+                    label9.Location = new System.Drawing.Point(17, 72);
+                    _lbl_SqlLogin.Location = new System.Drawing.Point(17, 137);
+                    _lbl_SqlLoginPassword.Location = new System.Drawing.Point(17, 163);
+                    radioButton_WindowsAuth.Text = "Azure Active Directory";
                 }
                 else if (m_RegisteredServer.ServerType == ServerType.SQLServerOnAzureVM)
                 {
                     _grpbx_WindowsGMCredentials.Text = "Azure AD Credentials to gather Operating System and Active Directory objects";
                     label10.Text = resources.GetString("label10.AzureVMLabel");
+
+                    checkBox_UseSameAuth.Enabled = false;
+                    checkBox_UseSameAuth.Checked = false;
+                    checkBox_UseSameAuth.Hide();
+                    _lbl_AzureAuth.Show();
+
+                    //checkBox_UseSameAuth.Text = "Use same Azure AD Authentication as above";
+                    //label10.Text = resources.GetString("label10.TextAzure");
+
+                    _lbl_WindowsUser.Text = "Azure AD Account:";
+                    label2.Text = "&Windows User:";
+                    label2.Location = new System.Drawing.Point(17, 46);
+                    label9.Location = new System.Drawing.Point(17, 72);
+                    _lbl_SqlLogin.Location = new System.Drawing.Point(17, 137);
+                    _lbl_SqlLoginPassword.Location = new System.Drawing.Point(17, 163);
+                    radioButton_WindowsAuth.Text = "Windows Authentication";
                 }
-                
-                checkBox_UseSameAuth.Text = "Use same Azure AD Authentication as above";
-                //label10.Text = resources.GetString("label10.TextAzure");
-               
-                _lbl_WindowsUser.Text = "Azure AD Account:";
-                label2.Text = "Azure AD Account:";
-                label2.Location = new System.Drawing.Point(17, 46);
-                label9.Location = new System.Drawing.Point(17, 72);
-                _lbl_SqlLogin.Location = new System.Drawing.Point(17, 137);
-                _lbl_SqlLoginPassword.Location = new System.Drawing.Point(17, 163);
-                radioButton_WindowsAuth.Text = "Azure Active Directory";
-                
-               
-                
             }
             
 
@@ -209,14 +222,17 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 textBox_SQLWindowsUser.Text = m_RegisteredServer.SqlLogin;
                 textBox_SQLWindowsPassword.Text = m_RegisteredServer.SqlPassword;
 
-                if (m_RegisteredServer.SqlLogin == m_RegisteredServer.WindowsUser
-                    && m_RegisteredServer.SqlPassword == m_RegisteredServer.WindowsPassword)
-                {
-                    checkBox_UseSameAuth.Checked = true;
-                }
+               
+                    if (m_RegisteredServer.SqlLogin == m_RegisteredServer.WindowsUser
+                    && m_RegisteredServer.SqlPassword == m_RegisteredServer.WindowsPassword
+                    && (m_RegisteredServer.ServerType != ServerType.SQLServerOnAzureVM))
+                    {
+                        checkBox_UseSameAuth.Checked = true;
+                    }
 
-                textbox_SqlLogin.Enabled = false;
-                textbox_SqlLoginPassword.Enabled = false;
+                    textbox_SqlLogin.Enabled = false;
+                    textbox_SqlLoginPassword.Enabled = false;
+                
             }
             else
             {
@@ -714,6 +730,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private void checkBox_UseSameAuth_CheckedChanged(object sender, EventArgs e)
         {
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            if (m_RegisteredServer.ServerType == ServerType.SQLServerOnAzureVM)
+            {
+                return;
+            }
+
             m_IsDirty = true;
             if (checkBox_UseSameAuth.Checked)
             {
@@ -737,7 +759,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
             if (radioButton_WindowsAuth.Checked)
             {
-                checkBox_UseSameAuth.Enabled = true;
+                // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                if (m_RegisteredServer.ServerType != ServerType.SQLServerOnAzureVM)
+                {
+                    checkBox_UseSameAuth.Enabled = true;
+                }                
 
                 textBox_SQLWindowsUser.Enabled = true;
                 textBox_SQLWindowsPassword.Enabled = true;
@@ -751,8 +777,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
             m_IsDirty = true;
             if (radioButton_SQLServerAuth.Checked)
             {
-                checkBox_UseSameAuth.Enabled = false;
-                checkBox_UseSameAuth.Checked = false;
+                // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                if (m_RegisteredServer.ServerType != ServerType.SQLServerOnAzureVM)
+                {
+                    checkBox_UseSameAuth.Enabled = false;
+                    checkBox_UseSameAuth.Checked = false;
+                }                
 
                 textBox_SQLWindowsUser.Enabled = false;
                 textBox_SQLWindowsPassword.Enabled = false;
@@ -764,7 +794,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void textBox_SQLWindowsUser_TextChanged(object sender, EventArgs e)
         {
             m_IsDirty = true;
-            if (checkBox_UseSameAuth.Checked)
+            if (checkBox_UseSameAuth.Checked && (m_RegisteredServer.ServerType != ServerType.SQLServerOnAzureVM))
             {
                 textbox_WindowsUser.Text = textBox_SQLWindowsUser.Text;
             }
@@ -773,7 +803,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void textBox_SQLWindowsPassword_TextChanged(object sender, EventArgs e)
         {
             m_IsDirty = true;
-            if (checkBox_UseSameAuth.Checked)
+            if (checkBox_UseSameAuth.Checked && (m_RegisteredServer.ServerType != ServerType.SQLServerOnAzureVM))
             {
                 textbox_WindowsPassword.Text = textBox_SQLWindowsPassword.Text;
             }
@@ -1191,7 +1221,34 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                 string errorMsg;
                                 Server.ServerAccess sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text,
                                                          out errorMsg);
-                                if(sa != Server.ServerAccess.OK)
+
+                                if (sa != Server.ServerAccess.OK)
+                                {
+                                    if ((machine != null) && (machine.IndexOf(".") < 0) && (m_RegisteredServer.ServerType == ServerType.SQLServerOnAzureVM))
+                                    {
+                                        if ((textbox_WindowsUser.Text != null) && (textbox_WindowsUser.Text.IndexOf(@"\") != -1))
+                                        {
+                                            string tempMachine = string.Format("{0}.{1}", machine, textbox_WindowsUser.Text.Substring(0, textbox_WindowsUser.Text.IndexOf(@"\")));
+                                            Server.ServerAccess tempSa = sa;
+                                            sa = Server.ServerAccess.ERROR_OTHER;
+                                            string tempErrorMsg = errorMsg;
+                                            errorMsg = string.Empty;
+                                            sa = Server.CheckServerAccess(tempMachine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+
+                                            if (sa != Server.ServerAccess.OK)
+                                            {
+                                                sa = tempSa;
+                                                errorMsg = tempErrorMsg;
+                                            }
+                                            else
+                                            {
+                                                machine = tempMachine;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (sa != Server.ServerAccess.OK)
                                 {
                                     isOk = false;
                                     if (msgBldr.Length > 0) { msgBldr.Remove(0, msgBldr.Length); }
