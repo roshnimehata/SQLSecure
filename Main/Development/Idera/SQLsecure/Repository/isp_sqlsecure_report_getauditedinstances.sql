@@ -34,7 +34,7 @@ SELECT	a.connectionname,
 		a.instancename,
 		version =	CASE 
 						WHEN b.servertype = 'ADB' -- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
-							THEN 'Azure SQL DB v'
+							THEN 'Microsoft SQL Azure v'
 						WHEN SUBSTRING(a.version,1,3) = '08.' OR SUBSTRING(a.version,1,2) = '8.' 
 							THEN 'SQL Server 2000 v'
 						WHEN SUBSTRING(a.version,1,3) = '09.' OR SUBSTRING(a.version,1,2) = '9.'

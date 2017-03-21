@@ -7,7 +7,7 @@
     </DataSource>
   </DataSources>
   <InteractiveHeight>8.27in</InteractiveHeight>
-  <Description>Show all direct members of Database Roles on all SQL Servers.</Description>
+  <Description>Show all direct members of Database Roles on all SQL Server and Azure SQL Database instances.</Description>
   <ReportParameters>
     <ReportParameter Name="rundate">
       <DataType>String</DataType>
@@ -1637,7 +1637,7 @@ End Function</Code>
             </Style>
             <CanGrow>true</CanGrow>
             <Left>1.4375in</Left>
-            <Value>="This report shows all direct members of Database Roles on all SQL Servers."</Value>
+            <Value>="This report shows all direct members of Database Roles on all SQL Server and Azure SQL Database instances."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
@@ -1854,7 +1854,7 @@ End Function</Code>
             <CanGrow>true</CanGrow>
             <Left>0.6875in</Left>
             <Height>0.1875in</Height>
-            <Value>="There are currently no audited SQL Servers that match your selected parameters."</Value>
+            <Value>="There are currently no audited SQL Server and Azure SQL Database instances that match your selected parameters."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.0625in</Top>

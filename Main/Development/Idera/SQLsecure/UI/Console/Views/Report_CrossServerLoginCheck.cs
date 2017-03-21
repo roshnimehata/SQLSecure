@@ -182,25 +182,9 @@ namespace Idera.SQLsecure.UI.Console.Views
                     cmd.Parameters.Add(paramServerName);
                     cmd.Parameters.Add(paramUseBaseline);
                     
-                    // SQLsecure 3.1 (Anshul Aggarwal) - Fill Data for Azure AD Account (User or Group) separately.
-                    if (m_loginType == Sql.LoginType.AzureADAccount)
-                    {
-                        // Get data for Azure AD User
-                        paramLoginType.Value = Sql.LoginType.AzureADUser;
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-
-                        // Get data for Azure AD Group
-                        paramLoginType.Value = Sql.LoginType.AzureADGroup;
-                        da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-                    }
-                    else
-                    {
-                        // Get data
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-                    }
+                    // Get data
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(ds);
 
                     ReportDataSource rds = new ReportDataSource();
                     rds.Name = DataSourceName;

@@ -63,7 +63,7 @@
             <Label>SQL Login</Label>
           </ParameterValue>
 		  <ParameterValue>
-            <Value>EX</Value>
+            <Value>A</Value>
             <Label>Azure AD Account</Label>
           </ParameterValue>
         </ParameterValues>
@@ -430,6 +430,8 @@ End Function
 Function loginTypeToString(t As String) As String
 	If t = "W" Then
 		Return "Windows Account"
+  Else If t = "A" Then
+		Return "Azure AD Account"
 	Else
 		Return "SQL Login"
 	End If

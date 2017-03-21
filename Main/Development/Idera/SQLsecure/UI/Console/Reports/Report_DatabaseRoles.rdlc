@@ -451,7 +451,7 @@
             </Style>
             <CanGrow>true</CanGrow>
             <Height>0.1875in</Height>
-            <Value>="There are currently no audited SQL Servers that match your selected parameters."</Value>
+            <Value>="There are currently no audited SQL Server and Azure SQL Database instances that match your selected parameters."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.0625in</Top>

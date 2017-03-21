@@ -7,7 +7,7 @@
     </DataSource>
   </DataSources>
   <InteractiveHeight>11in</InteractiveHeight>
-  <Description>Show all the SQL Server instances that are being audited by SQLsecure.</Description>
+  <Description>Show all the SQL Server and Azure SQL Database instances that are being audited by SQLsecure.</Description>
   <ReportParameters>
     <ReportParameter Name="rundate">
       <DataType>String</DataType>
@@ -194,6 +194,14 @@ QBGp3Mg5BANFroCnWQU3GAzgeAFZGXE6UAGMhYhEmCrFhymLJzK/D9vPbINzzASuHkC5P4zVWVOaKLu9
           <DataField>numwindowsgroup</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+		 <Field Name="numazureaduser">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>numazureaduser</DataField>
+        </Field>
+        <Field Name="numazureadgroup">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>numazureadgroup</DataField>
+        </Field>
         <Field Name="numsqllogin">
           <DataField>numsqllogin</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -337,7 +345,7 @@ End Function
             <CanGrow>true</CanGrow>
             <Left>0.6875in</Left>
             <Height>0.1875in</Height>
-            <Value>="There are currently no SQL Servers audited by SQLsecure."</Value>
+            <Value>="There are currently no SQL Server and Azure SQL Database instances audited by SQLsecure."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.0625in</Top>
@@ -409,7 +417,7 @@ End Function
                           </Style>
                           <ZIndex>4</ZIndex>
                           <CanGrow>true</CanGrow>
-                          <Value>="SQL Server versions are up-to-date. To find the latest version, visit support.microsoft.com."</Value>
+                          <Value>="SQL Server and Azure SQL Database versions are up-to-date. To find the latest version, visit support.microsoft.com."</Value>
                         </Textbox>
                       </ReportItems>
                     </TableCell>
@@ -749,6 +757,56 @@ Fields!edition.Value)</Value>
                 </TableCell>
                 <TableCell>
                   <ReportItems>
+                    <Textbox Name="numazureaduser">
+                      <rd:DefaultName>numazureaduser</rd:DefaultName>
+                      <ZIndex>2</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Bottom>Solid</Bottom>
+                        </BorderStyle>
+                        <TextAlign>Center</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontSize>9pt</FontSize>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BackgroundColor>= iif(RowNumber(Nothing) Mod 2, "White", "WhiteSmoke")</BackgroundColor>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!numazureaduser.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="numazureadgroup">
+                      <rd:DefaultName>numazureadgroup</rd:DefaultName>
+                      <ZIndex>1</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Bottom>Solid</Bottom>
+                        </BorderStyle>
+                        <TextAlign>Center</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontSize>9pt</FontSize>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BackgroundColor>= iif(RowNumber(Nothing) Mod 2, "White", "WhiteSmoke")</BackgroundColor>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!numazureadgroup.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
                     <Textbox Name="numsqllogin">
                       <rd:DefaultName>numsqllogin</rd:DefaultName>
                       <Style>
@@ -984,6 +1042,50 @@ Fields!edition.Value)</Value>
                 </TableCell>
                 <TableCell>
                   <ReportItems>
+                    <Textbox Name="textboxAzureADUserHeader">
+                      <rd:DefaultName>textboxAzureADUserHeader</rd:DefaultName>
+                      <ZIndex>20</ZIndex>
+                      <Style>
+                        <TextAlign>Center</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <BackgroundColor>#006699</BackgroundColor>
+                        <Color>White</Color>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>Azure AD Users</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textboxAzureADGroupHeader">
+                      <rd:DefaultName>textboxAzureADGroupHeader</rd:DefaultName>
+                      <ZIndex>19</ZIndex>
+                      <Style>
+                        <TextAlign>Center</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <BackgroundColor>#336699</BackgroundColor>
+                        <Color>White</Color>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>Azure AD Groups</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
                     <Textbox Name="textbox17">
                       <rd:DefaultName>textbox17</rd:DefaultName>
                       <Style>
@@ -1038,8 +1140,14 @@ Fields!edition.Value)</Value>
           <TableColumn>
             <Width>1.1in</Width>
           </TableColumn>
+		<TableColumn>
+            <Width>0.85in</Width>
+          </TableColumn>
           <TableColumn>
-            <Width>1.1in</Width>
+            <Width>0.85in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>0.85in</Width>
           </TableColumn>
         </TableColumns>
         <Height>0.53in</Height>
@@ -1249,6 +1357,58 @@ Fields!edition.Value)</Value>
                     </Textbox>
                   </ReportItems>
                 </TableCell>
+				 <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textboxAzureADUser">
+                      <rd:DefaultName>textboxAzureADUser</rd:DefaultName>
+                      <ZIndex>11</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Top>Solid</Top>
+                        </BorderStyle>
+                        <TextAlign>Center</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <BorderWidth>
+                          <Default>5pt</Default>
+                        </BorderWidth>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <BorderColor>
+                          <Default>#006699</Default>
+                        </BorderColor>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textboxAzureADGroup">
+                      <rd:DefaultName>textboxAzureADGroup</rd:DefaultName>
+                      <ZIndex>10</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Top>Solid</Top>
+                        </BorderStyle>
+                        <TextAlign>Center</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <BorderWidth>
+                          <Default>5pt</Default>
+                        </BorderWidth>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <BorderColor>
+                          <Default>#006699</Default>
+                        </BorderColor>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
                 <TableCell>
                   <ReportItems>
                     <Textbox Name="textbox22">
@@ -1343,6 +1503,12 @@ Fields!edition.Value)</Value>
               <StaticMember>
                 <Label>Windows Groups</Label>
               </StaticMember>
+			  <StaticMember>
+                <Label>Azure AD Users</Label>
+              </StaticMember>
+              <StaticMember>
+                <Label>Azure AD Groups</Label>
+              </StaticMember>
               <StaticMember>
                 <Label>SQL Logins</Label>
               </StaticMember>
@@ -1423,6 +1589,36 @@ Fields!edition.Value)</Value>
               </DataPoint>
             </DataPoints>
           </ChartSeries>
+		   <ChartSeries>
+            <DataPoints>
+              <DataPoint>
+                <DataValues>
+                  <DataValue>
+                    <Value>=Fields!numazureaduser.Value</Value>
+                  </DataValue>
+                </DataValues>
+                <DataLabel />
+                <Marker>
+                  <Size>6pt</Size>
+                </Marker>
+              </DataPoint>
+            </DataPoints>
+          </ChartSeries>
+          <ChartSeries>
+            <DataPoints>
+              <DataPoint>
+                <DataValues>
+                  <DataValue>
+                    <Value>=Fields!numazureadgroup.Value</Value>
+                  </DataValue>
+                </DataValues>
+                <DataLabel />
+                <Marker>
+                  <Size>6pt</Size>
+                </Marker>
+              </DataPoint>
+            </DataPoints>
+          </ChartSeries>
           <ChartSeries>
             <DataPoints>
               <DataPoint>
@@ -1468,7 +1664,7 @@ Fields!edition.Value)</Value>
             </Style>
             <CanGrow>true</CanGrow>
             <Left>1.4375in</Left>
-            <Value>="This report shows all the SQL Server instances that are being audited by SQLsecure." &amp; vbcrlf &amp; vbcrlf &amp;
+            <Value>="This report shows all the SQL Server and Azure SQL Database instances that are being audited by SQLsecure." &amp; vbcrlf &amp; vbcrlf &amp;
 "The bar chart below shows a breakdown of login types by server."</Value>
           </Textbox>
         </ReportItems>

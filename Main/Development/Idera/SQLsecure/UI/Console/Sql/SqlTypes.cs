@@ -138,7 +138,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         internal const string WindowsLogin = "W";
         internal const string WindowsUser = "U";
         internal const string WindowsGroup = "G";
-        internal const string AzureADAccount = "EX";    // SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure AD Users or Groups
+        internal const string AzureADAccount = "A";    // SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure AD Users or Groups
         internal const string AzureADUser = "E";   
         internal const string AzureADGroup = "X";   
         
