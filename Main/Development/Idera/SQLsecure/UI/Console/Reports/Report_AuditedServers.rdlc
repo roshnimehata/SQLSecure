@@ -101,7 +101,7 @@
             </Style>
             <CanGrow>true</CanGrow>
             <Height>0.1875in</Height>
-            <Value>="There are currently no SQL Servers audited by SQLsecure."</Value>
+            <Value>="There are currently no SQL Server and Azure SQL Database instances audited by SQLsecure."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.0625in</Top>
@@ -1576,7 +1576,7 @@ End Function
 </Code>
   <Width>10in</Width>
   <InteractiveHeight>11in</InteractiveHeight>
-  <Description>Show all the SQL Server instances that are being audited by SQLsecure.</Description>
+  <Description>Show all the SQL Server and Azure SQL Database instances that are being audited by SQLsecure.</Description>
   <Language>=User!Language</Language>
   <PageFooter>
     <ReportItems>

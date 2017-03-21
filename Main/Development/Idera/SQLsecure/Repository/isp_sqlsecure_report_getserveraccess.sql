@@ -70,6 +70,15 @@ WHILE @@fetch_status = 0
 						DROP TABLE #tmpsid				
 					END
 			END
+		ELSE IF (@logintype = 'A') -- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+			BEGIN
+				IF (@iscasesensitive = 'Y')
+					INSERT INTO #tmplogins ([sid], principalid, [name], [type], serveraccess, serverdeny, [disabled]) (SELECT DISTINCT a.sid, a.principalid, a.name, a.type, a.serveraccess, a.serverdeny, a.disabled FROM serverprincipal a WHERE a.snapshotid = @snapshotid AND [type] in ('E', 'X') AND CONVERT(VARBINARY, [name])=CONVERT(VARBINARY, @sqllogin))
+				ELSE
+					INSERT INTO #tmplogins ([sid], principalid, [name], [type], serveraccess, serverdeny, [disabled]) (SELECT DISTINCT a.sid, a.principalid, a.name, a.type, a.serveraccess, a.serverdeny, a.disabled FROM serverprincipal a WHERE a.snapshotid = @snapshotid AND [type] in ('E', 'X') AND UPPER([name])=UPPER(@sqllogin))
+
+				SET @loginname = @sqllogin
+			END
 		ELSE IF (@logintype = 'E' or @logintype = 'X') -- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
 			BEGIN
 				IF (@iscasesensitive = 'Y')
