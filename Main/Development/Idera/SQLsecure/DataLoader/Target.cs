@@ -2597,7 +2597,7 @@ namespace Idera.SQLsecure.Collector
                     if (!firewallRules.ProcessFirewallRules(m_Repository.ConnectionString, m_ConnectionStringBuilder, databases))
                     {
                         isOk = false;
-                        strNewMessage = "Failed to load firewall rules for target SQL Server";
+                        strNewMessage = "Failed to load firewall rules for target Azure SQL Database";
                         PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                         snapshotStatus = Constants.StatusError;
                     }

@@ -180,8 +180,7 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             foreach (Sql.RegisteredServer server in Program.gController.ReportPolicy.GetMemberServers())
             {
-                if (server.ServerType == ServerType.OnPremise || server.ServerType == ServerType.SQLServerOnAzureVM) // SQLsecure 3.1 (Anshul) - Not applicable to ADB.
-                    _comboBox_Server.Items.Add(server.ConnectionName);
+                _comboBox_Server.Items.Add(server.ConnectionName);
             }
 
             //Keep the last selection for the user
