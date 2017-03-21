@@ -327,7 +327,7 @@ BEGIN
 										 (c.servertype = 'ADB') and (c.servertype = d.servertype) and (d.reportkey <> b.metricreportkey
 																				 or d.reporttext <> b.metricreporttext
 																				 or d.severity <> b.metricseveritycode
-																				 or a.severityvalues <> b.metricseverityvalues)
+																				 or d.severityvalues <> b.metricseverityvalues)
 									 )))
 								-- if only metric 54 is returned, then there were no snapshots and other metrics will not be returned
 								and exists (select * from policyassessment where policyid = @policyid and assessmentid = @assessmentid and metricid <> 54)
