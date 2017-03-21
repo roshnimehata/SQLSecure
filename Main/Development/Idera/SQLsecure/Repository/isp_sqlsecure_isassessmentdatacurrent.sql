@@ -353,7 +353,7 @@ BEGIN
 										 (c.servertype = 'ADB') and (c.servertype = d.servertype) and (d.reportkey <> b.metricreportkey
 																				 or d.reporttext <> b.metricreporttext
 																				 or d.severity <> b.metricseveritycode
-																				 or a.severityvalues <> b.metricseverityvalues)
+																				 or d.severityvalues <> b.metricseverityvalues)
 									 ))
 					end
 					select @isvalid = 0
