@@ -123,6 +123,17 @@ IF ( ISNULL(@ver, 900) < 3100 )
 											'Are any permissions granted to the public database role?')		
 		end
 		
+		select @metricid = 71
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
+		begin
+			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
+							values (@metricid, 'ADB', 'Unauthorized Account Check', 'Determine whether unauthorized accounts have sysadmin privileges on the Azure SQL Database or has SoD roles like "ALTER ANY COLUMN MASTER KEY", "ALTER ANY COLUMN ENCRYPTION KEY", "VIEW ANY COLUMN MASTER KEY DEFINITION", "VIEW ANY COLUMN ENCRYPTION KEY DEFINITION", "ALTER ANY SECURITY POLICY", "ALTER ANY MASK", "UNMASK"', '', 'When enabled, this check will identify a risk if any unauthorized accounts are members of the sysadmin server role or extended SoD roles. Specify the unauthorized accounts. Can use ''%'' as wildcard.')
+
+			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
+							values (0, @metricid, 0, 'ADB', 2, 'UNAUTHORIZED_ADMIN_ACCT', '',
+											'Do unauthorized accounts have sysadmin privileges or extended SoD roles?')
+		end
+		
 		select @metricid = 76
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
@@ -134,7 +145,18 @@ IF ( ISNULL(@ver, 900) < 3100 )
 							values (0, @metricid, 0, 'ADB', 1, '''none''', '',
 											'Do required administrative accounts exist?')
 		end
-			
+		
+		select @metricid = 84
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
+		begin
+			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
+							values (@metricid, 'ADB', 'Unauthorized SQL Logins Exist', 'Determine whether unauthorized SQL Logins have been created on the Azure SQL Database', '', 'When enabled, this check will identify a risk if any unauthorized SQL Logins exist on the SQL Server. Specify the authorized logins.')
+
+			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
+							values (0, @metricid, 0, 'ADB', 1, '', '',
+											'Do unauthorized SQL Logins exist on the Azure SQL Database?')
+		end
+		
 		select @metricid = 87
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
@@ -437,7 +459,9 @@ IF ( ISNULL(@ver, 900) < 3100 )
 			55,
 			56,
 			58,
+			71,
 			76,
+			84,
 			87,
 			89,
 			92,
