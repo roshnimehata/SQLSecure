@@ -493,7 +493,9 @@ Note : This report is not applicable to Azure SQL Database instances.";
 
         // Vulnerability Reports
         public const string ReportTitle_GuestEnabledDatabases = @"Guest Enabled Databases";
-        public static string ReportSummary_GuestEnabledDatabases = @"Show all databases on a SQL Server instance where the Guest user has access.";
+        public static string ReportSummary_GuestEnabledDatabases = @"Show all databases on a SQL Server instance where the Guest user has access.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_MixedModeAuthentication = @"Mixed Mode Authentication";
         public static string ReportSummary_MixedModeAuthentication = @"Show all SQL Server instances where Windows Authentication is not the only login method.
