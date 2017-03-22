@@ -28,11 +28,14 @@ INSERT #tmpservers
 
 SELECT	DISTINCT a.connectionname
 FROM	serversnapshot a, 
-		dbo.getsnapshotlist(@rundate, @usebaseline) b
+		dbo.getsnapshotlist(@rundate, @usebaseline) b,
+		registeredserver c
 WHERE	b.registeredserverid IN (SELECT registeredserverid FROM #tmpservers) 
 		AND a.snapshotid = b.snapshotid
 		AND UPPER(a.connectionname) LIKE UPPER(@serverName)
 		AND a.authenticationmode = 'M'
+		AND a.connectionname = c.connectionname	-- SQL secure 3.1 (Anshul Aggarwal) - MMA is the only option suppported in ADB, so skip them.
+		AND c.servertype <> 'ADB'
 
 ORDER BY a.connectionname
 

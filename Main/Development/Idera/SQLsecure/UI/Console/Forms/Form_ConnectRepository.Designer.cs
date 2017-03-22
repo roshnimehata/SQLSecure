@@ -200,7 +200,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // sql_authentication
             // 
             this.sql_authentication.AutoSize = true;
-            this.sql_authentication.Location = new System.Drawing.Point(77, 83);
+            this.sql_authentication.Location = new System.Drawing.Point(150, 83);
             this.sql_authentication.Name = "sql_authentication";
             this.sql_authentication.Size = new System.Drawing.Size(117, 17);
             this.sql_authentication.TabIndex = 13;
@@ -213,7 +213,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // windows_authentication
             // 
             this.windows_authentication.AutoSize = true;
-            this.windows_authentication.Location = new System.Drawing.Point(194, 83);
+            this.windows_authentication.Location = new System.Drawing.Point(9, 83);
             this.windows_authentication.Name = "windows_authentication";
             this.windows_authentication.Size = new System.Drawing.Size(140, 17);
             this.windows_authentication.TabIndex = 14;
