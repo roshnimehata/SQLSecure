@@ -1045,29 +1045,37 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
                                 if (sa != Server.ServerAccess.OK)
                                 {
-                                    if ((machine != null) && (machine.IndexOf(".") < 0) && (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
+                                    if ((!string.IsNullOrEmpty(serverName)) && (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
                                     {
-                                        if ((textbox_WindowsUser.Text != null) && (textbox_WindowsUser.Text.IndexOf(@"\") != -1))
-                                        {
-                                            string tempMachine = string.Format("{0}.{1}", machine, textbox_WindowsUser.Text.Substring(0, textbox_WindowsUser.Text.IndexOf(@"\")));
-                                            Server.ServerAccess tempSa = sa;
-                                            sa = Server.ServerAccess.ERROR_OTHER;
-                                            string tempErrorMsg = errorMsg;
-                                            errorMsg = string.Empty;
-                                            sa = Server.CheckServerAccess(tempMachine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+                                        string tempMachine = string.Empty;
 
-                                            if (sa != Server.ServerAccess.OK)
-                                            {
-                                                sa = tempSa;
-                                                errorMsg = tempErrorMsg;
-                                            }
-                                            else
-                                            {
-                                                machine = tempMachine;
-                                            }
+                                        if (serverName.IndexOf(@"\") != -1)
+                                        {
+                                            tempMachine = serverName.Substring(0, serverName.IndexOf(@"\"));
+                                        }
+                                        else
+                                        {
+                                            tempMachine = serverName;
+                                        }
+
+                                        Server.ServerAccess tempSa = sa;
+                                        sa = Server.ServerAccess.ERROR_OTHER;
+                                        string tempErrorMsg = errorMsg;
+                                        errorMsg = string.Empty;
+                                        sa = Server.CheckServerAccess(tempMachine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+
+                                        if (sa != Server.ServerAccess.OK)
+                                        {
+                                            sa = tempSa;
+                                            errorMsg = tempErrorMsg;
+                                        }
+                                        else
+                                        {
+                                            machine = tempMachine;
                                         }
                                     }
                                 }
+
 
                                 
                             }
