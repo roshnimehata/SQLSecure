@@ -915,29 +915,7 @@ namespace Idera.SQLsecure.Collector
                         //applies to azure DB
                         getCollationProperty(ref enumStatus, isOk, ref casesensitivemode, target);
 
-                        // enableproxyaccount
-                        //not supported for azure DB
-                        //checkProxyAccount(ref enumStatus, isOk, ref enableProxyAcct, target);
-
-                        // Is sa account password NULL
-                        //sa account is not there in azure DB
-                        //checkSaAccountPasswordForNull(ref enumStatus, isOk, ref issaPasswordNull, target);
-
-
-                        // Is SysAdmin only allowed to execute cmdExec SQL Server Agent Jobs
-                        //SQL server agent is not there in azure DB
-                        //checkSQLAgentJobPermissions(ref enumStatus, isOk, ref enableProxyAcct, ref isSysAdminOnlyCmdExec, target);
-
-                        //there might be some different way to do this in azure db
-                        if (isOk)
-                        {
-                            // Replication Enabled
-                            //checkReplication(ref enumStatus, ref isReplicationEnabled, target);
-
-                            //Is Server Distributor, isPublisher, HasRemotePublisher
-                            //checkDistributorPublisher(ref enumStatus, ref isDistributor, ref isPublisher, ref hasRemotePublisher, target);
-
-                        }
+                        
 
                         // Read Security configuration information
                         //supported for azure DB
@@ -955,22 +933,7 @@ namespace Idera.SQLsecure.Collector
                     Program.RestoreImpersonationContext(wi);
                 }
 
-                // Is Server Domain Controller
-                //not supported by azure DB
-
-                //if (isOk)
-                //{
-                //    systemDrive = m_Server.SystemDrive;
-                //}
-
-                //// Is Server Domain Controller
-                //if (isOk)
-                //{
-                //    isDomainControler = m_Server.IsDomainController == true
-                //                                           ? Constants.Yes
-                //                                           : Constants.No;
-                //}
-
+               
                 // Connect to the repository, create snapshot entry and get
                 // the snapshotid.
                 saveSnapshotDataInRepository(ref snapshotid, ref enumStatus, ref isOk, authenticationMode, version, edition, 
@@ -981,11 +944,7 @@ namespace Idera.SQLsecure.Collector
                                 issaPasswordNull, isSysAdminOnlyCmdExec, isReplicationEnabled, isDistributor, isPublisher, 
                                 hasRemotePublisher, ref isWeakPasswordDetectionEnabled, isClrEnabled, systemDrive,serverType);
 
-                //get info about sql server jobs proxies
-                //getSQLServerJobProxiesInfo(snapshotid, ref enumStatus, ref isOk, servername);
-                //getSQLServerJobInfo(snapshotid, ref enumStatus, ref isOk, servername);
-                //get info sql server availability groups
-                //getSQLServerAvailabilityGroupsInfo(snapshotid, ref enumStatus, ref isOk, servername);
+                
 
             }
 
@@ -1104,6 +1063,11 @@ namespace Idera.SQLsecure.Collector
                         //else
 
                         instance = m_ConnectionStringBuilder.DataSource.Split(',')[0];
+                        //Barkha Khatri -- adding server name for Azure SQL DB
+                        if(serverType==ServerType.AzureSQLDatabase)
+                        {
+                            servername = instance;
+                        }
                         SqlParameter paramConnectionname =
                             new SqlParameter(ParamConnectionname, instance);
                         SqlParameter paramStarttime =
@@ -2514,15 +2478,7 @@ namespace Idera.SQLsecure.Collector
                     snapshotStatus = Constants.StatusWarning;
                 }
 
-                // Check if we read OS information successfull, & issue warning if we didn't
-                // -------------------------------------------------------------------------
-                //if (m_Server.NumWarnings > 0)
-                //{
-                //    strNewMessage = "Failed to load some OS settings";
-                //    PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //    snapshotStatus = Constants.StatusWarning;
-                //}
-
+                
 
                 // Update Application and Event Log with start status
                 // -------------------------------------------------
@@ -2606,13 +2562,7 @@ namespace Idera.SQLsecure.Collector
                                     sw.ElapsedMilliseconds.ToString() + " msec");
                 sw.Stop();
 
-                //if (isOk)
-                //{
-                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                //    logX.loggerX.Verbose("TIMING - Time to optimize filters = " + sw.ElapsedMilliseconds.ToString() +
-                //                         " msec");
-                //}
+                
                 // Start loading the data.
                 if (isOk)
                 {
@@ -2640,40 +2590,8 @@ namespace Idera.SQLsecure.Collector
                     // Load group memberships.
                     sw.Reset();
 
-                    //    //Process LinkedServer permissions
-                    //    sw.Start();
-                    //    if (isOk)
-                    //    {
+                    
 
-                    //        if (!LinkedServer.Process(ConnectionString, m_Repository.ConnectionString, m_snapshotId, ref metricsData))
-                    //        {
-                    //            strNewMessage = "Failed to process server objects";
-                    //            PostActivityMessage(ref strErrorMessage, strNewMessage, Constants.ActivityType_Error);
-                    //            snapshotStatus = Constants.StatusError;
-                    //            isOk = false;
-                    //        }
-                    //    }
-                    //    sw.Reset();
-
-
-                    //    sw.Start();
-                    //    if (isOk)
-                    //    {
-                    //        if (loadDomainInformation(m_snapshotId, false, users, windowsGroupLogins, out wellKnownAccounts) != 0)
-                    //        {
-                    //            //don't run this function because next code overwrites some snapshot results
-                    //            //UpdateSuspectAccounts(false);
-                    //            strNewMessage = "Suspect Windows accounts encountered processing SQL Server logins";
-                    //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                    //            snapshotStatus = Constants.StatusWarning;
-                    //        }
-                    //        Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
-                    //    }
-                    //    sw.Stop();
-                    //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                    //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                    //    logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
-                    //                         sw.ElapsedMilliseconds.ToString() + " msec");
 
                     // Process database level objects.
                     sw.Reset();
@@ -2696,35 +2614,7 @@ namespace Idera.SQLsecure.Collector
                     logX.loggerX.Verbose("TIMING - Time to Process Database Objects = " +
                                          sw.ElapsedMilliseconds.ToString() + " msec");
 
-                    //        if (!LinkedServer.Process(ConnectionString, m_Repository.ConnectionString, m_snapshotId, ref metricsData))
-                    //        {
-                    //            strNewMessage = "Failed to process server objects";
-                    //            PostActivityMessage(ref strErrorMessage, strNewMessage, Constants.ActivityType_Error);
-                    //            snapshotStatus = Constants.StatusError;
-                    //            isOk = false;
-                    //        }
-                    //    }
-                    //    sw.Reset();
-
-
-                    //    sw.Start();
-                    //    if (isOk)
-                    //    {
-                    //        if (loadDomainInformation(m_snapshotId, false, users, windowsGroupLogins, out wellKnownAccounts) != 0)
-                    //        {
-                    //            //don't run this function because next code overwrites some snapshot results
-                    //            //UpdateSuspectAccounts(false);
-                    //            strNewMessage = "Suspect Windows accounts encountered processing SQL Server logins";
-                    //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                    //            snapshotStatus = Constants.StatusWarning;
-                    //        }
-                    //        Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
-                    //    }
-                    //    sw.Stop();
-                    //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                    //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                    //    logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
-                    //                         sw.ElapsedMilliseconds.ToString() + " msec");
+                    
 
                     // Process database level objects.
 

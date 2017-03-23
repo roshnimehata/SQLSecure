@@ -111,8 +111,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public int? ConnectionPort { get { return m_ConnectionPort.IsNull ? (int?)null : m_ConnectionPort.Value; } }
         public string ServerName { get { return (m_ServerName.IsNull ? string.Empty : m_ServerName.Value.ToUpper()); } }
         public string InstanceName { get { return (m_InstanceName.IsNull ? string.Empty : m_InstanceName.Value.ToUpper()); } }
-        public string FullName { get { return FullNameStr(ServerName, InstanceName); } }
-        public string FullConnectionName { get { return FullConnectionNameStr(ServerName, InstanceName, ConnectionPort); } }
+        public string FullName { get { return FullNameStr(ServerName, InstanceName,ServerType); } }
+        public string FullConnectionName { get { return FullConnectionNameStr(ServerName, InstanceName, ConnectionPort,ServerType); } }
         public string SqlLogin { get { return (m_SqlLogin.IsNull ? string.Empty : m_SqlLogin.Value); } }
         public string SqlPassword { get { return (m_SqlPassword.IsNull ? string.Empty : Encryptor.Decrypt(m_SqlPassword.Value)); } }
         public string WindowsUser { get { return (m_WindowsUser.IsNull ? string.Empty : m_WindowsUser.Value); } }
@@ -1031,13 +1031,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
-        static public string FullNameStr(string server, string instance)
+        //Barkha Khatri(SQLSecure3.1) SQLSecure 1834 fix
+        static public string FullNameStr(string server, string instance, ServerType serverType)
         {
             Debug.Assert(!string.IsNullOrEmpty(server));
 
             string full = server;
 
-            if (!string.IsNullOrEmpty(instance))
+            if (!string.IsNullOrEmpty(instance) && serverType!=ServerType.AzureSQLDatabase )
             {
                 full += @"\" + instance;
             }
@@ -1045,9 +1046,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
             return full;
         }
 
-        static public string FullConnectionNameStr(string server, string instance, int? port)
+        static public string FullConnectionNameStr(string server, string instance, int? port,ServerType serverType)
         {
-            string full = FullNameStr(server, instance);
+            string full = FullNameStr(server, instance,serverType);
 
             if (port.HasValue)
             {
