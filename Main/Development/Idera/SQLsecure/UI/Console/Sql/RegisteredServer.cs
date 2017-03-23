@@ -1038,7 +1038,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             string full = server;
 
-            if (!string.IsNullOrEmpty(instance)&&serverType!=ServerType.AzureSQLDatabase )
+            if (!string.IsNullOrEmpty(instance) && serverType!=ServerType.AzureSQLDatabase )
             {
                 full += @"\" + instance;
             }
