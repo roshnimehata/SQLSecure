@@ -468,7 +468,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     signedcrypttype = c.crypt_type, isrowsecurityenabled = null, " +
                                     @"FQN = " + GetFullyQualifidAssemblyQuery(version, database, targetServerName, "a.name") + @" "
                                     + @"FROM " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.assemblies a " +
-                                    "LEFT JOIN sys.crypt_properties c ON a.assembly_id = c.major_id AND c.class_desc = 'ASSEMBLY' ";
+                                    "LEFT JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.crypt_properties c ON a.assembly_id = c.major_id AND c.class_desc = 'ASSEMBLY' ";
 						}
 					}
 					break;
