@@ -21,7 +21,7 @@ namespace Idera.SQLsecure.Collector.Sql
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Sql.AzureSqlDBFirewallRules");
         private List<AzureSqlDBFirewallRule> firewallRules = new List<AzureSqlDBFirewallRule>();
         private int m_snapshotId;
-        private const string SERVER_FIREWALL_QUERY = "select name, start_ip_address, end_ip_address from master.sys.firewall_rules";
+        private const string SERVER_FIREWALL_QUERY = "select name, start_ip_address, end_ip_address from [master].sys.firewall_rules";
         private const string DB_FIREWALL_QUERY = "select name, start_ip_address, end_ip_address from {0}.sys.database_firewall_rules ";
         private const int FieldName = 0;
         private const int FieldStartIPAddress = 1;
@@ -102,9 +102,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                     }
                                 }
 
+                                // SQLSECU-1772 - Unable to snapshot Azure DB databases with a dash in the name.
                                 // Query to get the table objects.
                                 using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(target, null,
-                                                    CommandType.Text, string.Format(DB_FIREWALL_QUERY, db.Name), null))
+                                                    CommandType.Text, string.Format(DB_FIREWALL_QUERY, Sql.SqlHelper.CreateSafeDatabaseName(db.Name)), null))
                                 {
                                     while (rdr.Read())
                                     {
