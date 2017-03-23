@@ -53,7 +53,8 @@ AS SELECT
 	a.[sapasswordempty],
 	a.[systemdrive],
 	a.[adhocdistributedqueriesenabled],
-	a.[isweakpassworddetectionenabled] as weakpassworddectectionenabled
+	a.[isweakpassworddetectionenabled] as weakpassworddectectionenabled,
+	b.[servertype]
  FROM [serversnapshot] a
   INNER JOIN [registeredserver] b ON a.[connectionname] = b.[connectionname]
  
