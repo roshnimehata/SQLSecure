@@ -4409,7 +4409,6 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ID_STRING443</td><td>1033</td><td>SQLSEC~1|SQLsecure</td><td>0</td><td/><td>1638226090</td></row>
 		<row><td>ID_STRING444</td><td>1033</td><td>SQLSEC~1|SQL Secure</td><td>0</td><td/><td>1638220769</td></row>
 		<row><td>ID_STRING445</td><td>1033</td><td>[ProductName] requires that your computer has the .NET Framework  version4.6</td><td>0</td><td/><td>2040899944</td></row>
-		<row><td>ID_STRING446</td><td>1033</td><td>This is the 64-bit version of [ProductName] and not designed to work on this operating system.  32-bit versions of the software are avaliable for download from Idera.</td><td>0</td><td/><td>-1180349011</td></row>
 		<row><td>ID_STRING45</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>228144489</td></row>
 		<row><td>ID_STRING46</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>228144489</td></row>
 		<row><td>ID_STRING47</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>496621705</td></row>
@@ -4987,7 +4986,6 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>BETA_INSTALL &lt;&gt; "TRUE"</td><td>##ID_STRING411##</td></row>
 		<row><td>DOTNET &lt;&gt; 0</td><td>##ID_STRING398##</td></row>
 		<row><td>DOTNETFRAMEWORKVERSION &gt;= "#378389"</td><td>##ID_STRING445##</td></row>
-		<row><td>Intel64 and Msix64</td><td>##ID_STRING446##</td></row>
 		<row><td>MDACFOUND &gt;= MDAC_MIN_VERSION</td><td>##ID_STRING404##</td></row>
 	</table>
 
