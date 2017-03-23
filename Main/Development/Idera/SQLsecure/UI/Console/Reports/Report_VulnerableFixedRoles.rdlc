@@ -81,7 +81,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="This report shows all SQL Server instances that contain fixed roles assigned to public or guest."</Value>
+            <Value>="This report shows all SQL Server and Azure SQL Database instances that contain fixed roles assigned to public or guest."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
@@ -118,7 +118,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="Assigning fixed roles to public or guest is a high security risk. Consider removing all assignments for public and guest from any fixed roles on your SQL Server instances."</Value>
+            <Value>="Assigning fixed roles to public or guest is a high security risk. Consider removing all assignments for public and guest from any fixed roles on your SQL Server and Azure SQL Database instances."</Value>
           </Textbox>
         </ReportItems>
         <Top>1.0625in</Top>
@@ -787,7 +787,7 @@ Function setServerFilter(s As String)
 End Function</Code>
   <Width>10in</Width>
   <InteractiveHeight>11in</InteractiveHeight>
-  <Description>Show all SQL Server instances that contain fixed roles assigned to public or guest.</Description>
+  <Description>Show all SQL Server and Azure SQL Database instances that contain fixed roles assigned to public or guest.</Description>
   <Language>=User!Language</Language>
   <PageFooter>
     <ReportItems>

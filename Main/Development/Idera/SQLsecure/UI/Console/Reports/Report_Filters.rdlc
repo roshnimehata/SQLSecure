@@ -107,7 +107,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="This report shows the data collection filters for all SQL Server instances in SQLsecure."</Value>
+            <Value>="This report shows the data collection filters for all SQL Server and Azure SQL Database instances in SQLsecure."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
@@ -1011,7 +1011,7 @@ Function setServerFilter(s As String)
 End Function</Code>
   <Width>10in</Width>
   <InteractiveHeight>11in</InteractiveHeight>
-  <Description>Show the data collection filters for all SQL Server instances.</Description>
+  <Description>Show the data collection filters for all SQL Server and Azure SQL Database instances.</Description>
   <Language>=User!Language</Language>
   <PageFooter>
     <ReportItems>

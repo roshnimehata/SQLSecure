@@ -56,6 +56,10 @@ namespace Idera.SQLsecure.Collector
         private ServerType serverType = ServerType.OnPremise;
         private AuthType authType = AuthType.Null;
 
+		// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+        private string m_SQLServerOnAzureVM_FullName;
+        private string m_SQLServerOnAzureVM_DomainName;
+
         #endregion
 
         Server.WriteActivityToRepositoryDelegate WriteAppActivityToRepository;
@@ -411,6 +415,20 @@ namespace Idera.SQLsecure.Collector
                     //serverType = (ServerType)Enum.Parse(typeof(ServerType), serverTypeString);
                     serverType = Helper.ConvertSQLTypeStringToEnum(serverTypeString);
                     authType = (AuthType)Enum.Parse(typeof(AuthType), sqlAuthTypeString);
+
+					// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+
+                    if (serverType == ServerType.SQLServerOnAzureVM)
+                    {
+                        m_SQLServerOnAzureVM_FullName = server;
+
+                        if (server.IndexOf(".") != -1)
+                        {
+                            m_SQLServerOnAzureVM_DomainName = server.Substring(server.IndexOf(".") + 1);
+                            server = server.Substring(0, server.IndexOf("."));
+                        }
+                    }
+
                     string login = string.Empty;
                     string password = string.Empty;
                     if (authType == AuthType.S || serverType==ServerType.AzureSQLDatabase)
@@ -432,7 +450,10 @@ namespace Idera.SQLsecure.Collector
                     }
                     //SQLsecure 3.1 (Tushar)--Added support for Azure VM.
                     else if (serverType == ServerType.SQLServerOnAzureVM)
-                        SettingsForAzureVM(server);
+                    {
+
+                        SettingsForAzureVM(m_SQLServerOnAzureVM_FullName);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -538,6 +559,20 @@ namespace Idera.SQLsecure.Collector
                     //serverType = (ServerType)Enum.Parse(typeof(ServerType), serverTypeString);
                     serverType = Helper.ConvertSQLTypeStringToEnum(serverTypeString);
                     authType = (AuthType)Enum.Parse(typeof(AuthType), sqlAuthTypeString);
+
+					// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+
+                    if (serverType == ServerType.SQLServerOnAzureVM)
+                    {
+                        m_SQLServerOnAzureVM_FullName = server;
+
+                        if (server.IndexOf(".") != -1)
+                        {
+                            m_SQLServerOnAzureVM_DomainName = server.Substring(server.IndexOf(".") + 1);
+                            server = server.Substring(0, server.IndexOf("."));
+                        }
+                    }
+
                     string login = string.Empty;
                     string password = string.Empty;
                     if (authType == AuthType.S)
@@ -880,29 +915,7 @@ namespace Idera.SQLsecure.Collector
                         //applies to azure DB
                         getCollationProperty(ref enumStatus, isOk, ref casesensitivemode, target);
 
-                        // enableproxyaccount
-                        //not supported for azure DB
-                        //checkProxyAccount(ref enumStatus, isOk, ref enableProxyAcct, target);
-
-                        // Is sa account password NULL
-                        //sa account is not there in azure DB
-                        //checkSaAccountPasswordForNull(ref enumStatus, isOk, ref issaPasswordNull, target);
-
-
-                        // Is SysAdmin only allowed to execute cmdExec SQL Server Agent Jobs
-                        //SQL server agent is not there in azure DB
-                        //checkSQLAgentJobPermissions(ref enumStatus, isOk, ref enableProxyAcct, ref isSysAdminOnlyCmdExec, target);
-
-                        //there might be some different way to do this in azure db
-                        if (isOk)
-                        {
-                            // Replication Enabled
-                            //checkReplication(ref enumStatus, ref isReplicationEnabled, target);
-
-                            //Is Server Distributor, isPublisher, HasRemotePublisher
-                            //checkDistributorPublisher(ref enumStatus, ref isDistributor, ref isPublisher, ref hasRemotePublisher, target);
-
-                        }
+                        
 
                         // Read Security configuration information
                         //supported for azure DB
@@ -920,22 +933,7 @@ namespace Idera.SQLsecure.Collector
                     Program.RestoreImpersonationContext(wi);
                 }
 
-                // Is Server Domain Controller
-                //not supported by azure DB
-
-                //if (isOk)
-                //{
-                //    systemDrive = m_Server.SystemDrive;
-                //}
-
-                //// Is Server Domain Controller
-                //if (isOk)
-                //{
-                //    isDomainControler = m_Server.IsDomainController == true
-                //                                           ? Constants.Yes
-                //                                           : Constants.No;
-                //}
-
+               
                 // Connect to the repository, create snapshot entry and get
                 // the snapshotid.
                 saveSnapshotDataInRepository(ref snapshotid, ref enumStatus, ref isOk, authenticationMode, version, edition, 
@@ -946,11 +944,7 @@ namespace Idera.SQLsecure.Collector
                                 issaPasswordNull, isSysAdminOnlyCmdExec, isReplicationEnabled, isDistributor, isPublisher, 
                                 hasRemotePublisher, ref isWeakPasswordDetectionEnabled, isClrEnabled, systemDrive,serverType);
 
-                //get info about sql server jobs proxies
-                //getSQLServerJobProxiesInfo(snapshotid, ref enumStatus, ref isOk, servername);
-                //getSQLServerJobInfo(snapshotid, ref enumStatus, ref isOk, servername);
-                //get info sql server availability groups
-                //getSQLServerAvailabilityGroupsInfo(snapshotid, ref enumStatus, ref isOk, servername);
+                
 
             }
 
@@ -1069,6 +1063,11 @@ namespace Idera.SQLsecure.Collector
                         //else
 
                         instance = m_ConnectionStringBuilder.DataSource.Split(',')[0];
+                        //Barkha Khatri -- adding server name for Azure SQL DB
+                        if(serverType==ServerType.AzureSQLDatabase)
+                        {
+                            servername = instance;
+                        }
                         SqlParameter paramConnectionname =
                             new SqlParameter(ParamConnectionname, instance);
                         SqlParameter paramStarttime =
@@ -2479,15 +2478,7 @@ namespace Idera.SQLsecure.Collector
                     snapshotStatus = Constants.StatusWarning;
                 }
 
-                // Check if we read OS information successfull, & issue warning if we didn't
-                // -------------------------------------------------------------------------
-                //if (m_Server.NumWarnings > 0)
-                //{
-                //    strNewMessage = "Failed to load some OS settings";
-                //    PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //    snapshotStatus = Constants.StatusWarning;
-                //}
-
+                
 
                 // Update Application and Event Log with start status
                 // -------------------------------------------------
@@ -2511,94 +2502,6 @@ namespace Idera.SQLsecure.Collector
                                          " msec");
                 }
 
-                //if (isOk)-Registry is not there for Azure DB
-                //{
-                //    // Load SQLServer Settings from Registry of Target Server
-                //    if (registryPermissions == null)
-                //    {
-                //        registryPermissions =
-                //            new RegistryPermissions(m_snapshotId, m_Server.Name,
-                //                                    Idera.SQLsecure.Core.Accounts.Path.GetInstanceFromSQLServerInstance(TargetInstance),
-                //                                    m_VersionEnum);
-                //        int numWarnings = registryPermissions.LoadRegistrySettings();
-                //        if (numWarnings > 0)
-                //        {
-                //            //isOk = false;
-                //            strNewMessage = "Failed to load some registry configuration options for target SQL Server";
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //        //else
-                //        {
-                //            registryPermissions.WriteRegistrySettingsToRepository(m_Repository.ConnectionString);
-                //        }
-                //    }
-                //}
-
-                // Get SQLServer Services from Target-SQL Azure DB services are not there in Azure DB
-                //if (isOk)
-                //{
-                //    string instanceName = Path.GetInstanceFromSQLServerInstance(TargetInstance);
-                //    string computerName = Path.WhackPrefixComputer(m_Server.Name);
-                //    sqlServices = new SQLServices(computerName, instanceName, m_VersionEnum);
-                //    if (sqlServices.GetSQLServices(m_Repository.ConnectionString, m_snapshotId) != 0)
-                //    {
-                //        // Don't abort if GetSQLServices Fails
-                //        strNewMessage = "Failed to load properties for some SQL Services on target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-                //}
-
-                // Load Registry Permissions- does not apply to Azure DB
-                //if (isOk)
-                //{
-                //    if (registryPermissions != null)
-                //    {
-                //        if (registryPermissions.ProcessRegistryPermissions(sqlServices.Services) != 0)
-                //        {
-                //            strNewMessage = "Failed to load registry permissions for target SQL Server";
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //        registryPermissions.WriteRegistryPermissionToRepository(m_Repository.ConnectionString, 0);
-                //    }
-                //}
-
-                // Load File Permissions-not applicable to azure DB
-                //if (isOk)
-                //{
-                //    if (filePermissions == null)
-                //    {
-                //        filePermissions = new FilePermissions(m_snapshotId, m_Server.Name, m_VersionEnum);
-                //    }
-                //    if (filePermissions.LoadFilePermissionsForInstallationDirectory(registryPermissions.InstallPath) != 0)
-                //    {
-                //        strNewMessage = "Failed to load file permissions for target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-
-                //    //for audit folders--they are not applicable to azure DB
-                //    foreach (string auditFolder in m_auditFolders)
-                //    {
-                //        if (filePermissions.LoadFilePermissionsForAuditDirectory(auditFolder) != 0)
-                //        {
-                //            strNewMessage = string.Format("Failed to load file permissions for '{0}' audit folder", auditFolder);
-                //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //            snapshotStatus = Constants.StatusWarning;
-                //        }
-                //    }
-
-                //    if (filePermissions.LoadFilePermissionForServices(sqlServices.Services) != 0)
-                //    {
-                //        strNewMessage = "Failed to load file permissions for SQL Services on target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-                //}
-
-
 
                 //Done
                 //Get a list of databases, from the target SQL Server.
@@ -2621,47 +2524,7 @@ namespace Idera.SQLsecure.Collector
                     }
                 }
 
-                //sw.Stop();
-                //if (isOk)
-                //{
-                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                //    logX.loggerX.Verbose("TIMING - Time to Get all databases = " + sw.ElapsedMilliseconds.ToString() +
-                //                         " msec");
-                //}
-
-                // Process Database File Permissions-not applicable on azure
-                //if (isOk)
-                //{
-                //    if (filePermissions.GetDatabaseFilePermissions(databases) != 0)
-                //    {
-                //        strNewMessage = "Failed to load some Database File permissions for target SQL Server";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-
-                //    filePermissions.WriteFilePermissionToRepository(m_Repository.ConnectionString,
-                //                                                        registryPermissions.NumOSObjectsWrittenToRepository);
-                //}
-                //if (isOk) todo
-                //{
-                //    List<Account> users = new List<Account>();
-                //    List<Account> groups = new List<Account>();
-                //    List<string> wellKnownAccounts = null;
-                //    int numWarn = filePermissions.GetUsersAndGroups(ref users, ref groups);
-                //    numWarn += registryPermissions.GetUsersAndGroups(ref users, ref groups);
-                //    if (loadDomainInformation(m_snapshotId, true, users, groups, out wellKnownAccounts) != 0 || numWarn != 0)
-                //    {
-                //        //don't run this function because next code overwrites some snapshot results
-                //        //UpdateSuspectAccounts(true);
-                //        strNewMessage = "Suspect Windows accounts encountered processing OS objects";
-                //        PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                //        snapshotStatus = Constants.StatusWarning;
-                //    }
-                //    // Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
-
-                //}
-
+                
                 // Optimize the filters
                 sw.Reset();
                 sw.Start();
@@ -2690,7 +2553,7 @@ namespace Idera.SQLsecure.Collector
                     if (!firewallRules.ProcessFirewallRules(m_Repository.ConnectionString, m_ConnectionStringBuilder, databases))
                     {
                         isOk = false;
-                        strNewMessage = "Failed to load firewall rules for target SQL Server";
+                        strNewMessage = "Failed to load firewall rules for target Azure SQL Database";
                         PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
                         snapshotStatus = Constants.StatusError;
                     }
@@ -2699,13 +2562,7 @@ namespace Idera.SQLsecure.Collector
                                     sw.ElapsedMilliseconds.ToString() + " msec");
                 sw.Stop();
 
-                //if (isOk)
-                //{
-                //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                //    logX.loggerX.Verbose("TIMING - Time to optimize filters = " + sw.ElapsedMilliseconds.ToString() +
-                //                         " msec");
-                //}
+                
                 // Start loading the data.
                 if (isOk)
                 {
@@ -2733,40 +2590,8 @@ namespace Idera.SQLsecure.Collector
                     // Load group memberships.
                     sw.Reset();
 
-                    //    //Process LinkedServer permissions
-                    //    sw.Start();
-                    //    if (isOk)
-                    //    {
+                    
 
-                    //        if (!LinkedServer.Process(ConnectionString, m_Repository.ConnectionString, m_snapshotId, ref metricsData))
-                    //        {
-                    //            strNewMessage = "Failed to process server objects";
-                    //            PostActivityMessage(ref strErrorMessage, strNewMessage, Constants.ActivityType_Error);
-                    //            snapshotStatus = Constants.StatusError;
-                    //            isOk = false;
-                    //        }
-                    //    }
-                    //    sw.Reset();
-
-
-                    //    sw.Start();
-                    //    if (isOk)
-                    //    {
-                    //        if (loadDomainInformation(m_snapshotId, false, users, windowsGroupLogins, out wellKnownAccounts) != 0)
-                    //        {
-                    //            //don't run this function because next code overwrites some snapshot results
-                    //            //UpdateSuspectAccounts(false);
-                    //            strNewMessage = "Suspect Windows accounts encountered processing SQL Server logins";
-                    //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                    //            snapshotStatus = Constants.StatusWarning;
-                    //        }
-                    //        Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
-                    //    }
-                    //    sw.Stop();
-                    //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                    //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                    //    logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
-                    //                         sw.ElapsedMilliseconds.ToString() + " msec");
 
                     // Process database level objects.
                     sw.Reset();
@@ -2789,35 +2614,7 @@ namespace Idera.SQLsecure.Collector
                     logX.loggerX.Verbose("TIMING - Time to Process Database Objects = " +
                                          sw.ElapsedMilliseconds.ToString() + " msec");
 
-                    //        if (!LinkedServer.Process(ConnectionString, m_Repository.ConnectionString, m_snapshotId, ref metricsData))
-                    //        {
-                    //            strNewMessage = "Failed to process server objects";
-                    //            PostActivityMessage(ref strErrorMessage, strNewMessage, Constants.ActivityType_Error);
-                    //            snapshotStatus = Constants.StatusError;
-                    //            isOk = false;
-                    //        }
-                    //    }
-                    //    sw.Reset();
-
-
-                    //    sw.Start();
-                    //    if (isOk)
-                    //    {
-                    //        if (loadDomainInformation(m_snapshotId, false, users, windowsGroupLogins, out wellKnownAccounts) != 0)
-                    //        {
-                    //            //don't run this function because next code overwrites some snapshot results
-                    //            //UpdateSuspectAccounts(false);
-                    //            strNewMessage = "Suspect Windows accounts encountered processing SQL Server logins";
-                    //            PostActivityMessage(ref strWarnMessage, strNewMessage, Collector.Constants.ActivityType_Warning);
-                    //            snapshotStatus = Constants.StatusWarning;
-                    //        }
-                    //        Sql.Database.SaveWellKnownGroups(m_Repository.ConnectionString, m_snapshotId, wellKnownAccounts);
-                    //    }
-                    //    sw.Stop();
-                    //    Sql.Database.UpdateRepositorySnapshotProgress(m_Repository.ConnectionString, m_snapshotId,
-                    //                                                  string.Format(strProgressFmt, ++nStep, nTotalSteps));
-                    //    logX.loggerX.Verbose("TIMING - Time to Load Group Memberships = " +
-                    //                         sw.ElapsedMilliseconds.ToString() + " msec");
+                    
 
                     // Process database level objects.
 

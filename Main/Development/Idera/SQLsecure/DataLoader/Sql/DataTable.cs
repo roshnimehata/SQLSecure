@@ -83,6 +83,8 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string ParamDefaultDatabase = "defaultdatabase";
         internal const string ParamDefaultLanguage = "defaultlanguage";
         internal const string ParamPasswordStatus = "passwordStatus";
+        internal const string ParamAzureSqlLoginIsDisabled = "isdisabled";
+        
 
         internal const string RepositoryTable = "SQLsecure.dbo.serverprincipal";
     }

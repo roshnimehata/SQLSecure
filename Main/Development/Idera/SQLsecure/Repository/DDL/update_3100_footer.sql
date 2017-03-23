@@ -65,6 +65,18 @@ IF ( ISNULL(@ver, 900) < 3100 )
 											'Are any user stored procedures not encrypted?')	
 		end
 		
+		select @metricid = 30
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
+		begin
+
+			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
+							values (@metricid, 'ADB', 'Replication Enabled', 'Determine whether replication is enabled on Azure SQL Databases', '', 'When enabled, this check will identify a risk if replication is enabled on Azure SQL Databases.')
+
+			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
+							values (0, @metricid, 0, 'ADB', 1, '', '',
+											'Is replication enabled on Azure SQL Databases?')	
+		end
+		
 		select @metricid = 54
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin			
@@ -111,6 +123,17 @@ IF ( ISNULL(@ver, 900) < 3100 )
 											'Are any permissions granted to the public database role?')		
 		end
 		
+		select @metricid = 71
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
+		begin
+			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
+							values (@metricid, 'ADB', 'Unauthorized Account Check', 'Determine whether unauthorized accounts have sysadmin privileges on the Azure SQL Database or has SoD roles like "ALTER ANY COLUMN MASTER KEY", "ALTER ANY COLUMN ENCRYPTION KEY", "VIEW ANY COLUMN MASTER KEY DEFINITION", "VIEW ANY COLUMN ENCRYPTION KEY DEFINITION", "ALTER ANY SECURITY POLICY", "ALTER ANY MASK", "UNMASK"', '', 'When enabled, this check will identify a risk if any unauthorized accounts are members of the sysadmin server role or extended SoD roles. Specify the unauthorized accounts. Can use ''%'' as wildcard.')
+
+			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
+							values (0, @metricid, 0, 'ADB', 2, 'UNAUTHORIZED_ADMIN_ACCT', '',
+											'Do unauthorized accounts have sysadmin privileges or extended SoD roles?')
+		end
+		
 		select @metricid = 76
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
@@ -122,18 +145,17 @@ IF ( ISNULL(@ver, 900) < 3100 )
 							values (0, @metricid, 0, 'ADB', 1, '''none''', '',
 											'Do required administrative accounts exist?')
 		end
-			
-		select @metricid = 86
+		
+		select @metricid = 84
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
-						
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
-						values (@metricid, 'ADB','Databases Are Trustworthy', 'Determine whether any unapproved databases are trustworthy on Azure SQL Database', '', 'When enabled, this check will identify a risk if any unapproved databases are trustworthy on Azure SQL Database. Specify the approved databases.')
+							values (@metricid, 'ADB', 'Unauthorized SQL Logins Exist', 'Determine whether unauthorized SQL Logins have been created on the Azure SQL Database', '', 'When enabled, this check will identify a risk if any unauthorized SQL Logins exist on the SQL Server. Specify the authorized logins.')
+
 			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-						values (0, @metricid, 0,  'ADB', 2, '''none''', '',
-										'Is the trustworthy bit on for any unapproved databases?')
+							values (0, @metricid, 0, 'ADB', 1, '', '',
+											'Do unauthorized SQL Logins exist on the Azure SQL Database?')
 		end
-		
 		
 		select @metricid = 87
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
@@ -146,27 +168,16 @@ IF ( ISNULL(@ver, 900) < 3100 )
 											'Are any unapproved databases owned by a system administrator?')
 		end
 
-		select @metricid = 88
-		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
-		begin
-			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
-							values (@metricid, 'ADB', 'Sysadmins Own Trustworthy Databases', 'Determine whether any trustworthy databases are owned by system administrators on Azure SQL Database', '', 'When enabled, this check will identify a risk if any unapproved databases have the trustworthy bit set on and the owner has system administrator privileges on Azure SQL Database. Specify the approved databases.')
-
-			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-							values (0, @metricid, 0, 'ADB', 3, '''none''', '',
-											'Are any unapproved trustworthy databases owned by a system administrator?')
-		end
-
 		select @metricid = 89
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
 							values (@metricid, 'ADB', 'Public Role Has Permissions on User Database Objects', 'Determine whether the public database role has been granted permissions on user database objects.', '', 'When enabled, this check will identify a risk if the public database role has been granted permissions on any user objects within a user database. Specify the approved databases.')
+
 			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
 							values (0, @metricid, 0, 'ADB', 3, '', '',
 											'Has the public database role been granted permissions on user database objects?')
 		end
-
 		
 		select @metricid = 92
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
@@ -177,29 +188,22 @@ IF ( ISNULL(@ver, 900) < 3100 )
 							values (0, @metricid, 0, 'ADB', 3, '', '', 'Does this SQL login have a weak password?')
 		end
 
-		select @metricid = 93
+		select @metricid = 100
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
-			values (
-					 @metricid
-					,N'ADB'
-					,N'Symmetric key'
-					,N'Determine whether master have user-created symmetric keys'
-					,N''
-					,N'When enabled, this check will identify a risk if master have user-created symmetric keys'
-					)
-
+							values (@metricid, 'ADB', 'Database roles and members','Shows information about database roles and their members', '', 'When enabled, this check will list database, database role, corresponding members, login type, windows group, permissions.')
 			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-			values (
-					 0
-					,@metricid
-					,0
-					,N'ADB'
-					,3
-					,N''
-					,N''
-					,N'Does master have user-created symmetric keys?')
+							values (0, @metricid, 0, 'ADB', 2, '', '', 'Have you check information about database roles and their memebers?')
+		end
+		
+		select @metricid = 101
+		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
+		begin
+			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
+							values (@metricid, 'ADB', 'Server roles and members','Shows information about server roles and their members', '', 'When enabled, this check will list SQL instance, role, corresponding members, login type, windows group, disabled.')
+			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
+							values (0, @metricid, 0, 'ADB', 2, '', '', 'Have you check information about server roles and their members?')
 		end
 
 		
@@ -290,6 +294,51 @@ IF ( ISNULL(@ver, 900) < 3100 )
 							N'ADB', -- servertype - nvarchar(3)
 							N'', -- reportkey - nvarchar(32)
 							N'Is there objects with permissions granted to public role?', -- reporttext - nvarchar(4000)
+							1, -- severity - int
+							N'' -- severityvalues - nvarchar(4000)
+						)
+			end
+
+			select @metricid = 107
+			if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
+			begin
+					insert into dbo.metricextendedinfo
+					(
+						metricid,
+						servertype,
+						metricname,
+						metricdescription,
+						validvalues,
+						valuedescription
+					)
+					values
+						(
+							@metricid, -- metricid - int
+							N'ADB', -- servertype - nvarchar(3)
+							N'Orphaned users', -- metricname - nvarchar(256)
+							N'Determine whether any orphaned users exist in databases.', -- metricdescription - nvarchar(1024)
+							N'MS_DataCollectorInternalUser', -- validvalues - nvarchar(1024)
+							N'When enabled, this check will identify a risk if there any orphaned user exists.'  -- valuedescription - nvarchar(1024)									        
+						)
+					insert into dbo.policymetricextendedinfo
+					(
+						policyid,
+						metricid,
+						assessmentid,
+						servertype,
+						reportkey,
+						reporttext,
+						severity,
+						severityvalues
+					)
+					values
+						(
+							0, -- policyid - int
+							@metricid, -- metricid - int
+							0,  -- assessmentid - int
+							N'ADB', -- servertype - nvarchar(3)
+							N'', -- reportkey - nvarchar(32)
+							N'Is there any orphaned users?', -- reporttext - nvarchar(4000)
 							1, -- severity - int
 							N'' -- severityvalues - nvarchar(4000)
 						)
@@ -405,19 +454,22 @@ IF ( ISNULL(@ver, 900) < 3100 )
 			2,
 			15,
 			22,
+			30,
 			54,
 			55,
 			56,
 			58,
+			71,
 			76,
-			86,
+			84,
 			87,
-			88,
 			89,
 			92,
-			93,
+			100,
+			101,
 			102,
 			103,
+			107,
 			113,
 			114
 			)

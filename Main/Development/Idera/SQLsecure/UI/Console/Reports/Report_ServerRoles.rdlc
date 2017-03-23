@@ -217,7 +217,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="This report shows all direct members of Server Roles on all SQL Servers and Azure SQL Databases."</Value>
+            <Value>="This report shows all direct members of Server Roles on all SQL Server and Azure SQL Database instances."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
@@ -470,7 +470,7 @@
             </Style>
             <CanGrow>true</CanGrow>
             <Height>0.1875in</Height>
-            <Value>="There are currently no audited SQL Servers."</Value>
+            <Value>="There are currently no audited SQL Server and Azure SQL Database instances."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.0625in</Top>
@@ -1379,7 +1379,7 @@ Function setServerFilter(s As String)
 End Function</Code>
   <Width>7.27in</Width>
   <InteractiveHeight>11in</InteractiveHeight>
-  <Description>Show all direct members of Server Roles on all SQL Servers.</Description>
+  <Description>Show all direct members of Server Roles on all SQL Server and Azure SQL Database instances.</Description>
   <Language>=User!Language</Language>
   <PageFooter>
     <ReportItems>

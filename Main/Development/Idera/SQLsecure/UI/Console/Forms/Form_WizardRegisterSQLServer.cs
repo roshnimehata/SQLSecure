@@ -437,13 +437,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 _lbl_AzureAuth.Hide();
                 checkBox_UseSameAuth.Enabled = true;
                 checkBox_UseSameAuth.Checked = true;
-                checkBox_UseSameAuth.Show();                
-
+                checkBox_UseSameAuth.Show();
+                radioButton_SQLServerAuth.Checked = true;
                 checkBox_UseSameAuth.Text = "Use same Windows Authentication as above";
                 radioButton_WindowsAuth.Text = "Windows Authentication";
                 label4.Text = "&Windows User:";
                 _lbl_WindowsUser.Text = "&Windows User:";
-                radioButton_SQLServerAuth.Checked = false;
                 _grpbx_WindowsGMCredentials.Text = "Windows Credentials to gather Operating System and Active Directory objects";
                 label2.Text = resources.GetString("label2.Text");
             }
@@ -481,7 +480,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 _lbl_AzureAuth.Hide();
                 checkBox_UseSameAuth.Show();
                 checkBox_UseSameAuth.Enabled = true;
-                //checkBox_UseSameAuth.Checked = true;
+                radioButton_SQLServerAuth.Checked = true;
+                
                 checkBox_UseSameAuth.Text = "Use same Azure AD Authentication as above";
                 radioButton_WindowsAuth.Text = "Azure Active Directory";
                 label4.Text = "&Azure AD Account:";
@@ -1041,15 +1041,43 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
                             if ((Convert.ToString(_comboBox_ServerType.SelectedItem)== Utility.Activity.TypeServerOnPremise) || (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
                             {
-                                if ((machine != null) && (machine.IndexOf(".") < 0) && (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
+                                sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+
+                                if (sa != Server.ServerAccess.OK)
                                 {
-                                    if ((textbox_WindowsUser.Text != null) && (textbox_WindowsUser.Text.IndexOf(@"\") != -1))
+                                    if ((!string.IsNullOrEmpty(serverName)) && (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
                                     {
-                                        machine = string.Format("{0}.{1}", machine, textbox_WindowsUser.Text.Substring(0, textbox_WindowsUser.Text.IndexOf(@"\")));
+                                        string tempMachine = string.Empty;
+
+                                        if (serverName.IndexOf(@"\") != -1)
+                                        {
+                                            tempMachine = serverName.Substring(0, serverName.IndexOf(@"\"));
+                                        }
+                                        else
+                                        {
+                                            tempMachine = serverName;
+                                        }
+
+                                        Server.ServerAccess tempSa = sa;
+                                        sa = Server.ServerAccess.ERROR_OTHER;
+                                        string tempErrorMsg = errorMsg;
+                                        errorMsg = string.Empty;
+                                        sa = Server.CheckServerAccess(tempMachine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+
+                                        if (sa != Server.ServerAccess.OK)
+                                        {
+                                            sa = tempSa;
+                                            errorMsg = tempErrorMsg;
+                                        }
+                                        else
+                                        {
+                                            machine = tempMachine;
+                                        }
                                     }
                                 }
 
-                                sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+
+                                
                             }
 							// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
                             //else if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)

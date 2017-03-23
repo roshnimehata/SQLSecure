@@ -2318,6 +2318,69 @@ AS -- <Idera SQLsecure version and copyright>
                                                 ELSE
                                                 IF (@metricid = 30)
                                                 BEGIN
+													IF (@serverType = @azuresqldatabaseservertype)
+													BEGIN
+														
+														declare replicationcursor cursor static for
+														select databasename
+														from sqldatabase
+														where snapshotid = @snapshotid and georeplication=1
+                                                               
+                                                        
+                                                        OPEN replicationcursor;
+											
+                                                        SELECT
+                                                                @intval2 = 0;
+                                                        FETCH NEXT FROM
+                                                        replicationcursor INTO @strval;
+                                                        WHILE @@fetch_status = 0
+                                                        BEGIN
+                                                                IF (@intval2 = 1
+                                                                        OR LEN(@metricval)
+                                                                        + LEN(@strval) > 1010
+                                                                        )
+                                                                BEGIN
+                                                                        IF @intval2 = 0
+                                                                                SELECT
+                                                                                        @metricval = @metricval
+                                                                                        + N', more...',
+                                                                                        @intval2 = 1;
+                                                                END;
+                                                                ELSE
+                                                                        SELECT
+                                                                                @metricval = @metricval
+                                                                                + CASE
+                                                                                        WHEN LEN(@metricval) > 0 THEN N', '
+                                                                                        ELSE N''
+                                                                                END + N''''
+                                                                                + @strval
+                                                                                + N'''';
+
+                                                                
+
+                                                                FETCH NEXT FROM
+                                                                replicationcursor INTO @strval;
+                                                        END;
+
+                                                        IF (LEN(@metricval) = 0)
+                                                                SELECT
+                                                                        @sevcode = @sevcodeok,
+                                                                        @metricval = N'None found.';
+                                                        ELSE
+                                                                SELECT
+                                                                        @sevcode = @severity,
+                                                                        @metricval = N'Databases with geo-replication enabled: '
+                                                                        + @metricval;
+
+                                                        SELECT
+                                                                @metricthreshold = N'Server is vulnerable if geo-replication is enabled on any of the database. '
+                                                                + @severityvalues;
+
+                                                        CLOSE replicationcursor;
+                                                        DEALLOCATE replicationcursor;
+													END
+													ELSE
+													BEGIN
                                                         SELECT
                                                                 @strval = @replication,
                                                                 @severityvalues = N'N';
@@ -2332,6 +2395,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 @metricval = dbo.getyesnotext(@strval);
                                                         SELECT
                                                                 @metricthreshold = N'Server is vulnerable if replication is enabled.';
+													END
                                                 END;
                                                 -- Unexpected Registry Key Owners
                                                 ELSE
@@ -4227,6 +4291,9 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         AND b.snapshotid = @snapshotid
                                                                         )
                                                                 WHERE b.snapshotid IS NULL;
+
+																IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+																BEGIN
                                                                 IF (@version > N'9.'
                                                                         OR @version < N'6.'
                                                                         )
@@ -4245,12 +4312,31 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                         @metricval = @metricval
                                                                                         + N'  Some objects may have been omitted by filtering during data collection.';
                                                                 END;
+																END
+																ELSE IF (@serverType = @azuresqldatabaseservertype)
+																BEGIN
+																	SELECT
+                                                                                        @sevcode = @severity,
+                                                                                        @metricval = @metricval
+                                                                                        + N'  Some objects may have been omitted by filtering during data collection.';
+																END
                                                         END;
 
-                                                        SELECT
+														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+														BEGIN
+														SELECT
                                                                 @metricthreshold = N'Server may be vulnerable if Snapshot status is not '
                                                                 + dbo.getsnapshotstatus(@severityvalues)
                                                                 + ' or data collection filters are excluding data.';
+														END;
+														ELSE IF (@serverType = @azuresqldatabaseservertype)
+														BEGIN
+														SELECT
+                                                                @metricthreshold = N'Azure SQL Database may be vulnerable if Snapshot status is not '
+                                                                + dbo.getsnapshotstatus(@severityvalues)
+                                                                + ' or data collection filters are excluding data.';
+														END;
+                                                        
                                                 END;
                                                 -- Baseline Data
                                                 ELSE
@@ -8599,7 +8685,49 @@ AS -- <Idera SQLsecure version and copyright>
 
                                                         DECLARE @orphanedUsersCount AS int;
                                                         DECLARE @orphanedUsersnames AS varchar(max);
-                                                        WITH OrphanedUsers (dbid, name, uid, type)
+														
+														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+														BEGIN
+
+															WITH OrphanedUsers (dbid, name, uid, type)
+															AS (SELECT
+																	dbid,
+																	name,
+																	uid,
+																	type
+															FROM dbo.databaseprincipal
+															WHERE usersid NOT IN (SELECT
+																	sid
+															FROM dbo.serverprincipal
+															WHERE sid IS NOT NULL
+															AND snapshotid = @snapshotid)
+															AND type = N'S'
+															AND usersid <> 0x00
+															AND usersid IS NOT NULL
+															AND IsContainedUser = 0
+															AND snapshotid = @snapshotid
+															AND NOT EXISTS (SELECT
+																	*
+															FROM #sevrVal
+															WHERE Value = name))
+															INSERT INTO #tempdetails
+																	SELECT
+																			@policyid,
+																			@assessmentid,
+																			@metricid,
+																			@snapshotid,
+																			N'Orphaned user found - '
+																			+ name,
+																			dbid,
+																			type,
+																			uid,
+																			name
+																	FROM OrphanedUsers;
+														END
+														ELSE IF (@serverType = @azuresqldatabaseservertype)
+														BEGIN
+
+															WITH OrphanedUsers (dbid, name, uid, type)
                                                         AS (SELECT
                                                                 dbid,
                                                                 name,
@@ -8607,11 +8735,13 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 type
                                                         FROM dbo.databaseprincipal
                                                         WHERE usersid NOT IN (SELECT
-                                                                sid
-                                                        FROM dbo.serverprincipal
-                                                        WHERE sid IS NOT NULL
-                                                        AND snapshotid = @snapshotid)
+																	sid
+															FROM dbo.serverprincipal
+															WHERE sid IS NOT NULL
+															AND snapshotid = @snapshotid)
                                                         AND type = N'S'
+														AND name NOT IN ('guest', 'INFORMATION_SCHEMA', 'sys')
+														AND AuthenticationType = 'INSTANCE'
                                                         AND usersid <> 0x00
                                                         AND usersid IS NOT NULL
                                                         AND IsContainedUser = 0
@@ -8620,7 +8750,8 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 *
                                                         FROM #sevrVal
                                                         WHERE Value = name))
-                                                        INSERT INTO #tempdetails
+
+														INSERT INTO #tempdetails
                                                                 SELECT
                                                                         @policyid,
                                                                         @assessmentid,
@@ -8633,7 +8764,10 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         uid,
                                                                         name
                                                                 FROM OrphanedUsers;
-                                                        WITH OrphanedUsersForDb (orphanedUsersCountForDb, orphanedUsersnamesForDb, dbname, dbid)
+														END
+
+                                                        
+                                                        ;WITH OrphanedUsersForDb (orphanedUsersCountForDb, orphanedUsersnamesForDb, dbname, dbid)
                                                         AS (SELECT
                                                                 COUNT(*) AS orphanedUsersCount,
                                                                 STUFF((SELECT
@@ -9522,7 +9656,6 @@ AS -- <Idera SQLsecure version and copyright>
  															select databasename 		
  															from sqldatabase		
  															where snapshotid = @snapshotid
-															and databasename not in ('msdb', 'master', 'model', 'tempdb')
 															and ((islastbackupnative = 1 and lastbackupencrypted = 0)  or intermediatebackupencrypted = 0)
 															order by databasename;
 															
@@ -10253,7 +10386,6 @@ AS -- <Idera SQLsecure version and copyright>
  															select databasename 		
  															from sqldatabase		
  															where snapshotid = @snapshotid
-															and databasename not in ('msdb', 'master', 'model', 'tempdb')
 															and (islastbackupnative = 0 or intermediatebackupnonnative = 1)
 															order by databasename;
 

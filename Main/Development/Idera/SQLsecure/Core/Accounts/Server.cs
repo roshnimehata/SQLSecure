@@ -56,6 +56,8 @@ namespace Idera.SQLsecure.Core.Accounts
 
         // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
         private string m_AccountName;
+        private string m_SQLServerOnAzureVM_FullName = string.Empty;
+        private string m_SQLServerOnAzureVM_DomainName = string.Empty;
         private ServerType m_serverType;
 
         private string m_BindUser;
@@ -938,7 +940,16 @@ namespace Idera.SQLsecure.Core.Accounts
             // Create management scope string.
             StringBuilder scopeStr = null;
             scopeStr = new StringBuilder();
-            scopeStr.Append(Path.WhackPrefixComputer(m_Name));
+
+            if (m_serverType == ServerType.SQLServerOnAzureVM)
+            {
+                scopeStr.Append(Path.WhackPrefixComputer(Name));
+            }
+            else
+            {
+                scopeStr.Append(Path.WhackPrefixComputer(m_Name));
+            }
+            
             scopeStr.Append(Constants.Cimv2Root);
 
             try
@@ -1114,13 +1125,15 @@ namespace Idera.SQLsecure.Core.Accounts
 
                     // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
                     string accountName = m_Name;
+                    string nameToAccessServer = m_Name;
 
                     if (m_serverType == ServerType.SQLServerOnAzureVM)
                     {
                         accountName = m_AccountName;
+                        nameToAccessServer = Name;
                     }
 
-                    if (Core.Interop.Authorization.LookupAccountName(m_Name,
+                    if (Core.Interop.Authorization.LookupAccountName(nameToAccessServer,
                                    accountName, out bSid,
                                    out refDom, out peUse) || peUse == SID_NAME_USE.SidTypeDomain)
                     {
@@ -1189,7 +1202,20 @@ namespace Idera.SQLsecure.Core.Accounts
             {
                 if (m_serverType == ServerType.SQLServerOnAzureVM)
                 {
-                    m_AccountName = GetActiveComputerName(name);
+					// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                    m_SQLServerOnAzureVM_FullName = name;
+                    m_Name = name;
+
+                    if (name.IndexOf(Constants.Dot) != -1)
+                    {
+                        m_SQLServerOnAzureVM_DomainName = name.Substring(name.IndexOf(Constants.Dot) + 1);
+                        name = name.Substring(0, name.IndexOf(Constants.Dot));
+                        m_Name = name;
+                    }
+
+                    
+
+                    m_AccountName = GetActiveComputerName(Name);
                     logX.loggerX.Info(string.Format(@"Active Computer Name: {0}", m_Name));
                 }
                 else
@@ -1231,7 +1257,13 @@ namespace Idera.SQLsecure.Core.Accounts
         }
         public string Name
         {
-            get { return m_Name; }
+            get {
+                if (m_serverType == ServerType.SQLServerOnAzureVM && (!IsLocalComputer))
+                {
+                    return m_SQLServerOnAzureVM_FullName;
+                }
+                return m_Name;
+            }
         }
         public string Product
         {
@@ -1373,7 +1405,14 @@ namespace Idera.SQLsecure.Core.Accounts
                 return true;
             }
 
-            return Bind(m_Name, m_BindUser, m_BindDomain, m_BindPassword);
+            if (m_serverType == ServerType.SQLServerOnAzureVM)
+            {
+                return Bind(Name, m_BindUser, m_BindDomain, m_BindPassword);
+            }
+            else
+            {
+                return Bind(m_Name, m_BindUser, m_BindDomain, m_BindPassword);
+            }
         }
 
         public bool Bind()

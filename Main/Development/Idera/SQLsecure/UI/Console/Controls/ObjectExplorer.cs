@@ -113,15 +113,20 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
         private void fillServerNode()
         {
-            Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.Environment;
-            Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type);
-            m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.NodeName, tag.NodeName, tag);
-
+            Sql.ObjectTag tag;
+            Sql.ObjectType.TypeEnum type;
+            //Barkha Khatri (SQLSecure 3.1) omitting Server Environment for Azure SQL DB
+            if (m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
+            {
+                type = Sql.ObjectType.TypeEnum.Environment;
+                tag = new Sql.ObjectTag(m_SnapshotId, type);
+                m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.NodeName, tag.NodeName, tag);
+            }
             type = Sql.ObjectType.TypeEnum.ServerSecurity;
             tag = new Sql.ObjectTag(m_SnapshotId, type);
             m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
-
-            if (m_Version > Sql.ServerVersion.SQL2000 && m_Version != Sql.ServerVersion.Unsupported)
+            //Barkha Khatri (SQLSecure 3.1) omitting Server Environment for Azure SQL DB
+            if (m_Version > Sql.ServerVersion.SQL2000 && m_Version != Sql.ServerVersion.Unsupported && m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
             {
                 type = Sql.ObjectType.TypeEnum.ServerObjects;
                 tag = new Sql.ObjectTag(m_SnapshotId, type);
@@ -355,8 +360,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             type = Sql.ObjectType.TypeEnum.Functions;
             tag = new Sql.ObjectTag(m_SnapshotId, type, database);
             m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
-
-            if (database.IsMasterDb)
+            //Barkha Khatri (SQLSecure 3.1) omitting ExtendedStoredProcedures for Azure SQL DB
+            if (database.IsMasterDb && m_ServerInstance.ServerType!=ServerType.AzureSQLDatabase)
             {
                 type = Sql.ObjectType.TypeEnum.ExtendedStoredProcedures;
                 tag = new Sql.ObjectTag(m_SnapshotId, type, database);
@@ -376,10 +381,13 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 type = Sql.ObjectType.TypeEnum.XMLSchemaCollections;
                 tag = new Sql.ObjectTag(m_SnapshotId, type, database);
                 m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
-
-                type = Sql.ObjectType.TypeEnum.FullTextCatalogs;
-                tag = new Sql.ObjectTag(m_SnapshotId, type, database);
-                m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
+                //Barkha Khatri (SQLSecure 3.1) omitting FullTextCatalogs for Azure SQL DB
+                if (m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
+                {
+                    type = Sql.ObjectType.TypeEnum.FullTextCatalogs;
+                    tag = new Sql.ObjectTag(m_SnapshotId, type, database);
+                    m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
+                }
             }
             if (m_Version >= Sql.ServerVersion.SQL2012 && m_Version <= Sql.ServerVersion.SQL2016)
             {
@@ -1421,7 +1429,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
 
                         // Add extended stored proc (if master db).
-                        if (string.Compare(db.Name, "master", true) == 0)
+                        //Barkha Khatri (SQLSecure 3.1) omitting ExtendedStoredProcedures for Azure SQL DB
+                        if (string.Compare(db.Name, "master", true) == 0 &&m_ServerInstance.ServerType!=ServerType.AzureSQLDatabase)
                         {
                             tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.ExtendedStoredProcedures, db);
                             tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
@@ -1447,11 +1456,14 @@ namespace Idera.SQLsecure.UI.Console.Controls
                             tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
                             tn.Tag = tag;
                             tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
-
-                            tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.FullTextCatalogs, db);
-                            tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
-                            tn.Tag = tag;
-                            tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                            //Barkha Khatri (SQLSecure 3.1) omitting FullTextCatalogs for Azure SQL DB
+                            if (m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
+                            {
+                                tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.FullTextCatalogs, db);
+                                tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
+                                tn.Tag = tag;
+                                tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                            }
 
                             tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.SequenceObjects, db);
                             tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);

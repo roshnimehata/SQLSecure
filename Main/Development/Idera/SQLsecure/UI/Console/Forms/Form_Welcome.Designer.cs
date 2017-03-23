@@ -139,6 +139,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+            //(SQLSecure 3.1 Barkha Khatri)SQLSECU-1755 fix 
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 
         }
 

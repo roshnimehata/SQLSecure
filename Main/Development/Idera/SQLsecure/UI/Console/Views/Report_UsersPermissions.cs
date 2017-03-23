@@ -75,7 +75,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             StringBuilder instructions = new StringBuilder(Utility.Constants.ReportRunInstructions_MultiStep);
             instructions.Append(newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_UseSelection, newline);
-            instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Server_OP_OR_ADB, newline);
+            instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_Server, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_LoginType, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_PermissionType, newline);
             instructions.AppendFormat(instructionformat, i++, Utility.Constants.ReportRunInstructions_UserName, newline);
@@ -199,29 +199,10 @@ namespace Idera.SQLsecure.UI.Console.Views
                             cmd.Parameters.Add(paramServer);
                             cmd.Parameters.Add(paramUserType);
                             cmd.Parameters.Add(paramPermission);
-
-                            // SQLsecure 3.1 (Anshul Aggarwal) - Fill Data for Azure Account (User or Group) separately.
-                            if (m_loginType == Sql.LoginType.AzureADAccount)
-                            {
-                                paramUserType.Value = Sql.LoginType.AzureADUser;
-
-                                // Get data for Azure AD Users
-                                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                                da.Fill(ds);
                             
-                                paramUserType.Value = Sql.LoginType.AzureADGroup;
-
-                                // Get data for Azure AD Group
-                                da = new SqlDataAdapter(cmd);
-                                da.Fill(ds);
-
-                            }
-                            else
-                            {
-                                // Get data
-                                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                                da.Fill(ds);
-                            }
+                            // Get data
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            da.Fill(ds);
 
                             // Attach datasource
                             rds.Name = SubReportPermissionsDataSourceName;
@@ -313,25 +294,9 @@ namespace Idera.SQLsecure.UI.Console.Views
                     cmd.Parameters.Add(paramPolicyid);
                     cmd.Parameters.Add(paramUsebaseline);
 
-                    // SQLsecure 3.1 (Anshul Aggarwal) - Fill Data for Azure AD Account (User or Group) separately.
-                    if (m_loginType == Sql.LoginType.AzureADAccount)
-                    {
-                        // Get data for Azure AD User
-                        paramUserType.Value = Sql.LoginType.AzureADUser;
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-
-                        // Get data for Azure AD Group
-                        paramUserType.Value = Sql.LoginType.AzureADGroup;
-                        da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-                    }
-                    else
-                    {
-                        // Get data
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        da.Fill(ds);
-                    }
+                    // Get data
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(ds);
 
                     ReportDataSource rds = new ReportDataSource();
                     rds.Name = DataSourceName;
@@ -415,7 +380,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             Cursor = Cursors.Default;
         }
 
-        private void _radioButton_SQLLogin_Click(object sender, EventArgs e)
+        private void _radioButton_SQLLogin_CheckedChanged(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -439,7 +404,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             Cursor = Cursors.Default;
         }
 
-        private void _radioButton_WindowsUser_Click(object sender, EventArgs e)
+        private void _radioButton_WindowsUser_CheckedChanged(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -465,7 +430,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         /// <summary>
         /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes user for Azure AD Account.
         /// </summary>
-        private void _radioButton_AzureADUserOrGroup_Click(object sender, EventArgs e)
+        private void _radioButton_AzureADUserOrGroup_CheckedChanged(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
             _button_BrowseUsers.Enabled = !((RadioButton)sender).Checked;

@@ -128,7 +128,10 @@ namespace Idera.SQLsecure.Collector.Sql
                                 iswithgrant = CASE WHEN state = 'W' THEN 'Y' ELSE 'N' END,
                                 isrevoke = CASE WHEN state = 'R' THEN 'Y' ELSE 'N' END,
                                 isdeny = CASE WHEN state = 'D' THEN 'Y' ELSE 'N' END
-                              FROM sys.database_permissions WHERE class = ");
+                              FROM sys.database_permissions WHERE grantee_principal_id in 
+                                (
+                                select p.principal_id from sys.database_principals p
+                                inner join sys.sql_logins l on ((p.sid=l.sid) or p.type='E' or p.type='X')) and  class = ");
 
             switch (otype)
             {

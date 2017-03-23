@@ -140,6 +140,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            //(SQLSecure 3.1 Barkha Khatri)SQLSECU-1755 fix 
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 
         }
 

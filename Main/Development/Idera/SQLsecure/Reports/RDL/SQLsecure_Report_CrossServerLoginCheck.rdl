@@ -38,6 +38,10 @@
             <Value>S</Value>
             <Label>SQL Login</Label>
           </ParameterValue>
+		   <ParameterValue>
+            <Value>A</Value>
+            <Label>Azure AD Account</Label>
+          </ParameterValue>
         </ParameterValues>
       </ValidValues>
     </ReportParameter>
@@ -138,7 +142,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="This report shows all SQL Servers where a selected user has access."</Value>
+            <Value>="This report shows all SQL Server and Azure SQL Database instances where a selected user has access."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
@@ -535,7 +539,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="To ensure your SQL Server environment remains secure, consider granting the minimum rights and privileges to individual users. Use this report to locate all SQL Server instances where a SQL Login has been created for a Windows Account, or where an account is not directly a SQL Login but has access via group membership."</Value>
+            <Value>="To ensure your SQL Server environment remains secure, consider granting the minimum rights and privileges to individual users. Use this report to locate all SQL Server and Azure SQL Database instances where a SQL Login has been created for a Windows and Azure Account, or where an account is not directly a SQL Login but has access via group membership."</Value>
           </Textbox>
         </ReportItems>
         <Top>1.0625in</Top>
@@ -924,6 +928,8 @@ End Function
 Function loginTypeToString(t As String) As String
 	If t = "W" Then
 		Return "Windows Account"
+	Else If t = "A" Then
+		Return "Azure AD Account"
 	Else
 		Return "SQL Login"
 	End If
@@ -939,7 +945,7 @@ End Function
 </Code>
   <Width>18.46349cm</Width>
   <InteractiveHeight>11in</InteractiveHeight>
-  <Description>Show all SQL Servers where a selected user has access.</Description>
+  <Description>Show all SQL Server and Azure SQL Database instances where a selected user has access.</Description>
   <Language>=User!Language</Language>
   <PageFooter>
     <ReportItems>

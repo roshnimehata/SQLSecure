@@ -201,10 +201,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public Repository(
                 string instance,
                 string user,
-                string password
+                string password,
+            type_of_authentication authenticationMode//SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
             )
         {
-            Connect(instance, user, password);
+            Connect(instance, user, password,authenticationMode);//SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
         }
 
         #endregion
@@ -387,11 +388,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public bool Connect(string instance)
         {
             // Connect using the current Windows user and password
-            return Connect(instance, null, null);
+            return Connect(instance, null, null,type_of_authentication.windows);//SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
         }
 
-
-        public bool Connect(string instance, string user, string password)
+        //SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+        public bool Connect(string instance, string user, string password, type_of_authentication authenticationMode)
         {
             try
             {
@@ -411,8 +412,16 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 {
                     m_ServerName = instance.ToUpper();
                 }
-
-                m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, user, password, Utility.Activity.TypeServerOnPremise);
+                //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                if (authenticationMode == type_of_authentication.windows)
+                {
+                    m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, string.Empty, string.Empty, Utility.Activity.TypeServerOnPremise);
+                }
+                else
+                {
+                    m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, user, password, Utility.Activity.TypeServerOnPremise);
+                }
+                //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
                 if (Connect())
                 {
                     //SQLsecure 3.1 (Tushar)--Saving UserName and Password in UserData object which will be saved in config file on closure of UI.
@@ -420,6 +429,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     //m_Password = password;
                     UserData.Current.RepositoryInfo.UserName = m_User = user;
                     UserData.Current.RepositoryInfo.Password = m_Password = password;
+                    UserData.Current.RepositoryInfo.AuthenticationMode = Convert.ToString(authenticationMode);//SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
                 }
 
             }
