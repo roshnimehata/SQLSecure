@@ -813,6 +813,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             bool isOk = true;
             bool allowRegisterAnyway = true;
             string version = string.Empty;
+            string edition = string.Empty;
             string login = string.Empty;
             string password = string.Empty;
             WindowsImpersonationContext targetImpersonationContext = null;
@@ -967,12 +968,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             if (azureADAuth)
                             {
                                 Sql.SqlServer.GetSqlServerProperties(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text,
-                                                                        out version, out machine, out instance, out connection, (string)_comboBox_ServerType.SelectedItem, azureADAuth);
+                                                                        out version, out machine, out instance, out connection, out edition,
+                                                                        (string)_comboBox_ServerType.SelectedItem, azureADAuth);
                             }
                             else
                             {
                                 Sql.SqlServer.GetSqlServerProperties(serverName, login, password,
-                                                                        out version, out machine, out instance, out connection, (string)_comboBox_ServerType.SelectedItem, azureADAuth);
+                                                                        out version, out machine, out instance, out connection, out edition,
+                                                                        (string)_comboBox_ServerType.SelectedItem, azureADAuth);
                             }
                             if (targetImpersonationContext != null)
                             {
@@ -980,6 +983,20 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                 targetImpersonationContext.Dispose();
                                 targetImpersonationContext = null;
                             }
+
+                            // SQLsecure 3.1 (Anshul) - Validate server edition based on server type.
+                            // SQLsecure 3.1 (Anshul) - SQLSECU-1775 - Azure VM : Register a Server as Azure DB by selecting Server type as Azure VM.
+                            ServerType serverType = SqlServer.GetServerTypeByName(Convert.ToString(_comboBox_ServerType.SelectedItem));
+                            if (!SqlHelper.ValidateServerEdition(serverType, edition))
+                            {
+                                if (msgBldr.Length > 0) { msgBldr.Remove(0, msgBldr.Length); }
+                                msgBldr.AppendFormat(serverType == ServerType.AzureSQLDatabase ? ErrorMsgs.IncorrectServerTypeAzureSQLDBMsg : 
+                                    ErrorMsgs.IncorrectServerTypeSQLServerMsg);
+
+                                isOk = false;
+                                allowRegisterAnyway = false;
+                            }
+
                             if (!checkVersionAndRegistration(version, connection))
                             {
                                 isOk = false;

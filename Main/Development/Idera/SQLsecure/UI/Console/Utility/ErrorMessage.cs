@@ -92,6 +92,10 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string WarningEmailNoConfiguredTitle = @"Email Configuration";
         public const string WarningEmailNoConfiguredMsg = @"To successfully receive email notifications, you must also specify which email provider SQLsecure should use. Click Configure SMTP Email on the Tools menu.";
         public const string AzureADAccountNotSpecifiedMsg = @"Azure AD account, for gathering AD objects, has been entered incorrectly. Make sure that the user is specified in Azure AD format and a password has been entered";
+        public const string IncorrectServerTypeAzureSQLDBMsg = @"Selected Server is not a valid Azure SQL Database. Please navigate back to register a server with appropriate server type.";
+        public const string IncorrectServerTypeSQLServerMsg = @"Selected Server is not a valid SQL Server. Please navigate back to register a server with appropriate server type.";
+        public const string IncorrectServerTypeAzureSQLDBImportMsg = @"Specified Server is not a valid Azure SQL Database.";
+        public const string IncorrectServerTypeSQLServerImportMsg = @"Specified Server is not a valid SQL Server.";
         // Policy
         public const string PolicyCaption = "Policy";
         public const string PolicyPropertiesCaption = "Policy Properties";

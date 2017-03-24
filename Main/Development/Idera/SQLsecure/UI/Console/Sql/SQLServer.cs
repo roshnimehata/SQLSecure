@@ -34,12 +34,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 out string machineName,
                 out string instanceName,
                 out string fullName,
+                out string edition,
                 string serverType,
                 bool azureADAuth=false
             )
         {
             // Init return.
             version = string.Empty;
+            edition = string.Empty;
             machineName = string.Empty;
             instanceName = string.Empty;
             fullName = string.Empty;
@@ -67,6 +69,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
 
             version = serverProperties.Version;
+            edition = serverProperties.Edition;
             if (serverType == Utility.Activity.TypeServerOnPremise || serverType == Utility.Activity.TypeServerAzureVM)
             {
                 machineName = serverProperties.MachineName;
@@ -93,6 +96,21 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 
                 default: return Utility.Activity.TypeServerOnPremise;
 
+            }
+        }
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul) - Convert server type display name to enum.
+        /// </summary>
+        public static ServerType GetServerTypeByName(string name)
+        {
+            switch (name)
+            {
+                case Utility.Activity.TypeServerOnPremise: return ServerType.OnPremise;
+                case Utility.Activity.TypeServerAzureVM: return ServerType.SQLServerOnAzureVM;
+                case Utility.Activity.TypeServerAzureDB: return ServerType.AzureSQLDatabase;
+
+                default: return ServerType.OnPremise;
             }
         }
 
@@ -132,7 +150,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                     var confQuery = @"select  isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
                                           isnull(SERVERPROPERTY('MachineName'),'')  as MachineName,
                                           isnull(SERVERPROPERTY('ServerName'),'') as ServerName,
-                                          isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName;";
+                                          isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName,
+                                          isnull(SERVERPROPERTY('Edition'),'') as Edition;";
                     if (isSQL2012OrHigher)
                     {
                         confQuery += @"SELECT top 1 cluster_name as HadrClusterName,
@@ -150,6 +169,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                             result.MachineName = rdr["MachineName"].ToString();
                             result.ServerName = rdr["ServerName"].ToString();
                             result.HadrManagerStatus = GetHadrManagerStatus(rdr["HadrManagerStatus"].ToString());
+                            result.Edition = rdr["Edition"].ToString();
 
                             if (isSQL2012OrHigher &&
                                 result.HadrManagerStatus == HadrManagerStatus.StartedAndRunning &&
