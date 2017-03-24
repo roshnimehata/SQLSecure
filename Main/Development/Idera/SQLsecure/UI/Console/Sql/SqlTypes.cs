@@ -42,6 +42,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public const string Unsupported = @"Unknown version";
         public const string AzureSQLDatabase = @"Microsoft SQL Azure";
     }
+
+    // SQLsecure 3.1 (Anshul) - Installed product edition of the instance of SQL Server.
+    public struct EditionName
+    {
+        public const string SQLAzure = @"SQL Azure";
+        public const string Unsupported = @"Unknown edition";
+    }
+
     public class ServicePack
     {
         public class SQL2000

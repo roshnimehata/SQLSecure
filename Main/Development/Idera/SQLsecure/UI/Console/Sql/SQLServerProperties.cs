@@ -9,6 +9,7 @@
         public string LocalNetAddress { get; set; }
         public string ClientNetAddress { get; set; }
         public string Version { get; set; }
+        public string Edition { get; set; }
         public string HadrClusterName { get; set; }
 
         public bool IsServerInAoag
@@ -26,6 +27,7 @@
             InstanceName = string.Empty;
             LocalNetAddress = string.Empty;
             Version = string.Empty;
+            Edition = string.Empty;
             HadrClusterName = string.Empty;
             HadrManagerStatus = HadrManagerStatus.NotApplicable;
         }
