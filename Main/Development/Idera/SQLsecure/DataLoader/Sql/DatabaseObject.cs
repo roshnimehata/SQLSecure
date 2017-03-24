@@ -685,7 +685,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                   + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.sql_modules c ON (a.object_id = c.object_id ) LEFT JOIN "
                                   + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.security_predicates AS spd ON (a.object_id = spd.target_object_id) LEFT JOIN "
                                   + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.security_policies spo ON (spd.object_id = spo.object_id) "
-                                  + "WHERE " + strScopeText.Replace("type", "a.type") + LIKEClause;
+                                  + "WHERE " + strScopeText.Replace("type", "a.type").Replace(" object_id", " a.object_id").Replace("is_ms_shipped", "a.is_ms_shipped") + LIKEClause;
                     }
                     else if (version == ServerVersion.SQL2000) // 2000
 					{
@@ -746,7 +746,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.crypt_properties AS d ON (a.object_id = d.major_id) AND d.class_desc = 'OBJECT_OR_COLUMN' LEFT JOIN  " +
                                     Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.security_predicates AS spd ON (a.object_id = spd.target_object_id) LEFT JOIN " +
                                     Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + @".sys.security_policies spo ON (spd.object_id = spo.object_id) WHERE " + 
-                                    strScopeText.Replace("type", "a.type") + LIKEClause;
+                                    strScopeText.Replace("type", "a.type").Replace(" object_id", " a.object_id").Replace("is_ms_shipped", "a.is_ms_shipped") + LIKEClause;
                     }
                     else if(version >= ServerVersion.SQL2008) // 2008 2012
                     {
@@ -784,7 +784,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                     @".sys.all_objects a INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + 
                                     @".sys.schemas b ON a.schema_id = b.schema_id LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) +
                                     @".sys.syscomments c ON (a.object_id = c.id and c.colid=1) LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + 
-                                    @".sys.crypt_properties AS d ON a.object_id = d.major_id AND d.class_desc = 'OBJECT_OR_COLUMN' WHERE " + strScopeText + LIKEClause;
+                                    @".sys.crypt_properties AS d ON a.object_id = d.major_id AND d.class_desc = 'OBJECT_OR_COLUMN' WHERE " + strScopeText.Replace(" object_id", " a.object_id").Replace("is_ms_shipped", "a.is_ms_shipped") + LIKEClause;
                     }
 					else // 2005
 					{
@@ -820,7 +820,7 @@ namespace Idera.SQLsecure.Collector.Sql
 									FROM  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.all_objects a "
                                 + "INNER JOIN " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.schemas b ON a.schema_id = b.schema_id "
                                 + "LEFT JOIN  " + Sql.SqlHelper.CreateSafeDatabaseName(database.Name) + ".sys.syscomments c ON (a.object_id = c.id and c.colid=1)"
-                                + "WHERE " + strScopeText + LIKEClause;
+                                + "WHERE " + strScopeText.Replace(" object_id", " a.object_id").Replace("is_ms_shipped", "a.is_ms_shipped") + LIKEClause;
                     }
 					break;
 
