@@ -31,7 +31,7 @@ namespace Idera.SQLsecure.UI.Console.Import
             {
 
 
-                string sqlServerVersion, machine, instance, connectionName;
+                string sqlServerVersion, machine, instance, connectionName, edition;
                 var errorList = new List<string>();
 
                 if (itemToImport.HasErrors())
@@ -50,11 +50,21 @@ namespace Idera.SQLsecure.UI.Console.Import
                 //Validation of instance connection credentials
                 OperationResult<bool> operationResult =
                     ValidateCredentials(itemToImport, out sqlServerVersion, out machine, out instance,
-                        out connectionName);
+                        out connectionName, out edition);
 
                 if (!operationResult.Value)
                 {
                     settings.ChangeStatus(ImportStatusIcon.Error, string.Format("Not imported. {0}", operationResult.GetEventAllMessagesString()));
+                    return false; //Skip importing of server
+                }
+
+                // SQLsecure 3.1 (Anshul) - Validate server edition based on server type.
+                // SQLsecure 3.1 (Anshul) - SQLSECU-1775 - Azure VM : Register a Server as Azure DB by selecting Server type as Azure VM.
+                if (!SqlHelper.ValidateServerEdition(itemToImport.ServerType, edition))
+                {
+                    settings.ChangeStatus(ImportStatusIcon.Error, string.Format("Not imported. {0}",
+                        itemToImport.ServerType == ServerType.AzureSQLDatabase ? ErrorMsgs.IncorrectServerTypeAzureSQLDBImportMsg :
+                    ErrorMsgs.IncorrectServerTypeSQLServerImportMsg));
                     return false; //Skip importing of server
                 }
 
@@ -344,7 +354,7 @@ namespace Idera.SQLsecure.UI.Console.Import
 
 
         private static OperationResult<bool> ValidateCredentials(ImportItem importItem, out string sqlServerVersion, out string machine,
-            out string instance, out string fullName)
+            out string instance, out string fullName, out string edition)
         {
             var result = new OperationResult<bool> { Value = true };
             using (logX.loggerX.InfoCall())
@@ -364,7 +374,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                     bool azureADAuth = importItem.AuthType == SqlServerAuthenticationType.AzureADAuthentication ? true : false;
 
                     SqlServer.GetSqlServerProperties(importItem.ServerName, login, password,
-                        out sqlServerVersion, out machine, out instance, out fullName, SqlServer.GetValueByName(importItem.ServerType), azureADAuth);
+                        out sqlServerVersion, out machine, out instance, out fullName, out edition, SqlServer.GetValueByName(importItem.ServerType), azureADAuth);
                 }
                 catch (Exception ex)
                 {
@@ -372,7 +382,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                     result.Value = false;
                     result.AddErrorEvent(ex.Message);
 
-                    sqlServerVersion = string.Empty;
+                    sqlServerVersion = edition = string.Empty;
                     machine = Path.GetComputerFromSQLServerInstance(importItem.ServerName);
                     instance = Path.GetInstanceFromSQLServerInstance(importItem.ServerName);
                     fullName = importItem.ServerName.Trim().ToUpperInvariant();

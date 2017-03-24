@@ -984,6 +984,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             bool allowRegisterAnyway = true;
             bool isWindowsCredentials = true;
             string version = string.Empty;
+            string edition = string.Empty;
             string login = string.Empty;
             string password = string.Empty;
             WindowsImpersonationContext targetImpersonationContext = null;
@@ -1186,7 +1187,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                         string.Format("Connecting to SQL Server {0}...", m_RegisteredServer.ServerName.ToUpper()));
                                     Sql.SqlServer.GetSqlServerProperties(m_RegisteredServer.FullConnectionName, login, password,
                                                                          out version, out machine, out instance,
-                                                                         out connection, Utility.Activity.TypeServerOnPremise);
+                                                                         out connection, out edition, Utility.Activity.TypeServerOnPremise);
                                     if (targetImpersonationContext != null)
                                     {
                                         targetImpersonationContext.Undo();

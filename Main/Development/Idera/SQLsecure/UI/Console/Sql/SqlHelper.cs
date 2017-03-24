@@ -16,6 +16,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Logger;
+using Idera.SQLsecure.UI.Console.Utility;
 
 namespace Idera.SQLsecure.UI.Console.Sql
 {
@@ -751,6 +752,15 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
 
             return retval;
+        }
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul) - Validate server edition based on server type.
+        /// </summary>
+        public static bool ValidateServerEdition(ServerType serverType, string edition)
+        {
+            return serverType == ServerType.AzureSQLDatabase ? edition == EditionName.SQLAzure : 
+                edition != EditionName.SQLAzure;
         }
     }
 }
