@@ -56,7 +56,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                                         IsContainedUser,
                                         AuthenticationType
                                     FROM SQLsecure.dbo.vwdatabaseprincipal
-                                    WHERE snapshotid = @snapshotid AND dbid = @dbid AND type IN ('S', 'U', 'G')";
+                                    WHERE snapshotid = @snapshotid AND dbid = @dbid AND type IN ('S', 'U', 'G','E','X')";
         private const string QueryGetSnapshotUser
                                 = @"SELECT 
 	                                    snapshotid, 

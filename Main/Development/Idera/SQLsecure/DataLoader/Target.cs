@@ -881,7 +881,6 @@ namespace Idera.SQLsecure.Collector
 
             using (logX.loggerX.DebugCall())
             {
-                Program.ImpersonationContext wi = Program.SetTargetSQLServerImpersonationContext();
                 using (SqlConnection target = new SqlConnection(ConnectionString))
                 {
                     try
@@ -890,8 +889,6 @@ namespace Idera.SQLsecure.Collector
                         target.Open();
 
                         // authentication mode.
-                        // should we check for integrated security in case of azure DB?
-                        // as integrated security does not include Azure AD auth
                         getAuthenticationMode(ref enumStatus, ref isOk, ref authenticationMode, target);
 
                         // version
@@ -902,10 +899,6 @@ namespace Idera.SQLsecure.Collector
                         //supported by azure DB
                         getEdition(ref enumStatus, isOk, ref edition, target);
 
-                        // Servername--machine name
-                        //not applicable on azure DB
-                        //select @@SERVERNAME
-                        //getserverName(ref enumStatus, isOk, ref servername, target);
 
                         // Instance name
                         //returning null for azure db
@@ -930,7 +923,6 @@ namespace Idera.SQLsecure.Collector
                         logX.loggerX.Warn("WARN - exception raised when getting instance properties", ex);
                         enumStatus = Constants.CollectionStatus.StatusWarning;
                     }
-                    Program.RestoreImpersonationContext(wi);
                 }
 
                
