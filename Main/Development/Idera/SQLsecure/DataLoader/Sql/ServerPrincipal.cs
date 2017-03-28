@@ -755,7 +755,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
                 if (numberOfRecords1 > 1 || numberOfRecords2 > 1)
                 {
-                    logX.loggerX.Error("ERROR - Azure SQL Database \n we have used 0xFFFFFFFE and 0xFFFFFFFF SIDs for sys and Information_schema by default \n Microsoft is also using same negative SIDs for some of the principals  ");
+                    logX.loggerX.Error("ERROR - Azure SQL Database \n Since sid of 'sys' and 'Information_schema' SQL users in master.database_principals view are null, we have used 0xFFFFFFFE and 0xFFFFFFFF SIDs for sys and Information_schema by default. These are equivalent to -2 and -1 respectively. This is done with the assumption that negative sid do not exist in system views. \n Microsoft is also using same negative SIDs for some of the principals which is violating the assumption");
                 }
             }
         }
