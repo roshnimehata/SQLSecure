@@ -23,6 +23,7 @@ using System.Security.Cryptography;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.Collector.Utility;
+
 namespace Idera.SQLsecure.Collector.Sql
 {
     /// <summary>
@@ -194,8 +195,9 @@ namespace Idera.SQLsecure.Collector.Sql
                 // SQLsecure 3.1 (Anshul Aggarwal) - SQLSECU-1704 : "Reports- Audited SQL Servers" is not getting updated for Azure DB
                 // Check for 'CO' permission instead of 'COSQ' for Azure SQL Database.
                 // For now, isdisabled = 'N' for Azure SQL Database (Azure AD User or Group login types) 
-                
 
+                //SQLSecure 3.1 (Barkha Khatri) SQLSECURE-1959 fix
+                // Using negative SIDs for Information_schema and sys
                 query = @" (SELECT DISTINCT 
                             SqlLogins.name, 
                             principalid = ISNULL(Principals.principal_id,SqlLogins.principal_id*-1), 
@@ -249,7 +251,11 @@ namespace Idera.SQLsecure.Collector.Sql
                             Principals.name, 
                             principalid = Principals.principal_id, 
                             Principals.type  collate database_default,
-							sid=ISNULL(Principals.sid,0x0), 
+							sid=CASE Principals.name
+                                WHEN 'sys' THEN 0xFFFFFFFF 
+                                WHEN 'INFORMATION_SCHEMA' THEN 0xFFFFFFFE
+                                ELSE  Principals.sid
+                                END,
                             serveraccess = CASE Permissions.state
                                               WHEN 'G' THEN 'Y' 
                                               WHEN 'W' THEN 'Y' 
@@ -490,6 +496,7 @@ namespace Idera.SQLsecure.Collector.Sql
                                         type = rdr.GetSqlString(FieldPrincipalType);
                                     }
                                     SqlBinary sid = rdr.GetSqlBinary(FieldPrincipalSid);
+                                  
                                     SqlInt32 principalid = rdr.GetSqlInt32(FieldPrincipalPid);
                                     SqlString serveraccess = rdr.GetSqlString(FieldPrincipalServeraccess);
                                     SqlString serverdeny = rdr.GetSqlString(FieldPrincipalServerdeny);
@@ -606,6 +613,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                     // Write to repository if exceeds threshold.
                                     if (dataTable.Rows.Count > Constants.RowBatchSize)
                                     {
+                                        //SQLSecure 3.1 (Barkha Khatri) SQLSECURE-1959 fix
+                                        // logging if there are any system defined negative SIDs that are same as the ones we have used for Information_schema and sys
+                                        CheckForNegativeSIDs(serverType, dataTable);
                                         bcp.WriteToServer(dataTable);
                                         dataTable.Clear();
                                     }
@@ -614,6 +624,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                 // Write any items still in the data table.
                                 if (dataTable.Rows.Count > 0)
                                 {
+                                    //SQLSecure 3.1 (Barkha Khatri) SQLSECURE-1959 fix
+                                    // logging if there are any system defined negative SIDs that are same as the ones we have used for Information_schema and sys
+                                    CheckForNegativeSIDs(serverType, dataTable);
                                     bcp.WriteToServer(dataTable);
                                     dataTable.Clear();
                                 }
@@ -707,6 +720,44 @@ namespace Idera.SQLsecure.Collector.Sql
             }
 
             return isOk;
+        }
+        /// <summary>
+        /// check for negative SIDs in case of Azure SQL database
+        /// </summary>
+        /// <param name="serverType"></param>
+        /// <param name="dataTable"></param>
+        private static void CheckForNegativeSIDs(ServerType serverType, DataTable dataTable)
+        {
+            if (serverType == ServerType.AzureSQLDatabase)
+            {
+                int numberOfRecords1 = 0;
+                int numberOfRecords2 = 0;
+ 
+                Byte[] byte1 = new byte[] { 255,255,255,255};
+                Byte[] byte2 = new byte[] { 255, 255, 255, 254 };
+                SqlBinary sid1 = new SqlBinary(byte1);
+                SqlBinary sid2 = new SqlBinary(byte2);
+
+
+                foreach (DataRow row in dataTable.Rows)
+                {
+
+                    SqlBinary sid =(SqlBinary) row[ServerPrincipalDataTable.ParamSid];
+                    if (sid.CompareTo(sid1)==0)
+                    {
+                        numberOfRecords1++;
+                    }
+                    else if (sid.CompareTo(sid2)==0)
+                    {
+                        numberOfRecords2++;
+                    }
+                }
+
+                if (numberOfRecords1 > 1 || numberOfRecords2 > 1)
+                {
+                    logX.loggerX.Error("ERROR - Azure SQL Database \n Since sid of 'sys' and 'Information_schema' SQL users in master.database_principals view are null, we have used 0xFFFFFFFE and 0xFFFFFFFF SIDs for sys and Information_schema by default. These are equivalent to -2 and -1 respectively. This is done with the assumption that negative sid do not exist in system views. \n Microsoft is also using same negative SIDs for some of the principals which is violating the assumption");
+                }
+            }
         }
 
         private static PasswordStatus DetectPasswordStatus(string loginName, byte[] passwordHash, WeakPasswordSetting passwordSettings, ServerVersion version)
