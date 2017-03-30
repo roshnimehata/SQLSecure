@@ -10432,7 +10432,7 @@ AS -- <Idera SQLsecure version and copyright>
 																	objecttype,
 																	objectid,
 																	objectname)
-																			VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'The following databases are using non-native backups and should be checked for encruption status: ''' + @strval + N'''', NULL, -- database ID,
+																			VALUES (@policyid, @assessmentid, @metricid, @snapshotid, N'The following databases are using non-native backups and should be checked for encryption status: ''' + @strval + N'''', NULL, -- database ID,
 																			N'DB', -- object type
 																			NULL, -- object id
 																			@strval);
