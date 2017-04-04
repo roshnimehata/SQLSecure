@@ -17,7 +17,7 @@ CREATE procedure [dbo].[isp_sqlsecure_getobjectpermission]
 	@iscolumn nchar(1)='N',
 	@parentobjectid int=null
 )
-WITH ENCRYPTION
+--WITH ENCRYPTION
 as
    -- <Idera SQLsecure version and copyright>
    --
