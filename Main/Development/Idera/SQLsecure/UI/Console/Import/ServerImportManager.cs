@@ -77,7 +77,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                 };
 
                 var parsedSqlServerVersion = SqlHelper.ParseVersion(sqlServerVersion);
-                ServerInfo serverInfo = new ServerInfo(parsedSqlServerVersion, itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication,
+                ServerInfo serverInfo = new ServerInfo(parsedSqlServerVersion, (itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication || itemToImport.AuthType == SqlServerAuthenticationType.AzureADAuthentication),
                 itemToImport.UserName, itemToImport.Password, connectionName, SqlServer.GetValueByName(itemToImport.ServerType));
                 try
                 {
@@ -93,7 +93,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                     string serverType = itemToImport.ServerType == ServerType.OnPremise ? "OP" : (itemToImport.ServerType == ServerType.SQLServerOnAzureVM ? "AVM" : "ADB");
                     RegisteredServer.AddServer(repository.ConnectionString,
                         connectionName, serverPort, machine, instance,
-                        itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication ? "W" : "S",
+                        (itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication || itemToImport.AuthType == SqlServerAuthenticationType.AzureADAuthentication) ? "W" : "S",
                         itemToImport.UserName, itemToImport.Password,
                         itemToImport.UseSameCredentials ? itemToImport.UserName : itemToImport.WindowsUserName,
                         itemToImport.UseSameCredentials
