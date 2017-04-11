@@ -193,7 +193,7 @@ namespace Idera.SQLsecure.UI.Console.Import
         {
             RegisteredServer.UpdateCredentials(repository.ConnectionString,
                 connectionName, itemToImport.UserName, itemToImport.Password,
-                itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication ? "W" : (itemToImport.AuthType == SqlServerAuthenticationType.SqlServerAuthentication ? "S" : "A"),
+                (itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication || itemToImport.AuthType == SqlServerAuthenticationType.SqlServerAuthentication) ? "W" : "S" ,
                 itemToImport.UseSameCredentials ? itemToImport.UserName : itemToImport.WindowsUserName,
                 itemToImport.UseSameCredentials
                     ? itemToImport.Password
