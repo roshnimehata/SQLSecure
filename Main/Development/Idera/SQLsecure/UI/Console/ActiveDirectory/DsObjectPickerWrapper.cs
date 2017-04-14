@@ -189,7 +189,7 @@ namespace Idera.SQLsecure.UI.Console.ActiveDirectory
                         selections = new ADObject[cnt];
                         logX.loggerX.Debug("Line: 1");
                         // increment the pointer so we can read the DS_SELECTION structure
-                        current = (IntPtr) ((int) current + (Marshal.SizeOf(typeof (uint))*2));
+                        current = (IntPtr) ((Int64) current + (Marshal.SizeOf(typeof (uint))*2));//SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1972
                         logX.loggerX.Debug("Line: 2");
                         // now loop through the structures
                         for (int i = 0; i < cnt; i++)
@@ -202,7 +202,7 @@ namespace Idera.SQLsecure.UI.Console.ActiveDirectory
                             logX.loggerX.Debug("Line: 4");
 
                             // increment the position of our pointer by the size of the structure
-                            current = (IntPtr) ((int) current + Marshal.SizeOf(typeof (DS_SELECTION)));
+                            current = (IntPtr) ((Int64) current + Marshal.SizeOf(typeof (DS_SELECTION)));//SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1972
                             logX.loggerX.Debug("Line: 5");
 
                             selections[i] = new ADObject();
@@ -223,7 +223,7 @@ namespace Idera.SQLsecure.UI.Console.ActiveDirectory
                             selections[i].SamAccountName = str;
                             int vt = vr.vt;
 
-                            IntPtr ptrSid = (IntPtr) ((int) ptrFetched + (Marshal.SizeOf(typeof (VARIANT))));
+                            IntPtr ptrSid = (IntPtr) ((Int64) ptrFetched + (Marshal.SizeOf(typeof (VARIANT))));//SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1972
                             logX.loggerX.Debug("Line: 9");
 
                             vr = (VARIANT) Marshal.PtrToStructure(ptrSid, typeof (VARIANT));
