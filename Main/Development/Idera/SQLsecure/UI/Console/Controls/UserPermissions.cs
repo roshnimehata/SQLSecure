@@ -742,7 +742,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         if (m_user == null)
                         {
                             // If not found in domain, check the snapshot
-                            m_user = Sql.User.GetSnapshotWindowsUser(m_snapshotId, _textBox_User.Text, false);
+                            m_user = Sql.User.GetSnapshotWindowsUser(m_snapshotId, _textBox_User.Text, false, m_serverInstance.ServerType);//SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1971
                             if (m_user == null)
                             {
                                 // this user is not found anywhere, so alert the user
@@ -1859,7 +1859,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             bool isCancel = false;
 
             // verify user is in the snapshot
-            Sql.User user = Sql.User.GetSnapshotWindowsUser(m_snapshotId, m_user.Name, false);
+            Sql.User user = Sql.User.GetSnapshotWindowsUser(m_snapshotId, m_user.Name, false,m_serverInstance.ServerType);//SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1971
             if (user == null)
             {
                 user = Sql.User.GetSnapshotWindowsUser(m_snapshotId, m_user.Sid, false);

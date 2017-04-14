@@ -424,7 +424,7 @@ Permission\tab :
                         if (m_SelectedUser == null)
                         {
                             // If not found in domain, check the snapshot
-                            m_SelectedUser = Sql.User.GetSnapshotWindowsUser(m_SelectedSnapshotID, _textBox_User.Text, false);
+                            m_SelectedUser = Sql.User.GetSnapshotWindowsUser(m_SelectedSnapshotID, _textBox_User.Text, false,m_SelectedServer.ServerType);//SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1971
                             if (m_SelectedUser == null)
                             {
                                 // this user is not found anywhere, so alert the user
@@ -541,7 +541,7 @@ Permission\tab :
             bool isCancel = false;
 
             // verify user is in the snapshot
-            Sql.User user = Sql.User.GetSnapshotWindowsUser(m_SelectedSnapshotID, m_SelectedUser.Name, false);
+            Sql.User user = Sql.User.GetSnapshotWindowsUser(m_SelectedSnapshotID, m_SelectedUser.Name, false,m_SelectedServer.ServerType);//SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1971
             if (user == null)
             {
                 user = Sql.User.GetSnapshotWindowsUser(m_SelectedSnapshotID, m_SelectedUser.Sid, false);
