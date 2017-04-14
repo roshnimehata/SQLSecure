@@ -248,66 +248,69 @@ namespace Idera.SQLsecure.UI.Console.Import
             {
                 try
                 {
-                    var winUser = importItem.UseSameCredentials ? importItem.UserName : importItem.WindowsUserName;
-                    var winUserPassword = importItem.UseSameCredentials
-                        ? importItem.Password
-                        : importItem.WindowsUserPassword;
-                    if (string.IsNullOrEmpty(winUser) && string.IsNullOrEmpty(winUserPassword))
+                    if (importItem.ServerType != ServerType.AzureSQLDatabase)
                     {
-                        result.Value = false;
-                        result.AddErrorEvent(ErrorMsgs.WindowsUserForImportNotSpecifiedMsg);
-
-                    }
-                    else
-                    {
-                        Core.Accounts.Server.ServerAccess sa;
-
-                        // SQLSecure 3.1 (Biresh Kumar Mishra) - Fix server import for Azure VM
-                        if ((SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerOnPremise)
-                             || (SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerAzureVM))
+                        var winUser = importItem.UseSameCredentials ? importItem.UserName : importItem.WindowsUserName;
+                        var winUserPassword = importItem.UseSameCredentials
+                            ? importItem.Password
+                            : importItem.WindowsUserPassword;
+                        if (string.IsNullOrEmpty(winUser) && string.IsNullOrEmpty(winUserPassword))
                         {
-                            sa = Core.Accounts.Server.CheckServerAccess(machine, winUser, winUserPassword, out errorMsg);
+                            result.Value = false;
+                            result.AddErrorEvent(ErrorMsgs.WindowsUserForImportNotSpecifiedMsg);
 
-                            if (sa != Core.Accounts.Server.ServerAccess.OK)
-                            {
-                                if ((!string.IsNullOrEmpty(importItem.ServerName)) && (SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerAzureVM))
-                                {
-                                    string tempMachine = string.Empty;
-
-                                    if (importItem.ServerName.IndexOf(@"\") != -1)
-                                    {
-                                        tempMachine = importItem.ServerName.Substring(0, importItem.ServerName.IndexOf(@"\"));
-                                    }
-                                    else
-                                    {
-                                        tempMachine = importItem.ServerName;
-                                    }
-
-                                    Core.Accounts.Server.ServerAccess tempSa = sa;
-                                    sa = Core.Accounts.Server.ServerAccess.ERROR_OTHER;
-                                    string tempErrorMsg = errorMsg;
-                                    errorMsg = string.Empty;
-                                    sa = Core.Accounts.Server.CheckServerAccess(tempMachine, winUser, winUserPassword, out errorMsg);
-
-                                    if (sa != Core.Accounts.Server.ServerAccess.OK)
-                                    {
-                                        sa = tempSa;
-                                        errorMsg = tempErrorMsg;
-                                    }
-                                    else
-                                    {
-                                        machine = tempMachine;
-                                    }
-                                }
-                            }
                         }
                         else
                         {
-                            sa = Core.Accounts.Server.CheckAzureServerAccess(importItem.ServerName, winUser, winUserPassword, out errorMsg, true);
+                            Core.Accounts.Server.ServerAccess sa;
 
+                            // SQLSecure 3.1 (Biresh Kumar Mishra) - Fix server import for Azure VM
+                            if ((SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerOnPremise)
+                                 || (SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerAzureVM))
+                            {
+                                sa = Core.Accounts.Server.CheckServerAccess(machine, winUser, winUserPassword, out errorMsg);
+
+                                if (sa != Core.Accounts.Server.ServerAccess.OK)
+                                {
+                                    if ((!string.IsNullOrEmpty(importItem.ServerName)) && (SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerAzureVM))
+                                    {
+                                        string tempMachine = string.Empty;
+
+                                        if (importItem.ServerName.IndexOf(@"\") != -1)
+                                        {
+                                            tempMachine = importItem.ServerName.Substring(0, importItem.ServerName.IndexOf(@"\"));
+                                        }
+                                        else
+                                        {
+                                            tempMachine = importItem.ServerName;
+                                        }
+
+                                        Core.Accounts.Server.ServerAccess tempSa = sa;
+                                        sa = Core.Accounts.Server.ServerAccess.ERROR_OTHER;
+                                        string tempErrorMsg = errorMsg;
+                                        errorMsg = string.Empty;
+                                        sa = Core.Accounts.Server.CheckServerAccess(tempMachine, winUser, winUserPassword, out errorMsg);
+
+                                        if (sa != Core.Accounts.Server.ServerAccess.OK)
+                                        {
+                                            sa = tempSa;
+                                            errorMsg = tempErrorMsg;
+                                        }
+                                        else
+                                        {
+                                            machine = tempMachine;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                sa = Core.Accounts.Server.CheckAzureServerAccess(importItem.ServerName, winUser, winUserPassword, out errorMsg, true);
+
+                            }
+                            if (!string.IsNullOrEmpty(errorMsg)) result.AddWarningEvent(errorMsg);
+                            result.Value = (sa == Core.Accounts.Server.ServerAccess.OK);
                         }
-                        if (!string.IsNullOrEmpty(errorMsg)) result.AddWarningEvent(errorMsg);
-                        result.Value = (sa == Core.Accounts.Server.ServerAccess.OK);
                     }
                 }
                 catch (Exception ex)

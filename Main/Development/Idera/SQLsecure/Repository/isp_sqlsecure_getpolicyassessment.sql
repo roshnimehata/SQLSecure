@@ -4966,8 +4966,7 @@ AS -- <Idera SQLsecure version and copyright>
 					-- Unauthorized Accounts Check
 											ELSE IF (@metricid = 71)
 											BEGIN
-												IF(LEN(@severityvalues) > 0)
-													BEGIN
+												
 														IF OBJECT_ID('tempdb..#usersWithExtendedPermissions') IS NOT NULL
 															DROP TABLE #usersWithExtendedPermissions;
 														CREATE TABLE #usersWithExtendedPermissions
@@ -4990,8 +4989,11 @@ AS -- <Idera SQLsecure version and copyright>
 																														left outer join [dbo].[databaseobjectpermission] as dop on dop.grantee = dprinc.uid and dop.dbid = dprinc.dbid
 																														where permission in (''ALTER ANY COLUMN MASTER KEY'', ''ALTER ANY COLUMN ENCRYPTION KEY'', ''VIEW ANY COLUMN MASTER KEY DEFINITION'', ''VIEW ANY COLUMN ENCRYPTION KEY DEFINITION'', ''ALTER ANY SECURITY POLICY'', ''ALTER ANY MASK'', ''UNMASK'')
 																														and dprinc.snapshotid = '+CONVERT(NVARCHAR, @snapshotid)+'
-																													) result
-																											where lower(name) not in ('+LOWER(@severityvalues)+N')';
+																													) result';
+
+														IF(LEN(@severityvalues) > 0)
+															SELECT @sql = @sql + ' where lower(name) not in ('+LOWER(@severityvalues)+N')';
+
 														IF(CHARINDEX('%', @severityvalues) > 0)
 															BEGIN
 																SELECT @strval = LOWER(@severityvalues),
@@ -5088,11 +5090,19 @@ AS -- <Idera SQLsecure version and copyright>
 														ELSE
 														SELECT @sevcode = @severity,
 															   @metricval = N'Unauthorized member found: '+@metricval;
-													END;
-												ELSE
-												SELECT @sevcode = @sevcodeok,
-													   @metricval = N'No list of unapproved logins was provided.';
-												SELECT @metricthreshold = N'Server is vulnerable if not authorized logins are sysadmins or they have extended permissions. Authorized logins are: '+@severityvalues;
+													
+												IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+												BEGIN
+													SELECT @metricthreshold = N'Server is vulnerable if not authorized logins are sysadmins or they have extended permissions.';
+												END
+												ELSE IF (@serverType = @azuresqldatabaseservertype)
+												BEGIN
+													SELECT @metricthreshold = N'Server is vulnerable if not authorized logins are members of dbmanager and loginmanager roles or they have extended permissions.';
+												END;
+
+												IF(LEN(@severityvalues) > 0)
+													SELECT @metricthreshold = @metricthreshold + ' Authorized logins are: '+@severityvalues;
+
 											END;
                                                 -- sa Account disabled  (this is a subset of metric 16)
                                                 ELSE
@@ -5556,19 +5566,42 @@ AS -- <Idera SQLsecure version and copyright>
                                                                                 @sevcode = @sevcodeok,
                                                                                 @metricval = 'All required administrative logins were found.';
                                                                 ELSE
-                                                                        SELECT
+																	BEGIN
+																		IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+																		BEGIN
+																			    SELECT
                                                                                 @sevcode = @severity,
                                                                                 @metricval = N'These administrative logins are missing or are not sysadmin members:  '
                                                                                 + @metricval;
+																		END
+																		ELSE IF (@serverType = @azuresqldatabaseservertype)
+																		BEGIN
+																			    SELECT
+                                                                                @sevcode = @severity,
+                                                                                @metricval = N'These administrative logins are missing or are not dbmanager and loginmanager members:  '
+                                                                                + @metricval;
+																		END
+																	END
                                                         END;
                                                         ELSE
                                                                 SELECT
                                                                         @sevcode = @sevcodeok,
                                                                         @metricval = N'No required administrative login account was provided.';
 
-                                                        SELECT
+														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+														BEGIN
+															   SELECT
                                                                 @metricthreshold = N'Server is not standardized if the sysadmin server role does not include these accounts: '
                                                                 + @severityvalues;
+														END
+														ELSE IF (@serverType = @azuresqldatabaseservertype)
+														BEGIN
+															   SELECT
+                                                                @metricthreshold = N'Server is not standardized if the dbmanager and loginmanager roles do not include these accounts: '
+                                                                + @severityvalues;
+														END;
+
+                                                     
                                                 END;
 
                                                 -- Password Policy Enabled for sa
@@ -6659,8 +6692,16 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         @metricval = N'Databases owned by system administrators: '
                                                                         + @metricval;
 
-                                                        SELECT
+														IF (@serverType = @onpremiseservertype or @serverType = @sqlserveronazurevmservertype)
+														BEGIN
+															    SELECT
                                                                 @metricthreshold = N'Server is vulnerable if a login who is a member of sysadmin or has the CONTROL SERVER permission owns any databases';
+														END
+														ELSE IF (@serverType = @azuresqldatabaseservertype)
+														BEGIN
+															    SELECT
+                                                                @metricthreshold = N'Server is vulnerable if a login who is a member of dbmanager and loginmanager roles owns any databases';
+														END;
 
 														IF(ISNULL(@severityvalues, '') <> '')
 															SELECT @metricthreshold = @metricthreshold + N' other than: '  + @severityvalues;

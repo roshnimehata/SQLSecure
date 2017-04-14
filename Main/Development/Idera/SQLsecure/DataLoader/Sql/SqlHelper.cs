@@ -214,11 +214,11 @@ namespace Idera.SQLsecure.Collector.Sql
             string connectionString;
             if (!azureADAuth)
             {
-                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;";
+                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;ConnectRetryCount=5;";
             }
             else
             {
-                connectionString = @"Data Source=" + instance + "; Authentication=Active Directory Password; UID=" + user + "; PWD=" + password;
+                connectionString = @"Data Source=" + instance + "; Authentication=Active Directory Password; UID=" + user + "; PWD=" + password+ "; ConnectRetryCount=5;";
             }
             return connectionString;
         }
@@ -438,6 +438,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     // Prepare and execute the command.
                     try
                     {
+                        
                         // Create the command object.
                         prepareCommand(cmd, connection, (SqlTransaction)null, commandType, commandText, commandParameters);
 
@@ -463,6 +464,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         {
                             cmd.Parameters.Clear();
                         }
+
                     }
                     catch (SqlException ex)
                     {
@@ -531,6 +533,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     if (hkSQLsecure != null) hkSQLsecure.Close();
                 }
             }
+            
             return timeout;
             
         }
