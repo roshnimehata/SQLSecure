@@ -133,7 +133,20 @@ AS
 						END
 						ELSE IF(@usertype = 'A')
 						BEGIN
-							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype=@usertype ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+							if (@iscasesensitive = 'Y')
+							begin
+								if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'E')
+								EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='E' ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+							else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'X')
+								EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='X' ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+							end
+							else
+							begin
+								if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = 'E')
+								EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='E' ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+							else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = 'X')
+								EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='X' ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+							end
 						END
 						ELSE IF(@usertype = 'E' or @usertype = 'X')
 						BEGIN
@@ -243,7 +256,23 @@ AS
 					END
 					ELSE IF(UPPER(@usertype) = 'A') -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD Account
 					BEGIN
-						EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype=@usertype ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+
+						if (@iscasesensitive = 'Y')
+						begin
+							if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'E')
+							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='E' ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+						else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'X')
+							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='X' ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+						end
+						else
+						begin
+							if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = 'E')
+							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='E' ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+						else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = 'X')
+							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='X' ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+						end
+
+						
 					END
 					ELSE IF(UPPER(@usertype) = 'E' or UPPER(@usertype) = 'X') -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD User or Group
 					BEGIN
