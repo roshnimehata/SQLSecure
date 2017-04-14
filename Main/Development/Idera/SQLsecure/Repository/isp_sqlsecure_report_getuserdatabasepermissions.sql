@@ -133,20 +133,24 @@ AS
 						END
 						ELSE IF(@usertype = 'A')
 						BEGIN
+							declare @azurelogintype nchar(1)
 							if (@iscasesensitive = 'Y')
 							begin
 								if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'E')
-								EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='E' ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
-							else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'X')
-								EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='X' ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+									SET @azurelogintype = 'E'
+								else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'X')
+									SET @azurelogintype = 'X'
 							end
 							else
 							begin
 								if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = 'E')
-								EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='E' ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
-							else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = 'X')
-								EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='X' ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+									SET @azurelogintype = 'E'
+								else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = 'X')
+									SET @azurelogintype = 'X'
 							end
+
+							IF(@azurelogintype = 'E' or @azurelogintype = 'X')
+								EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype=@azurelogintype ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
 						END
 						ELSE IF(@usertype = 'E' or @usertype = 'X')
 						BEGIN
@@ -260,18 +264,20 @@ AS
 						if (@iscasesensitive = 'Y')
 						begin
 							if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'E')
-							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='E' ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
-						else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'X')
-							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='X' ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+								SET @azurelogintype = 'E'
+							else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'X')
+								SET @azurelogintype = 'X'
 						end
 						else
 						begin
 							if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = 'E')
-							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='E' ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
-						else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = 'X')
-							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype='X' ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+								SET @azurelogintype = 'E'
+							else if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = 'X')
+								SET @azurelogintype = 'X'
 						end
 
+						IF(@azurelogintype = 'E' or @azurelogintype = 'X')
+							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype= @azurelogintype ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
 						
 					END
 					ELSE IF(UPPER(@usertype) = 'E' or UPPER(@usertype) = 'X') -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD User or Group
