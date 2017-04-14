@@ -153,6 +153,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             {
                 if (m_RegisteredServer.ServerType == ServerType.AzureSQLDatabase)
                 {
+                    _grpbx_WindowsGMCredentials.Visible = false;
                     _grpbx_WindowsGMCredentials.Text = "Azure Active Directory Credentials to gather Active Directory objects";
                     label10.Text = resources.GetString("label10.AzureDbLabel");
                     _lbl_Replication.Text = "Geo-Replication Enabled:";
