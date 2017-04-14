@@ -194,7 +194,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
 							values (@metricid, 'ADB', 'Database roles and members','Shows information about database roles and their members', '', 'When enabled, this check will list database, database role, corresponding members, login type, windows group, permissions.')
 			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-							values (0, @metricid, 0, 'ADB', 2, '', '', 'Have you check information about database roles and their memebers?')
+							values (0, @metricid, 0, 'ADB', 2, '', '', 'Have you checked information about database roles and their members?')
 		end
 		
 		select @metricid = 101
@@ -203,7 +203,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
 							values (@metricid, 'ADB', 'Server roles and members','Shows information about server roles and their members', '', 'When enabled, this check will list SQL instance, role, corresponding members, login type, windows group, disabled.')
 			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-							values (0, @metricid, 0, 'ADB', 2, '', '', 'Have you check information about server roles and their members?')
+							values (0, @metricid, 0, 'ADB', 2, '', '', 'Have you checked information about server roles and their members?')
 		end
 
 		
@@ -248,7 +248,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 						  0 , -- assessmentid - int,
 						  N'ADB', -- servertype nvarchar(3)
 						  N'', -- reportkey - nvarchar(32)
-						  N'Are there  databases with an unacceptable owner?', -- reporttext - nvarchar(4000)
+						  N'Are there databases with an unacceptable owner?', -- reporttext - nvarchar(4000)
 						  1, -- severity - int
 						  N'none' -- severityvalues - nvarchar(4000)
 						)
@@ -293,7 +293,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 							0,  -- assessmentid - int
 							N'ADB', -- servertype - nvarchar(3)
 							N'', -- reportkey - nvarchar(32)
-							N'Is there objects with permissions granted to public role?', -- reporttext - nvarchar(4000)
+							N'Are there objects with permissions granted to the Public role?', -- reporttext - nvarchar(4000)
 							1, -- severity - int
 							N'' -- severityvalues - nvarchar(4000)
 						)
@@ -338,7 +338,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 							0,  -- assessmentid - int
 							N'ADB', -- servertype - nvarchar(3)
 							N'', -- reportkey - nvarchar(32)
-							N'Is there any orphaned users?', -- reporttext - nvarchar(4000)
+							N'Are there any orphaned users?', -- reporttext - nvarchar(4000)
 							1, -- severity - int
 							N'' -- severityvalues - nvarchar(4000)
 						)
@@ -385,7 +385,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 						0,  -- assessmentid - int
 						N'ADB', -- servertype - nvarchar(3)
                         N'' , -- reportkey - nvarchar(32)
-                        N'Is there any encryption keys with algorithms other than selected?' , -- reporttext - nvarchar(4000)
+                        N'Are there any encryption keys with unapproved algorithms?' , -- reporttext - nvarchar(4000)
                         3 , -- severity - int
                         N'''AES_128'',''AES_192'',''AES_256'''  -- severityvalues - nvarchar(4000)
                     );
@@ -433,7 +433,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
                         0 ,--assesmentid
                         N'ADB', -- servertype - nvarchar(3)
 						N'' ,--reportkey
-                        N'Does certificate private keys were exported?', --reporttext
+                        N'Have certificate private keys been exported?', --reporttext
                         3 , --severity
                         N''  --severityvalues
                     )
@@ -528,7 +528,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
                         @metricid , -- metricid - int
                         0 , -- isenabled - bit
                         N'' , -- reportkey - nvarchar(32)
-                        N'Are any databases using always encryption to protect sensitive data on SQL Server 2016 or later?' , -- reporttext - nvarchar(4000)
+                        N'Are specified columns using Always Encrypted to protect sensitive data on SQL 2016 or later?' , -- reporttext - nvarchar(4000)
                         3 , -- severity - int
                         N'' , -- severityvalues - nvarchar(4000)
                         0  -- assessmentid - int
@@ -1409,6 +1409,83 @@ IF ( ISNULL(@ver, 900) < 3100 )
 			124
 			)
 		END
+		
+		UPDATE policymetric
+		SET reporttext=N'Are there user defined assemblies with a host policy other than SAFE?'
+		WHERE metricid=94
+		
+		UPDATE policymetric
+		SET reporttext=N'Are there SQL Server Agent job steps configured using the defined subsystems ?'
+		WHERE metricid=97
+		
+		UPDATE policymetric
+		SET reporttext=N'Have you checked information about database roles and their members?'
+		WHERE metricid=100
+		
+		UPDATE policymetric
+		SET reporttext=N'Have you checked information about server roles and their members?'
+		WHERE metricid=101
+		
+		UPDATE policymetric
+		SET reporttext=N'Are there databases with an unacceptable owner?'
+		WHERE metricid=102
+		
+		UPDATE policymetric
+		SET reporttext=N'Are there objects with permissions granted to the Public role?'
+		WHERE metricid=103
+		
+		UPDATE policymetric
+		SET reporttext=N'Is CLR enabled on the server?'
+		WHERE metricid=104
+		
+		UPDATE policymetric
+		SET reporttext=N'Is the default traced disabled on the server?'
+		WHERE metricid=105
+		
+		UPDATE policymetric
+		SET reporttext=N'Is the maximum number of error log files greater than or equal to 12?'
+		WHERE metricid=106
+		
+		UPDATE policymetric
+		SET reporttext=N'Are there any orphaned users?'
+		WHERE metricid=107
+		
+		UPDATE policymetric
+		SET reporttext=N'Are OLE automation procedures enabled on the server?'
+		WHERE metricid=108
+		
+		UPDATE policymetric
+		SET reporttext=N'Is common criteria compliance disabled on the server?'
+		WHERE metricid=109
+
+		UPDATE policymetric
+		SET reporttext=N'Are there any general domain accounts added to the instance?'
+		WHERE metricid=111
+		
+		UPDATE policymetric
+		SET reporttext=N'Is there any job step that runs without a proxy account?'
+		WHERE metricid=112
+		
+		UPDATE policymetric
+		SET reporttext=N'Are there any encryption keys with unapproved algorithms?'
+		WHERE metricid=113
+		
+		UPDATE policymetric
+		SET reporttext=N'Have certificate private keys been exported?'
+		WHERE metricid=114
+		
+		UPDATE policymetric
+		SET reporttext=N'Are linked servers configured?'
+		WHERE metricid=115
+		
+		UPDATE policymetric
+		SET reporttext=N'Are linked servers running as a member of the a sysadmin group?'
+		WHERE metricid=116
+		
+		UPDATE policymetric
+		SET reporttext=N'Are specified columns using Always Encrypted to protect sensitive data on SQL 2016 or later?'
+		WHERE metricid=117
+				
 				
     END;
 GO
