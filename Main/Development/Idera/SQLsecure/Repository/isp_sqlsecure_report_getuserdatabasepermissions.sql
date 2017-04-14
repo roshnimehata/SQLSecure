@@ -27,6 +27,7 @@ AS
 	declare @logintype nchar(1)
 	declare @validuser nchar(1)
 	declare @iscasesensitive nchar(1)
+	declare @azurelogintype nchar(1)
 
 	IF EXISTS (SELECT name FROM sysobjects WHERE xtype='u' AND name='#tmpserverpermission')
 	BEGIN
@@ -133,7 +134,6 @@ AS
 						END
 						ELSE IF(@usertype = 'A')
 						BEGIN
-							declare @azurelogintype nchar(1)
 							if (@iscasesensitive = 'Y')
 							begin
 								if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = 'E')
@@ -151,6 +151,8 @@ AS
 
 							IF(@azurelogintype = 'E' or @azurelogintype = 'X')
 								EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype=@azurelogintype ,@inputsid=null, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
+
+							SET @azurelogintype = ''
 						END
 						ELSE IF(@usertype = 'E' or @usertype = 'X')
 						BEGIN
@@ -279,6 +281,7 @@ AS
 						IF(@azurelogintype = 'E' or @azurelogintype = 'X')
 							EXEC isp_sqlsecure_getuserpermission @snapshotid=@snapshotid, @logintype= @azurelogintype ,@inputsid=NULL, @sqllogin=@user, @databasename=@databasename, @permissiontype=@permission
 						
+						SET @azurelogintype = ''
 					END
 					ELSE IF(UPPER(@usertype) = 'E' or UPPER(@usertype) = 'X') -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD User or Group
 					BEGIN
