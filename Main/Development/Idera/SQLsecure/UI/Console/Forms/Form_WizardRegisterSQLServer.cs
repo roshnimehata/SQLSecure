@@ -487,6 +487,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 label4.Text = "&Azure AD Account:";
                 _lbl_WindowsUser.Text = "&Azure AD Account:";
                 radioButton_SQLServerAuth.Checked = true;
+                _grpbx_WindowsGMCredentials.Visible = false;
                 _grpbx_WindowsGMCredentials.Text = "Azure Active Directory Credentials to gather Active Directory objects";
                 label2.Text = resources.GetString("AzureDbLabel2.Text");
                 this._page_Credentials.NextPage = this._PageTags;
@@ -872,7 +873,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 msgBldr.AppendFormat(Utility.Constants.PASSWORD_LENGTH_MESSAGE_FORMAT, Utility.Constants.MINIMUM_PASSWORD_LENGTH);
             }
 
-            if (allowRegisterAnyway)
+            if (allowRegisterAnyway && _comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureDB)
             {
                 // Operation System and AD User 
                 if (string.IsNullOrEmpty(textbox_WindowsUser.Text) || string.IsNullOrEmpty(textbox_WindowsPassword.Text))
@@ -967,7 +968,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             bool azureADAuth = (radioButton_WindowsAuth.Checked && _comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerOnPremise && _comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureVM) ? true : false;
                             if (azureADAuth)
                             {
-                                Sql.SqlServer.GetSqlServerProperties(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text,
+                                Sql.SqlServer.GetSqlServerProperties(serverName, textBox_SQLWindowsUser.Text, textBox_SQLWindowsPassword.Text,
                                                                         out version, out machine, out instance, out connection, out edition,
                                                                         (string)_comboBox_ServerType.SelectedItem, azureADAuth);
                             }
@@ -1027,7 +1028,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     }
 
 
-                    if (allowRegisterAnyway && isWindowsCredentails)
+                    if (allowRegisterAnyway && isWindowsCredentails && _comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureDB)
                     {
                         // Try connecting to server
                         // Impersonate ...
