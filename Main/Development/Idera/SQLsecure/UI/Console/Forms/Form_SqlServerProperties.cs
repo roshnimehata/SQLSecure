@@ -1103,25 +1103,28 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         msgBldr.AppendFormat(Utility.Constants.PASSWORD_LENGTH_MESSAGE_FORMAT, Utility.Constants.MINIMUM_PASSWORD_LENGTH);
                     }
 
-                    if (allowRegisterAnyway)
+                    if (allowRegisterAnyway )
                     {
                         // Operating System and AD User 
                         if (string.IsNullOrEmpty(textbox_WindowsUser.Text) ||
                             string.IsNullOrEmpty(textbox_WindowsPassword.Text))
                         {
-                            if (msgBldr.Length > 0)
+                            if (m_RegisteredServer.ServerType != ServerType.AzureSQLDatabase)
                             {
-                                msgBldr.Append("\n\n");
+                                if (msgBldr.Length > 0)
+                                {
+                                    msgBldr.Append("\n\n");
+                                }
+                                msgBldr.Append(Utility.ErrorMsgs.WindowsUserNotSpecifiedMsg);
+                                isOk = false;
+                                allowRegisterAnyway = true;
                             }
-                            msgBldr.Append(Utility.ErrorMsgs.WindowsUserNotSpecifiedMsg);
-                            isOk = false;
-                            allowRegisterAnyway = true;
                             isWindowsCredentials = false;
                         }
                     }
 
                     // Check if the account format is correct.
-                    if (allowRegisterAnyway && isWindowsCredentials)
+                    if (allowRegisterAnyway && isWindowsCredentials&& m_RegisteredServer.ServerType != ServerType.AzureSQLDatabase)
                     {
                         string domain = string.Empty;
                         string user = string.Empty;
@@ -1155,7 +1158,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                 login = textbox_SqlLogin.Text;
                                 password = textbox_SqlLoginPassword.Text;
                             }
-                            else
+                            else if(m_RegisteredServer.ServerType == ServerType.AzureSQLDatabase && radioButton_WindowsAuth.Checked)
+                            {
+                                login = textBox_SQLWindowsUser.Text;
+                                password = textBox_SQLWindowsPassword.Text;
+                            }
+                            else 
                             {
                                 // Impersonate ...
                                 try
@@ -1186,9 +1194,10 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                 {
                                     showWorking.UpdateText(
                                         string.Format("Connecting to SQL Server {0}...", m_RegisteredServer.ServerName.ToUpper()));
+                                    bool azureADAuth = (radioButton_WindowsAuth.Checked && m_RegisteredServer.ServerType != ServerType.OnPremise && m_RegisteredServer.ServerType != ServerType.SQLServerOnAzureVM) ? true : false;
                                     Sql.SqlServer.GetSqlServerProperties(m_RegisteredServer.FullConnectionName, login, password,
                                                                          out version, out machine, out instance,
-                                                                         out connection, out edition, Utility.Activity.TypeServerOnPremise);
+                                                                         out connection, out edition, SqlServer.GetValueByName( m_RegisteredServer.ServerType),azureADAuth);
                                     if (targetImpersonationContext != null)
                                     {
                                         targetImpersonationContext.Undo();
