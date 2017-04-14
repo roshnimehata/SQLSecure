@@ -48,7 +48,7 @@ IF ( ISNULL(@ver, 900) < 3100 )
 							values (@metricid, 'ADB', 'Sample Databases Exist','Determine whether sample databases exist on the Azure SQL Database', '', 'When enabled, this check will identify a risk if any sample databases exist on the Azure SQL Database. Specify the sample databases.')
 
 			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-							values (0, @metricid, 0, 'ADB', 1, '''Northwind'',''pubs'',''AdventureWorks'',''AdventureWorksAS'',''AdventureWorksDW''', '',
+							values (0, @metricid, 0, 'ADB', 1, '''Northwind'',''pubs'',''AdventureWorks'',''AdventureWorksAS'',''AdventureWorksDW'',''AdventureWorksLTv12''', '',
 											'Do the Azure SQL Database sample databases exist?')
 
 		end
@@ -127,11 +127,11 @@ IF ( ISNULL(@ver, 900) < 3100 )
 		if not exists (select TOP 1 * from metricextendedinfo where metricid = @metricid)
 		begin
 			insert into metricextendedinfo(metricid, servertype, metricname, metricdescription, validvalues, valuedescription)
-							values (@metricid, 'ADB', 'Unauthorized Account Check', 'Determine whether unauthorized accounts have sysadmin privileges on the Azure SQL Database or has SoD roles like "ALTER ANY COLUMN MASTER KEY", "ALTER ANY COLUMN ENCRYPTION KEY", "VIEW ANY COLUMN MASTER KEY DEFINITION", "VIEW ANY COLUMN ENCRYPTION KEY DEFINITION", "ALTER ANY SECURITY POLICY", "ALTER ANY MASK", "UNMASK"', '', 'When enabled, this check will identify a risk if any unauthorized accounts are members of the sysadmin server role or extended SoD roles. Specify the unauthorized accounts. Can use ''%'' as wildcard.')
+							values (@metricid, 'ADB', 'Unauthorized Account Check', 'Determine whether unauthorized accounts have dbmanager and loginmanager privileges on the Azure SQL Database or has SoD roles like "ALTER ANY COLUMN MASTER KEY", "ALTER ANY COLUMN ENCRYPTION KEY", "VIEW ANY COLUMN MASTER KEY DEFINITION", "VIEW ANY COLUMN ENCRYPTION KEY DEFINITION", "ALTER ANY SECURITY POLICY", "ALTER ANY MASK", "UNMASK"', '', 'When enabled, this check will identify a risk if any unauthorized accounts are members of the dbmanager and loginmanager roles or extended SoD roles. Specify the unauthorized accounts. Can use ''%'' as wildcard.')
 
 			insert into policymetricextendedinfo (policyid, metricid, assessmentid, servertype, severity, severityvalues, reportkey, reporttext)
-							values (0, @metricid, 0, 'ADB', 2, 'UNAUTHORIZED_ADMIN_ACCT', '',
-											'Do unauthorized accounts have sysadmin privileges or extended SoD roles?')
+							values (0, @metricid, 0, 'ADB', 2, '', '',
+											'Do unauthorized accounts have dbmanager and loginmanager privileges or extended SoD roles?')
 		end
 		
 		select @metricid = 76
