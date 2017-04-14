@@ -100,6 +100,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private static string QueryGetSnapshotUser = @"SELECT name, type, sid FROM SQLsecure.dbo.vwserverprincipal WHERE snapshotid = {0} AND lower(type) IN ({1}) AND lower(name) = '{2}'";
         private static string QueryGetSnapshotWindowsUser = @"SELECT name, type, sid FROM SQLsecure.dbo.vwwindowsaccount WHERE snapshotid = {0} AND lower(name) = '{1}'";
         private static string QueryGetSnapshotWindowsSid = @"SELECT name, type, sid FROM SQLsecure.dbo.vwwindowsaccount WHERE snapshotid = {0} AND sid = {1}";
+        private static string QueryGetSnapshotWindowsUserForAzureSQLDatabase = "select name, type, sid from SQLsecure.dbo.serverprincipal a where a.snapshotid = {0} and name = '{1}'";//SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1971
 
         // Columns for handling the Snapshot query results
         private enum UserColumn
@@ -164,7 +165,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             return user;
         }
 
-        static public User GetSnapshotWindowsUser(int snapshotId, string name, bool showErrorMsg)
+        //SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1971
+        static public User GetSnapshotWindowsUser(int snapshotId, string name, bool showErrorMsg,ServerType serverType)
         {
             // Create a user object from the name passed.
             User user = null;
@@ -173,9 +175,18 @@ namespace Idera.SQLsecure.UI.Console.Sql
             try
             {
                 logX.loggerX.Info(@"Retrieve Windows Login user from snapshot by name");
+                
+                //Start-SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1971
+                if (serverType == ServerType.AzureSQLDatabase)
+                {
+                    query = string.Format(QueryGetSnapshotWindowsUserForAzureSQLDatabase, snapshotId, name);
+                }
 
-                query = string.Format(QueryGetSnapshotWindowsUser, snapshotId, name.ToLower());
-
+                else
+                {
+                    query = string.Format(QueryGetSnapshotWindowsUser, snapshotId, name.ToLower());
+                }
+                //End-SQLsecure 3.1 (Tushar)--Fix for issue SQLSECU-1971
                 using (SqlConnection connection = new SqlConnection(Program.gController.Repository.ConnectionString))
                 {
                     connection.Open();
