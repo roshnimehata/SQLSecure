@@ -439,6 +439,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 checkBox_UseSameAuth.Checked = true;
                 checkBox_UseSameAuth.Show();
                 radioButton_SQLServerAuth.Checked = true;
+                _grpbx_WindowsGMCredentials.Visible = true;
                 checkBox_UseSameAuth.Text = "Use same Windows Authentication as above";
                 radioButton_WindowsAuth.Text = "Windows Authentication";
                 label4.Text = "&Windows User:";
@@ -468,7 +469,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
                 textbox_SqlLogin.Enabled = true;
                 textbox_SqlLoginPassword.Enabled = true;
-
+                _grpbx_WindowsGMCredentials.Visible = true;
                 _grpbx_WindowsGMCredentials.Text = "Azure Active Directory to gather Operating System and Active Directory objects";
                 label2.Text = resources.GetString("AzureVMLabel2.Text");
             }
