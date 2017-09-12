@@ -56,6 +56,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public static String RepositoryDBNotFound = @"A " + Constants.PRODUCT_STR + " database was not found on the selected server";
         public const String SMOError = @"Exception raised using SMO to retrieve Server List";
         public const String VersionNotSupported = @"Version not supported";
+        public const String IncompatibleVersion = @"Choose a different Repository or make sure the console and Repository versions are compatible";//SQLsecure 3.1 (Tushar)--Fix for Defect SQLSECU-1672
 
         // Add server wizard error messages.
         public const string RegisterSqlServerCaption = "Register SQL Server";
@@ -90,7 +91,11 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string NameMatchInvalidCharsMsg = @"Name match string contains invalid characters.";
         public const string WarningEmailNoConfiguredTitle = @"Email Configuration";
         public const string WarningEmailNoConfiguredMsg = @"To successfully receive email notifications, you must also specify which email provider SQLsecure should use. Click Configure SMTP Email on the Tools menu.";
-
+        public const string AzureADAccountNotSpecifiedMsg = @"Azure AD account, for gathering AD objects, has been entered incorrectly. Make sure that the user is specified in Azure AD format and a password has been entered";
+        public const string IncorrectServerTypeAzureSQLDBMsg = @"Selected Server is not a valid Azure SQL Database. Please navigate back to register a server with appropriate server type.";
+        public const string IncorrectServerTypeSQLServerMsg = @"Selected Server is not a valid SQL Server. Please navigate back to register a server with appropriate server type.";
+        public const string IncorrectServerTypeAzureSQLDBImportMsg = @"Specified Server is not a valid Azure SQL Database.";
+        public const string IncorrectServerTypeSQLServerImportMsg = @"Specified Server is not a valid SQL Server.";
         // Policy
         public const string PolicyCaption = "Policy";
         public const string PolicyPropertiesCaption = "Policy Properties";
@@ -379,5 +384,24 @@ Do you wish to remove SQL Server now?";
 
 
         public const string WindowsUserForImportNotSpecifiedMsg = "Windows User for gathering OS and AD Objects was not provided";
+
+        //Deploy Repository
+        public const String SuccessTag = "Success";
+        public const String FailTag = "Failed";
+        public const String RepositorySuccessfullyUpdated = "Repository updated successfully.";
+        public const String RepositorySuccessfullyDeployed = "Repository Deployed successfully.";
+        public const String ScriptNotExist = "Some of the script(s) required to update repository do not exist. Please contact Idera support team.";
+        public const String ScriptExecutionFailed = "Some of the script(s) required to update repository failed to execute. Please check log file for more information or contact Idera support team.";
+
+        //incorrect credentials
+        public const String IncorrectCredentialsTag = "Incorrect credentials";
+        public const String IncorrectCredentials = "Username or password incorrect";
+
+        //Update Repository
+        public const String UpgradeSchemaTag = "Upgrade your Schema";
+        public const String UpgradeRepositoryTag = "Upgrade your Repository";
+        public const String UpgradeRepository = "The version of the selected SQLsecure repository is {0}.Do you wish to upgrade your repository to version {1}?\nNote:For best performance it is advised to upgrade your repository.";
+        public const String RepositoryExistTag = "Repository Already Exists.";
+        public const string RepositoryExists = "SQLsecure latest repository already exists on the selected SQL Server instance.";
     }
 }

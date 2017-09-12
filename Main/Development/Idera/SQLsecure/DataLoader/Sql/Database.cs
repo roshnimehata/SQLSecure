@@ -19,7 +19,8 @@ using System.Data.SqlTypes;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
-
+using Idera.SQLsecure.Collector.Sql;
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
     /// <summary>
@@ -88,7 +89,9 @@ namespace Idera.SQLsecure.Collector.Sql
 
         #endregion
 
-
+        //SQLsecure 3.1 (Tushar)--Added serverType,targerServerName and targetConnectionBuilder as parameters to support
+        //Azure DB since as of now Account.Server class object is not created and also while querying Azure DB, we need 
+        //have database name in the connection string for Azure DB. 
         #region Load From Target
         public static bool GetTargetDatabases(
                 Core.Accounts.Server server,
@@ -97,11 +100,17 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnectionString,
                 int snapshotid,
                 string serverlogin,
+                ServerType serverType,
+                string targetServerName,
+                SqlConnectionStringBuilder targerConnectionBuilder,
+                DateTime? lastCollectionEndTime,    // SQLSecure 3.1 (Anshul Aggarwal) - Need last collection time for "Backup Encryption".
                 out List<Sql.Database> databaseList,
                 ref Dictionary<Sql.SqlObjectType, Dictionary<MetricMeasureType, uint>> metricsData                
             )
         {
-            Debug.Assert(server != null);
+            //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
+            if (serverType != ServerType.AzureSQLDatabase)
+                Debug.Assert(server != null);
             Debug.Assert(!string.IsNullOrEmpty(targetConnectionString));
             Debug.Assert(sqlServerVersion != ServerVersion.Unsupported);
             uint numDatabasesProcessed = 0;
@@ -136,7 +145,10 @@ namespace Idera.SQLsecure.Collector.Sql
             {
                 // Bind to the remote target, because we have to resolve db owner sid,
                 // if needed (ignore errors).
-                bool isBind = server.Bind();
+                //SQLsecure 3.1 (Tushar)--Added this check for Azure DB because Accounts.Server class object is not created for AzureDB.
+                bool isBind = false;
+                if (serverType == ServerType.OnPremise)
+                    isBind = server.Bind();
 
                 // Connect and load the databases.
                 using (SqlConnection connection = new SqlConnection(targetConnectionString))
@@ -147,11 +159,17 @@ namespace Idera.SQLsecure.Collector.Sql
                         connection.Open();
 
                         // Create the query based on server version.
-                        string query = QueryDb2K;    
-                        if (sqlServerVersion >= ServerVersion.SQL2012)
-                            query = QueryDb2K12;
-                        if (sqlServerVersion < ServerVersion.SQL2012 && sqlServerVersion > ServerVersion.SQL2000)
+                        string query = QueryDb2K;                       // 2000
+                        //SQLsecure 3.1 (Tushar)--Query Change for Azure DB.
+                        if (serverType == ServerType.AzureSQLDatabase)
+                            query = string.Format(QueryDbAzureDatabase, targetServerName);
+                        else if (sqlServerVersion >= ServerVersion.SQL2012) // 2012, 2014, 2016
+                            query = string.Format(QueryDb2K12, targetServerName);
+                        else if (sqlServerVersion >= ServerVersion.SQL2008) // 2008
+                            query = string.Format(QueryDb2K8, targetServerName);
+                        else if (sqlServerVersion > ServerVersion.SQL2000) // 2005
                             query = QueryDb2K5;
+                       
                         // Get a list of databases from the target instance.
                         using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
                             CommandType.Text, query, null))
@@ -164,12 +182,28 @@ namespace Idera.SQLsecure.Collector.Sql
                                 SqlBinary ownersid = rdr.GetSqlBinary(FieldOwnersid);
                                 SqlString ownername = rdr.GetSqlString(FieldOwnername);
                                 SqlBoolean trustworthy = rdr.GetBoolean(FieldTrustworthy);
-                                SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);   
+                                SqlBoolean isContained = rdr.GetBoolean(FieldIscontained);
+                                //SQLSecure 3.1 (Barkha Khatri) getting georeplication for Azure DB ,null for other server types
+                                SqlBoolean geoReplication = rdr.IsDBNull(FieldGeoReplication)?SqlBoolean.Null: rdr.GetSqlBoolean(FieldGeoReplication);
+                                // SQLSecure 3.1 (Anshul Aggarwal) - New column for TDE risk assessments.
+                                SqlBoolean isTDEEncrypted = SqlBoolean.Null;    
+                                if (!rdr.IsDBNull(FieldIsTDEEncrypted))
+                                {
+                                    isTDEEncrypted = rdr.GetBoolean(FieldIsTDEEncrypted);
+                                }
+
+                                // SQLsecure 3.1 (Anshul Aggarwal) - SQLSECU-1662 - Snapshot collection fails for 'SF-TEDDY' instance.
+                                SqlString FQN = SqlString.Null;
+                                if (!rdr.IsDBNull(FieldFQN))
+                                {
+                                    FQN = rdr.GetSqlString(FieldFQN);
+                                }
 
                                 // Create the sid object.
                                 Debug.Assert(!ownersid.IsNull);
                                 Sid osid = new Sid(ownersid.Value);
-                                Debug.Assert(osid.IsValid);
+                                if (serverType != ServerType.AzureSQLDatabase)
+                                    Debug.Assert(osid.IsValid);
 
                                 // If the owner name is null, then we have to resolve the SID to 
                                 // get the owner name.
@@ -184,9 +218,25 @@ namespace Idera.SQLsecure.Collector.Sql
                                 }
 
                                 // Create the database object.
-                                Database db = new Database(name.Value, dbid.Value, osid, owner, server.Name, trustworthy.Value,isContained.Value);
+                                //SQLsecure 3.1 (Tushar)--Adding support for Azure DB.
+                                Database db;
+                                if (serverType == ServerType.AzureSQLDatabase)
+                                {
+                                    //SQLsecure 3.1 (Anshul Aggarwal) - Backup encryption not supported for ADB or AVM.
+                                    db = new Database(name.Value, dbid.Value, osid, owner, targetServerName, trustworthy.Value, isContained.Value,
+                                       isTDEEncrypted.IsNull ? (bool?)null : isTDEEncrypted.Value,
+                                       FQN.IsNull ? null : FQN.Value,geoReplication.Value);
+                                    targerConnectionBuilder.InitialCatalog = db.Name;
+                                }
+                                else
+                                {
+                                    db = new Database(name.Value, dbid.Value, osid, owner, server.Name, trustworthy.Value, 
+                                        isContained.Value, 
+                                         isTDEEncrypted.IsNull ? (bool?)null : isTDEEncrypted.Value,
+                                         FQN.IsNull ? null : FQN.Value,null);
+                                }
 
-                                db.GetDatabaseFiles(targetConnectionString);
+                                db.GetDatabaseFiles(targerConnectionBuilder.ConnectionString);
                                 // Add filter to the list.
                                 databaseList.Add(db);
 
@@ -211,7 +261,34 @@ namespace Idera.SQLsecure.Collector.Sql
                         databaseList = null;
                         isOk = false;
                     }
+
+                    // SQLsecure 3.1 (Anshul) - Process Backup Information for databases
+                    try
+                    {
+                        GetDatabaseBackupInformation(connection, serverType, sqlServerVersion, lastCollectionEndTime, databaseList);
+                    }
+                    catch (SqlException ex)
+                    {
+                        string strMessage = "Getting backup information for databases on target raised an exception. ";
+                        logX.loggerX.Error("ERROR - " + strMessage, ex);
+                        AppLog.WriteAppEventError(SQLsecureEvent.ExErrExceptionRaised, SQLsecureCat.DlDataLoadCat,
+                                                    "Retrieve backup information for databases from target " + targetConnectionString,
+                                                    ex.Message);
+                        Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnectionString,
+                                                                                snapshotid,
+                                                                                Collector.Constants.ActivityType_Error,
+                                                                                Collector.Constants.ActivityEvent_Error,
+                                                                                strMessage + ex.Message);
+
+                        databaseList.Clear();
+                        databaseList = null;
+                        isOk = false;
+                    }
                 }
+                
+                //SQLsecure 3.1 (Tushar)--Added support for Azure SQLDb.
+                //once we are done with processing individual databases, setting it back to empty.
+                targerConnectionBuilder.InitialCatalog = string.Empty;
 
                 // Now unbind from the target, if we have bound to the target.
                 if (isBind) { server.Unbind(); }
@@ -239,6 +316,108 @@ namespace Idera.SQLsecure.Collector.Sql
             return isOk;
         }
 
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul) - Get Backup Information for SQL Server 2008+ databases.
+        /// </summary>
+        private static void GetDatabaseBackupInformation(SqlConnection connection, 
+                ServerType serverType,
+                ServerVersion sqlServerVersion,
+                DateTime? lastCollectionEndTime,    // SQLSecure 3.1 (Anshul Aggarwal) - Need last collection time for "Backup Encryption".
+                List<Sql.Database> databaseList)
+        {
+            if (serverType != ServerType.OnPremise && serverType != ServerType.SQLServerOnAzureVM)
+                return;
+
+            if (sqlServerVersion < ServerVersion.SQL2008)
+                return;
+
+            // Create the query based on server version.
+            string query = QueryDb2k8_Backup;
+            if (sqlServerVersion >= ServerVersion.SQL2014) // 2014, 2016
+                query = QueryDb2k14_Backup;
+
+            // Add check for last collection if this is not the first collection for the server.
+            query = string.Format(query,
+                    lastCollectionEndTime.HasValue ? string.Format(QueryDb_BackupLastCollection, lastCollectionEndTime.Value) : string.Empty);
+
+            // Get a list of databases from the target instance.
+            using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
+                CommandType.Text, query, null))
+            {
+                while (rdr.Read())
+                {
+                    // Retrieve the fields.
+                    SqlString dbName = rdr.GetSqlString(FieldDbName);
+
+                    SqlBoolean isLastBackupNative = SqlBoolean.Null;
+                    if (!rdr.IsDBNull(FieldLastBackupType))
+                    {
+                        isLastBackupNative = rdr.GetBoolean(FieldLastBackupType);
+                    }
+
+                    SqlBoolean lastBackupEncrypted = SqlBoolean.Null;
+                    if (!rdr.IsDBNull(FieldLastBackupEncrypted))
+                    {
+                        lastBackupEncrypted = rdr.GetBoolean(FieldLastBackupEncrypted);
+                    }
+
+                    if (!dbName.IsNull) {
+                        var db = databaseList.Find(d => d.Name == dbName.Value);
+                        if(db != null)
+                        {
+                            db.IsLastBackupNative = isLastBackupNative.IsNull ? (bool?)null : isLastBackupNative.Value;
+                            db.LastBackupEncrypted = lastBackupEncrypted.IsNull ? (bool?)null : lastBackupEncrypted.Value;
+                        }
+                    }
+                }
+
+                if (rdr.NextResult())
+                {
+                    while (rdr.Read())
+                    {
+                        // Retrieve the fields.
+                        SqlString dbName = rdr.GetSqlString(FieldDbName);
+                        
+                        SqlBoolean isCurrentRecordNative = SqlBoolean.Null;
+                        if (!rdr.IsDBNull(FieldNonNativeBackupAvailable))
+                        {
+                            isCurrentRecordNative = rdr.GetBoolean(FieldNonNativeBackupAvailable);
+                        }
+
+
+                        SqlBoolean intermediateBackupEncrypted = SqlBoolean.Null;
+                        if (!rdr.IsDBNull(FieldIntermediateBackupEncrypted))
+                        {
+                            intermediateBackupEncrypted = rdr.GetBoolean(FieldIntermediateBackupEncrypted);
+                        }
+
+                        if (!dbName.IsNull && !isCurrentRecordNative.IsNull)
+                        {
+                            var db = databaseList.Find(d => d.Name == dbName.Value);
+                            if (db != null)
+                            {
+                                if (!db.NonNativeBackupAvailable.HasValue)
+                                    db.NonNativeBackupAvailable = false;
+
+                                // Backup Encryption only applicable for SQLServer 2014+
+                                if (sqlServerVersion > ServerVersion.SQL2012 && !db.IntermediateBackupEncrypted.HasValue)
+                                    db.IntermediateBackupEncrypted = true;
+
+                                if (!isCurrentRecordNative.IsTrue)
+                                {
+                                    db.NonNativeBackupAvailable = true;
+                                }
+                                else if (!intermediateBackupEncrypted.IsNull && intermediateBackupEncrypted.IsFalse)
+                                {
+                                    db.IntermediateBackupEncrypted = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         public void GetDatabaseFiles(string targetConnectionString)
         {
@@ -273,12 +452,14 @@ namespace Idera.SQLsecure.Collector.Sql
             }
         }
 
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
         public static bool GetDabaseStatus(
                 ServerVersion sqlServerVersion,
                 string targetConnectionString,
                 string repositoryConnectionString,
                 int snapshotid,
                 int dbid,
+                ServerType serverType,
                 out string status
             )
         {
@@ -320,7 +501,12 @@ namespace Idera.SQLsecure.Collector.Sql
                         connection.Open();
 
                         // Create the query.
-                        string query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2;
+                        string query = string.Empty;
+                        //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
+                        if (serverType== ServerType.AzureSQLDatabase)
+                            query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2ForAzureDb;
+                        else
+                            query = QueryDbStatus1 + dbid.ToString() + QueryDbStatus2;
 
                         // Get the status.
                         using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null,
@@ -360,23 +546,87 @@ namespace Idera.SQLsecure.Collector.Sql
         
         private const string QueryDb2K =
                             @"SELECT name = db.name, dbid = CAST(db.dbid AS int), ownersid = db.sid, ownername = l.loginname, trustworthy = cast(0 as bit), isContained=cast( 0 as bit)
-                              FROM master.dbo.sysdatabases AS db LEFT OUTER JOIN master.dbo.syslogins AS l 
+                             , istdeencrypted= NULL, FQN = NULL,NULL  
+                                FROM master.dbo.sysdatabases AS db LEFT OUTER JOIN master.dbo.syslogins AS l 
 	                                    ON (db.sid = l.sid)";
         private const string QueryDb2K5 =
                             @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( 0 as bit)
-                              FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
+                              , istdeencrypted= NULL, FQN = NULL,NULL
+                            FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
 
+        // SQLsecure 3.1 (Anshul Aggarwal) - New query as 2k8 onwards supports TDE encryption but 2k5 does not.
+        private const string QueryDb2K8 =
+                                   @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( 0 as bit)
+                              ,istdeencrypted = cast(db.is_encrypted as bit), FQN = QUOTENAME('{0}') + '.' + QUOTENAME(db.name) ,NULL 
+                               FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
+	                                    ON (db.owner_sid = l.sid)";
+        
         private const string QueryDb2K12 =
                             @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = l.name, trustworthy = db.is_trustworthy_on, isContained=cast( db.containment as bit)
-                              FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
+                              ,istdeencrypted = cast(db.is_encrypted as bit), FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name)),NULL
+                                FROM sys.databases AS db LEFT OUTER JOIN sys.server_principals AS l
 	                                    ON (db.owner_sid = l.sid)";
+        
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
+        private const string QueryDbAzureDatabase = @"SELECT name = db.name, dbid = db.database_id, ownersid = db.owner_sid, ownername = ISNULL(ISNULL(s.name, l.name), 'dbo'), trustworthy = db.is_trustworthy_on, 
+                    isContained=cast(db.containment as bit),istdeencrypted = db.is_encrypted, FQN = CONCAT(QUOTENAME('{0}'), '.',QUOTENAME(db.name)),
+                    georeplication=CASE WHEN (R.database_id IS NULL) THEN cast(0 as bit) ELSE cast(1 as bit) END   
+                              FROM sys.databases AS db LEFT OUTER JOIN sys.sql_logins AS s ON (db.owner_sid = s.sid)
+							  LEFT OUTER JOIN sys.database_principals AS l ON (db.owner_sid = l.sid) and l.type = 'E'
+                              LEFT OUTER JOIN [sys].geo_replication_links AS R ON(db.database_id=R.database_id)";
+        
+        private const string QueryDb2k14_Backup = @"SELECT a.database_name, 
+                                            CASE WHEN (a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server') THEN cast(1 as bit) ELSE cast(0 as bit) END,
+                                            CASE WHEN (a.encryptor_type IS NULL) THEN cast(0 as bit) ELSE cast(1 as bit) END
+	                                        FROM msdb.dbo.backupset a 
+	                                        INNER JOIN msdb.dbo.backupmediaset b ON a.media_set_id = b.media_set_id
+	                                        INNER JOIN (SELECT database_name, max(backup_start_date) AS max_backup_start_date
+	                                        FROM msdb.dbo.backupset
+	                                        GROUP BY(database_name)) c ON c.database_name = a.database_name AND c.max_backup_start_date = a.backup_start_date
+
+                                            SELECT distinct a.database_name,
+                                            CASE WHEN (a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server') THEN cast(1 as bit) ELSE cast(0 as bit) END,
+                                            CASE WHEN (a.encryptor_type is not null) THEN cast(1 as bit) ELSE cast(0 as bit) END
+                                            FROM msdb.dbo.backupset a 
+                                            INNER JOIN msdb.dbo.backupmediaset b ON a.media_set_id = b.media_set_id
+                                            WHERE ((a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server' and a.encryptor_type is null) OR
+                                            (a.software_vendor_id <> 4608 OR b.software_name <> 'Microsoft SQL Server')){0}";
+
+        private const string QueryDb2k8_Backup = @"SELECT a.database_name, 
+                                            CASE WHEN (a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server') THEN cast(1 as bit) ELSE cast(0 as bit) END,
+                                            NULL
+	                                        FROM msdb.dbo.backupset a 
+	                                        INNER JOIN msdb.dbo.backupmediaset b ON a.media_set_id = b.media_set_id
+	                                        INNER JOIN (SELECT database_name, max(backup_start_date) AS max_backup_start_date
+	                                        FROM msdb.dbo.backupset
+	                                        GROUP BY(database_name)) c ON c.database_name = a.database_name AND c.max_backup_start_date = a.backup_start_date
+
+                                            SELECT distinct a.database_name, 
+                                            CASE WHEN (a.software_vendor_id = 4608 AND b.software_name = 'Microsoft SQL Server') THEN cast(1 as bit) ELSE cast(0 as bit) END,
+                                            NULL
+                                            FROM msdb.dbo.backupset a 
+                                            INNER JOIN msdb.dbo.backupmediaset b ON a.media_set_id = b.media_set_id
+                                            WHERE (a.software_vendor_id <> 4608 OR b.software_name <> 'Microsoft SQL Server'){0}";
+        
+        private const string QueryDb_BackupLastCollection = @" AND DATEADD(second, DATEDIFF(second, GETDATE(), GETUTCDATE()), a.backup_start_date) > '{0}'";
+
         private const int FieldName = 0;
         private const int FieldDbid = 1;
         private const int FieldOwnersid = 2;
         private const int FieldOwnername = 3;
         private const int FieldTrustworthy = 4;
         private const int FieldIscontained = 5;
+        private const int FieldIsTDEEncrypted = 6;   // SQLsecure 3.1 (Anshul Aggarwal) - New fields for TDE risk assessments.
+        private const int FieldFQN = 7;
+        private const int FieldGeoReplication = 8;
+
+        private const int FieldDbName = 0;
+        private const int FieldLastBackupType = 1;
+        private const int FieldLastBackupEncrypted = 2;
+        private const int FieldNonNativeBackupAvailable = 1;
+        private const int FieldIntermediateBackupEncrypted = 2;
+      
 
         private const string QueryDbStatus1 = @"
                             --Declare variables
@@ -397,6 +647,98 @@ namespace Idera.SQLsecure.Collector.Sql
 	                            @status2 = status2
                             FROM 
 	                            master..sysdatabases d (nolock)
+                            WHERE 
+	                            dbid = @dbid
+
+                            -- Determine if database is suspect, and if so, goto Single User DB (below)
+                            -- Note that databasepropertyex is SQL 2000+ and databaseproperty is provided for backwards compatibility
+                            IF databasepropertyex(@dbname,'status') = 'Suspect' 
+	                            GOTO single_user_db 
+
+                            -- If database status is Single User and the current user does not have access to it, go to Single User DB (below)
+
+                            IF @status & 4096 = 4096 
+                            BEGIN
+                                IF(has_dbaccess(@dbname) = 0) 
+	                              GOTO single_user_db 
+                            END
+
+                            -- If the user has access to the database and:
+                            IF (has_dbaccess(@dbname) = 1) 
+	                            -- The database is not locked
+	                            AND @mode = 0 
+	                            -- The database is not in a load state
+	                            AND databaseproperty(@dbname, 'isinload') = 0 
+	                            -- The database is not suspect
+	                            AND databaseproperty(@dbname, 'issuspect') = 0 
+	                            -- The database is not in recovery
+	                            AND isnull(databaseproperty(@dbname, 'isinrecovery'),0) = 0 
+	                            -- The database is not in state - not recovered
+	                            AND isnull(databaseproperty(@dbname, 'isnotrecovered'),0) = 0 
+	                            -- The database is not offline
+	                            AND databaseproperty(@dbname, 'isoffline') = 0 
+	                            -- The database is not shut down
+	                            AND isnull(databaseproperty(@dbname, 'isshutdown'),0) = 0 
+	                            -- The database is not in a load state (according to status bits)
+	                            AND @status & 32 <> 32 
+	                            -- The database is not in pre-recovery (according to status bits)
+	                            AND @status & 64 <> 64 
+	                            -- The database is not in recovery (according to status bits)
+	                            AND @status & 128 <> 128 
+	                            -- The database is not in state - not recovered (according to status bits)
+	                            AND @status & 256 <> 256 
+	                            -- The database is not offline (according to status bits)
+	                            AND @status & 512 <> 512 
+                            	
+	                            BEGIN
+		                            --This section of code will run if the database is accessible
+		                            SELECT
+			                            'Available database', 
+			                            @dbname, 
+			                            @status, 
+			                            @mode  
+
+	                            END
+                            ELSE
+	                            BEGIN single_user_db:  
+		                            -- If not suspect and not inaccessible
+		                            IF @mode = 0 and databasepropertyex(@dbname,'status') <> 'suspect' 
+			                            -- Return - loading/exlock db along with DB name, status, and mode
+			                            SELECT
+				                            'Database is loading or exclusively locked', 
+				                            @dbname, 
+				                            @status, 
+				                            @mode  
+		                            ELSE
+			                            BEGIN
+				                            -- If suspect
+				                            IF databasepropertyex(@dbname,'status') = 'suspect'  
+					                            -- Return - not accessible along with DB name, 256, and mode
+					                            SELECT
+						                            'Suspect', 
+						                            @dbname, 
+						                            @status, 
+						                            @mode  
+				                            -- If inaccessible for another reason
+				                            ELSE
+					                            -- Return - not accessible along with DB name, status, and mode
+					                            SELECT
+						                            'Not accessible', 
+						                            @dbname, 
+						                            @status, 
+						                            @mode  
+			                            END 
+	                            END";
+        //SQLsecure 3.1 (Tushar)--Added support for Azure SQLdb.
+        private const string QueryDbStatus2ForAzureDb = @"
+                            --Get mode, status & status2 for the dabase.
+                            SELECT 
+	                            @dbname = name,
+	                            @mode = mode,
+	                            @status = isnull(convert(integer,status),-999),
+	                            @status2 = status2
+                            FROM 
+	                            sys.sysdatabases d (nolock)
                             WHERE 
 	                            dbid = @dbid
 
@@ -526,13 +868,20 @@ namespace Idera.SQLsecure.Collector.Sql
                         SqlParameter paramIsAudited = new SqlParameter(ParamIsAudited, isAudited.ToString());
                         SqlParameter paramIsTrustworthy = new SqlParameter(ParamTrustworthy, database.IsTrustworthyChar);
                         SqlParameter paramIsContained = new SqlParameter(ParamIsContained, database.IsContained);
-
-
+                        SqlParameter paramIsTDEEncrypted = new SqlParameter(ParamIsTDEEnrypted, database.IsTDEEncrypted);    // SQLsecure 3.1 (Anshul Aggarwal) - New fields for new risk assessments.
+                        SqlParameter paramIsLastBackupNative = new SqlParameter(ParamLastBackupType, database.IsLastBackupNative);
+                        SqlParameter paramLastBackupEncrypted = new SqlParameter(ParamLastBackupEnrypted, database.LastBackupEncrypted);
+                        SqlParameter paramIntermediateBackupEncrypted = new SqlParameter(ParamIntermediateBackupEnrypted, database.IntermediateBackupEncrypted);
+                        SqlParameter paramNonNativeBackupAvailable = new SqlParameter(ParamNonNativeBackupAvailable, database.NonNativeBackupAvailable);
+                        SqlParameter paramFQN = new SqlParameter(ParamFQN, database.FQN);
+                        SqlParameter paramGeoReplication = new SqlParameter(ParamGeoReplication, database.GeoReplication);
 
                         Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.Text, NonQueryDatabaseInsert, 
                                             new SqlParameter[] {  paramDbid, paramSnapshotid, paramDatabasename, paramOwner, 
                                                                     paramGuestenabled, paramAvailable, paramStatus, paramHashkey, 
-                                                                    paramIsAudited, paramIsTrustworthy,paramIsContained });
+                                                                    paramIsAudited, paramIsTrustworthy,paramIsContained, paramFQN,
+                                                paramIsTDEEncrypted, paramIsLastBackupNative, paramLastBackupEncrypted,
+                                            paramIntermediateBackupEncrypted, paramNonNativeBackupAvailable,paramGeoReplication});
                     }
                     catch (SqlException ex)
                     {
@@ -594,10 +943,11 @@ namespace Idera.SQLsecure.Collector.Sql
                         SqlParameter paramOwnerId = new SqlParameter(ParamOwnerid, 1); // Always DBO
                         SqlParameter paramName = new SqlParameter(ParamName, database.Name);
                         SqlParameter paramHashkey = new SqlParameter(ParamHashkey, "");
+                        SqlParameter paramFQN = new SqlParameter(ParamFQN, database.FQN);
                         Sql.SqlHelper.ExecuteNonQuery(connection, CommandType.Text, NonQueryObjectInsert,
                                             new SqlParameter[] {  paramSnapshotid, paramDbid, paramClassid, paramParentobjectid, 
                                                                         paramObjectid, paramSchemaid, paramType, paramOwnerId, 
-                                                                            paramName, paramHashkey });
+                                                                            paramName, paramHashkey, paramFQN });
                     }
                     catch (SqlException ex)
                     {
@@ -1124,11 +1474,13 @@ namespace Idera.SQLsecure.Collector.Sql
 
         #region SQL Queries
         private const string NonQueryDatabaseInsert =
-                    @"INSERT INTO SQLsecure.dbo.sqldatabase (dbid, snapshotid, databasename, owner, guestenabled, trustworthy, available, status, hashkey, isaudited,IsContained)
-                      VALUES (@dbid, @snapshotid, @databasename, @owner, @guestenabled, @trustworthy, @available, @status, @hashkey, @isaudited,@iscontained)";
+                    @"INSERT INTO SQLsecure.dbo.sqldatabase (dbid, snapshotid, databasename, owner, guestenabled, trustworthy, available, status, hashkey, isaudited,IsContained,
+                    FQN, istdeencrypted, islastbackupnative, lastbackupencrypted, intermediatebackupencrypted, intermediatebackupnonnative,georeplication)
+                      VALUES (@dbid, @snapshotid, @databasename, @owner, @guestenabled, @trustworthy, @available, @status, @hashkey, @isaudited, @iscontained, @FQN, @istdeencrypted,
+                        @islastbackupnative, @lastbackupencrypted, @intermediatebackupencrypted, @intermediatebackupnonnative,@georeplication)";
         private const string NonQueryObjectInsert =
-                    @"INSERT INTO SQLsecure.dbo.databaseobject (snapshotid, dbid, classid, parentobjectid, objectid, schemaid, type, owner, name, hashkey)
-                      VALUES (@snapshotid, @dbid, @classid, @parentobjectid, @objectid, @schemaid, @type, @ownerid, @name, @hashkey)"; 
+                    @"INSERT INTO SQLsecure.dbo.databaseobject (snapshotid, dbid, classid, parentobjectid, objectid, schemaid, type, owner, name, hashkey, FQN)
+                      VALUES (@snapshotid, @dbid, @classid, @parentobjectid, @objectid, @schemaid, @type, @ownerid, @name, @hashkey, @FQN)"; 
 
         private const string ParamDbid = "dbid";
         private const string ParamSnapshotid = "snapshotid";
@@ -1140,6 +1492,13 @@ namespace Idera.SQLsecure.Collector.Sql
         private const string ParamStatus = "status";
         private const string ParamHashkey = "hashkey";
         private const string ParamIsAudited = "isaudited";
+        private const string ParamFQN = "FQN";
+        private const string ParamGeoReplication = "georeplication";
+        private const string ParamIsTDEEnrypted = "istdeencrypted";  // SQLsecure 3.1 (Anshul Aggarwal) - New fields for new risk assessments.
+        private const string ParamLastBackupType = "islastbackupnative";
+        private const string ParamLastBackupEnrypted = "lastbackupencrypted";
+        private const string ParamIntermediateBackupEnrypted = "intermediatebackupencrypted";
+        private const string ParamNonNativeBackupAvailable = "intermediatebackupnonnative";
 
         private const string ParamClassid = "classid";
         private const string ParamParentobjectid = "parentobjectid";
@@ -1166,6 +1525,13 @@ namespace Idera.SQLsecure.Collector.Sql
         private bool m_IsTrustworthy;
         private string m_Status;
         private bool m_isContained;
+        private bool? m_isTDEEncrypted;   // SQLsecure 3.1 (Anshul Aggarwal) - New fields for new risk assessments.
+        private bool? m_IsLastBackupNative;
+        private bool? m_lastBackupEncrypted;
+        private bool? m_intermediateBackupEncrypted;
+        private bool? m_nonNativeBackupAvailable;
+        private string m_FQN;
+        private bool? m_geoReplication;
 
         #endregion
 
@@ -1173,7 +1539,8 @@ namespace Idera.SQLsecure.Collector.Sql
         #endregion
 
         #region Ctors
-        public Database(string name, int dbId, Sid ownerSid, string ownerName, string serverName, bool trustworthy, bool isContained)
+        public Database(string name, int dbId, Sid ownerSid, string ownerName, string serverName, bool trustworthy, bool isContained, bool? isTDEEncrypted,
+            string FQN,bool? geoReplication)
         {
             Debug.Assert(!string.IsNullOrEmpty(name));
             Debug.Assert(ownerSid != null);
@@ -1188,8 +1555,9 @@ namespace Idera.SQLsecure.Collector.Sql
             m_serverName = serverName;
             m_Status = "Available";
             m_isContained = isContained;
-
-
+            m_isTDEEncrypted = isTDEEncrypted;
+            m_FQN = FQN;
+            m_geoReplication = geoReplication;
         }
         #endregion
         
@@ -1262,6 +1630,45 @@ namespace Idera.SQLsecure.Collector.Sql
         {
             set { m_Status = value; }
             get { return m_Status; }
+        }
+
+        public bool? IsTDEEncrypted
+        {
+            get { return m_isTDEEncrypted; }
+        }
+
+        public bool? IsLastBackupNative
+        {
+            get { return m_IsLastBackupNative; }
+            set { m_IsLastBackupNative = value; }
+        }
+
+        public bool? LastBackupEncrypted
+        {
+            get { return m_lastBackupEncrypted; }
+            set { m_lastBackupEncrypted = value; }
+        }
+
+        public bool? IntermediateBackupEncrypted
+        {
+            get { return m_intermediateBackupEncrypted; }
+            set { m_intermediateBackupEncrypted = value; }
+        }
+
+        public string FQN
+        {
+            get { return m_FQN; }
+        }
+
+        public bool? GeoReplication
+        {
+            get { return m_geoReplication; }
+        }
+
+        public bool? NonNativeBackupAvailable
+        {
+            get { return m_nonNativeBackupAvailable; }
+            set { m_nonNativeBackupAvailable = value; }
         }
         #endregion
     }

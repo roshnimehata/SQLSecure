@@ -29,6 +29,7 @@ CREATE VIEW [dbo].[vwpolicymetric]
 	severity,
 	severityname,
 	severityvalues)
+	--END(Barkha Khatri) adding 3 columns to check for supported metrics
 AS
 SELECT
 	a.policyid,

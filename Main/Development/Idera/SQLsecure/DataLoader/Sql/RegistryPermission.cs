@@ -13,6 +13,7 @@ using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Interop;
 using Path = System.IO.Path;
+using Idera.SQLsecure.Collector.Utility;
 
 namespace Idera.SQLsecure.Collector.Sql
 {
@@ -272,7 +273,9 @@ namespace Idera.SQLsecure.Collector.Sql
             {
                 try
                 {
-                    remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    //remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+
+                    remoteBaseKey = Helper.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
 
                     // Is Instance Hidden?
                     try
@@ -627,7 +630,8 @@ namespace Idera.SQLsecure.Collector.Sql
                 using (logX.loggerX.DebugCall())
                 {
                     logX.loggerX.Debug(string.Format("Processing SQL Server Registry Keys for Computer: {0} and Instance: {1}", m_targetServerName, m_targetInstanceName));
-                    remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    //remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    remoteBaseKey = Helper.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
                     if (remoteBaseKey != null)
                     {
                         logX.loggerX.Debug(string.Format("Successfully opened Base Key {0}", RegistryHive.LocalMachine.ToString()));
@@ -825,6 +829,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                     }
                                     dr[SQLServerObjectTable.ParamOwnerSid] = fp.OwnerSid.BinarySid;
                                     dr[SQLServerObjectTable.ParamDiskType] = DBNull.Value;
+
+                                    // SQLsecure 3.1 (Anshul Aggarwal) - Add new columns to track NTFS encryption for SQL Folder/Files.
+                                    dr[SQLServerObjectTable.ParamIsEncrypted] = DBNull.Value;
 
                                     dataTableObject.Rows.Add(dr);
                                     if (dataTableObject.Rows.Count >= Constants.RowBatchSize)
@@ -1195,7 +1202,10 @@ where
                     }
                     else
                     {
-                        remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                        //remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+
+                        remoteBaseKey = Helper.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                        
                         if (remoteBaseKey != null)
                         {
                             logX.loggerX.Debug(string.Format("Successfully opened Base Key {0}", RegistryHive.LocalMachine.ToString()));
@@ -1245,7 +1255,9 @@ where
             {
                 try
                 {
-                    remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    //remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    remoteBaseKey = Helper.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+
                     valueKey = remoteBaseKey.OpenSubKey(m_regInstancePath + @"\setup");
                     installPath = (string)valueKey.GetValue("SQLPath", string.Empty);
                 }
@@ -1274,7 +1286,8 @@ where
             {
                 try
                 {
-                    remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    //remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    remoteBaseKey = Helper.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
                     valueKey = remoteBaseKey.OpenSubKey(m_regInstancePath + @"\MSSQLServer\Parameters");
                     logPath = (string)valueKey.GetValue("SQLArg1", string.Empty);
                     if (logPath.StartsWith("-e"))
@@ -1307,7 +1320,8 @@ where
             {
                 try
                 {
-                    remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    //remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    remoteBaseKey = Helper.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
                     valueKey = remoteBaseKey.OpenSubKey(m_regInstancePath + @"\MSSQLServer");
                     if (valueKey != null) numErrorLogs = (int)valueKey.GetValue("NumErrorLogs", 0);
                 }
@@ -1335,7 +1349,8 @@ where
             {
                 try
                 {
-                    remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    //remoteBaseKey = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
+                    remoteBaseKey = Helper.OpenRemoteBaseKey(RegistryHive.LocalMachine, m_targetServerName);
                     valueKey = remoteBaseKey.OpenSubKey(m_regInstancePath + @"\SQLServerAgent");
                     logPath = (string)valueKey.GetValue("ErrorLogFile", string.Empty);
                 }

@@ -18,7 +18,7 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Logger;
-
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
     internal static class ServerPermission
@@ -39,6 +39,7 @@ namespace Idera.SQLsecure.Collector.Sql
         private static string createPermissionQuery(
                 SqlObjectType otype,
                 List<int> oidbatch
+                
             )
         {
             Debug.Assert(otype == SqlObjectType.Server
@@ -48,7 +49,7 @@ namespace Idera.SQLsecure.Collector.Sql
             Debug.Assert(oidbatch != null && oidbatch.Count > 0);
 
             StringBuilder query = new StringBuilder();
-         
+
             query.Append(@"SELECT 
                                 classid = CAST (class AS int), 
                                 major_id, 
@@ -65,8 +66,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                 iswithgrant = CASE WHEN state = 'W' THEN 'Y' ELSE 'N' END,
                                 isrevoke = CASE WHEN state = 'R' THEN 'Y' ELSE 'N' END,
                                 isdeny = CASE WHEN state = 'D' THEN 'Y' ELSE 'N' END
-                              FROM sys.server_permissions
-                              WHERE class = ");
+                              FROM sys.server_permissions WHERE class = ");
+            
             switch (otype)
 	        {
 		        case SqlObjectType.Server:
@@ -94,12 +95,72 @@ namespace Idera.SQLsecure.Collector.Sql
             return query.ToString();
         }
 
+        /// <summary>
+        /// SQLSecure 3.1 (Barkha Khatri) creating permission query for Azure SQL DB using its predefined types
+        /// </summary>
+        /// <param name="otype">object type</param>
+        /// <param name="oidbatch">major ids</param>
+        /// <returns></returns>
+        private static string createPermissionQueryAzureDB(
+               SqlObjectType otype,
+               List<int> oidbatch
+            
+           )
+        {
+          
+            Debug.Assert(oidbatch != null && oidbatch.Count > 0);
+
+            StringBuilder query = new StringBuilder();
+
+            query.Append(@"SELECT 
+                                classid = CAST (class AS int), 
+                                major_id, 
+                                minor_id, 
+                                grantee_principal_id, 
+                                grantor_principal_id, 
+                                type, 
+                                permission_name, 
+	                            isgrant = CASE 
+                                             WHEN state = 'G' THEN 'Y'
+                                             WHEN state = 'W' THEN 'Y' 
+                                             ELSE 'N'
+                                          END,
+                                iswithgrant = CASE WHEN state = 'W' THEN 'Y' ELSE 'N' END,
+                                isrevoke = CASE WHEN state = 'R' THEN 'Y' ELSE 'N' END,
+                                isdeny = CASE WHEN state = 'D' THEN 'Y' ELSE 'N' END
+                              FROM sys.database_permissions WHERE grantee_principal_id in 
+                                (
+                                select p.principal_id from sys.database_principals p
+                                inner join sys.sql_logins l on ((p.sid=l.sid) or p.type='E' or p.type='X')) and  class = ");
+
+            switch (otype)
+            {
+                case SqlObjectType.Database:
+                    query.Append("0");
+                    break;
+                case SqlObjectType.DatabasePrincipal:
+                    query.Append("4");
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
+            query.Append("AND major_id IN ( ");
+            for (int i = 0; i < oidbatch.Count; ++i)
+            {
+                query.Append(oidbatch[i].ToString());
+                query.Append((i == (oidbatch.Count - 1)) ? " )" : ", ");
+            }
+            return query.ToString();
+        }
+
         public static bool Process(
                 string targetConnection,
                 string repositoryConnection,
                 int snapshotid,
                 SqlObjectType oType,
-                List<int> oidList
+                List<int> oidList,
+                ServerType serverType
             )
         {
             Debug.Assert(!string.IsNullOrEmpty(targetConnection));
@@ -141,7 +202,15 @@ namespace Idera.SQLsecure.Collector.Sql
                                     if (oidbatch.Count == Constants.PermissionBatchSize || oidcntr == 0)
                                     {
                                         // Create the query based on the object.
-                                        string query = createPermissionQuery(oType, oidbatch);
+                                        string query;
+                                        if(serverType==ServerType.AzureSQLDatabase)
+                                        {
+                                            query = createPermissionQueryAzureDB(oType, oidbatch);
+                                        }
+                                        else
+                                        {
+                                            query = createPermissionQuery(oType, oidbatch);
+                                        }
                                         Debug.Assert(!string.IsNullOrEmpty(query));
 
                                         // Clear the batch.

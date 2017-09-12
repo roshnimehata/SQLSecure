@@ -88,6 +88,40 @@ AS
 					set @validuser = 'Y'
 	
 			end
+			else if(UPPER(@usertype) = 'A')	-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure AD Users or Groups
+			begin
+				if (@iscasesensitive = 'Y')
+				begin
+
+					if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type in ('E', 'X'))
+						set @validuser = 'Y'
+
+				end
+				else
+				begin
+					if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type in ('E', 'X'))
+						set @validuser = 'Y'
+
+				end
+	
+			end
+			else if(UPPER(@usertype) = 'E' or UPPER(@usertype) = 'X')	-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure AD Users or Groups
+			begin
+				if (@iscasesensitive = 'Y')
+				begin
+
+					if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = UPPER(@usertype))
+						set @validuser = 'Y'
+
+				end
+				else
+				begin
+					if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = UPPER(@usertype))
+						set @validuser = 'Y'
+
+				end
+	
+			end
 			else
 			begin
 				if (@iscasesensitive = 'Y')
@@ -123,7 +157,13 @@ AS
 		
 				if (UPPER(@usertype) = 'W')
 					set @logintype = 'Windows Account'
-				else
+				else if (UPPER(@usertype) = 'A')
+					set @logintype = 'Azure AD Account'		 -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD Account
+				else if (UPPER(@usertype) = 'E')		 -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD User
+					set @logintype = 'Azure AD User'
+				else if (UPPER(@usertype) = 'X')		 -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD Group
+					set @logintype = 'Azure AD Group'
+				else 
 					set @logintype = 'SQL Login'
 			
 		
@@ -196,6 +236,40 @@ AS
 				set @validuser = 'Y'
 
 		end
+		else if (UPPER(@usertype) = 'A')	 -- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure AD Users or Groups
+		begin
+			if (@iscasesensitive = 'Y')
+			begin
+
+				if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type in ('E', 'X'))
+					set @validuser = 'Y'
+
+			end
+			else
+			begin
+				if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type in ('E', 'X'))
+					set @validuser = 'Y'
+
+			end
+
+		end
+		else if (UPPER(@usertype) = 'E' or UPPER(@usertype) = 'X')	 -- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure AD Users or Groups
+		begin
+			if (@iscasesensitive = 'Y')
+			begin
+
+				if exists (select 1 from serverprincipal where snapshotid = @snapshotid and CONVERT(varbinary(256), name)= CONVERT(varbinary(256), @user) and type = UPPER(@usertype))
+					set @validuser = 'Y'
+
+			end
+			else
+			begin
+				if exists (select 1 from serverprincipal where snapshotid = @snapshotid and UPPER(name)= UPPER(@user) and type = UPPER(@usertype))
+					set @validuser = 'Y'
+
+			end
+
+		end
 		else
 		begin
 			if (@iscasesensitive = 'Y')
@@ -230,6 +304,12 @@ AS
 	
 			if (UPPER(@usertype) = 'W')
 				set @logintype = 'Windows Account'
+			else if (UPPER(@usertype) = 'A')
+				set @logintype = 'Azure AD Account'		 -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD Account
+			else if (UPPER(@usertype) = 'E')
+				set @logintype = 'Azure AD User'		 -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD User
+			else if (UPPER(@usertype) = 'X')
+				set @logintype = 'Azure AD Group'		 -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD Group
 			else
 				set @logintype = 'SQL Login'
 		

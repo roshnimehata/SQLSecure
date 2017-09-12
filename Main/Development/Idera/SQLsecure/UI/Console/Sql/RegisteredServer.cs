@@ -84,6 +84,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private String m_ReplicationEnabled;
         private String m_SaPasswordEmpty;
         private int m_LastSnapshotId;
+        private ServerType m_ServerType;
 
         Form_StartSnapshotJobAndShowProgress m_StartSnapshotForm;
 
@@ -110,8 +111,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public int? ConnectionPort { get { return m_ConnectionPort.IsNull ? (int?)null : m_ConnectionPort.Value; } }
         public string ServerName { get { return (m_ServerName.IsNull ? string.Empty : m_ServerName.Value.ToUpper()); } }
         public string InstanceName { get { return (m_InstanceName.IsNull ? string.Empty : m_InstanceName.Value.ToUpper()); } }
-        public string FullName { get { return FullNameStr(ServerName, InstanceName); } }
-        public string FullConnectionName { get { return FullConnectionNameStr(ServerName, InstanceName, ConnectionPort); } }
+        public string FullName { get { return FullNameStr(ServerName, InstanceName,ServerType); } }
+        public string FullConnectionName { get { return FullConnectionNameStr(ServerName, InstanceName, ConnectionPort,ServerType); } }
         public string SqlLogin { get { return (m_SqlLogin.IsNull ? string.Empty : m_SqlLogin.Value); } }
         public string SqlPassword { get { return (m_SqlPassword.IsNull ? string.Empty : Encryptor.Decrypt(m_SqlPassword.Value)); } }
         public string WindowsUser { get { return (m_WindowsUser.IsNull ? string.Empty : m_WindowsUser.Value); } }
@@ -137,8 +138,31 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public String ReplicationEnabled { get { return YesNoStr(m_ReplicationEnabled); } }
         public String SaPasswordEmpty { get { return YesNoStr(m_SaPasswordEmpty); } }
 
-        public string VersionFriendly { get { return SqlHelper.ParseVersionFriendly(m_Version.Value); } }
-        public string VersionFriendlyLong { get { return SqlHelper.ParseVersionFriendly(m_Version.Value, true); } }
+        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        public string VersionFriendly
+        { get
+            { if (ServerType == ServerType.AzureSQLDatabase)
+                {
+                    return VersionName.AzureSQLDatabase;
+                }
+                else { return SqlHelper.ParseVersionFriendly(m_Version.Value); }
+            }
+        }
+        public string VersionFriendlyLong
+        {
+            get
+            {
+                if (ServerType == ServerType.AzureSQLDatabase)
+                {
+                    return String.Format("{0} v{1}", VersionName.AzureSQLDatabase, m_Version.Value);
+                }
+                else
+                {
+                    return SqlHelper.ParseVersionFriendly(m_Version.Value, true);
+                }
+            }
+        }
+        //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
         public string AuditFoldersString { get { return m_auditfoldersstring.IsNull ? string.Empty : m_auditfoldersstring.Value.ToLower(); } }
 
         public string NextCollectionTime
@@ -187,6 +211,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
             set { m_ShowDataCollectionComplete = value; }
         }
 
+        public ServerType ServerType
+        {
+            get { return m_ServerType; }
+        }
+
         #endregion
 
         #region Queries & Constants
@@ -222,7 +251,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         serverisdomaincontroller,
                         replicationenabled,
                         sapasswordempty,
-                        auditfoldersstring
+                        auditfoldersstring,
+                        servertype
                       FROM SQLsecure.dbo.vwregisteredserver";
 
         private static string QueryGetRegisteredServer = QueryGetAllRegisteredServerBase + @" WHERE connectionname = @instance";
@@ -260,7 +290,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
             ServerIsDomainController,
             ReplicationEnabled,
             SaPasswordEmpty,
-            AuditFoldersString
+            AuditFoldersString,
+            ServerType
         }
 
         // Is server registered.
@@ -285,6 +316,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private const string ParamRegisterServerVersion = "@version";
         private const string ParamRegisterServerRetentionPeriod = "@retentionperiod";
         private const string ParamAuditFoldersString = "@auditfoldersstring";
+        private const string ParamServerType = "@servertype";
 
         // Remove server.
         private const string NonQueryRemoveServer = @"SQLsecure.dbo.isp_sqlsecure_removeregisteredserver";
@@ -355,6 +387,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_ReplicationEnabled = SqlHelper.GetString(rdr, (int)RegisteredServerColumn.ReplicationEnabled);
             m_SaPasswordEmpty = SqlHelper.GetString(rdr, (int)RegisteredServerColumn.SaPasswordEmpty);
             m_auditfoldersstring = rdr.GetSqlString((int)RegisteredServerColumn.AuditFoldersString);
+            m_ServerType = Helper.ConvertSQLTypeStringToEnum(rdr.GetString((int)RegisteredServerColumn.ServerType));
         }
 
         #endregion
@@ -742,13 +775,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 string windowsPassword,
                 string version,
                 int retentionPeriod,
-                string[] auditFolders
+                string[] auditFolders,
+                string servertype
             )
         {
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
             Debug.Assert(!string.IsNullOrEmpty(newConnection));
             Debug.Assert(!string.IsNullOrEmpty(machine));
-
+            newConnection = newConnection.ToUpper();
             // Encrypt passwords before saving them to the repository
             string cipherSqlPassword = Encryptor.Encrypt(sqlPassword);
             string cipherWindowsPassword = Encryptor.Encrypt(windowsPassword);
@@ -773,9 +807,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 SqlParameter paramVersion = new SqlParameter(ParamRegisterServerVersion, version);
                 SqlParameter paramRetentionPeriod = new SqlParameter(ParamRegisterServerRetentionPeriod, retentionPeriod);
                 SqlParameter paramAuditFoldersString = new SqlParameter(ParamAuditFoldersString, auditFoldersString);
+                SqlParameter paramServertype = new SqlParameter(ParamServerType, servertype);
 
                 SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                NonQueryRegisterServer, paramConnectionname, paramConnectionport, paramServername, paramInstancename, paramAuthmode, paramLoginname, paramLoginpassword, paramServerlogin, paramServerpassword, paramVersion, paramRetentionPeriod, paramAuditFoldersString);
+                                NonQueryRegisterServer, paramConnectionname, paramConnectionport, paramServername, paramInstancename, paramAuthmode, paramLoginname, paramLoginpassword, paramServerlogin, paramServerpassword, paramVersion, paramRetentionPeriod, paramAuditFoldersString,paramServertype);
             }
         }
 
@@ -996,13 +1031,14 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
-        static public string FullNameStr(string server, string instance)
+        //Barkha Khatri(SQLSecure3.1) SQLSecure 1834 fix
+        static public string FullNameStr(string server, string instance, ServerType serverType)
         {
             Debug.Assert(!string.IsNullOrEmpty(server));
 
             string full = server;
 
-            if (!string.IsNullOrEmpty(instance))
+            if (!string.IsNullOrEmpty(instance) && serverType!=ServerType.AzureSQLDatabase )
             {
                 full += @"\" + instance;
             }
@@ -1010,9 +1046,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
             return full;
         }
 
-        static public string FullConnectionNameStr(string server, string instance, int? port)
+        static public string FullConnectionNameStr(string server, string instance, int? port,ServerType serverType)
         {
-            string full = FullNameStr(server, instance);
+            string full = FullNameStr(server, instance,serverType);
 
             if (port.HasValue)
             {
@@ -1033,6 +1069,32 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             return ret;
         }
+
+        //Start-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
+        /// <summary>
+        /// Return authentication mode string that needs to be viwed at UI according to server type.
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="serverType"></param>
+        /// <returns></returns>
+        static public string AuthenticationModeStr(string mode, ServerType serverType)
+        {
+            string ret = string.Empty;
+            try
+            {
+                if (string.IsNullOrEmpty(mode)) { ret = string.Empty; }
+                else if (string.Compare(mode, "W", true) == 0) { ret = "Windows Authentication"; }
+                else if (string.Compare(mode, "M", true) == 0 && serverType == ServerType.AzureSQLDatabase) { ret = "SQL Login and Azure AD"; }
+                else if (string.Compare(mode, "M", true) == 0) { ret = "SQL Server and Windows Authentication"; }
+                else { Debug.Assert(false, "Unknown SQL authentication mode"); }
+            }
+            catch (Exception ex)
+            {
+                logX.loggerX.Error(@"Error while converting authentication mode string.", ex);
+            }
+            return ret;
+        }
+        //End-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
 
         static public string LoginAuditModeStr(string mode)
         {

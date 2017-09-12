@@ -47,6 +47,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._textBox_User = new System.Windows.Forms.TextBox();
             this._radioButton_WindowsUser = new System.Windows.Forms.RadioButton();
             this._radioButton_SQLLogin = new System.Windows.Forms.RadioButton();
+            this._radioButton_AzureADUserOrGroup = new System.Windows.Forms.RadioButton();
             this._label_LoginType = new System.Windows.Forms.Label();
             this._label_Level = new System.Windows.Forms.Label();
             this._comboBox_Level = new System.Windows.Forms.ComboBox();
@@ -69,6 +70,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._gradientPanel_Selections.Controls.Add(this._button_BrowseUsers);
             this._gradientPanel_Selections.Controls.Add(this._radioButton_WindowsUser);
             this._gradientPanel_Selections.Controls.Add(this._radioButton_SQLLogin);
+            this._gradientPanel_Selections.Controls.Add(this._radioButton_AzureADUserOrGroup);
             this._gradientPanel_Selections.Controls.Add(this._label_PermissionType);
             this._gradientPanel_Selections.Controls.Add(this._comboBox_PermissionType);
             this._gradientPanel_Selections.Controls.Add(this._label_Server);
@@ -80,6 +82,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._gradientPanel_Selections.Controls.SetChildIndex(this._label_PermissionType, 0);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._radioButton_SQLLogin, 0);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._radioButton_WindowsUser, 0);
+            this._gradientPanel_Selections.Controls.SetChildIndex(this._radioButton_AzureADUserOrGroup, 0);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._button_BrowseUsers, 0);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._textBox_User, 0);
             this._gradientPanel_Selections.Controls.SetChildIndex(this._label_User, 0);
@@ -212,27 +215,40 @@ namespace Idera.SQLsecure.UI.Console.Views
             this._radioButton_WindowsUser.BackColor = System.Drawing.Color.Transparent;
             this._radioButton_WindowsUser.CausesValidation = false;
             this._radioButton_WindowsUser.Checked = true;
-            this._radioButton_WindowsUser.Location = new System.Drawing.Point(96, 68);
+            this._radioButton_WindowsUser.Location = WINDOWS_RADIO_BUTTON_LOCATION;
             this._radioButton_WindowsUser.Name = "_radioButton_WindowsUser";
             this._radioButton_WindowsUser.Size = new System.Drawing.Size(138, 17);
             this._radioButton_WindowsUser.TabIndex = 0;
             this._radioButton_WindowsUser.TabStop = true;
             this._radioButton_WindowsUser.Text = "Windows User or Group";
             this._radioButton_WindowsUser.UseVisualStyleBackColor = false;
-            this._radioButton_WindowsUser.Click += new System.EventHandler(this._radioButton_WindowsUser_Click);
+            this._radioButton_WindowsUser.CheckedChanged += new System.EventHandler(this._radioButton_WindowsUser_CheckedChanged);
             // 
             // _radioButton_SQLLogin
             // 
             this._radioButton_SQLLogin.AutoSize = true;
             this._radioButton_SQLLogin.BackColor = System.Drawing.Color.Transparent;
             this._radioButton_SQLLogin.CausesValidation = false;
-            this._radioButton_SQLLogin.Location = new System.Drawing.Point(240, 68);
+            this._radioButton_SQLLogin.Location = SQL_RADIO_BUTTON_LOCATION;
             this._radioButton_SQLLogin.Name = "_radioButton_SQLLogin";
             this._radioButton_SQLLogin.Size = new System.Drawing.Size(75, 17);
             this._radioButton_SQLLogin.TabIndex = 1;
             this._radioButton_SQLLogin.Text = "SQL Login";
             this._radioButton_SQLLogin.UseVisualStyleBackColor = false;
-            this._radioButton_SQLLogin.Click += new System.EventHandler(this._radioButton_SQLLogin_Click);
+            this._radioButton_SQLLogin.CheckedChanged += new System.EventHandler(this._radioButton_SQLLogin_CheckedChanged);
+            // 
+            // _radioButton_AzureADUserOrGroup
+            // 
+            this._radioButton_AzureADUserOrGroup.AutoSize = true;
+            this._radioButton_AzureADUserOrGroup.BackColor = System.Drawing.Color.Transparent;
+            this._radioButton_AzureADUserOrGroup.CausesValidation = false;
+            this._radioButton_AzureADUserOrGroup.Location = AZURE_RADIO_BUTTON_LOCATION;
+            this._radioButton_AzureADUserOrGroup.Name = "this._userTypePanel.Size = ";
+            this._radioButton_AzureADUserOrGroup.Size = new System.Drawing.Size(110, 17);
+            this._radioButton_AzureADUserOrGroup.TabIndex = 2;
+            this._radioButton_AzureADUserOrGroup.Text = "Azure AD User or Group";
+            this._radioButton_AzureADUserOrGroup.UseVisualStyleBackColor = false;
+            this._radioButton_AzureADUserOrGroup.CheckedChanged += new System.EventHandler(this._radioButton_AzureADUserOrGroup_CheckedChanged);
             // 
             // _label_LoginType
             // 
@@ -292,6 +308,7 @@ namespace Idera.SQLsecure.UI.Console.Views
         private System.Windows.Forms.TextBox _textBox_User;
         private System.Windows.Forms.RadioButton _radioButton_WindowsUser;
         private System.Windows.Forms.RadioButton _radioButton_SQLLogin;
+        private System.Windows.Forms.RadioButton _radioButton_AzureADUserOrGroup;
         private System.Windows.Forms.Label _label_LoginType;
         private System.Windows.Forms.ComboBox _comboBox_Level;
         private System.Windows.Forms.Label _label_Level;

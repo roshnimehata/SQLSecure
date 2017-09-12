@@ -30,7 +30,23 @@ namespace Idera.SQLsecure.UI.Console.Controls
             m_serverInstance = m_context.Server;
 
             setMenuConfiguration();
-
+            //Start-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
+            if (m_serverInstance != null && m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
+            {
+                _ultraTabControl_Users.Tabs[tabKey_Windows].Visible = false;
+                _ultraTabControl_Users.Tabs[tabKey_AzureSQLDatabase].Visible = true;
+            }
+            else if (m_serverInstance != null && m_serverInstance.ServerType != ServerType.AzureSQLDatabase)
+            {
+                _ultraTabControl_Users.Tabs[tabKey_Windows].Visible = true;
+                _ultraTabControl_Users.Tabs[tabKey_AzureSQLDatabase].Visible = false;
+            }
+            else if (m_serverInstance == null)
+            {
+                _ultraTabControl_Users.Tabs[tabKey_Windows].Visible = true;
+                _ultraTabControl_Users.Tabs[tabKey_AzureSQLDatabase].Visible = true;
+            }
+            //End-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
             loadDataSource();
         }
         String Interfaces.IView.HelpTopic
@@ -206,10 +222,25 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // Initialize the tabs
             _ultraTabControl_Users.SuspendLayout();
             _ultraTabControl_Users.Tabs.Clear();
-            foreach (string usertype in new string[] { tabKey_Windows, tabKey_Sql, tabKey_All })
+            //Start-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
+            string[] userTypes;
+            if (m_serverInstance != null && m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
+            {
+                userTypes = new string[] { tabKey_AzureSQLDatabase, tabKey_Sql, tabKey_All };
+            }
+            else if (m_serverInstance != null && m_serverInstance.ServerType != ServerType.AzureSQLDatabase)
+            {
+                userTypes = new string[] { tabKey_Windows, tabKey_Sql, tabKey_All };
+            }
+            else
+            {
+                userTypes = new string[] { tabKey_Windows, tabKey_AzureSQLDatabase, tabKey_Sql, tabKey_All };
+            }
+            foreach (string usertype in userTypes)
             {
                 _ultraTabControl_Users.Tabs.Add(usertype, usertype);
             }
+            //End-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
             _ultraTabControl_Users.ResumeLayout();
 
             // Initialize the grids
@@ -263,6 +294,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string colPasswordStatus = @"passwordstatus";
         private const string colDefaultDatabase = @"defaultdatabase";
         private const string colDefaultLanguage = @"defaultlanguage";
+        private const string colServerType = @"servertype";//SQLsecure 3.1 (Tushar)--Filtering view for Azure SQL Database.
 
 
         private const string ServerFilter = "and connectionname = '{0}'";
@@ -270,6 +302,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string tabKey_Windows = @"Windows Users and Groups";
         private const string tabKey_Sql = @"SQL Logins";
         private const string tabKey_All = @"All Logins";
+        private const string tabKey_AzureSQLDatabase = @"Azure AD Users and Groups";//SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
+        private const string notApplicableTag = @"NA";
 
         private const string NumericFormat = @"N0";
 
@@ -406,6 +440,27 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
                     m_UsersTable = ds.Tables[0];
 
+                    //Start-SQLsecure 3.1 (Tushar)--Filtering view for Azure SQL Database.
+                    if (m_serverInstance != null && m_serverInstance.ServerType == ServerType.AzureSQLDatabase)
+                    {
+                        m_UsersTable.Columns.Remove(colDefaultDatabase);
+                        m_UsersTable.Columns.Remove(colDefaultLanguage);
+                    }
+
+                    if (m_serverInstance == null)
+                    {
+                        foreach (DataRow row in m_UsersTable.Rows)
+                        {
+                            if (Helper.ConvertSQLTypeStringToEnum(row[colServerType].ToString()) == ServerType.AzureSQLDatabase)
+                            {
+                                row[colDefaultDatabase] = notApplicableTag;
+                                row[colDefaultLanguage] = notApplicableTag;
+                            }
+                        }
+                    }
+
+                    m_UsersTable.Columns.Remove(colServerType);
+                    //End-SQLsecure 3.1 (Tushar)--Filtering view for Azure SQL Database.
 
                     //Add the Icon, Checkbox columns for manual processing
                     //dt.Columns.Add(colIcon, typeof (Image));
@@ -452,7 +507,13 @@ namespace Idera.SQLsecure.UI.Console.Controls
         {
             string filter;
 
-            if (usertype == tabKey_Windows)
+            //Start-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
+            if (usertype == tabKey_AzureSQLDatabase)
+            {
+                filter = colPrincipalType + " in ('" + Sql.ServerPrincipalTypes.AzureADGroup + "', '" + Sql.ServerPrincipalTypes.AzureADUSer + "')";
+            }
+            //End-SQLsecure 3.1 (Tushar)--Adding support for Azure SQL Database.
+            else if (usertype == tabKey_Windows)
             {
                 filter = colPrincipalType + " in ('" + Sql.ServerPrincipalTypes.WindowsGroup+ "', '" + Sql.ServerPrincipalTypes.WindowsUser + "')";
             }
@@ -830,9 +891,17 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             band.Columns[colPasswordStatus].Header.Caption = "Password Health";
 
-            band.Columns[colDefaultDatabase].Header.Caption = "Default Database";
+            //Start-SQLsecure 3.1 (Tushar)--Filtering view for Azure SQL Database.
+            if (band.Columns.Exists(colDefaultDatabase))
+            {
+                band.Columns[colDefaultDatabase].Header.Caption = "Default Database";
+            }
 
-            band.Columns[colDefaultLanguage].Header.Caption = "Default Language";
+            if (band.Columns.Exists(colDefaultLanguage))
+            {
+                band.Columns[colDefaultLanguage].Header.Caption = "Default Language";
+            }
+            //End-SQLsecure 3.1 (Tushar)--Filtering view for Azure SQL Database.
         }
 
         private void _grid_Users_InitializeGroupByRow(object sender, InitializeGroupByRowEventArgs e)

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ClassLibrary1</RootNamespace>
     <AssemblyName>Repository</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -72,10 +74,10 @@
     <Content Include="..\..\Repository\DDL\ddl_update_3000.sql">
       <Link>DDLs\ddl_update_3000.sql</Link>
     </Content>
-	<Content Include="..\..\Repository\DDL\ddl_update_3001.sql">
+    <Content Include="..\..\Repository\DDL\ddl_update_3001.sql">
       <Link>DDLs\ddl_update_3001.sql</Link>
     </Content>
-	<Content Include="..\..\Repository\DDL\update_3002_indexses.sql">
+    <Content Include="..\..\Repository\DDL\update_3002_indexses.sql">
       <Link>DDLs\update_3002_indexses.sql</Link>
     </Content>
     <Content Include="..\..\Repository\DDL\footer.sql">
@@ -129,7 +131,7 @@
     <Content Include="..\..\Repository\DDL\update_3000_footer.sql">
       <Link>DDLs\update_3000_footer.sql</Link>
     </Content>
-	<Content Include="..\..\Repository\DDL\update_3001_header.sql">
+    <Content Include="..\..\Repository\DDL\update_3001_header.sql">
       <Link>DDLs\update_3001_header.sql</Link>
     </Content>
     <Content Include="..\..\Repository\fn_getaccesstype.sql">
@@ -876,8 +878,8 @@
     <Content Include="..\..\Repository\vwwindowsgroupmembers.sql">
       <Link>Views\vwwindowsgroupmembers.sql</Link>
     </Content>
-    <Content Include="..\..\Repository\DDL\update_3001_footer.sql" >
-	  <Link>DDLs\update_3001_footer.sql</Link>
+    <Content Include="..\..\Repository\DDL\update_3001_footer.sql">
+      <Link>DDLs\update_3001_footer.sql</Link>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

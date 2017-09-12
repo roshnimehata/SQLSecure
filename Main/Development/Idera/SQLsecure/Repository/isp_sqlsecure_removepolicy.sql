@@ -99,6 +99,10 @@ AS
 				delete from policyassessment where policyid = @policyid and assessmentid in (@assessmentid, @cid)
 				delete from policyinterview where policyid = @policyid and assessmentid in (@assessmentid, @cid)
 				delete from policymember where policyid = @policyid and assessmentid in (@assessmentid, @cid)
+				
+				-- SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+				delete from policymetricextendedinfo where policyid = @policyid and assessmentid in (@assessmentid, @cid)	
+
 				delete from policymetric where policyid = @policyid and assessmentid in (@assessmentid, @cid)
 				delete from assessment where policyid = @policyid and assessmentid in (@assessmentid, @cid)
 				if (@assessmentstate = N'S')

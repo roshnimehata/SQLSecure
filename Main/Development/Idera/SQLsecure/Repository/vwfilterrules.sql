@@ -22,15 +22,19 @@ b.filterruleid,
 b.class, 
 b.scope, 
 b.matchstring, 
-c.objectvalue as classname 
+c.objectvalue as classname,
+--SQLSecure 3.1 (Barkha Khatri) getting servertype
+d.servertype
 FROM  
 [filterruleheader] a, 
 [filterrule] b, 
-[filterruleclass] c 
+[filterruleclass] c,
+[registeredserver] d
+
 WHERE 
 a.filterruleheaderid = b.filterruleheaderid 
 and b.class = c.objectclass
-
+and  a.connectionname=d.connectionname
 GO
 
 GRANT SELECT ON [dbo].[vwfilterrules] TO [SQLSecureView]

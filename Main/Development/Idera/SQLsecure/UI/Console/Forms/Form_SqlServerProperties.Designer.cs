@@ -85,6 +85,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._grpbx_WindowsGMCredentials = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.checkBox_UseSameAuth = new System.Windows.Forms.CheckBox();
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            this._lbl_AzureAuth = new System.Windows.Forms.Label();
             this._lbl_WindowsUser = new System.Windows.Forms.Label();
             this.textbox_WindowsUser = new System.Windows.Forms.TextBox();
             this._lbl_WindowsPassword = new System.Windows.Forms.Label();
@@ -93,6 +95,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._lbl_CredentialsIntroSep = new System.Windows.Forms.Label();
             this._lbl_CredentialsIntroText = new System.Windows.Forms.Label();
             this.tpcAuditFolders = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
+            this.addEditFoldersControl = new Idera.SQLsecure.UI.Console.Controls.AddEditFolders();
             this.label15 = new System.Windows.Forms.Label();
             this.ultraTabPageControl_Filters = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this._spltcntnr = new System.Windows.Forms.SplitContainer();
@@ -161,7 +164,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraTabSharedControlsPage1 = new Infragistics.Win.UltraWinTabControl.UltraTabSharedControlsPage();
             this.ultraButton_OK = new Infragistics.Win.Misc.UltraButton();
             this.ultraButton_Cancel = new Infragistics.Win.Misc.UltraButton();
-            this.addEditFoldersControl = new Idera.SQLsecure.UI.Console.Controls.AddEditFolders();
             this._bfd_ButtonPanel.SuspendLayout();
             this._bf_MainPanel.SuspendLayout();
             this.ultraTabPageControl_General.SuspendLayout();
@@ -234,8 +236,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _grpbx_NameVersion
             // 
-            this._grpbx_NameVersion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._grpbx_NameVersion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._grpbx_NameVersion.Controls.Add(this._lbl_SaVal);
             this._grpbx_NameVersion.Controls.Add(this._lbl_Sa);
             this._grpbx_NameVersion.Controls.Add(this._lbl_ReplicationVal);
@@ -299,8 +301,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_SQLServerEditionVal
             // 
-            this._lbl_SQLServerEditionVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_SQLServerEditionVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_SQLServerEditionVal.AutoEllipsis = true;
             this._lbl_SQLServerEditionVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_SQLServerEditionVal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -313,8 +315,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_SQLServerVersionVal
             // 
-            this._lbl_SQLServerVersionVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_SQLServerVersionVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_SQLServerVersionVal.AutoEllipsis = true;
             this._lbl_SQLServerVersionVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_SQLServerVersionVal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -347,8 +349,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_ServerVal
             // 
-            this._lbl_ServerVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_ServerVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_ServerVal.AutoEllipsis = true;
             this._lbl_ServerVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_ServerVal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -371,8 +373,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this._lbl_WindowsOSVal);
             this.groupBox1.Controls.Add(this._lbl_DcVal);
             this.groupBox1.Controls.Add(this._lbl_Dc);
@@ -388,8 +390,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_WindowsOSVal
             // 
-            this._lbl_WindowsOSVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_WindowsOSVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_WindowsOSVal.AutoEllipsis = true;
             this._lbl_WindowsOSVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_WindowsOSVal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -435,8 +437,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_OsServerVal
             // 
-            this._lbl_OsServerVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_OsServerVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_OsServerVal.AutoEllipsis = true;
             this._lbl_OsServerVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_OsServerVal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -459,8 +461,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _grpbx_Snapshot
             // 
-            this._grpbx_Snapshot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._grpbx_Snapshot.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._grpbx_Snapshot.Controls.Add(this._lbl_LastSuccessfulSnapshotAtVal);
             this._grpbx_Snapshot.Controls.Add(this._lbl_CurrentSnapshotStatusVal);
             this._grpbx_Snapshot.Controls.Add(this._lbl_CurrentSnapshotTimeVal);
@@ -476,8 +478,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_LastSuccessfulSnapshotAtVal
             // 
-            this._lbl_LastSuccessfulSnapshotAtVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_LastSuccessfulSnapshotAtVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_LastSuccessfulSnapshotAtVal.AutoEllipsis = true;
             this._lbl_LastSuccessfulSnapshotAtVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_LastSuccessfulSnapshotAtVal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -491,8 +493,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_CurrentSnapshotStatusVal
             // 
-            this._lbl_CurrentSnapshotStatusVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_CurrentSnapshotStatusVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_CurrentSnapshotStatusVal.AutoEllipsis = true;
             this._lbl_CurrentSnapshotStatusVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_CurrentSnapshotStatusVal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -506,8 +508,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _lbl_CurrentSnapshotTimeVal
             // 
-            this._lbl_CurrentSnapshotTimeVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._lbl_CurrentSnapshotTimeVal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._lbl_CurrentSnapshotTimeVal.AutoEllipsis = true;
             this._lbl_CurrentSnapshotTimeVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this._lbl_CurrentSnapshotTimeVal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -554,14 +556,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraTabPageControl_Credentials.Controls.Add(this._grpbx_SQLServerCredentials);
             this.ultraTabPageControl_Credentials.Controls.Add(this._grpbx_WindowsGMCredentials);
             this.ultraTabPageControl_Credentials.Controls.Add(this._pnl_CredentialsIntro);
-            this.ultraTabPageControl_Credentials.Location = new System.Drawing.Point(-10000, -10000);
+            this.ultraTabPageControl_Credentials.Location = new System.Drawing.Point(1, 23);
             this.ultraTabPageControl_Credentials.Name = "ultraTabPageControl_Credentials";
             this.ultraTabPageControl_Credentials.Size = new System.Drawing.Size(504, 461);
             // 
             // _grpbx_SQLServerCredentials
             // 
-            this._grpbx_SQLServerCredentials.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._grpbx_SQLServerCredentials.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._grpbx_SQLServerCredentials.Controls.Add(this.label2);
             this._grpbx_SQLServerCredentials.Controls.Add(this.textBox_SQLWindowsUser);
             this._grpbx_SQLServerCredentials.Controls.Add(this.label9);
@@ -590,8 +592,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // textBox_SQLWindowsUser
             // 
-            this.textBox_SQLWindowsUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_SQLWindowsUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_SQLWindowsUser.Location = new System.Drawing.Point(117, 43);
             this.textBox_SQLWindowsUser.Name = "textBox_SQLWindowsUser";
             this.textBox_SQLWindowsUser.Size = new System.Drawing.Size(364, 20);
@@ -609,8 +611,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // textBox_SQLWindowsPassword
             // 
-            this.textBox_SQLWindowsPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_SQLWindowsPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_SQLWindowsPassword.Location = new System.Drawing.Point(117, 69);
             this.textBox_SQLWindowsPassword.Name = "textBox_SQLWindowsPassword";
             this.textBox_SQLWindowsPassword.PasswordChar = '*';
@@ -654,8 +656,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // textbox_SqlLogin
             // 
-            this.textbox_SqlLogin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textbox_SqlLogin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textbox_SqlLogin.Location = new System.Drawing.Point(117, 134);
             this.textbox_SqlLogin.Name = "textbox_SqlLogin";
             this.textbox_SqlLogin.Size = new System.Drawing.Size(364, 20);
@@ -673,8 +675,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // textbox_SqlLoginPassword
             // 
-            this.textbox_SqlLoginPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textbox_SqlLoginPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textbox_SqlLoginPassword.Location = new System.Drawing.Point(117, 160);
             this.textbox_SqlLoginPassword.Name = "textbox_SqlLoginPassword";
             this.textbox_SqlLoginPassword.PasswordChar = '*';
@@ -684,10 +686,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _grpbx_WindowsGMCredentials
             // 
-            this._grpbx_WindowsGMCredentials.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._grpbx_WindowsGMCredentials.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._grpbx_WindowsGMCredentials.Controls.Add(this.label10);
             this._grpbx_WindowsGMCredentials.Controls.Add(this.checkBox_UseSameAuth);
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            this._grpbx_WindowsGMCredentials.Controls.Add(this._lbl_AzureAuth);
             this._grpbx_WindowsGMCredentials.Controls.Add(this._lbl_WindowsUser);
             this._grpbx_WindowsGMCredentials.Controls.Add(this.textbox_WindowsUser);
             this._grpbx_WindowsGMCredentials.Controls.Add(this._lbl_WindowsPassword);
@@ -698,6 +702,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._grpbx_WindowsGMCredentials.TabIndex = 7;
             this._grpbx_WindowsGMCredentials.TabStop = false;
             this._grpbx_WindowsGMCredentials.Text = "Windows Credentials to gather Operating System and Active Directory objects";
+            this._grpbx_WindowsGMCredentials.Enter += new System.EventHandler(this._grpbx_WindowsGMCredentials_Enter);
             // 
             // label10
             // 
@@ -705,7 +710,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(454, 66);
             this.label10.TabIndex = 6;
-            this.label10.Text = resources.GetString("label10.Text");
+            this.label10.Text = resources.GetString("label10.TextWindows");
             // 
             // checkBox_UseSameAuth
             // 
@@ -717,6 +722,18 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.checkBox_UseSameAuth.Text = "Use same Windows Authentication as above";
             this.checkBox_UseSameAuth.UseVisualStyleBackColor = true;
             this.checkBox_UseSameAuth.CheckedChanged += new System.EventHandler(this.checkBox_UseSameAuth_CheckedChanged);
+
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            // 
+            // _lbl_AzureAuth
+            // 
+            this._lbl_AzureAuth.AutoSize = true;
+            this._lbl_AzureAuth.Location = new System.Drawing.Point(10, 89);
+            this._lbl_AzureAuth.Name = "_lbl_AzureAuth";
+            this._lbl_AzureAuth.Size = new System.Drawing.Size(238, 17);
+            this._lbl_AzureAuth.TabIndex = 0;
+            this._lbl_AzureAuth.Text = "Azure AD Authentication";
+
             // 
             // _lbl_WindowsUser
             // 
@@ -729,8 +746,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // textbox_WindowsUser
             // 
-            this.textbox_WindowsUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textbox_WindowsUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textbox_WindowsUser.Location = new System.Drawing.Point(117, 114);
             this.textbox_WindowsUser.Name = "textbox_WindowsUser";
             this.textbox_WindowsUser.Size = new System.Drawing.Size(364, 20);
@@ -748,8 +765,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // textbox_WindowsPassword
             // 
-            this.textbox_WindowsPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textbox_WindowsPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textbox_WindowsPassword.Location = new System.Drawing.Point(117, 140);
             this.textbox_WindowsPassword.Name = "textbox_WindowsPassword";
             this.textbox_WindowsPassword.PasswordChar = '*';
@@ -785,15 +802,24 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._lbl_CredentialsIntroText.Size = new System.Drawing.Size(498, 34);
             this._lbl_CredentialsIntroText.TabIndex = 0;
             this._lbl_CredentialsIntroText.Text = "This window allows you to change the credentials that are used to collect data fo" +
-                "r auditing. \r\n";
+    "r auditing. \r\n";
             // 
             // tpcAuditFolders
             // 
             this.tpcAuditFolders.Controls.Add(this.addEditFoldersControl);
             this.tpcAuditFolders.Controls.Add(this.label15);
-            this.tpcAuditFolders.Location = new System.Drawing.Point(2, 24);
+            this.tpcAuditFolders.Location = new System.Drawing.Point(-10000, -10000);
             this.tpcAuditFolders.Name = "tpcAuditFolders";
             this.tpcAuditFolders.Size = new System.Drawing.Size(504, 461);
+            // 
+            // addEditFoldersControl
+            // 
+            this.addEditFoldersControl.ForeColor = System.Drawing.Color.Navy;
+            this.addEditFoldersControl.Location = new System.Drawing.Point(3, 37);
+            this.addEditFoldersControl.Name = "addEditFoldersControl";
+            this.addEditFoldersControl.Size = new System.Drawing.Size(498, 388);
+            this.addEditFoldersControl.TabIndex = 1;
+            this.addEditFoldersControl.TargetServerName = "";
             // 
             // label15
             // 
@@ -803,7 +829,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.label15.Size = new System.Drawing.Size(498, 34);
             this.label15.TabIndex = 0;
             this.label15.Text = "This window allows you to view and modify audit folders.  You can add, edit or re" +
-                "move folders.";
+    "move folders.";
             // 
             // ultraTabPageControl_Filters
             // 
@@ -859,15 +885,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraListView_Filters.TabIndex = 3;
             this.ultraListView_Filters.Text = "ultraListView1";
             this.ultraListView_Filters.View = Infragistics.Win.UltraWinListView.UltraListViewStyle.Details;
-            this.ultraListView_Filters.KeyDown += new System.Windows.Forms.KeyEventHandler(this._lstvw_Filters_KeyDown);
-            this.ultraListView_Filters.DoubleClick += new System.EventHandler(this.ultraListView_Filters_DoubleClick);
             this.ultraListView_Filters.ItemSelectionChanged += new Infragistics.Win.UltraWinListView.ItemSelectionChangedEventHandler(this.ultraListView_Filters_ItemSelectionChanged);
+            this.ultraListView_Filters.DoubleClick += new System.EventHandler(this.ultraListView_Filters_DoubleClick);
+            this.ultraListView_Filters.KeyDown += new System.Windows.Forms.KeyEventHandler(this._lstvw_Filters_KeyDown);
             // 
             // _hdrstrip
             // 
             this._hdrstrip.AutoSize = false;
             this._hdrstrip.BackColor = System.Drawing.Color.Transparent;
-            this._hdrstrip.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this._hdrstrip.Font = new System.Drawing.Font("Segoe UI", 9F);
             this._hdrstrip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(245)))), ((int)(((byte)(245)))));
             this._hdrstrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this._hdrstrip.HeaderStyle = Idera.SQLsecure.UI.Console.Controls.AreaHeaderStyle.Small;
@@ -888,7 +914,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._tsbtn_FilterProperties.Image = ((System.Drawing.Image)(resources.GetObject("_tsbtn_FilterProperties.Image")));
             this._tsbtn_FilterProperties.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._tsbtn_FilterProperties.Name = "_tsbtn_FilterProperties";
-            this._tsbtn_FilterProperties.Size = new System.Drawing.Size(76, 16);
+            this._tsbtn_FilterProperties.Size = new System.Drawing.Size(80, 16);
             this._tsbtn_FilterProperties.Text = "Properties";
             this._tsbtn_FilterProperties.Click += new System.EventHandler(this._tsbtn_FilterProperties_Click);
             // 
@@ -898,7 +924,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._tsbtn_FilterDelete.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.funnel_delete;
             this._tsbtn_FilterDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._tsbtn_FilterDelete.Name = "_tsbtn_FilterDelete";
-            this._tsbtn_FilterDelete.Size = new System.Drawing.Size(85, 16);
+            this._tsbtn_FilterDelete.Size = new System.Drawing.Size(89, 16);
             this._tsbtn_FilterDelete.Text = "Delete Filter";
             this._tsbtn_FilterDelete.Click += new System.EventHandler(this._tsbtn_FilterDelete_Click);
             // 
@@ -908,7 +934,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._tsbtn_FilterNew.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.funnel_add;
             this._tsbtn_FilterNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._tsbtn_FilterNew.Name = "_tsbtn_FilterNew";
-            this._tsbtn_FilterNew.Size = new System.Drawing.Size(75, 16);
+            this._tsbtn_FilterNew.Size = new System.Drawing.Size(80, 16);
             this._tsbtn_FilterNew.Text = "New Filter";
             this._tsbtn_FilterNew.Click += new System.EventHandler(this._tsbtn_FilterNew_Click);
             // 
@@ -976,7 +1002,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._lbl_FilterIntroText.Size = new System.Drawing.Size(498, 27);
             this._lbl_FilterIntroText.TabIndex = 0;
             this._lbl_FilterIntroText.Text = "This window allows you to view and modify audit filters.  You can add, delete, or" +
-                " edit filter properties.";
+    " edit filter properties.";
             // 
             // ultraTabPageControl_Schedule
             // 
@@ -1028,16 +1054,16 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Location = new System.Drawing.Point(102, 25);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(371, 59);
             this.label1.TabIndex = 12;
             this.label1.Text = "SQLsecure uses the SQL Server Agent for data collection and grooming. This agent " +
-                "is located on the SQL server hosting the Repository database.";
+    "is located on the SQL server hosting the Repository database.";
             // 
             // _pnl_ScheduleIntro
             // 
@@ -1092,9 +1118,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // _grpbx_Schedule
             // 
-            this._grpbx_Schedule.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._grpbx_Schedule.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._grpbx_Schedule.BackColor = System.Drawing.Color.Transparent;
             this._grpbx_Schedule.Controls.Add(this.label_Schedule);
             this._grpbx_Schedule.Controls.Add(this._btn_ChangeSchedule);
@@ -1108,9 +1134,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // label_Schedule
             // 
-            this.label_Schedule.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_Schedule.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label_Schedule.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this.label_Schedule.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label_Schedule.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
@@ -1191,7 +1217,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.label12.Size = new System.Drawing.Size(379, 13);
             this.label12.TabIndex = 24;
             this.label12.Text = "( specify multiple email recipients by separating each address with a semicolon )" +
-                "";
+    "";
             // 
             // panel7
             // 
@@ -1225,7 +1251,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.label14.Size = new System.Drawing.Size(498, 33);
             this.label14.TabIndex = 0;
             this.label14.Text = "This window allows you to configure Email notification for Snapshots (data collec" +
-                "tions).";
+    "tions).";
             // 
             // panel2
             // 
@@ -1428,7 +1454,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.label11.Size = new System.Drawing.Size(504, 16);
             this.label11.TabIndex = 5;
             this.label11.Text = "This registered SQL Server may be added to one or more of the following policies:" +
-                "";
+    "";
             // 
             // panel4
             // 
@@ -1500,7 +1526,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.label4.Size = new System.Drawing.Size(498, 33);
             this.label4.TabIndex = 0;
             this.label4.Text = "This window allows you to modify the policies that contain this SQL Server Instan" +
-                "ce.";
+    "ce.";
             // 
             // _cntxtmn_FilterList
             // 
@@ -1509,13 +1535,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this._cntxtmi_FilterDelete,
             this._cntxtmi_FilterProperties});
             this._cntxtmn_FilterList.Name = "_cntxtmn_FilterList";
-            this._cntxtmn_FilterList.Size = new System.Drawing.Size(133, 70);
+            this._cntxtmn_FilterList.Size = new System.Drawing.Size(137, 70);
             // 
             // _cntxtmi_FilterNew
             // 
             this._cntxtmi_FilterNew.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.Filter2HS;
             this._cntxtmi_FilterNew.Name = "_cntxtmi_FilterNew";
-            this._cntxtmi_FilterNew.Size = new System.Drawing.Size(132, 22);
+            this._cntxtmi_FilterNew.Size = new System.Drawing.Size(136, 22);
             this._cntxtmi_FilterNew.Text = "New Filter";
             this._cntxtmi_FilterNew.Click += new System.EventHandler(this._cntxtmi_FilterNew_Click);
             // 
@@ -1523,7 +1549,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             this._cntxtmi_FilterDelete.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.delete2;
             this._cntxtmi_FilterDelete.Name = "_cntxtmi_FilterDelete";
-            this._cntxtmi_FilterDelete.Size = new System.Drawing.Size(132, 22);
+            this._cntxtmi_FilterDelete.Size = new System.Drawing.Size(136, 22);
             this._cntxtmi_FilterDelete.Text = "Delete Filter";
             this._cntxtmi_FilterDelete.Click += new System.EventHandler(this._cntxtmi_FilterDelete_Click);
             // 
@@ -1531,7 +1557,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             this._cntxtmi_FilterProperties.Image = global::Idera.SQLsecure.UI.Console.Properties.Resources.propertiesORoptions;
             this._cntxtmi_FilterProperties.Name = "_cntxtmi_FilterProperties";
-            this._cntxtmi_FilterProperties.Size = new System.Drawing.Size(132, 22);
+            this._cntxtmi_FilterProperties.Size = new System.Drawing.Size(136, 22);
             this._cntxtmi_FilterProperties.Text = "Properties";
             this._cntxtmi_FilterProperties.Click += new System.EventHandler(this._cntxtmi_FilterProperties_Click);
             // 
@@ -1549,9 +1575,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             appearance6.BackColor = System.Drawing.Color.White;
             this.ultraTabControl_ServerProperties.ActiveTabAppearance = appearance6;
-            this.ultraTabControl_ServerProperties.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.ultraTabControl_ServerProperties.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             appearance4.BackColor = System.Drawing.Color.Transparent;
             appearance4.BackColor2 = System.Drawing.Color.Transparent;
             this.ultraTabControl_ServerProperties.Appearance = appearance4;
@@ -1627,16 +1653,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.ultraButton_Cancel.Size = new System.Drawing.Size(75, 23);
             this.ultraButton_Cancel.TabIndex = 5;
             this.ultraButton_Cancel.Text = "&Cancel";
-            // 
-            // addEditFoldersControl
-            // 
-            this.addEditFoldersControl.ForeColor = System.Drawing.Color.Navy;
-            this.addEditFoldersControl.Location = new System.Drawing.Point(3, 37);
-            this.addEditFoldersControl.Name = "addEditFoldersControl";
-            this.addEditFoldersControl.Size = new System.Drawing.Size(498, 388);
-            this.addEditFoldersControl.TabIndex = 1;
-            this.addEditFoldersControl.Text = "This window allows you to view and modify audit folders.  You can add, edit or re" +
-                "move folders.";
             // 
             // Form_SqlServerProperties
             // 
@@ -1813,6 +1829,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private System.Windows.Forms.GroupBox _grpbx_WindowsGMCredentials;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.CheckBox checkBox_UseSameAuth;
+        // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+        private System.Windows.Forms.Label _lbl_AzureAuth;
+
         private System.Windows.Forms.Label _lbl_WindowsUser;
         private System.Windows.Forms.TextBox textbox_WindowsUser;
         private System.Windows.Forms.Label _lbl_WindowsPassword;

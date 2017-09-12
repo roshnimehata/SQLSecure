@@ -11,10 +11,11 @@ using Idera.SQLsecure.UI.Console.Utility;
 using Infragistics.Win;
 using Infragistics.Win.UltraWinGrid;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
+using Infragistics.Win.UltraWinTabControl;
 
 namespace Idera.SQLsecure.UI.Console.Controls
 {
-    public partial class controlConfigurePolicyVulnerabilities : UserControl
+    internal partial class controlConfigurePolicyVulnerabilities : UserControl
     {
         #region fields
 
@@ -25,82 +26,21 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private bool m_importing = false;
 
         private bool m_allowEdit = true;
+        private ConfigurePolicyControlType m_ControlType;
 
         #endregion
-
-        #region Queries, Columns & Constants
-
-        private const string valueListSeverity = @"Severity";
-        private const string valueListEnabled = @"Enabled";
-
-        // Columns for handling the grid and policymetric results
-        private const string colIsEnabled = @"IsEnabled";
-        private const string colIsMultiSelect = @"IsMultiSelect";
-        private const string colIsUserEntered = @"IsUserEntered";
-        private const string colMetricDescription = @"MetricDescription";
-        private const string colMetricName = @"MetricName";
-        private const string colMetricType = @"MetricType";
-        private const string colReportKey = @"ReportKey";
-        private const string colReportText = @"ReportText";
-        private const string colSeverity = @"Severity";
-        private const string colSeverityValues = @"SeverityValues";
-        private const string colValidValues = @"ValidValues";
-        private const string colValueDescription = @"ValueDescription";
-
-        private const string HeaderDisplay = "Security Checks ({0} enabled)";
-        private const string PrintTitle = @"Policy Security Checks";
-        private const string PrintHeaderDisplay = "Security Checks for '{0}' as of {1}";
-
-        #endregion
-
+        
         #region ctors
 
-        public controlConfigurePolicyVulnerabilities()
+        internal controlConfigurePolicyVulnerabilities(ConfigurePolicyControlType state)
         {
+            // SQLsecure 3.1 (Anshul Aggarwal) - Represents current state of control - 'Configure Security Check' or 'Export/Import Policy'.
+            m_ControlType = state;
+
             InitializeComponent();
 
-            // Hide all radio buttons for single selection group box
-            radioButton1.Visible = false;
-            radioButton2.Visible = false;
-            radioButton3.Visible = false;
-            radioButton4.Visible = false;
-            radioButton5.Visible = false;
-            radioButton6.Visible = false;
-            radioButton7.Visible = false;
-            radioButton8.Visible = false;
-
-            // Hide single selectin group box
-            groupBox_TriggerSingle.Visible = false;
-
-            // Hide all checkboxes for multiple selection group box
-            checkBox1.Visible = false;
-            checkBox2.Visible = false;
-            checkBox3.Visible = false;
-            checkBox4.Visible = false;
-            checkBox5.Visible = false;
-            checkBox6.Visible = false;
-            checkBox7.Visible = false;
-            checkBox8.Visible = false;
-
-            // Hide multiple selection group box
-            groupBox_CriteriaMultiple.Visible = false;
-
-            // Hide User Entered Multiple Selection group box
-            groupBox_CriteriaUserEnterMultiple.Visible = false;
-
-            // Hide User Entered Single Selection group box
-            groupBox_CriteriaUserEnterSingle.Visible = false;
-
-            // Hide Enabled Disabled Only group box
-            groupBox_TriggerDisabledEnabledOnly.Visible = false;
-
-            radioButton_SeverityCritical.Text =
-                Utility.DescriptionHelper.GetEnumDescription(Utility.Policy.Severity.High);
-            radioButton_SeverityMedium.Text =
-                            Utility.DescriptionHelper.GetEnumDescription(Utility.Policy.Severity.Medium);
-            radioButton_SeverityLow.Text =
-                            Utility.DescriptionHelper.GetEnumDescription(Utility.Policy.Severity.Low);
-
+            ultraTabControl1.DrawFilter = new HideFocusRectangleDrawFilter();
+            
             _toolStripButton_ColumnChooser.Image = AppIcons.AppImage16(AppIcons.Enum.GridFieldChooser);
             _toolStripButton_GroupBy.Image = AppIcons.AppImage16(AppIcons.Enum.GridGroupBy);
             _toolStripButton_Save.Image = AppIcons.AppImage16(AppIcons.Enum.GridSaveToExcel);
@@ -109,7 +49,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             // load value lists for grid display
             ValueListItem listItem;
             ValueList severityValueList = new ValueList();
-            severityValueList.Key = valueListSeverity;
+            severityValueList.Key = Utility.Constants.POLICY_METRIC_VALUE_LIST_SERVERITY;
             severityValueList.DisplayStyle = ValueListDisplayStyle.DisplayText;
             ultraGridPolicyMetrics.DisplayLayout.ValueLists.Add(severityValueList);
             severityValueList.ValueListItems.Clear();
@@ -135,13 +75,16 @@ namespace Idera.SQLsecure.UI.Console.Controls
             severityValueList.ValueListItems.Add(listItem);
 
             ValueList enabledValueList = new ValueList();
-            enabledValueList.Key = valueListEnabled;
+            enabledValueList.Key = Utility.Constants.POLICY_METRIC_VALUE_LIST_ENABLED;
             enabledValueList.DisplayStyle = ValueListDisplayStyle.DisplayText;
             ultraGridPolicyMetrics.DisplayLayout.ValueLists.Add(enabledValueList);
             listItem = new ValueListItem(true, "Yes");
             enabledValueList.ValueListItems.Add(listItem);
             listItem = new ValueListItem(false, "No");
             enabledValueList.ValueListItems.Add(listItem);
+
+            // SQLsecure 3.1 (Anshul Aggarwal) - Change control state based on current control usage type.
+            RefreshState();
         }
 
         #endregion
@@ -211,27 +154,43 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 return count;
             }
         }
+        
+        public string IsSelectColumnDisplayText
+        {
+            get { return ultraGridPolicyMetrics.DisplayLayout.Bands[0].Columns[Utility.Constants.POLICY_METRIC_VALUE_IS_SELECTED].Header.Caption; }
+            set { ultraGridPolicyMetrics.DisplayLayout.Bands[0].Columns[Utility.Constants.POLICY_METRIC_VALUE_IS_SELECTED].Header.Caption = value; }
+        }
 
         #endregion
 
         #region methods
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes control using specified configuration values.
+        /// </summary>
         public void InitializeControl(Policy policy)
         {
             m_policy = policy;
             m_importing = m_policy.PolicyId == 0;
-            button_Remove.Enabled = false;
             checkBox_GroupByCategories.Checked = true;
+            
+            sqlServerCriteriaControl.InitializeControl();      // SQLsecure 3.1 (Anshul Aggarwal) - Initialize both tabs.
+            azureSQLDatabaseCriteriaControl.InitializeControl(GetAzureSQLDBGridColumnMapping());
 
-            loadPolicyMetrics();            
+            loadPolicyMetrics();
         }
-
+        
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes control using specified configuration values.
+        /// </summary>
         public void InitializeControl(Policy policy, int metricId, bool allowEdit)
         {
             m_policy = policy;
             m_importing = m_policy.PolicyId == 0;
-            button_Remove.Enabled = false;
             checkBox_GroupByCategories.Checked = true;
+            
+            sqlServerCriteriaControl.InitializeControl(allowEdit);     // SQLsecure 3.1 (Anshul Aggarwal) - Initialize both tabs.
+            azureSQLDatabaseCriteriaControl.InitializeControl(allowEdit, GetAzureSQLDBGridColumnMapping());
 
             loadPolicyMetrics();
 
@@ -255,106 +214,59 @@ namespace Idera.SQLsecure.UI.Console.Controls
             {
                 button_Import.Enabled =
                     button_Clear.Enabled =
-                    button_ResetToDefaults.Enabled =
-                    button_Edit.Enabled =
-                    button_Remove.Enabled = false;
-                textBox_ReportKey.Enabled =
-                    textBox_ReportText.Enabled =
-                    textBox_UserEnterSingle.Enabled = false;
-                radioButton_SeverityCritical.Enabled =
-                    radioButton_SeverityMedium.Enabled =
-                    radioButton_SeverityLow.Enabled = false;
-                checkBox1.Enabled =
-                    checkBox2.Enabled =
-                    checkBox3.Enabled =
-                    checkBox4.Enabled =
-                    checkBox5.Enabled =
-                    checkBox6.Enabled =
-                    checkBox7.Enabled =
-                    checkBox8.Enabled = false;
-                radioButton1.Enabled =
-                    radioButton2.Enabled =
-                    radioButton3.Enabled =
-                    radioButton4.Enabled =
-                    radioButton5.Enabled =
-                    radioButton6.Enabled =
-                    radioButton7.Enabled =
-                    radioButton8.Enabled = false;
-                listView_MultiSelect.Enabled = false;
+                    button_ResetToDefaults.Enabled = false;
             }
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Checks if current configuration is valid or not.
+        /// </summary>
         public bool OKToSave()
         {
-            bool ok = true;
-            Infragistics.Win.UltraWinGrid.UltraGridRow row = ultraGridPolicyMetrics.ActiveRow;
+            UltraGridRow row = ultraGridPolicyMetrics.ActiveRow;
             if (row != null && row.IsDataRow)
             {
-                Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[colIsEnabled];
-                if (cell != null && cell.Value is bool && (bool)cell.Value == true)
+                UltraGridCell cell = row.Cells[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED];
+                var policyMetric = row.ListObject as PolicyMetric;
+                if (policyMetric != null && cell != null && cell.Value is bool && (bool)cell.Value == true)
                 {
-                    if (groupBox_CriteriaUserEnterMultiple.Visible)
+                    if (row.IsDataRow && policyMetric != null)
                     {
-                        if (listView_MultiSelect.Items.Count < 1)
+                        bool okOnPremise = false;
+                        bool okADB = false;
+                        if (policyMetric.ApplicableOnPremise)
                         {
-                            ok = false;
+                            okOnPremise = sqlServerCriteriaControl.OKToSave();
                         }
-                    }
-                    else if (groupBox_CriteriaUserEnterSingle.Visible)
-                    {
-                        if (string.IsNullOrEmpty(textBox_UserEnterSingle.Text))
+
+                        // SQLsecure 3.1 (Anshul Aggarwal) - Even if a single tab is valid, we will accept it.
+                        if (!policyMetric.ApplicableOnPremise || (policyMetric.ApplicableOnAzureDB && !okOnPremise))
                         {
-                            ok = false;
+                            okADB = azureSQLDatabaseCriteriaControl.OKToSave();
                         }
-                    }
-                    else if(groupBox_CriteriaMultiple.Visible)
-                    {
-                        bool atLeastOneChecked = false;
-                        if(checkBox1.Checked)
+
+
+                        bool ok = (policyMetric.ApplicableOnPremise && okOnPremise) || (policyMetric.ApplicableOnAzureDB && okADB);
+                        if (!ok)
                         {
-                            atLeastOneChecked = true;                            
+                            //  SQLsecure 3.1 (Anshul Aggarwal) - Switch to the tab that is invalid.
+                            if (policyMetric.ApplicableOnPremise && !okOnPremise)
+                            {
+                                ultraTabControl1.SelectedTab = ultraTabControl1.Tabs[0];
+                            }
+                            else if (policyMetric.ApplicableOnAzureDB && !okADB)
+                            {
+                                ultraTabControl1.SelectedTab = ultraTabControl1.Tabs[1];
+                            }
+
+                            MsgBox.ShowError("Security Checks",
+                                             "This security check requires at least one criteria be specified.\n\nEither specify a criteria or disable this security check.");
                         }
-                        else if(checkBox2.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox3.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox4.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox5.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox6.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox7.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        else if (checkBox8.Checked)
-                        {
-                            atLeastOneChecked = true;
-                        }
-                        if(!atLeastOneChecked)
-                        {
-                            ok = false;
-                        }
+                        return ok;
                     }
                 }
             }
-            if(!ok)
-            {
-                MsgBox.ShowError("Security Checks",
-                                 "This security check requires at least one criteria be specified.\n\nEither specify a criteria or disable this security check.");                
-            }
-            return ok;
+            return true;
         }
 
         public void SaveMetricChanges(Policy policy)
@@ -422,11 +334,28 @@ namespace Idera.SQLsecure.UI.Console.Controls
             UpdateEnabledCount();
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Gets grid column name mapping of Azure SQL Database.
+        /// </summary>
+        private static Dictionary<PolicyMetricConfigurationColumn, string> GetAzureSQLDBGridColumnMapping()
+        {
+            return new Dictionary<PolicyMetricConfigurationColumn, string>() {
+                    { PolicyMetricConfigurationColumn.MetricDescription, Utility.Constants.POLICY_METRIC_COLUMN_ADB_METRIC_DESCRIPTION},
+                    { PolicyMetricConfigurationColumn.MetricName, Utility.Constants.POLICY_METRIC_COLUMN_ADB_METRIC_NAME},
+                    { PolicyMetricConfigurationColumn.ReportKey, Utility.Constants.POLICY_METRIC_COLUMN_ADB_REPORT_KEY},
+                    { PolicyMetricConfigurationColumn.ReportText, Utility.Constants.POLICY_METRIC_COLUMN_ADB_REPORT_TEXT},
+                    { PolicyMetricConfigurationColumn.Severity, Utility.Constants.POLICY_METRIC_COLUMN_ADB_SEVERITY},
+                    { PolicyMetricConfigurationColumn.SeverityValues, Utility.Constants.POLICY_METRIC_COLUMN_ADB_SEVERITY_VALUES},
+                    { PolicyMetricConfigurationColumn.ValidValues, Utility.Constants.POLICY_METRIC_COLUMN_ADB_VALID_VALUES},
+                    { PolicyMetricConfigurationColumn.ValueDescription, Utility.Constants.POLICY_METRIC_COLUMN_ADB_VALUE_DESCRIPTION},
+                };
+        }
+
         #region Grid functions
 
         protected void showGridColumnChooser(Infragistics.Win.UltraWinGrid.UltraGrid grid)
         {
-            Forms.Form_GridColumnChooser.Process(grid, PrintTitle);
+            Forms.Form_GridColumnChooser.Process(grid, Utility.Constants.POLICY_METRIC_PROPERTIES_PRINT_TITLE);
         }
 
         protected void toggleGridGroupByBox(Infragistics.Win.UltraWinGrid.UltraGrid grid)
@@ -441,10 +370,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             _ultraGridPrintDocument.Grid = grid;
             _ultraGridPrintDocument.DefaultPageSettings.Landscape = true;
             _ultraGridPrintDocument.DefaultPageSettings.Color = false;
-            _ultraGridPrintDocument.DocumentName = PrintTitle;
+            _ultraGridPrintDocument.DocumentName = Utility.Constants.POLICY_METRIC_PROPERTIES_PRINT_TITLE;
             _ultraGridPrintDocument.FitWidthToPages = 1;
             _ultraGridPrintDocument.Header.TextLeft =
-                    string.Format(PrintHeaderDisplay,
+                    string.Format(Utility.Constants.POLICY_METRIC_PROPERTIES_PRINT_HEADER_DISPLAY,
                                         m_policy.PolicyAssessmentName,
                                         DateTime.Now.ToShortDateString()
                                     );
@@ -461,11 +390,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 try
                 {
                     //fix the enabled checkboxes to export as values
-                    grid.DisplayLayout.Bands[0].Columns[colIsEnabled].ValueList = grid.DisplayLayout.ValueLists[valueListEnabled];
+                    grid.DisplayLayout.Bands[0].Columns[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED].ValueList = grid.DisplayLayout.ValueLists[Utility.Constants.POLICY_METRIC_VALUE_LIST_ENABLED];
 
                     _ultraGridExcelExporter.Export(grid, _saveFileDialog.FileName);
 
-                    grid.DisplayLayout.Bands[0].Columns[colIsEnabled].ValueList = null;
+                    grid.DisplayLayout.Bands[0].Columns[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED].ValueList = null;
                 }
                 catch (Exception ex)
                 {
@@ -487,182 +416,36 @@ namespace Idera.SQLsecure.UI.Console.Controls
             ultraGridPolicyMetrics.DisplayLayout.Bands[0].SortedColumns.Add("MetricName", false);
         }
 
-
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Set values into gridrow from UI.
+        /// </summary>
         private bool RetrieveValuesFromUI()
         {
             bool bAllowContinue = true;
             if (Visible && !m_InternalUpdate)
             {
-                if(!OKToSave())
+                if(m_ControlType != ConfigurePolicyControlType.ImportExportSecurityCheck && !OKToSave())
                 {
                     return false;
                 }
-                Infragistics.Win.UltraWinGrid.UltraGridRow row = ultraGridPolicyMetrics.ActiveRow;
+              
+                UltraGridRow row = ultraGridPolicyMetrics.ActiveRow;
                 if (row != null)
                 {
-                    if (row.IsDataRow)
+                    var policyMetric = row.ListObject as PolicyMetric;
+                    if (row.IsDataRow && policyMetric != null)
                     {
                         bool refreshSort = false;
-                        if (row.Cells[colReportKey].Value.ToString() != textBox_ReportKey.Text
-                            || (radioButton_SeverityLow.Checked && row.Cells[colSeverity].Value.ToString() != "1")
-                            || (radioButton_SeverityMedium.Checked && row.Cells[colSeverity].Value.ToString() != "2")
-                            || (radioButton_SeverityCritical.Checked && row.Cells[colSeverity].Value.ToString() != "3"))
+
+                        if (policyMetric.ApplicableOnPremise)
                         {
-                            refreshSort = true;
+                            sqlServerCriteriaControl.RetrieveValuesFromUI(row, out refreshSort);
                         }
 
-                        row.Cells[colReportText].Value = textBox_ReportText.Text;
-                        row.Cells[colReportKey].Value = textBox_ReportKey.Text;
-
-                        if (radioButton_SeverityLow.Checked)
+                        if (policyMetric.ApplicableOnAzureDB)
                         {
-                            row.Cells[colSeverity].Value = "1";
+                            azureSQLDatabaseCriteriaControl.RetrieveValuesFromUI(row, out refreshSort);
                         }
-                        else if (radioButton_SeverityMedium.Checked)
-                        {
-                            row.Cells[colSeverity].Value = "2";
-                        }
-                        else
-                        {
-                            row.Cells[colSeverity].Value = "3";
-                        }
-
-                        StringBuilder values = new StringBuilder();
-                        if (groupBox_CriteriaMultiple.Visible)
-                        {
-                            if (checkBox1.Checked)
-                            {
-                                values.Append("'");
-                                values.Append(checkBox1.Tag);
-                                values.Append("'");
-                            }
-                            if (checkBox2.Checked)
-                            {
-                                if (values.Length > 0)
-                                    values.Append(",");
-                                values.Append("'");
-                                values.Append(checkBox2.Tag);
-                                values.Append("'");
-                            }
-                            if (checkBox3.Checked)
-                            {
-                                if (values.Length > 0)
-                                    values.Append(",");
-                                values.Append("'");
-                                values.Append(checkBox3.Tag);
-                                values.Append("'");
-                            }
-                            if (checkBox4.Checked)
-                            {
-                                if (values.Length > 0)
-                                    values.Append(",");
-                                values.Append("'");
-                                values.Append(checkBox4.Tag);
-                                values.Append("'");
-                            }
-                            if (checkBox5.Checked)
-                            {
-                                if (values.Length > 0)
-                                    values.Append(",");
-                                values.Append("'");
-                                values.Append(checkBox5.Tag);
-                                values.Append("'");
-                            }
-                            if (checkBox6.Checked)
-                            {
-                                if (values.Length > 0)
-                                    values.Append(",");
-                                values.Append("'");
-                                values.Append(checkBox6.Tag);
-                                values.Append("'");
-                            }
-                            if (checkBox7.Checked)
-                            {
-                                if (values.Length > 0)
-                                    values.Append(",");
-                                values.Append("'");
-                                values.Append(checkBox7.Tag);
-                                values.Append("'");
-                            }
-                            if (checkBox8.Checked)
-                            {
-                                if (values.Length > 0)
-                                    values.Append(",");
-                                values.Append("'");
-                                values.Append(checkBox8.Tag);
-                                values.Append("'");
-                            }
-                        }
-                        else if (groupBox_TriggerSingle.Visible)
-                        {
-                            if (radioButton1.Checked)
-                            {
-                                values.Append("'");
-                                values.Append(radioButton1.Tag);
-                                values.Append("'");
-                            }
-                            if (radioButton2.Checked)
-                            {
-                                values.Append("'");
-                                values.Append(radioButton2.Tag);
-                                values.Append("'");
-                            }
-                            if (radioButton3.Checked)
-                            {
-                                values.Append("'");
-                                values.Append(radioButton3.Tag);
-                                values.Append("'");
-                            }
-                            if (radioButton4.Checked)
-                            {
-                                values.Append("'");
-                                values.Append(radioButton4.Tag);
-                                values.Append("'");
-                            }
-                            if (radioButton5.Checked)
-                            {
-                                values.Append("'");
-                                values.Append(radioButton5.Tag);
-                                values.Append("'");
-                            }
-                            if (radioButton6.Checked)
-                            {
-                                values.Append("'");
-                                values.Append(radioButton6.Tag);
-                                values.Append("'");
-                            }
-                            if (radioButton7.Checked)
-                            {
-                                values.Append("'");
-                                values.Append(radioButton7.Tag);
-                                values.Append("'");
-                            }
-                            if (radioButton8.Checked)
-                            {
-                                values.Append("'");
-                                values.Append(radioButton8.Tag);
-                                values.Append("'");
-                            }
-                        }
-                        else if (groupBox_CriteriaUserEnterMultiple.Visible)
-                        {
-                            foreach (ListViewItem i in listView_MultiSelect.Items)
-                            {
-                                if (values.Length > 0)
-                                    values.Append(",");
-                                values.Append("'");
-                                values.Append(i.Text);
-                                values.Append("'");
-                            }
-                        }
-                        else if (groupBox_CriteriaUserEnterSingle.Visible)
-                        {
-                            values.Append("'");
-                            values.Append(textBox_UserEnterSingle.Text);
-                            values.Append("'");
-                        }
-
-                        row.Cells[colSeverityValues].Value = values.ToString();
 
                         if (refreshSort)
                         {
@@ -687,7 +470,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     enabledCount += 1;
                 }
             }
-            _label_Header.Text = string.Format(HeaderDisplay, enabledCount);
+            _label_Header.Text = string.Format(Utility.Constants.POLICY_METRIC_PROPERTIES_HEADER_DISPLAY, enabledCount);
         }
 
         private int GetRowMetricCount(UltraGridRow row)
@@ -709,280 +492,53 @@ namespace Idera.SQLsecure.UI.Console.Controls
             return count;
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Updates UI using grid row.
+        /// </summary>
         private void UpdateUIWithMetric()
         {
-            foreach (Infragistics.Win.UltraWinGrid.UltraGridRow row in ultraGridPolicyMetrics.Selected.Rows)
+            foreach (UltraGridRow row in ultraGridPolicyMetrics.Selected.Rows)
             {
                 if (row.Cells != null)
                 {
-                    textBox_Name.Text = row.Cells[colMetricName].Text;
-                    textBox_Description.Text = row.Cells[colMetricDescription].Text;
-                    textBox_ReportText.Text = row.Cells[colReportText].Text;
-                    textBox_ReportKey.Text = row.Cells[colReportKey].Text;
+                    var policyMetric = row.ListObject as PolicyMetric;
+                    if (policyMetric == null)
+                        continue;
 
-                    switch ((Utility.Policy.Severity)row.Cells[colSeverity].Value)
+                    if (policyMetric.ApplicableOnPremise)
                     {
-                        case Utility.Policy.Severity.Low:
-                            radioButton_SeverityLow.Checked = true;
-                            break;
-                        case Utility.Policy.Severity.Medium:
-                            radioButton_SeverityMedium.Checked = true;
-                            break;
-                        case Utility.Policy.Severity.High:
-                            radioButton_SeverityCritical.Checked = true;
-                            break;
-                    }
-
-                    bool isUserEntered = row.Cells[colIsUserEntered].Text.ToUpper() == "TRUE" ? true : false;
-                    bool isMultiSelect = row.Cells[colIsMultiSelect].Text.ToUpper() == "TRUE" ? true : false;
-
-                    if (isUserEntered)
-                    {
-                        if (isMultiSelect)
-                        {
-                            groupBox_TriggerDisabledEnabledOnly.Visible = false;
-                            groupBox_CriteriaMultiple.Visible = false;
-                            groupBox_TriggerSingle.Visible = false;
-                            groupBox_CriteriaUserEnterSingle.Visible = false;
-                            groupBox_CriteriaUserEnterMultiple.Visible = true;
-                            label_ValueDescriptionUEM.Text = row.Cells[colValueDescription].Text;
-                            MetricValue metricValue =
-                                new MetricValue(row.Cells[colValidValues].Text, row.Cells[colSeverityValues].Text);
-                            listView_MultiSelect.Items.Clear();
-                            foreach (string s in metricValue.CurrentValues)
-                            {
-                                if (!string.IsNullOrEmpty(s))
-                                {
-                                    listView_MultiSelect.Items.Add(s, s, null);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            groupBox_TriggerDisabledEnabledOnly.Visible = false;
-                            groupBox_CriteriaMultiple.Visible = false;
-                            groupBox_TriggerSingle.Visible = false;
-                            groupBox_CriteriaUserEnterMultiple.Visible = false;
-                            groupBox_CriteriaUserEnterSingle.Visible = true;
-                            label_ValueDescriptionUES.Text = row.Cells[colValueDescription].Text;
-                            MetricValue metricValue =
-                                new MetricValue(row.Cells[colValidValues].Text, row.Cells[colSeverityValues].Text);
-                            if (!string.IsNullOrEmpty(metricValue.CurrentValues[0]))
-                            {
-                                textBox_UserEnterSingle.Text = metricValue.CurrentValues[0];
-                            }
-                        }
+                        ultraTabControl1.Tabs[0].Visible = true;
+                        sqlServerCriteriaControl.UpdateUIWithMetric(row);
                     }
                     else
                     {
-                        if (isMultiSelect)
-                        {
-                            groupBox_TriggerDisabledEnabledOnly.Visible = false;
-                            groupBox_TriggerSingle.Visible = false;
-                            groupBox_CriteriaUserEnterSingle.Visible = false;
-                            groupBox_CriteriaUserEnterMultiple.Visible = false;
-                            groupBox_CriteriaMultiple.Visible = true;
-                            checkBox1.Visible = false;
-                            checkBox2.Visible = false;
-                            checkBox3.Visible = false;
-                            checkBox4.Visible = false;
-                            checkBox5.Visible = false;
-                            checkBox6.Visible = false;
-                            checkBox7.Visible = false;
-                            checkBox8.Visible = false;
-                            label_ValueDescriptionM.Text = row.Cells[colValueDescription].Text;
-                            MetricValue metricValue =
-                                new MetricValue(row.Cells[colValidValues].Text, row.Cells[colSeverityValues].Text);
-                            int x = 0;
-                            foreach (KeyValuePair<string, string> kvp in metricValue.PossibleValues)
-                            {
-                                x++;
-                                switch (x)
-                                {
-                                    case 1:
-                                        checkBox1.Visible = true;
-                                        checkBox1.Text = kvp.Value;
-                                        checkBox1.Tag = kvp.Key;
-                                        if (metricValue.CurrentValues.Contains(kvp.Key))
-                                        {
-                                            checkBox1.Checked = true;
-                                        }
-                                        break;
-                                    case 2:
-                                        checkBox2.Visible = true;
-                                        checkBox2.Text = kvp.Value;
-                                        checkBox2.Tag = kvp.Key;
-                                        if (metricValue.CurrentValues.Contains(kvp.Key))
-                                        {
-                                            checkBox2.Checked = true;
-                                        }
-                                        break;
-                                    case 3:
-                                        checkBox3.Visible = true;
-                                        checkBox3.Text = kvp.Value;
-                                        checkBox3.Tag = kvp.Key;
-                                        if (metricValue.CurrentValues.Contains(kvp.Key))
-                                        {
-                                            checkBox3.Checked = true;
-                                        }
-                                        break;
-                                    case 4:
-                                        checkBox4.Visible = true;
-                                        checkBox4.Text = kvp.Value;
-                                        checkBox4.Tag = kvp.Key;
-                                        if (metricValue.CurrentValues.Contains(kvp.Key))
-                                        {
-                                            checkBox4.Checked = true;
-                                        }
-                                        break;
-                                    case 5:
-                                        checkBox5.Visible = true;
-                                        checkBox5.Text = kvp.Value;
-                                        checkBox5.Tag = kvp.Key;
-                                        if (metricValue.CurrentValues.Contains(kvp.Key))
-                                        {
-                                            checkBox5.Checked = true;
-                                        }
-                                        break;
-                                    case 6:
-                                        checkBox6.Visible = true;
-                                        checkBox6.Text = kvp.Value;
-                                        checkBox6.Tag = kvp.Key;
-                                        if (metricValue.CurrentValues.Contains(kvp.Key))
-                                        {
-                                            checkBox6.Checked = true;
-                                        }
-                                        break;
-                                    case 7:
-                                        checkBox7.Visible = true;
-                                        checkBox7.Text = kvp.Value;
-                                        checkBox7.Tag = kvp.Key;
-                                        if (metricValue.CurrentValues.Contains(kvp.Key))
-                                        {
-                                            checkBox7.Checked = true;
-                                        }
-                                        break;
-                                    case 8:
-                                        checkBox8.Visible = true;
-                                        checkBox8.Text = kvp.Value;
-                                        checkBox8.Tag = kvp.Key;
-                                        if (metricValue.CurrentValues.Contains(kvp.Key))
-                                        {
-                                            checkBox8.Checked = true;
-                                        }
-                                        break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (string.IsNullOrEmpty(row.Cells[colSeverityValues].Text))
-                            {
-                                groupBox_TriggerSingle.Visible = false;
-                                groupBox_CriteriaMultiple.Visible = false;
-                                groupBox_CriteriaUserEnterMultiple.Visible = false;
-                                groupBox_CriteriaUserEnterSingle.Visible = false;
-                                groupBox_TriggerDisabledEnabledOnly.Visible = true;
-                                label_DescriptionEnableDisableOnly.Text = row.Cells[colValueDescription].Text;
-                            }
-                            else
-                            {
-                                groupBox_TriggerDisabledEnabledOnly.Visible = false;
-                                groupBox_CriteriaMultiple.Visible = false;
-                                groupBox_CriteriaUserEnterMultiple.Visible = false;
-                                groupBox_CriteriaUserEnterSingle.Visible = false;
-                                groupBox_TriggerSingle.Visible = true;
-                                radioButton1.Visible = false;
-                                radioButton2.Visible = false;
-                                radioButton3.Visible = false;
-                                radioButton4.Visible = false;
-                                radioButton5.Visible = false;
-                                radioButton6.Visible = false;
-                                radioButton7.Visible = false;
-                                radioButton8.Visible = false;
-                                label_ValueDescriptionS.Text = row.Cells[colValueDescription].Text;
-                                MetricValue metricValue =
-                                    new MetricValue(row.Cells[colValidValues].Text, row.Cells[colSeverityValues].Text);
-                                int x = 0;
-                                foreach (KeyValuePair<string, string> kvp in metricValue.PossibleValues)
-                                {
-                                    x++;
-                                    switch (x)
-                                    {
-                                        case 1:
-                                            radioButton1.Visible = true;
-                                            radioButton1.Text = kvp.Value;
-                                            radioButton1.Tag = kvp.Key;
-                                            if (metricValue.CurrentValues.Contains(kvp.Key))
-                                            {
-                                                radioButton1.Checked = true;
-                                            }
-                                            break;
-                                        case 2:
-                                            radioButton2.Visible = true;
-                                            radioButton2.Text = kvp.Value;
-                                            radioButton2.Tag = kvp.Key;
-                                            if (metricValue.CurrentValues.Contains(kvp.Key))
-                                            {
-                                                radioButton2.Checked = true;
-                                            }
-                                            break;
-                                        case 3:
-                                            radioButton3.Visible = true;
-                                            radioButton3.Text = kvp.Value;
-                                            radioButton3.Tag = kvp.Key;
-                                            if (metricValue.CurrentValues.Contains(kvp.Key))
-                                            {
-                                                radioButton3.Checked = true;
-                                            }
-                                            break;
-                                        case 4:
-                                            radioButton4.Visible = true;
-                                            radioButton4.Text = kvp.Value;
-                                            radioButton4.Tag = kvp.Key;
-                                            if (metricValue.CurrentValues.Contains(kvp.Key))
-                                            {
-                                                radioButton4.Checked = true;
-                                            }
-                                            break;
-                                        case 5:
-                                            radioButton5.Visible = true;
-                                            radioButton5.Text = kvp.Value;
-                                            radioButton5.Tag = kvp.Key;
-                                            if (metricValue.CurrentValues.Contains(kvp.Key))
-                                            {
-                                                radioButton5.Checked = true;
-                                            }
-                                            break;
-                                        case 6:
-                                            radioButton6.Visible = true;
-                                            radioButton6.Text = kvp.Value;
-                                            radioButton6.Tag = kvp.Key;
-                                            break;
-                                        case 7:
-                                            radioButton7.Visible = true;
-                                            radioButton7.Text = kvp.Value;
-                                            radioButton7.Tag = kvp.Key;
-                                            if (metricValue.CurrentValues.Contains(kvp.Key))
-                                            {
-                                                radioButton7.Checked = true;
-                                            }
-                                            break;
-                                        case 8:
-                                            radioButton8.Visible = true;
-                                            radioButton8.Text = kvp.Value;
-                                            radioButton8.Tag = kvp.Key;
-                                            if (metricValue.CurrentValues.Contains(kvp.Key))
-                                            {
-                                                radioButton8.Checked = true;
-                                            }
-                                            break;
-                                    }
-                                }
-                            }
-                        }
+                        ultraTabControl1.Tabs[0].Visible = false;
+                    }
+                    
+                    if(policyMetric.ApplicableOnAzureDB)
+                    {
+                        ultraTabControl1.Tabs[1].Visible = true;
+                        azureSQLDatabaseCriteriaControl.UpdateUIWithMetric(row);
+                    }
+                    else
+                    {
+                        ultraTabControl1.Tabs[1].Visible = false;
                     }
                 }
+            }
+        }
+
+        private void RefreshState()
+        {
+            if (m_ControlType == ConfigurePolicyControlType.ImportExportSecurityCheck)
+            {
+                button_Import.Visible = button_Clear.Visible = false;
+                checkBox_GroupByCategories.Visible = false;
+                button_ResetToDefaults.Visible = false;
+
+                button_Import.Enabled =
+                   button_Clear.Enabled =
+                   button_ResetToDefaults.Enabled = false;
             }
         }
 
@@ -1016,11 +572,25 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     Infragistics.Win.UltraWinGrid.UltraGridRow row = selectedElement.SelectableItem as Infragistics.Win.UltraWinGrid.UltraGridRow;
                     if (row != null && row.Cells != null)
                     {
-                        Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[colIsEnabled];
-                        if (cell != null && cell.Value is bool)
+                        // SQLsecure 3.1 (Anshul Aggarwal) - Type of control decides editable columns in the grid.
+                        if(m_ControlType == ConfigurePolicyControlType.ImportExportSecurityCheck)
                         {
-                            cell.Value = !(bool) cell.Value;
-                            UpdateEnabledCount();
+                            UltraGridCell cell = selectedElement.GetContext(typeof(UltraGridCell)) as UltraGridCell;
+                            if (cell != null &&
+                                (cell.Column.Key == Utility.Constants.POLICY_METRIC_VALUE_IS_SELECTED))
+                            {
+                                cell.Value = !((bool)cell.Value);
+                                UpdateEnabledCount();
+                            }
+                        }
+                        else
+                        {
+                            Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED];
+                            if (cell != null && cell.Value is bool)
+                            {
+                                cell.Value = !(bool)cell.Value;
+                                UpdateEnabledCount();
+                            }
                         }
                     }
                 }
@@ -1031,9 +601,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
         {
             UltraGridBand band = e.Layout.Bands[0];
 
-            band.Columns[colSeverity].ValueList = e.Layout.ValueLists[valueListSeverity];
+            band.Columns[Utility.Constants.POLICY_METRIC_COLUMN_SEVERITY].ValueList = e.Layout.ValueLists[Utility.Constants.POLICY_METRIC_VALUE_LIST_SERVERITY];
             EditorWithText textEditor = new EditorWithText();
-            band.Columns[colSeverity].Editor = textEditor;
+            band.Columns[Utility.Constants.POLICY_METRIC_COLUMN_SEVERITY].Editor = textEditor;
 
             if (ultraGridPolicyMetrics.Visible)
             {
@@ -1045,12 +615,13 @@ namespace Idera.SQLsecure.UI.Console.Controls
         {
             UltraGrid grid = (UltraGrid)sender;
             e.Row.Appearance.FontData.Bold = Infragistics.Win.DefaultableBoolean.True;
-            if (e.Row.Column.Key == colMetricType || e.Row.Column.Key == colSeverity || e.Row.Column.Key == colIsEnabled || e.Row.Column.Key == colReportKey)
+            if (e.Row.Column.Key == Utility.Constants.POLICY_METRIC_COLUMN_METRIC_TYPE || e.Row.Column.Key == Utility.Constants.POLICY_METRIC_COLUMN_SEVERITY ||
+                e.Row.Column.Key == Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED || e.Row.Column.Key == Utility.Constants.POLICY_METRIC_COLUMN_REPORT_KEY)
             {
                 //e.Row.ExpansionIndicator = ShowExpansionIndicator.Never;
                 int count = GetRowMetricCount(e.Row);
                 string descr = e.Row.ValueAsDisplayText;
-                if (e.Row.Column.Key == colIsEnabled)
+                if (e.Row.Column.Key == Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED)
                 {
                     descr = (bool)e.Row.Value ? "Enabled" : "Disabled";
                 }
@@ -1073,7 +644,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                     Infragistics.Win.UltraWinGrid.UltraGridRow row = ultraGridPolicyMetrics.Selected.Rows[0];
                     if (row != null && row.Cells != null)
                     {
-                        Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[colIsEnabled];
+                        Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED];
                         if (cell != null && cell.Value is bool)
                         {
                             cell.Value = !(bool)cell.Value;
@@ -1089,7 +660,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             Infragistics.Win.UltraWinGrid.UltraGridRow row = e.Row;
             if (m_allowEdit && row != null && row.Cells != null)
             {
-                Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[colIsEnabled];
+                Infragistics.Win.UltraWinGrid.UltraGridCell cell = row.Cells[Utility.Constants.POLICY_METRIC_COLUMN_IS_ENABLED];
                 if (cell != null && cell.Value is bool)
                 {
                     cell.Value = !(bool)cell.Value;
@@ -1141,67 +712,11 @@ namespace Idera.SQLsecure.UI.Console.Controls
         #endregion
 
         #region security check data entry
-
-        private void button_Edit_Click(object sender, EventArgs e)
-        {
-            // Show Add/Edit dialog
-            string[] oldvalues = new string[listView_MultiSelect.Items.Count];
-            int i = 0;
-            foreach (ListViewItem s in listView_MultiSelect.Items)
-            {
-                oldvalues[i] = s.Text;
-                i++;
-            }
-            string[] values = Forms.Form_AddMetricValue.Process(label_ValueDescriptionUEM.Text, oldvalues);
-
-            // Clear the list before processing because it will always return all values back
-            listView_MultiSelect.Items.Clear();
-
-            foreach(string s in values)
-            {
-                string temp = s.Trim();
-
-                // make sure we don't add blanks or duplicates
-                if (!string.IsNullOrEmpty(temp) && !listView_MultiSelect.Items.ContainsKey(temp))
-                {
-                    listView_MultiSelect.Items.Add(temp, temp, null);
-                }
-            }
-        }
-
-        private void button_Remove_Click(object sender, EventArgs e)
-        {
-            foreach(ListViewItem i in listView_MultiSelect.SelectedItems)
-            {
-                listView_MultiSelect.Items.Remove(i);
-            }
-        }
-
-        private void listView_MultiSelect_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(listView_MultiSelect.SelectedItems.Count > 0)
-            {
-                button_Remove.Enabled = true;
-            }
-            else
-            {
-                button_Remove.Enabled = false;
-            }
-        }
-
-        private void listView_MultiSelect_Resize(object sender, EventArgs e)
-        {
-            listView_MultiSelect.Columns[0].Width = listView_MultiSelect.Width - 4;
-        }
-
-        #endregion
-
+        
         private void checkBox_GroupByCategories_CheckedChanged(object sender, EventArgs e)
         {
             updateVulnerabilityLayout();
         }
-
-        #region buttons for all security checks
 
         private void button_Import_Click(object sender, EventArgs e)
         {
@@ -1286,7 +801,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         }
 
         #endregion
-
+        
         #endregion
     }
 

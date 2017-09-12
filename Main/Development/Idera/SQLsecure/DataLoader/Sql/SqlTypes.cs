@@ -91,6 +91,9 @@ namespace Idera.SQLsecure.Collector.Sql
                 case SqlObjectType.LinkedServerPrincipals:
                     strType = "LinkedServerPrincipal";
                     break;
+                case SqlObjectType.Trigger:
+                    strType = "Trigger";
+                    break;
                 default:
                     strType = "UnKnown";
                     System.Diagnostics.Debug.Assert(false, "Unknown Database Type");
@@ -136,8 +139,9 @@ namespace Idera.SQLsecure.Collector.Sql
         SequenceObject=48,
         AvailabilityGroup=49,
         LinkedServer = 50,
-        LinkedServerPrincipals=51
-
+        LinkedServerPrincipals=51,
+        DatabasePrincipal=52,
+        Trigger = 53
     }
 
     public enum FilterScope
@@ -154,6 +158,15 @@ namespace Idera.SQLsecure.Collector.Sql
         Unknown
     }
 
+    public enum AuthType
+    {
+        Null,
+        W,//Windows Auth
+        S//Sql Server Auth
+    }
+
+    
+
     public static class Constants
     {
         #region General
@@ -166,6 +179,7 @@ namespace Idera.SQLsecure.Collector.Sql
         internal const string Sql2012VerPrefix = @"11";
         internal const string Sql2014VerPrefix = @"12";
         internal const string Sql2016VerPrefix = @"13";
+        internal const string MASTER_DB_NAME = @"master";
 
         #endregion
 
@@ -176,8 +190,11 @@ namespace Idera.SQLsecure.Collector.Sql
         public const string WindowsGroup = "G";
         public const string WindowsUser = "U";
         public const string SQLLogin = "S";
+        public const string SQLUser = "Q";
 
         #endregion
+
+        
 
         #region Database Principal
 

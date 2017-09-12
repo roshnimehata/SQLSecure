@@ -60,8 +60,8 @@
 		<lastauthor>Administrator</lastauthor>
 		<revnumber>{C20EF196-9EB9-43F5-9C83-D4A6C9583ACA}</revnumber>
 		<lastprinted/>
-		<createdtm>06/21/1999 03:00</createdtm>
-		<lastsavedtm>07/14/2000 06:50</lastsavedtm>
+		<createdtm>06/21/1999 04:00</createdtm>
+		<lastsavedtm>07/14/2000 07:50</lastsavedtm>
 		<pagecount>300</pagecount>
 		<wordcount>0</wordcount>
 		<charcount/>
@@ -233,6 +233,7 @@
 		<col key="yes" def="s72">Property</col>
 		<col key="yes" def="s72">Signature_</col>
 		<row><td>DOTNET</td><td>NewSignature13</td></row>
+		<row><td>DOTNETFRAMEWORKVERSION</td><td>NewSignature16</td></row>
 		<row><td>INSTALLED_INSTANCE</td><td>NewSignature12</td></row>
 		<row><td>INSTALL_DIRECTORY</td><td>NewSignature14</td></row>
 		<row><td>MDACFOUND</td><td>NewSignature111</td></row>
@@ -406,11 +407,11 @@
 		<row><td>Interop.ActiveDs.dll</td><td>{5A7CC216-F127-45D7-9669-5248CEAFE63F}</td><td>BIN</td><td>256</td><td/><td>interop.activeds.dll</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>License4Net.dll</td><td>{C526939C-2FA7-43C2-9B04-3183332552BB}</td><td>BIN</td><td>256</td><td/><td>license4net.dll</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Manage.dll</td><td>{D2C5E711-01AE-4054-B76F-65619AEF6D67}</td><td>BIN</td><td>8</td><td/><td>manage.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td><td>{DFA0E75A-C515-4EC0-B3B8-D253A369E653}</td><td>BIN</td><td>8</td><td/><td>microsoft.identitymodel.clie1</td><td>9</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td><td>{90B7CCD7-8659-461C-9B8B-6A5B33106B14}</td><td>BIN</td><td>8</td><td/><td>microsoft.identitymodel.clie</td><td>9</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Microsoft.ReportViewer.Common.dll</td><td>{9DD639CD-B9C0-4505-A84E-3A3A95196EC4}</td><td>BIN</td><td>256</td><td/><td>microsoft.reportviewer.commo</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>{C1BD5CC7-8EB0-4932-8A9C-D37732D83CB1}</td><td>BIN</td><td>256</td><td/><td>microsoft.reportviewer.proce</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Microsoft.ReportViewer.WinForms.dll</td><td>{3736D8DF-2D90-4CAC-A35D-2BE897FD95FB}</td><td>BIN</td><td>256</td><td/><td>microsoft.reportviewer.winfo</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Microsoft.SqlServer.BatchParser.dll</td><td>{D1DF4E43-0172-4E13-836E-FCB562196E7A}</td><td>BIN</td><td>256</td><td/><td>microsoft.sqlserver.batchpar</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>Microsoft.SqlServer.Replication.dll</td><td>{3C524D80-7DB5-4A29-B20B-3CCDAC842ADA}</td><td>BIN</td><td>256</td><td/><td>microsoft.sqlserver.replicat</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>Microsoft.SqlServer.Smo.dll</td><td>{8DABE291-BEB4-4D09-BA19-A89C524DF02E}</td><td>BIN</td><td>256</td><td/><td>microsoft.sqlserver.smo.dll</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>PolicyTemplates</td><td>{D64D70D8-8ECC-4814-9C75-085D8E691BB3}</td><td>POLICIES</td><td>256</td><td/><td/><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>PowerCollections.dll</td><td>{D119EB6E-9491-4BEA-A356-76945854EBFE}</td><td>BIN</td><td>256</td><td/><td>powercollections.dll</td><td>1</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -892,18 +893,20 @@
 		<row><td>SetupResume</td><td>txtUpgrade</td><td>Text</td><td>151</td><td>7</td><td>272</td><td>25</td><td>65539</td><td/><td>##ID_STRING173##</td><td/><td>##ID_STRING175##</td><td/><td/><td/><td/></row>
 		<row><td>SetupType</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>Note</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>CompText1</td><td>Text</td><td>223</td><td>112</td><td>157</td><td>33</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_AllFeatures##</td><td>rbSetupType</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>CompText2</td><td>Text</td><td>224</td><td>187</td><td>164</td><td>35</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseFeatures##</td><td>CompText1</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>CompText1</td><td>Text</td><td>223</td><td>112</td><td>157</td><td>33</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_AllFeatures##</td><td>CompText2</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>CompText2</td><td>Text</td><td>224</td><td>187</td><td>164</td><td>35</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseFeatures##</td><td>rbSetupType</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>CompleteIco</td><td>Icon</td><td>178</td><td>112</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary10</td></row>
 		<row><td>SetupType</td><td>CustomIco</td><td>Icon</td><td>178</td><td>187</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary11</td></row>
 		<row><td>SetupType</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>240</td><td>18</td><td>65539</td><td/><td>##IDS__IsSetupTypeMinDlg_ChooseSetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>DlgText</td><td>Text</td><td>152</td><td>67</td><td>112</td><td>14</td><td>3</td><td/><td>##IDS__IsSetupTypeMinDlg_SelectSetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupType</td><td>DlgTitleLarge</td><td>Text</td><td>151</td><td>6</td><td>254</td><td>16</td><td>65539</td><td/><td>##IDS__IsSetupTypeMinDlg_SetupType##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>Icon1</td><td>Icon</td><td>178</td><td>239</td><td>24</td><td>24</td><td>5767169</td><td/><td/><td/><td/><td/><td/><td/><td>NewBinary11</td></row>
 		<row><td>SetupType</td><td>ImageMain_All</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048576</td><td/><td/><td/><td/><td/><td/><td/><td>Image_Overview</td></row>
 		<row><td>SetupType</td><td>ImageMain_GUI</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1048576</td><td/><td/><td/><td/><td/><td/><td/><td>Image_GUI</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>PushButton</td><td>298</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_NEXT##</td><td>BackLarge</td><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupType</td><td>Note</td><td>Text</td><td>178</td><td>150</td><td>223</td><td>16</td><td>3</td><td/><td>##NEW_STRING158##</td><td>CompText2</td><td/><td/><td/><td/><td/></row>
-		<row><td>SetupType</td><td>rbSetupType</td><td>RadioButtonGroup</td><td>166</td><td>97</td><td>232</td><td>120</td><td>3</td><td>_IsSetupTypeMin</td><td>##IDS__IsSetupTypeMinDlg_13##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupType</td><td>Note</td><td>Text</td><td>178</td><td>150</td><td>223</td><td>16</td><td>3</td><td/><td>##NEW_STRING158##</td><td>Text1</td><td/><td/><td/><td/><td/></row>
+		<row><td>SetupType</td><td>Text1</td><td>Text</td><td>224</td><td>239</td><td>164</td><td>35</td><td>3</td><td>NewProperty5</td><td>##NEW_STRING165##</td><td>CompText1</td><td/><td/><td/><td/><td/></row>
+		<row><td>SetupType</td><td>rbSetupType</td><td>RadioButtonGroup</td><td>166</td><td>97</td><td>238</td><td>182</td><td>3</td><td>_IsSetupTypeMin</td><td>##IDS__IsSetupTypeMinDlg_13##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SplashBitmap</td><td>BackLarge</td><td>PushButton</td><td>232</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SplashBitmap</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SplashBitmap</td><td>Image</td><td>Bitmap</td><td>0</td><td>0</td><td>139</td><td>324</td><td>1</td><td/><td/><td/><td/><td>0</td><td/><td/><td>NewBinary5</td></row>
@@ -1222,9 +1225,10 @@
 		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>EndDialog</td><td>Return</td><td>1</td><td>3</td></row>
 		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>Reinstall</td><td>ALL</td><td>PATCH And REINSTALL=""</td><td>1</td></row>
 		<row><td>PatchWelcome</td><td>UpdateLarge</td><td>ReinstallMode</td><td>omus</td><td>PATCH And REINSTALLMODE=""</td><td>2</td></row>
-		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "No" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>3</td></row>
+		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "No" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>4</td></row>
 		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>MaintenanceType</td><td>Installed AND _IsMaintenance = "Reinstall" and not IS_MAJOR_UPGRADE</td><td>1</td></row>
-		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLocation</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "Yes" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>4</td></row>
+		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLocation</td><td>_IsSetupTypeMin = "GUI" and CONFIG_REPOSITORY = "Yes" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>5</td></row>
+		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>3</td></row>
 		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>2</td></row>
 		<row><td>ReadyToInstall</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
 		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1</td><td>1</td></row>
@@ -1337,7 +1341,7 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpFatalExit</td><td>1</td><td>1</td></row>
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpSuccess</td><td>1</td><td>1</td></row>
-		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>LAUNCHPROGRAM</td><td>3</td></row>
+		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>LAUNCHPROGRAM AND _IsSetupTypeMin &lt;&gt; "Collector"</td><td>3</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupError</td><td>A</td><td>EndDialog</td><td>ErrorAbort</td><td>1</td><td>1</td></row>
 		<row><td>SetupError</td><td>C</td><td>EndDialog</td><td>ErrorCancel</td><td>1</td><td>0</td></row>
@@ -1362,12 +1366,24 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupResume</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>OutOfNoRbDiskSpace &lt;&gt; 1 and !Repository=3 and IS_MINOR_UPGRADE</td><td>3</td></row>
 		<row><td>SetupType</td><td>BackLarge</td><td>NewDialog</td><td>DestinationFolder</td><td>1</td><td>1</td></row>
 		<row><td>SetupType</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>ALL</td><td>_IsSetupTypeMin = "Typical"</td><td>6</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Collector</td><td>_IsSetupTypeMin = "Collector"</td><td>16</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "GUI"</td><td>2</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "GUI"</td><td>4</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI"</td><td>5</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical"</td><td>7</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "Typical"</td><td>10</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "GUI"</td><td>5</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "Typical"</td><td>11</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Collector"</td><td>15</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Typical"</td><td>12</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI"</td><td>9</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector"</td><td>19</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical"</td><td>14</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "GUI"</td><td>4</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "Typical"</td><td>13</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Console</td><td>_IsSetupTypeMin = "Collector"</td><td>17</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Reports</td><td>_IsSetupTypeMin = "Collector"</td><td>18</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Repository</td><td>_IsSetupTypeMin = "GUI"</td><td>3</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>[LAUNCHPROGRAM]</td><td>0</td><td>_IsSetupTypeMin = "Collector"</td><td>6</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>[LAUNCHPROGRAM]</td><td>1</td><td>_IsSetupTypeMin = "GUI"</td><td>8</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>[LAUNCHPROGRAM]</td><td>1</td><td>_IsSetupTypeMin = "Typical"</td><td>7</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>[SQLSERVER_AUTHENTICATION]</td><td>{}</td><td>_IsSetupTypeMin = "GUI"</td><td>1</td></row>
 		<row><td>SplashBitmap</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
 		<row><td>SplashBitmap</td><td>NextLarge</td><td>NewDialog</td><td>InstallWelcome</td><td>1</td><td>0</td></row>
@@ -1393,8 +1409,6 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>INSTALLDIR</td><td>Idera.SQLsecure.Core.Logger.dll</td></row>
 		<row><td>INSTALLDIR</td><td>Idera.SQLsecure.UI.Console.exe</td></row>
 		<row><td>INSTALLDIR</td><td>Interop.ActiveDs.dll</td></row>
-		<row><td>INSTALLDIR</td><td>Microsoft.SqlServer.BatchParser.dll</td></row>
-		<row><td>INSTALLDIR</td><td>Microsoft.SqlServer.Replication.dll</td></row>
 		<row><td>INSTALLDIR</td><td>Microsoft.SqlServer.Smo.dll</td></row>
 		<row><td>INSTALLDIR</td><td>NewComponent3</td></row>
 		<row><td>INSTALLDIR</td><td>NewComponent5</td></row>
@@ -1921,6 +1935,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>WindowsVolume</td><td>TARGETDIR</td><td>.:WinRoot</td><td/><td>0</td><td/></row>
 		<row><td>_0</td><td>MICROSOFT_SQL_SERVER</td><td>80</td><td/><td>0</td><td/></row>
 		<row><td>_033</td><td>RESOURCES</td><td>1033</td><td/><td>0</td><td/></row>
+		<row><td>ideras_1_idera_sqlsecure_x64</td><td>Idera</td><td>IDERAS~1|Idera SQLsecure x64</td><td/><td>1</td><td/></row>
 	</table>
 
 	<table name="DrLocator">
@@ -2174,6 +2189,7 @@ Set oServer = Nothing</td><td/></row>
 		<col def="S255">ISComments</col>
 		<col def="S255">ISFeatureCabName</col>
 		<col def="S255">ISProFeatureName</col>
+		<row><td>Collector</td><td/><td>##ID_STRING441##</td><td/><td>8</td><td>1</td><td>INSTALLDIR</td><td>0</td><td/><td/><td/><td/></row>
 		<row><td>Console</td><td/><td>##ID_STRING14##</td><td>##ID_STRING15##</td><td>2</td><td>1</td><td>INSTALLDIR</td><td>8</td><td/><td/><td/><td/></row>
 		<row><td>Reports</td><td/><td>##ID_STRING54##</td><td>##ID_STRING55##</td><td>6</td><td>1</td><td>INSTALLDIR</td><td>8</td><td/><td/><td/><td/></row>
 		<row><td>Repository</td><td/><td>##ID_STRING13##</td><td>##ID_STRING52##</td><td>4</td><td>1</td><td>INSTALLDIR</td><td>8</td><td/><td/><td/><td/></row>
@@ -2182,6 +2198,23 @@ Set oServer = Nothing</td><td/></row>
 	<table name="FeatureComponents">
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
+		<row><td>Collector</td><td>Idera.SQLsecure.Collector.exe</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Collector.exe.config</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.Accounts.dll</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.EventMessages.dll</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.Interop.dll</td></row>
+		<row><td>Collector</td><td>Idera.SQLsecure.Core.Logger.dll</td></row>
+		<row><td>Collector</td><td>Interop.ActiveDs.dll</td></row>
+		<row><td>Collector</td><td>License4Net.dll</td></row>
+		<row><td>Collector</td><td>Manage.dll</td></row>
+		<row><td>Collector</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td></row>
+		<row><td>Collector</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td></row>
+		<row><td>Collector</td><td>Microsoft.SqlServer.Smo.dll</td></row>
+		<row><td>Collector</td><td>PowerCollections.dll</td></row>
+		<row><td>Collector</td><td>SQLsecure_Help.chm</td></row>
+		<row><td>Collector</td><td>TracerX.exe</td></row>
+		<row><td>Collector</td><td>TracerX.exe.config</td></row>
+		<row><td>Collector</td><td>WebHelp.exe</td></row>
 		<row><td>Console</td><td>Doc_WebHelp</td></row>
 		<row><td>Console</td><td>EULA</td></row>
 		<row><td>Console</td><td>Idera.SQLsecure.Collector.exe</td></row>
@@ -2212,11 +2245,11 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>Console</td><td>Interop.ActiveDs.dll</td></row>
 		<row><td>Console</td><td>License4Net.dll</td></row>
 		<row><td>Console</td><td>Manage.dll</td></row>
+		<row><td>Console</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td></row>
+		<row><td>Console</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.Common.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td></row>
 		<row><td>Console</td><td>Microsoft.ReportViewer.WinForms.dll</td></row>
-		<row><td>Console</td><td>Microsoft.SqlServer.BatchParser.dll</td></row>
-		<row><td>Console</td><td>Microsoft.SqlServer.Replication.dll</td></row>
 		<row><td>Console</td><td>Microsoft.SqlServer.Smo.dll</td></row>
 		<row><td>Console</td><td>NewComponent3</td></row>
 		<row><td>Console</td><td>PolicyTemplates</td></row>
@@ -2313,11 +2346,11 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>introsplash.png</td><td>Reports_Graphics</td><td>INTROS~1.PNG|introSplash.png</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\introSplash.png</td><td>1</td><td/></row>
 		<row><td>license4net.dll</td><td>License4Net.dll</td><td>LICENS~1.DLL|License4Net.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_THIRDPARTY&gt;\BBSLicense\x64\License4Net.dll</td><td>1</td><td/></row>
 		<row><td>manage.dll</td><td>Manage.dll</td><td>Manage.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_THIRDPARTY&gt;\Manage_x64.dll</td><td>1</td><td/></row>
+		<row><td>microsoft.identitymodel.clie</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td><td>MICROS~1.DLL|Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td><td>1</td><td/></row>
+		<row><td>microsoft.identitymodel.clie1</td><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td><td>MICROS~1.DLL|Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</td><td>1</td><td/></row>
 		<row><td>microsoft.reportviewer.commo</td><td>Microsoft.ReportViewer.Common.dll</td><td>MICROS~1.DLL|Microsoft.ReportViewer.Common.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.ReportViewer.Common.dll</td><td>1</td><td/></row>
 		<row><td>microsoft.reportviewer.proce</td><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>MICROS~1.DLL|Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td>1</td><td/></row>
 		<row><td>microsoft.reportviewer.winfo</td><td>Microsoft.ReportViewer.WinForms.dll</td><td>MICROS~1.DLL|Microsoft.ReportViewer.WinForms.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.ReportViewer.WinForms.dll</td><td>1</td><td/></row>
-		<row><td>microsoft.sqlserver.batchpar</td><td>Microsoft.SqlServer.BatchParser.dll</td><td>MICROS~1.DLL|Microsoft.SqlServer.BatchParser.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.SqlServer.BatchParser.dll</td><td>1</td><td/></row>
-		<row><td>microsoft.sqlserver.replicat</td><td>Microsoft.SqlServer.Replication.dll</td><td>MICROS~1.DLL|Microsoft.SqlServer.Replication.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.SqlServer.Replication.dll</td><td>1</td><td/></row>
 		<row><td>microsoft.sqlserver.smo.dll</td><td>Microsoft.SqlServer.Smo.dll</td><td>MICROS~1.DLL|Microsoft.SqlServer.Smo.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Microsoft.SqlServer.Smo.dll</td><td>1</td><td/></row>
 		<row><td>powercollections.dll</td><td>PowerCollections.dll</td><td>POWERC~1.DLL|PowerCollections.dll</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\PowerCollections.dll</td><td>1</td><td/></row>
 		<row><td>rdl.xml</td><td>Reports_rdl.xml</td><td>rdl.xml</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;PATH_BUILD_OUTPUT&gt;\reports\rdl.xml</td><td>1</td><td/></row>
@@ -2373,6 +2406,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>BiildInternetEnabled</td><td/></row>
 		<row><td>BiildSingleExeEnabled</td><td/></row>
 		<row><td>BiildSingleMSIEnabled</td><td/></row>
+		<row><td>IIIIIIIIIIIIIIIIIIIIIIIIIIIIII</td><td/></row>
 	</table>
 
 	<table name="ISCEApp">
@@ -2554,11 +2588,11 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>Interop.ActiveDs.dll</td><td/><td/><td>_6B07C248_6A38_45A6_A907_47801F4F8754_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>License4Net.dll</td><td/><td/><td>_ACF3CAC6_D987_4AFA_84F0_E0691AA75446_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Manage.dll</td><td/><td/><td>_4F4DEF5A_DB37_405C_8491_B50995C58C6A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.</td><td/><td/><td>_76F22856_CDE8_401B_BCD1_971772B92AAA_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>Microsoft.IdentityModel.Clients.ActiveDirectory.dll</td><td/><td/><td>_529ECB80_A1BC_4A6C_8FBD_A089F9861248_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Microsoft.ReportViewer.Common.dll</td><td/><td/><td>_292473A9_FAEC_48C9_BE96_70BB60B294E3_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Microsoft.ReportViewer.ProcessingObjectModel.dll</td><td/><td/><td>_BA49DE63_E7B4_4C25_8DD8_4304178B43EA_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Microsoft.ReportViewer.WinForms.dll</td><td/><td/><td>_963093A0_B656_4E2E_9868_0216559F3ACD_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Microsoft.SqlServer.BatchParser.dll</td><td/><td/><td>_8A4FB65E_D017_4EDF_BD44_3206AB7A7AF9_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>Microsoft.SqlServer.Replication.dll</td><td/><td/><td>_E3E0B785_D4B4_4A4B_8622_234799B125E2_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>Microsoft.SqlServer.Smo.dll</td><td/><td/><td>_21312AEB_C77B_4DD9_BC46_8ECE7D3FADB3_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NewComponent3</td><td/><td/><td>_D782ECA3_546B_4B9F_BECD_03E0473CA37C_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>NewComponent5</td><td/><td/><td>_B8D94BD4_BFBB_492B_AFBD_584D3F1FF3E7_FILTER</td><td/><td/><td/><td/></row>
@@ -3290,28 +3324,28 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>##ID_STRING231##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272652859</td></row>
 		<row><td>##ID_STRING235##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272652859</td></row>
 		<row><td>##ID_STRING239##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING243##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING247##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING251##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING255##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING259##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING243##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING247##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING251##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING255##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING259##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING263##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675329726</td></row>
-		<row><td>##ID_STRING267##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING271##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING275##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING267##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING271##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING275##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING279##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1550133816</td></row>
-		<row><td>##ID_STRING283##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING287##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING283##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING287##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING291##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING295##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING299##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING295##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING299##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING303##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
-		<row><td>##ID_STRING307##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING307##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING311##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675329726</td></row>
 		<row><td>##ID_STRING315##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1013278065</td></row>
 		<row><td>##ID_STRING319##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1675329726</td></row>
-		<row><td>##ID_STRING323##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
-		<row><td>##ID_STRING327##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272701979</td></row>
+		<row><td>##ID_STRING323##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
+		<row><td>##ID_STRING327##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1591377620</td></row>
 		<row><td>##ID_STRING331##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272706075</td></row>
 		<row><td>##ID_STRING335##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272706075</td></row>
 		<row><td>##ID_STRING339##</td><td>1033</td><td>|</td><td>0</td><td/><td>-1272706075</td></row>
@@ -3679,7 +3713,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>IDS_INSTALLSHIELD_FORMATTED</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_ISSCRIPT_VERSION_MISSING</td><td>1033</td><td>The InstallScript engine is missing from this machine.  If available, please run ISScript.msi, or contact your support personnel for further assistance.</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_ISSCRIPT_VERSION_OLD</td><td>1033</td><td>The InstallScript engine on this machine is older than the version required to run this setup.  If available, please install the latest version of ISScript.msi, or contact your support personnel for further assistance.</td><td>0</td><td/><td>-1256677244</td></row>
-		<row><td>IDS_NEXT</td><td>1033</td><td>&amp;Next &gt;</td><td>0</td><td/><td>-1256677244</td></row>
+		<row><td>IDS_NEXT</td><td>1033</td><td>&amp;Next &gt;</td><td>0</td><td/><td>-1591394228</td></row>
 		<row><td>IDS_OK</td><td>1033</td><td>OK</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_PRINT_BUTTON</td><td>1033</td><td>&amp;Print</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_PRODUCTNAME_INSTALLSHIELD</td><td>1033</td><td>[ProductName] - Setup Wizard</td><td>0</td><td/><td>865710349</td></row>
@@ -3707,6 +3741,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>IDS_PROGMSG_XML_REMOVE_FILE</td><td>1033</td><td>Removing XML file %s...</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_PROGMSG_XML_ROLLBACK_FILES</td><td>1033</td><td>Rolling back XML file changes...</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_PROGMSG_XML_UPDATE_FILE</td><td>1033</td><td>Updating XML file %s...</td><td>0</td><td/><td>-1256677244</td></row>
+		<row><td>IDS_SHORTCUT_DISPLAY_NAME1</td><td>1033</td><td>LAUNCH~1.EXE|Launch Idera.SQLsecure.UI.Console.exe</td><td>0</td><td/><td>1369792838</td></row>
 		<row><td>IDS_SQLBROWSE_INTRO</td><td>1033</td><td>From the list of servers below, select the database server you would like to target.</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_SQLLOGIN_BROWSE</td><td>1033</td><td>B&amp;rowse...</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS_SQLLOGIN_CONNECT</td><td>1033</td><td>Repository name:</td><td>0</td><td/><td>236555149</td></row>
@@ -3943,7 +3978,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>IDS__IsSetupTypeMinDlg_AllFeatures</td><td>1033</td><td>Installs the Console and Reports, and creates the Repository database on a local SQL Server instance.</td><td>0</td><td/><td>438087502</td></row>
 		<row><td>IDS__IsSetupTypeMinDlg_ChooseFeatures</td><td>1033</td><td>Install only the [txtConsole]</td><td>0</td><td/><td>1536866029</td></row>
 		<row><td>IDS__IsSetupTypeMinDlg_ChooseSetupType</td><td>1033</td><td>Choose either a Typical or Console only installation.</td><td>0</td><td/><td>-73735602</td></row>
-		<row><td>IDS__IsSetupTypeMinDlg_Complete</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Typical</td><td>0</td><td/><td>605736650</td></row>
+		<row><td>IDS__IsSetupTypeMinDlg_Complete</td><td>1033</td><td>{&amp;MSSansBold8}&amp;All Components</td><td>0</td><td/><td>1638254154</td></row>
 		<row><td>IDS__IsSetupTypeMinDlg_Custom</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Console only</td><td>0</td><td/><td>1805280366</td></row>
 		<row><td>IDS__IsSetupTypeMinDlg_Minimal</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Minimal</td><td>0</td><td/><td>-1256677244</td></row>
 		<row><td>IDS__IsSetupTypeMinDlg_MinimumFeatures</td><td>1033</td><td>Minimum required features will be installed.</td><td>0</td><td/><td>-1256677244</td></row>
@@ -4369,6 +4404,11 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ID_STRING439</td><td>1033</td><td>INSTAL~1|Install Guide</td><td>0</td><td/><td>-1306602991</td></row>
 		<row><td>ID_STRING44</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>-48667223</td></row>
 		<row><td>ID_STRING440</td><td>1033</td><td>RELEAS~1|Release Notes</td><td>0</td><td/><td>-1306609103</td></row>
+		<row><td>ID_STRING441</td><td>1033</td><td>NewFeature1</td><td>0</td><td/><td>1898279235</td></row>
+		<row><td>ID_STRING442</td><td>1033</td><td>LAUNCH~1.EXE|Launch Idera.SQLsecure.UI.Console.exe</td><td>0</td><td/><td>1369794886</td></row>
+		<row><td>ID_STRING443</td><td>1033</td><td>SQLSEC~1|SQLsecure</td><td>0</td><td/><td>1638226090</td></row>
+		<row><td>ID_STRING444</td><td>1033</td><td>SQLSEC~1|SQL Secure</td><td>0</td><td/><td>1638220769</td></row>
+		<row><td>ID_STRING445</td><td>1033</td><td>[ProductName] requires that your computer has the .NET Framework  version4.6</td><td>0</td><td/><td>2040899944</td></row>
 		<row><td>ID_STRING45</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>228144489</td></row>
 		<row><td>ID_STRING46</td><td>1033</td><td>{&amp;Tahoma8}InstallShield</td><td>0</td><td/><td>228144489</td></row>
 		<row><td>ID_STRING47</td><td>1033</td><td>{&amp;MSSWhiteSerif8}InstallShield</td><td>0</td><td/><td>496621705</td></row>
@@ -4499,6 +4539,12 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>NEW_STRING158</td><td>1033</td><td>{\Tahoma7Red}Note: Install locally on a SQL Server computer hosting the Repository.</td><td>0</td><td/><td>572318505</td></row>
 		<row><td>NEW_STRING159</td><td>1033</td><td>&amp;Cluster Installation </td><td>0</td><td/><td>1176634634</td></row>
 		<row><td>NEW_STRING16</td><td>1033</td><td>&amp;Next &gt;</td><td>0</td><td/><td>-199646929</td></row>
+		<row><td>NEW_STRING160</td><td>1033</td><td>{&amp;MSSansBold8}&amp;Repository and Services only</td><td>0</td><td/><td>430276614</td></row>
+		<row><td>NEW_STRING161</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591360410</td></row>
+		<row><td>NEW_STRING162</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591350170</td></row>
+		<row><td>NEW_STRING163</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591401338</td></row>
+		<row><td>NEW_STRING164</td><td>1033</td><td>Be Visible</td><td>0</td><td/><td>-1591387002</td></row>
+		<row><td>NEW_STRING165</td><td>1033</td><td>Installs the Collector service and creates the repository database on local SQL Server instance</td><td>0</td><td/><td>430268454</td></row>
 		<row><td>NEW_STRING17</td><td>1033</td><td>Cancel</td><td>0</td><td/><td>-199642833</td></row>
 		<row><td>NEW_STRING173</td><td>1033</td><td>&amp;OK</td><td>0</td><td/><td>-2070198543</td></row>
 		<row><td>NEW_STRING174</td><td>1033</td><td>The database specified is an unsupported version.  The SQL diagnostic manager installer can not update this version of the database.</td><td>0</td><td/><td>-2070213742</td></row>
@@ -4704,9 +4750,9 @@ Set oServer = Nothing</td><td/></row>
 		<col def="I2">ISIconIndex</col>
 		<row><td>ARPPRODUCTICON.exe</td><td/><td>&lt;PATH_IMAGES&gt;\app.ico</td><td>0</td></row>
 		<row><td>NewShortcut1_4C6A9ACB080A4424BAF97E7D730892C1.exe</td><td/><td>&lt;PATH_RELEASE&gt;\Idera.SQLdm.ExportUtility.exe</td><td>0</td></row>
+		<row><td>NewShortcut1_ED9B592B2BD94F9EBA9FB5ABF8EADE2D.exe</td><td/><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Secure.ico</td><td>0</td></row>
 		<row><td>NewShortcut1_F5F326438B69434A87BF18463B401FAA.exe</td><td/><td>&lt;PATH_RELEASE&gt;\dssmanager.exe</td><td>0</td></row>
 		<row><td>NewShortcut1_F5F326438B69434A87BF18463B401FAA_1.exe</td><td/><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Idera.SQLsecure.UI.Console.exe</td><td>0</td></row>
-		<row><td>NewShortcut1_F79AC890669D4D9085D3A4071EE36532.exe</td><td/><td>&lt;PATH_BUILD_OUTPUT&gt;\bin\Idera.SQLsecure.UI.Console.exe</td><td>0</td></row>
 		<row><td>NewShortcut2_4C6A9ACB080A4424BAF97E7D730892C1.exe</td><td/><td>&lt;PATH_RELEASE&gt;\Idera.SQLdm.Web.ConfigurationConsole.exe</td><td>0</td></row>
 		<row><td>NewShortcut2_F4439BBBFF784CBDB54AF62D4C15EB73.exe</td><td/><td>&lt;PATH_IMAGES&gt;\help16.ico</td><td>0</td></row>
 		<row><td>NewShortcut2_F5F326438B69434A87BF18463B401FAA.chm</td><td/><td>&lt;WindowsFolder&gt;\hh.exe</td><td>0</td></row>
@@ -4939,6 +4985,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>AdminUser</td><td>##ID_STRING33##</td></row>
 		<row><td>BETA_INSTALL &lt;&gt; "TRUE"</td><td>##ID_STRING411##</td></row>
 		<row><td>DOTNET &lt;&gt; 0</td><td>##ID_STRING398##</td></row>
+		<row><td>DOTNETFRAMEWORKVERSION &gt;= "#378389"</td><td>##ID_STRING445##</td></row>
 		<row><td>MDACFOUND &gt;= MDAC_MIN_VERSION</td><td>##ID_STRING404##</td></row>
 	</table>
 
@@ -5138,6 +5185,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>Blank</td><td/><td/></row>
 		<row><td>CONFIG_REPOSITORY</td><td>Yes</td><td/></row>
 		<row><td>DOTNET</td><td>0</td><td/></row>
+		<row><td>DOTNETFRAMEWORKVERSION</td><td/><td/></row>
 		<row><td>DRIVE_LETTER</td><td>0</td><td/></row>
 		<row><td>DRIVE_LETTER_INSTALLDIR</td><td>0</td><td/></row>
 		<row><td>DRIVE_TYPE</td><td>0</td><td/></row>
@@ -5188,6 +5236,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>NewProperty2</td><td>0</td><td/></row>
 		<row><td>NewProperty3</td><td>0</td><td/></row>
 		<row><td>NewProperty4</td><td>0</td><td/></row>
+		<row><td>NewProperty5</td><td>0</td><td/></row>
 		<row><td>PIDTemplate</td><td>12345&lt;###-%%%%%%%&gt;@@@@@</td><td/></row>
 		<row><td>PROGMSG_IIS_CREATEAPPPOOL</td><td>##IDS_PROGMSG_IIS_CREATEAPPPOOL##</td><td/></row>
 		<row><td>PROGMSG_IIS_CREATEAPPPOOLS</td><td>##IDS_PROGMSG_IIS_CREATEAPPPOOLS##</td><td/></row>
@@ -5210,7 +5259,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>PROGMSG_IIS_ROLLBACKVROOTS</td><td>##IDS_PROGMSG_IIS_ROLLBACKVROOTS##</td><td/></row>
 		<row><td>PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS</td><td>##IDS_PROGMSG_IIS_ROLLBACKWEBSERVICEEXTENSIONS##</td><td/></row>
 		<row><td>Password_Result</td><td>0</td><td/></row>
-		<row><td>ProductCode</td><td>{A3E8489A-F823-4DAB-8926-7FEFBE72E29E}</td><td/></row>
+		<row><td>ProductCode</td><td>{ED9B592B-2BD9-4F9E-BA9F-B5ABF8EADE2D}</td><td/></row>
 		<row><td>ProductID</td><td>none</td><td/></row>
 		<row><td>ProductLanguage</td><td>1033</td><td/></row>
 		<row><td>ProductName</td><td>Idera SQLsecure x64</td><td/></row>
@@ -5223,7 +5272,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>RETURN</td><td>0</td><td/></row>
 		<row><td>RebootYesNo</td><td>Yes</td><td/></row>
 		<row><td>ReinstallModeText</td><td>omus</td><td/></row>
-		<row><td>SCHEMA_VERSION</td><td>3002</td><td/></row>
+		<row><td>SCHEMA_VERSION</td><td>3100</td><td/></row>
 		<row><td>SERVICEPASSWORD</td><td/><td/></row>
 		<row><td>SERVICEUSERNAME</td><td/><td/></row>
 		<row><td>SERVICE_SQLAUTHENTICATION</td><td/><td/></row>
@@ -5301,6 +5350,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>_IsMaintenance</td><td>2</td><td>Remove</td><td>0</td><td>90</td><td>118</td><td>14</td><td>##IDS__IsMaintenanceDlg_Remove##</td><td/><td>0</td></row>
 		<row><td>_IsSetupTypeMin</td><td>1</td><td>Typical</td><td>0</td><td>0</td><td>192</td><td>14</td><td>##IDS__IsSetupTypeMinDlg_Complete##</td><td/><td>0</td></row>
 		<row><td>_IsSetupTypeMin</td><td>2</td><td>GUI</td><td>0</td><td>73</td><td>193</td><td>14</td><td>##IDS__IsSetupTypeMinDlg_Custom##</td><td/><td>0</td></row>
+		<row><td>_IsSetupTypeMin</td><td>3</td><td>Collector</td><td>0</td><td>117</td><td>166</td><td>21</td><td>##NEW_STRING160##</td><td/><td>0</td></row>
 	</table>
 
 	<table name="RegLocator">
@@ -5316,6 +5366,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>NewSignature13</td><td>2</td><td>Software\Microsoft\NET Framework Setup\NDP\v2.0.50727</td><td>Install</td><td>18</td></row>
 		<row><td>NewSignature14</td><td>2</td><td>Software\Idera\SQLsecure</td><td>Path</td><td>18</td></row>
 		<row><td>NewSignature15</td><td>2</td><td>Software\Idera\SQLsecure\Repository</td><td>PreserveJobs</td><td>18</td></row>
+		<row><td>NewSignature16</td><td>2</td><td>SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full</td><td>Release</td><td>2</td></row>
 	</table>
 
 	<table name="Registry">
@@ -5344,6 +5395,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<col def="L255">FileName</col>
 		<col def="s72">DirProperty</col>
 		<col def="i2">InstallMode</col>
+		<row><td>FileKey1</td><td>Idera.SQLsecure.UI.Console.exe</td><td/><td>ideras_1_idera_sqlsecure_x64</td><td>2</td></row>
 		<row><td>NewShortcut1</td><td>Idera.SQLsecure.UI.Console.exe</td><td/><td>SQLsecure</td><td>2</td></row>
 		<row><td>NewShortcut2</td><td>WebHelp.exe</td><td/><td>Docs</td><td>2</td></row>
 		<row><td>NewShortcut3</td><td>WebHelp.exe</td><td/><td>Docs</td><td>2</td></row>
@@ -5432,7 +5484,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<col def="I4">ISAttributes</col>
 		<row><td>Help</td><td>Docs</td><td>##ID_STRING438##</td><td>WebHelp.exe</td><td>[BIN]WebHelp.exe</td><td/><td/><td/><td>NewShortcut2_F4439BBBFF784CBDB54AF62D4C15EB73.exe</td><td>0</td><td>1</td><td>BIN</td><td/><td/><td/></row>
 		<row><td>InstallGuide</td><td>Docs</td><td>##ID_STRING439##</td><td>WebHelp.exe</td><td>[BIN]WebHelp.exe</td><td> -Topic "SQLsecure Help\Install and Deploy SQLsecure.htm"</td><td/><td/><td>NewShortcut3_F4439BBBFF784CBDB54AF62D4C15EB73.exe</td><td>0</td><td>1</td><td>BIN</td><td/><td/><td/></row>
-		<row><td>NewShortcut1</td><td>SQLsecure</td><td>##ID_STRING399##</td><td>Idera.SQLsecure.UI.Console.exe</td><td>Console</td><td/><td/><td/><td>NewShortcut1_F79AC890669D4D9085D3A4071EE36532.exe</td><td>1</td><td>1</td><td>BIN</td><td/><td/><td/></row>
+		<row><td>NewShortcut1</td><td>SQLsecure</td><td>##ID_STRING443##</td><td>Idera.SQLsecure.UI.Console.exe</td><td>[INSTALLDIR]bin\Idera.SQLsecure.UI.Console.exe</td><td/><td/><td/><td>NewShortcut1_ED9B592B2BD94F9EBA9FB5ABF8EADE2D.exe</td><td>0</td><td>1</td><td/><td/><td/><td/></row>
 		<row><td>ReleaseNotes</td><td>Docs</td><td>##ID_STRING440##</td><td>WebHelp.exe</td><td>[BIN]WebHelp.exe</td><td> -Topic "SQLsecure Help\What's New.htm"</td><td/><td/><td>NewShortcut4_F4439BBBFF784CBDB54AF62D4C15EB73.exe</td><td>0</td><td>1</td><td>BIN</td><td/><td/><td/></row>
 	</table>
 

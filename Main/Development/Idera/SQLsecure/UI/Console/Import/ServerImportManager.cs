@@ -24,13 +24,14 @@ namespace Idera.SQLsecure.UI.Console.Import
             return ImportItem(itemToImport, repository, ImportSettings.Default);
         }
 
+
         public static bool ImportItem(ImportItem itemToImport, Repository repository, ImportSettings settings)
         {
             using (logX.loggerX.InfoCall())
             {
 
 
-                string sqlServerVersion, machine, instance, connectionName;
+                string sqlServerVersion, machine, instance, connectionName, edition;
                 var errorList = new List<string>();
 
                 if (itemToImport.HasErrors())
@@ -49,11 +50,21 @@ namespace Idera.SQLsecure.UI.Console.Import
                 //Validation of instance connection credentials
                 OperationResult<bool> operationResult =
                     ValidateCredentials(itemToImport, out sqlServerVersion, out machine, out instance,
-                        out connectionName);
+                        out connectionName, out edition);
 
                 if (!operationResult.Value)
                 {
                     settings.ChangeStatus(ImportStatusIcon.Error, string.Format("Not imported. {0}", operationResult.GetEventAllMessagesString()));
+                    return false; //Skip importing of server
+                }
+
+                // SQLsecure 3.1 (Anshul) - Validate server edition based on server type.
+                // SQLsecure 3.1 (Anshul) - SQLSECU-1775 - Azure VM : Register a Server as Azure DB by selecting Server type as Azure VM.
+                if (!SqlHelper.ValidateServerEdition(itemToImport.ServerType, edition))
+                {
+                    settings.ChangeStatus(ImportStatusIcon.Error, string.Format("Not imported. {0}",
+                        itemToImport.ServerType == ServerType.AzureSQLDatabase ? ErrorMsgs.IncorrectServerTypeAzureSQLDBImportMsg :
+                    ErrorMsgs.IncorrectServerTypeSQLServerImportMsg));
                     return false; //Skip importing of server
                 }
 
@@ -66,28 +77,29 @@ namespace Idera.SQLsecure.UI.Console.Import
                 };
 
                 var parsedSqlServerVersion = SqlHelper.ParseVersion(sqlServerVersion);
-                ServerInfo serverInfo = new ServerInfo(parsedSqlServerVersion, itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication,
-                itemToImport.UserName, itemToImport.Password, connectionName);
+                ServerInfo serverInfo = new ServerInfo(parsedSqlServerVersion, (itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication || itemToImport.AuthType == SqlServerAuthenticationType.AzureADAuthentication),
+                itemToImport.UserName, itemToImport.Password, connectionName, SqlServer.GetValueByName(itemToImport.ServerType));
                 try
                 {
                     if (repository.RegisteredServers.Find(connectionName) != null)
                     {
                         UpdateCredentials(itemToImport, repository, connectionName);
-                        if(errorList.Count>0)
+                        if (errorList.Count > 0)
                             settings.ChangeStatus(ImportStatusIcon.Warning, string.Format("Updated with warnings: {0}", string.Join("\n", errorList.ToArray())));
-                        else 
+                        else
                             settings.ChangeStatus(ImportStatusIcon.Imported, "Updated");
                         return true;
                     }
+                    string serverType = itemToImport.ServerType == ServerType.OnPremise ? "OP" : (itemToImport.ServerType == ServerType.SQLServerOnAzureVM ? "AVM" : "ADB");
                     RegisteredServer.AddServer(repository.ConnectionString,
                         connectionName, serverPort, machine, instance,
-                        itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication ? "W" : "S",
+                        (itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication || itemToImport.AuthType == SqlServerAuthenticationType.AzureADAuthentication) ? "W" : "S",
                         itemToImport.UserName, itemToImport.Password,
                         itemToImport.UseSameCredentials ? itemToImport.UserName : itemToImport.WindowsUserName,
                         itemToImport.UseSameCredentials
                             ? itemToImport.Password
                             : itemToImport.WindowsUserPassword,
-                        sqlServerVersion, 0, new string[0]);
+                        sqlServerVersion, 0, new string[0], serverType);
                     repository.RefreshRegisteredServers();
                 }
                 catch (Exception ex)
@@ -154,8 +166,8 @@ namespace Idera.SQLsecure.UI.Console.Import
                     settings.ChangeStatus(ImportStatusIcon.Imported, "Imported");
                 else
                     settings.ChangeStatus(ImportStatusIcon.Warning, string.Format("Imported with warnings: {0}", errorMessage));
-                
-                
+
+
                 return true;
             }
         }
@@ -181,7 +193,7 @@ namespace Idera.SQLsecure.UI.Console.Import
         {
             RegisteredServer.UpdateCredentials(repository.ConnectionString,
                 connectionName, itemToImport.UserName, itemToImport.Password,
-                itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication ? "W" : "S",
+                (itemToImport.AuthType == SqlServerAuthenticationType.WindowsAuthentication || itemToImport.AuthType == SqlServerAuthenticationType.AzureADAuthentication) ? "W" : "S" ,
                 itemToImport.UseSameCredentials ? itemToImport.UserName : itemToImport.WindowsUserName,
                 itemToImport.UseSameCredentials
                     ? itemToImport.Password
@@ -236,23 +248,69 @@ namespace Idera.SQLsecure.UI.Console.Import
             {
                 try
                 {
-                    var winUser = importItem.UseSameCredentials ? importItem.UserName : importItem.WindowsUserName;
-                    var winUserPassword = importItem.UseSameCredentials
-                        ? importItem.Password
-                        : importItem.WindowsUserPassword;
-                    if (string.IsNullOrEmpty(winUser) && string.IsNullOrEmpty(winUserPassword))
+                    if (importItem.ServerType != ServerType.AzureSQLDatabase)
                     {
-                        result.Value = false;
-                        result.AddErrorEvent(ErrorMsgs.WindowsUserForImportNotSpecifiedMsg);
+                        var winUser = importItem.UseSameCredentials ? importItem.UserName : importItem.WindowsUserName;
+                        var winUserPassword = importItem.UseSameCredentials
+                            ? importItem.Password
+                            : importItem.WindowsUserPassword;
+                        if (string.IsNullOrEmpty(winUser) && string.IsNullOrEmpty(winUserPassword))
+                        {
+                            result.Value = false;
+                            result.AddErrorEvent(ErrorMsgs.WindowsUserForImportNotSpecifiedMsg);
 
-                    }
-                    else
-                    {
-                        Core.Accounts.Server.ServerAccess sa = Core.Accounts.Server.CheckServerAccess(machine, winUser,
-                            winUserPassword,
-                            out errorMsg);
-                        if(!string.IsNullOrEmpty(errorMsg)) result.AddWarningEvent(errorMsg);
-                        result.Value = (sa == Core.Accounts.Server.ServerAccess.OK);
+                        }
+                        else
+                        {
+                            Core.Accounts.Server.ServerAccess sa;
+
+                            // SQLSecure 3.1 (Biresh Kumar Mishra) - Fix server import for Azure VM
+                            if ((SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerOnPremise)
+                                 || (SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerAzureVM))
+                            {
+                                sa = Core.Accounts.Server.CheckServerAccess(machine, winUser, winUserPassword, out errorMsg);
+
+                                if (sa != Core.Accounts.Server.ServerAccess.OK)
+                                {
+                                    if ((!string.IsNullOrEmpty(importItem.ServerName)) && (SqlServer.GetValueByName(importItem.ServerType) == Utility.Activity.TypeServerAzureVM))
+                                    {
+                                        string tempMachine = string.Empty;
+
+                                        if (importItem.ServerName.IndexOf(@"\") != -1)
+                                        {
+                                            tempMachine = importItem.ServerName.Substring(0, importItem.ServerName.IndexOf(@"\"));
+                                        }
+                                        else
+                                        {
+                                            tempMachine = importItem.ServerName;
+                                        }
+
+                                        Core.Accounts.Server.ServerAccess tempSa = sa;
+                                        sa = Core.Accounts.Server.ServerAccess.ERROR_OTHER;
+                                        string tempErrorMsg = errorMsg;
+                                        errorMsg = string.Empty;
+                                        sa = Core.Accounts.Server.CheckServerAccess(tempMachine, winUser, winUserPassword, out errorMsg);
+
+                                        if (sa != Core.Accounts.Server.ServerAccess.OK)
+                                        {
+                                            sa = tempSa;
+                                            errorMsg = tempErrorMsg;
+                                        }
+                                        else
+                                        {
+                                            machine = tempMachine;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                sa = Core.Accounts.Server.CheckAzureServerAccess(importItem.ServerName, winUser, winUserPassword, out errorMsg, true);
+
+                            }
+                            if (!string.IsNullOrEmpty(errorMsg)) result.AddWarningEvent(errorMsg);
+                            result.Value = (sa == Core.Accounts.Server.ServerAccess.OK);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -299,7 +357,7 @@ namespace Idera.SQLsecure.UI.Console.Import
 
 
         private static OperationResult<bool> ValidateCredentials(ImportItem importItem, out string sqlServerVersion, out string machine,
-            out string instance, out string fullName)
+            out string instance, out string fullName, out string edition)
         {
             var result = new OperationResult<bool> { Value = true };
             using (logX.loggerX.InfoCall())
@@ -309,17 +367,17 @@ namespace Idera.SQLsecure.UI.Console.Import
                 string password = string.Empty;
                 try
                 {
-                    if (importItem.AuthType == SqlServerAuthenticationType.SqlServerAuthentication)
+                    if (importItem.AuthType != SqlServerAuthenticationType.WindowsAuthentication)
                     {
                         login = importItem.UserName;
                         password = importItem.Password;
                     }
                     else
                         impersonationContext = Impersonate(importItem.UserName, importItem.Password);
-
+                    bool azureADAuth = importItem.AuthType == SqlServerAuthenticationType.AzureADAuthentication ? true : false;
 
                     SqlServer.GetSqlServerProperties(importItem.ServerName, login, password,
-                        out sqlServerVersion, out machine, out instance, out fullName);
+                        out sqlServerVersion, out machine, out instance, out fullName, out edition, SqlServer.GetValueByName(importItem.ServerType), azureADAuth);
                 }
                 catch (Exception ex)
                 {
@@ -327,7 +385,7 @@ namespace Idera.SQLsecure.UI.Console.Import
                     result.Value = false;
                     result.AddErrorEvent(ex.Message);
 
-                    sqlServerVersion = string.Empty;
+                    sqlServerVersion = edition = string.Empty;
                     machine = Path.GetComputerFromSQLServerInstance(importItem.ServerName);
                     instance = Path.GetInstanceFromSQLServerInstance(importItem.ServerName);
                     fullName = importItem.ServerName.Trim().ToUpperInvariant();

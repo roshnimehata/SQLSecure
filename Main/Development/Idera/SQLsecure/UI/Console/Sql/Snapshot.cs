@@ -102,6 +102,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             m_SystemDrive = SqlHelper.GetString(rdr, (int)SnapshotListColumn.systemdrive);
             m_AdHocDistributedQueriesEnabled = SqlHelper.GetString(rdr, (int)SnapshotListColumn.adhocdistributedqueriesenabled);
             m_WeakPasswordDetectionEnabled = SqlHelper.GetString(rdr, (int)SnapshotListColumn.weakpassworddectectionenabled);
+            m_ServerType=Helper.ConvertSQLTypeStringToEnum( SqlHelper.GetString(rdr, (int)SnapshotListColumn.servertype));
         }
 
         #endregion
@@ -154,7 +155,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
 	                        sapasswordempty,
 	                        systemdrive,
 	                        adhocdistributedqueriesenabled,
-                            weakpassworddectectionenabled
+                            weakpassworddectectionenabled,
+                            servertype
                         FROM SQLsecure.dbo.vwserversnapshot";
         private const string QueryGetSnapshot = QueryGetSnapshotBase + 
                     @" WHERE snapshotid = {0}";
@@ -222,7 +224,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
 	        sapasswordempty,
             systemdrive,
             adhocdistributedqueriesenabled,
-            weakpassworddectectionenabled
+            weakpassworddectectionenabled,
+            servertype
         }
 
         #endregion
@@ -231,6 +234,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private static LogX logX = new LogX("Idera.SQLsecure.UI.Console.Sql.Snapshot");
         private String m_ConnectionName;
         private String m_ServerName;
+        private ServerType m_ServerType;
         private String m_InstanceName;
         private String m_AuthenticationMode;
         private String m_OS;
@@ -281,7 +285,8 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public String ConnectionName {get{return m_ConnectionName;}}
         public String ServerName { get { return m_ServerName; } }
         public String InstanceName { get { return m_InstanceName; } }
-        public String FullName { get { return Sql.RegisteredServer.FullNameStr(m_ServerName, m_InstanceName); } }
+        public String FullName { get { return Sql.RegisteredServer.FullNameStr(m_ServerName, m_InstanceName,m_ServerType); } }
+        public ServerType ServerType { get { return m_ServerType; } }
         public String AuthenticationMode { get { return Sql.RegisteredServer.AuthenticationModeStr(m_AuthenticationMode); } }
         public String OS { get { return m_OS; } }
         public String Version { get { return m_Version; } }

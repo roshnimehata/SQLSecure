@@ -437,6 +437,26 @@ as
 
 		set @loginname = @sqllogin
 	end
+	else if (@logintype = 'A') -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD Account
+	begin
+	-- step 1.4.2
+		if (@iscasesensitive = 'Y')
+			insert into #tmplogins (sid, principalid, name, type, serveraccess, serverdeny, disabled) (select  distinct  a.sid, a.principalid, a.name, a.type, a.serveraccess, a.serverdeny, a.disabled from serverprincipal a where a.snapshotid = @snapshotid and type in ('E', 'X') and CONVERT(VARBINARY, name)=CONVERT(VARBINARY, @sqllogin))
+		else
+			insert into #tmplogins (sid, principalid, name, type, serveraccess, serverdeny, disabled) (select  distinct  a.sid, a.principalid, a.name, a.type, a.serveraccess, a.serverdeny, a.disabled from serverprincipal a where a.snapshotid = @snapshotid and type in ('E', 'X') and UPPER(name)=UPPER(@sqllogin))
+
+		set @loginname = @sqllogin
+	end
+	else if (@logintype = 'E' or @logintype = 'X') -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD User or Group
+	begin
+	-- step 1.4.2
+		if (@iscasesensitive = 'Y')
+			insert into #tmplogins (sid, principalid, name, type, serveraccess, serverdeny, disabled) (select  distinct  a.sid, a.principalid, a.name, a.type, a.serveraccess, a.serverdeny, a.disabled from serverprincipal a where a.snapshotid = @snapshotid and type=@logintype and CONVERT(VARBINARY, name)=CONVERT(VARBINARY, @sqllogin))
+		else
+			insert into #tmplogins (sid, principalid, name, type, serveraccess, serverdeny, disabled) (select  distinct  a.sid, a.principalid, a.name, a.type, a.serveraccess, a.serverdeny, a.disabled from serverprincipal a where a.snapshotid = @snapshotid and type=@logintype and UPPER(name)=UPPER(@sqllogin))
+
+		set @loginname = @sqllogin
+	end
 	else if (@logintype = 'R') -- database role
 	begin
 	-- step 1.4.3

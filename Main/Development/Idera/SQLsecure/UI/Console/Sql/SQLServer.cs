@@ -14,6 +14,8 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.UI.Console.SQL;
+using Idera.SQLsecure.UI.Console.Import.Models;
+using Idera.SQLsecure.UI.Console.Utility;
 
 namespace Idera.SQLsecure.UI.Console.Sql
 {
@@ -31,48 +33,92 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 out string version,
                 out string machineName,
                 out string instanceName,
-                out string fullName
+                out string fullName,
+                out string edition,
+                string serverType,
+                bool azureADAuth=false
             )
         {
             // Init return.
             version = string.Empty;
+            edition = string.Empty;
             machineName = string.Empty;
             instanceName = string.Empty;
             fullName = string.Empty;
 
-            var serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword);
+            var serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword,serverType,azureADAuth);
 
-            if (serverProperties.IsServerInAoag)
-            {
-                SQLServerProperties nodeProperties;
-                var forcingTCP = "tcp:";
-                var tcpServerName = string.Concat(forcingTCP, serverProperties.ServerName);
-                var isLocalhost = string.IsNullOrEmpty(serverProperties.LocalNetAddress);
-                var isWeOnWantedNode = serverProperties.ClientNetAddress == serverProperties.LocalNetAddress;
-                var isConnectionDirectlyToTheNode = isLocalhost || isWeOnWantedNode ||
-                                                    TryGetSqlServerProperties(tcpServerName, sqlLogin, sqlPassword, out nodeProperties) &&
-                                                    nodeProperties.LocalNetAddress == serverProperties.LocalNetAddress;
+            //if (serverProperties.IsServerInAoag)
+            //{
+            //    SQLServerProperties nodeProperties;
+            //    var forcingTCP = "tcp:";
+            //    var tcpServerName = string.Concat(forcingTCP, serverProperties.ServerName);
+            //    var isLocalhost = string.IsNullOrEmpty(serverProperties.LocalNetAddress);
+            //    var isWeOnWantedNode = serverProperties.ClientNetAddress == serverProperties.LocalNetAddress;
+            //    var isConnectionDirectlyToTheNode = isLocalhost || isWeOnWantedNode ||
+            //                                        TryGetSqlServerProperties(tcpServerName, sqlLogin, sqlPassword, out nodeProperties,serverType,azureADAuth) &&
+            //                                        nodeProperties.LocalNetAddress == serverProperties.LocalNetAddress;
 
-                if (!isConnectionDirectlyToTheNode)
-                {
-                    version = serverProperties.Version;
-                    instanceName = serverProperties.InstanceName;
-                    fullName =machineName = serverProperties.HadrClusterName;
-                    return;
-                }
-            }
+            //    if (!isConnectionDirectlyToTheNode)
+            //    {
+            //        version = serverProperties.Version;
+            //        instanceName = serverProperties.InstanceName;
+            //        fullName =machineName = serverProperties.HadrClusterName;
+            //        return;
+            //    }
+            //}
 
             version = serverProperties.Version;
-            machineName = serverProperties.MachineName;
-            instanceName = serverProperties.InstanceName;
-            fullName = serverProperties.ServerName;
+            edition = serverProperties.Edition;
+            if (serverType == Utility.Activity.TypeServerOnPremise || serverType == Utility.Activity.TypeServerAzureVM)
+            {
+                machineName = serverProperties.MachineName;
+                instanceName = serverProperties.InstanceName;
+
+                //SQLsecure 3.1 (Tushar)-- Fix for defect SQLSECU-1702 & SQLSECU-1667 --Supporting FQDN names.
+                fullName = instance.ToUpper().Split(',')[0];
+            }
+            else
+            {   
+                //assigning FQDN to machine and instance
+                machineName = instanceName = fullName= instance.ToUpper().Split(',')[0];
+            }
+            
         }
 
-        public static bool TryGetSqlServerProperties(string instance, string sqlLogin, string sqlPassword, out SQLServerProperties serverProperties)
+        public static string GetValueByName(ServerType serverType)
+        {
+            switch (serverType)
+            {
+                case ServerType.OnPremise: return Utility.Activity.TypeServerOnPremise;
+                case ServerType.SQLServerOnAzureVM: return Utility.Activity.TypeServerAzureVM;
+                case ServerType.AzureSQLDatabase: return Utility.Activity.TypeServerAzureDB;
+                
+                default: return Utility.Activity.TypeServerOnPremise;
+
+            }
+        }
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul) - Convert server type display name to enum.
+        /// </summary>
+        public static ServerType GetServerTypeByName(string name)
+        {
+            switch (name)
+            {
+                case Utility.Activity.TypeServerOnPremise: return ServerType.OnPremise;
+                case Utility.Activity.TypeServerAzureVM: return ServerType.SQLServerOnAzureVM;
+                case Utility.Activity.TypeServerAzureDB: return ServerType.AzureSQLDatabase;
+
+                default: return ServerType.OnPremise;
+            }
+        }
+
+        public static bool TryGetSqlServerProperties(string instance, string sqlLogin, string sqlPassword, out SQLServerProperties serverProperties,string serverType,bool azureADAuth)
         {
             try
             {
-                serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword);
+                serverProperties = GetSqlServerProperties(instance, sqlLogin, sqlPassword,serverType, azureADAuth);
                 return true;
             }
             catch
@@ -83,7 +129,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
-        public static SQLServerProperties GetSqlServerProperties(string instance, string sqlLogin, string sqlPassword)
+        public static SQLServerProperties GetSqlServerProperties(string instance, string sqlLogin, string sqlPassword,string serverType, bool azureADAuth)
         {
             Debug.Assert(!string.IsNullOrEmpty(instance));
 
@@ -96,49 +142,50 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             instance = instance.Trim();
             var result = new SQLServerProperties();
-            var bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword);
-
+            var bldr = SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword,serverType,azureADAuth);
             using (var connection = new SqlConnection(bldr.ConnectionString))
-            {
-                connection.Open();
-                var isSQL2012OrHigher = IsSQL2012OrHigher(connection.ServerVersion);
-                var confQuery = @"select  isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
+                {
+                    connection.Open();
+                    var isSQL2012OrHigher = IsSQL2012OrHigher(connection.ServerVersion);
+                    var confQuery = @"select  isnull(SERVERPROPERTY('HadrManagerStatus'),0) as HadrManagerStatus,
                                           isnull(SERVERPROPERTY('MachineName'),'')  as MachineName,
                                           isnull(SERVERPROPERTY('ServerName'),'') as ServerName,
-                                          isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName;";
-                if (isSQL2012OrHigher)
-                {
-                    confQuery += @"SELECT top 1 cluster_name as HadrClusterName,
+                                          isnull(SERVERPROPERTY('InstanceName'),'') as InstanceName,
+                                          isnull(SERVERPROPERTY('Edition'),'') as Edition;";
+                    if (isSQL2012OrHigher)
+                    {
+                        confQuery += @"SELECT top 1 cluster_name as HadrClusterName,
                                           isnull(CONNECTIONPROPERTY('local_net_address'),'') as LocalNetAddress,
                                           isnull(CONNECTIONPROPERTY('client_net_address'),'') as ClientNetAddress
                                    FROM  sys.dm_hadr_cluster;";
-                }
+                    }
 
-                using (var rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text, confQuery, null))
-                {
-                    if (rdr.HasRows && rdr.Read())
+                    using (var rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text, confQuery, null))
                     {
-                        result.Version = connection.ServerVersion;
-                        result.InstanceName = rdr["InstanceName"].ToString();
-                        result.MachineName = rdr["MachineName"].ToString();
-                        result.ServerName = rdr["ServerName"].ToString();
-                        result.HadrManagerStatus = GetHadrManagerStatus(rdr["HadrManagerStatus"].ToString());
-
-                        if (isSQL2012OrHigher &&
-                            result.HadrManagerStatus == HadrManagerStatus.StartedAndRunning &&
-                            rdr.NextResult() &&
-                            rdr.HasRows &&
-                            rdr.Read())
+                        if (rdr.HasRows && rdr.Read())
                         {
-                            result.HadrClusterName = rdr["HadrClusterName"].ToString();
-                            result.LocalNetAddress = rdr["LocalNetAddress"].ToString();
-                            result.ClientNetAddress = rdr["ClientNetAddress"].ToString();
+                            result.Version = connection.ServerVersion;
+                            result.InstanceName = rdr["InstanceName"].ToString();
+                            result.MachineName = rdr["MachineName"].ToString();
+                            result.ServerName = rdr["ServerName"].ToString();
+                            result.HadrManagerStatus = GetHadrManagerStatus(rdr["HadrManagerStatus"].ToString());
+                            result.Edition = rdr["Edition"].ToString();
+
+                            if (isSQL2012OrHigher &&
+                                result.HadrManagerStatus == HadrManagerStatus.StartedAndRunning &&
+                                rdr.NextResult() &&
+                                rdr.HasRows &&
+                                rdr.Read())
+                            {
+                                result.HadrClusterName = rdr["HadrClusterName"].ToString();
+                                result.LocalNetAddress = rdr["LocalNetAddress"].ToString();
+                                result.ClientNetAddress = rdr["ClientNetAddress"].ToString();
+                            }
                         }
                     }
-                }
 
-                SqlConnection.ClearPool(connection);
-            }
+                    SqlConnection.ClearPool(connection);
+                }
 
             return result;
         }
@@ -195,7 +242,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
 
             // Build the connection string.
-            SqlConnectionStringBuilder bldr = Sql.SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword);
+            SqlConnectionStringBuilder bldr = Sql.SqlHelper.ConstructConnectionString(instance, sqlLogin, sqlPassword, Utility.Activity.TypeServerOnPremise);
 
             // Connect to the sql instance.
             using (SqlConnection connection = new SqlConnection(bldr.ConnectionString))

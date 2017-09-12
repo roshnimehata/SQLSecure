@@ -98,6 +98,7 @@ namespace Idera.SQLsecure.Collector.Sql
         //private string ownerName;
         private string disktype;      // NTFS, FAT or null if not file object
         private string objectSid;
+        private bool? isEncrypted; // SQLsecure 3.1 (Anshul Aggarwal) - Track SQL files to check for NTFS Encryption for new risk assessment.
         private List<FileAccessRight> accessRightsList = new List<FileAccessRight>();
         private List<FileAuditSetting> auditSettingsList = new List<FileAuditSetting>();
         #endregion
@@ -164,6 +165,14 @@ namespace Idera.SQLsecure.Collector.Sql
             get { return objectSid; }
             set { objectSid = value; }
         }
+
+        // SQLsecure 3.1 (Anshul Aggarwal) - Track SQL folder to check for NTFS Encryption for new risk assessment.
+        public bool? IsEncrypted
+        {
+            get { return isEncrypted; }
+            set { isEncrypted = value; }
+        }
+
         #endregion
     }
 
@@ -403,7 +412,7 @@ namespace Idera.SQLsecure.Collector.Sql
             }
             return numWarnings;
         }
-
+        
         public bool WriteFilePermissionToRepository(string repositoryConnectionString, int startID)
         {
             bool isOK = true;
@@ -456,6 +465,16 @@ namespace Idera.SQLsecure.Collector.Sql
                                     }
                                     dr[SQLServerObjectTable.ParamOwnerSid] = fp.OwnerSid.BinarySid;
                                     dr[SQLServerObjectTable.ParamDiskType] = fp.Disktype.ToString();
+
+                                    // SQLsecure 3.1 (Anshul Aggarwal) - Add new columns to track NTFS encryption for SQL Folder/Files.
+                                    if (fp.IsEncrypted.HasValue)
+                                    {
+                                        dr[SQLServerObjectTable.ParamIsEncrypted] = fp.IsEncrypted;
+                                    }
+                                    else
+                                    {
+                                        dr[SQLServerObjectTable.ParamIsEncrypted] = DBNull.Value;
+                                    }
 
                                     dataTableObject.Rows.Add(dr);
                                     if (dataTableObject.Rows.Count >= Constants.RowBatchSize)
@@ -981,6 +1000,14 @@ namespace Idera.SQLsecure.Collector.Sql
                         }
                     }
                 }
+                
+                // SQLsecure 3.1 (Anshul Aggarwal) - Check for NTFS Encryption for SQL Folders
+                DirectoryInfo di = new DirectoryInfo(dirName);
+                // Determine whether the directory exists.
+                if (di.Exists)
+                {
+                    fp.IsEncrypted = (di.Attributes & FileAttributes.Encrypted) == FileAttributes.Encrypted;
+                }
 
                 AddFilePermision(fp);
             }
@@ -993,6 +1020,7 @@ namespace Idera.SQLsecure.Collector.Sql
 
             return numWarnings;
         }
+
 
         private int GetFilePermission(string fileName, enumOSObjectType eObjectType, string diskType, int dbId)
         {

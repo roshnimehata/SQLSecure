@@ -14,6 +14,7 @@ using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.UI.Console.ActiveDirectory;
 using Idera.SQLsecure.UI.Console.Utility;
+using Idera.SQLsecure.UI.Console.Sql;
 
 namespace Idera.SQLsecure.UI.Console.Views
 {
@@ -41,6 +42,13 @@ namespace Idera.SQLsecure.UI.Console.Views
         private Sql.User m_user;
         private string m_permissionType;
         private DataView m_userPermissions;
+
+        // SQLsecure 3.1 (Anshul Aggarwal) - Maintains a mapping from connection to server so we can check RegisteredServer type based on server dropdown value.
+        private Dictionary<string, RegisteredServer> _connectionNameToServer = new Dictionary<string, RegisteredServer>();
+
+        private static Point WINDOWS_RADIO_BUTTON_LOCATION = new Point(96, 68);
+        private static Point AZURE_RADIO_BUTTON_LOCATION = new Point(240, 68);
+        private static Point SQL_RADIO_BUTTON_LOCATION = new Point(385, 68);
 
         #endregion
 
@@ -178,6 +186,8 @@ namespace Idera.SQLsecure.UI.Console.Views
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.CommandTimeout = SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry();
 
+                            DataSet ds = new DataSet();
+
                             // Build parameters
                             SqlParameter paramRunDate = new SqlParameter(SqlParamRunDate, m_reportDate);
                             SqlParameter paramUser = new SqlParameter(SqlParamUser, _textBox_User.Text.Trim());
@@ -189,10 +199,9 @@ namespace Idera.SQLsecure.UI.Console.Views
                             cmd.Parameters.Add(paramServer);
                             cmd.Parameters.Add(paramUserType);
                             cmd.Parameters.Add(paramPermission);
-
+                            
                             // Get data
                             SqlDataAdapter da = new SqlDataAdapter(cmd);
-                            DataSet ds = new DataSet();
                             da.Fill(ds);
 
                             // Attach datasource
@@ -235,7 +244,8 @@ namespace Idera.SQLsecure.UI.Console.Views
 
             if (m_user == null)
             {
-                if (m_loginType.Equals(Sql.LoginType.SqlLogin))
+                // SQLsecure 3.1 (Anshul Aggarwal) - Skip domain check for Azure AD Accounts as well.
+                if (m_loginType.Equals(Sql.LoginType.SqlLogin) || m_loginType.Equals(Sql.LoginType.AzureADAccount))
                 {
                     // if it is a SQL Login, it will not be validated, so just create the m_user without a sid
                     m_user = new Sql.User(_textBox_User.Text, null, m_loginType, Sql.User.UserSource.UserEntry);
@@ -268,6 +278,8 @@ namespace Idera.SQLsecure.UI.Console.Views
                     SqlCommand cmd = new SqlCommand(_comboBox_Level.SelectedIndex == 0 ? QueryDataSource : QueryDataSourceUser, connection);
                     cmd.CommandType = CommandType.StoredProcedure;
 
+                    DataSet ds = new DataSet();
+
                     // Build parameters
                     SqlParameter paramRunDate = new SqlParameter(SqlParamRunDate, m_reportDate);
                     SqlParameter paramUser = new SqlParameter(SqlParamUser, _textBox_User.Text.Trim());
@@ -284,7 +296,6 @@ namespace Idera.SQLsecure.UI.Console.Views
 
                     // Get data
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    DataSet ds = new DataSet();
                     da.Fill(ds);
 
                     ReportDataSource rds = new ReportDataSource();
@@ -369,7 +380,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             Cursor = Cursors.Default;
         }
 
-        private void _radioButton_SQLLogin_Click(object sender, EventArgs e)
+        private void _radioButton_SQLLogin_CheckedChanged(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -393,7 +404,7 @@ namespace Idera.SQLsecure.UI.Console.Views
             Cursor = Cursors.Default;
         }
 
-        private void _radioButton_WindowsUser_Click(object sender, EventArgs e)
+        private void _radioButton_WindowsUser_CheckedChanged(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -416,6 +427,30 @@ namespace Idera.SQLsecure.UI.Console.Views
             Cursor = Cursors.Default;
         }
 
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Initializes user for Azure AD Account.
+        /// </summary>
+        private void _radioButton_AzureADUserOrGroup_CheckedChanged(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            _button_BrowseUsers.Enabled = !((RadioButton)sender).Checked;
+            if (((RadioButton)sender).Checked)
+            {
+                if (m_loginType != Sql.LoginType.AzureADAccount)
+                {
+                    // try to be smart and not clear the user if it was not validated to type previously
+                    if (m_user != null && m_user.Sid != null)
+                    {
+                        _textBox_User.Text = string.Empty;
+                        m_user = null;
+                    }
+                    m_loginType = Sql.LoginType.AzureADAccount;
+                }
+            }
+            checkSelections();
+            Cursor = Cursors.Default;
+        }
+        
         private void _textBox_User_TextChanged(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -434,9 +469,14 @@ namespace Idera.SQLsecure.UI.Console.Views
             _comboBox_Server.Items.Clear();
             _comboBox_Server.Items.Add(Utility.Constants.ReportSelect_AllServers);
 
+            _connectionNameToServer.Clear();    // SQLsecure 3.1 (Anshul Aggarwal) - Clear the old mapping.
+
             foreach (Sql.RegisteredServer server in Program.gController.ReportPolicy.GetMemberServers())
             {
                 _comboBox_Server.Items.Add(server.ConnectionName);
+
+                if(!_connectionNameToServer.ContainsKey(server.ConnectionName)) // SQLsecure 3.1 (Anshul Aggarwal) - Populate the new mapping.
+                    _connectionNameToServer.Add(server.ConnectionName, server);
             }
 
             //Keep the last selection for the user
@@ -445,7 +485,74 @@ namespace Idera.SQLsecure.UI.Console.Views
 
         private void _comboBox_Server_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            RefreshLoginTypesRadioButtons(); // Change login types radio buttons based on server type.
             checkSelections();
+        }
+
+        /// <summary>
+        /// SQLsecure 3.1 (Anshul Aggarwal) - Change login types radio buttons based on server type.
+        /// </summary>
+        private void RefreshLoginTypesRadioButtons()
+        {
+            string connectionname = _comboBox_Server.SelectedItem as string;
+            if (connectionname != null)
+            {
+                if (connectionname == Utility.Constants.ReportSelect_AllServers)
+                {
+                    this.SuspendLayout();  // Suspend changes.
+
+                    this._radioButton_WindowsUser.Location = WINDOWS_RADIO_BUTTON_LOCATION;
+                    this._radioButton_SQLLogin.Location = SQL_RADIO_BUTTON_LOCATION;
+                    this._radioButton_AzureADUserOrGroup.Location = AZURE_RADIO_BUTTON_LOCATION;
+                    this._radioButton_WindowsUser.Visible = true;
+                    this._radioButton_SQLLogin.Visible = true;
+                    this._radioButton_AzureADUserOrGroup.Visible = true;
+
+                    this.ResumeLayout();  // Resume changes.
+                }
+                else if (_connectionNameToServer.ContainsKey(connectionname))
+                {
+                    var server = _connectionNameToServer[connectionname];
+                    if (server.ServerType == ServerType.AzureSQLDatabase)
+                    {
+                        this.SuspendLayout();  // Suspend changes.
+
+                        this._radioButton_AzureADUserOrGroup.Location = WINDOWS_RADIO_BUTTON_LOCATION;
+                        this._radioButton_SQLLogin.Location = AZURE_RADIO_BUTTON_LOCATION;
+                        this._radioButton_WindowsUser.Visible = false;
+                        this._radioButton_SQLLogin.Visible = true;
+                        this._radioButton_AzureADUserOrGroup.Visible = true;
+
+                        this.ResumeLayout();  // Resume changes.
+
+                        // Change selected button if it does not exist for current server type.
+                        if (_radioButton_WindowsUser.Checked)
+                        {
+                            m_user = null;
+                            _radioButton_AzureADUserOrGroup.Checked = true;
+                        }
+                    }
+                    else
+                    {
+                        this.SuspendLayout(); // Suspend changes.
+
+                        this._radioButton_WindowsUser.Location = WINDOWS_RADIO_BUTTON_LOCATION;
+                        this._radioButton_SQLLogin.Location = AZURE_RADIO_BUTTON_LOCATION;
+                        this._radioButton_WindowsUser.Visible = true;
+                        this._radioButton_SQLLogin.Visible = true;
+                        this._radioButton_AzureADUserOrGroup.Visible = false;
+
+                        this.ResumeLayout();  // Resume changes.
+
+                       
+                        if (_radioButton_AzureADUserOrGroup.Checked)
+                        {
+                            m_user = null;
+                            _radioButton_WindowsUser.Checked = true;
+                        }
+                    }
+                }
+            }
         }
 
         private void _comboBox_PermissionType_SelectionChangeCommitted(object sender, EventArgs e)

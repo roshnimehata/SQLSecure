@@ -21,6 +21,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
         private const string DynamicSqlVersion2012Code = "Left(version,3) = '11.'";
         private const string DynamicSqlVersion2014Code = "Left(version,3) = '12.'";
         private const string DynamicSqlVersion2016Code = "Left(version,3) = '13.'";
+        private const string DynamicSqlVersionAzureCode = "servertype = 'ADB'";//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1728
 
 
         private const string TITLE_POLICY = "Policy";
@@ -62,6 +63,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
             radioButton2012.Tag = DynamicSqlVersion2012Code;
             radioButton2014.Tag = DynamicSqlVersion2014Code;
             radioButton2016.Tag = DynamicSqlVersion2016Code;
+            radioButtonAzure.Tag = DynamicSqlVersionAzureCode;
 
             groupBoxMainServerSelection.Text = string.Format(GROUPBOXHEADING_FMT, TITLE_NAME);
 
@@ -90,6 +92,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         break;
                     case DynamicSqlVersion2016Code:
                         radioButton2016.Checked = true;
+                        break;
+                    case DynamicSqlVersionAzureCode:
+                        radioButtonAzure.Checked = true;
                         break;
                     default:
                         radioButtonAll.Checked = true;
@@ -120,6 +125,7 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 radioButton2012.Enabled = false;
                 radioButton2014.Enabled = false;
                 radioButton2016.Enabled = false;
+                radioButtonAzure.Enabled = false;
                 radioButtonManual.Enabled = false;
                 ultraListViewServers.Enabled = false;
             }
@@ -136,8 +142,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 bool isEnabled = (m_policy == null ||
                     (m_policy.IsSystemPolicy &&
                                 m_policy.IsDynamic)) ? false : m_policy.IsPolicy;
-
-                    radioButtonAll.Enabled =
+                        radioButtonAzure.Enabled = 
+                        radioButtonAll.Enabled =
                         radioButton2000.Enabled =
                         radioButton2005.Enabled =
                         radioButton2008.Enabled =
@@ -189,6 +195,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             else if (radioButton2016.Checked)
             {
                 servers.Add(radioButton2016.Text);
+            }
+            else if (radioButtonAzure.Checked)
+            {
+                servers.Add(radioButtonAzure.Text);
             }
             return servers;
         }
@@ -267,6 +277,10 @@ namespace Idera.SQLsecure.UI.Console.Controls
             else if (radioButton2016.Checked)
             {
                 dynamicSelection = (string)radioButton2016.Tag;
+            }
+            else if (radioButtonAzure.Checked)
+            {
+                dynamicSelection = (string)radioButtonAzure.Tag;
             }
         }
 

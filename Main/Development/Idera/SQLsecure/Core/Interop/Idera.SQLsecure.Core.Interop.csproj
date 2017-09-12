@@ -14,7 +14,7 @@
     <SccProjectName>%24/SQl Secure 3.0/src/Main/Development/Idera/SQLsecure/Core</SccProjectName>
     <SccLocalPath>..</SccLocalPath>
     <SccAuxPath>http://192.168.242.72:8080/tfs/defaultcollection</SccAuxPath>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>

@@ -9,19 +9,14 @@
  * (C) 2006 - Idera, a division of BBS Technologies, Inc.
  *******************************************************************/
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Security.Principal;
 
 using Idera.SQLsecure.Core.Logger;
-using Idera.SQLsecure.Collector.Utility;
 using Idera.SQLsecure.Core.Accounts;
-using System.Management;
-
-
-
-
-
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System.Security;
+using Idera.SQLsecure.Collector.Sql;
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector
 {
 
@@ -47,6 +42,10 @@ namespace Idera.SQLsecure.Collector
         private static string m_targetUserName;
         private static string m_targetUserPassword;
         private static bool m_UserSQLAuthentication = false;
+
+		// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+        private static string m_SQLServerOnAzureVM_FullName = string.Empty;
+        private static string m_SQLServerOnAzureVM_DomainName = string.Empty;
 
         private static LogX logX = new LogX("Idera.SQLsecure.Collector.Program");
         #endregion
@@ -410,17 +409,35 @@ namespace Idera.SQLsecure.Collector
                                     if (m_Repository.IsTargetRegistered(programArgs.TargetInstance))
                                     {
                                         // Retrieve target instance credentials from the repository.
-                                        string server, sqlLogin, sqlPassword, sqlAuthType, serverLogin, serverPassword;
+                                        string server, sqlLogin, sqlPassword, sqlAuthTypeString, serverLogin, serverPassword, serverTypeString;
                                         int? port;
+                                        ServerType serverType = ServerType.OnPremise;
+                                        AuthType authType = AuthType.Null;
                                         if (m_Repository.GetTargetCredentials(programArgs.TargetInstance, 
                                                                               out server, out port,
                                                                               out sqlLogin, out sqlPassword,
-                                                                              out sqlAuthType,
-                                                                              out serverLogin, out serverPassword))
+                                                                              out sqlAuthTypeString,
+                                                                              out serverLogin, out serverPassword,out serverTypeString))
                                         {
+                                            serverType = Helper.ConvertSQLTypeStringToEnum(serverTypeString);
+                                            authType = (AuthType)Enum.Parse(typeof(AuthType),sqlAuthTypeString);
                                             m_targetUserName = serverLogin;
                                             m_targetUserPassword = serverPassword;
-                                            if(string.IsNullOrEmpty(serverLogin))
+
+											// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+
+                                            if (serverType == ServerType.SQLServerOnAzureVM)
+                                            {
+                                                m_SQLServerOnAzureVM_FullName = server;
+
+                                                if (server.IndexOf(".") != -1)
+                                                {
+                                                    m_SQLServerOnAzureVM_DomainName = server.Substring(server.IndexOf(".") + 1);
+                                                    server = server.Substring(0, server.IndexOf("."));
+                                                }
+                                            }
+
+                                            if (string.IsNullOrEmpty(serverLogin))
                                             {
                                                 // Only issue warning for this case
                                                 Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString,
@@ -431,65 +448,75 @@ namespace Idera.SQLsecure.Collector
                                                                                                         string.Format("No credentials specified for Operating System and Active Directory, using SQLsecure Collector user {0}", WindowsIdentity.GetCurrent().Name));
 
                                             }
-                                            if(string.IsNullOrEmpty(sqlLogin))
+                                            if (string.IsNullOrEmpty(sqlLogin))
                                             {
                                                 throw new Exception("No credentials specified for collecting SQL Server security.");
                                             }
-                                            if (!string.IsNullOrEmpty(serverLogin))
+                                            if (serverType == ServerType.OnPremise)
                                             {
-                                                try
-                                                {
-                                                    // Set the current identity from the remote user, used for impersonation                             
-                                                    m_targetIdentity = Impersonation.GetCurrentIdentity(serverLogin, serverPassword);
-                                                }
-                                                catch (Exception e)
-                                                {
-                                                    logX.loggerX.Warn(string.Format("Error Impersonating User {0}:  {1}", serverLogin, e.Message));
-                                                    logX.loggerX.Warn(string.Format("Using SQLsecure Collector user {0}", WindowsIdentity.GetCurrent().Name));
-                                                    //Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString,
-                                                    //                                                        targetName,
-                                                    //                                                        0,
-                                                    //                                                        Collector.Constants.ActivityType_Warning,
-                                                    //                                                        Collector.Constants.ActivityEvent_Start,
-                                                    //                                                        string.Format("Failed to Impersonate Operating System and Active Directory credentials for {0}, using SQLsecure Collector user {1}", serverLogin, WindowsIdentity.GetCurrent().Name));
-                                                }
+                                                GetIdentitiesForImpersonation(sqlLogin, sqlPassword, authType, serverLogin, serverPassword);
                                             }
-                                            if (sqlAuthType != "S")
+                                            else if(serverType== ServerType.AzureSQLDatabase && authType == AuthType.W)
                                             {
-                                                try
-                                                {
-                                                    // Set the current identity from the remote user, used for impersonation                             
-                                                    m_targetSQLServerIdentity = Impersonation.GetCurrentIdentity(sqlLogin, sqlPassword);
-                                                }
-                                                catch (Exception e)
-                                                {
-                                                    logX.loggerX.Error(string.Format("Error Impersonating SQL Server User {0}:  {1}", sqlLogin, e.Message));
-                                                    throw new Exception(string.Format("Failed to validate Target SQL Server credentials {0}", sqlLogin));
-                                                }
+                                                //AuthenticationResult authenticationResult= AzureDatabase.GetConnectionToken(serverLogin, serverPassword);
                                             }
-                                            else
+                                            //SQLsecure 3.1 (Tushar)--Support for Azure VM.
+                                            else if (serverType == ServerType.SQLServerOnAzureVM)
                                             {
-                                                m_UserSQLAuthentication = true;
+                                                GetIdentitiesForImpersonation(sqlLogin, sqlPassword, authType, serverLogin, serverPassword);
                                             }
                                         }
+                                        Program.ImpersonationContext wi;
                                         // Initialize and validate the target.
                                         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                                         sw.Start();
-                                        Program.ImpersonationContext wi = SetTargetSQLServerImpersonationContext();
-                                        m_Target = new Target(programArgs.TargetInstance, m_Repository);
-                                        RestoreImpersonationContext(wi);
+                                        if (serverType == ServerType.OnPremise)
+                                        {
+                                            
+                                            wi = SetTargetSQLServerImpersonationContext();
+                                            m_Target = new Target(programArgs.TargetInstance, m_Repository);
+                                            RestoreImpersonationContext(wi);
+                                            
+                                        }
+                                        else if(serverType== ServerType.AzureSQLDatabase)
+                                        {
+                                            m_Target = new Target(programArgs.TargetInstance, m_Repository);
+                                        }
+                                        //SQLsecure 3.1 (Tushar)--Support for Azure VM.
+                                        else if (serverType == ServerType.SQLServerOnAzureVM)
+                                        {
+                                            wi = SetTargetSQLServerImpersonationContext();
+                                            m_Target = new Target(programArgs.TargetInstance, m_Repository);
+                                            RestoreImpersonationContext(wi);
+                                        }
                                         sw.Stop();
                                         logX.loggerX.Verbose("TIMING - Time to initialize and validate target = " +
                                                         sw.ElapsedMilliseconds.ToString() + " msec");
-
-                                        if (m_Target.IsValid)
+                                        if (m_Target.IsValid )
                                         {
-                                            wi = SetTargetImpersonationContext();
-                                            
-                                            // Load the permissions data.
-                                            m_Target.LoadData(programArgs.AutomatedRun);
+                                            if (serverType == ServerType.OnPremise)
+                                            {
+                                                wi = SetTargetImpersonationContext();
 
-                                            RestoreImpersonationContext(wi);
+                                                // Load the permissions data.
+                                                m_Target.LoadData(programArgs.AutomatedRun);
+
+                                                RestoreImpersonationContext(wi);
+                                            }
+                                            else if(serverType== ServerType.AzureSQLDatabase)
+                                            {
+                                                //SQLsecure 3.1 (Tushar)--Passing the server name becasue we are not creating server object for azure DB.
+                                                m_Target.LoadDataAzureDB(programArgs.AutomatedRun, server);
+                                            }
+                                            //SQLsecure 3.1 (Tushar)--Support for Azure VM.
+                                            else if (serverType == ServerType.SQLServerOnAzureVM)
+                                            {
+                                                wi = SetTargetImpersonationContext();
+
+                                                m_Target.LoadDataForAzureVM(programArgs.AutomatedRun);
+
+                                                RestoreImpersonationContext(wi);
+                                            }
                                         }
                                         else
                                         {
@@ -627,6 +654,62 @@ namespace Idera.SQLsecure.Collector
             Environment.ExitCode = isOK ? 0 : 1;
         
         }
+
+        private static void GetIdentitiesForImpersonation(string sqlLogin, string sqlPassword, AuthType sqlAuthType, string serverLogin, string serverPassword)
+        {
+            if (!string.IsNullOrEmpty(serverLogin))
+            {
+                try
+                {
+                    // Set the current identity from the remote user, used for impersonation                             
+                    m_targetIdentity = Impersonation.GetCurrentIdentity(serverLogin, serverPassword);
+                }
+                catch (Exception e)
+                {
+                    logX.loggerX.Warn(string.Format("Error Impersonating User {0}:  {1}", serverLogin, e.Message));
+                    logX.loggerX.Warn(string.Format("Using SQLsecure Collector user {0}", WindowsIdentity.GetCurrent().Name));
+                    //Sql.Database.CreateApplicationActivityEventInRepository(m_Repository.ConnectionString,
+                    //                                                        targetName,
+                    //                                                        0,
+                    //                                                        Collector.Constants.ActivityType_Warning,
+                    //                                                        Collector.Constants.ActivityEvent_Start,
+                    //                                                        string.Format("Failed to Impersonate Operating System and Active Directory credentials for {0}, using SQLsecure Collector user {1}", serverLogin, WindowsIdentity.GetCurrent().Name));
+                }
+            }
+            if (sqlAuthType !=  AuthType.S)
+            {
+                try
+                {
+                    // Set the current identity from the remote user, used for impersonation                             
+                    m_targetSQLServerIdentity = Impersonation.GetCurrentIdentity(sqlLogin, sqlPassword);
+                }
+                catch (Exception e)
+                {
+                    logX.loggerX.Error(string.Format("Error Impersonating SQL Server User {0}:  {1}", sqlLogin, e.Message));
+                    throw new Exception(string.Format("Failed to validate Target SQL Server credentials {0}", sqlLogin));
+                }
+            }
+            else
+            {
+                m_UserSQLAuthentication = true;
+            }
+        }
+
+        private static UserCredential GetUserCredential(string username , string password)
+        {
+            string pwd = password;
+            string userId = username;
+
+            SecureString securePassword = new SecureString();
+
+            foreach (char c in pwd) { securePassword.AppendChar(c); }
+            securePassword.MakeReadOnly();
+
+            var userCredential = new UserPasswordCredential(userId, securePassword);
+
+            return userCredential;
+        }
+        
         #endregion
     }
 }

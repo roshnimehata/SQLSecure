@@ -201,10 +201,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public Repository(
                 string instance,
                 string user,
-                string password
+                string password,
+            type_of_authentication authenticationMode//SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
             )
         {
-            Connect(instance, user, password);
+            Connect(instance, user, password,authenticationMode);//SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
         }
 
         #endregion
@@ -387,10 +388,11 @@ namespace Idera.SQLsecure.UI.Console.Sql
         public bool Connect(string instance)
         {
             // Connect using the current Windows user and password
-            return Connect(instance, null, null);
+            return Connect(instance, null, null,type_of_authentication.windows);//SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
         }
 
-        public bool Connect(string instance, string user, string password)
+        //SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+        public bool Connect(string instance, string user, string password, type_of_authentication authenticationMode)
         {
             try
             {
@@ -410,12 +412,24 @@ namespace Idera.SQLsecure.UI.Console.Sql
                 {
                     m_ServerName = instance.ToUpper();
                 }
-
-                m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, user, password);
+                //Start-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
+                if (authenticationMode == type_of_authentication.windows)
+                {
+                    m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, string.Empty, string.Empty, Utility.Activity.TypeServerOnPremise);
+                }
+                else
+                {
+                    m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(m_ServerName, user, password, Utility.Activity.TypeServerOnPremise);
+                }
+                //End-SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
                 if (Connect())
                 {
-                    m_User = user;
-                    m_Password = password;
+                    //SQLsecure 3.1 (Tushar)--Saving UserName and Password in UserData object which will be saved in config file on closure of UI.
+                    //m_User = user;
+                    //m_Password = password;
+                    UserData.Current.RepositoryInfo.UserName = m_User = user;
+                    UserData.Current.RepositoryInfo.Password = m_Password = password;
+                    UserData.Current.RepositoryInfo.AuthenticationMode = Convert.ToString(authenticationMode);//SQLsecure 3.1 (Tushar)--Supporting windows auth for repository connection
                 }
 
             }
@@ -458,7 +472,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
             return m_IsValid;
         }
-
+        
         private bool OpenRepository()
         {
             using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
@@ -526,8 +540,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
                         {
                             logX.loggerX.Error(string.Format(Utility.ErrorMsgs.ErrorStub, Utility.ErrorMsgs.DalNotSupported), Utility.Constants.DalVersion);
                             MsgBox.ShowError(Utility.ErrorMsgs.VersionNotSupported,
-                                             String.Format(Utility.ErrorMsgs.DalNotSupported, m_ServerName,
-                                                           Utility.Constants.DalVersion));
+                                             String.Format(Utility.ErrorMsgs.IncompatibleVersion));//SQLsecure 3.1 (Tushar)--Fix for Defect SQLSECU-1672
                             return false;
                         }
                     }
@@ -866,7 +879,51 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         #endregion
 
-
+        //SQLsecure 3.1 (Tushar)--Added parameter for type of server and authentication.
+        public int getRepositoryVersion(string Server_Name,string userName,string password,int typeOfServer,int typeOfAuthentication)
+        {
+            int m_SchemaVersion = 0;
+            try
+            {
+                //SQLsecure 3.1 (Tushar)--On Basis of type of server and authentication constructing the connectionStringBuilder.
+                SqlConnectionStringBuilder m_ConnectionStringBuilder = null;
+                switch (typeOfServer)
+                {
+                    case 3://on-premise local sql server.
+                        m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, null, null, Utility.Activity.TypeServerOnPremise);
+                        break;
+                    case 2://remote sql server.
+                        m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, userName, password, Utility.Activity.TypeServerOnPremise);
+                        break;
+                    case 1://Azure DB
+                        m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, userName, password, Utility.Activity.TypeServerAzureDB);
+                        break;
+                    case 0://Azure VM
+                        m_ConnectionStringBuilder = Sql.SqlHelper.ConstructConnectionString(Server_Name, userName, password, Utility.Activity.TypeServerAzureVM);
+                        break;
+                }
+                using (SqlConnection connection = new SqlConnection(m_ConnectionStringBuilder.ConnectionString))
+                {
+                    connection.Open();
+                    using (SqlDataReader rdr = Sql.SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                                                        String.Format(QueryGetDALSchemaVersion), null))
+                    {
+                        // This table has only one column and row with a Y or N in it.
+                        if (rdr.Read())
+                        {
+                            // Get DAL & schema versions.
+                            m_SchemaVersion = Convert.ToInt32(rdr[(int)VersionColumn.schemaversion]);
+                            m_DALVersion = Convert.ToInt32(rdr[(int)VersionColumn.dalversion]);
+                        }
+                    }
+             
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            return m_SchemaVersion;
+        }
 
         public static bool checkAllCredentialsEntered(string connectionString)
         {

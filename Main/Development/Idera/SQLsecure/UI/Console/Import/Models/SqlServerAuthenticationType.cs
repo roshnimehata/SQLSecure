@@ -3,6 +3,7 @@
     public enum SqlServerAuthenticationType
     {
         WindowsAuthentication,
-        SqlServerAuthentication
+        SqlServerAuthentication,
+        AzureADAuthentication
     }
 }

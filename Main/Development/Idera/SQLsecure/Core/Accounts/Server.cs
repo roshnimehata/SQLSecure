@@ -26,6 +26,7 @@ using Microsoft.Win32;
 using Idera.SQLsecure.Core.Interop;
 using Idera.SQLsecure.Core.Logger;
 using System.Runtime.InteropServices;
+using System.Data.SqlClient;
 
 namespace Idera.SQLsecure.Core.Accounts
 {
@@ -38,12 +39,27 @@ namespace Idera.SQLsecure.Core.Accounts
             Failed
         }
 
+        // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+        public enum ServerType
+        {
+            OnPremise,//On-Premise
+            AzureSQLDatabase,//Azure SqlDatabase
+            SQLServerOnAzureVM//Azure VM
+        }
+
         #region Fields
         private static LogX logX = new LogX("Idera.SQLsecure.Core.Accounts.Server");
         private int m_numWarnings;
         private bool m_IsValid;
         private bool m_IsAdmin = false;
         private string m_Name;
+
+        // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+        private string m_AccountName;
+        private string m_SQLServerOnAzureVM_FullName = string.Empty;
+        private string m_SQLServerOnAzureVM_DomainName = string.Empty;
+        private ServerType m_serverType;
+
         private string m_BindUser;
         private string m_BindDomain;
         private string m_BindAccount;
@@ -133,7 +149,19 @@ namespace Idera.SQLsecure.Core.Accounts
              }
              catch (Exception ex)
              {
-                throw; //caller should handle this exception
+                // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                if (computerName.IndexOf(Constants.Dot) != -1)
+                 {
+                    remoteBaseKey =
+                   RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine,
+                                                  computerName.Substring(0, computerName.IndexOf(Constants.Dot)));
+                    valueKey = remoteBaseKey.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\ComputerName\ActiveComputerName");
+                    activeComputerName = (string)valueKey.GetValue("ComputerName");
+                }                
+                else
+                {
+                    throw; //caller should handle this exception
+                }
              }
              finally
              {
@@ -912,7 +940,16 @@ namespace Idera.SQLsecure.Core.Accounts
             // Create management scope string.
             StringBuilder scopeStr = null;
             scopeStr = new StringBuilder();
-            scopeStr.Append(Path.WhackPrefixComputer(m_Name));
+
+            if (m_serverType == ServerType.SQLServerOnAzureVM)
+            {
+                scopeStr.Append(Path.WhackPrefixComputer(Name));
+            }
+            else
+            {
+                scopeStr.Append(Path.WhackPrefixComputer(m_Name));
+            }
+            
             scopeStr.Append(Constants.Cimv2Root);
 
             try
@@ -1086,8 +1123,18 @@ namespace Idera.SQLsecure.Core.Accounts
                     string refDom;
                     byte[] bSid;
 
-                    if (Core.Interop.Authorization.LookupAccountName(m_Name,
-                                   m_Name, out bSid,
+                    // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                    string accountName = m_Name;
+                    string nameToAccessServer = m_Name;
+
+                    if (m_serverType == ServerType.SQLServerOnAzureVM)
+                    {
+                        accountName = m_AccountName;
+                        nameToAccessServer = Name;
+                    }
+
+                    if (Core.Interop.Authorization.LookupAccountName(nameToAccessServer,
+                                   accountName, out bSid,
                                    out refDom, out peUse) || peUse == SID_NAME_USE.SidTypeDomain)
                     {
                         m_ComputerSid = new Sid(bSid);
@@ -1139,6 +1186,7 @@ namespace Idera.SQLsecure.Core.Accounts
                 string name,
                 string bindAcct,
                 string bindPassword,
+                ServerType serverType,
                 WriteActivityToRepositoryDelegate WriteAppActivityToRepositoryParam
             )
         {
@@ -1146,10 +1194,37 @@ namespace Idera.SQLsecure.Core.Accounts
             Debug.Assert(string.IsNullOrEmpty(bindAcct) || (!string.IsNullOrEmpty(bindAcct) && !string.IsNullOrEmpty(bindPassword)));
             WriteApplicationActivityToRepository = WriteAppActivityToRepositoryParam;
             m_Name = name;
+
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            m_serverType = serverType;
+
             try
             {
-                m_Name = GetActiveComputerName(name);
-                logX.loggerX.Info(string.Format(@"Active Computer Name: {0}", m_Name));
+                if (m_serverType == ServerType.SQLServerOnAzureVM)
+                {
+					// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                    m_SQLServerOnAzureVM_FullName = name;
+                    m_Name = name;
+
+                    if (name.IndexOf(Constants.Dot) != -1)
+                    {
+                        m_SQLServerOnAzureVM_DomainName = name.Substring(name.IndexOf(Constants.Dot) + 1);
+                        name = name.Substring(0, name.IndexOf(Constants.Dot));
+                        m_Name = name;
+                    }
+
+                    
+
+                    m_AccountName = GetActiveComputerName(Name);
+                    logX.loggerX.Info(string.Format(@"Active Computer Name: {0}", m_Name));
+                }
+                else
+                {
+                    m_Name = GetActiveComputerName(name);
+                    logX.loggerX.Info(string.Format(@"Active Computer Name: {0}", m_Name));
+                }
+
+                
             }
             catch (Exception e)
             {
@@ -1182,7 +1257,13 @@ namespace Idera.SQLsecure.Core.Accounts
         }
         public string Name
         {
-            get { return m_Name; }
+            get {
+                if (m_serverType == ServerType.SQLServerOnAzureVM && (!IsLocalComputer))
+                {
+                    return m_SQLServerOnAzureVM_FullName;
+                }
+                return m_Name;
+            }
         }
         public string Product
         {
@@ -1324,7 +1405,14 @@ namespace Idera.SQLsecure.Core.Accounts
                 return true;
             }
 
-            return Bind(m_Name, m_BindUser, m_BindDomain, m_BindPassword);
+            if (m_serverType == ServerType.SQLServerOnAzureVM)
+            {
+                return Bind(Name, m_BindUser, m_BindDomain, m_BindPassword);
+            }
+            else
+            {
+                return Bind(m_Name, m_BindUser, m_BindDomain, m_BindPassword);
+            }
         }
 
         public bool Bind()
@@ -1566,7 +1654,7 @@ namespace Idera.SQLsecure.Core.Accounts
 
         public static ServerAccess CheckServerAccess(string computer, string account, string password, out string errorMessage)
         {
-            return CheckServerAccess(computer, account, password, out errorMessage, false);
+                return CheckServerAccess(computer, account, password, out errorMessage, false);
         }
 
         public static ServerAccess CheckServerAccess(string computer, string account, string password, out string errorMessage, bool forceLocal)
@@ -1668,6 +1756,55 @@ namespace Idera.SQLsecure.Core.Accounts
             }            
 
             return retCode;
+        }
+
+        /// <summary>
+        /// Check whether Azure DB is accessible or not 
+        /// </summary>
+        /// <param name="serverName">FQDN concatenated with Port number</param>
+        /// <param name="account">username</param>
+        /// <param name="password">password</param>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        
+        public static string ConstructConnectionString(
+              string instance,
+              string user,
+              string password,
+              bool azureADAuth
+          )
+        {
+            string connectionString;
+            if (!azureADAuth)
+            {
+                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;";
+            }
+            else
+            {
+                connectionString = @"Data Source=" + instance + "; Authentication=Active Directory Password; UID=" + user + "; PWD=" + password;
+            }
+            return connectionString;
+        }
+        public static ServerAccess CheckAzureServerAccess(string serverName, string account, string password, out string errorMessage, bool azureADAuth)
+        {
+            //string connectionString =@"Data Source="+serverName+"; Authentication=Active Directory Password; UID="+account+"; PWD="+password;
+            string connectionString = ConstructConnectionString(serverName, account, password, azureADAuth);
+            ServerAccess retCode = ServerAccess.OK;
+            errorMessage = string.Empty;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open(); // throws if invalid
+                }
+                catch(Exception ex)
+                {
+                    retCode = ServerAccess.ERROR_CONNECT;
+                    errorMessage = ex.Message;
+                }
+            }
+            return retCode;
+            
         }
 
         #endregion

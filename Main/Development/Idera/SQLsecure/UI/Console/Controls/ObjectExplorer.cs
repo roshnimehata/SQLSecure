@@ -113,15 +113,20 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
         private void fillServerNode()
         {
-            Sql.ObjectType.TypeEnum type = Sql.ObjectType.TypeEnum.Environment;
-            Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, type);
-            m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.NodeName, tag.NodeName, tag);
-
+            Sql.ObjectTag tag;
+            Sql.ObjectType.TypeEnum type;
+            //Barkha Khatri (SQLSecure 3.1) omitting Server Environment for Azure SQL DB
+            if (m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
+            {
+                type = Sql.ObjectType.TypeEnum.Environment;
+                tag = new Sql.ObjectTag(m_SnapshotId, type);
+                m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.NodeName, tag.NodeName, tag);
+            }
             type = Sql.ObjectType.TypeEnum.ServerSecurity;
             tag = new Sql.ObjectTag(m_SnapshotId, type);
             m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
-
-            if (m_Version > Sql.ServerVersion.SQL2000 && m_Version != Sql.ServerVersion.Unsupported)
+            //Barkha Khatri (SQLSecure 3.1) omitting Server Environment for Azure SQL DB
+            if (m_Version > Sql.ServerVersion.SQL2000 && m_Version != Sql.ServerVersion.Unsupported && m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
             {
                 type = Sql.ObjectType.TypeEnum.ServerObjects;
                 tag = new Sql.ObjectTag(m_SnapshotId, type);
@@ -237,9 +242,20 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 foreach (Sql.Login login in logins)
                 {
                     Sql.ObjectTag tag = new Sql.ObjectTag(m_SnapshotId, login.Type, login.Id, login.Name, null);
-                    m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(tag.ObjType), tag.ObjectName, tag.TypeName, tag,
-                                        null, null, null, null, null, null,
-                                        getMembersOf(tag), login.ServerAccess, login.ServerDeny);
+                    //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.--Currently using Windows user and group images for azure AD user and groups.
+                    if (tag.ObjType == ObjectType.TypeEnum.AzureADUser)
+                        m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(ObjectType.TypeEnum.WindowsUserLogin), tag.ObjectName, tag.TypeName, tag,
+                                            null, null, null, null, null, null,
+                                            getMembersOf(tag), login.ServerAccess, login.ServerDeny);
+                    else if(tag.ObjType == ObjectType.TypeEnum.AzureADGroup)
+                        m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(ObjectType.TypeEnum.WindowsGroupLogin), tag.ObjectName, tag.TypeName, tag,
+                                            null, null, null, null, null, null,
+                                            getMembersOf(tag), login.ServerAccess, login.ServerDeny);
+                    else
+                        m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(tag.ObjType), tag.ObjectName, tag.TypeName, tag,
+                                            null, null, null, null, null, null,
+                                            getMembersOf(tag), login.ServerAccess, login.ServerDeny);
+                    //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database.
                 }
             }
             catch (Exception ex)
@@ -344,8 +360,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
             type = Sql.ObjectType.TypeEnum.Functions;
             tag = new Sql.ObjectTag(m_SnapshotId, type, database);
             m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
-
-            if (database.IsMasterDb)
+            //Barkha Khatri (SQLSecure 3.1) omitting ExtendedStoredProcedures for Azure SQL DB
+            if (database.IsMasterDb && m_ServerInstance.ServerType!=ServerType.AzureSQLDatabase)
             {
                 type = Sql.ObjectType.TypeEnum.ExtendedStoredProcedures;
                 tag = new Sql.ObjectTag(m_SnapshotId, type, database);
@@ -365,10 +381,13 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 type = Sql.ObjectType.TypeEnum.XMLSchemaCollections;
                 tag = new Sql.ObjectTag(m_SnapshotId, type, database);
                 m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
-
-                type = Sql.ObjectType.TypeEnum.FullTextCatalogs;
-                tag = new Sql.ObjectTag(m_SnapshotId, type, database);
-                m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
+                //Barkha Khatri (SQLSecure 3.1) omitting FullTextCatalogs for Azure SQL DB
+                if (m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
+                {
+                    type = Sql.ObjectType.TypeEnum.FullTextCatalogs;
+                    tag = new Sql.ObjectTag(m_SnapshotId, type, database);
+                    m_DataTable.Rows.Add(Sql.ObjectType.TypeImage16(type), tag.TypeName, tag.TypeName, tag);
+                }
             }
             if (m_Version >= Sql.ServerVersion.SQL2012 && m_Version <= Sql.ServerVersion.SQL2016)
             {
@@ -1244,27 +1263,30 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 tnServer.Tag = tag;
                 tnServer.ImageIndex = tnServer.SelectedImageIndex = tag.ImageIndex;
 
-                // Add server level environment node and environment level container nodes.
-                tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Environment);
-                TreeNode tnServerEnvironment = tnServer.Nodes.Add(tag.NodeName, tag.NodeName);
-                tnServerEnvironment.Tag = tag;
-                tnServerEnvironment.ImageIndex = tnServerEnvironment.SelectedImageIndex = tag.ImageIndex;
+                //SQLsecure 3.1 (Tushar)--Added support for AzureSQLDatabase.
+                if (m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
+                {
+                    // Add server level environment node and environment level container nodes.
+                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Environment);
+                    TreeNode tnServerEnvironment = tnServer.Nodes.Add(tag.NodeName, tag.NodeName);
+                    tnServerEnvironment.Tag = tag;
+                    tnServerEnvironment.ImageIndex = tnServerEnvironment.SelectedImageIndex = tag.ImageIndex;
 
-                tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.FileSystem);
-                tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
-                tn.Tag = tag;
-                tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.FileSystem);
+                    tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
+                    tn.Tag = tag;
+                    tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
 
-                tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Registry);
-                tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
-                tn.Tag = tag;
-                tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Registry);
+                    tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
+                    tn.Tag = tag;
+                    tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
 
-                tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Services);
-                tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
-                tn.Tag = tag;
-                tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
-
+                    tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.Services);
+                    tn = tnServerEnvironment.Nodes.Add(tag.NodeName, tag.NodeName);
+                    tn.Tag = tag;
+                    tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                }
                 // Add server level security node.
                 tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.ServerSecurity);
                 TreeNode tnServerSecurity = tnServer.Nodes.Add(tag.NodeName, tag.NodeName);
@@ -1281,8 +1303,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 tn.Tag = tag;
                 tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
 
+                //SQLsecure 3.1 (Tushar)--Added support for AzureSQLDatabase.
                 // Add server objects node if 2005 or higher.
-                if (m_Version > Sql.ServerVersion.SQL2000 && m_Version != Sql.ServerVersion.Unsupported)
+                if (m_Version > Sql.ServerVersion.SQL2000 && m_Version != Sql.ServerVersion.Unsupported && m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
                 {
                     tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.ServerObjects);
                     TreeNode svObjects = tnServer.Nodes.Add(tag.NodeName, tag.NodeName);
@@ -1406,7 +1429,8 @@ namespace Idera.SQLsecure.UI.Console.Controls
                         tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
 
                         // Add extended stored proc (if master db).
-                        if (string.Compare(db.Name, "master", true) == 0)
+                        //Barkha Khatri (SQLSecure 3.1) omitting ExtendedStoredProcedures for Azure SQL DB
+                        if (string.Compare(db.Name, "master", true) == 0 &&m_ServerInstance.ServerType!=ServerType.AzureSQLDatabase)
                         {
                             tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.ExtendedStoredProcedures, db);
                             tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
@@ -1432,11 +1456,14 @@ namespace Idera.SQLsecure.UI.Console.Controls
                             tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
                             tn.Tag = tag;
                             tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
-
-                            tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.FullTextCatalogs, db);
-                            tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
-                            tn.Tag = tag;
-                            tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                            //Barkha Khatri (SQLSecure 3.1) omitting FullTextCatalogs for Azure SQL DB
+                            if (m_ServerInstance.ServerType != ServerType.AzureSQLDatabase)
+                            {
+                                tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.FullTextCatalogs, db);
+                                tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
+                                tn.Tag = tag;
+                                tn.ImageIndex = tn.SelectedImageIndex = tag.ImageIndex;
+                            }
 
                             tag = new Sql.ObjectTag(m_SnapshotId, Sql.ObjectType.TypeEnum.SequenceObjects, db);
                             tn = tnDb.Nodes.Add(tag.NodeName, tag.NodeName);
@@ -1527,6 +1554,9 @@ namespace Idera.SQLsecure.UI.Console.Controls
                 case Sql.ObjectType.TypeEnum.WindowsUserLogin:
                 case Sql.ObjectType.TypeEnum.WindowsGroupLogin:
                 case Sql.ObjectType.TypeEnum.SqlLogin:
+                //SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                case ObjectType.TypeEnum.AzureADUser:
+                case ObjectType.TypeEnum.AzureADGroup:
                     Forms.Form_SnapshotLoginProperties.Process(m_Version, tag);
                     break;
                 case Sql.ObjectType.TypeEnum.ServerRole:

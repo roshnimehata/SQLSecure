@@ -50,6 +50,18 @@
             <Value>SQL Login</Value>
             <Label>SQL Logins</Label>
           </ParameterValue>
+		 <ParameterValue>
+            <Value>Azure AD*</Value>
+            <Label>All Azure AD Accounts</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>Azure AD User</Value>
+            <Label>Azure AD Users</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>Azure AD Group</Value>
+            <Label>Azure AD Groups</Label>
+          </ParameterValue>
         </ParameterValues>
       </ValidValues>
     </ReportParameter>
@@ -156,7 +168,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="This report shows all Server Logins and associated Database User Mappings for each SQL Server instance being audited by SQLsecure."</Value>
+            <Value>="This report shows all Server Logins and associated Database User Mappings for each SQL Server and Azure SQL Database instance being audited by SQLsecure."</Value>
           </Textbox>
         </ReportItems>
         <Top>0.75in</Top>
@@ -406,7 +418,7 @@
               <Color>#404040</Color>
             </Style>
             <CanGrow>true</CanGrow>
-            <Value>="User Mappings provide access to databases for a Login on a SQL Server. Consider reviewing this report to make sure that each Login has only the mappings to the databases it should access."</Value>
+            <Value>="User Mappings provide access to databases for a Login on a SQL Server and Azure SQL Database. Consider reviewing this report to make sure that each Login has only the mappings to the databases it should access."</Value>
           </Textbox>
         </ReportItems>
         <Top>1.0625in</Top>
@@ -1503,7 +1515,7 @@ Function setUserFilter(u As String)
 End Function</Code>
   <Width>10in</Width>
   <InteractiveHeight>11in</InteractiveHeight>
-  <Description>Show all Server Logins and associated Database User Mappings for each SQL Server instance being audited.</Description>
+  <Description>Show all Server Logins and associated Database User Mappings for each SQL Server and Azure SQL Database instance being audited.</Description>
   <Language>=User!Language</Language>
   <PageFooter>
     <PrintOnFirstPage>true</PrintOnFirstPage>

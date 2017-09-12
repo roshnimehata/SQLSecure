@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using Idera.SQLsecure.Core.Accounts;
 using Idera.SQLsecure.Core.Logger;
+using Idera.SQLsecure.Collector.Utility;
 
 namespace Idera.SQLsecure.Collector.Sql
 {
@@ -93,7 +94,8 @@ namespace Idera.SQLsecure.Collector.Sql
                                                                         };
 
         private static string createPrincipalQuery(
-                ServerVersion version
+                ServerVersion version,
+                ServerType serverType
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
@@ -101,9 +103,11 @@ namespace Idera.SQLsecure.Collector.Sql
             string query = null;
 
             // Create query based on the SQL Server version.
-            if (version == ServerVersion.SQL2000)
+            if ((serverType == ServerType.OnPremise) || (serverType == ServerType.SQLServerOnAzureVM))
             {
-                query = @"SELECT DISTINCT 
+                if (version == ServerVersion.SQL2000)
+                {
+                    query = @"SELECT DISTINCT 
                             name, 
                             principalid = 0, 
                             type = CASE 
@@ -140,10 +144,10 @@ namespace Idera.SQLsecure.Collector.Sql
                             cast([password] as varbinary)
                           FROM master.dbo.syslogins";
 
-            }
-            else
-            {
-                query = @"SELECT DISTINCT 
+                }
+                else
+                {
+                    query = @"SELECT DISTINCT 
                             Principals.name, 
                             principalid = Principals.principal_id, 
                             Principals.type, 
@@ -183,29 +187,127 @@ namespace Idera.SQLsecure.Collector.Sql
                                     Principals.principal_id = SqlLogins.principal_id 
                                 LEFT OUTER JOIN sys.server_permissions Permissions 
                                     ON Permissions.grantee_principal_id = Principals.principal_id AND Permissions.type = N'COSQ'";
+                }
             }
+            //isdisabled- fix for SQLSECU-1656,SQLSECU-1643
+            else
+            {
+                // SQLsecure 3.1 (Anshul Aggarwal) - SQLSECU-1704 : "Reports- Audited SQL Servers" is not getting updated for Azure DB
+                // Check for 'CO' permission instead of 'COSQ' for Azure SQL Database.
+                // For now, isdisabled = 'N' for Azure SQL Database (Azure AD User or Group login types) 
 
+                //SQLSecure 3.1 (Barkha Khatri) SQLSECURE-1959 fix
+                // Using negative SIDs for Information_schema and sys
+                query = @" (SELECT DISTINCT 
+                            SqlLogins.name, 
+                            principalid = ISNULL(Principals.principal_id,SqlLogins.principal_id*-1), 
+                            SqlLogins.type collate database_default, 
+                            SqlLogins.sid, 
+                            serveraccess = CASE Permissions.state
+                                              WHEN 'G' THEN 'Y' 
+                                              WHEN 'W' THEN 'Y' 
+                                              ELSE 'N'
+                                           END,
+                            serverdeny = CASE Permissions.state
+                                            WHEN 'D' THEN 'Y'
+                                            ELSE 'N'
+                                         END, 
+                            isdisabled = CASE WHEN SqlLogins.type = 'S'
+                                            THEN
+                                                        CASE  SqlLogins.is_disabled WHEN 1
+                                                             THEN 'Y'
+                                                             ELSE 'N'
+                                                        END
+                                                    ELSE null
+                                              END,
+                            ispolicychecked = CASE SqlLogins.is_policy_checked
+                                                 WHEN 1 THEN 'Y'
+                                                 ELSE 'N'
+                                              END, 
+                            isexpirationchecked = CASE SqlLogins.is_expiration_checked
+                                                     WHEN 1 THEN 'Y'
+                                                     ELSE 'N'
+                                                  END, 
+                            ispasswordblank = CASE WHEN SqlLogins.type = 'S'
+                                                    THEN
+                                                        CASE WHEN pwdcompare('', SqlLogins.password_hash) = 1
+                                                             THEN 'Y'
+                                                             ELSE 'N'
+                                                        END
+                                                    ELSE null
+                                              END,
+                            defaultdatabase =NULL,
+                            defaultlanguage = SqlLogins.default_language_name,
+                            SqlLogins.password_hash
+                          FROM sys.sql_logins SqlLogins  LEFT OUTER JOIN sys.database_principals Principals ON 
+                                    Principals.sid = SqlLogins.sid
+                                LEFT OUTER JOIN sys.database_permissions Permissions
+                                    ON Permissions.grantee_principal_id = Principals.principal_id AND Permissions.type = N'CO'
+                            WHERE SqlLogins.sid IS NOT NULL )
+       
+                       UNION
+                       (
+                       SELECT DISTINCT 
+                            Principals.name, 
+                            principalid = Principals.principal_id, 
+                            Principals.type  collate database_default,
+							sid=CASE Principals.name
+                                WHEN 'sys' THEN 0xFFFFFFFF 
+                                WHEN 'INFORMATION_SCHEMA' THEN 0xFFFFFFFE
+                                ELSE  Principals.sid
+                                END,
+                            serveraccess = CASE Permissions.state
+                                              WHEN 'G' THEN 'Y' 
+                                              WHEN 'W' THEN 'Y' 
+                                              ELSE 'N'
+                                           END,
+                            serverdeny = CASE Permissions.state
+                                            WHEN 'D' THEN 'Y'
+                                            ELSE 'N'
+                                         END, 
+                            isdisabled ='N' ,
+                            ispolicychecked = 'N', 
+                            isexpirationchecked =  'N', 
+                            ispasswordblank = NULL,
+                            defaultdatabase =NULL,
+                            defaultlanguage = Principals.default_language_name,
+                            password_hash=NULL
+                          FROM sys.database_principals Principals 
+                                LEFT OUTER JOIN sys.database_permissions Permissions
+                                    ON Permissions.grantee_principal_id = Principals.principal_id AND Permissions.type = N'CO'
+                            WHERE  Principals.is_fixed_role<>1 and (Principals.type <> 'S' or Principals.name='dbo' or Principals.name='guest'  or Principals.name='sys' or Principals.name='INFORMATION_SCHEMA')
+
+							)";
+            }
             return query;
         }
 
         private static string createRoleMemberQuery(
-                ServerVersion version
+                ServerVersion version,ServerType serverType
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
 
             string query = null;
-
-            // Create query based on the SQL Server version.
-            if (version == ServerVersion.SQL2000)
+            if ((serverType ==ServerType.OnPremise)|| (serverType == ServerType.SQLServerOnAzureVM))
             {
-                query = "EXEC sp_helpsrvrolemember";
+                // Create query based on the SQL Server version.
+                if (version == ServerVersion.SQL2000)
+                {
+                    query = "EXEC sp_helpsrvrolemember";
+                }
+                else
+                {
+                    query = @"SELECT * FROM sys.server_role_members";
+                }
             }
-            else
+            else 
             {
-                query = @"SELECT * FROM sys.server_role_members";
+                query = @"SELECT role_principal_id, member_principal_id FROM sys.database_role_members INNER JOIN sys.database_principals ON role_principal_id= principal_id WHERE is_fixed_role=0 
+                            and member_principal_id in (
+                            select p.principal_id from sys.database_principals p
+                            inner join sys.sql_logins l on ((p.sid=l.sid) or p.type='E' or p.type='X'))";
             }
-
             return query;
         }
 
@@ -214,7 +316,8 @@ namespace Idera.SQLsecure.Collector.Sql
                 string targetConnection,
                 string repositoryConnection,
                 int snapshotid,
-                Dictionary<string, int> nameDictionary
+                Dictionary<string, int> nameDictionary,
+                ServerType serverType
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
@@ -244,7 +347,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         using (DataTable dataTable = ServerRoleMemberDataTable.Create())
                         {
                             // Create the query.
-                            string query = createRoleMemberQuery(version);
+                            string query = createRoleMemberQuery(version,serverType);
                             Debug.Assert(!string.IsNullOrEmpty(query));
 
                             // Query to get the table objects.
@@ -331,7 +434,8 @@ namespace Idera.SQLsecure.Collector.Sql
                 string repositoryConnection,
                 int snapshotid,
                 out List<Account> users,
-                out List<Account> windowsGroupLogins
+                out List<Account> windowsGroupLogins,
+                ServerType serverType
             )
         {
             Debug.Assert(version != ServerVersion.Unsupported);
@@ -365,12 +469,12 @@ namespace Idera.SQLsecure.Collector.Sql
                     {
                         // Set the destination table.
                         bcp.DestinationTableName = ServerPrincipalDataTable.RepositoryTable;
-                        bcp.BulkCopyTimeout = SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry();
+                        bcp.BulkCopyTimeout = 0;//SQLCommandTimeout.GetSQLCommandTimeoutFromRegistry();
                         // Create the datatable to write to the repository.
                         using (DataTable dataTable = ServerPrincipalDataTable.Create())
                         {
                             // Create the query.
-                            string query = createPrincipalQuery(version);
+                            string query = createPrincipalQuery(version,serverType);
                             Debug.Assert(!string.IsNullOrEmpty(query));
 
                             // Query to get the table objects.
@@ -382,21 +486,52 @@ namespace Idera.SQLsecure.Collector.Sql
                                 {
                                     // Retrieve information.
                                     SqlString name = rdr.GetSqlString(FieldPrincipalName);
-                                    SqlString type = rdr.GetSqlString(FieldPrincipalType);
+                                    SqlString type;
+                                    if (serverType==ServerType.AzureSQLDatabase && Helper.CheckForSystemSqlUsers((string)name))
+                                    {
+                                        type = Constants.SQLUser;
+                                    }
+                                    else
+                                    {
+                                        type = rdr.GetSqlString(FieldPrincipalType);
+                                    }
                                     SqlBinary sid = rdr.GetSqlBinary(FieldPrincipalSid);
+                                  
                                     SqlInt32 principalid = rdr.GetSqlInt32(FieldPrincipalPid);
                                     SqlString serveraccess = rdr.GetSqlString(FieldPrincipalServeraccess);
                                     SqlString serverdeny = rdr.GetSqlString(FieldPrincipalServerdeny);
-                                    SqlString isdisabled = rdr.GetSqlString(FieldPrincipalIsdisabled);
+                                    SqlString isdisabled;
+                                    if (!rdr.IsDBNull(FieldPrincipalIsdisabled))
+                                    {
+                                        isdisabled = rdr.GetSqlString(FieldPrincipalIsdisabled);
+                                    }
+                                    else
+                                    {
+                                        isdisabled = null;
+                                    }
                                     SqlString isexpirationchecked = rdr.GetSqlString(FieldPrincipalIsexpirationchecked);
                                     SqlString ispolicychecked = rdr.GetSqlString(FieldPrincipalIspolicychecked);
                                     SqlString ispasswordnull = rdr.GetSqlString(FieldPrincipalIsPasswordNull);
-                                    SqlString defaultdatabase = rdr.GetSqlString(FieldPrincipalDefautDatabase);
-                                    SqlString defaultlanguage = rdr.GetSqlString(FieldPrincipalDefautLanguage);
+                                    SqlString defaultdatabase;
+                                    if (!rdr.IsDBNull(FieldPrincipalDefautDatabase))
+                                    {
+                                        defaultdatabase = rdr.GetSqlString(FieldPrincipalDefautDatabase);
+                                    }
+                                    else
+                                    {
+                                        defaultdatabase = null;
+                                    }
+
+                                SqlString defaultlanguage = rdr.GetSqlString(FieldPrincipalDefautLanguage);
+
+                                  
+                                   
                                     SqlInt32 passwordStatus = SqlInt32.Null; 
 
                                     //only calculate the password status for SQL Logins
-                                    if (type.CompareTo(Constants.SQLLogin) == 0)
+                                    //SQL Secure 3.1(Barkha Khatri)
+                                    //skipping sys,guest,dbo,information_Schema for Azure SQL DB as there ispasswordnull values is null
+                                    if (type.CompareTo(Constants.SQLLogin) == 0 )//&&(String.Compare((string)name,"sys",true)!=0 && String.Compare((string)name, "dbo",true) != 0 && String.Compare((string)name, "guest",true) != 0 && String.Compare((string)name, "INFORMATION_SCHEMA",true) != 0 ))
                                     {
                                         //This tells us if the password is blank.
                                         if (ispasswordnull.Value == "Y")
@@ -478,6 +613,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                     // Write to repository if exceeds threshold.
                                     if (dataTable.Rows.Count > Constants.RowBatchSize)
                                     {
+                                        //SQLSecure 3.1 (Barkha Khatri) SQLSECURE-1959 fix
+                                        // logging if there are any system defined negative SIDs that are same as the ones we have used for Information_schema and sys
+                                        CheckForNegativeSIDs(serverType, dataTable);
                                         bcp.WriteToServer(dataTable);
                                         dataTable.Clear();
                                     }
@@ -486,6 +624,9 @@ namespace Idera.SQLsecure.Collector.Sql
                                 // Write any items still in the data table.
                                 if (dataTable.Rows.Count > 0)
                                 {
+                                    //SQLSecure 3.1 (Barkha Khatri) SQLSECURE-1959 fix
+                                    // logging if there are any system defined negative SIDs that are same as the ones we have used for Information_schema and sys
+                                    CheckForNegativeSIDs(serverType, dataTable);
                                     bcp.WriteToServer(dataTable);
                                     dataTable.Clear();
                                 }
@@ -526,7 +667,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         }
                     }
                 }
-                catch (SqlException ex)
+                catch (Exception ex)
                 {
                     string strMessage = "Processing server principals";
                     logX.loggerX.Error("ERROR - " + strMessage, ex);
@@ -549,8 +690,8 @@ namespace Idera.SQLsecure.Collector.Sql
 
             // Process role memberships.
             if (isOk)
-            {
-                if (!processMembers(version, targetConnection, repositoryConnection, snapshotid, nameDictionary))
+            {//change for azure--tushar
+                if (!processMembers(version, targetConnection, repositoryConnection, snapshotid, nameDictionary,serverType))
                 {
                     logX.loggerX.Error("ERROR - error encountered in processing server role members");
                     isOk = false;
@@ -560,17 +701,63 @@ namespace Idera.SQLsecure.Collector.Sql
             // Load principal permissions, if its 2005.
             if (isOk)
             {
-                if (version != ServerVersion.SQL2000)
-                {
-                    if (!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid, SqlObjectType.Login, pidList))
+                if (version != ServerVersion.SQL2000)// && serverType!="OP")
+                {//check for azure--tushar
+                    if (!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid,serverType!=ServerType.AzureSQLDatabase? SqlObjectType.Login: SqlObjectType.DatabasePrincipal, pidList,serverType))
                     {
                         logX.loggerX.Error("ERROR - error encountered in processing server principal permissions");
                         isOk = false;
                     }
                 }
+                //else if(serverType=="ADB")
+                //{
+                //    if(!ServerPermission.Process(targetConnection, repositoryConnection, snapshotid, SqlObjectType.DatabasePrincipal, pidList, serverType))
+                //    {
+                //        logX.loggerX.Error("ERROR - error encountered in processing server principal permissions for Azure DB");
+                //        isOk = false;
+                //    }
+                //}
             }
 
             return isOk;
+        }
+        /// <summary>
+        /// check for negative SIDs in case of Azure SQL database
+        /// </summary>
+        /// <param name="serverType"></param>
+        /// <param name="dataTable"></param>
+        private static void CheckForNegativeSIDs(ServerType serverType, DataTable dataTable)
+        {
+            if (serverType == ServerType.AzureSQLDatabase)
+            {
+                int numberOfRecords1 = 0;
+                int numberOfRecords2 = 0;
+ 
+                Byte[] byte1 = new byte[] { 255,255,255,255};
+                Byte[] byte2 = new byte[] { 255, 255, 255, 254 };
+                SqlBinary sid1 = new SqlBinary(byte1);
+                SqlBinary sid2 = new SqlBinary(byte2);
+
+
+                foreach (DataRow row in dataTable.Rows)
+                {
+
+                    SqlBinary sid =(SqlBinary) row[ServerPrincipalDataTable.ParamSid];
+                    if (sid.CompareTo(sid1)==0)
+                    {
+                        numberOfRecords1++;
+                    }
+                    else if (sid.CompareTo(sid2)==0)
+                    {
+                        numberOfRecords2++;
+                    }
+                }
+
+                if (numberOfRecords1 > 1 || numberOfRecords2 > 1)
+                {
+                    logX.loggerX.Error("ERROR - Azure SQL Database \n Since sid of 'sys' and 'Information_schema' SQL users in master.database_principals view are null, we have used 0xFFFFFFFE and 0xFFFFFFFF SIDs for sys and Information_schema by default. These are equivalent to -2 and -1 respectively. This is done with the assumption that negative sid do not exist in system views. \n Microsoft is also using same negative SIDs for some of the principals which is violating the assumption");
+                }
+            }
         }
 
         private static PasswordStatus DetectPasswordStatus(string loginName, byte[] passwordHash, WeakPasswordSetting passwordSettings, ServerVersion version)

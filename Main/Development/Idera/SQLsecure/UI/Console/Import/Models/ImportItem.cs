@@ -27,6 +27,12 @@ namespace Idera.SQLsecure.UI.Console.Import.Models
         [PropertyOrder(7)]
         public string WindowsUserPassword { get; set; }
 
+        [PropertyOrder(8)]
+        public string PortNumber { get; set; }
+
+        [PropertyOrder(9)]
+        public ServerType ServerType { get; set; }
+
         private const string CannotUseCredentialsString = "You can not use SqlServer Credentials for Windows Authentication";
         private const string UnsupportedAuthTypeString = "Unsupported Authentication Type.";
         private const string ServerCannotBeEmptyString = "Server name can not be empty";

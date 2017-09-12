@@ -14,6 +14,7 @@ using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.UI.Console.ActiveDirectory;
 using Idera.SQLsecure.UI.Console.Controls;
 using Idera.SQLsecure.UI.Console.Sql;
+using Idera.SQLsecure.UI.Console.Utility;
 
 using Infragistics.Win.UltraWinGrid;
 
@@ -23,7 +24,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
     {
         #region Ctors
 
-        public Form_SelectUser(int snapshotId, string loginType)
+        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        public Form_SelectUser(int snapshotId, string loginType, ServerType serverType)
         {
             InitializeComponent();
 
@@ -40,9 +42,23 @@ namespace Idera.SQLsecure.UI.Console.Forms
             if (m_LoginType == Sql.LoginType.WindowsLogin)
             {
                 Width = 551;
-                Text = @"Select Windows User";
                 _button_BrowseDomain.Visible = true;
-                _label_Server.Text = @"Windows Users and Groups on ";
+                //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                if (serverType != ServerType.AzureSQLDatabase)
+                {
+                    _label_Server.Text = @"Windows Users and Groups on ";
+                    Text = @"Select Windows User";
+
+                }
+                else
+                {
+                    _label_Server.Text = @"AzureAD Users and Groups on ";
+                    _label_Descr.Text = "Select a AzureAD Account from the list, or click Browse Active Directory to locat" +
+                "e users by name";
+                    Text = @"Select AzureAD User";
+                    _button_BrowseDomain.Visible = false; //SQLsecure 3.1 (Tushar)--Turning off the visiblility of this button since for Azure VM and Azure DB, this button is not applicable.
+                }
+                //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
             }
             else
             {
@@ -54,7 +70,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 _panel_Users.Top = 20;
             }
 
-            m_Snapshot = Snapshot.GetSnapShot(snapshotId);
+            m_Snapshot = Idera.SQLsecure.UI.Console.Sql.Snapshot.GetSnapShot(snapshotId);
             if (m_Snapshot != null)
             {
                 _label_Server.Text += m_Snapshot.ConnectionName;
@@ -144,7 +160,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
             }
         }
 
-        private void LoadUsers()
+        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        private void LoadUsers(ServerType serverType)
         {
             string loginType;
             string accessType;
@@ -170,18 +187,26 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         }
                         else
                         {
-                            string groups = Delim + Sql.LoginType.WindowsUser + DelimFieldSep
-                                                + Sql.LoginType.WindowsGroup + DelimFieldSep
-                                                + Core.Accounts.ObjectClass.User.ToString() + DelimFieldSep
-                                                + Core.Accounts.ObjectClass.Group.ToString() + DelimFieldSep
-                                                + Core.Accounts.ObjectClass.LocalGroup.ToString() + DelimFieldSep
-                                                + Core.Accounts.ObjectClass.GlobalGroup.ToString() + DelimFieldSep
-                                                + Core.Accounts.ObjectClass.UniversalGroup.ToString() + DelimFieldSep
-                                                + Core.Accounts.ObjectClass.DistributionGroup.ToString() + DelimFieldSep
-                                                + Core.Accounts.ObjectClass.WellknownGroup.ToString() + Delim;
-                            query = string.Format(QueryGetLogins, m_Snapshot.SnapshotId, groups);
+                            //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                            if (serverType == ServerType.AzureSQLDatabase)
+                            {
+                                query = string.Format("select name, type, login=CASE WHEN a.sid IS NULL THEN 'N' ELSE 'Y' END,sid from SQLsecure.dbo.serverprincipal a where a.snapshotid = {0} and type in ('E', 'X')", m_Snapshot.SnapshotId);
+                            }
+                            else
+                            {
+                                string groups = Delim + Sql.LoginType.WindowsUser + DelimFieldSep
+                                                  + Sql.LoginType.WindowsGroup + DelimFieldSep
+                                                  + Core.Accounts.ObjectClass.User.ToString() + DelimFieldSep
+                                                  + Core.Accounts.ObjectClass.Group.ToString() + DelimFieldSep
+                                                  + Core.Accounts.ObjectClass.LocalGroup.ToString() + DelimFieldSep
+                                                  + Core.Accounts.ObjectClass.GlobalGroup.ToString() + DelimFieldSep
+                                                  + Core.Accounts.ObjectClass.UniversalGroup.ToString() + DelimFieldSep
+                                                  + Core.Accounts.ObjectClass.DistributionGroup.ToString() + DelimFieldSep
+                                                  + Core.Accounts.ObjectClass.WellknownGroup.ToString() + Delim;
+                                query = string.Format(QueryGetLogins, m_Snapshot.SnapshotId, groups);
+                            }
+                            //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                         }
-
 
                         //Get Users
                         // Execute stored procedure and get the users.
@@ -231,6 +256,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                     case ServerLoginTypes.User:
                                         loginType = ServerLoginTypes.UserText;
                                         break;
+                                    //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+                                    case ServerLoginTypes.AzureADUser:
+                                        loginType = ServerLoginTypes.AzureADUserText;
+                                        break;
+                                    case ServerLoginTypes.AzureADGroup:
+                                        loginType = ServerLoginTypes.AzureADGrouptext;
+                                        break;
+                                    //End-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
                                     default:
                                         //Debug.Assert(false, "Unknown status encountered");
                                         logX.loggerX.Warn("Warning - unknown User Type encountered", dvr[colType]);
@@ -327,10 +360,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         #region Methods
 
-        public static Sql.User GetUser(int snapshotId, string loginType)
+        //Start-SQLsecure 3.1 (Tushar)--Added support for Azure SQL Database
+        public static Sql.User GetUser(int snapshotId, string loginType, ServerType serverType)
         {
-            Form_SelectUser form = new Form_SelectUser(snapshotId, loginType);
-            form.LoadUsers();
+            Form_SelectUser form = new Form_SelectUser(snapshotId, loginType,serverType);
+            form.LoadUsers(serverType);
             DialogResult rc = form.ShowDialog();
 
             Sql.User user = null;

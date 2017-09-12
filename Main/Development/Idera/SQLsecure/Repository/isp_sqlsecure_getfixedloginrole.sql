@@ -45,9 +45,19 @@ as
 
 		drop table #tmpsid				
 	end
+	else if (UPPER(@logintype) = 'A')	 -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD Account.
+ 	begin
+ 		insert into #tmplogins (sid, principalid, name, type, serveraccess, serverdeny, disabled) (select a.sid, a.principalid, a.name, a.type, a.serveraccess, a.serverdeny, a.disabled from serverprincipal a where a.snapshotid = @snapshotid and name=@sqllogin and type in ('E', 'X'))
+ 		set @loginname = @sqllogin
+ 	end
+	else if (UPPER(@logintype) = 'E' or UPPER(@logintype) = 'X')	 -- SQLsecure 3.1 (Anshul Aggarwal) - Azure AD User/Group.
+ 	begin
+ 		insert into #tmplogins (sid, principalid, name, type, serveraccess, serverdeny, disabled) (select a.sid, a.principalid, a.name, a.type, a.serveraccess, a.serverdeny, a.disabled from serverprincipal a where a.snapshotid = @snapshotid and name=@sqllogin and type = UPPER(@logintype))
+ 		set @loginname = @sqllogin
+ 	end
 	else -- sql login type
 	begin
-		insert into #tmplogins (sid, principalid, name, type, serveraccess, serverdeny, disabled) (select a.sid, a.principalid, a.name, a.type, a.serveraccess, a.serverdeny, a.disabled from serverprincipal a where a.snapshotid = @snapshotid and name=@sqllogin)
+		insert into #tmplogins (sid, principalid, name, type, serveraccess, serverdeny, disabled) (select a.sid, a.principalid, a.name, a.type, a.serveraccess, a.serverdeny, a.disabled from serverprincipal a where a.snapshotid = @snapshotid and name=@sqllogin and type = 'S')
 		set @loginname = @sqllogin
 	end
 

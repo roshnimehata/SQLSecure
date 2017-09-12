@@ -18,7 +18,8 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using Idera.SQLsecure.Core.Logger;
 using Idera.SQLsecure.Collector;
-
+using Idera.SQLsecure.Collector.Sql;
+using Idera.SQLsecure.Collector.Utility;
 namespace Idera.SQLsecure.Collector.Sql
 {
     internal static class SqlHelper
@@ -126,17 +127,27 @@ namespace Idera.SQLsecure.Collector.Sql
                 string instance,
                 int? port,
                 string user,
-                string password
+                string password,
+                ServerType serverType,
+                bool azureADAuth
             )
         {
             SqlConnectionStringBuilder bldr;
-            if (port.HasValue)
+            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            if (serverType == ServerType.SQLServerOnAzureVM)
             {
-                bldr = ConstructConnectionString(string.Format("{0},{1}", instance, port.Value), user, password);
+                bldr = ConstructConnectionString(instance, user, password, serverType, azureADAuth);
             }
             else
             {
-                bldr = ConstructConnectionString(instance, user, password);
+                if (port.HasValue)
+                {
+                    bldr = ConstructConnectionString(string.Format("{0},{1}", instance, port.Value), user, password, serverType, azureADAuth);
+                }
+                else
+                {
+                    bldr = ConstructConnectionString(instance, user, password, serverType, azureADAuth);
+                }
             }
 
             return bldr;
@@ -152,7 +163,9 @@ namespace Idera.SQLsecure.Collector.Sql
         public static SqlConnectionStringBuilder ConstructConnectionString(
                 string instance,
                 string user,
-                string password
+                string password,
+                ServerType serverType = ServerType.OnPremise,
+                bool azureADAuth=false
             )
         {
 //            using (logX.loggerX.DebugCall())
@@ -164,7 +177,6 @@ namespace Idera.SQLsecure.Collector.Sql
                 SqlConnectionStringBuilder bldr = new SqlConnectionStringBuilder();
                 bldr.DataSource = instance;
                 bldr.ApplicationName = Constants.SqlAppName;
-
                 // If user is specified then its not integrated security,
                 // so set the user & password.
                 bldr.IntegratedSecurity = (user == null || user.Length == 0);
@@ -173,11 +185,43 @@ namespace Idera.SQLsecure.Collector.Sql
                     bldr.UserID = user;
                     bldr.Password = password;
                 }
+                if (serverType == ServerType.AzureSQLDatabase || (serverType == ServerType.SQLServerOnAzureVM && azureADAuth))
+                {
+                    bldr.ConnectionString = ConstructConnectionString(instance, user, password, azureADAuth);
 
+                }
+                //
+                ////SQLsecure (Tushar)--Added support for Azure VM
+                //if(serverType == ServerType.SQLServerOnAzureVM)
+                //    bldr.ConnectionString =     @"Data Source=" + instance + ";Initial Catalog=master ;User ID= " + user + ";Password=" + password + ";";
                 return bldr;
             }
         }
 
+
+        /// <summary>
+        /// Constructs connection strings for azure DB connection and for Azure AD
+        /// </summary>
+        /// <param name="serverType">server type : on premise,azure DB, SQL server on Azure VM</param>
+        /// <param name="azureADAuth">bool value : true when it is for azure Ad</param>
+        public static string ConstructConnectionString(
+               string instance,
+               string user,
+               string password,
+               bool azureADAuth
+           )
+        {
+            string connectionString;
+            if (!azureADAuth)
+            {
+                connectionString = "Server=" + instance + ";Persist Security Info=False;User ID=" + user + ";Password=" + password + ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;ConnectRetryCount=5;";
+            }
+            else
+            {
+                connectionString = @"Data Source=" + instance + "; Authentication=Active Directory Password; UID=" + user + "; PWD=" + password+ "; ConnectRetryCount=5;";
+            }
+            return connectionString;
+        }
         /// <summary>
         /// Appends database to a connection string, and returns the new connection string.
         /// </summary>
@@ -394,6 +438,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     // Prepare and execute the command.
                     try
                     {
+                        
                         // Create the command object.
                         prepareCommand(cmd, connection, (SqlTransaction)null, commandType, commandText, commandParameters);
 
@@ -419,6 +464,7 @@ namespace Idera.SQLsecure.Collector.Sql
                         {
                             cmd.Parameters.Clear();
                         }
+
                     }
                     catch (SqlException ex)
                     {
@@ -432,7 +478,10 @@ namespace Idera.SQLsecure.Collector.Sql
         }
 
 
+       
     }
+
+   
     #region SQL Command Timeout
     public class SQLCommandTimeout
     {
@@ -484,7 +533,9 @@ namespace Idera.SQLsecure.Collector.Sql
                     if (hkSQLsecure != null) hkSQLsecure.Close();
                 }
             }
+            
             return timeout;
+            
         }
 
         private static void WriteDefaultSQLCommandTimeout(int defaultTimeout)

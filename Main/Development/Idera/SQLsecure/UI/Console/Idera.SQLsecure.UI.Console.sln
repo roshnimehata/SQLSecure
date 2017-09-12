@@ -91,27 +91,4 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.242.72:8080/tfs/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Idera.SQLsecure.UI.Console.csproj
-		SccLocalPath1 = .
-		SccProjectUniqueName2 = ..\\..\\Core\\Logger\\Idera.SQLsecure.Core.Logger.csproj
-		SccProjectName2 = ../../Core
-		SccLocalPath2 = ..\\..\\Core
-		SccProjectFilePathRelativizedFromConnection2 = Logger\\
-		SccProjectUniqueName3 = ..\\..\\Core\\Accounts\\Idera.SQLsecure.Core.Accounts.csproj
-		SccProjectName3 = ../../Core
-		SccLocalPath3 = ..\\..\\Core
-		SccProjectFilePathRelativizedFromConnection3 = Accounts\\
-		SccProjectUniqueName4 = ..\\..\\Core\\Interop\\Idera.SQLsecure.Core.Interop.csproj
-		SccProjectName4 = ../../Core
-		SccLocalPath4 = ..\\..\\Core
-		SccProjectFilePathRelativizedFromConnection4 = Interop\\
-		SccProjectUniqueName5 = ..\\Repository\\Repository.csproj
-		SccProjectName5 = ../Repository
-		SccLocalPath5 = ..\\Repository
-	EndGlobalSection
 EndGlobal

@@ -17,7 +17,7 @@
     <ApplicationIcon>SQLsecure_product.ico</ApplicationIcon>
     <Win32Resource>
     </Win32Resource>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -56,6 +56,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Idera.SQLsecure.UI.Console.Program</StartupObject>
@@ -151,8 +152,9 @@
       <HintPath>..\..\..\..\ThirdPartySoftware\Infragistics2.Win.v9.1.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.Common, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Reference Include="Microsoft.ReportViewer.Common, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\ThirdPartySoftware\Microsoft.ReportViewer.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -160,8 +162,9 @@
       <HintPath>..\..\..\..\ThirdPartySoftware\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.WinForms, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\ThirdPartySoftware\Microsoft.ReportViewer.WinForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -190,6 +193,7 @@
       <HintPath>..\..\..\..\ThirdPartySoftware\PowerCollections.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Design" />
@@ -275,6 +279,12 @@
     </Compile>
     <Compile Include="Controls\CommonTask.designer.cs">
       <DependentUpon>CommonTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\controlConfigureMetricCriteria.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\controlConfigureMetricCriteria.Designer.cs">
+      <DependentUpon>controlConfigureMetricCriteria.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\controlConfigurePolicyVulnerabilities.cs">
       <SubType>UserControl</SubType>
@@ -1479,6 +1489,7 @@
     <Compile Include="SQL\ObjectPermissions.cs" />
     <Compile Include="SQL\Policy.cs" />
     <Compile Include="SQL\PolicyAssessmentNotes.cs" />
+    <Compile Include="SQL\PolicyMetricConfiguration.cs" />
     <Compile Include="SQL\PolicyMetric.cs" />
     <Compile Include="SQL\RegistryKey.cs" />
     <Compile Include="SQL\ReportsRecord.cs" />
@@ -1502,6 +1513,7 @@
     <Compile Include="Utility\ExceptionHelper.cs" />
     <Compile Include="Utility\GridSettings.cs" />
     <Compile Include="Utility\Help.cs" />
+    <Compile Include="Utility\Helper.cs" />
     <Compile Include="Utility\HideFocusRectangleDrawFilter.cs" />
     <Compile Include="Utility\Logging.cs" />
     <Compile Include="Utility\MenuConfiguration.cs" />

@@ -76,7 +76,53 @@ namespace Idera.SQLsecure.UI.Console.Utility
         NewAuditServer,
         NewPolicy
     }
+    
+    // SQLsecure 3.1 (Anshul Aggarwal) - Represents values configurable for a metric based on server type.
+    internal enum PolicyMetricConfigurationColumn
+    {
+        PolicyId = 0,
+        AssessmentId,
+        MetricId,
+        ServerType,
+        MetricName,
+        MetricDescription,
+        ValidValues,
+        ValueDescription,
+        ReportKey,
+        ReportText,
+        Severity,
+        SeverityValues
+    }
 
+    // SQLsecure 3.1 (Anshul Aggarwal) - Represents values configurable for a metric.
+    internal enum PolicyColumn
+    {
+        PolicyId = 0,
+        AssessmentId,
+        PolicyName,
+        MetricId,
+        MetricType,
+        MetricName,
+        MetricDescription,
+        IsUserEntered,
+        IsMultiSelect,
+        ValidValues,
+        ValueDescription,
+        IsEnabled,
+        ReportKey,
+        ReportText,
+        Severity,
+        SeverityValues
+    }
+
+    // SQLsecure 3.1 (Anshul Aggarwal) - Used to differentiate between 2 states of Configure Policy Control
+    internal enum ConfigurePolicyControlType
+    {
+        ConfigureSecurityCheck,
+        ImportExportSecurityCheck,
+        CreatePolicySecurityCheck
+    }
+    
     internal static class Constants
     {
         #region General
@@ -92,17 +138,17 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static String COMPANY_STR = @"Idera";
         public static String PRODUCT_STR = @"SQLsecure";
-        public static String PRODUCT_VER_STR = @"2.9";
+        public static String PRODUCT_VER_STR = @"3.1";
         // Previous version strings (newest first) to find previous option files
-        public static String[] PRODUCT_VER_STR_PREV = { @"2.8",@"2.7",@"2.6", @"2.5", @"2.0", @"1.2", @"1.1" };
+        public static String[] PRODUCT_VER_STR_PREV = { @"3.0",@"2.9",@"2.8",@"2.7",@"2.6", @"2.5", @"2.0", @"1.2", @"1.1" };
         public static String COMPONENT_STR = @"Console";
 
         public static String APP_TITLE_STR = COMPANY_STR + @" " + PRODUCT_STR + @" - {0}";
 
         public static String OPTIONS_FILE_EXTENSION_STR = @".options.xml";
 
-        public const int DalVersion = 3002;
-        public const int SchemaVersion = 3002;
+        public const int DalVersion = 3100;
+        public const int SchemaVersion = 3100;
 
         public const string COPYRIGHT_MSG = @"© Copyright 2005-2016 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
 
@@ -112,6 +158,22 @@ namespace Idera.SQLsecure.UI.Console.Utility
         internal const string SQLsecureLicenseProductVersionStr = "1.1";
 
         public const string ProductsPageText = "Idera SQLsecure helps you detect and verify security holes in your SQL Server security model. SQLsecure does this by performing rights analysis across SQL Server, Active Directory and Windows and calculating the effective access rights for any user, object or access control.";
+
+        internal enum ExitCode
+        {
+            Success = 0,
+            ScriptNotExist = -999,
+            ScriptFailure = -1000
+        }
+
+        //SQLsecure 3.1 (Tushar)--Enums for type of server and authentication.
+        public enum typeOfServer
+        {
+            azureVM,
+            azureDB,
+            remoteVM,
+            onPremise
+        };
 
         #endregion
 
@@ -261,6 +323,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         #region Main Menus
 
+        public const String Menu_Descr_Deploy_Repository = @"Deploy SQLsecure Repository";
         public const String Menu_Descr_File_Connect = @"Connect to another SQLsecure Repository";
         public const String Menu_Descr_File_ConnectionProperties = @"View connection properties for the current Repository";
         public const String Menu_Descr_File_NewSQLServer = @"Register a new SQL Server instance to audit";
@@ -369,7 +432,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string ReportRunInstructions_NoParameters = @"Click the ""View Report"" button to generate your report.";
         public const string ReportRunInstructions_LoginType = @"Choose the type of Login.";
         public const string ReportRunInstructions_UserName = @"Type or browse for the User name.";
-        public const string ReportRunInstructions_Server = @"Select a target SQL Server instance.";
+        public const string ReportRunInstructions_Server = @"Select a target instance.";    // SQLsecure 3.1 (Anshul Aggarwal) - SQLSECU-1711 : Report UI Msg Changes.
+
         public const string ReportRunInstructions_Database = @"Select a Database you would like to analyze.";
         public const string ReportRunInstructions_PermissionType = @"Select a permisson type.";
         public const string ReportRunInstructions_StartDate = @"Choose a start date and time for the report. (in UTC)";
@@ -387,13 +451,15 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         // General Reports
         public const string ReportTitle_AuditedServers = @"Audited SQL Servers";
-        public static string ReportSummary_AuditedServers = @"Show all the SQL Server instances that are being audited by " + PRODUCT_STR + ".";
+        
+		// SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure SQL Database.
+		public static string ReportSummary_AuditedServers = @"Show all the SQL Server and Azure SQL Database instances that are being audited by " + PRODUCT_STR + ".";
 
         public const string ReportTitle_CrossServerLoginCheck = @"Cross Server Login Check";
-        public static string ReportSummary_CrossServerLoginCheck = @"Show all SQL Servers where a selected user has access.";
+        public static string ReportSummary_CrossServerLoginCheck = @"Show all SQL Servers and Azure SQL Databases where a selected user has access.";
 
         public const string ReportTitle_Filters = @"Data Collection Filters";
-        public static string ReportSummary_Filters = @"Show the data collection filters for all SQL Server instances.";
+        public static string ReportSummary_Filters = @"Show the data collection filters for all SQL Server and Azure SQL Database instances.";
 
         public const string ReportTitle_ActivityHistory = @"Activity History";
         public static string ReportSummary_ActivityHistory = @"Show all SQLsecure activity history.";
@@ -403,59 +469,75 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         // Entitlement Reports
         public const string ReportTitle_SuspectWindowsAccounts = @"Suspect Windows Accounts";
-        public static string ReportSummary_SuspectWindowsAccounts = @"Show all the unresolved Windows Accounts that have Server Logins.";
+        public static string ReportSummary_SuspectWindowsAccounts = @"Show all the unresolved Windows Accounts that have Server Logins.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_SuspectSqlLogins = @"Suspect SQL Logins";
-        public static string ReportSummary_SuspectSqlLogins = @"Show all SQL server logins that do not have permissions.";
+        public static string ReportSummary_SuspectSqlLogins = @"Show all SQL Server and Azure SQL Database logins that do not have permissions.";
         
         public const string ReportTitle_ServerLoginsAndUserMappings = @"Server Logins and User Mappings";
-        public static string ReportSummary_ServerLoginsAndUserMappings = @"Show all Server Logins and associated Database User Mappings for each SQL Server instance being audited.";
+        public static string ReportSummary_ServerLoginsAndUserMappings = @"Show all Server Logins and associated Database User Mappings for each SQL Server and Azure SQL Database instance being audited.";
 
         public const string ReportTitle_UsersPermissions = @"User Permissions";
         public static string ReportSummary_UsersPermissions = @"Show permissions for a user across all servers.";
 
         public const string ReportTitle_DatabaseRoles = @"Database Roles";
-        public static string ReportSummary_DatabaseRoles = @"Show all direct members of Database Roles on all SQL Servers.";
+        public static string ReportSummary_DatabaseRoles = @"Show all direct members of Database Roles on all SQL Server and Azure SQL Database instances.";
 
         public const string ReportTitle_ServerRoles = @"Server Roles";
-        public static string ReportSummary_ServerRoles = @"Show all direct members of Server Roles on all SQL Servers.";
+        public static string ReportSummary_ServerRoles = @"Show all direct members of Server Roles on all SQL Server and Azure SQL Database instances.";
 
         public const string ReportTitle_AllObjectsWithPermissions = @"All User Permissions";
         public static string ReportSummary_AllObjectsWithPermissions = @"Show all objects with permissions in databases for all servers.";
 
         // Vulnerability Reports
         public const string ReportTitle_GuestEnabledDatabases = @"Guest Enabled Databases";
-        public static string ReportSummary_GuestEnabledDatabases = @"Show all databases on a SQL Server instance where the Guest user has access.";
+        public static string ReportSummary_GuestEnabledDatabases = @"Show all databases on a SQL Server instance where the Guest user has access.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_MixedModeAuthentication = @"Mixed Mode Authentication";
-        public static string ReportSummary_MixedModeAuthentication = @"Show all SQL Server instances where Windows Authentication is not the only login method.";
+        public static string ReportSummary_MixedModeAuthentication = @"Show all SQL Server instances where Windows Authentication is not the only login method.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_SystemAdministratorVulnerability = @"System Administrator Vulnerability";
-        public static string ReportSummary_SystemAdministratorVulnerability = @"Show all SQL Server instances that include Built-in Administrators as members of the sysadmin role.";
+        public static string ReportSummary_SystemAdministratorVulnerability = @"Show all SQL Server instances that include Built-in Administrators as members of the sysadmin role.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_VulnerableFixedRoles = @"Vulnerable Fixed Roles";
-        public static string ReportSummary_VulnerableFixedRoles = @"Show all SQL Server instances that contain fixed roles assigned to public or guest.";
+        public static string ReportSummary_VulnerableFixedRoles = @"Show all SQL Server and Azure SQL Database instances that contain fixed roles assigned to public or guest.";
 
         public const string ReportTitle_ServersWithDangerousGroups = @"Dangerous Windows Groups";
-        public static string ReportSummary_ServersWithDangerousGroups = @"Show all SQL Server instances that grant access to any OS controlled Windows Group.";
+        public static string ReportSummary_ServersWithDangerousGroups = @"Show all SQL Server instances that grant access to any OS controlled Windows Group.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_DatabaseChaining = @"Database Chaining Enabled";
-        public static string ReportSummary_DatabaseChaining = @"Show all SQL Server instances that have cross-database ownership chaining enabled.";
+        public static string ReportSummary_DatabaseChaining = @"Show all SQL Server instances that have cross-database ownership chaining enabled.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_CMDShellVulnerability = @"CMD Shell Vulnerability";
         public static string ReportSummary_CMDShellVulnerability = @"Show all SQL Server instances that have xp_cmdshell extended stored procedures available.";
 
         public const string ReportTitle_MailVulnerability = @"Mail Vulnerability";
-        public static string ReportSummary_MailVulnerability = @"Show all SQL Server instances with SQL Mail stored procedures.";
+        public static string ReportSummary_MailVulnerability = @"Show all SQL Server instances with SQL Mail stored procedures.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         public const string ReportTitle_LoginVulnerability = @"Login Vulnerability";
-        public static string ReportSummary_LoginVulnerability = @"Show all SQL Server instance whose SQL logins have weak passwords.";
+        public static string ReportSummary_LoginVulnerability = @"Show all SQL Server and Azure SQL Database instances whose SQL logins have weak passwords.";
 
         public const string ReportTitle_RiskAssessment = @"Risk Assessment";
         public static string ReportSummary_RiskAssessment = @"Show all policy and risk assessment results.";
 
         public const string ReportTitle_OSVulnerability = @"OS Vulnerability via XSPs";
-        public static string ReportSummary_OSVulnerability = @"Show all extended stored procedures that grant non-Administrator users permission to access operating system functions.";
+        public static string ReportSummary_OSVulnerability = @"Show all extended stored procedures that grant non-Administrator users permission to access operating system functions.
+
+Note : This report is not applicable to Azure SQL Database instances.";
 
         // Comparison Reports
         public const string ReportTitle_CompareAssessments = @"Assessment Comparison";
@@ -476,6 +558,9 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string ReportSelect_LoginTypes_WindowsUsers = "Windows Users";
         public const string ReportSelect_LoginTypes_WindowsGroup = "Windows Groups";
         public const string ReportSelect_LoginTypes_SQLLogins = "SQL Logins";
+        public const string ReportSelect_LoginTypes_AzureADAccounts = "All Azure AD Accounts";  // SQLsecure 3.1 (Anshul Aggarwal) - Add support for Azure AD Users or Groups
+        public const string ReportSelect_LoginTypes_AzureADUser = "Azure AD User";
+        public const string ReportSelect_LoginTypes_AzureADGroup = "Azure AD Group";
 
         #endregion
 
@@ -502,6 +587,50 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string IMPORT_COLUMN_TEXT = "Import";
         public const string IMPORTING_EXPORTING_DESCRIPTION_FORMAT = "Check security checks in {0} column for {1} operation.";
         public const string IMPORTING_EXPORTING_FORM_TITLE_FORMAT = "{0} {1} Security Checks - {2}";
+
+        #endregion
+
+        #region Configure Policy Vulnerabilities
+        
+        // SQLsecure 3.1 (Anshul Aggarwal) - Columns for handling the grid and policymetric results
+        public const string POLICY_METRIC_VALUE_IS_SELECTED = @"IsSelected";
+
+        public const string POLICY_METRIC_VALUE_LIST_SERVERITY = @"Severity";
+        public const string POLICY_METRIC_VALUE_LIST_ENABLED = @"Enabled";
+
+        public const string POLICY_METRIC_COLUMN_IS_ENABLED = @"IsEnabled";
+        public const string POLICY_METRIC_COLUMN_IS_MULTISELECT = @"IsMultiSelect";
+        public const string POLICY_METRIC_COLUMN_IS_USER_ENTERED = @"IsUserEntered";
+        public const string POLICY_METRIC_COLUMN_METRIC_TYPE = @"MetricType";
+        public const string POLICY_METRIC_COLUMN_VALID_VALUES = @"ValidValues";
+        public const string POLICY_METRIC_COLUMN_VALUE_DESCRIPTION = @"ValueDescription";
+        
+        public const string POLICY_METRIC_PROPERTIES_HEADER_DISPLAY = "Security Checks ({0} enabled)";
+        public const string POLICY_METRIC_PROPERTIES_PRINT_TITLE = @"Policy Security Checks";
+        public const string POLICY_METRIC_PROPERTIES_PRINT_HEADER_DISPLAY = "Security Checks for '{0}' as of {1}";
+
+        public const string POLICY_METRIC_COLUMN_APPLICABLE_AZUREDB = @"ApplicableOnAzureDB";
+        public const string POLICY_METRIC_COLUMN_APPLICABLE_PREMISE = @"ApplicableOnPremise";
+        public const string POLICY_METRIC_COLUMN_METRIC_DISPLAY_NAME = @"MetricDisplayName";
+
+        public const string POLICY_METRIC_COLUMN_REPORT_KEY = @"ReportKey";
+        public const string POLICY_METRIC_COLUMN_REPORT_TEXT = @"ReportText";
+        public const string POLICY_METRIC_COLUMN_SEVERITY = @"Severity";
+        public const string POLICY_METRIC_COLUMN_SEVERITY_VALUES = @"SeverityValues";
+        public const string POLICY_METRIC_COLUMN_METRIC_DESCRIPTION = @"MetricDescription";
+        public const string POLICY_METRIC_COLUMN_METRIC_NAME = @"MetricName";
+        
+        public const string POLICY_METRIC_COLUMN_ADB_METRIC_NAME = @"ADBMetricName";
+        public const string POLICY_METRIC_COLUMN_ADB_METRIC_DESCRIPTION = @"ADBMetricDescription";
+        public const string POLICY_METRIC_COLUMN_ADB_REPORT_KEY = @"ADBReportKey";
+        public const string POLICY_METRIC_COLUMN_ADB_REPORT_TEXT = @"ADBReportText";
+        public const string POLICY_METRIC_COLUMN_ADB_SEVERITY = @"ADBSeverity";
+        public const string POLICY_METRIC_COLUMN_ADB_SEVERITY_VALUES = @"ADBSeverityValues";
+        public const string POLICY_METRIC_COLUMN_ADB_VALID_VALUES = @"ADBValidValues";
+        public const string POLICY_METRIC_COLUMN_ADB_VALUE_DESCRIPTION = @"ADBValueDescription";
+        public const string POLICY_METRIC_COLUMN_AZURE_DB = @"AzureDB";
+
+        public const string POLICY_METRIC_CONSTANT_NOT_APPLICABLE = @"NA";
 
         #endregion
     }
@@ -664,6 +793,10 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const String ToolTipCode = @"The event code for the Activity";
         public const String ToolTipCategory = @"The category of the Activity";
         public const String ToolTipDescription = @"The description of the Activity";
+
+        public const string TypeServerOnPremise = @"On-Premise SQL Server";
+        public const string TypeServerAzureVM = @"SQL Server on Azure Virtual Machine";
+        public const string TypeServerAzureDB = @"Azure SQL Database";
     }
 
     #endregion
@@ -908,4 +1041,17 @@ namespace Idera.SQLsecure.UI.Console.Utility
     }
 
     #endregion
+
+    public enum ServerType
+    {
+        OnPremise,//On-Premise
+        AzureSQLDatabase,//Azure SqlDatabase
+        SQLServerOnAzureVM//Azure VM
+    }
+
+    public enum type_of_authentication
+    {
+        windows,
+        sa
+    };
 }

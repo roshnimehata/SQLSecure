@@ -13,6 +13,8 @@ using Idera.SQLsecure.UI.Console.Utility;
 using Infragistics.Win.UltraWinListView;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 using Idera.SQLsecure.UI.Console.SQL;
+using System.Drawing;
+using System.Text.RegularExpressions;
 
 namespace Idera.SQLsecure.UI.Console.Forms
 {
@@ -55,6 +57,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private string m_Connection = string.Empty;
         private int? m_ConnectionPort = null;
         private string m_Version = string.Empty;
+        private string m_ServerType = string.Empty;
         private Sql.DataCollectionFilter m_Filter;
         private List<Console.Sql.Policy> m_Polices = new List<Console.Sql.Policy>();
         private NextAction m_nextAction;
@@ -96,6 +99,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             textbox_WindowsUser.Enabled = false;
             textbox_WindowsPassword.Enabled = false;
 
+
+            _comboBox_ServerType.Items.Clear();
+            _comboBox_ServerType.Items.Add(Utility.Activity.TypeServerOnPremise);
+            _comboBox_ServerType.Items.Add(Utility.Activity.TypeServerAzureVM);
+            _comboBox_ServerType.Items.Add(Utility.Activity.TypeServerAzureDB);
+            _comboBox_ServerType.SelectedItem = Utility.Activity.TypeServerOnPremise;
+            _comboBox_ServerType.SelectedIndexChanged +=
+            new System.EventHandler(_comboBox_ServerType_SelectedIndexChanged);
             // Load up the Polices
             foreach (Policy p in Program.gController.Repository.Policies)
             {
@@ -229,7 +240,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                                         form.radioButton_WindowsAuth.Checked ? "W" : "S",
                                         sqlLogin, sqlPassword,
                                         form.textbox_WindowsUser.Text, form.textbox_WindowsPassword.Text,
-                                        form.m_Version, (int)form.numericUpDown_KeepSnapshotDays.Value, auditFolders);
+                                        form.m_Version, (int)form.numericUpDown_KeepSnapshotDays.Value, auditFolders,form.m_ServerType);
 
                     // Notify controller that a new server was added.
                     Program.gController.SignalRefreshServersEvent(true, form._txtbx_Server.Text.ToUpper());
@@ -414,6 +425,77 @@ namespace Idera.SQLsecure.UI.Console.Forms
             Program.gController.ShowTopic(helpTopic);
         }
 
+        private void _comboBox_ServerType_SelectedIndexChanged(object sender,
+        System.EventArgs e)
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_WizardRegisterSQLServer));
+            ComboBox comboBox = (ComboBox)sender;
+            if (comboBox.SelectedItem == Utility.Activity.TypeServerOnPremise)
+            {
+                _btn_BrowseServers.Visible = true;
+                // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                _lbl_AzureAuth.Hide();
+                checkBox_UseSameAuth.Enabled = true;
+                checkBox_UseSameAuth.Checked = true;
+                checkBox_UseSameAuth.Show();
+                radioButton_SQLServerAuth.Checked = true;
+                _grpbx_WindowsGMCredentials.Visible = true;
+                checkBox_UseSameAuth.Text = "Use same Windows Authentication as above";
+                radioButton_WindowsAuth.Text = "Windows Authentication";
+                label4.Text = "&Windows User:";
+                _lbl_WindowsUser.Text = "&Windows User:";
+                _grpbx_WindowsGMCredentials.Text = "Windows Credentials to gather Operating System and Active Directory objects";
+                label2.Text = resources.GetString("label2.Text");
+            }
+			// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            else if (comboBox.SelectedItem == Utility.Activity.TypeServerAzureVM)
+            {
+                _btn_BrowseServers.Visible = false;//SQLsecure 3.1 (Tushar)--Fix for defect SQLSECU-1714
+                checkBox_UseSameAuth.Enabled = false;
+                checkBox_UseSameAuth.Checked = false;
+                checkBox_UseSameAuth.Hide();
+                _lbl_AzureAuth.Show();
+
+                radioButton_WindowsAuth.Text = "Windows Authentication";
+                label4.Text = "&Windows User:";
+                _lbl_WindowsUser.Text = "&Azure AD Account:";
+                radioButton_SQLServerAuth.Checked = true;
+
+                textBox_SQLWindowsUser.Enabled = false;
+                textBox_SQLWindowsPassword.Enabled = false;
+
+                textbox_WindowsUser.Enabled = true;
+                textbox_WindowsPassword.Enabled = true;
+
+                textbox_SqlLogin.Enabled = true;
+                textbox_SqlLoginPassword.Enabled = true;
+                _grpbx_WindowsGMCredentials.Visible = true;
+                _grpbx_WindowsGMCredentials.Text = "Azure Active Directory to gather Operating System and Active Directory objects";
+                label2.Text = resources.GetString("AzureVMLabel2.Text");
+            }
+            else if (comboBox.SelectedItem == Utility.Activity.TypeServerAzureDB)
+            {
+              
+                _btn_BrowseServers.Visible = false;
+				// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                _lbl_AzureAuth.Hide();
+                checkBox_UseSameAuth.Show();
+                checkBox_UseSameAuth.Enabled = true;
+                radioButton_SQLServerAuth.Checked = true;
+                
+                checkBox_UseSameAuth.Text = "Use same Azure AD Authentication as above";
+                radioButton_WindowsAuth.Text = "Azure Active Directory";
+                label4.Text = "&Azure AD Account:";
+                _lbl_WindowsUser.Text = "&Azure AD Account:";
+                radioButton_SQLServerAuth.Checked = true;
+                _grpbx_WindowsGMCredentials.Visible = false;
+                _grpbx_WindowsGMCredentials.Text = "Azure Active Directory Credentials to gather Active Directory objects";
+                label2.Text = resources.GetString("AzureDbLabel2.Text");
+                this._page_Credentials.NextPage = this._PageTags;
+                this._PageTags.PreviousPage = this._page_Credentials;
+            }
+            
+        }
         #region Select Server Page
 
         private void _page_Servers_BeforeDisplay(object sender, EventArgs e)
@@ -450,7 +532,34 @@ namespace Idera.SQLsecure.UI.Console.Forms
         private void _txtbx_Server_TextChanged(object sender, EventArgs e)
         {
             // Enable next button, if text length is not null.
-            _page_Servers.AllowMoveNext = !string.IsNullOrEmpty(_txtbx_Server.Text);
+            if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerOnPremise)
+            {
+                _page_Servers.AllowMoveNext = !string.IsNullOrEmpty(_txtbx_Server.Text);
+            }
+            else
+            {
+
+                try
+                {
+                    
+                    if (!Regex.IsMatch(_txtbx_PortNumber.Text, @"^\d+$"))
+                    {   
+                        _txtbx_PortNumber.ForeColor = System.Drawing.Color.Red;
+                        _page_Servers.AllowMoveNext = false;
+                    }
+                    else
+                    {
+                        _txtbx_PortNumber.ForeColor = System.Drawing.Color.Black;
+                        _page_Servers.AllowMoveNext = !string.IsNullOrEmpty(_txtbx_Server.Text) && !string.IsNullOrEmpty(_txtbx_PortNumber.Text);
+                    }
+                }
+                catch
+                {
+                    // If there is an error, display the text using the system colors.
+                    _txtbx_PortNumber.ForeColor = SystemColors.ControlText;
+                }
+                
+            }
         }
 
         private void _page_Servers_BeforeMoveNext(object sender, CancelEventArgs e)
@@ -479,7 +588,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     m_ConnectionPort = null;
                 }
             }
-
+           
             // We have to get the server properties (machine & instance) from the
             // specified SQL Server.   If agent service credentials are being used
             // for data collection, connect to the registered SQL Server and get
@@ -549,7 +658,13 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private void checkBox_UseSameAuth_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox_UseSameAuth.Checked)
+			// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)
+            {
+                return;
+            }
+
+                if (checkBox_UseSameAuth.Checked)
             {
                 textbox_WindowsUser.Text = textBox_SQLWindowsUser.Text;
                 textbox_WindowsPassword.Text = textBox_SQLWindowsPassword.Text;
@@ -569,7 +684,11 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             if (radioButton_WindowsAuth.Checked)
             {
-                checkBox_UseSameAuth.Enabled = true;
+				// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                if (_comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureVM)
+                {
+                    checkBox_UseSameAuth.Enabled = true;
+                }            
 
                 textBox_SQLWindowsUser.Enabled = true;
                 textBox_SQLWindowsPassword.Enabled = true;
@@ -584,8 +703,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
         {
             if (radioButton_SQLServerAuth.Checked)
             {
-                checkBox_UseSameAuth.Enabled = false;
-                checkBox_UseSameAuth.Checked = false;
+				// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                if (_comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureVM)
+                {
+                    checkBox_UseSameAuth.Enabled = false;
+                    checkBox_UseSameAuth.Checked = false;
+                }
 
                 textBox_SQLWindowsUser.Enabled = false;
                 textBox_SQLWindowsPassword.Enabled = false;
@@ -622,7 +745,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private void textBox_SQLWindowsUser_TextChanged(object sender, EventArgs e)
         {
-            if (checkBox_UseSameAuth.Checked)
+			// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            if (checkBox_UseSameAuth.Checked && (_comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureVM))
             {
                 textbox_WindowsUser.Text = textBox_SQLWindowsUser.Text;
             }
@@ -631,7 +755,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
 
         private void textBox_SQLWindowsPassword_TextChanged(object sender, EventArgs e)
         {
-            if (checkBox_UseSameAuth.Checked)
+			// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+            if (checkBox_UseSameAuth.Checked && (_comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureVM))
             {
                 textbox_WindowsPassword.Text = textBox_SQLWindowsPassword.Text;
             }
@@ -690,6 +815,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             bool isOk = true;
             bool allowRegisterAnyway = true;
             string version = string.Empty;
+            string edition = string.Empty;
             string login = string.Empty;
             string password = string.Empty;
             WindowsImpersonationContext targetImpersonationContext = null;
@@ -721,7 +847,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 }
 
                 // Check if the account format is correct.
-                if (isOk)
+                // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                if (isOk && ((_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerOnPremise) || (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)))
                 {
                     string domain = string.Empty;
                     string user = string.Empty;
@@ -747,7 +874,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                 msgBldr.AppendFormat(Utility.Constants.PASSWORD_LENGTH_MESSAGE_FORMAT, Utility.Constants.MINIMUM_PASSWORD_LENGTH);
             }
 
-            if (allowRegisterAnyway)
+            if (allowRegisterAnyway && _comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureDB)
             {
                 // Operation System and AD User 
                 if (string.IsNullOrEmpty(textbox_WindowsUser.Text) || string.IsNullOrEmpty(textbox_WindowsPassword.Text))
@@ -756,7 +883,15 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     {
                         msgBldr.Append("\n\n");
                     }
-                    msgBldr.Append(Utility.ErrorMsgs.WindowsUserNotSpecifiedMsg);
+                    if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerOnPremise)
+                    {
+                        msgBldr.Append(Utility.ErrorMsgs.WindowsUserNotSpecifiedMsg);
+                    }
+                    else
+                    {
+                        msgBldr.Append(Utility.ErrorMsgs.AzureADAccountNotSpecifiedMsg);
+
+                    }
                     isOk = false;
                     allowRegisterAnyway = true;
                     isWindowsCredentails = false;
@@ -764,7 +899,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             }
 
             // Check if the account format is correct.
-            if (allowRegisterAnyway && isWindowsCredentails)
+            if (allowRegisterAnyway && isWindowsCredentails && _comboBox_ServerType.SelectedItem==Utility.Activity.TypeServerOnPremise)
             {
                 string domain = string.Empty;
                 string user = string.Empty;
@@ -790,8 +925,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     {
                         login = textbox_SqlLogin.Text;
                         password = textbox_SqlLoginPassword.Text;
-                    }
-                    else
+                    } 
+                    // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                    else if(radioButton_WindowsAuth.Checked &&((_comboBox_ServerType.SelectedItem==Utility.Activity.TypeServerOnPremise) || (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)))
                     {
                         // Impersonate ...
                         try
@@ -812,20 +948,57 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             allowRegisterAnyway = false;
                         }
                     }
+                    string serverName = _txtbx_Server.Text;
                     if (allowRegisterAnyway)
                     {
                         // Try connecting to SQLserver...
                         try
                         {
                             showWorking.UpdateText(string.Format("Connecting to SQL Server {0}...", _txtbx_Server.Text.ToUpper()));
-                            Sql.SqlServer.GetSqlServerProperties(_txtbx_Server.Text, login, password,
-                                                                    out version, out machine, out instance, out connection);
+                            //Barkha Khatri (SQLSecure 3.1) Removing protocol name from server name
+                            if (_txtbx_Server.Text.Contains(":"))
+                            {
+                                _txtbx_Server.Text = _txtbx_Server.Text.Split(':')[1];
+                            }
+                            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                            if ((_comboBox_ServerType.SelectedItem!= Utility.Activity.TypeServerOnPremise) && (_comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureVM))
+                            {
+                                serverName = _txtbx_Server.Text + "," + _txtbx_PortNumber.Text;
+                            }
+                            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                            bool azureADAuth = (radioButton_WindowsAuth.Checked && _comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerOnPremise && _comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureVM) ? true : false;
+                            if (azureADAuth)
+                            {
+                                Sql.SqlServer.GetSqlServerProperties(serverName, textBox_SQLWindowsUser.Text, textBox_SQLWindowsPassword.Text,
+                                                                        out version, out machine, out instance, out connection, out edition,
+                                                                        (string)_comboBox_ServerType.SelectedItem, azureADAuth);
+                            }
+                            else
+                            {
+                                Sql.SqlServer.GetSqlServerProperties(serverName, login, password,
+                                                                        out version, out machine, out instance, out connection, out edition,
+                                                                        (string)_comboBox_ServerType.SelectedItem, azureADAuth);
+                            }
                             if (targetImpersonationContext != null)
                             {
                                 targetImpersonationContext.Undo();
                                 targetImpersonationContext.Dispose();
                                 targetImpersonationContext = null;
                             }
+
+                            // SQLsecure 3.1 (Anshul) - Validate server edition based on server type.
+                            // SQLsecure 3.1 (Anshul) - SQLSECU-1775 - Azure VM : Register a Server as Azure DB by selecting Server type as Azure VM.
+                            ServerType serverType = SqlServer.GetServerTypeByName(Convert.ToString(_comboBox_ServerType.SelectedItem));
+                            if (!SqlHelper.ValidateServerEdition(serverType, edition))
+                            {
+                                if (msgBldr.Length > 0) { msgBldr.Remove(0, msgBldr.Length); }
+                                msgBldr.AppendFormat(serverType == ServerType.AzureSQLDatabase ? ErrorMsgs.IncorrectServerTypeAzureSQLDBMsg : 
+                                    ErrorMsgs.IncorrectServerTypeSQLServerMsg);
+
+                                isOk = false;
+                                allowRegisterAnyway = false;
+                            }
+
                             if (!checkVersionAndRegistration(version, connection))
                             {
                                 isOk = false;
@@ -842,6 +1015,8 @@ namespace Idera.SQLsecure.UI.Console.Forms
                             connection = _txtbx_Server.Text;
                             isOk = false;
                             allowRegisterAnyway = false;
+                            logX.loggerX.Error("Could not establish a connection with SQL Server {0}.", _txtbx_Server.Text.ToUpper());
+                            logX.loggerX.Error("Exception :" + ex.Message);
                         }
 
                     }
@@ -854,7 +1029,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
                     }
 
 
-                    if (allowRegisterAnyway && isWindowsCredentails)
+                    if (allowRegisterAnyway && isWindowsCredentails && _comboBox_ServerType.SelectedItem != Utility.Activity.TypeServerAzureDB)
                     {
                         // Try connecting to server
                         // Impersonate ...
@@ -879,10 +1054,72 @@ namespace Idera.SQLsecure.UI.Console.Forms
                         if (allowRegisterAnyway)
                         {
                             showWorking.UpdateText(string.Format("Connecting to Server {0}...", machine));
-                            string errorMsg;
-                            Server.ServerAccess sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text,
-                                                     out errorMsg);
-                            //                            Server s = new Server(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, null);
+							// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                            string errorMsg = string.Empty;
+                            Server.ServerAccess sa = Server.ServerAccess.ERROR_OTHER;
+                            // SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                            if ((Convert.ToString(_comboBox_ServerType.SelectedItem)== Utility.Activity.TypeServerOnPremise) || (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
+                            {
+                                sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+
+                                if (sa != Server.ServerAccess.OK)
+                                {
+                                    if ((!string.IsNullOrEmpty(serverName)) && (Convert.ToString(_comboBox_ServerType.SelectedItem) == Utility.Activity.TypeServerAzureVM))
+                                    {
+                                        string tempMachine = string.Empty;
+
+                                        if (serverName.IndexOf(@"\") != -1)
+                                        {
+                                            tempMachine = serverName.Substring(0, serverName.IndexOf(@"\"));
+                                        }
+                                        else
+                                        {
+                                            tempMachine = serverName;
+                                        }
+
+                                        Server.ServerAccess tempSa = sa;
+                                        sa = Server.ServerAccess.ERROR_OTHER;
+                                        string tempErrorMsg = errorMsg;
+                                        errorMsg = string.Empty;
+                                        sa = Server.CheckServerAccess(tempMachine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+
+                                        if (sa != Server.ServerAccess.OK)
+                                        {
+                                            sa = tempSa;
+                                            errorMsg = tempErrorMsg;
+                                        }
+                                        else
+                                        {
+                                            machine = tempMachine;
+                                        }
+                                    }
+                                }
+
+
+                                
+                            }
+							// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                            //else if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureVM)
+                            //{
+                            //    sa = Server.CheckServerAccess(machine, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg);
+
+                            //    //if (this.radioButton_WindowsAuth.Checked)
+                            //    //{
+                            //    //    sa = Server.CheckAzureServerAccess(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg, this.radioButton_WindowsAuth.Checked);
+                            //    //}
+                            //    //else
+                            //    //{
+                            //    //    sa = Server.CheckAzureServerAccess(serverName, textbox_SqlLogin.Text, textbox_SqlLoginPassword.Text, out errorMsg, this.radioButton_WindowsAuth.Checked);
+                            //    //}
+
+                            //}
+							// SQLSecure 3.1 (Biresh Kumar Mishra) - Add Support for Azure VM
+                            else if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureDB)
+                            {
+                                sa = Server.CheckAzureServerAccess(serverName, textbox_WindowsUser.Text, textbox_WindowsPassword.Text, out errorMsg, true);
+                            }
+
+
                             if (sa != Server.ServerAccess.OK)
                             {
                                 isOk = false;
@@ -959,8 +1196,25 @@ namespace Idera.SQLsecure.UI.Console.Forms
             {
                 m_Machine = machine;
                 m_Instance = instance;
-                m_Connection = connection;
+                
                 m_Version = version;
+                if (_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerOnPremise)
+                {
+                    m_ServerType = "OP";
+                    m_Connection = connection;
+                }
+                else if(_comboBox_ServerType.SelectedItem == Utility.Activity.TypeServerAzureDB)
+                {
+                    m_ServerType = "ADB";
+                    m_Connection = connection;
+                    m_ConnectionPort =Int32.Parse( _txtbx_PortNumber.Text);
+                }
+                else
+                {
+                    m_ServerType = "AVM";
+                    m_Connection = _txtbx_Server.Text;
+                    m_ConnectionPort = Int32.Parse(_txtbx_PortNumber.Text);
+                }
                 addEditFoldersControl.TargetServerName = m_Machine;
             }
             else
@@ -980,8 +1234,9 @@ namespace Idera.SQLsecure.UI.Console.Forms
             m_Filter = new Sql.DataCollectionFilter(m_Connection, "Default rule", "Rule created when the server was registered");
 
             ServerVersion parsedVersion = Sql.SqlHelper.ParseVersion(m_Version);
+            
             Idera.SQLsecure.UI.Console.Data.ServerInfo serverInfo = new Idera.SQLsecure.UI.Console.Data.ServerInfo(parsedVersion, radioButton_WindowsAuth.Checked,
-                textBox_SQLWindowsUser.Text, textBox_SQLWindowsPassword.Text, m_Connection);
+                textBox_SQLWindowsUser.Text, textBox_SQLWindowsPassword.Text, m_Connection,(string)_comboBox_ServerType.SelectedItem);
             filterSelection1.Initialize(m_Filter, serverInfo);
         }
 
@@ -1404,9 +1659,14 @@ namespace Idera.SQLsecure.UI.Console.Forms
             button2.Enabled = button3.Enabled = ulTags.SelectedItems.Count != 0;        
         }
 
-       
+        private void _page_FilePermissionFolders_BeforeDisplay(object sender, EventArgs e)
+        {
 
+        }
 
-     
+        private void _page_CollectData_BeforeDisplay(object sender, EventArgs e)
+        {
+
+        }
     }
 }
