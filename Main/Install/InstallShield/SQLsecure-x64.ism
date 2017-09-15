@@ -867,7 +867,7 @@
 		<row><td>SetupProgress</td><td>BackLarge</td><td>PushButton</td><td>231</td><td>299</td><td>66</td><td>17</td><td>1</td><td/><td>##IDS_BACK##</td><td>CancelLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupProgress</td><td>CancelLarge</td><td>PushButton</td><td>376</td><td>299</td><td>66</td><td>17</td><td>3</td><td/><td>##IDS_CANCEL##</td><td>NextLarge</td><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupProgress</td><td>DlgDesc2</td><td>Text</td><td>151</td><td>24</td><td>292</td><td>25</td><td>65538</td><td/><td>##IDS__IsProgressDlg_UninstallingFeatures##</td><td/><td/><td>0</td><td/><td/><td/></row>
-		<row><td>SetupProgress</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>183</td><td>18</td><td>65538</td><td/><td>##IDS__IsProgressDlg_UninstallingFeatures2##</td><td/><td/><td>0</td><td/><td/><td/></row>
+		<row><td>SetupProgress</td><td>DlgDescLarge</td><td>Text</td><td>151</td><td>23</td><td>292</td><td>18</td><td>65538</td><td/><td>##IDS__IsProgressDlg_UninstallingFeatures2##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupProgress</td><td>DlgDesc_upg</td><td>Text</td><td>151</td><td>23</td><td>292</td><td>25</td><td>65538</td><td/><td>##NEW_STRING128##</td><td/><td/><td/><td/><td/><td/></row>
 		<row><td>SetupProgress</td><td>DlgText</td><td>Text</td><td>196</td><td>82</td><td>211</td><td>30</td><td>65538</td><td/><td>##IDS__IsProgressDlg_WaitUninstall2##</td><td/><td/><td>0</td><td/><td/><td/></row>
 		<row><td>SetupProgress</td><td>DlgText2</td><td>Text</td><td>196</td><td>82</td><td>211</td><td>30</td><td>65538</td><td/><td>##IDS__IsProgressDlg_WaitUninstall##</td><td/><td/><td>0</td><td/><td/><td/></row>
