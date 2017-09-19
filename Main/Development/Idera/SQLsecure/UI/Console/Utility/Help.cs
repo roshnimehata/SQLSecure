@@ -35,7 +35,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string IderaProducts = @"http://www.idera.com/Products/Default.aspx";
         public const string CheckUpdates = @"http://www.idera.com/webscripts/VersionCheck.aspx?productid={0}&v={1}";
         public const string productID = "sqlsecure";
-        public const string productVersion = "3100";
+        public const string productVersion = "3110";
         public const string ABOUT_IDERA = "http://wiki.idera.com/x/0whK";
 
         #endregion

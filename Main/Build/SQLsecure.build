@@ -632,7 +632,7 @@
 		<attrib file="build/build.number" readonly="true"/>
 		
 		<!-- Set the build label used for P4 labeling, output dir & zip file -->
-		<property name="SQLsecure.BuildVersion" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.buildnumber}.0" />
+		<property name="SQLsecure.BuildVersion" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.build}.${SQLsecure.buildnumber}" />
 		
 		<property name="SQLsecure.BuildLabel" value="${SQLsecure.BuildVersion}_${SQLsecure.Incremental.Label}" />
 		
@@ -658,7 +658,7 @@
 		<!--p4submit changelist="Update build number" view="${Perforce.Branch}/build/build.number"/-->
 		
 		<!-- Set the build label used for P4 labeling, output dir & zip file -->
-		<property name="SQLsecure.BuildVersion" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.buildnumber}.0" />
+		<property name="SQLsecure.BuildVersion" value="${SQLsecure.major}.${SQLsecure.minor}.${SQLsecure.build}.${SQLsecure.buildnumber}" />
 		<property name="SQLsecure.BuildLabel" value="${SQLsecure.BuildVersion}" />
 		
 		<!-- Build share -->
