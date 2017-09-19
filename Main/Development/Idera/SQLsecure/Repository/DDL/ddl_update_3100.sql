@@ -1,3 +1,4 @@
+
 /* ---------------------------------------------------------------------- */
 /* Schema changes for SQLsecure 3.1 schema version 3100                   */
 /* ---------------------------------------------------------------------- */
@@ -16,19 +17,8 @@ SELECT
     @ver = schemaversion
 FROM
     currentversion;
-IF (ISNULL(@ver, 900) >= 3100)
+IF (ISNULL(@ver, 900) < 3100)
     BEGIN
-        DECLARE @msg NVARCHAR(500);
-        SET @msg = N'Database schema is not at a level that can be upgraded to version 3100';
-        IF (@ver IS NOT NULL)
-            EXEC isp_sqlsecure_addactivitylog @activitytype = 'Failure Audit',
-                @source = 'Install', @eventcode = 'Upgrade',
-                @category = 'Schema', @description = @msg,
-                @connectionname = NULL;
-        RAISERROR (@msg, 16, 1);
-    END;
-GO
-
 
 IF OBJECT_ID('registeredserver', 'U') IS NOT NULL 
 BEGIN
@@ -114,7 +104,6 @@ BEGIN
 	END
 END
 
-GO
 
 -- SQLsecure 3.1 (Anshul Aggarwal) - New table for risk assessment ADB: Server and DB Level Firewall Rules.
 IF NOT EXISTS ( SELECT TOP 1 *
@@ -220,7 +209,6 @@ WHERE  id = OBJECT_ID(N'[dbo].[policymetricextendedinfo]')
 	end
 /* END SQL Secure 3.1 (Anshul Aggarwal) Support different metric settings based on type of server */ 
 
-GO
 /*START Barkha khatri (SQlSecure 3.1)georeplication risk assessment */
 IF OBJECT_ID('sqldatabase', 'U') IS NOT NULL 
 BEGIN
@@ -230,5 +218,6 @@ IF COL_LENGTH('sqldatabase','georeplication') IS NULL
 	ADD georeplication bit 
  END
 END
-Go
+END
+GO
 /*END Barkha khatri (SQlSecure 3.1)georeplication risk assessment */
