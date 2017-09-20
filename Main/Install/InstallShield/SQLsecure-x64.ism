@@ -1004,9 +1004,7 @@
 		<row><td>SetupCompleteError</td><td>RestContText2</td><td>Show</td><td>UpdateStarted</td></row>
 		<row><td>SetupCompleteSuccess</td><td>CheckBoxUpdates</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
 		<row><td>SetupCompleteSuccess</td><td>CheckForUpdatesText</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
-		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Disable</td><td>&amp;Repository=3  OR (IS_UPGRADE=1 and !Repository=3)</td></row>
-		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Enable</td><td>&amp;Repository&lt;&gt;3  and !Repository&lt;&gt;3</td></row>
-		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Show</td><td>Not ISENABLEDWUSFINISHDIALOG</td></row>
+		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Show</td><td>NOT ISENABLEDWUSFINISHDIALOG And NOT Installed OR IS_UPGRADE</td></row>
 		<row><td>SetupCompleteSuccess</td><td>CheckLaunchReadme</td><td>Show</td><td>SHOWLAUNCHREADME="-1"  And READMEFILETOLAUNCHATEND &lt;&gt; "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG</td></row>
 		<row><td>SetupCompleteSuccess</td><td>LaunchReadmeText</td><td>Show</td><td>0</td></row>
 		<row><td>SetupCompleteSuccess</td><td>TextLine2</td><td>Show</td><td>ProgressType2="installed" And ((ACTION&lt;&gt;"INSTALL") OR (NOT ISENABLEDWUSFINISHDIALOG) OR (ISENABLEDWUSFINISHDIALOG And Installed))</td></row>
@@ -1015,7 +1013,7 @@
 		<row><td>SetupCompleteSuccess</td><td>UpdateTextLine2</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
 		<row><td>SetupCompleteSuccess</td><td>UpdateTextLine3</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
 		<row><td>SetupCompleteSuccess</td><td>txtRun</td><td>Hide</td><td>ISENABLEDWUSFINISHDIALOG</td></row>
-		<row><td>SetupCompleteSuccess</td><td>txtRun</td><td>Show</td><td>Not ISENABLEDWUSFINISHDIALOG</td></row>
+		<row><td>SetupCompleteSuccess</td><td>txtRun</td><td>Show</td><td>IS_UPGRADE</td></row>
 		<row><td>SetupInterrupted</td><td>BackLarge</td><td>Default</td><td>UpdateStarted</td></row>
 		<row><td>SetupInterrupted</td><td>BackLarge</td><td>Disable</td><td>NOT UpdateStarted</td></row>
 		<row><td>SetupInterrupted</td><td>BackLarge</td><td>Enable</td><td>UpdateStarted</td></row>

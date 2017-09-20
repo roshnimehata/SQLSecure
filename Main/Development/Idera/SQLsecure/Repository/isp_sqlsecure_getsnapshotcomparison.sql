@@ -520,7 +520,7 @@ as
 								N'isdatamasked', N'alwaysencryptiontype', N'signedcrypttype', N'isrowsecurityenabled', N'georeplication',
 								N'keyid',N'JobId',N'certid')
 		AND DATA_TYPE <>  N'nvarchar(max)'
-
+		
 		--AND TABLE_NAME LIKE 'sql%'	--	restriction for testing on certain tables
 
 

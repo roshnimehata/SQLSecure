@@ -2124,6 +2124,7 @@
     <None Include="Resources\ServerTag_48.png" />
     <Content Include="Resources\Services_48.png" />
     <None Include="Resources\SQLsecure_product.png" />
+    <Content Include="Resources\Splash2017.png" />
     <Content Include="Resources\SQLServerLogin_48.png" />
     <Content Include="Resources\SQLServerRole_48.png" />
     <Content Include="Resources\StoredProcedure_48.png" />

@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-
+using Idera.SQLsecure.UI.Console.Utility;
 namespace Idera.SQLsecure.UI.Console.Forms
 {
     public partial class Form_Splash : Form
@@ -28,6 +28,7 @@ namespace Idera.SQLsecure.UI.Console.Forms
             TimerToClose.Enabled = true;
             Opacity = m_currentOpacity;
             m_bCloseTime = false;
+            copyrightLabel.Text = Constants.COPYRIGHT_SPLASH_MSG;
         }
 
         private void TimerToClose_Tick(object sender, EventArgs e)

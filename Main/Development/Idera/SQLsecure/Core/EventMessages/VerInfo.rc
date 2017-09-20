@@ -74,7 +74,7 @@ BEGIN
             VALUE "FileDescription", "SQLsecure NT event log messages"
             VALUE "FileVersion", "1, 0, 0, 1"
             VALUE "InternalName", "Idera.SQLsecure.Core.EventMessages"
-            VALUE "LegalCopyright", "Copyright (C) 2006"
+            VALUE "LegalCopyright", "Copyright (C) 2017"
             VALUE "OriginalFilename", "Idera.SQLsecure.Core.EventMessages"
             VALUE "ProductName", " Idera SQLsecure"
             VALUE "ProductVersion", "1, 0, 0, 1"

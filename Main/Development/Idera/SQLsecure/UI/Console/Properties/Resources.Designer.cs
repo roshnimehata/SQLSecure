@@ -2033,6 +2033,16 @@ namespace Idera.SQLsecure.UI.Console.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Splash2017 {
+            get {
+                object obj = ResourceManager.GetObject("Splash2017", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SQLsecure_product {
             get {
                 object obj = ResourceManager.GetObject("SQLsecure_product", resourceCulture);

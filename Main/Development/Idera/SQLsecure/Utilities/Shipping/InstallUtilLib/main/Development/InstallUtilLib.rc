@@ -73,7 +73,7 @@ BEGIN
             VALUE "FileDescription", "Install utilities library"
             VALUE "FileVersion", "2, 2, 0, 0"
             VALUE "InternalName", "InstallUtilLib"
-            VALUE "LegalCopyright", "© Copyright 2004-2005 BBS Technologies, Inc., all rights reserved."
+            VALUE "LegalCopyright", "© Copyright 2004-2017 BBS Technologies, Inc., all rights reserved."
             VALUE "OriginalFilename", "InstallUtilLib.dll"
             VALUE "ProductName", "Install utilities library"
             VALUE "ProductVersion", "2, 2, 0, 0"

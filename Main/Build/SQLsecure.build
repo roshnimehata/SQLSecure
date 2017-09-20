@@ -121,7 +121,7 @@
 	<!-- Common Assembly Info -->
 	<property name="AssemblyInfo.Company" value="Idera, Inc." />
 	<property name="AssemblyInfo.Product" value="Idera SQLsecure" />
-	<property name="AssemblyInfo.Copyright" value="Copyright (C) 2005 - 2016 Idera, Inc." />
+	<property name="AssemblyInfo.Copyright" value="Copyright (C) 2005 - 2017 Idera, Inc." />
 	
 	<!-- InstallShield Information -->
 	<property name="InstallShield.Builder" value="C:\Program Files (x86)\Macrovision\IS 11.5 StandaloneBuild"/>
