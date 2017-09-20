@@ -82,7 +82,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     query = @"SELECT
                             dp.name, 
                             uid = dp.principal_id, 
-                            dp.type, 
+                            ISNULL(dp.type,'R'), 
                             usersid = dp.sid, 
                             isalias = 'N', 
                             altuid = CAST(su.altuid AS int),
@@ -119,7 +119,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     query = @"SELECT
                             dp.name, 
                             uid = dp.principal_id, 
-                            dp.type, 
+                            ISNULL(dp.type,'R'), 
                             usersid = dp.sid, 
                             isalias = 'N', 
                             altuid = CAST(su.altuid AS int),
@@ -163,7 +163,7 @@ namespace Idera.SQLsecure.Collector.Sql
                     query = @"SELECT
                             dp.name, 
                             uid = dp.principal_id, 
-                            dp.type, 
+                            ISNULL(dp.type,'R'), 
                             usersid = dp.sid, 
                             isalias = 'N', 
                             altuid = CAST(su.altuid AS int),
@@ -209,7 +209,7 @@ namespace Idera.SQLsecure.Collector.Sql
                 query = @"SELECT
                             dp.name, 
                             uid = dp.principal_id, 
-                            dp.type, 
+                            ISNULL(dp.type,'R'), 
                             usersid = dp.sid, 
                             isalias = 'N', 
                             altuid = CAST(su.altuid AS int),
