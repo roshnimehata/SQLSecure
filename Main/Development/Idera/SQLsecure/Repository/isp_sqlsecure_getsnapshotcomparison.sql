@@ -349,6 +349,10 @@ as
 							   + N' and new.[isinherited] = old.[isinherited]'
 						else N''
 						end
+				 + case when TABLE_NAME = N'sqljob'
+							then N' and new.name = old.name and new.step = old.step'
+						else N''
+						end
 				 + case when TABLE_NAME in (select A.TABLE_NAME
 											from INFORMATION_SCHEMA.COLUMNS A
 												INNER JOIN INFORMATION_SCHEMA.TABLES B ON A.TABLE_NAME = B.TABLE_NAME 
@@ -513,7 +517,8 @@ as
 								N'type', N'name', N'isrevoke', N'isaudited',	
 								N'FQN', N'istdeencrypted', -- SQLsecure 3.1 (Anshul Aggarwal) - Ignore new columns for new risks. 
 								N'islastbackupnative', N'lastbackupencrypted', N'intermediatebackupencrypted', N'intermediatebackupnonnative', 
-								N'isdatamasked', N'alwaysencryptiontype', N'signedcrypttype', N'isrowsecurityenabled', N'georeplication')
+								N'isdatamasked', N'alwaysencryptiontype', N'signedcrypttype', N'isrowsecurityenabled', N'georeplication',
+								N'keyid',N'JobId',N'certid')
 		AND DATA_TYPE <>  N'nvarchar(max)'
 
 		--AND TABLE_NAME LIKE 'sql%'	--	restriction for testing on certain tables
@@ -714,6 +719,10 @@ as
 							   + N' and isnull(new.[auditflags],0) = isnull(old.[auditflags],0)'
 							   + N' and isnull(new.[accesstype],0) = isnull(old.[accesstype],0)'
 							   + N' and new.[isinherited] = old.[isinherited]'
+						else N''
+						end
+				 + case when TABLE_NAME = N'sqljob'
+							then N' and new.name = old.name and new.step = old.step'
 						else N''
 						end
 				 + case when TABLE_NAME in (select A.TABLE_NAME
