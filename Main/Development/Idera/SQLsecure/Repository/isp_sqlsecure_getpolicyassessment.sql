@@ -7970,7 +7970,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         ON DRM.snapshotid = DPU.snapshotid
                                                                         AND DRM.dbid = DPU.dbid
                                                                         AND DRM.rolememberuid = DPU.uid
-                                                                        AND DPU.type <> 'R'
+                                                                        AND DPU.type in ('U','G','S','E','X')
                                                                         INNER JOIN dbo.databaseprincipal
                                                                         AS DPR
                                                                                 ON DRM.snapshotid = DPR.snapshotid
