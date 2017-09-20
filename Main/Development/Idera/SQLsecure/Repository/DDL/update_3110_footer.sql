@@ -53,7 +53,7 @@ IF ( ISNULL(@ver, 900) < 3110 )
          
 		BEGIN
 			UPDATE dbo.metric
-			SET valuedescription = 'When enabled, this check will identify a risk if any unauthorized accounts are members of the sysadmin server role or extended SoD roles. Specify the authorized accounts. Can use ''%'' as wildcard.',
+			SET valuedescription = 'When enabled, this check will identify a risk if any unauthorized accounts are members of the sysadmin server role or extended SoD roles. Specify the authorized accounts. Can use ''%'' as wildcard.'
 			WHERE metricid = @metricid
 		END;
 GO
