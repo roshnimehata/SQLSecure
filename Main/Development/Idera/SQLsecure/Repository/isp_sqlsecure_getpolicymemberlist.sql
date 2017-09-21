@@ -43,9 +43,21 @@ AS
 	declare @isdynamic bit, 
 		@str nvarchar(4000) 
 	declare @memberstable table (registeredserverid int)
-
+	declare @servertable table (registeredserverid int,connectionname nvarchar(400))
+	insert into @servertable (registeredserverid,connectionname)
+		select registeredserverid,connectionname from registeredserver
+	if(@assessmentid is not null and @policyid is not null) 
+	begin
+		insert into @servertable (registeredserverid,connectionname)
+			select registeredserverid,connectionname from unregisteredserver 
+				where registeredserverid in (select registeredserverid from policymember p 
+			inner join assessment a 
+				on p.assessmentid = a.assessmentid and p.policyid = a.policyid
+				where p.assessmentid = @assessmentid 
+				and p.policyid = @policyid 
+				and a.assessmentstate in (N'D', N'P', N'A'))
+	end
 	select @assessmentid = isnull(@assessmentid,[dbo].[getdefaultassessmentid](@policyid))
-
 	select @isdynamic=isdynamic, @str=rtrim(isnull(dynamicselection,N''))
 		from assessment 
 		where policyid = @policyid 
@@ -57,7 +69,7 @@ AS
 		begin
 			insert into @memberstable
 				select registeredserverid
-					from registeredserver
+					from @servertable
 					order by connectionname
 		end
 		else
@@ -86,7 +98,7 @@ AS
 	begin
 		insert into @memberstable
 			select m.registeredserverid
-				from policymember m inner join registeredserver s on m.registeredserverid = s.registeredserverid
+				from policymember m inner join @servertable s on m.registeredserverid = s.registeredserverid
 				where policyid = @policyid
 					and assessmentid = @assessmentid
 				order by s.connectionname

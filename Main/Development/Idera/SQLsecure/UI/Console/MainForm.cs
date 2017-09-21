@@ -19,7 +19,6 @@ using Idera.SQLsecure.UI.Console.Utility;
 using Policy = Idera.SQLsecure.UI.Console.Sql.Policy;
 using System.IO;
 using System.Data.SqlClient;
-using Microsoft.SqlServer.Management.Common;
 using System.Security.Principal;
 
 namespace Idera.SQLsecure.UI.Console
@@ -3249,6 +3248,7 @@ namespace Idera.SQLsecure.UI.Console
                     {
                         TreeNode servernode = new TreeNode(server.ConnectionName);
                         servernode.Name = server.ConnectionName;
+                        servernode.Text= server.ConnectionName + (server.IsUnregisteredServer ? "(UNREGISTERED)" : "");
                         servernode.ImageIndex =
                             servernode.SelectedImageIndex = AppIcons.AppImageIndex16(AppIcons.Enum.ServerOK);
                         servernode.Tag = server;
@@ -4440,6 +4440,7 @@ namespace Idera.SQLsecure.UI.Console
             bool canRemoveServer = false;
             bool canUpdateAssessment = false;
             bool serversExist = Program.gController.Repository.RegisteredServers.Count > 0;
+            bool isUnregisteredServer = false;
 
             // use the node that was clicked if a node was clicked on
             m_NodeToProcess = m_ClickedNode;
@@ -4486,6 +4487,7 @@ namespace Idera.SQLsecure.UI.Console
                         isInAssessment = policy.IsAssessment;
                         canRemoveServer = (policy.IsPolicy || (policy.IsAssessment && !policy.IsApprovedAssessment)) && !policy.IsDynamic;
                         hasLog = policy.IsPublishedAssessment || policy.IsApprovedAssessment;
+                        isUnregisteredServer = ((Sql.RegisteredServer)node.Tag).IsUnregisteredServer;
                     }
                 }
                 else if (isPolicyTree)
@@ -4537,22 +4539,23 @@ namespace Idera.SQLsecure.UI.Console
             _cmsi_Policy_separatorRemove.Visible = isPolicyTree || (isServerTree && isServer);
 
             // Enable/disable based on the node type.
-            _cmsi_Policy_viewSummary.Enabled = (isPolicy || isAssessment || isServer);
-            _cmsi_Policy_viewMetrics.Enabled = (isPolicy || isServer);
-            _cmsi_Policy_viewUsers.Enabled = (isPolicy || isServer);
-            _cmsi_Policy_viewLog.Enabled = (isAssessment || isServer) && hasLog && Program.gController.Permissions.isAdmin;
+            _cmsi_Policy_viewSummary.Enabled = (isPolicy || isAssessment || isServer) && !isUnregisteredServer;
+            _cmsi_Policy_viewMetrics.Enabled = (isPolicy || isServer) && !isUnregisteredServer;
+            _cmsi_Policy_viewUsers.Enabled = (isPolicy || isServer) && !isUnregisteredServer;
+            _cmsi_Policy_viewLog.Enabled = (isAssessment || isServer) && hasLog && Program.gController.Permissions.isAdmin && !isUnregisteredServer;
             _cmsi_Policy_addPolicy.Enabled = Program.gController.Permissions.isAdmin;
             _cmsi_Policy_configurePolicy.Enabled = (isPolicy || (isAssessment && canUpdateAssessment)) && Program.gController.Permissions.isAdmin;
             _cmsi_Policy_configureServers.Enabled = (isPolicy || (isAssessment && canUpdateAssessment)) && Program.gController.Permissions.isAdmin;
             _cmsi_Policy_importPolicy.Enabled = isPolicy && Program.gController.Permissions.isAdmin;
             _cmsi_Policy_exportPolicy.Enabled = isPolicy && Program.gController.Permissions.isAdmin;
-            _cmsi_Policy_configureAuditSettings.Enabled = isServer && Program.gController.Permissions.isAdmin;
-            _cmsi_Policy_collectDataSnapshot.Enabled = isServer && Program.gController.Permissions.isAdmin;
+            _cmsi_Policy_configureAuditSettings.Enabled = isServer && Program.gController.Permissions.isAdmin && !isUnregisteredServer;
+            _cmsi_Policy_collectDataSnapshot.Enabled = isServer && Program.gController.Permissions.isAdmin && !isUnregisteredServer;
             _cmsi_Policy_createAssessment.Enabled = serversExist && (isPolicy || isAssessment) && Program.gController.Permissions.isAdmin;
             _cmsi_Policy_removePolicy.Enabled = (isPolicy || isAssessment) && canRemovePolicy && Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Delete);
             _cmsi_Policy_removeServer.Enabled = isServer && canRemoveServer && Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Delete);
-            _cmsi_Policy_refresh.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Refresh);
-            _cmsi_Policy_properties.Enabled = ((isPolicy || isAssessment) || isServer) && Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Properties);
+            _cmsi_Policy_refresh.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Refresh) && !isUnregisteredServer;
+            _cmsi_Policy_properties.Enabled = ((isPolicy || isAssessment) || isServer) && Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Properties) && !isUnregisteredServer;
+            _cmsi_Policy_exploreSnapshot.Enabled = _cmsi_Policy_exploreUserPermissions.Enabled = _cmsi_Policy_exploreRolePermissions.Enabled = !isUnregisteredServer;
         }
 
         private void _cmsi_Policy_viewSummary_Click(object sender, EventArgs e)

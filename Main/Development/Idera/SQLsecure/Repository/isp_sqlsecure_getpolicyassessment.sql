@@ -457,7 +457,8 @@ AS -- <Idera SQLsecure version and copyright>
                                 BEGIN
 										
 										--START(Barkha Khatri) Changing metric cursor to get the metrics applicable on a particular server type
-										select @serverType=servertype from dbo.registeredserver where registeredserverid=@registeredserverid
+										select @serverType=servertype from (select servertype,registeredserverid from dbo.registeredserver union 
+										select servertype,registeredserverid from dbo.unregisteredserver) a where a.registeredserverid=@registeredserverid
 										IF(@serverType=@onpremiseservertype OR @serverType=@sqlserveronazurevmservertype)
 										BEGIN
 											DECLARE metriccursor CURSOR STATIC FOR

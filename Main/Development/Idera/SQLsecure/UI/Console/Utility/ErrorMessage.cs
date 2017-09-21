@@ -167,6 +167,8 @@ namespace Idera.SQLsecure.UI.Console.Utility
         public const string RemoveSQLServerConfirmMsg = @"Warning: When you remove a registered SQL Server, you stop collecting permissions data for the server.  Any permissions data that has been collected for the server will also be deleted.
 
 Do you wish to remove SQL Server now?";
+
+        public const string RemoveSQLServerFromAssessmentsCnfrmMsg = "The SQL Server you are trying to remove is present in Draft, Published or Approved assessment.\n\nDo you want to remove the server from all active assessments as well?";
         public const string RemoveSqlServerFailedMsg = "Error was encountered when removing the SQL Server from SQLsecure.";
         public const string RemoveSqlServerSuccessful = @" has been removed.";
 

@@ -60,6 +60,17 @@ as
 	end
 
 	select @id = @@IDENTITY
+
+	----------Removing server from unregistered table and updating registeredserverid in policymember table-----
+	declare @oldserverid int = null
+	select @oldserverid = registeredserverid from unregisteredserver where UPPER(connectionname) = UPPER(@connectionname)
+	if(@oldserverid IS NOT NULL)
+	begin
+	update policymember set registeredserverid = @id where registeredserverid = @oldserverid
+	delete from unregisteredserver where UPPER(connectionname) = UPPER(@connectionname)
+	end
+	------------------------------------------------------------------------------------------------------------
+
 	if exists (Select snapshotid from serversnapshot where UPPER(connectionname) = UPPER(@connectionname))
 	begin
 		update serversnapshot set registeredserverid=@id where UPPER(connectionname) = UPPER(@connectionname)
