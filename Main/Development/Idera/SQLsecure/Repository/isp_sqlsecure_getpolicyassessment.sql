@@ -7993,6 +7993,8 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 DRM.dbid;
 
                                                         DECLARE @DatabaseRolesInfo TABLE (
+																snapshotid
+																int,
                                                                 databasename
                                                                 nvarchar(128),
                                                                 rolename
@@ -8009,6 +8011,7 @@ AS -- <Idera SQLsecure version and copyright>
 
                                                         INSERT INTO @DatabaseRolesInfo
                                                                 SELECT
+																		DPR.snapshotid,
                                                                         DB.databasename,
                                                                         DPR.name,
                                                                         DRU.username,
@@ -8051,8 +8054,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 DRI.groupname,
                                                                 DRI.rolepermissions
                                                         FROM @DatabaseRolesInfo
-                                                        AS DRI;
-
+                                                        AS DRI where DRI.snapshotid = @snapshotid;
                                                         OPEN DatabaseRolesInfoCursor;
                                                         FETCH NEXT FROM
                                                         DatabaseRolesInfoCursor INTO @databasename,
@@ -8238,7 +8240,9 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 groupname
                                                                 nvarchar(200),
                                                                 disabled
-                                                                nvarchar(3)
+                                                                nvarchar(3),
+																snapshotid
+																int
                                                         );
 
                                                         INSERT INTO @ServerRolesInfo
@@ -8254,7 +8258,8 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         SRU.username,
                                                                         SRU.usertype,
                                                                         SRU.groupname,
-                                                                        SRU.disabled
+                                                                        SRU.disabled,
+																		SRU.snapshotid
                                                                 FROM dbo.serverprincipal
                                                                 AS SP
                                                                 INNER JOIN dbo.serversnapshot
@@ -8285,7 +8290,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 SRI.groupname,
                                                                 SRI.disabled
                                                         FROM @ServerRolesInfo
-                                                        AS SRI;
+                                                        AS SRI where SRI.snapshotid = @snapshotid;
 
                                                         OPEN ServerRolesInfoCursor;
                                                         FETCH NEXT FROM
