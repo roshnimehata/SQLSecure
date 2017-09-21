@@ -7993,8 +7993,6 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 DRM.dbid;
 
                                                         DECLARE @DatabaseRolesInfo TABLE (
-																snapshotid
-																int,
                                                                 databasename
                                                                 nvarchar(128),
                                                                 rolename
@@ -8006,18 +8004,20 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 groupname
                                                                 nvarchar(200),
                                                                 rolepermissions
-                                                                nvarchar(max)
+                                                                nvarchar(max),
+																snapshotid
+																int
                                                         );
 
                                                         INSERT INTO @DatabaseRolesInfo
                                                                 SELECT
-																		DPR.snapshotid,
                                                                         DB.databasename,
                                                                         DPR.name,
                                                                         DRU.username,
                                                                         DRU.usertype,
                                                                         DRU.groupname,
-                                                                        rolepermissions
+                                                                        rolepermissions,
+																		DPR.snapshotid
                                                                 FROM dbo.databaseprincipal
                                                                 AS DPR
                                                                 INNER JOIN dbo.sqldatabase
