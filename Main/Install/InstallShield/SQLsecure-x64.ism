@@ -4353,7 +4353,6 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>ID_STRING395</td><td>1033</td><td/><td>0</td><td/><td>-1290090481</td></row>
 		<row><td>ID_STRING396</td><td>1033</td><td>&amp;Only for me (Current User)</td><td>0</td><td/><td>-484788753</td></row>
 		<row><td>ID_STRING397</td><td>1033</td><td>[ProductName] requires that your computer has the .NET Framework version 2.0 or higher installed.</td><td>0</td><td/><td>-744823249</td></row>
-		<row><td>ID_STRING398</td><td>1033</td><td>[ProductName] requires that your computer has the .NET Framework version 2.0</td><td>0</td><td/><td>1947897486</td></row>
 		<row><td>ID_STRING399</td><td>1033</td><td>SQLSEC~1|SQLsecure</td><td>0</td><td/><td>-786664119</td></row>
 		<row><td>ID_STRING4</td><td>1033</td><td>Contact:  support@idera.com</td><td>0</td><td/><td>731482921</td></row>
 		<row><td>ID_STRING40</td><td>1033</td><td>[ProductName] - Setup Wizard</td><td>0</td><td/><td>-451294899</td></row>
@@ -4982,7 +4981,6 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQAgAHgANgA0AA==
 		<row><td>(Not Version9X=400) And (Not Version9X=410) And (Not Version9X=490) And (Not VersionNT=400) And (Not (VersionNT = 500 and ServicePackLevel &lt; 3))</td><td>##ID_STRING10##</td></row>
 		<row><td>AdminUser</td><td>##ID_STRING33##</td></row>
 		<row><td>BETA_INSTALL &lt;&gt; "TRUE"</td><td>##ID_STRING411##</td></row>
-		<row><td>DOTNET &lt;&gt; 0</td><td>##ID_STRING398##</td></row>
 		<row><td>DOTNETFRAMEWORKVERSION &gt;= "#378389"</td><td>##ID_STRING445##</td></row>
 		<row><td>MDACFOUND &gt;= MDAC_MIN_VERSION</td><td>##ID_STRING404##</td></row>
 	</table>
