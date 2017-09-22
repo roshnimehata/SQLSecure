@@ -68,6 +68,12 @@ as
 	begin
 	update policymember set registeredserverid = @id where registeredserverid = @oldserverid
 	delete from unregisteredserver where UPPER(connectionname) = UPPER(@connectionname)
+	-----Updating registeredserverid for approved assessment----
+	-----Note: for draft and published assessment, registeredserverid is updated by [isp_sqlsecure_getpolicyassessment] stored procedure------
+	update pa set registeredserverid = pm.registeredserverid from policyassessment pa 
+		inner join policymember pm on  pa.policyid = pm.policyid and pa.assessmentid = pm.assessmentid
+		inner join assessment a on pa.policyid = a.policyid and pa.assessmentid = a.assessmentid
+		where a.assessmentstate = N'A' and UPPER(pa.connectionname) = UPPER(connectionname)
 	end
 	------------------------------------------------------------------------------------------------------------
 
