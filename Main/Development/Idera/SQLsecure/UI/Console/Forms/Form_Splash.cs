@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Idera.SQLsecure.UI.Console.Utility;
+
 namespace Idera.SQLsecure.UI.Console.Forms
 {
     public partial class Form_Splash : Form
@@ -28,7 +24,19 @@ namespace Idera.SQLsecure.UI.Console.Forms
             TimerToClose.Enabled = true;
             Opacity = m_currentOpacity;
             m_bCloseTime = false;
-            copyrightLabel.Text = Constants.COPYRIGHT_SPLASH_MSG;
+            
+            string copyrightYear = DateTime.Now.Year.ToString();
+            string productVersion = Application.ProductVersion;
+
+            StringBuilder copyrightSB = new StringBuilder();
+            copyrightSB.Append("Version ");
+            copyrightSB.Append(productVersion);
+            copyrightSB.Append(" Copyright © ");
+            copyrightSB.Append(copyrightYear);
+            copyrightSB.Append(" IDERA, Inc.");
+
+            copyrightLabel.Text = copyrightSB.ToString();
+            //copyrightLabel.Text = Constants.COPYRIGHT_SPLASH_MSG;
         }
 
         private void TimerToClose_Tick(object sender, EventArgs e)

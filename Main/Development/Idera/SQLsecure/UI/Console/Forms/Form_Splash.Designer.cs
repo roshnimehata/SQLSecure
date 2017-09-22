@@ -39,13 +39,12 @@ namespace Idera.SQLsecure.UI.Console.Forms
             // 
             // copyrightLabel
             // 
-            this.copyrightLabel.AutoSize = true;
             this.copyrightLabel.BackColor = System.Drawing.Color.Transparent;
             this.copyrightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
             this.copyrightLabel.ForeColor = System.Drawing.Color.White;
-            this.copyrightLabel.Location = new System.Drawing.Point(105, 245);
+            this.copyrightLabel.Location = new System.Drawing.Point(9, 245);
             this.copyrightLabel.Name = "copyrightLabel";
-            this.copyrightLabel.Size = new System.Drawing.Size(0, 15);
+            this.copyrightLabel.Size = new System.Drawing.Size(480, 20);
             this.copyrightLabel.TabIndex = 0;
             this.copyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -70,7 +69,6 @@ namespace Idera.SQLsecure.UI.Console.Forms
             this.TransparencyKey = System.Drawing.Color.DimGray;
             this.Load += new System.EventHandler(this.Splash_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
