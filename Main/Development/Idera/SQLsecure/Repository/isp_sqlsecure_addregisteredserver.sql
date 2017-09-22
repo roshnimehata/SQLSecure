@@ -73,7 +73,7 @@ as
 	update pa set registeredserverid = pm.registeredserverid from policyassessment pa 
 		inner join policymember pm on  pa.policyid = pm.policyid and pa.assessmentid = pm.assessmentid
 		inner join assessment a on pa.policyid = a.policyid and pa.assessmentid = a.assessmentid
-		where a.assessmentstate = N'A' and UPPER(pa.connectionname) = UPPER(connectionname)
+		where a.assessmentstate = N'A' and UPPER(pa.connectionname) = UPPER(@connectionname) and pm.registeredserverid = @id
 	end
 	------------------------------------------------------------------------------------------------------------
 
