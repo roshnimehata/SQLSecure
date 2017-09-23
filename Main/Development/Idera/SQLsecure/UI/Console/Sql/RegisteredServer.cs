@@ -266,12 +266,12 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private const string ParamGetRegisteredServerInstance = "instance";
         private const string ParamGetRegisteredServerId = "registeredserverid";
         private const string QueryGetUnregisteredServer = QueryGetAllUnRegisteredServerBase + @" WHERE registeredserverid = @registeredserverid";
-        private const string QueryIsServerAddedInAssessment = @"select distinct a.registeredserverid
-                                                            from SQLsecure.dbo.policymember a
-                                                                inner join SQLsecure.dbo.assessment b on a.policyid = b.policyid
-                                                                    and a.assessmentid = b.assessmentid
-                                                            where a.registeredserverid = @registeredserverid
-                                                                and b.assessmentstate in (N'D', N'P', N'A')";
+        private const string QueryIsServerAddedInAssessment = @"select distinct p.registeredserverid
+                                                            from SQLsecure.dbo.policymember p
+                                                                inner join SQLsecure.dbo.assessment a on p.policyid = a.policyid
+                                                                    and p.assessmentid = a.assessmentid
+                                                            where p.registeredserverid = @registeredserverid
+                                                                and a.assessmentstate in (N'D', N'P', N'A')";
         // This is the column index to use when obtaining fields from the query
         private enum RegisteredServerColumn
         {

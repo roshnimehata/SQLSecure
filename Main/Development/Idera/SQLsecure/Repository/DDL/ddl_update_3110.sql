@@ -70,13 +70,13 @@ IF NOT EXISTS ( SELECT TOP 1 *
 			[lastcollectionsnapshotid] [int] NULL,
 			[currentcollectiontm] [datetime] NULL,
 			[currentcollectionstatus] [nchar](1) NULL,
-			[servertype] [nvarchar](3) NULL,
 			[registeredserverid] [int],
 			[serverisdomaincontroller] [nchar](1) NULL,
 			[replicationenabled] [nchar](1) NULL,
 			[sapasswordempty] [nchar](1) NULL,
 			[connectionport] [int] NULL,
 			[auditfoldersstring] [nvarchar](max) NULL,
+			[servertype] [nvarchar](3) NULL,
 			PRIMARY KEY ([registeredserverid])
 		)
 	end

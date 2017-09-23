@@ -4555,7 +4555,9 @@ namespace Idera.SQLsecure.UI.Console
             _cmsi_Policy_removeServer.Enabled = isServer && canRemoveServer && Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Delete);
             _cmsi_Policy_refresh.Enabled = Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Refresh) && !isUnregisteredServer;
             _cmsi_Policy_properties.Enabled = ((isPolicy || isAssessment) || isServer) && Program.gController.Permissions.hasSecurity(Utility.Security.Functions.Properties) && !isUnregisteredServer;
-            _cmsi_Policy_exploreSnapshot.Enabled = _cmsi_Policy_exploreUserPermissions.Enabled = _cmsi_Policy_exploreRolePermissions.Enabled = !isUnregisteredServer;
+            _cmsi_Policy_exploreSnapshot.Enabled = !isUnregisteredServer;
+            _cmsi_Policy_exploreUserPermissions.Enabled = !isUnregisteredServer;
+            _cmsi_Policy_exploreRolePermissions.Enabled = !isUnregisteredServer;
         }
 
         private void _cmsi_Policy_viewSummary_Click(object sender, EventArgs e)
