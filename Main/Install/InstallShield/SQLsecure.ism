@@ -1004,9 +1004,7 @@
 		<row><td>SetupCompleteError</td><td>RestContText2</td><td>Show</td><td>UpdateStarted</td></row>
 		<row><td>SetupCompleteSuccess</td><td>CheckBoxUpdates</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
 		<row><td>SetupCompleteSuccess</td><td>CheckForUpdatesText</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
-		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Disable</td><td>&amp;Repository=3  OR (IS_UPGRADE=1 and !Repository=3)</td></row>
-		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Enable</td><td>&amp;Repository&lt;&gt;3  and !Repository&lt;&gt;3</td></row>
-		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Show</td><td>Not ISENABLEDWUSFINISHDIALOG</td></row>
+		<row><td>SetupCompleteSuccess</td><td>CheckLaunchProgram</td><td>Show</td><td>CustomLaunchProgram="1"</td></row>
 		<row><td>SetupCompleteSuccess</td><td>CheckLaunchReadme</td><td>Show</td><td>SHOWLAUNCHREADME="-1"  And READMEFILETOLAUNCHATEND &lt;&gt; "" And NOT Installed And NOT ISENABLEDWUSFINISHDIALOG</td></row>
 		<row><td>SetupCompleteSuccess</td><td>LaunchReadmeText</td><td>Show</td><td>0</td></row>
 		<row><td>SetupCompleteSuccess</td><td>TextLine2</td><td>Show</td><td>ProgressType2="installed" And ((ACTION&lt;&gt;"INSTALL") OR (NOT ISENABLEDWUSFINISHDIALOG) OR (ISENABLEDWUSFINISHDIALOG And Installed))</td></row>
@@ -1015,7 +1013,7 @@
 		<row><td>SetupCompleteSuccess</td><td>UpdateTextLine2</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
 		<row><td>SetupCompleteSuccess</td><td>UpdateTextLine3</td><td>Show</td><td>ISENABLEDWUSFINISHDIALOG And NOT Installed And ACTION="INSTALL"</td></row>
 		<row><td>SetupCompleteSuccess</td><td>txtRun</td><td>Hide</td><td>ISENABLEDWUSFINISHDIALOG</td></row>
-		<row><td>SetupCompleteSuccess</td><td>txtRun</td><td>Show</td><td>Not ISENABLEDWUSFINISHDIALOG</td></row>
+		<row><td>SetupCompleteSuccess</td><td>txtRun</td><td>Show</td><td>IS_UPGRADE</td></row>
 		<row><td>SetupInterrupted</td><td>BackLarge</td><td>Default</td><td>UpdateStarted</td></row>
 		<row><td>SetupInterrupted</td><td>BackLarge</td><td>Disable</td><td>NOT UpdateStarted</td></row>
 		<row><td>SetupInterrupted</td><td>BackLarge</td><td>Enable</td><td>UpdateStarted</td></row>
@@ -1180,15 +1178,16 @@
 		<row><td>InstallChangeFolder</td><td>OK</td><td>SetTargetPath</td><td>[_BrowseProperty]</td><td>1</td><td>2</td></row>
 		<row><td>InstallChangeFolder</td><td>Up</td><td>DirectoryListUp</td><td>0</td><td>1</td><td>0</td></row>
 		<row><td>InstallWelcome</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>1</td></row>
-		<row><td>InstallWelcome</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>IS_MAJOR_UPGRADE and FS_CONSOLE</td><td>2</td></row>
-		<row><td>InstallWelcome</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>IS_MAJOR_UPGRADE and FS_REPORTS</td><td>3</td></row>
-		<row><td>InstallWelcome</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>IS_MAJOR_UPGRADE and FS_REPOSITORY</td><td>4</td></row>
+		<row><td>InstallWelcome</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>IS_MAJOR_UPGRADE and FS_CONSOLE</td><td>3</td></row>
+		<row><td>InstallWelcome</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>IS_MAJOR_UPGRADE and FS_REPORTS</td><td>4</td></row>
+		<row><td>InstallWelcome</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>IS_MAJOR_UPGRADE and FS_REPOSITORY</td><td>5</td></row>
+		<row><td>InstallWelcome</td><td>NextLarge</td><td>DoAction</td><td>SetLaunchProgram</td><td>IS_MAJOR_UPGRADE and FS_CONSOLE</td><td>2</td></row>
 		<row><td>InstallWelcome</td><td>NextLarge</td><td>NewDialog</td><td>LicenseAgreement</td><td>not IS_MAJOR_UPGRADE</td><td>1</td></row>
-		<row><td>InstallWelcome</td><td>NextLarge</td><td>NewDialog</td><td>ReadyToUpgrade</td><td>IS_MAJOR_UPGRADE and not FS_REPOSITORY</td><td>9</td></row>
-		<row><td>InstallWelcome</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>IS_MAJOR_UPGRADE and FS_REPOSITORY</td><td>8</td></row>
-		<row><td>InstallWelcome</td><td>NextLarge</td><td>Remove</td><td>Console</td><td>IS_MAJOR_UPGRADE and not FS_CONSOLE</td><td>5</td></row>
-		<row><td>InstallWelcome</td><td>NextLarge</td><td>Remove</td><td>Reports</td><td>IS_MAJOR_UPGRADE and not FS_REPORTS</td><td>6</td></row>
-		<row><td>InstallWelcome</td><td>NextLarge</td><td>Remove</td><td>Repository</td><td>IS_MAJOR_UPGRADE and not FS_REPOSITORY</td><td>7</td></row>
+		<row><td>InstallWelcome</td><td>NextLarge</td><td>NewDialog</td><td>ReadyToUpgrade</td><td>IS_MAJOR_UPGRADE and not FS_REPOSITORY</td><td>10</td></row>
+		<row><td>InstallWelcome</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>IS_MAJOR_UPGRADE and FS_REPOSITORY</td><td>9</td></row>
+		<row><td>InstallWelcome</td><td>NextLarge</td><td>Remove</td><td>Console</td><td>IS_MAJOR_UPGRADE and not FS_CONSOLE</td><td>6</td></row>
+		<row><td>InstallWelcome</td><td>NextLarge</td><td>Remove</td><td>Reports</td><td>IS_MAJOR_UPGRADE and not FS_REPORTS</td><td>7</td></row>
+		<row><td>InstallWelcome</td><td>NextLarge</td><td>Remove</td><td>Repository</td><td>IS_MAJOR_UPGRADE and not FS_REPOSITORY</td><td>8</td></row>
 		<row><td>LicenseAgreement</td><td>BackLarge</td><td>NewDialog</td><td>InstallWelcome</td><td>1</td><td>1</td></row>
 		<row><td>LicenseAgreement</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>1</td></row>
 		<row><td>LicenseAgreement</td><td>ISPrintButton</td><td>DoAction</td><td>ISPrint</td><td>1</td><td>0</td></row>
@@ -1231,11 +1230,12 @@
 		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>3</td></row>
 		<row><td>ReadyToInstall</td><td>BackLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical" and _IsMaintenance &lt;&gt; "Reinstall"</td><td>2</td></row>
 		<row><td>ReadyToInstall</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
-		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1</td><td>1</td></row>
-		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>NewDialog</td><td>OutOfSpace</td><td>OutOfNoRbDiskSpace = 1</td><td>2</td></row>
-		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>[ProgressType1]</td><td>Installing</td><td>1</td><td>3</td></row>
-		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>[ProgressType2]</td><td>installed</td><td>1</td><td>4</td></row>
-		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>[ProgressType3]</td><td>installs</td><td>1</td><td>5</td></row>
+		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>DoAction</td><td>SetLaunchManagementConsole</td><td>1</td><td>1</td></row>
+		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1</td><td>2</td></row>
+		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>NewDialog</td><td>OutOfSpace</td><td>OutOfNoRbDiskSpace = 1</td><td>3</td></row>
+		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>[ProgressType1]</td><td>Installing</td><td>1</td><td>4</td></row>
+		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>[ProgressType2]</td><td>installed</td><td>1</td><td>5</td></row>
+		<row><td>ReadyToInstall</td><td>InstallLarge</td><td>[ProgressType3]</td><td>installs</td><td>1</td><td>6</td></row>
 		<row><td>ReadyToRemove</td><td>BackLarge</td><td>NewDialog</td><td>MaintenanceType</td><td>1</td><td>1</td></row>
 		<row><td>ReadyToRemove</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>1</td></row>
 		<row><td>ReadyToRemove</td><td>RemoveLarge</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1</td><td>2</td></row>
@@ -1246,11 +1246,12 @@
 		<row><td>ReadyToRemove</td><td>RemoveLarge</td><td>[ProgressType3]</td><td>uninstalls</td><td>1</td><td>6</td></row>
 		<row><td>ReadyToUpgrade</td><td>BackLarge</td><td>NewDialog</td><td>SQLLogin</td><td>1</td><td>1</td></row>
 		<row><td>ReadyToUpgrade</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
-		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1</td><td>1</td></row>
-		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>NewDialog</td><td>OutOfSpace</td><td>OutOfNoRbDiskSpace = 1</td><td>2</td></row>
-		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>[ProgressType1]</td><td>Upgrading</td><td>1</td><td>3</td></row>
-		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>[ProgressType2]</td><td>upgraded</td><td>1</td><td>4</td></row>
-		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>[ProgressType3]</td><td>upgrades</td><td>1</td><td>5</td></row>
+		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>DoAction</td><td>SetLaunchManagementConsole</td><td>1</td><td>1</td></row>
+		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1</td><td>2</td></row>
+		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>NewDialog</td><td>OutOfSpace</td><td>OutOfNoRbDiskSpace = 1</td><td>3</td></row>
+		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>[ProgressType1]</td><td>Upgrading</td><td>1</td><td>4</td></row>
+		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>[ProgressType2]</td><td>upgraded</td><td>1</td><td>5</td></row>
+		<row><td>ReadyToUpgrade</td><td>NextLarge</td><td>[ProgressType3]</td><td>upgrades</td><td>1</td><td>6</td></row>
 		<row><td>SQLBrowse</td><td>CancelOther</td><td>EndDialog</td><td>Return</td><td>1</td><td>1</td></row>
 		<row><td>SQLBrowse</td><td>OKOther</td><td>EndDialog</td><td>Return</td><td>1</td><td>2</td></row>
 		<row><td>SQLBrowse</td><td>OKOther</td><td>[INSTANCE]</td><td>[IS_SQLSERVER_LIST]</td><td>1</td><td>1</td></row>
@@ -1343,7 +1344,7 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpFatalExit</td><td>1</td><td>1</td></row>
 		<row><td>SetupCompleteError</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>ISCleanUpSuccess</td><td>1</td><td>1</td></row>
-		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>LAUNCHPROGRAM AND _IsSetupTypeMin &lt;&gt; "Collector"</td><td>3</td></row>
+		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>DoAction</td><td>IS_LAUNCH_MY_PROGRAM_PLEASE</td><td>LAUNCHPROGRAM="1"</td><td>3</td></row>
 		<row><td>SetupCompleteSuccess</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>2</td></row>
 		<row><td>SetupError</td><td>A</td><td>EndDialog</td><td>ErrorAbort</td><td>1</td><td>1</td></row>
 		<row><td>SetupError</td><td>C</td><td>EndDialog</td><td>ErrorCancel</td><td>1</td><td>0</td></row>
@@ -1363,26 +1364,28 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupInterrupted</td><td>FinishLarge</td><td>EndDialog</td><td>Exit</td><td>1</td><td>3</td></row>
 		<row><td>SetupProgress</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
 		<row><td>SetupResume</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>1</td></row>
-		<row><td>SetupResume</td><td>NextLarge</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1 and (!Repository &lt;&gt;3 or not IS_MINOR_UPGRADE)</td><td>1</td></row>
-		<row><td>SetupResume</td><td>NextLarge</td><td>NewDialog</td><td>OutOfSpace</td><td>OutOfNoRbDiskSpace = 1</td><td>2</td></row>
-		<row><td>SetupResume</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>OutOfNoRbDiskSpace &lt;&gt; 1 and !Repository=3 and IS_MINOR_UPGRADE</td><td>3</td></row>
+		<row><td>SetupResume</td><td>NextLarge</td><td>DoAction</td><td>SetLaunchIfFileExist</td><td>1</td><td>1</td></row>
+		<row><td>SetupResume</td><td>NextLarge</td><td>EndDialog</td><td>Return</td><td>OutOfNoRbDiskSpace &lt;&gt; 1 and (!Repository &lt;&gt;3 or not IS_MINOR_UPGRADE)</td><td>2</td></row>
+		<row><td>SetupResume</td><td>NextLarge</td><td>NewDialog</td><td>OutOfSpace</td><td>OutOfNoRbDiskSpace = 1</td><td>3</td></row>
+		<row><td>SetupResume</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>OutOfNoRbDiskSpace &lt;&gt; 1 and !Repository=3 and IS_MINOR_UPGRADE</td><td>4</td></row>
 		<row><td>SetupType</td><td>BackLarge</td><td>NewDialog</td><td>DestinationFolder</td><td>1</td><td>1</td></row>
 		<row><td>SetupType</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Collector</td><td>_IsSetupTypeMin = "Collector"</td><td>12</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Collector</td><td>_IsSetupTypeMin = "Collector"</td><td>13</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "GUI"</td><td>2</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "Typical"</td><td>7</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "Typical"</td><td>8</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "GUI"</td><td>5</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "Typical"</td><td>8</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Collector"</td><td>13</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Typical"</td><td>9</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI"</td><td>6</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector"</td><td>16</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical"</td><td>11</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "Typical"</td><td>9</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Collector"</td><td>14</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Typical"</td><td>10</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI"</td><td>7</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector"</td><td>17</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical"</td><td>12</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "GUI"</td><td>4</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "Typical"</td><td>10</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Console</td><td>_IsSetupTypeMin = "Collector"</td><td>14</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Reports</td><td>_IsSetupTypeMin = "Collector"</td><td>15</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "Typical"</td><td>11</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Console</td><td>_IsSetupTypeMin = "Collector"</td><td>15</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Reports</td><td>_IsSetupTypeMin = "Collector"</td><td>16</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Repository</td><td>_IsSetupTypeMin = "GUI"</td><td>3</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>[CustomLaunchProgram]</td><td>1</td><td>_IsSetupTypeMin = "GUI" or _IsSetupTypeMin = "Typical"</td><td>6</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>[SQLSERVER_AUTHENTICATION]</td><td>{}</td><td>_IsSetupTypeMin = "GUI"</td><td>1</td></row>
 		<row><td>SplashBitmap</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>1</td></row>
 		<row><td>SplashBitmap</td><td>NextLarge</td><td>NewDialog</td><td>InstallWelcome</td><td>1</td><td>1</td></row>
@@ -1659,6 +1662,9 @@ Set conn = Nothing</td><td/></row>
 		<row><td>RemoveSlashINSTALLDirMedia</td><td>1</td><td>ISScriptBridge.dll</td><td>f10</td><td/></row>
 		<row><td>SetARPINSTALLLOCATION</td><td>51</td><td>ARPINSTALLLOCATION</td><td>[INSTALLDIR]</td><td/></row>
 		<row><td>SetAllUsersProfileNT</td><td>51</td><td>ALLUSERSPROFILE</td><td>[%SystemRoot]\Profiles\All Users</td><td/></row>
+		<row><td>SetLaunchIfFileExist</td><td>1</td><td>ISScriptBridge.dll</td><td>f16</td><td/></row>
+		<row><td>SetLaunchManagementConsole</td><td>51</td><td>LAUNCHPROGRAM</td><td>[CustomLaunchProgram]</td><td/></row>
+		<row><td>SetLaunchProgram</td><td>51</td><td>CustomLaunchProgram</td><td>1</td><td/></row>
 		<row><td>SetOldINSTALLDIR</td><td>51</td><td>INSTALLDIR</td><td>[INSTALL_DIRECTORY]</td><td/></row>
 		<row><td>SetOldINSTALLDIR_Dir</td><td>35</td><td>INSTALLDIR</td><td>[INSTALL_DIRECTORY]</td><td/></row>
 		<row><td>SetPreserveJobs</td><td>1</td><td>ISScriptBridge.dll</td><td>f15</td><td/></row>
@@ -2821,6 +2827,7 @@ Set oServer = Nothing</td><td/></row>
 		<row><td>f13</td><td>0</td><td>UpgradeRepositoryCheck</td><td/></row>
 		<row><td>f14</td><td>0</td><td>CheckFeatureState</td><td/></row>
 		<row><td>f15</td><td>0</td><td>SetPreserveJobs</td><td/></row>
+		<row><td>f16</td><td>0</td><td>SetManagementConsoleChecked</td><td/></row>
 		<row><td>f2</td><td>0</td><td>DoesDatabaseExist</td><td/></row>
 		<row><td>f3</td><td>0</td><td>CheckRepositoryExist</td><td/></row>
 		<row><td>f4</td><td>0</td><td>CheckSQLdmInstalled</td><td/></row>
@@ -5160,6 +5167,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>ApplicationUsers</td><td>AllUsers</td><td/></row>
 		<row><td>Blank</td><td/><td/></row>
 		<row><td>CONFIG_REPOSITORY</td><td>Yes</td><td/></row>
+		<row><td>CustomLaunchProgram</td><td>0</td><td/></row>
 		<row><td>DOTNET</td><td>0</td><td/></row>
 		<row><td>DOTNETFRAMEWORKVERSION</td><td/><td/></row>
 		<row><td>DRIVE_LETTER</td><td>0</td><td/></row>
@@ -5202,7 +5210,7 @@ UgBlAGwAZQBhAHMAZQAgADEAAQBTAFEATABzAGUAYwB1AHIAZQA=
 		<row><td>IS_SQLSERVER_SERVER</td><td/><td/></row>
 		<row><td>IS_SQLSERVER_USERNAME</td><td>sa</td><td/></row>
 		<row><td>InstallChoice</td><td>AR</td><td/></row>
-		<row><td>LAUNCHPROGRAM</td><td>1</td><td/></row>
+		<row><td>LAUNCHPROGRAM</td><td>0</td><td/></row>
 		<row><td>LICENSETYPE</td><td>Trial</td><td/></row>
 		<row><td>LICENSE_KEY</td><td/><td/></row>
 		<row><td>MDACFOUND</td><td>0</td><td/></row>

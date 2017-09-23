@@ -22,6 +22,8 @@
 // the OnBegin and OnEnd events.
 #include "ifx.h"
 
+#define FILE_SPEC "Idera.SQLsecure.UI.Console.exe"
+
 // The keyword export identifies MyFunction() as an entry-point function.
 // The argument it accepts must be a handle to the Installer database
 
@@ -44,6 +46,7 @@ export prototype SetPreserveJobs(HWND);
 export prototype UpdateLocalInstance(HWND);
 export prototype UpgradeBackupServiceMessageBox(HWND);
 export prototype UpgradeRepositoryCheck(HWND);
+export prototype SetManagementConsoleChecked(HWND);
 
 
 
@@ -1913,4 +1916,19 @@ _WriteToLogFile(hMSI, "Error: Registry key could not be set");
 	endif;
 
 _WriteToLogFile(hMSI, LONG_STARS);
+end;
+
+//Function to find if Idera.SQLsecure.UI.Console.exe exists in the install directory
+function SetManagementConsoleChecked(hMSI)
+STRING installPath, svResult;
+NUMBER nvStringBufferSize, fileExists;
+
+begin
+	nvStringBufferSize = 256;
+	MsiGetProperty(ISMSI_HANDLE, "INSTALLDIR", installPath, nvStringBufferSize);
+	fileExists = FindAllFiles (installPath , FILE_SPEC , svResult, CONTINUE);
+	
+	if (fileExists >= 0) then
+		MsiSetProperty(ISMSI_HANDLE, "CustomLaunchProgram", "1");
+	endif;
 end;
