@@ -69,13 +69,13 @@ as
 			,[lastcollectionsnapshotid]
 			,[currentcollectiontm]
 			,[currentcollectionstatus]
-			,[servertype]
 			,[registeredserverid]
 			,[serverisdomaincontroller]
 			,[replicationenabled]
 			,[sapasswordempty]
 			,[connectionport]
-			,[auditfoldersstring]) select * from registeredserver where registeredserverid = @registeredserverid
+			,[auditfoldersstring]
+			,[servertype]) select * from registeredserver where registeredserverid = @registeredserverid
 			delete p from policymember p
 			inner join assessment a on p.assessmentid = a.assessmentid and p.policyid = a.policyid
 			where p.registeredserverid = @registeredserverid and a.assessmentstate not in (N'D', N'P', N'A')
