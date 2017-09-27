@@ -153,7 +153,8 @@ namespace Idera.SQLsecure.Collector.Sql
                             Principals.type, 
                             Principals.sid, 
                             serveraccess = CASE Permissions.state 
-                                              WHEN 'G' THEN 'Y' 
+                                              WHEN 'G' THEN 'Y'
+                                              WHEN 'W' THEN 'Y' 
                                               ELSE 'N' 
                                            END,
                             serverdeny = CASE Permissions.state 
@@ -667,6 +668,34 @@ namespace Idera.SQLsecure.Collector.Sql
                         }
                     }
                 }
+
+                catch (SqlException ex)
+                {
+                    string strMessage = "Processing server principals";
+                    string sqlErrorMessage;
+                    logX.loggerX.Error("ERROR - " + strMessage, ex);
+                    if (ex.Number == 2627)
+                    {
+                        sqlErrorMessage = "One or more user(s) and/or roles(s) have been granted conflicting permissions on the server by " +
+                                            "multiple granters, which is restricting the snapshot to be performed. Review the conflicting permissions " +
+                                            "and resolve by removing either one of these from the respective user/role.";
+                    }
+                    else
+                    {
+                        sqlErrorMessage = strMessage + ex.Message;
+                    }
+                    Sql.Database.CreateApplicationActivityEventInRepository(repositoryConnection,
+                                                                            snapshotid,
+                                                                            Collector.Constants.ActivityType_Error,
+                                                                            Collector.Constants.ActivityEvent_Error,
+                                                                            sqlErrorMessage);
+                    AppLog.WriteAppEventError(SQLsecureEvent.ExErrExceptionRaised, SQLsecureCat.DlDataLoadCat,
+                        " SQL Server = " + new SqlConnectionStringBuilder(targetConnection).DataSource +
+                        strMessage, ex.Message);
+
+                    isOk = false;
+                }
+
                 catch (Exception ex)
                 {
                     string strMessage = "Processing server principals";
