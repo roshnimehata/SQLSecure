@@ -1477,19 +1477,19 @@ err.number = 0
 on error resume next
 
 Set conn = CreateObject("adodb.connection")
-conn.Provider = "SQLOLEDB.1"
+conn.Provider = "SQLNCLI11.1"
 
 if DBMode = 0 then   
 
-	conn.ConnectionString = "Data Source=" &amp; DBServer _
-		&amp; ";Integrated Security=SSPI;Initial Catalog=master"
+	conn.ConnectionString = "SERVER=" &amp; DBServer _
+		&amp; ";Trusted_Connection=Yes;database=master"
 
 else
 
-	conn.ConnectionString = "user id="&amp; DBUser _
-		&amp; "; password=" &amp; DBPassword _
-		&amp; ";Data Source=" &amp; DBServer _
-		&amp; "; Initial Catalog=master;"
+	conn.ConnectionString = "Uid="&amp; DBUser _
+		&amp; "; Pwd=" &amp; DBPassword _
+		&amp; ";SERVER=" &amp; DBServer _
+		&amp; "; database=master;"
 
 end if
 
@@ -1572,19 +1572,19 @@ err.number = 0
 on error resume next
 
 Set conn = CreateObject("adodb.connection")
-conn.Provider = "SQLOLEDB.1"
+conn.Provider = "SQLNCLI11.1"
 
 if DBMode = 0 then   
 
-	conn.ConnectionString = "Data Source=" &amp; DBServer _
-		&amp; ";Integrated Security=SSPI;Initial Catalog=master"
+	conn.ConnectionString = "SERVER=" &amp; DBServer _
+		&amp; ";Trusted_Connection=Yes;database=master"
 
 else
 
-	conn.ConnectionString = "user id="&amp; DBUser _
-		&amp; "; password=" &amp; DBPassword _
-		&amp; ";Data Source=" &amp; DBServer _
-		&amp; "; Initial Catalog=master;"
+	conn.ConnectionString = "Uid="&amp; DBUser _
+		&amp; "; Pwd=" &amp; DBPassword _
+		&amp; ";SERVER=" &amp; DBServer _
+		&amp; "; database=master;"
 
 end if
 
@@ -3060,7 +3060,7 @@ Set oServer = Nothing</td><td/></row>
 		<col def="S255">DotNetBuildConfiguration</col>
 		<col def="S255">MsiCommandLine</col>
 		<col def="I4">ISSetupPrerequisiteLocation</col>
-		<row><td>Release 1</td><td>SQLsecure x64</td><td>&lt;ISProjectDataFolder&gt;</td><td>PackageName</td><td>1</td><td>1033</td><td>2</td><td>1</td><td>Intel</td><td/><td>1033</td><td>2</td><td>0</td><td>1</td><td>0</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>42706957</td><td/><td/><td/><td/></row>
+		<row><td>Release 1</td><td>SQLsecure x64</td><td>&lt;ISProjectDataFolder&gt;</td><td>PackageName</td><td>1</td><td>1033</td><td>2</td><td>1</td><td>Intel</td><td/><td>1033</td><td>2</td><td>0</td><td>1</td><td>0</td><td/><td>0</td><td/><td>MediaLocation</td><td/><td>http://</td><td/><td/><td/><td/><td>42706957</td><td/><td/><td/><td>1</td></row>
 	</table>
 
 	<table name="ISReleaseASPublishInfo">
@@ -3173,7 +3173,7 @@ Set oServer = Nothing</td><td/></row>
 		<col def="S0">TestTableCmd2</col>
 		<col def="S0">WinAuthentUserId</col>
 		<col def="S0">DsnODBCName</col>
-		<row><td>MSSQLServer</td><td>Microsoft SQL Server</td><td>sqloledb</td><td>Provider=</td><td>Server=</td><td>Initial Catalog=</td><td>User ID=</td><td>Password=</td><td>Integrated Security=SSPI</td><td>Network Library=DBMSSOCN</td><td>select name from master.dbo.sysdatabases where name = '%s'</td><td>select * from dbo.sysobjects where id = object_id('dbo.%s') and sysstat &amp; 0xf = 3</td><td>SELECT SERVERPROPERTY('ProductVersion')</td><td/><td/><td>(local);.</td><td>CREATE DATABASE [%s]</td><td>USE [%s]</td><td>0</td><td>select * from dbo.sysobjects where id = object_id('dbo.%2') and sysstat &amp; 0xf = 3</td><td/><td>{SQL Server}</td></row>
+		<row><td>MSSQLServer</td><td>Microsoft SQL Server</td><td>sqlncli11</td><td>Provider=</td><td>Server=</td><td>Initial Catalog=</td><td>User ID=</td><td>Password=</td><td>Integrated Security=SSPI</td><td>Network Library=DBMSSOCN</td><td>select name from master.dbo.sysdatabases where name = '%s'</td><td>select * from dbo.sysobjects where id = object_id('dbo.%s') and sysstat &amp; 0xf = 3</td><td>SELECT SERVERPROPERTY('ProductVersion')</td><td/><td/><td>(local);.</td><td>CREATE DATABASE [%s]</td><td>USE [%s]</td><td>0</td><td>select * from dbo.sysobjects where id = object_id('dbo.%2') and sysstat &amp; 0xf = 3</td><td/><td>{SQL Server}</td></row>
 	</table>
 
 	<table name="ISSQLRequirement">
@@ -3266,6 +3266,7 @@ Set oServer = Nothing</td><td/></row>
 		<col key="yes" def="s72">ISSetupPrerequisites</col>
 		<col def="S255">ISBuildSourcePath</col>
 		<col def="I2">Order</col>
+		<row><td>_D0B6EE9A_26C4_4A42_</td><td>&lt;ISProductFolder&gt;\SetupPrerequisites\Microsoft SQL Server 2012 Native Client (x64).prq</td><td/></row>
 	</table>
 
 	<table name="ISSetupType">
