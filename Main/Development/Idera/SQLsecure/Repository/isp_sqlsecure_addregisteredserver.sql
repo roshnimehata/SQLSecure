@@ -62,7 +62,7 @@ as
 	select @id = @@IDENTITY
 
 	----------Removing server from unregistered table and updating registeredserverid in policymember table-----
-	declare @oldserverid int = null
+	declare @oldserverid int
 	select @oldserverid = registeredserverid from unregisteredserver where UPPER(connectionname) = UPPER(@connectionname)
 	if(@oldserverid IS NOT NULL)
 	begin
