@@ -124,15 +124,15 @@
 	<property name="AssemblyInfo.Copyright" value="Copyright (C) 2005 - 2017 Idera, Inc." />
 	
 	<!-- InstallShield Information -->
-	<property name="InstallShield.Builder" value="C:\Program Files (x86)\Macrovision\IS 11.5 StandaloneBuild"/>
+	<property name="InstallShield.Builder" value="C:\Program Files (x86)\InstallShield\2014 SAB"/>
 	<property name="InstallShield.Full.Project" value="SQLsecure.ism"/>
 	<property name="InstallShield.Full.Project.x64" value="SQLsecure-x64.ism"/>
-	<property name="InstallShield.Full.Project.ia64" value="SQLsecure-ia64.ism"/>
+	<!--property name="InstallShield.Full.Project.ia64" value="SQLsecure-ia64.ism"/-->
 	<property name="installshield.mergemodules" value="${InstallShield.Builder}/Modules/i386"/>
 	<property name="SQLsecure.Install.MergeModules" value="${SQLsecure.Install}/MergeModules"/>
 	<property name="FullPath.Install.Full" value="${SQLsecure.Install.InstallShield}/SQLsecure/SQLsecure/Release 1/DiskImages/DISK1/SQLsecure.exe"/>
 	<property name="FullPath.Install.Full.x64" value="${SQLsecure.Install.InstallShield}/SQLsecure-x64/SQLsecure x64/Release 1/DiskImages/DISK1/SQLsecure x64.exe"/>
-	<property name="FullPath.Install.Full.ia64" value="${SQLsecure.Install.InstallShield}/SQLsecure-ia64/SQLsecure ia64/Release 1/DiskImages/DISK1/SQLsecure ia64.exe"/>
+	<!--	property name="FullPath.Install.Full.ia64" value="${SQLsecure.Install.InstallShield}/SQLsecure-ia64/SQLsecure ia64/Release 1/DiskImages/DISK1/SQLsecure ia64.exe"/-->
 	<property name="installshield.mergemodules.2" value="${InstallShield.Builder}/Objects"/>
 	<property name="installshield.mergemodules.searchpath" value="${installshield.mergemodules},${installshield.mergemodules.2}"/>
 
@@ -332,7 +332,7 @@
 		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
 
 		<!-- Add version number to the installer x86 -->	    	
-		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}" readonly="false"/>
+		<!--attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}" readonly="false"/>
 		<move file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}" tofile="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}.old"   overwrite="true" />
 		<exec program="${Utility.Sed}">
 			<arg value="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project.ia64}.old"/>
@@ -340,10 +340,10 @@
 			<arg value="${BuildNumberPlaceholder}"/>
 			<arg value="${SQLsecure.BuildVersion}"/>
 		</exec>
-		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/>
+		<attrib file="${SQLsecure.Install.InstallShield}\${InstallShield.Full.Project}" readonly="true"/-->
 
 		<!-- Full Install x86-->
-		<exec program="${InstallShield.Builder}\IsSABld.exe" workingdir="${SQLsecure.Install.InstallShield}">
+		<exec program="${InstallShield.Builder}\System\IsCmdBld.exe" workingdir="${SQLsecure.Install.InstallShield}">
 			<arg value="-c"/>
 			<arg value="COMP"/>
 			<arg value="-p"/>
@@ -358,7 +358,7 @@
 		<call target="SignCode"/>
 
 		<!-- Full Install x64-->
-		<exec program="${InstallShield.Builder}\IsSABld.exe" workingdir="${SQLsecure.Install.InstallShield}">
+		<exec program="${InstallShield.Builder}\System\IsCmdBld.exe" workingdir="${SQLsecure.Install.InstallShield}">
 			<arg value="-c"/>
 			<arg value="COMP"/>
 			<arg value="-p"/>
@@ -373,7 +373,7 @@
 		<call target="SignCode"/>
 		
 		<!-- Full Install ia64-->
-		<exec program="${InstallShield.Builder}\IsSABld.exe" workingdir="${SQLsecure.Install.InstallShield}">
+		<!--exec program="${InstallShield.Builder}\System\IsCmdBld.exe" workingdir="${SQLsecure.Install.InstallShield}">
 			<arg value="-c"/>
 			<arg value="COMP"/>
 			<arg value="-p"/>
@@ -385,7 +385,7 @@
 		</exec>
 		<property name="Signing.Name" value="Idera SQLsecure ia64"/>
 		<property name="Signing.Target" value="${FullPath.Install.Full.ia64}"/>
-		<call target="SignCode"/>
+		<call target="SignCode"/-->
 	</target>
 	
 	<target name="SignCode">
@@ -421,11 +421,11 @@
 				<include name="${FullPath.Install.Full.x64}"/>
 			</fileset>
 	    </copy>
-		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full/Intel" flatten="true">
+		<!--copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full/Intel" flatten="true">
 			<fileset>
 				<include name="${FullPath.Install.Full.ia64}"/>
 			</fileset>
-	    </copy>
+	    </copy-->
 
 		<!-- copy Database Script -->
 		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full/Scripts" flatten="true">
@@ -438,11 +438,11 @@
 				<include name="${SQLsecure.RepositoryDDL}/Schema_900_Fix.sql"/>
 			</fileset>
 	    </copy>
-		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full/Scripts" flatten="true">
+		<!--copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full/Scripts" flatten="true">
 			<fileset>
 				<include name="${SQLsecure.RepositoryDDL}/Schema_900_Fix.sql"/>
 			</fileset>
-	    </copy>
+	    </copy-->
 
 		<!-- copy Documentation -->
 		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full/Documentation" flatten="true">
@@ -455,11 +455,11 @@
 			<include name="${SQLsecure.Documentation}/*" />
       		</fileset>
     	</copy>
-		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full/Documentation" flatten="true">
+		<!--copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full/Documentation" flatten="true">
       		<fileset>
 			<include name="${SQLsecure.Documentation}/*" />
       		</fileset>
-    	</copy>
+    	</copy-->
 
 		<!-- copy Redist -->
 		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/x86/Full/redist/NET Framework 2.0" flatten="true">
@@ -534,7 +534,7 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full" flatten="true"
+		<!--copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Full" flatten="true"
 				file="${SQLsecure.Install.Autorun}/setup.hta" >
 			<filterchain>
 				<replacestring from="{platform}" to="ia64" ignorecase="true" />
@@ -554,7 +554,7 @@
 				<include name="${SQLsecure.Install.Autorun}/autorun.inf"/>
 				<include name="${SQLsecure.Install.Autorun}/setup.exe"/>
 			</fileset>
-		</copy>
+		</copy-->
 	</target>
 
 	<!-- ****************** -->
@@ -576,21 +576,21 @@
 	      		<arg value="${Workspace.Path}\Build\BuildCompileOutput\SQLsecure-x64.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\x64\Full\*.*"/>
 	    	</exec>
-		<exec program="${WinZip}\wzzip">
+		<!--exec program="${WinZip}\wzzip">
 	      		<arg value="-a"/>
 	      		<arg value="-p"/>
 	      		<arg value="-r"/>
 	      		<arg value="${Workspace.Path}\Build\BuildCompileOutput\SQLsecure-ia64.zip"/>
 	      		<arg value="${SQLsecure.Build.Output}\${SQLsecure.BuildLabel}\ia64\Full\*.*"/>
-	    	</exec>
+	    	</exec-->
 	    	
 		<!-- Build absolute packager -->
 	    <exec program="InstallationKit.bat" workingdir="${Workspace.Path}\Build">
 		</exec>
 		<exec program="InstallationKit-x64.bat" workingdir="${Workspace.Path}\Build">
 		</exec>
-		<exec program="InstallationKit-ia64.bat" workingdir="${Workspace.Path}\Build">
-	    	</exec>
+		<!--exec program="InstallationKit-ia64.bat" workingdir="${Workspace.Path}\Build">
+	    	</exec-->
 	    	
         <!-- Zip the EXE (used for HTTP downloads where we dont want an EXE) -->
 		<exec program="${WinZip}\wzzip">
@@ -610,11 +610,11 @@
 				<include name="${SQLsecure.BuildCompile.Output}\IderaSQlsecureInstallationKit-x64.exe"/>
 			</fileset>
 	    	</copy>
-		<copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Web" flatten="true">
+		<!--copy todir="${SQLsecure.Build.Output}/${SQLsecure.BuildLabel}/ia64/Web" flatten="true">
 			<fileset>
 				<include name="${SQLsecure.BuildCompile.Output}\IderaSQlsecureInstallationKit-ia64.exe"/>
 			</fileset>
-	    	</copy>
+	    	</copy-->
 	</target>
 
 
