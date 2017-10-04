@@ -1369,21 +1369,22 @@ Ensure you specified a valid user account, and your current logon account can ac
 		<row><td>SetupResume</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>OutOfNoRbDiskSpace &lt;&gt; 1 and !Repository=3 and IS_MINOR_UPGRADE</td><td>4</td></row>
 		<row><td>SetupType</td><td>BackLarge</td><td>NewDialog</td><td>DestinationFolder</td><td>1</td><td>1</td></row>
 		<row><td>SetupType</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>0</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Collector</td><td>_IsSetupTypeMin = "Collector"</td><td>13</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Collector</td><td>_IsSetupTypeMin = "Collector"</td><td>14</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "GUI"</td><td>2</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "Typical"</td><td>8</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Console</td><td>_IsSetupTypeMin = "Typical"</td><td>9</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "GUI"</td><td>5</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "Typical"</td><td>9</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Collector"</td><td>14</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Typical"</td><td>10</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI"</td><td>7</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector"</td><td>17</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical"</td><td>12</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Reports</td><td>_IsSetupTypeMin = "Typical"</td><td>10</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Collector"</td><td>15</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>AddLocal</td><td>Repository</td><td>_IsSetupTypeMin = "Typical"</td><td>11</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>ConfigRepository</td><td>_IsSetupTypeMin = "GUI"</td><td>8</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Collector"</td><td>18</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>NewDialog</td><td>SQLLogin</td><td>_IsSetupTypeMin = "Typical"</td><td>13</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "GUI"</td><td>4</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "Typical"</td><td>11</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Console</td><td>_IsSetupTypeMin = "Collector"</td><td>15</td></row>
-		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Reports</td><td>_IsSetupTypeMin = "Collector"</td><td>16</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Collector</td><td>_IsSetupTypeMin = "Typical"</td><td>12</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Console</td><td>_IsSetupTypeMin = "Collector"</td><td>16</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Reports</td><td>_IsSetupTypeMin = "Collector"</td><td>17</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>Remove</td><td>Repository</td><td>_IsSetupTypeMin = "GUI"</td><td>3</td></row>
+		<row><td>SetupType</td><td>NextLarge</td><td>[CustomLaunchProgram]</td><td>0</td><td>_IsSetupTypeMin &lt;&gt; "GUI" and _IsSetupTypeMin &lt;&gt; "Typical"</td><td>7</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>[CustomLaunchProgram]</td><td>1</td><td>_IsSetupTypeMin = "GUI" or _IsSetupTypeMin = "Typical"</td><td>6</td></row>
 		<row><td>SetupType</td><td>NextLarge</td><td>[SQLSERVER_AUTHENTICATION]</td><td>{}</td><td>_IsSetupTypeMin = "GUI"</td><td>1</td></row>
 		<row><td>SplashBitmap</td><td>CancelLarge</td><td>SpawnDialog</td><td>CancelSetup</td><td>1</td><td>1</td></row>

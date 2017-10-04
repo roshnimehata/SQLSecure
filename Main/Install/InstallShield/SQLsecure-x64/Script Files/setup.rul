@@ -2056,5 +2056,6 @@ begin
 	
 	if (fileExists >= 0) then
 		MsiSetProperty(ISMSI_HANDLE, "CustomLaunchProgram", "1");
+		MsiSetProperty(ISMSI_HANDLE, "LAUNCHPROGRAM", "1");
 	endif;
 end;
