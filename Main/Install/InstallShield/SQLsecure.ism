@@ -5717,7 +5717,7 @@ Set oServer = Nothing</td><td/><td/></row>
 		<row><td>ISSQLServerInstall</td><td/><td>5901</td><td/><td/></row>
 		<row><td>ISSQLServerRemoveLoginInfo</td><td>REMOVE="ALL"</td><td>2401</td><td/><td/></row>
 		<row><td>ISSQLServerRollback</td><td/><td>1506</td><td/><td/></row>
-		<row><td>ISSQLServerRollbackLoginInfo</td><td/><td>1501</td><td/><td/></row>
+		<row><td>ISSQLServerRollbackLoginInfo</td><td/><td>1502</td><td/><td/></row>
 		<row><td>ISSQLServerUninstall</td><td/><td>2399</td><td/><td/></row>
 		<row><td>ISSQLServerWriteLoginInfo</td><td>REMOVE&lt;&gt;"ALL"</td><td>5902</td><td/><td/></row>
 		<row><td>ISSelfRegisterCosting</td><td/><td>2201</td><td/><td/></row>
@@ -5727,7 +5727,7 @@ Set oServer = Nothing</td><td/><td/></row>
 		<row><td>ISUnSelfRegisterFiles</td><td/><td>2202</td><td/><td/></row>
 		<row><td>InstallFiles</td><td/><td>4000</td><td>InstallFiles</td><td/></row>
 		<row><td>InstallFinalize</td><td/><td>6600</td><td>InstallFinalize</td><td/></row>
-		<row><td>InstallInitialize</td><td/><td>1502</td><td>InstallInitialize</td><td/></row>
+		<row><td>InstallInitialize</td><td/><td>1501</td><td>InstallInitialize</td><td/></row>
 		<row><td>InstallODBC</td><td/><td>5400</td><td>InstallODBC</td><td/></row>
 		<row><td>InstallServices</td><td>VersionNT</td><td>5800</td><td>InstallServices</td><td/></row>
 		<row><td>InstallValidate</td><td/><td>1400</td><td>InstallValidate</td><td/></row>
