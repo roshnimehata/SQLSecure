@@ -7831,7 +7831,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 AS WG
                                                                         ON WGM.snapshotid = WG.snapshotid
                                                                         AND WGM.groupsid = WG.sid
-                                                                        AND WG.name LIKE '%\Administrators'
+                                                                        AND (WG.name LIKE '%\Administrators' OR WG.sid = 0x01020000000000052000000020020000)
                                                         WHERE NOT EXISTS (SELECT
                                                                 1
                                                         FROM SuppressedAccounts
