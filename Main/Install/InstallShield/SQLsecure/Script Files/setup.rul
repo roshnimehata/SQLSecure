@@ -252,19 +252,12 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=" + svDatabaseName + ";Integrated Security=SSPI;";
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
-		endif; 
-		
+		    pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=" + svDatabaseName + ";User ID=" + svUserName + ";Password=" + svUserPassword + ";";
+		endif;
 		pADOConnObj.Open();
-
 	                                       			    
 		// Create ADO Recordset object for the return 
 		
@@ -605,14 +598,10 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = "master";
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=master;Integrated Security=SSPI;";
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		    pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=master;User ID=" + svUserName + ";Password=" + svUserPassword + ";";
 		endif;
 		pADOConnObj.Open();
 	                                       			    
