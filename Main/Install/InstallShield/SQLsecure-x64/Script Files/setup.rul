@@ -22,6 +22,7 @@
 // the OnBegin and OnEnd events.
 #include "ifx.h"
 
+#define FILE_SPEC "Idera.SQLsecure.UI.Console.exe"
 // The keyword export identifies MyFunction() as an entry-point function.
 // The argument it accepts must be a handle to the Installer database
 
@@ -44,6 +45,7 @@ export prototype SetPreserveJobs(HWND);
 export prototype UpdateLocalInstance(HWND);
 export prototype UpgradeBackupServiceMessageBox(HWND);
 export prototype UpgradeRepositoryCheck(HWND);
+export prototype SetManagementConsoleChecked(HWND);
 
 
 
@@ -171,7 +173,8 @@ function CheckRepositoryExist(hMSI)
 	OBJECT pADOConnObj, pADORecordSetObj;
 	STRING szConnString, szSQL;
 	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType;
-	STRING svEscapedDatabaseName, svRepositoryVersion;
+	STRING svEscapedDatabaseName, svRepositoryVersion; 
+	STRING connectionString;
 	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize, nvResponse;
 	NUMBER iReturn, iRes;
 	BOOL bUpgradeDAL, bUpgrade;
@@ -247,17 +250,16 @@ begin
 		
 		// Set the ADO connection properties and open the connection
 
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		connectionString = "Provider=SQLNCLI11;";
+            	connectionString = connectionString + "SERVER="+ svServerName + ";";
+		connectionString = connectionString + "database="+svDatabaseName+";";
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			connectionString = connectionString + "Trusted_Connection=Yes";			
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
-		endif; 
-		
-		pADOConnObj.Open();
+		    connectionString = connectionString + "Uid=" +svUserName+";";
+		    connectionString = connectionString + "Pwd=" +svUserPassword+";";
+		endif;
+		pADOConnObj.Open(connectionString);
 
 	                                       			    
 		// Create ADO Recordset object for the return 
@@ -377,6 +379,13 @@ switch (pADORecordSetObj(0))
 			                       
 			 case "3100":
                 
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    
+			  case "3110":
+                
                 bUpgradeDAL = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
@@ -477,6 +486,13 @@ switch (pADORecordSetObj(0))
 	        
 	        case "3100":
  
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    
+			case "3110":
+ 
                 bUpgrade = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
@@ -564,6 +580,7 @@ function NUMBER DoesDatabaseExist()
 	STRING szConnString, szSQL;
 	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType;
 	STRING svEscapedDatabaseName;
+	STRING connectionString;
 	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize, iReturn;
 begin                         
 
@@ -588,16 +605,16 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = "master";
+		connectionString = "Provider=SQLNCLI11;";
+            	connectionString = connectionString + "SERVER="+ svServerName + ";";
+		connectionString = connectionString + "database=master;";
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			connectionString = connectionString + "Trusted_Connection=Yes";			
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		    connectionString = connectionString + "Uid=" + svUserName+";";
+		    connectionString = connectionString + "Pwd=" + svUserPassword+";";
 		endif;
-		pADOConnObj.Open();
+		pADOConnObj.Open(connectionString);
 	                                       			    
 		// Create ADO Recordset object for the return
 		set pADORecordSetObj = CreateObject("ADODB.Recordset");
@@ -669,6 +686,7 @@ function NUMBER IsValidRepositoryVersion()
 	STRING szConnString, szSQL;
 	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType, svRepositoryVersion;
 	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize;
+	STRING connectionString;
 	NUMBER   iIsValidVersion;
 begin
 	iIsValidVersion = 1;
@@ -693,18 +711,16 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		connectionString = "Provider=SQLNCLI11;";
+		connectionString = connectionString + "SERVER=" + svServerName + ";";
+		connectionString = connectionString + "database="+svDatabaseName+";";
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			connectionString = connectionString + "Trusted_Connection=Yes";			
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		    connectionString = connectionString + "Uid=" +svUserName+";";
+		    connectionString = connectionString + "Pwd=" +svUserPassword+";";
 		endif;
-		
-		
-		pADOConnObj.Open();                                   			    
+		pADOConnObj.Open(connectionString);                                    			    
 		// Create ADO Recordset object for the return
 		set pADORecordSetObj = CreateObject("ADODB.Recordset");
 	
@@ -971,7 +987,8 @@ end;
 
 function LONG DoesSQLAccountExist(svServerName, svUserName, svUserPassword) 
 	
-	OBJECT pADOConnObj;
+	OBJECT pADOConnObj; 
+	STRING connectionString;
 	
 begin                         
    
@@ -981,13 +998,13 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = "master";
-		pADOConnObj.Properties("User ID").Value = svUserName;
-		pADOConnObj.Properties("Password").Value = svUserPassword;
+		connectionString = "Provider=SQLNCLI11;";
+            	connectionString = connectionString + "SERVER="+ svServerName + ";";
+		connectionString = connectionString + "database=master;";
+		connectionString = connectionString + "Uid=" +svUserName+";";
+		connectionString = connectionString + "Pwd=" +svUserPassword+";";
 		
-		pADOConnObj.Open();                                      			    
+		pADOConnObj.Open(connectionString);                                     			    
 
 	catch
 	    return Err.Number;
@@ -1338,7 +1355,8 @@ function CheckGUICompatability(hMSI)
 	OBJECT pADOConnObj, pADORecordSetObj;
 	STRING szConnString, szSQL;
 	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType, svRepositoryVersion;
-	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize;
+	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize; 
+	STRING connectionString;
 	BOOL   bIsValidVersion;
 begin
     
@@ -1363,18 +1381,16 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		connectionString = "Provider=SQLNCLI11;";
+            	connectionString = connectionString + "SERVER="+ svServerName + ";";
+		connectionString = connectionString + "database="+svDatabaseName+";";
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			connectionString = connectionString + "Trusted_Connection=Yes";			
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		    connectionString = connectionString + "Uid=" +svUserName+";";
+		    connectionString = connectionString + "Pwd=" +svUserPassword+";";
 		endif;
-		
-		
-		pADOConnObj.Open();                                   			    
+		pADOConnObj.Open(connectionString);                                   			    
 		// Create ADO Recordset object for the return
 		set pADORecordSetObj = CreateObject("ADODB.Recordset");
 	
@@ -1414,6 +1430,7 @@ end;
 function SetupCollectorLocation(hMSI) 
 	OBJECT pADOConnObj, pADORecordSetObj;
 	STRING szConnString, szSQL;
+	STRING connectionString;
 	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType, svInstallDir;
 	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize;
 
@@ -1440,18 +1457,16 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		connectionString = "Provider=SQLNCLI11;";
+            	connectionString = connectionString + "SERVER="+ svServerName + ";";
+		connectionString = connectionString + "database="+svDatabaseName+";";
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			connectionString = connectionString + "Trusted_Connection=Yes";			
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		    connectionString = connectionString + "Uid=" +svUserName+";";
+		    connectionString = connectionString + "Pwd=" +svUserPassword+";";
 		endif;
-		
-		
-		pADOConnObj.Open();                                   			    
+		pADOConnObj.Open(connectionString);                                    			    
 		// Create ADO Recordset object for the return
 		set pADORecordSetObj = CreateObject("ADODB.Recordset");
 	
@@ -1489,7 +1504,8 @@ function RemoveJobsonUninstall(hMSI)
 	OBJECT pADOConnObj, pADORecordSetObj;
 	STRING szConnString, szSQL;
 	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType, svRepositoryVersion;
-	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize;
+	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize; 
+	STRING connectionString;
 	BOOL   bIsValidVersion;
 begin
 
@@ -1520,19 +1536,19 @@ _WriteToLogFile(hMSI, "Create ADO object");
 _WriteToLogFile(hMSI, "Create connection string");
 		
 		// Set the ADO connection properties and open the connection
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		connectionString = "Provider=SQLNCLI11;";
+            	connectionString = connectionString + "SERVER="+ svServerName + ";";
+		connectionString = connectionString + "database="+svDatabaseName+";";
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			connectionString = connectionString + "Trusted_Connection=Yes";			
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		    connectionString = connectionString + "Uid=" +svUserName+";";
+		    connectionString = connectionString + "Pwd=" +svUserPassword+";";
 		endif;
 
 _WriteToLogFile(hMSI, "Open Connection");		
 		
-		pADOConnObj.Open();                                   			    
+		pADOConnObj.Open(connectionString);                                    			    
 		// Create ADO Recordset object for the return
 		set pADORecordSetObj = CreateObject("ADODB.Recordset");
 	
@@ -1674,6 +1690,7 @@ function UpgradeRepositoryCheck(hMSI)
 	STRING szConnString, szSQL;
 	STRING svServerName, svDatabaseName, svUserName, svUserPassword, svAuthenticationType, svRepositoryVersion;
 	NUMBER nvAuthenticationType, nvStringBufferSize, nvBoolBufferSize, iRes;
+	STRING connectionString;
 	BOOL   bIsValidVersion, bUpgrade, bUpgradeDAL;
 begin
 
@@ -1700,17 +1717,16 @@ begin
 		
 		// Set the ADO connection properties and open the connection
 
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
+		connectionString = "Provider=SQLNCLI11;";
+            	connectionString = connectionString + "SERVER="+ svServerName + ";";
+		connectionString = connectionString + "database="+svDatabaseName+";";
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			connectionString = connectionString + "Trusted_Connection=Yes";			
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
-		endif; 
-		
-		pADOConnObj.Open();
+		    connectionString = connectionString + "Uid=" +svUserName+";";
+		    connectionString = connectionString + "Pwd=" +svUserPassword+";";
+		endif;
+		pADOConnObj.Open(connectionString);
 
 	                                       			    
 		// Create ADO Recordset object for the return 
@@ -1824,11 +1840,17 @@ switch (pADORecordSetObj(0))
 			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
              
              case "3100":
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+			case "3110":
                 bUpgradeDAL = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
 			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
-
+			    
 	    	default:
 	    			    		
 	    		bUpgradeDAL = FALSE;
@@ -1919,6 +1941,13 @@ switch (pADORecordSetObj(0))
 			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
 	        
 	        case "3100":
+ 
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    
+			case "3110":
  
                 bUpgrade = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
@@ -2013,4 +2042,20 @@ _WriteToLogFile(hMSI, "Error: Registry key could not be set");
 REGDB_OPTIONS = REGDB_OPTIONS & ~REGDB_OPTION_WOW64_64KEY;
 
 _WriteToLogFile(hMSI, LONG_STARS);
+end;
+
+//Function to find if Idera.SQLsecure.UI.Console.exe exists in the install directory
+function SetManagementConsoleChecked(hMSI)
+STRING installPath, svResult;
+NUMBER nvStringBufferSize, fileExists;
+
+begin
+	nvStringBufferSize = 256;
+	MsiGetProperty(ISMSI_HANDLE, "INSTALLDIR", installPath, nvStringBufferSize);
+	fileExists = FindAllFiles (installPath , FILE_SPEC , svResult, CONTINUE);
+	
+	if (fileExists >= 0) then
+		MsiSetProperty(ISMSI_HANDLE, "CustomLaunchProgram", "1");
+		MsiSetProperty(ISMSI_HANDLE, "LAUNCHPROGRAM", "1");
+	endif;
 end;

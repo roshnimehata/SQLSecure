@@ -19,8 +19,18 @@ namespace Idera.SQLsecure.UI.Console.Forms
             {
                 try
                 {
+                    bool removeFromAssessment = true;
+                    if(Sql.RegisteredServer.IsServerAddedInAssessment(Program.gController.Repository.ConnectionString,
+                                                        toDeleteConnection))
+                    {
+                        if (MsgBox.ShowConfirm(caption, ErrorMsgs.RemoveSQLServerFromAssessmentsCnfrmMsg) != DialogResult.Yes)
+                        {
+                            removeFromAssessment = false;
+                        }
+                        
+                    }
                     Sql.RegisteredServer.RemoveServer(Program.gController.Repository.ConnectionString,
-                                                        toDeleteConnection);
+                                                        toDeleteConnection, removeFromAssessment);
                     //Utility.MsgBox.ShowInfo(Utility.ErrorMsgs.RemoveSqlServerCaption,
                     //                            toDeleteConnection.ToUpper() + Utility.ErrorMsgs.RemoveSqlServerSuccessful);
                     Program.gController.SignalRefreshServersEvent(true, toDeleteConnection.ToUpper());

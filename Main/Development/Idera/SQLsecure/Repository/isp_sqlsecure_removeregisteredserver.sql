@@ -7,7 +7,7 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[isp_sqlsec
 drop procedure [dbo].[isp_sqlsecure_removeregisteredserver]
 GO
 
-CREATE procedure [dbo].[isp_sqlsecure_removeregisteredserver] (@connectionname nvarchar(500))
+CREATE procedure [dbo].[isp_sqlsecure_removeregisteredserver] (@connectionname nvarchar(500), @removefromassessments bit = 0)
 as
    -- <Idera SQLsecure version and copyright>
    --
@@ -43,46 +43,98 @@ as
 		return -1
 	end
 
-	if exists (select distinct a.registeredserverid 
-				from policyassessment a 
-					inner join assessment b on a.policyid = b.policyid 
-						and a.assessmentid = b.assessmentid 
-				where a.registeredserverid = @registeredserverid 
-					and b.assessmentstate in (N'D', N'P', N'A'))
+	BEGIN TRAN
+	if(@removefromassessments = 0)
 	begin
-		set @msg = 'Error: ' + @category + ' "' + @connectionname + '" must be removed from all draft and published assessments before it can be removed from auditing.'
-		exec isp_sqlsecure_addactivitylog @activitytype=@failure, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname=@connectionname
-		RAISERROR (@msg, 16, 1)
-		return -1
+		insert into unregisteredserver ([connectionname]
+			,[servername]
+			,[instancename]
+			,[snapshotretentionperiod]
+			,[authenticationmode]
+			,[sqlserverlogin]
+			,[sqlserverpassword]
+			,[sqlserverauthtype]
+			,[serverlogin]
+			,[serverpassword]
+			,[os]
+			,[version]
+			,[edition]
+			,[loginauditmode]
+			,[enableproxyaccount]
+			,[enablec2audittrace]
+			,[crossdbownershipchaining]
+			,[casesensitivemode]
+			,[jobid]
+			,[lastcollectiontm]
+			,[lastcollectionsnapshotid]
+			,[currentcollectiontm]
+			,[currentcollectionstatus]
+			,[registeredserverid]
+			,[serverisdomaincontroller]
+			,[replicationenabled]
+			,[sapasswordempty]
+			,[connectionport]
+			,[auditfoldersstring]
+			,[servertype]) select [connectionname]
+			,[servername]
+			,[instancename]
+			,[snapshotretentionperiod]
+			,[authenticationmode]
+			,[sqlserverlogin]
+			,[sqlserverpassword]
+			,[sqlserverauthtype]
+			,[serverlogin]
+			,[serverpassword]
+			,[os]
+			,[version]
+			,[edition]
+			,[loginauditmode]
+			,[enableproxyaccount]
+			,[enablec2audittrace]
+			,[crossdbownershipchaining]
+			,[casesensitivemode]
+			,[jobid]
+			,[lastcollectiontm]
+			,[lastcollectionsnapshotid]
+			,[currentcollectiontm]
+			,[currentcollectionstatus]
+			,[registeredserverid]
+			,[serverisdomaincontroller]
+			,[replicationenabled]
+			,[sapasswordempty]
+			,[connectionport]
+			,[auditfoldersstring]
+			,[servertype] from registeredserver where registeredserverid = @registeredserverid
+			delete p from policymember p
+			inner join assessment a on p.assessmentid = a.assessmentid and p.policyid = a.policyid
+			where p.registeredserverid = @registeredserverid and a.assessmentstate not in (N'D', N'P', N'A')
 	end
 	else
-	begin
-		BEGIN TRAN
-
-		delete from filterrule where filterruleheaderid in (select filterruleheaderid from filterruleheader where UPPER(connectionname) = UPPER(@connectionname))
-		delete from filterruleheader where  UPPER(connectionname) = UPPER(@connectionname)
+	begin		
 		delete from policymember where  registeredserverid = @registeredserverid
 		update policyassessment set registeredserverid = null where registeredserverid = @registeredserverid
-		delete from registeredservernotification where  registeredserverid = @registeredserverid
-		delete from registeredserver where  UPPER(connectionname) = UPPER(@connectionname)
-
-		select @err = @@ERROR
-
-		if @err <> 0
-		begin
-			set @msg = 'Error: Failed to ' + lower(@action) + ' ' + lower(@category) + ' "' + @connectionname + '"'
-			exec isp_sqlsecure_addactivitylog @activitytype=@failure, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname=@connectionname
-			RAISERROR (@msg, 16, 1)
-			ROLLBACK TRAN
-			return -1
-		end
-
-
-		set @msg = @category + N' "' + @connectionname + '" with id ' + CONVERT(NVARCHAR, @registeredserverid)
-		exec isp_sqlsecure_addactivitylog @activitytype=@success, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname=@connectionname
-
-		COMMIT TRAN
 	end
+	delete from filterrule where filterruleheaderid in (select filterruleheaderid from filterruleheader where UPPER(connectionname) = UPPER(@connectionname))
+	delete from filterruleheader where  UPPER(connectionname) = UPPER(@connectionname)
+	delete from registeredservernotification where  registeredserverid = @registeredserverid
+	delete from registeredserver where  UPPER(connectionname) = UPPER(@connectionname)
+
+	select @err = @@ERROR
+
+	if @err <> 0
+	begin
+		set @msg = 'Error: Failed to ' + lower(@action) + ' ' + lower(@category) + ' "' + @connectionname + '"'
+		exec isp_sqlsecure_addactivitylog @activitytype=@failure, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname=@connectionname
+		RAISERROR (@msg, 16, 1)
+		ROLLBACK TRAN
+		return -1
+	end
+
+
+	set @msg = @category + N' "' + @connectionname + '" with id ' + CONVERT(NVARCHAR, @registeredserverid)
+	exec isp_sqlsecure_addactivitylog @activitytype=@success, @source=@programname, @eventcode=@action, @category=@category, @description=@msg, @connectionname=@connectionname
+
+	COMMIT TRAN
 
 
 GO

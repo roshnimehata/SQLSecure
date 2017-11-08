@@ -74,7 +74,7 @@ namespace Idera.SQLsecure.Collector
         internal const string EncryptPassword       = "-EncryptPassword";       // Command output the encrypted version of the supplied password
         internal const string EncryptedRepositoryPassword    = "-EncryptedRepositoryPassword";    // For supplying an ecrypted string representing the password for repository access
 
-        internal const string CopyrightMsg          = "\nCopyright © 2005-2012 Idera, Inc.";
+        internal const string CopyrightMsg          = "\nCopyright © 2005-2017 Idera, Inc.";
         internal const string UsageMsg = "\nSQLsecure Collector utility loads SQL Server security data and associated\n"
                                                       + "Windows accounts.\n\n"
                                                       + "Usage: Idera.SQLsecure.Collector -TargetInstance TARGETSQLSERVER\n"
@@ -96,8 +96,8 @@ namespace Idera.SQLsecure.Collector
         #endregion
 
         #region SQL Server Stuff
-        internal const int DalVersion = 3100;
-        internal const int SchemaVersion = 3100;
+        internal const int DalVersion = 3110;
+        internal const int SchemaVersion = 3110;
 
         internal const string AdminRole = @"Admin";
         internal const string LoaderRole = @"Loader";

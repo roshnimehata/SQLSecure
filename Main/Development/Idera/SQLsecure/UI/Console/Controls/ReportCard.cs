@@ -433,9 +433,15 @@ namespace Idera.SQLsecure.UI.Console.Controls
 
             setMenuConfiguration();
 
-            if (m_serverInstance != null && !Sql.RegisteredServer.IsServerRegistered(m_serverInstance.ConnectionName))
+            if (m_serverInstance != null 
+                && !m_serverInstance.IsUnregisteredServer //Server is unregistered from auditing but it is in Assessments
+                && !Sql.RegisteredServer.IsServerRegistered(m_serverInstance.ConnectionName))
             {
-                MsgBox.ShowWarning(ErrorMsgs.ObjectExplorerCaption, ErrorMsgs.ServerNotRegistered);
+                //Check server availability in assessment when server is removed and switched to the Security Summary view
+                Sql.RegisteredServer svr = new Sql.RegisteredServer();
+                svr.LoadUnregisteredServer(m_serverInstance.RegisteredServerId);
+                if(string.IsNullOrEmpty(svr.ConnectionName))
+                    MsgBox.ShowWarning(ErrorMsgs.ObjectExplorerCaption, ErrorMsgs.ServerNotRegistered);
             }
 
             _ultraTabControl_Details.Tabs[(int)DetailsTab.ExplanationNotes].Visible = m_policy.IsAssessment;

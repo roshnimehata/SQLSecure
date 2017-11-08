@@ -25,7 +25,8 @@ RETURN
 (
 	-- Join snapshot to registeredserver to make sure the server isn't deleted
 	SELECT	MAX(a.snapshotid) as snapshotid, a.connectionname, a.registeredserverid
-	FROM	serversnapshot a INNER JOIN registeredserver b ON a.connectionname = b.connectionname
+	FROM	serversnapshot a INNER JOIN (select connectionname from registeredserver union 
+				select connectionname from unregisteredserver) b ON a.connectionname = b.connectionname
 	WHERE	(@usebaseline = 0 AND a.status IN ('S', 'W') OR a.baseline = 'Y')
 			AND (@selection IS NULL	OR a.starttime < @selection)
 	

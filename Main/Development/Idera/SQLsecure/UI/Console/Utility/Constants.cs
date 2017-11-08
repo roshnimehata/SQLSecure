@@ -125,6 +125,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
     
     internal static class Constants
     {
+    
         #region General
 
         public const int NOT_FOUND = -1;
@@ -147,10 +148,11 @@ namespace Idera.SQLsecure.UI.Console.Utility
 
         public static String OPTIONS_FILE_EXTENSION_STR = @".options.xml";
 
-        public const int DalVersion = 3100;
-        public const int SchemaVersion = 3100;
+        public const int DalVersion = 3110;
+        public const int SchemaVersion = 3110;
 
-        public const string COPYRIGHT_MSG = @"© Copyright 2005-2016 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
+        public const string COPYRIGHT_MSG = @"© Copyright 2005-2017 Idera, Inc., all rights reserved. SQLsecure, Idera and the Idera Logo are trademarks or registered trademarks of Idera or its subsidiaries in the United States and other jurisdictions.";
+        public const string COPYRIGHT_SPLASH_MSG = "Version 3.1.1.1 Copyright © 2017 IDERA, Inc.";
 
         public const string BETA_VERSION = ""; //" (BETA VERSION)"; 
 
@@ -241,7 +243,7 @@ namespace Idera.SQLsecure.UI.Console.Utility
         internal const string SetDefault = "-DefaultRepository"; // Save Installation Repository
         internal const string Verbose = "-Verbose";
 
-        internal const string CopyrightMsg = "\nCopyright © 2005-2016, Idera, Inc.";
+        internal const string CopyrightMsg = "\nCopyright © 2005-2017, Idera, Inc.";
         internal static string UsageMsg = "\n" + PRODUCT_STR + @"  audits SQL Server security data and associated\n"
                                                       + "Windows accounts.\n\n"
                                                       + "Usage: Idera." + PRODUCT_STR + @".Console\n"

@@ -65,6 +65,8 @@ AS
 
  	declare @connection nvarchar(128)
 	select @connection=connectionname from registeredserver where registeredserverid = @registeredserverid
+	if(@connection is null)
+		select @connection=connectionname from unregisteredserver where registeredserverid = @registeredserverid
 
 	set @category= case when @state in (N'D', N'P') then @category2 else @category end
 	if (@connection is null)
@@ -92,6 +94,16 @@ AS
 			ROLLBACK TRAN
 			return -1
 		end
+		
+		--------------Delete server from unregisteredserver table if that is not available in any assessment--- 
+		if not exists (select distinct a.registeredserverid 
+					from policymember a 
+						inner join assessment b on a.policyid = b.policyid
+							and a.assessmentid = b.assessmentid 
+					where a.registeredserverid = @registeredserverid 
+						and b.assessmentstate in (N'D', N'P', N'A'))
+		delete from unregisteredserver where registeredserverid =@registeredserverid
+		-------------------------------------------------------------------------------------------------------
 
 		set @msg = N'Removed server ' + @connection
 		set @state=dbo.getassessmentstatename(@state)

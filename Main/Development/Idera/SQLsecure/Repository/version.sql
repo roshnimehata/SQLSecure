@@ -16,13 +16,13 @@ SELECT	@schematype = 'schema', @daltype = 'dal'
 -- **************************** SET THE CURRENT VERSION INFO HERE
 
 -- The current schema version (int)
-SELECT	@schemaversion = 3100
+SELECT	@schemaversion = 3110
 -- The current dal version (int)
-SELECT	@dalversion = 3100
+SELECT	@dalversion = 3110
 -- Compatible schema versions (nvarchar - comma separated list of integers with no delimiters)
-SELECT	@schemacompat = '3100'
+SELECT	@schemacompat = '3110'
 -- Compatible dal versions (nvarchar - comma separated list of integers with no delimiters)
-SELECT	@dalcompat = '3100'
+SELECT	@dalcompat = '3110'
 
 -- **************************** END SET CURRENT VERSION INFO
 

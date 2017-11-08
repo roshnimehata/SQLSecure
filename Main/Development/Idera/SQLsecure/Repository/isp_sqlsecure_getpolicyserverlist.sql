@@ -27,8 +27,10 @@ AS
 			@policyid = @policyid,
 			@assessmentid = @assessmentid
 
-	select registeredserverid, connectionname from vwregisteredserver
-		where registeredserverid in (select registeredserverid from #tmpservers)
+	select registeredserverid, connectionname from 
+		(select registeredserverid, connectionname from vwregisteredserver
+			union select registeredserverid, connectionname from vwunregisteredserver) a 
+			where registeredserverid in (select registeredserverid from #tmpservers)
 
 	drop table #tmpservers
 

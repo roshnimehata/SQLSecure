@@ -85,6 +85,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private String m_SaPasswordEmpty;
         private int m_LastSnapshotId;
         private ServerType m_ServerType;
+        private bool m_IsUnregisteredServer;
 
         Form_StartSnapshotJobAndShowProgress m_StartSnapshotForm;
 
@@ -107,7 +108,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         #region Properties
 
         public int RegisteredServerId { get { return m_RegisteredServerId.Value; } }
-        public string ConnectionName { get { return m_ConnectionName.Value.ToUpper(); } }
+        public string ConnectionName { get { return m_ConnectionName.IsNull? string.Empty: m_ConnectionName.Value.ToUpper(); } }
         public int? ConnectionPort { get { return m_ConnectionPort.IsNull ? (int?)null : m_ConnectionPort.Value; } }
         public string ServerName { get { return (m_ServerName.IsNull ? string.Empty : m_ServerName.Value.ToUpper()); } }
         public string InstanceName { get { return (m_InstanceName.IsNull ? string.Empty : m_InstanceName.Value.ToUpper()); } }
@@ -216,49 +217,61 @@ namespace Idera.SQLsecure.UI.Console.Sql
             get { return m_ServerType; }
         }
 
+        public bool IsUnregisteredServer
+        {
+            get { return m_IsUnregisteredServer; }
+        }
         #endregion
 
         #region Queries & Constants
 
         // Get registered servers.
-        private const string QueryGetAllRegisteredServerBase =
-                    @"SELECT 
-                        registeredserverid,
-                        connectionname,
-                        connectionport,
-                        servername,
-                        instancename,
-                        sqlserverlogin, 
-                        sqlserverpassword, 
-                        serverlogin,
-                        serverpassword,
-                        sqlserverauthtype,
-                        authenticationmode,
-                        os,
-                        version,
-                        edition,
-                        loginauditmode,
-                        enableproxyaccount,
-                        enablec2audittrace,
-                        crossdbownershipchaining,
-                        casesensitivemode,
-                        jobid,
-                        lastcollectiontm,
-                        lastcollectionsnapshotid,
-                        currentcollectiontm,
-                        currentcollectionstatus,
-                        snapshotretentionperiod,
-                        serverisdomaincontroller,
-                        replicationenabled,
-                        sapasswordempty,
-                        auditfoldersstring,
-                        servertype
-                      FROM SQLsecure.dbo.vwregisteredserver";
-
+        private const string QueryGetAllServerBase =
+                                    @"SELECT 
+                                    registeredserverid,
+                                    connectionname,
+                                    connectionport,
+                                    servername,
+                                    instancename,
+                                    sqlserverlogin, 
+                                    sqlserverpassword, 
+                                    serverlogin,
+                                    serverpassword,
+                                    sqlserverauthtype,
+                                    authenticationmode,
+                                    os,
+                                    version,
+                                    edition,
+                                    loginauditmode,
+                                    enableproxyaccount,
+                                    enablec2audittrace,
+                                    crossdbownershipchaining,
+                                    casesensitivemode,
+                                    jobid,
+                                    lastcollectiontm,
+                                    lastcollectionsnapshotid,
+                                    currentcollectiontm,
+                                    currentcollectionstatus,
+                                    snapshotretentionperiod,
+                                    serverisdomaincontroller,
+                                    replicationenabled,
+                                    sapasswordempty,
+                                    auditfoldersstring,
+                                    servertype
+                                  FROM ";
+        private const string QueryGetAllRegisteredServerBase =QueryGetAllServerBase+ "SQLsecure.dbo.vwregisteredserver";
+        private const string QueryGetAllUnRegisteredServerBase = QueryGetAllServerBase + "SQLsecure.dbo.vwunregisteredserver";
         private static string QueryGetRegisteredServer = QueryGetAllRegisteredServerBase + @" WHERE connectionname = @instance";
         private static string QueryGetAllRegisteredServers = QueryGetAllRegisteredServerBase + @" ORDER BY connectionname";
         private const string ParamGetRegisteredServerInstance = "instance";
-
+        private const string ParamGetRegisteredServerId = "registeredserverid";
+        private const string QueryGetUnregisteredServer = QueryGetAllUnRegisteredServerBase + @" WHERE registeredserverid = @registeredserverid";
+        private const string QueryIsServerAddedInAssessment = @"select distinct p.registeredserverid
+                                                            from SQLsecure.dbo.policymember p
+                                                                inner join SQLsecure.dbo.assessment a on p.policyid = a.policyid
+                                                                    and p.assessmentid = a.assessmentid
+                                                            where p.registeredserverid = @registeredserverid
+                                                                and a.assessmentstate in (N'D', N'P', N'A')";
         // This is the column index to use when obtaining fields from the query
         private enum RegisteredServerColumn
         {
@@ -351,6 +364,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
         private const string NonQueryRemoveRegisteredServerFromPolicy = @"SQLsecure.dbo.isp_sqlsecure_removeregisteredserverfrompolicy";
 
         private const string AuditDateFmt = "'{0}'";
+        private const string ParamRemoveFromAssessment = @"@removefromassessments";
 
         #endregion
 
@@ -814,7 +828,7 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
         }
 
-        static public void RemoveServer(string connectionString, string removeConnection)
+        static public void RemoveServer(string connectionString, string removeConnection, bool removeFromAssessment)
         {
             Debug.Assert(!string.IsNullOrEmpty(connectionString));
             Debug.Assert(!string.IsNullOrEmpty(removeConnection));
@@ -832,9 +846,9 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
                 // Setup register server params.
                 SqlParameter paramConnectionname = new SqlParameter(ParamRemoveServerConnectionname, removeConnection);
-
+                SqlParameter paramRemoveFromAssessment = new SqlParameter(ParamRemoveFromAssessment, removeFromAssessment);
                 SqlHelper.ExecuteNonQuery(connection, CommandType.StoredProcedure,
-                                NonQueryRemoveServer, paramConnectionname);
+                                NonQueryRemoveServer, paramConnectionname, paramRemoveFromAssessment);
             }
         }
 
@@ -1144,6 +1158,61 @@ namespace Idera.SQLsecure.UI.Console.Sql
             }
 
             return auditFoldersString;
+        }
+
+        public void LoadUnregisteredServer(int svrId)
+        {
+            try
+            {               
+                // Open connection to repository and get server properties.
+                using (SqlConnection connection = new SqlConnection(Program.gController.Repository.ConnectionString))
+                {
+                    // Open the connection.
+                    connection.Open();
+
+                    // Check if the instance is registered.
+                    SqlParameter param = new SqlParameter(ParamGetRegisteredServerId, svrId);
+                    using (SqlDataReader rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                                                    QueryGetUnregisteredServer, new[] { param }))
+                    {
+                        if (rdr.HasRows && rdr.Read())
+                        {
+                            setValues(rdr);
+                            m_IsUnregisteredServer = true;
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                logX.loggerX.Error("Error - Unable to refresh Registered Server from the Repository", ex);
+                MsgBox.ShowError(ErrorMsgs.CantGetRegisteredServer, ex.Message);
+            }
+        }
+
+        static public bool IsServerAddedInAssessment(string connectionString, string removeConnection)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(connectionString));
+            Debug.Assert(!string.IsNullOrEmpty(removeConnection));
+            RegisteredServer registeredServer = null;
+            GetServer(connectionString, removeConnection, out registeredServer);
+            Debug.Assert(!removeConnection.Contains(",")); // Open connection to repository and remove server.
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                // Open the connection.
+                connection.Open();
+
+                // Setup register server params.
+                // Check if the instance is registered.
+                SqlParameter param = new SqlParameter(ParamGetRegisteredServerId, registeredServer.RegisteredServerId);
+                using (SqlDataReader rdr = SqlHelper.ExecuteReader(connection, null, CommandType.Text,
+                                                QueryIsServerAddedInAssessment, new[] { param }))
+                {
+                    if (rdr.HasRows)
+                        return true;
+                }
+            }
+            return false;
         }
 
         #endregion

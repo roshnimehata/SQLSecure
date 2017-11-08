@@ -107,7 +107,8 @@ AS
 				delete from assessment where policyid = @policyid and assessmentid in (@assessmentid, @cid)
 				if (@assessmentstate = N'S')
 					delete from policy where policyid = @policyid
-
+				--------deleting server from unregisteredserver table if it is not available in any policy/assessment -------
+				delete from unregisteredserver where registeredserverid not in (select registeredserverid from policymember)
 				select @err = @@error
 
 				if @err <> 0

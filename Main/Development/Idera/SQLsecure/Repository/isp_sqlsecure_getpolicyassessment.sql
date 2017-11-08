@@ -457,7 +457,8 @@ AS -- <Idera SQLsecure version and copyright>
                                 BEGIN
 										
 										--START(Barkha Khatri) Changing metric cursor to get the metrics applicable on a particular server type
-										select @serverType=servertype from dbo.registeredserver where registeredserverid=@registeredserverid
+										select @serverType=servertype from (select servertype,registeredserverid from dbo.registeredserver union 
+										select servertype,registeredserverid from dbo.unregisteredserver) a where a.registeredserverid=@registeredserverid
 										IF(@serverType=@onpremiseservertype OR @serverType=@sqlserveronazurevmservertype)
 										BEGIN
 											DECLARE metriccursor CURSOR STATIC FOR
@@ -7830,7 +7831,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 AS WG
                                                                         ON WGM.snapshotid = WG.snapshotid
                                                                         AND WGM.groupsid = WG.sid
-                                                                        AND WG.name LIKE '%\Administrators'
+                                                                        AND (WG.name LIKE '%\Administrators' OR WG.sid = 0x01020000000000052000000020020000)
                                                         WHERE NOT EXISTS (SELECT
                                                                 1
                                                         FROM SuppressedAccounts
@@ -7970,7 +7971,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         ON DRM.snapshotid = DPU.snapshotid
                                                                         AND DRM.dbid = DPU.dbid
                                                                         AND DRM.rolememberuid = DPU.uid
-                                                                        AND DPU.type <> 'R'
+                                                                        AND DPU.type in ('U','G','S','E','X')
                                                                         INNER JOIN dbo.databaseprincipal
                                                                         AS DPR
                                                                                 ON DRM.snapshotid = DPR.snapshotid
@@ -8003,7 +8004,9 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 groupname
                                                                 nvarchar(200),
                                                                 rolepermissions
-                                                                nvarchar(max)
+                                                                nvarchar(max),
+																snapshotid
+																int
                                                         );
 
                                                         INSERT INTO @DatabaseRolesInfo
@@ -8013,7 +8016,8 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         DRU.username,
                                                                         DRU.usertype,
                                                                         DRU.groupname,
-                                                                        rolepermissions
+                                                                        rolepermissions,
+																		DPR.snapshotid
                                                                 FROM dbo.databaseprincipal
                                                                 AS DPR
                                                                 INNER JOIN dbo.sqldatabase
@@ -8050,8 +8054,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 DRI.groupname,
                                                                 DRI.rolepermissions
                                                         FROM @DatabaseRolesInfo
-                                                        AS DRI;
-
+                                                        AS DRI where DRI.snapshotid = @snapshotid;
                                                         OPEN DatabaseRolesInfoCursor;
                                                         FETCH NEXT FROM
                                                         DatabaseRolesInfoCursor INTO @databasename,
@@ -8237,7 +8240,9 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 groupname
                                                                 nvarchar(200),
                                                                 disabled
-                                                                nvarchar(3)
+                                                                nvarchar(3),
+																snapshotid
+																int
                                                         );
 
                                                         INSERT INTO @ServerRolesInfo
@@ -8253,7 +8258,8 @@ AS -- <Idera SQLsecure version and copyright>
                                                                         SRU.username,
                                                                         SRU.usertype,
                                                                         SRU.groupname,
-                                                                        SRU.disabled
+                                                                        SRU.disabled,
+																		SRU.snapshotid
                                                                 FROM dbo.serverprincipal
                                                                 AS SP
                                                                 INNER JOIN dbo.serversnapshot
@@ -8284,7 +8290,7 @@ AS -- <Idera SQLsecure version and copyright>
                                                                 SRI.groupname,
                                                                 SRI.disabled
                                                         FROM @ServerRolesInfo
-                                                        AS SRI;
+                                                        AS SRI where SRI.snapshotid = @snapshotid;
 
                                                         OPEN ServerRolesInfoCursor;
                                                         FETCH NEXT FROM

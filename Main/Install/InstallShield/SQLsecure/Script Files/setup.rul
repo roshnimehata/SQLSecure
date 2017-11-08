@@ -22,6 +22,8 @@
 // the OnBegin and OnEnd events.
 #include "ifx.h"
 
+#define FILE_SPEC "Idera.SQLsecure.UI.Console.exe"
+
 // The keyword export identifies MyFunction() as an entry-point function.
 // The argument it accepts must be a handle to the Installer database
 
@@ -44,6 +46,7 @@ export prototype SetPreserveJobs(HWND);
 export prototype UpdateLocalInstance(HWND);
 export prototype UpgradeBackupServiceMessageBox(HWND);
 export prototype UpgradeRepositoryCheck(HWND);
+export prototype SetManagementConsoleChecked(HWND);
 
 
 
@@ -249,19 +252,12 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=" + svDatabaseName + ";Integrated Security=SSPI;";
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
-		endif; 
-		
+		    pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=" + svDatabaseName + ";User ID=" + svUserName + ";Password=" + svUserPassword + ";";
+		endif;
 		pADOConnObj.Open();
-
 	                                       			    
 		// Create ADO Recordset object for the return 
 		
@@ -377,6 +373,13 @@ switch (pADORecordSetObj(0))
 			       
 			 case "3100":
                 
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    
+			case "3110":
+                
                 bUpgradeDAL = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
@@ -477,11 +480,18 @@ switch (pADORecordSetObj(0))
 	        
 	        case "3100":
  
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+
+			case "3110":
+ 
                 bUpgrade = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
 			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
-
+			
 				default:
 	    			    		
 	    		bUpgradeDAL = FALSE;
@@ -588,14 +598,10 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = "master";
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=master;Integrated Security=SSPI;";
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		    pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=master;User ID=" + svUserName + ";Password=" + svUserPassword + ";";
 		endif;
 		pADOConnObj.Open();
 	                                       			    
@@ -1316,18 +1322,17 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=" + svDatabaseName + ";Integrated Security=SSPI;";
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
+		    pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=" + svDatabaseName + ";User ID=" + svUserName + ";Password=" + svUserPassword + ";";
 		endif;
+		pADOConnObj.Open();
 		
 		
-		pADOConnObj.Open();                                   			    
+		
+		
+		                        			    
 		// Create ADO Recordset object for the return
 		set pADORecordSetObj = CreateObject("ADODB.Recordset");
 	
@@ -1576,17 +1581,11 @@ begin
 		set pADOConnObj = CreateObject("ADODB.Connection");
 		
 		// Set the ADO connection properties and open the connection
-
-		pADOConnObj.Provider = "sqloledb";
-		pADOConnObj.Properties("Data Source").Value = svServerName;
-		pADOConnObj.Properties("Initial Catalog").Value = svDatabaseName;
 		if (svAuthenticationType = "0") then
-			pADOConnObj.Properties("Integrated Security").Value = "SSPI";
+			pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=" + svDatabaseName + ";Integrated Security=SSPI;";
 		else
-		    pADOConnObj.Properties("User ID").Value = svUserName;
-		    pADOConnObj.Properties("Password").Value = svUserPassword;
-		endif; 
-		
+		    pADOConnObj.ConnectionString = "Provider=SQLOLEDB;Data Source=" + svServerName + ";Initial Catalog=" + svDatabaseName + ";User ID=" + svUserName + ";Password=" + svUserPassword + ";";
+		endif;
 		pADOConnObj.Open();
 
 	                                       			    
@@ -1701,6 +1700,12 @@ switch (pADORecordSetObj(0))
 			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
              
              case "3100":
+                bUpgradeDAL = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    
+			case "3110":
                 bUpgradeDAL = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_ACCESS", "");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
@@ -1797,6 +1802,13 @@ switch (pADORecordSetObj(0))
 	        
 	        case "3100":
  
+                bUpgrade = TRUE;
+			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
+			    MsiSetProperty(ISMSI_HANDLE, "INVALID_DATABASE", "");
+			    
+			case "3110":
+ 
                 bUpgrade = FALSE;
 			    MsiSetProperty(ISMSI_HANDLE, "UPGRADE_SCHEMA", "");
 			    MsiSetProperty(ISMSI_HANDLE, "USE_EXISTING_DATABASE", "1");
@@ -1886,4 +1898,20 @@ _WriteToLogFile(hMSI, "Error: Registry key could not be set");
 	endif;
 
 _WriteToLogFile(hMSI, LONG_STARS);
+end;
+
+//Function to find if Idera.SQLsecure.UI.Console.exe exists in the install directory
+function SetManagementConsoleChecked(hMSI)
+STRING installPath, svResult;
+NUMBER nvStringBufferSize, fileExists;
+
+begin
+	nvStringBufferSize = 256;
+	MsiGetProperty(ISMSI_HANDLE, "INSTALLDIR", installPath, nvStringBufferSize);
+	fileExists = FindAllFiles (installPath , FILE_SPEC , svResult, CONTINUE);
+	
+	if (fileExists >= 0) then
+		MsiSetProperty(ISMSI_HANDLE, "CustomLaunchProgram", "1");
+		MsiSetProperty(ISMSI_HANDLE, "LAUNCHPROGRAM", "1");		
+	endif;
 end;

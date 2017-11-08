@@ -1533,10 +1533,10 @@ namespace Idera.SQLsecure.UI.Console.Sql
 
         public List<RegisteredServer> GetMemberServers()
         {
-            return GetMemberServers(PolicyId, AssessmentId);
+            return GetMemberServers(PolicyId, AssessmentId, AssessmentState);
         }
-
-        public static List<RegisteredServer> GetMemberServers(int policyId, int? assessmentId)
+                
+        public static List<RegisteredServer> GetMemberServers(int policyId, int? assessmentId,string assessmentState)
         {
             SortedList<string, RegisteredServer> members = new SortedList<string, RegisteredServer>();
 
@@ -1571,6 +1571,18 @@ namespace Idera.SQLsecure.UI.Console.Sql
                             if (!members.ContainsKey(svr.ConnectionName))
                             {
                                 members.Add(svr.ConnectionName, svr);
+                            }
+                        }
+                        else if(assessmentState == "A" || assessmentState == "D" || assessmentState == "P")
+                        {
+                            svr = new RegisteredServer();
+                            svr.LoadUnregisteredServer(svrId);
+                            if (!string.IsNullOrEmpty(svr.ConnectionName))
+                            {
+                                if (!members.ContainsKey(svr.ConnectionName))
+                                {
+                                    members.Add(svr.ConnectionName, svr);
+                                }
                             }
                         }
                     }

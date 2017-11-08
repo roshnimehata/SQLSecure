@@ -1017,7 +1017,7 @@ IIF(System.DateTime.Now.Subtract(Globals!ExecutionTime).Seconds = 1, "", "s")</V
         <ZIndex>4</ZIndex>
         <CanGrow>true</CanGrow>
         <Height>0.1875in</Height>
-        <Value>Copyright © 2005-2012 Idera, Inc. </Value>
+        <Value>Copyright © 2005-2017 Idera, Inc. </Value>
       </Textbox>
       <Image Name="idera_logo">
         <Sizing>Clip</Sizing>
